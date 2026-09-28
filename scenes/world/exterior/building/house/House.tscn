@@ -5,6 +5,7 @@
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_coavl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_okwql"]
+size = Vector2(16, 30)
 
 [node name="House" type="Node2D" unique_id=285203614]
 
@@ -14,10 +15,12 @@ physics_material_override = SubResource("PhysicsMaterial_coavl")
 [node name="Sprite2D" type="Sprite2D" parent="StaticBody2D" unique_id=271789169]
 texture = ExtResource("1_dd62a")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=405284575]
-polygon = PackedVector2Array(12, 11, 11, -12, -12, -12, -12, 8)
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=1506471825]
+polygon = PackedVector2Array(-8, 37, -9, 23, -8, 17, 9, 17, 10, 22, 9, 30, 8, 40, 29, 39, 30, 15, 24, 9, 5, -10, -6, -10, -30, 14, -29, 39, -8, 40)
 
 [node name="Area2D" type="Area2D" parent="StaticBody2D" unique_id=1324620855]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D/Area2D" unique_id=675798593]
+position = Vector2(0, 32)
 shape = SubResource("RectangleShape2D_okwql")
