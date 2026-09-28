@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://b2tjgesgetfj3"]
+
+[ext_resource type="Texture2D" uid="uid://q32pffktpdju" path="res://assets/farm_rpg/Houses/9.png" id="1_dd62a"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_coavl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_okwql"]
+
+[node name="House" type="Node2D" unique_id=285203614]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=683628792]
+physics_material_override = SubResource("PhysicsMaterial_coavl")
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D" unique_id=271789169]
+texture = ExtResource("1_dd62a")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=405284575]
+polygon = PackedVector2Array(12, 11, 11, -12, -12, -12, -12, 8)
+
+[node name="Area2D" type="Area2D" parent="StaticBody2D" unique_id=1324620855]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D/Area2D" unique_id=675798593]
+shape = SubResource("RectangleShape2D_okwql")
