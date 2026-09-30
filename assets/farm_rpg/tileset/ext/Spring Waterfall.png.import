@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://qbavso8tlt0g"
-path="res://.godot/imported/ALL props seasons.png-5e9d3d65739f377e88ad22e507524fb0.ctex"
+uid="uid://d2pomvbxnm2c"
+path="res://.godot/imported/Spring Waterfall.png-86c5c6d005ea7a1d682e98792d7b3fdd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/farm_rpg/tileset/ALL props seasons.png"
-dest_files=["res://.godot/imported/ALL props seasons.png-5e9d3d65739f377e88ad22e507524fb0.ctex"]
+source_file="res://assets/farm_rpg/tileset/ext/Spring Waterfall.png"
+dest_files=["res://.godot/imported/Spring Waterfall.png-86c5c6d005ea7a1d682e98792d7b3fdd.ctex"]
 
 [params]
 

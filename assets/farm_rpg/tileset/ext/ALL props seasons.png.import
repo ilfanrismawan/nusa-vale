@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dijxnkbq118pr"
-path="res://.godot/imported/Water tile.png-9947f7ceaed9cf5e8a43e4555cb48a0f.ctex"
+uid="uid://qbavso8tlt0g"
+path="res://.godot/imported/ALL props seasons.png-710746a4af7d797cc4b213374979d849.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/farm_rpg/tileset/Water tile.png"
-dest_files=["res://.godot/imported/Water tile.png-9947f7ceaed9cf5e8a43e4555cb48a0f.ctex"]
+source_file="res://assets/farm_rpg/tileset/ext/ALL props seasons.png"
+dest_files=["res://.godot/imported/ALL props seasons.png-710746a4af7d797cc4b213374979d849.ctex"]
 
 [params]
 

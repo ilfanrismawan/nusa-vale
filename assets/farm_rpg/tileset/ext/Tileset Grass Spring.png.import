@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dp1hfkqgkux1l"
-path="res://.godot/imported/Tileset Grass Cliff Tileset Spring.png-2b53ca6355ff985eea629a44eb4aee10.ctex"
+uid="uid://ncqoc1p3duym"
+path="res://.godot/imported/Tileset Grass Spring.png-4cfecd79eaf18d04f0a7e6a8265c885e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/farm_rpg/tileset/Tileset Grass Cliff Tileset Spring.png"
-dest_files=["res://.godot/imported/Tileset Grass Cliff Tileset Spring.png-2b53ca6355ff985eea629a44eb4aee10.ctex"]
+source_file="res://assets/farm_rpg/tileset/ext/Tileset Grass Spring.png"
+dest_files=["res://.godot/imported/Tileset Grass Spring.png-4cfecd79eaf18d04f0a7e6a8265c885e.ctex"]
 
 [params]
 

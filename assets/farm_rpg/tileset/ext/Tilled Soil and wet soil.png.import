@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dp1dkbhkv7vi3"
-path="res://.godot/imported/Sprite-0001.png-7ca46207497fd68272c55b23d4abd0b8.ctex"
+uid="uid://cddykmwt4lbf3"
+path="res://.godot/imported/Tilled Soil and wet soil.png-a617d810599fb2c9591304177d34a032.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/farm_rpg/tileset/Sprite-0001.png"
-dest_files=["res://.godot/imported/Sprite-0001.png-7ca46207497fd68272c55b23d4abd0b8.ctex"]
+source_file="res://assets/farm_rpg/tileset/ext/Tilled Soil and wet soil.png"
+dest_files=["res://.godot/imported/Tilled Soil and wet soil.png-a617d810599fb2c9591304177d34a032.ctex"]
 
 [params]
 

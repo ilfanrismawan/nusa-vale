@@ -1,50 +1,48 @@
+class_name Player
 extends CharacterBody2D
-@export var speed: float = 90.0
 
-var last_direction: String = "down"
+@export var speed: float = 30.0
 
-@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var animation_controller: AnimationController = $AnimationController
+@onready var state_machine: StateMachine = $StateMachine
+@onready var base_layer_ground: TileMapLayer = $"../../BaseLayerGround"
 
-func _physics_process(_delta: float) -> void:
-	var input_vector := _get_input_vector()
-	velocity = input_vector * speed
-	move_and_slide()
+var facing_direction := Vector2.DOWN
+
+func _ready() -> void:
+	state_machine.initialize(self, animation_controller)
 	
-	_update_animation(input_vector)
-
-func _get_input_vector() -> Vector2:
-	var input_vector:= Input.get_vector("move_left", "move_right", "move_up", "move_down")
-	return input_vector
-
-func _update_animation(input_vector: Vector2) -> void:
-	var is_moving := input_vector.length() > 0.1
+func _physics_process(delta: float) -> void:
+	state_machine.physics_update(delta)
 	
-	if is_moving:
-		if abs(input_vector.x) > abs(input_vector.y):
-			last_direction = "right" if input_vector.x > 0 else "left"
-		else:
-			last_direction = "down" if input_vector.y > 0 else "up"
-	
-	var anim_name := _resolve_animation_name(is_moving)
-	_play_animation(anim_name)
+func get_input_vector() -> Vector2:
+	return Input.get_vector("move_left", "move_right", "move_up", "move_down")
 
+func update_facing_direction(direction: Vector2) -> void:
+	if direction == Vector2.ZERO:
+		return
 	
-func _resolve_animation_name(is_moving: bool) -> String:
-	var state := "walk" if is_moving else "idle"
-	
-	match last_direction:
-		"left", "right":
-			animated_sprite.flip_h = (last_direction == "left")
-			return "%s_right" % state
-			
-		_:
-			animated_sprite.flip_h = false
-			return "%s_%s" % [state, last_direction]
-
-func _play_animation(anim_name: String) -> void:
-	if animated_sprite.animation and animated_sprite.sprite_frames.has_animation(anim_name):
-		if animated_sprite.animation != anim_name:
-			animated_sprite.play(anim_name)
+	var new_facing: Vector2
+	if abs(direction.x) > abs(direction.y):
+		new_facing = Vector2(sign(direction.x), 0)
 	else:
-		push_warning("Animasi '%s' belum ada di SpriteFrames player." % anim_name)
+		new_facing = Vector2(0, sign(direction.y))
 	
+	if new_facing == facing_direction:
+		return
+	
+	facing_direction = new_facing
+	print("[%d] facing -> %s" % [Time.get_ticks_msec(), facing_direction])
+	animation_controller.set_direction(facing_direction)
+
+func world_to_cell(world_position: Vector2) -> Vector2i:
+	return base_layer_ground.local_to_map(base_layer_ground.to_local(world_position))
+ 
+func get_player_cell() -> Vector2i:
+	return base_layer_ground.local_to_map(
+		base_layer_ground.to_local(global_position)
+	)
+
+func get_target_cell() -> Vector2i:
+	var player_cell := get_player_cell()
+	return player_cell + Vector2i(facing_direction)

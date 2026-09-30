@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c33w0x0mlujye"
-path="res://.godot/imported/Tileset Grass Water Spring.png-2a318d08d0beb8cfa37e0dd84bbfa14b.ctex"
+uid="uid://dwmb3bhuq3tm4"
+path="res://.godot/imported/Old planks.png-5422ca87a50d21307c2b80924f04b8b9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/farm_rpg/tileset/Tileset Grass Water Spring.png"
-dest_files=["res://.godot/imported/Tileset Grass Water Spring.png-2a318d08d0beb8cfa37e0dd84bbfa14b.ctex"]
+source_file="res://assets/farm_rpg/tileset/ext/Old planks.png"
+dest_files=["res://.godot/imported/Old planks.png-5422ca87a50d21307c2b80924f04b8b9.ctex"]
 
 [params]
 

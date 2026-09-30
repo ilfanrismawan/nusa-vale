@@ -1,26 +1,30 @@
 [gd_scene format=3 uid="uid://b2tjgesgetfj3"]
 
 [ext_resource type="Texture2D" uid="uid://q32pffktpdju" path="res://assets/farm_rpg/Houses/9.png" id="1_dd62a"]
+[ext_resource type="Script" uid="uid://bfg43kx57o018" path="res://scripts/world/enter_door_house.gd" id="2_coavl"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_coavl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_okwql"]
-size = Vector2(16, 30)
+size = Vector2(12, 21)
 
 [node name="House" type="Node2D" unique_id=285203614]
 
-[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=683628792]
+[node name="Wall" type="StaticBody2D" parent="." unique_id=683628792]
 physics_material_override = SubResource("PhysicsMaterial_coavl")
 
-[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D" unique_id=271789169]
+[node name="Sprite2D" type="Sprite2D" parent="Wall" unique_id=271789169]
 texture = ExtResource("1_dd62a")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=1506471825]
-polygon = PackedVector2Array(-8, 37, -9, 23, -8, 17, 9, 17, 10, 22, 9, 30, 8, 40, 29, 39, 30, 15, 24, 9, 5, -10, -6, -10, -30, 14, -29, 39, -8, 40)
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Wall" unique_id=1506471825]
+position = Vector2(0, -5.4375)
+scale = Vector2(0.6634616, 0.8625)
+polygon = PackedVector2Array(-8, 37, -9, 23, -8, 17, 9, 17, 10, 22, 9, 30, 8, 40, 29, 39, 30, 15, 24, 9, 5, -10, -6, -10, -30, 14, -29, 39, -8, 39)
 
-[node name="Area2D" type="Area2D" parent="StaticBody2D" unique_id=1324620855]
-visible = false
+[node name="Door" type="Area2D" parent="Wall" unique_id=1324620855]
+script = ExtResource("2_coavl")
+target_scene = "uid://gaufp2g5voy0"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D/Area2D" unique_id=675798593]
-position = Vector2(0, 32)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall/Door" unique_id=675798593]
+position = Vector2(0, 27.5)
 shape = SubResource("RectangleShape2D_okwql")

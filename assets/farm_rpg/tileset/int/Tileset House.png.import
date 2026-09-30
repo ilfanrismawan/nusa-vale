@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cyprfexj0uwt4"
-path="res://.godot/imported/ALL props 3.png-376489ef97919f86bdcfe6fa0132bb88.ctex"
+uid="uid://omf8whfi0m45"
+path="res://.godot/imported/Tileset House.png-8387d352f33f2ded5697335c6c3f4a77.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/farm_rpg/tileset/ALL props 3.png"
-dest_files=["res://.godot/imported/ALL props 3.png-376489ef97919f86bdcfe6fa0132bb88.ctex"]
+source_file="res://assets/farm_rpg/tileset/int/Tileset House.png"
+dest_files=["res://.godot/imported/Tileset House.png-8387d352f33f2ded5697335c6c3f4a77.ctex"]
 
 [params]
 

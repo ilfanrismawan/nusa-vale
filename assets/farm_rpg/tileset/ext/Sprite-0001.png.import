@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d2pomvbxnm2c"
-path="res://.godot/imported/Spring Waterfall.png-573fd1d2de034e580b9ced337e6f6cdf.ctex"
+uid="uid://dp1dkbhkv7vi3"
+path="res://.godot/imported/Sprite-0001.png-15d039b95bcae71e7ab57f4db06cabfb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/farm_rpg/tileset/Spring Waterfall.png"
-dest_files=["res://.godot/imported/Spring Waterfall.png-573fd1d2de034e580b9ced337e6f6cdf.ctex"]
+source_file="res://assets/farm_rpg/tileset/ext/Sprite-0001.png"
+dest_files=["res://.godot/imported/Sprite-0001.png-15d039b95bcae71e7ab57f4db06cabfb.ctex"]
 
 [params]
 

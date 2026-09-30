@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ActionData" format=3 uid="uid://dhh5pdmrc30cu"]
+
+[ext_resource type="Script" uid="uid://babxwm68vuqeh" path="res://scripts/state/action_data.gd" id="1_uuc6g"]
+
+[resource]
+script = ExtResource("1_uuc6g")
+animation_name = &"Axe"
+input_action = &"axe"
+hit_frame = 3
+metadata/_custom_type_script = "uid://babxwm68vuqeh"

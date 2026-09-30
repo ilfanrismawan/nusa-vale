@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b8c48phpp7onl"
-path="res://.godot/imported/Extra Village Tilesets.png-35559a666dc302312653b5fd21cd84c8.ctex"
+path="res://.godot/imported/Extra Village Tilesets.png-9d4c29e0db0e9fbd08aee32a73cbf6f5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/farm_rpg/tileset/Extra Village Tilesets.png"
-dest_files=["res://.godot/imported/Extra Village Tilesets.png-35559a666dc302312653b5fd21cd84c8.ctex"]
+source_file="res://assets/farm_rpg/tileset/ext/Extra Village Tilesets.png"
+dest_files=["res://.godot/imported/Extra Village Tilesets.png-9d4c29e0db0e9fbd08aee32a73cbf6f5.ctex"]
 
 [params]
 
