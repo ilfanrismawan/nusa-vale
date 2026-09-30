@@ -7,9 +7,16 @@ extends CharacterBody2D
 @onready var state_machine: StateMachine = $StateMachine
 @onready var base_layer_ground: TileMapLayer = $"../../BaseLayerGround"
 
+@onready var hotbar_ui = $"../HotbarUi"
+@onready var tool_ctrl = $ToolController
+
 var facing_direction := Vector2.DOWN
 
 func _ready() -> void:
+	hotbar_ui.setup.call_deferred(tool_ctrl.actions)
+	tool_ctrl.tool_changed.connect(func(a):
+		hotbar_ui.highlight_slot(tool_ctrl.current_index))
+	
 	state_machine.initialize(self, animation_controller)
 	
 func _physics_process(delta: float) -> void:

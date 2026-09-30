@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://byrns4jyh60tk"
-path="res://.godot/imported/Path_Tile.png-58442e72401a30574898c0dbcdab5d06.ctex"
+uid="uid://d0jle0x084bmw"
+path="res://.godot/imported/Sword.png-81ca92468ea3f705ae868cc1f9743f8d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/farm_rpg/tileset/ext/Path_Tile.png"
-dest_files=["res://.godot/imported/Path_Tile.png-58442e72401a30574898c0dbcdab5d06.ctex"]
+source_file="res://assets/farm_rpg/icons/tools/wood/Sword.png"
+dest_files=["res://.godot/imported/Sword.png-81ca92468ea3f705ae868cc1f9743f8d.ctex"]
 
 [params]
 

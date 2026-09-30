@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c1qmmkdpdh40i"
-path="res://.godot/imported/Cliff_Tile.png-874f1b3f76176da231541ed2ba9c02e1.ctex"
+uid="uid://ddnh3dmd48l0m"
+path="res://.godot/imported/Shovel.png-802948b444b0466f229664c1d3b274ea.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/farm_rpg/tileset/ext/Cliff_Tile.png"
-dest_files=["res://.godot/imported/Cliff_Tile.png-874f1b3f76176da231541ed2ba9c02e1.ctex"]
+source_file="res://assets/farm_rpg/icons/tools/wood/Shovel.png"
+dest_files=["res://.godot/imported/Shovel.png-802948b444b0466f229664c1d3b274ea.ctex"]
 
 [params]
 

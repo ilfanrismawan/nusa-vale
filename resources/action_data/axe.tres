@@ -1,9 +1,12 @@
 [gd_resource type="Resource" script_class="ActionData" format=3 uid="uid://dhh5pdmrc30cu"]
 
+[ext_resource type="Texture2D" uid="uid://cl1l1cchsdn2v" path="res://resources/icons/icon_axe.tres" id="1_nn5yw"]
 [ext_resource type="Script" uid="uid://babxwm68vuqeh" path="res://scripts/state/action_data.gd" id="1_uuc6g"]
 
 [resource]
 script = ExtResource("1_uuc6g")
+display_name = "axe"
+icon = ExtResource("1_nn5yw")
 animation_name = &"Axe"
 input_action = &"axe"
 hit_frame = 3
