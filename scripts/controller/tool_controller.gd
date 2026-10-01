@@ -52,7 +52,7 @@ func select_tool(index: int) -> void:
 		return
 	
 	current_index = index
-	tool_changed.emit(current_index)
+	tool_changed.emit(current_tool)
 	print("Tool aktif: ", current_tool.display_name)
 	
 func use_action(action: ActionData) -> void:

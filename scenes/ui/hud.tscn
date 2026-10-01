@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://cw8nmal7ii5ue"]
+
+[ext_resource type="Script" uid="uid://dt7thdf6sv6lj" path="res://scenes/ui/hud.gd" id="1_8qguk"]
+[ext_resource type="Texture2D" uid="uid://bjqa0akh2pva5" path="res://assets/farm_rpg/Clock/Clock.png" id="1_bo48s"]
+[ext_resource type="Texture2D" uid="uid://hun4udw71hlk" path="res://assets/farm_rpg/Clock/clock hand.png" id="2_8qguk"]
+[ext_resource type="Texture2D" uid="uid://dcvh6rh0mven1" path="res://assets/farm_rpg/Clock/Extras.png" id="2_136eg"]
+[ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="3_136eg"]
+
+[sub_resource type="FontVariation" id="FontVariation_ovsut"]
+base_font = ExtResource("3_136eg")
+spacing_glyph = 50
+spacing_space = 50
+
+[sub_resource type="LabelSettings" id="LabelSettings_ovsut"]
+line_spacing = 100.0
+font = ExtResource("3_136eg")
+font_size = 14
+font_color = Color(0.13333334, 0.06666667, 0.13333334, 1)
+shadow_color = Color(0, 0, 0, 0.17254902)
+
+[sub_resource type="LabelSettings" id="LabelSettings_ywce2"]
+font = ExtResource("3_136eg")
+font_size = 13
+font_color = Color(0.13333334, 0.06666667, 0.13333334, 1)
+shadow_color = Color(0, 0, 0, 0.30588236)
+
+[sub_resource type="LabelSettings" id="LabelSettings_ajcru"]
+font = ExtResource("3_136eg")
+font_size = 10
+font_color = Color(0.13333334, 0.06666667, 0.13333334, 1)
+shadow_color = Color(0, 0, 0, 0.24705882)
+
+[node name="HUD" type="CanvasLayer" unique_id=1575410842]
+script = ExtResource("1_8qguk")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=13787984]
+position = Vector2(574, 64)
+scale = Vector2(2, 2)
+texture = ExtResource("2_136eg")
+region_enabled = true
+region_rect = Rect2(142, 70, 59, 49)
+
+[node name="ClockDisplay" type="Control" parent="Sprite2D" unique_id=1433762434]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -45.333332
+offset_top = -32.666668
+offset_right = -45.333332
+offset_bottom = 16.333332
+pivot_offset = Vector2(-10, 10)
+
+[node name="ClockBg" type="TextureRect" parent="Sprite2D/ClockDisplay" unique_id=1427033482]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_bo48s")
+
+[node name="ClockHand" type="Sprite2D" parent="Sprite2D/ClockDisplay/ClockBg" unique_id=1160113035]
+position = Vector2(20, 21)
+texture = ExtResource("2_8qguk")
+hframes = 8
+
+[node name="MoneyLabel" type="Label" parent="Sprite2D" unique_id=2106462979]
+offset_left = -13.0
+offset_top = 6.5
+offset_right = 32.0
+offset_bottom = 19.5
+theme_override_constants/line_spacing = 3
+theme_override_fonts/font = SubResource("FontVariation_ovsut")
+text = "100 G"
+label_settings = SubResource("LabelSettings_ovsut")
+
+[node name="DayLabel" type="Label" parent="Sprite2D" unique_id=1304610861]
+offset_left = -2.0
+offset_top = -22.5
+offset_right = 40.0
+offset_bottom = -9.5
+text = "Hari 1"
+label_settings = SubResource("LabelSettings_ywce2")
+
+[node name="TimeLabel" type="Label" parent="Sprite2D" unique_id=1928001391]
+offset_left = -3.0
+offset_top = -10.0
+offset_right = 39.0
+offset_bottom = 2.0
+text = "06:00 AM"
+label_settings = SubResource("LabelSettings_ajcru")

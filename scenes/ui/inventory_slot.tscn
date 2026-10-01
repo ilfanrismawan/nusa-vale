@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://cbg24vroh5cka"]
+
+[ext_resource type="Script" uid="uid://nl1l1bhh5soy" path="res://scripts/ui/inventory_slot.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://resources/ui/slot_normal.tres" id="2_slot_tex"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_count"]
+font_size = 6
+outline_size = 2
+outline_color = Color(0.15, 0.1, 0.05, 1)
+
+[node name="InventorySlot" type="TextureRect" unique_id=2087412665]
+texture_filter = 1
+custom_minimum_size = Vector2(20, 20)
+texture = ExtResource("2_slot_tex")
+expand_mode = 3
+stretch_mode = 5
+script = ExtResource("1_script")
+
+[node name="Icon" type="TextureRect" parent="." unique_id=342227426]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(-8, 8)
+stretch_mode = 5
+
+[node name="Icon2" type="TextureRect" parent="." unique_id=1666575935]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(-8, 8)
+stretch_mode = 5
+
+[node name="CountLabel" type="Label" parent="." unique_id=368989431]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -12.0
+offset_top = -10.0
+grow_horizontal = 0
+grow_vertical = 0
+label_settings = SubResource("LabelSettings_count")
+horizontal_alignment = 2
+vertical_alignment = 2

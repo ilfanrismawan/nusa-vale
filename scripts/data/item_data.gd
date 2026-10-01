@@ -1,6 +1,9 @@
 class_name ItemData
 extends Resource
 
+enum Category { ALL, SEED, CROP, TOOL, MATERIAL}
+@export var category: Category = Category.MATERIAL
+
 @export var item_id: String = ""
 @export var display_name: String = ""
 @export var icon: Texture2D

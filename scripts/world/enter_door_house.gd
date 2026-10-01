@@ -1,14 +1,15 @@
 extends Area2D
 
-@export_file("*.tscn") var target_scene: String
+@export var interior_scene_path: String = "res://scenes/world/interior/interior_house.tscn"
+@export var target_spawn_pos: Vector2 = Vector2(312, 206)
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	print("Area siap, target: ", target_scene)
 	body_entered.connect(_on_body_entered)
-
-
-func _on_body_entered(body):
-	print("Node: ", body.get_path(), " | groups: ", body.get_groups())
-	if body.is_in_group("player"):
-		get_tree().change_scene_to_file(target_scene)
+	
+func _on_body_entered(body: Node2D) -> void:
+	print("Menyentuh pintu masuk: ", body.name)
+	
+	if body is Player or body.is_in_group("player"):
+		GameState.next_spawn_position = target_spawn_pos
+		GameState.has_spawn_point = true
+		get_tree().change_scene_to_file(interior_scene_path)

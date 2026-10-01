@@ -10,5 +10,8 @@ func _ready() -> void:
 
 func _on_body_entered(body):
 	print("Node: ", body.get_path(), " | groups: ", body.get_groups())
-	if body.is_in_group("player"):
+	if body is Player or body.is_in_group("player"):
+		# Posisi pintu rumah di map Farm (1159, 275)
+		GameState.next_spawn_position = Vector2(1159, 295)
+		GameState.has_spawn_point = true
 		get_tree().change_scene_to_file(target_scene)

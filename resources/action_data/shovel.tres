@@ -14,5 +14,6 @@ display_name = "shovel"
 icon = ExtResource("2_fl402")
 animation_name = &"Shovel"
 input_action = &"shovel"
+hit_frame = 3
 effect = SubResource("Resource_ajofe")
 metadata/_custom_type_script = "uid://babxwm68vuqeh"

@@ -1,12 +1,12 @@
 [gd_resource type="Resource" script_class="ActionData" format=3 uid="uid://buhctuso6827s"]
 
-[ext_resource type="Script" uid="uid://q0k4rq7vbg1e" path="res://scripts/effects/action_effect.gd" id="1_ibojs"]
+[ext_resource type="Script" uid="uid://dkcra16xdgfu8" path="res://scripts/effects/hoe_effect.gd" id="1_g3dm3"]
 [ext_resource type="Script" uid="uid://babxwm68vuqeh" path="res://scripts/state/action_data.gd" id="1_vlfuu"]
 [ext_resource type="Texture2D" uid="uid://7pt6228v7t1n" path="res://resources/icons/icon_hoe.tres" id="2_g3dm3"]
 
-[sub_resource type="Resource" id="Resource_ov1oi"]
-script = ExtResource("1_ibojs")
-metadata/_custom_type_script = "uid://q0k4rq7vbg1e"
+[sub_resource type="Resource" id="Resource_mp7hb"]
+script = ExtResource("1_g3dm3")
+metadata/_custom_type_script = "uid://dkcra16xdgfu8"
 
 [resource]
 script = ExtResource("1_vlfuu")
@@ -14,6 +14,6 @@ display_name = "hoe"
 icon = ExtResource("2_g3dm3")
 animation_name = &"Hoe"
 input_action = &"hoe"
-hit_frame = 3
-effect = SubResource("Resource_ov1oi")
+hit_frame = 6
+effect = SubResource("Resource_mp7hb")
 metadata/_custom_type_script = "uid://babxwm68vuqeh"

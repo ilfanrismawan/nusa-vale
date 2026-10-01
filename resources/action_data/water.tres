@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ActionData" format=3 uid="uid://s2n6e2y564m3"]
+
+[ext_resource type="Script" uid="uid://babxwm68vuqeh" path="res://scripts/state/action_data.gd" id="1_ls7gn"]
+[ext_resource type="Script" uid="uid://dmqyo5ybith08" path="res://scripts/effects/water_effect.gd" id="1_qk4pj"]
+[ext_resource type="Texture2D" uid="uid://dsa1uipft6uq" path="res://resources/icons/icon_water.tres" id="2_k3hx8"]
+
+[sub_resource type="Resource" id="Resource_qk4pj"]
+script = ExtResource("1_qk4pj")
+metadata/_custom_type_script = "uid://dmqyo5ybith08"
+
+[resource]
+script = ExtResource("1_ls7gn")
+display_name = "Water"
+icon = ExtResource("2_k3hx8")
+animation_name = &"Water"
+input_action = &"water"
+hit_frame = 6
+effect = SubResource("Resource_qk4pj")
+metadata/_custom_type_script = "uid://babxwm68vuqeh"

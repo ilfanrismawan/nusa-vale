@@ -23,7 +23,6 @@ polygon = PackedVector2Array(-8, 37, -9, 23, -8, 17, 9, 17, 10, 22, 9, 30, 8, 40
 
 [node name="Door" type="Area2D" parent="Wall" unique_id=1324620855]
 script = ExtResource("2_coavl")
-target_scene = "uid://gaufp2g5voy0"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Wall/Door" unique_id=675798593]
 position = Vector2(0, 27.5)

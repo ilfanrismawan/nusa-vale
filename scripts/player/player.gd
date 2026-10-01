@@ -12,12 +12,22 @@ extends CharacterBody2D
 
 var facing_direction := Vector2.DOWN
 
+const FEET_OFFSET := Vector2(0, 8)
+const ACTION_DISTANCE := 16.0
+
+
 func _ready() -> void:
 	hotbar_ui.setup.call_deferred(tool_ctrl.actions)
+	hotbar_ui.slot_clicked.connect(func(index: int): tool_ctrl.select_tool(index))
 	tool_ctrl.tool_changed.connect(func(a):
 		hotbar_ui.highlight_slot(tool_ctrl.current_index))
 	
 	state_machine.initialize(self, animation_controller)
+	
+	if GameState.has_spawn_point:
+		global_position = GameState.next_spawn_position
+		GameState.has_spawn_point = false
+		
 	
 func _physics_process(delta: float) -> void:
 	state_machine.physics_update(delta)
@@ -46,10 +56,10 @@ func world_to_cell(world_position: Vector2) -> Vector2i:
 	return base_layer_ground.local_to_map(base_layer_ground.to_local(world_position))
  
 func get_player_cell() -> Vector2i:
+	var foot_position: Vector2 = global_position + FEET_OFFSET
 	return base_layer_ground.local_to_map(
-		base_layer_ground.to_local(global_position)
+		base_layer_ground.to_local(foot_position)
 	)
 
 func get_target_cell() -> Vector2i:
-	var player_cell := get_player_cell()
-	return player_cell + Vector2i(facing_direction)
+	return get_player_cell() + Vector2i(facing_direction)

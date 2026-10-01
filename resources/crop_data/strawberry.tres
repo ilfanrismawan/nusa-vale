@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="CropData" format=3 uid="uid://rtu43cdyw34s"]
+
+[ext_resource type="Script" uid="uid://bq03ikyg8041q" path="res://scripts/farming/crop_data.gd" id="1_pokfu"]
+[ext_resource type="Texture2D" uid="uid://cdymqylaraqh1" path="res://resources/icons/icon_seed_strawberry.tres" id="1_vey2w"]
+
+[resource]
+script = ExtResource("1_pokfu")
+crop_id = "strawberry"
+display_name = "Strawberry"
+icon = ExtResource("1_vey2w")
+growth_stages = Array[Vector2i]([Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0), Vector2i(3, 0), Vector2i(4, 0), Vector2i(5, 0)])
+harvest_item_id = "strawberry"
+metadata/_custom_type_script = "uid://bq03ikyg8041q"

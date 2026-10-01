@@ -1,5 +1,6 @@
 extends CanvasLayer
 
+signal slot_clicked(index: int)
 @onready var slot_container: HBoxContainer = $"MarginContainer/HBoxContainer"
 
 var slots: Array[TextureRect] = []
@@ -8,13 +9,14 @@ var active_index: int = 0
 
 const SLOT_SIZE := 28  # pixel, kecil untuk pixel art game
 
-func setup(actions: Array[ActionData]) -> void:
+func setup(actions: Array[ActionData]) -> void:			
 	# Hapus slot lama
 	for child in slot_container.get_children():
 		child.queue_free()
 	slots.clear()
 	frames.clear()
-
+	
+	
 	# Buat slot baru per action
 	for i in actions.size():
 		var action := actions[i]
@@ -35,6 +37,13 @@ func setup(actions: Array[ActionData]) -> void:
 		style.corner_radius_bottom_left = 4
 		style.corner_radius_bottom_right = 4
 		frame.add_theme_stylebox_override("panel", style)
+		
+		frame.mouse_filter = Control.MOUSE_FILTER_STOP
+		var slot_idx := i
+	
+		frame.gui_input.connect(func(event: InputEvent):
+			if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+				slot_clicked.emit(slot_idx))
 
 		# Icon di dalam frame
 		var tex := TextureRect.new()

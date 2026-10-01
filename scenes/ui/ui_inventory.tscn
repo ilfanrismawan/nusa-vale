@@ -1,0 +1,131 @@
+[gd_scene format=3 uid="uid://dufirbfujpiry"]
+
+[ext_resource type="Script" uid="uid://5f2xbdnvcc84" path="res://scripts/ui/ui_inventory.gd" id="1_dv7qf"]
+[ext_resource type="Texture2D" path="res://resources/ui/book_bg.tres" id="2_trwh6"]
+[ext_resource type="Texture2D" path="res://resources/ui/title_banner.tres" id="3_cb5kx"]
+[ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="4_qdtvf"]
+[ext_resource type="Texture2D" path="res://resources/ui/decor_border.tres" id="5_1f4qj"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+font = ExtResource("4_qdtvf")
+font_size = 10
+font_color = Color(0.35, 0.2, 0.1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_capacity"]
+font = ExtResource("4_qdtvf")
+font_color = Color(0.45, 0.3, 0.15, 1)
+outline_color = Color(0.9, 0.85, 0.75, 0.5)
+
+[node name="UIInventory" type="CanvasLayer" unique_id=404707451]
+script = ExtResource("1_dv7qf")
+
+[node name="Dimmer" type="ColorRect" parent="." unique_id=851330332]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.4)
+
+[node name="BookBg" type="TextureRect" parent="Dimmer" unique_id=1270225104]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -110.0
+offset_top = -80.0
+offset_right = 128.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2, 2)
+pivot_offset = Vector2(119, 72)
+texture = ExtResource("2_trwh6")
+stretch_mode = 5
+
+[node name="PageMargin" type="MarginContainer" parent="Dimmer/BookBg" unique_id=1062465128]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 10
+
+[node name="PageContent" type="VBoxContainer" parent="Dimmer/BookBg/PageMargin" unique_id=381361860]
+texture_filter = 1
+layout_mode = 2
+theme_override_constants/separation = 3
+alignment = 1
+
+[node name="TitleBar" type="TextureRect" parent="Dimmer/BookBg/PageMargin/PageContent" unique_id=691108528]
+texture_filter = 1
+custom_minimum_size = Vector2(88, 15)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("3_cb5kx")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TitleLabel" type="Label" parent="Dimmer/BookBg/PageMargin/PageContent/TitleBar" unique_id=1106403775]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_right = -18.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Inventory"
+label_settings = SubResource("LabelSettings_title")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DecorTop" type="TextureRect" parent="Dimmer/BookBg/PageMargin/PageContent" unique_id=1987980317]
+texture_filter = 1
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("5_1f4qj")
+expand_mode = 1
+stretch_mode = 2
+
+[node name="SlotGrid" type="GridContainer" parent="Dimmer/BookBg/PageMargin/PageContent" unique_id=2027134067]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/h_separation = 2
+theme_override_constants/v_separation = 2
+columns = 4
+
+[node name="DecorBottom" type="TextureRect" parent="Dimmer/BookBg/PageMargin/PageContent" unique_id=10432731]
+texture_filter = 1
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("5_1f4qj")
+expand_mode = 1
+stretch_mode = 2
+
+[node name="Footer" type="HBoxContainer" parent="Dimmer/BookBg/PageMargin/PageContent" unique_id=1206693422]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 4
+alignment = 1
+
+[node name="CapacityLabel" type="Label" parent="Dimmer/BookBg/PageMargin/PageContent/Footer" unique_id=1907140168]
+texture_filter = 1
+layout_mode = 2
+text = "0/20"
+label_settings = SubResource("LabelSettings_capacity")
+horizontal_alignment = 1

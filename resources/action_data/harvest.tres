@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ActionData" format=3 uid="uid://bj46gqceuj4rb"]
+
+[ext_resource type="Script" uid="uid://b3552q380fai0" path="res://scripts/effects/harvest_effect.gd" id="1_4c073"]
+[ext_resource type="Script" uid="uid://babxwm68vuqeh" path="res://scripts/state/action_data.gd" id="1_j3m30"]
+
+[sub_resource type="Resource" id="Resource_4c073"]
+script = ExtResource("1_4c073")
+metadata/_custom_type_script = "uid://b3552q380fai0"
+
+[resource]
+script = ExtResource("1_j3m30")
+display_name = "Harvest"
+animation_name = &"Shovel"
+input_action = &"shovel"
+hit_frame = 3
+effect = SubResource("Resource_4c073")
+metadata/_custom_type_script = "uid://babxwm68vuqeh"
