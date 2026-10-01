@@ -99,7 +99,7 @@ func remove_item(item_id: String, amount: int = 1) -> bool:
 
 func add_money(amount: int) -> void:
 	money += amount
-	money_changed.emit()
+	money_changed.emit(money)
 	
 func spend_money(amount: int) -> bool:
 	if money >= amount:

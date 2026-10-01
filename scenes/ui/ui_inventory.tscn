@@ -99,6 +99,37 @@ texture = ExtResource("5_1f4qj")
 expand_mode = 1
 stretch_mode = 2
 
+[node name="CategoryTabs" type="HBoxContainer" parent="Dimmer/BookBg/PageMargin/PageContent" unique_id=532528049]
+layout_mode = 2
+alignment = 1
+
+[node name="BtnAll" type="Button" parent="Dimmer/BookBg/PageMargin/PageContent/CategoryTabs" unique_id=1252590783]
+texture_filter = 1
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_qdtvf")
+theme_override_font_sizes/font_size = 16
+text = "Semua"
+
+[node name="BtnSeed" type="Button" parent="Dimmer/BookBg/PageMargin/PageContent/CategoryTabs" unique_id=176948092]
+texture_filter = 1
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_qdtvf")
+theme_override_font_sizes/font_size = 16
+text = "Bibit"
+
+[node name="BtnCrop" type="Button" parent="Dimmer/BookBg/PageMargin/PageContent/CategoryTabs" unique_id=232000527]
+texture_filter = 1
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_qdtvf")
+theme_override_font_sizes/font_size = 16
+text = "Panen"
+
+[node name="BtnTool" type="Button" parent="Dimmer/BookBg/PageMargin/PageContent/CategoryTabs" unique_id=838232209]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_qdtvf")
+theme_override_font_sizes/font_size = 16
+text = "Alat"
+
 [node name="SlotGrid" type="GridContainer" parent="Dimmer/BookBg/PageMargin/PageContent" unique_id=2027134067]
 texture_filter = 1
 layout_mode = 2

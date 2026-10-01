@@ -5,7 +5,7 @@ extends CharacterBody2D
 
 @onready var animation_controller: AnimationController = $AnimationController
 @onready var state_machine: StateMachine = $StateMachine
-@onready var base_layer_ground: TileMapLayer = $"../../BaseLayerGround"
+@onready var base_layer_ground: TileMapLayer = get_node_or_null("../../BaseLayerGround")
 
 @onready var hotbar_ui = $"../HotbarUi"
 @onready var tool_ctrl = $ToolController
@@ -53,9 +53,13 @@ func update_facing_direction(direction: Vector2) -> void:
 	animation_controller.set_direction(facing_direction)
 
 func world_to_cell(world_position: Vector2) -> Vector2i:
+	if base_layer_ground == null:
+		return Vector2i.ZERO
 	return base_layer_ground.local_to_map(base_layer_ground.to_local(world_position))
  
 func get_player_cell() -> Vector2i:
+	if base_layer_ground == null:
+		return Vector2i.ZERO
 	var foot_position: Vector2 = global_position + FEET_OFFSET
 	return base_layer_ground.local_to_map(
 		base_layer_ground.to_local(foot_position)

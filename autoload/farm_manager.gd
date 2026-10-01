@@ -1,7 +1,7 @@
 extends Node
 
 signal crop_planted(cell: Vector2i, crop: CropData)
-signal crop_harvested(cell, Vector2i, item_id: String, count: int)
+signal crop_harvested(cell: Vector2i, item_id: String, count: int)
 
 var base_layer_ground: TileMapLayer
 var soil_layer: TileMapLayer
@@ -19,8 +19,29 @@ func initialize(world: Node) -> void:
 	soil_layer = world.get_node("SoilLayer")
 	crop_layer = world.get_node("Crop")
 	
-	DayCycle.day_passed.connect(_on_day_passed)
+	if not DayCycle.day_passed.is_connected(_on_day_passed):
+		DayCycle.day_passed.connect(_on_day_passed)
 	
+	_restore_tiles()
+	
+func _restore_tiles() -> void:
+	for cell in farm_data:
+		var data: Dictionary = farm_data[cell]
+		
+		soil_layer.set_cells_terrain_connect(
+			[cell], TERRAIN_SET_SOIL, TERRAIN_TILLED
+		)
+		
+		if data["watered"]:
+			watered_layer.set_cells_terrain_connect(
+				[cell], TERRAIN_SET_SOIL, 0
+			)
+		
+		if data["crop"] != null:
+			_update_crop_tile(cell, data["crop"], data["stage"])
+	
+	if not farm_data.is_empty():
+		print("Restore tile: %d petak dikembalikan" % farm_data.size())
 	
 func hoe(cell: Vector2i) -> void:
 	if not is_tile_farmable(cell):
@@ -92,6 +113,8 @@ func harvest(cell: Vector2i) -> bool:
 	return true
 	
 func _on_day_passed(_day: int) -> void:
+	var layers_valid := is_instance_valid(crop_layer) and is_instance_valid(watered_layer)
+	
 	for cell in farm_data:
 		var data: Dictionary = farm_data[cell]
 		
@@ -104,16 +127,20 @@ func _on_day_passed(_day: int) -> void:
 				if data["days_in_stage"] >= crop.days_per_stage:
 					data["stage"] += 1
 					data["days_in_stage"] = 0
-					_update_crop_tile(cell, crop, data["stage"])
+					if layers_valid:
+						_update_crop_tile(cell, crop, data["stage"])
 					print("%s tumbuh ke stage %d" % [crop.display_name, data["stage"]])
 			else:
 				print("%s sudah siap panen di %s" % [crop.display_name, cell])
 		
 		data["watered"] = false
 		
-		watered_layer.erase_cell(cell)
+		if layers_valid:
+			watered_layer.erase_cell(cell)
 			
 func _update_crop_tile(cell: Vector2i, crop: CropData, stage: int) -> void:
+	if not is_instance_valid(crop_layer):
+		return
 	var coords := crop.growth_stages[stage]
 	crop_layer.set_cell(cell, crop.tileset_source_id, coords)
 	

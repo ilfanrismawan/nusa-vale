@@ -4,10 +4,9 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	print(FarmManager)
-	print(FarmManager.get_script())
-	print(FarmManager.has_method("initialize"))
 	FarmManager.initialize(self)
+	DayCycle.time_tick.connect(_on_time_tick)
+	_on_time_tick(DayCycle.hour, DayCycle.minute)
 
 #efek pergantian siang sore malam
 func _on_time_tick(hour: int, _minute: int) -> void:
