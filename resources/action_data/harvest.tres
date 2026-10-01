@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b3552q380fai0" path="res://scripts/effects/harvest_effect.gd" id="1_4c073"]
 [ext_resource type="Script" uid="uid://babxwm68vuqeh" path="res://scripts/state/action_data.gd" id="1_j3m30"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_strawberry.tres" id="2_oui2p"]
 
 [sub_resource type="Resource" id="Resource_4c073"]
 script = ExtResource("1_4c073")
@@ -10,6 +11,7 @@ metadata/_custom_type_script = "uid://b3552q380fai0"
 [resource]
 script = ExtResource("1_j3m30")
 display_name = "Harvest"
+icon = ExtResource("2_oui2p")
 animation_name = &"Shovel"
 input_action = &"shovel"
 hit_frame = 3

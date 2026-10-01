@@ -1,12 +1,12 @@
 [gd_resource type="Resource" script_class="ActionData" format=3 uid="uid://bd8rejuy7t25e"]
 
-[ext_resource type="Script" uid="uid://q0k4rq7vbg1e" path="res://scripts/effects/action_effect.gd" id="1_g02ak"]
+[ext_resource type="Script" uid="uid://d1yq110coek5k" path="res://scripts/effects/shovel_effect.gd" id="1_g02ak"]
 [ext_resource type="Script" uid="uid://babxwm68vuqeh" path="res://scripts/state/action_data.gd" id="1_j7hip"]
 [ext_resource type="Texture2D" uid="uid://dnejd2nfvkhar" path="res://resources/icons/icon_shovel.tres" id="2_fl402"]
 
-[sub_resource type="Resource" id="Resource_ajofe"]
+[sub_resource type="Resource" id="Resource_287bi"]
 script = ExtResource("1_g02ak")
-metadata/_custom_type_script = "uid://q0k4rq7vbg1e"
+metadata/_custom_type_script = "uid://d1yq110coek5k"
 
 [resource]
 script = ExtResource("1_j7hip")
@@ -15,5 +15,5 @@ icon = ExtResource("2_fl402")
 animation_name = &"Shovel"
 input_action = &"shovel"
 hit_frame = 3
-effect = SubResource("Resource_ajofe")
+effect = SubResource("Resource_287bi")
 metadata/_custom_type_script = "uid://babxwm68vuqeh"

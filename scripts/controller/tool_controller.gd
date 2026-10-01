@@ -35,7 +35,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("tool_prev"):
 		switch_tool(-1)
 	
-	for i in range(mini(actions.size(), 5)):
+	for i in range(mini(actions.size(), 6)):
 		if event.is_action_pressed("slot_%d" % (i + 1)):
 			select_tool(i)
 			return
