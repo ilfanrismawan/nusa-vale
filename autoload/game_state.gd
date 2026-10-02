@@ -12,6 +12,7 @@ var has_spawn_point: bool = false
 
 const SHOP_PRICES := {
 	"seed_strawberry": 15,
+	"seed_carrot": 25,
 }
 
 
