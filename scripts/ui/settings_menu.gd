@@ -19,6 +19,7 @@ const RESOLUTIONS: Array[Vector2i] = [
 ]
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	hide()
 	_setup_ui()
 
@@ -147,9 +148,11 @@ func toggle() -> void:
 func _open() -> void:
 	_sync_current_settings()
 	show()
+	get_tree().paused = true
 
 func _close() -> void:
 	hide()
+	get_tree().paused = false
 
 func _toggle_fullscreen() -> void:
 	var cur = DisplayServer.window_get_mode()
@@ -175,6 +178,8 @@ func _input(event: InputEvent) -> void:
 		if not visible:
 			var inventory_node = get_parent().get_node_or_null("UIInventory")
 			if inventory_node and inventory_node.visible:
+				return
+			if get_tree().paused:
 				return
 		toggle()
 		get_viewport().set_input_as_handled()

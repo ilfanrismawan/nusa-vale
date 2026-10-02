@@ -5,6 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://bye3dnnqckqj5" path="res://scenes/player/Player.tscn" id="3_gvyf1"]
 [ext_resource type="Texture2D" uid="uid://dwmb3bhuq3tm4" path="res://assets/farm_rpg/tileset/ext/Old planks.png" id="3_l5guh"]
 [ext_resource type="Script" uid="uid://tw7i8ohp1n1" path="res://scripts/world/exit_door_house.gd" id="4_5n7fl"]
+[ext_resource type="Script" uid="uid://bubk6r06ryn05" path="res://scripts/world/bed.gd" id="6_4cxdx"]
+[ext_resource type="Texture2D" uid="uid://jy6e75i02lwh" path="res://scenes/world/interior/objects/Beds.png" id="7_cnadn"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_l5guh"]
 texture = ExtResource("2_gvyf1")
@@ -1264,6 +1266,12 @@ texture = ExtResource("3_l5guh")
 [sub_resource type="TileSet" id="TileSet_ajcru"]
 sources/0 = SubResource("TileSetAtlasSource_cnadn")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ajcru"]
+size = Vector2(24, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ywce2"]
+size = Vector2(25, 17)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ovsut"]
 
 [node name="InteriorHouse" type="Node2D" unique_id=792953455]
@@ -1279,11 +1287,31 @@ position = Vector2(270, 122)
 tile_map_data = PackedByteArray("AAADAAQAAAAAAAAAAAADAAUAAAAAAAEAAAAEAAQAAAABAAAAAAAEAAUAAAABAAEAAAAFAAQAAAACAAAAAAAFAAUAAAACAAEAAAA=")
 tile_set = SubResource("TileSet_ajcru")
 
+[node name="Area2D" type="Area2D" parent="." unique_id=276044005]
+position = Vector2(331, 129)
+script = ExtResource("6_4cxdx")
+
+[node name="Sprite2D" type="Sprite2D" parent="Area2D" unique_id=913235950]
+position = Vector2(-29, -2)
+texture = ExtResource("7_cnadn")
+region_enabled = true
+region_rect = Rect2(48, 184, 32, 24)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=789521940]
+position = Vector2(-29, -2)
+shape = SubResource("RectangleShape2D_ajcru")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Area2D" unique_id=154353960]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D/StaticBody2D" unique_id=860477030]
+position = Vector2(-28.5, -1.5)
+shape = SubResource("RectangleShape2D_ywce2")
+
 [node name="spawn" type="Marker2D" parent="." unique_id=121107213]
 position = Vector2(270, 122)
 
 [node name="Player" parent="." unique_id=374434540 instance=ExtResource("3_gvyf1")]
-position = Vector2(312, 206)
+position = Vector2(317, 151)
 
 [node name="ExitDoor" type="Area2D" parent="." unique_id=1117652326]
 position = Vector2(267, 121)

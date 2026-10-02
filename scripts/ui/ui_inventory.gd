@@ -17,11 +17,13 @@ extends CanvasLayer
 
 const GRID_COLUMNS := 4
 var _slots: Array[InventorySlotUI] = []
+var _displayed: Array = []
 
 var current_category: ItemData.Category = ItemData.Category.ALL
 
 ## ── Lifecycle ────────────────────────────────────────────────────
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	hide()
 	_setup_category_tabs()
 	_create_slots()
@@ -47,12 +49,15 @@ func _setup_category_tabs() -> void:
 func _set_category(cat: ItemData.Category) -> void:
 	current_category = cat		
 	refresh_inventory()
+	_clear_item_detail()
 			
 ## ── Input ────────────────────────────────────────────────────────
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("inventory") and not event.is_echo():
 		var settings = get_parent().get_node_or_null("SettingsMenu")
 		if settings and settings.visible:
+			return
+		if get_tree().paused and not visible:
 			return
 		toggle()
 		get_viewport().set_input_as_handled()
@@ -71,9 +76,11 @@ func _open() -> void:
 	refresh_inventory()
 	_clear_item_detail()
 	show()
+	get_tree().paused = true
 
 func _close() -> void:
 	hide()
+	get_tree().paused = false
 
 ## ── Slot Management & Filter ──────────────────────────────────────────────
 func _create_slots() -> void:
@@ -93,14 +100,13 @@ func _create_slots() -> void:
 		_slots.append(slot)
 
 func _on_slot_clicked(index: int, button: int) -> void:
-	if index < 0 or index >= GameState.inventory.size():
+	if index < 0 or index >= _displayed.size():
+		_clear_item_detail()
 		return
 	
-	var slot_data = GameState.inventory[index]
-	if slot_data != null and slot_data.get("item") != null:
-		_display_item_detail(slot_data["item"], slot_data["count"])
-	else:
-		_clear_item_detail()
+	var slot_data = _displayed[index]
+	_display_item_detail(slot_data["item"], slot_data["count"])
+	
 
 func _display_item_detail(item: ItemData, count: int) -> void:
 	if detail_icon:
@@ -125,14 +131,17 @@ func refresh_inventory() -> void:
 
 	var matching_items: Array = []
 	for slot_data in GameState.inventory:
-		if slot_data != null and slot_data["item"] != null:
-			var item: ItemData = slot_data["item"]
-			if current_category == ItemData.Category.ALL or item.category == current_category:
+		if slot_data == null or slot_data["item"] == null:
+			continue
+		var item: ItemData = slot_data["item"]
+		if current_category == ItemData.Category.ALL or item.category == current_category:
 				matching_items.append(slot_data)
 	
-	for i in range (_slots.size()):
-		if i < matching_items.size():
-			_slots[i].set_item(matching_items[i]["item"], matching_items[i]["count"])
+	_displayed = matching_items
+	
+	for i in _slots.size():
+		if i < _displayed.size():
+			_slots[i].set_item(_displayed[i]["item"], _displayed[i]["count"])
 		else:
 			_slots[i].clear()
 

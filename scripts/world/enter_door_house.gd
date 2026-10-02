@@ -12,4 +12,4 @@ func _on_body_entered(body: Node2D) -> void:
 	if body is Player or body.is_in_group("player"):
 		GameState.next_spawn_position = target_spawn_pos
 		GameState.has_spawn_point = true
-		get_tree().change_scene_to_file(interior_scene_path)
+		get_tree().change_scene_to_file.call_deferred(interior_scene_path)

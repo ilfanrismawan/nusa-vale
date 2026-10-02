@@ -10,6 +10,10 @@ var inventory: Array = []
 var next_spawn_position: Vector2 = Vector2.ZERO
 var has_spawn_point: bool = false
 
+const SHOP_PRICES := {
+	"seed_strawberry": 15,
+}
+
 
 func _ready() -> void:
 	inventory.resize(INVENTORY_SIZE)
@@ -35,6 +39,19 @@ func _resolve_item(item_or_id: Variant) -> ItemData:
 			item.icon = load(icon_path)
 		return item
 	return null
+
+func buy_item(item_id: String, amount: int = 1) -> bool:
+	if not SHOP_PRICES.has(item_id):
+		return false
+	var cost: int = SHOP_PRICES[item_id] * amount
+	if not spend_money(cost):
+		print("Uang tidak cukup")
+		return false
+	var leftover := add_item(item_id, amount)
+	if leftover > 0:
+		add_money(SHOP_PRICES[item_id] * leftover) # refund sisa yang tidak muat
+		return leftover < amount
+	return true
 
 ## Tambah item ke slot inventory (mendukung ItemData atau String item_id)
 func add_item(item_or_id: Variant, amount: int = 1) -> int:
