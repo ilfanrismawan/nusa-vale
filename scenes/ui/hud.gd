@@ -1,9 +1,10 @@
 extends CanvasLayer
 
-@onready var time_label: Label = $Sprite2D/TimeLabel
-@onready var clock_hand: Sprite2D = $Sprite2D/ClockDisplay/ClockBg/ClockHand
-@onready var day_label: Label = $Sprite2D/DayLabel
-@onready var money_label: Label = $Sprite2D/MoneyLabel
+@onready var time_label: Label = %TimeLabel
+@onready var clock_hand: Sprite2D = %ClockHand
+@onready var day_label: Label = %DayLabel
+@onready var money_label: Label = %MoneyLabel
+@onready var btn_settings: Button = %BtnSettings
 
 
 func _ready() -> void:
@@ -11,9 +12,17 @@ func _ready() -> void:
 	DayCycle.day_passed.connect(_on_day_passed)
 	GameState.money_changed.connect(_on_money_changed)
 	
+	if is_instance_valid(btn_settings):
+		btn_settings.pressed.connect(_on_settings_pressed)
+	
 	_update_day(DayCycle.current_day)
 	_update_time(DayCycle.hour, DayCycle.minute)
 	_update_money(GameState.money)
+
+func _on_settings_pressed() -> void:
+	var settings = get_parent().get_node_or_null("SettingsMenu")
+	if settings:
+		settings.toggle()
 
 func _on_time_tick(hour: int, minute: int) -> void:
 	_update_time(hour, minute)

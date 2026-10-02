@@ -1,0 +1,211 @@
+[gd_scene format=3 uid="uid://df67kn03yptm1"]
+
+[ext_resource type="Script" uid="uid://bsh27k18pq05j" path="res://scripts/ui/settings_menu.gd" id="1_script"]
+[ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="2_font"]
+[ext_resource type="Texture2D" path="res://resources/ui/title_banner.tres" id="3_banner"]
+[ext_resource type="Texture2D" path="res://resources/ui/decor_border.tres" id="4_decor"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.18, 0.13, 0.1, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.55, 0.4, 0.25, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(0, 0, 0, 0.4)
+shadow_size = 4
+
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+font = ExtResource("2_font")
+font_size = 16
+font_color = Color(0.35, 0.2, 0.1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_item"]
+font = ExtResource("2_font")
+font_size = 16
+font_color = Color(0.9, 0.85, 0.75, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_hint"]
+font = ExtResource("2_font")
+font_size = 16
+font_color = Color(0.65, 0.6, 0.5, 1)
+
+[node name="SettingsMenu" type="CanvasLayer" unique_id=987216440]
+layer = 10
+script = ExtResource("1_script")
+
+[node name="Dimmer" type="ColorRect" parent="." unique_id=284918234]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="PanelContainer" type="PanelContainer" parent="Dimmer" unique_id=741029384]
+texture_filter = 1
+custom_minimum_size = Vector2(250, 210)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -125.0
+offset_top = -105.0
+offset_right = 125.0
+offset_bottom = 105.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Margin" type="MarginContainer" parent="Dimmer/PanelContainer" unique_id=837261940]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 8
+
+[node name="Content" type="VBoxContainer" parent="Dimmer/PanelContainer/Margin" unique_id=194820193]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="TitleBar" type="TextureRect" parent="Dimmer/PanelContainer/Margin/Content" unique_id=847291039]
+texture_filter = 1
+custom_minimum_size = Vector2(88, 15)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("3_banner")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TitleLabel" type="Label" parent="Dimmer/PanelContainer/Margin/Content/TitleBar" unique_id=948271038]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_right = -18.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Pengaturan"
+label_settings = SubResource("LabelSettings_title")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DecorTop" type="TextureRect" parent="Dimmer/PanelContainer/Margin/Content" unique_id=583920194]
+texture_filter = 1
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("4_decor")
+expand_mode = 1
+stretch_mode = 2
+
+[node name="OptionsGrid" type="GridContainer" parent="Dimmer/PanelContainer/Margin/Content" unique_id=472910482]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 4
+columns = 2
+
+[node name="LblWindowMode" type="Label" parent="Dimmer/PanelContainer/Margin/Content/OptionsGrid" unique_id=284910283]
+texture_filter = 1
+layout_mode = 2
+text = "Mode Layar"
+label_settings = SubResource("LabelSettings_item")
+
+[node name="WindowModeOption" type="OptionButton" parent="Dimmer/PanelContainer/Margin/Content/OptionsGrid" unique_id=184920192]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 16
+
+[node name="LblResolution" type="Label" parent="Dimmer/PanelContainer/Margin/Content/OptionsGrid" unique_id=573920194]
+texture_filter = 1
+layout_mode = 2
+text = "Resolusi"
+label_settings = SubResource("LabelSettings_item")
+
+[node name="ResolutionOption" type="OptionButton" parent="Dimmer/PanelContainer/Margin/Content/OptionsGrid" unique_id=294820193]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 16
+
+[node name="LblVsync" type="Label" parent="Dimmer/PanelContainer/Margin/Content/OptionsGrid" unique_id=482910394]
+texture_filter = 1
+layout_mode = 2
+text = "VSync"
+label_settings = SubResource("LabelSettings_item")
+
+[node name="VsyncCheck" type="CheckBox" parent="Dimmer/PanelContainer/Margin/Content/OptionsGrid" unique_id=194820492]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 16
+text = "Aktif"
+
+[node name="LblVolume" type="Label" parent="Dimmer/PanelContainer/Margin/Content/OptionsGrid" unique_id=492810293]
+texture_filter = 1
+layout_mode = 2
+text = "Volume"
+label_settings = SubResource("LabelSettings_item")
+
+[node name="VolumeBox" type="HBoxContainer" parent="Dimmer/PanelContainer/Margin/Content/OptionsGrid" unique_id=749201948]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="MasterSlider" type="HSlider" parent="Dimmer/PanelContainer/Margin/Content/OptionsGrid/VolumeBox" unique_id=948201923]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+
+[node name="MasterLabel" type="Label" parent="Dimmer/PanelContainer/Margin/Content/OptionsGrid/VolumeBox" unique_id=849201934]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(36, 0)
+layout_mode = 2
+text = "100%"
+label_settings = SubResource("LabelSettings_item")
+horizontal_alignment = 2
+
+[node name="HintLabel" type="Label" parent="Dimmer/PanelContainer/Margin/Content" unique_id=384920194]
+texture_filter = 1
+layout_mode = 2
+text = "F11: Layar Penuh  |  ESC: Menu / Batal"
+label_settings = SubResource("LabelSettings_hint")
+horizontal_alignment = 1
+
+[node name="DecorBottom" type="TextureRect" parent="Dimmer/PanelContainer/Margin/Content" unique_id=938201948]
+texture_filter = 1
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("4_decor")
+expand_mode = 1
+stretch_mode = 2
+
+[node name="BtnClose" type="Button" parent="Dimmer/PanelContainer/Margin/Content" unique_id=849201847]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(70, 20)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 16
+text = "Tutup"

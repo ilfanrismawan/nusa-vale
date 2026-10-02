@@ -4,7 +4,9 @@
 [ext_resource type="Texture2D" uid="uid://bi3hfsiexrnqr" path="res://assets/farm_rpg/objects/exterior/shipping box.png" id="2_icus8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ovsut"]
-size = Vector2(16, 15)
+size = Vector2(14, 13)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ajcru"]
 
 [node name="ShippingBin" type="Area2D" unique_id=1342505141]
 script = ExtResource("1_plga2")
@@ -14,6 +16,11 @@ texture = ExtResource("2_icus8")
 region_enabled = true
 region_rect = Rect2(0, 16, 16, 16)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1647253379]
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=968021486]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1647253379]
 position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_ovsut")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1918566008]
+shape = SubResource("RectangleShape2D_ajcru")

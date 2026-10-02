@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://bqqnf62q54j8r"]
+
+[ext_resource type="Script" uid="uid://8410el0dtaeb" path="res://scripts/world/choppable.gd" id="1_5qchx"]
+[ext_resource type="Texture2D" uid="uid://330u8sijhc3s" path="res://assets/farm_rpg/objects/tree/Birch Tree Animation.png" id="1_r6wkp"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_as7m0"]
+radius = 6.2499995
+height = 22.499996
+
+[node name="Tree" type="Node2D" unique_id=238171705]
+script = ExtResource("1_5qchx")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=237592714]
+texture = ExtResource("1_r6wkp")
+offset = Vector2(0, -20)
+region_enabled = true
+region_rect = Rect2(0, 48, 32, 48)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Sprite2D" unique_id=2109815010]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D/StaticBody2D" unique_id=501145078]
+position = Vector2(0, -4.9999995)
+scale = Vector2(0.8, 0.8)
+shape = SubResource("CapsuleShape2D_as7m0")

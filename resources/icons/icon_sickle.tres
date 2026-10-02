@@ -1,0 +1,7 @@
+[gd_resource type="AtlasTexture" format=3 uid="uid://b6sf30o6syg4w"]
+
+[ext_resource type="Texture2D" uid="uid://cnqh2bsnylckf" path="res://assets/farm_rpg/icons/tools/wood/Sickle.png" id="1_dqxm3"]
+
+[resource]
+atlas = ExtResource("1_dqxm3")
+region = Rect2(2, 2, 11, 12)

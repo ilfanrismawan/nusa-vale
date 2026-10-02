@@ -1,13 +1,12 @@
-[gd_resource type="Resource" script_class="ItemData" format=3]
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://c7lfb2s65cj0u"]
 
-[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1_item_script"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1_item_script"]
 [ext_resource type="Texture2D" uid="uid://cdymqylaraqh1" path="res://resources/icons/icon_seed_strawberry.tres" id="2_icon"]
 
 [resource]
 script = ExtResource("1_item_script")
+category = 1
 item_id = "seed_strawberry"
 display_name = "Benih Strawberry"
 icon = ExtResource("2_icon")
 description = "Benih untuk menanam tanaman strawberry di musim semi."
-stackable = true
-max_stack = 99

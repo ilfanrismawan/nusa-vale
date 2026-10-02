@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://be6cpsd7kiowk"]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1_6kg2j"]
+[ext_resource type="Texture2D" uid="uid://dvb0xvflg8qdt" path="res://resources/icons/icon_wood.tres" id="1_whxdr"]
+
+[resource]
+script = ExtResource("1_6kg2j")
+item_id = "wood"
+display_name = "Kayu"
+icon = ExtResource("1_whxdr")
+metadata/_custom_type_script = "uid://cm1okc20ussp3"

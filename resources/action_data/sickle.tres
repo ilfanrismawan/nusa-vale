@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ActionData" format=3 uid="uid://bp54i2j5xfoge"]
+
+[ext_resource type="Script" uid="uid://q0k4rq7vbg1e" path="res://scripts/effects/action_effect.gd" id="1_ijcdu"]
+[ext_resource type="Script" uid="uid://babxwm68vuqeh" path="res://scripts/state/action_data.gd" id="1_q08c0"]
+[ext_resource type="Texture2D" uid="uid://b6sf30o6syg4w" path="res://resources/icons/icon_sickle.tres" id="2_8d8rm"]
+
+[sub_resource type="Resource" id="Resource_qvttf"]
+script = ExtResource("1_ijcdu")
+metadata/_custom_type_script = "uid://q0k4rq7vbg1e"
+
+[resource]
+script = ExtResource("1_q08c0")
+display_name = "Sickle"
+icon = ExtResource("2_8d8rm")
+animation_name = &"Sickle"
+input_action = &"sickle"
+hit_frame = 3
+effect = SubResource("Resource_qvttf")
+metadata/_custom_type_script = "uid://babxwm68vuqeh"

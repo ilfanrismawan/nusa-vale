@@ -1,13 +1,16 @@
 extends CanvasLayer
 
 ## ── Node references ──────────────────────────────────────────────
-@onready var dimmer: ColorRect = $Dimmer
-@onready var book_bg: TextureRect = $Dimmer/BookBg
-@onready var slot_grid: GridContainer = $Dimmer/BookBg/PageMargin/PageContent/SlotGrid
-@onready var title_label: Label = $Dimmer/BookBg/PageMargin/PageContent/TitleBar/TitleLabel
-@onready var capacity_label: Label = $Dimmer/BookBg/PageMargin/PageContent/Footer/CapacityLabel
+@onready var dimmer: ColorRect = %Dimmer
+@onready var book_bg: TextureRect = %BookBg
+@onready var slot_grid: GridContainer = %SlotGrid
+@onready var title_label: Label = %TitleLabel
+@onready var capacity_label: Label = %CapacityLabel
+@onready var detail_icon: TextureRect = %DetailIcon
+@onready var detail_title: Label = %DetailTitle
+@onready var detail_desc: Label = %DetailDesc
 
-@onready var category_tabs: HBoxContainer = $Dimmer/BookBg/PageMargin/PageContent/CategoryTabs
+@onready var category_tabs: HBoxContainer = %CategoryTabs
 
 ## ── Config ───────────────────────────────────────────────────────
 @export var slot_scene: PackedScene = preload("res://scenes/ui/inventory_slot.tscn")
@@ -20,10 +23,12 @@ var current_category: ItemData.Category = ItemData.Category.ALL
 ## ── Lifecycle ────────────────────────────────────────────────────
 func _ready() -> void:
 	hide()
+	_setup_category_tabs()
 	_create_slots()
 	if GameState:
 		GameState.inventory_changed.connect(refresh_inventory)
 	refresh_inventory()
+	_clear_item_detail()
 
 ## ── Menghubungkan Tombol Tab
 func _setup_category_tabs() -> void:
@@ -46,6 +51,9 @@ func _set_category(cat: ItemData.Category) -> void:
 ## ── Input ────────────────────────────────────────────────────────
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("inventory") and not event.is_echo():
+		var settings = get_parent().get_node_or_null("SettingsMenu")
+		if settings and settings.visible:
+			return
 		toggle()
 		get_viewport().set_input_as_handled()
 	elif visible and event.is_action_pressed("ui_cancel") and not event.is_echo():
@@ -61,6 +69,7 @@ func toggle() -> void:
 
 func _open() -> void:
 	refresh_inventory()
+	_clear_item_detail()
 	show()
 
 func _close() -> void:
@@ -84,7 +93,31 @@ func _create_slots() -> void:
 		_slots.append(slot)
 
 func _on_slot_clicked(index: int, button: int) -> void:
-	print("Slot diklik: ", index, " Tombol: ", button)
+	if index < 0 or index >= GameState.inventory.size():
+		return
+	
+	var slot_data = GameState.inventory[index]
+	if slot_data != null and slot_data.get("item") != null:
+		_display_item_detail(slot_data["item"], slot_data["count"])
+	else:
+		_clear_item_detail()
+
+func _display_item_detail(item: ItemData, count: int) -> void:
+	if detail_icon:
+		detail_icon.texture = item.icon
+		detail_icon.show()
+	if detail_title:
+		detail_title.text = item.display_name if item.display_name != "" else item.item_id
+	if detail_desc:
+		detail_desc.text = "%s\nJumlah: %d" % [item.description, count]
+
+func _clear_item_detail() -> void:
+	if detail_icon:
+		detail_icon.hide()
+	if detail_title:
+		detail_title.text = "Pilih Item"
+	if detail_desc:
+		detail_desc.text = "Klik slot untuk detail."
 	
 func refresh_inventory() -> void:
 	if not is_instance_valid(slot_grid):

@@ -3,8 +3,11 @@
 [ext_resource type="Script" uid="uid://nl1l1bhh5soy" path="res://scripts/ui/inventory_slot.gd" id="1_script"]
 [ext_resource type="Texture2D" path="res://resources/ui/slot_normal.tres" id="2_slot_tex"]
 
+[ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="3_font"]
+
 [sub_resource type="LabelSettings" id="LabelSettings_count"]
-font_size = 6
+font = ExtResource("3_font")
+font_size = 16
 outline_size = 2
 outline_color = Color(0.15, 0.1, 0.05, 1)
 

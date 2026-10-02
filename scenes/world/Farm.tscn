@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://bwvb6thirrj8w" path="res://assets/farm_rpg/tileset/ext/Bridge.png" id="10_m7efr"]
 [ext_resource type="Texture2D" uid="uid://4bywip37j6ab" path="res://assets/farm_rpg/tileset/ext/Bridge Beach.png" id="11_jn5tw"]
 [ext_resource type="PackedScene" uid="uid://cita5dfs3657t" path="res://scenes/world/exterior/object/ShippingBin.tscn" id="16_fly3y"]
+[ext_resource type="PackedScene" uid="uid://bqqnf62q54j8r" path="res://scenes/objects/tree.tscn" id="17_as7m0"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4btud"]
 texture = ExtResource("5_2inl0")
@@ -5413,3 +5414,14 @@ shape = SubResource("RectangleShape2D_ovsut")
 position = Vector2(1199, 276)
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=730533897]
+
+[node name="Tree" parent="." unique_id=238171705 instance=ExtResource("17_as7m0")]
+position = Vector2(1199, 388)
+
+[node name="Tree2" parent="." unique_id=293802387 instance=ExtResource("17_as7m0")]
+position = Vector2(1215, 166)
+
+[node name="Tree3" parent="." unique_id=505116220 instance=ExtResource("17_as7m0")]
+position = Vector2(1093, 228)
+
+[node name="Tree4" parent="." unique_id=537721391 instance=ExtResource("17_as7m0")]

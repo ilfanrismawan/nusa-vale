@@ -1285,11 +1285,11 @@ position = Vector2(270, 122)
 [node name="Player" parent="." unique_id=374434540 instance=ExtResource("3_gvyf1")]
 position = Vector2(312, 206)
 
-[node name="ExitDoor" type="Area2D" parent="." unique_id=1589565606]
+[node name="ExitDoor" type="Area2D" parent="." unique_id=1117652326]
 position = Vector2(267, 121)
 script = ExtResource("4_5n7fl")
 target_scene = "uid://bpk7kk0a4ctut"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitDoor" unique_id=1056257296]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitDoor" unique_id=1169761824]
 position = Vector2(45, 107)
 shape = SubResource("RectangleShape2D_ovsut")

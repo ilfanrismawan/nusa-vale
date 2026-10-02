@@ -14,6 +14,6 @@ display_name = "hoe"
 icon = ExtResource("2_g3dm3")
 animation_name = &"Hoe"
 input_action = &"hoe"
-hit_frame = 6
+hit_frame = 3
 effect = SubResource("Resource_mp7hb")
 metadata/_custom_type_script = "uid://babxwm68vuqeh"

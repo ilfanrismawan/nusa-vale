@@ -100,9 +100,13 @@ func harvest(cell: Vector2i) -> bool:
 	if not crop.is_harvestable(data["stage"]):
 		return false
 	
-	GameState.add_item(crop.harvest_item_id, crop.harvest_count)
+	var remaining := GameState.add_item(crop.harvest_item_id, crop.harvest_count)
+	if remaining > 0:
+		print ("Inventory penuh!")
+		return false
+		
 	crop_harvested.emit(cell, crop.harvest_item_id, crop.harvest_count)
-	print("Panen: %s x%d" % [crop.harvest_item_id, crop. harvest_count])
+	print("Panen: %s x%d" % [crop.harvest_item_id, crop.harvest_count])
 	
 	crop_layer.erase_cell(cell)
 	data["state"] = "tilled"
