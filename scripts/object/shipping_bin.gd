@@ -4,6 +4,7 @@ extends Area2D
 
 @export var sell_prices: Dictionary = {
 	"strawberry": 20,
+	"carrot": 45,
 	"wood": 5
 }
 
@@ -36,6 +37,6 @@ func sell_harvested_items() -> void:
 	
 	if total_earned > 0:
 		GameState.add_money(total_earned)
-		print("Terjual! Mendapatkan %d gold. Total uang: %d" % [total_earned, GameState.money])
+		Notify.say("Terjual +%d G" % total_earned)
 	else:
-		print("Tidak ada barang yang bisa dijual di tas!")
+		Notify.say("Tidak ada yang bisa dijual")

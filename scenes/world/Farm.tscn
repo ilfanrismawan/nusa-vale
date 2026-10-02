@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://qbavso8tlt0g" path="res://assets/farm_rpg/tileset/ext/ALL props seasons.png" id="9_7idkv"]
 [ext_resource type="Texture2D" uid="uid://dki3b2jfr52ui" path="res://assets/farm_rpg/crops/spring/Strawberry.png" id="9_jn5tw"]
 [ext_resource type="Texture2D" uid="uid://bwvb6thirrj8w" path="res://assets/farm_rpg/tileset/ext/Bridge.png" id="10_m7efr"]
+[ext_resource type="Texture2D" uid="uid://jrgvada067w4" path="res://assets/farm_rpg/crops/spring/Carrot.png" id="10_p1g1c"]
 [ext_resource type="Texture2D" uid="uid://4bywip37j6ab" path="res://assets/farm_rpg/tileset/ext/Bridge Beach.png" id="11_jn5tw"]
 [ext_resource type="PackedScene" uid="uid://cita5dfs3657t" path="res://scenes/world/exterior/object/ShippingBin.tscn" id="16_fly3y"]
 [ext_resource type="PackedScene" uid="uid://bqqnf62q54j8r" path="res://scenes/objects/tree.tscn" id="17_as7m0"]
@@ -2961,8 +2962,19 @@ texture = ExtResource("9_jn5tw")
 5:0/0 = 0
 7:0/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nm0te"]
+texture = ExtResource("10_p1g1c")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+7:0/0 = 0
+
 [sub_resource type="TileSet" id="TileSet_v5i4m"]
 sources/0 = SubResource("TileSetAtlasSource_r0ptg")
+sources/1 = SubResource("TileSetAtlasSource_nm0te")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2inl0"]
 texture = ExtResource("1_xctj8")
@@ -5355,7 +5367,6 @@ position = Vector2(5, 0)
 tile_set = SubResource("TileSet_w5a0g")
 
 [node name="Crop" type="TileMapLayer" parent="." unique_id=1059345984]
-position = Vector2(5, 0)
 tile_set = SubResource("TileSet_v5i4m")
 
 [node name="Cliff" type="TileMapLayer" parent="." unique_id=1746907184]

@@ -21,6 +21,7 @@ DayCycle="*uid://bj4mh1d37l0ax"
 GameState="*uid://cvamfx176g3r7"
 FarmManager="*uid://j3hi3toxtjtn"
 SaveManager="*uid://y3jxkvhdn3xw"
+Notify="*uid://bby6jmxse52om"
 
 [display]
 

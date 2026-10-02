@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://crfhrhlc6bhi0"]
+
+[ext_resource type="Texture2D" uid="uid://bfnu0clhub6s2" path="res://resources/icons/icon_carrot.tres" id="1_0gd0j"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1_2kb5s"]
+
+[resource]
+script = ExtResource("1_2kb5s")
+category = 2
+item_id = "carrot"
+display_name = "Carrot"
+icon = ExtResource("1_0gd0j")
+description = "Buah Carrot yang segar."
+metadata/_custom_type_script = "uid://cm1okc20ussp3"

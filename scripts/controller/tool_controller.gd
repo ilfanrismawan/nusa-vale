@@ -59,7 +59,7 @@ func use_action(action: ActionData) -> void:
 	if state_machine.current_state == action_state:
 		return
 	if player.base_layer_ground == null:
-		print("Tidak bisa pakai tool di sini")
+		Notify.say("Tidak bisa pakai alat di sini")
 		return
 	action_state.start(action, player.get_target_cell())
 	state_machine.change_state(action_state)

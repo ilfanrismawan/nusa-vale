@@ -2,11 +2,10 @@ class_name HarvestEffect
 extends ActionEffect
 
 func apply(
-	player: Player,
+	_player: Player,
 	cell: Vector2i
 ) -> void:
-	var success := FarmManager.harvest(cell)
-	if success:
-		print("Berhasil panen!")
+	if FarmManager.harvest(cell) :
+		Notify.say("Panen berhasil!")
 	else:
-		print("Tidak ada tanaman matang di sini")
+		Notify.say("Belum ada tanaman matang")

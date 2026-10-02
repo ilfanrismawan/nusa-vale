@@ -41,5 +41,5 @@ func advance_day() -> void:
 	
 	
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and event.keycode == KEY_N:
+	if OS.is_debug_build() and event is InputEventKey and event.pressed and event.keycode == KEY_N:
 		advance_day()

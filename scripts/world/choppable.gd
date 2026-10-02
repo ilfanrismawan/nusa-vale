@@ -15,5 +15,5 @@ func take_hit(damage: int) -> void:
 	if health <= 0:
 		if not drop_item_id.is_empty():
 			GameState.add_item(drop_item_id, drop_count)
-			print("Dapat %s x%d" % [drop_item_id, drop_count])
+			Notify.say("+%d Kayu" % drop_count)
 		queue_free()

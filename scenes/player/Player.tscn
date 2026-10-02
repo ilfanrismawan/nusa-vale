@@ -26,6 +26,7 @@
 [ext_resource type="Resource" uid="uid://s2n6e2y564m3" path="res://resources/action_data/water.tres" id="22_ro0t8"]
 [ext_resource type="Resource" uid="uid://bj46gqceuj4rb" path="res://resources/action_data/harvest.tres" id="23_x3qp0"]
 [ext_resource type="PackedScene" uid="uid://dufirbfujpiry" path="res://scenes/ui/ui_inventory.tscn" id="24_8nn5r"]
+[ext_resource type="Resource" uid="uid://cnny4htdujgkx" path="res://resources/action_data/seed_carrot.tres" id="25_1hh02"]
 [ext_resource type="PackedScene" uid="uid://cw8nmal7ii5ue" path="res://scenes/ui/hud.tscn" id="25_kvwax"]
 [ext_resource type="PackedScene" uid="uid://df67kn03yptm1" path="res://scenes/ui/settings_menu.tscn" id="26_settings"]
 
@@ -1357,7 +1358,7 @@ speed_multiplier = 3.0
 
 [node name="ToolController" type="Node" parent="CharacterBody2D" unique_id=581944347]
 script = ExtResource("7_v42im")
-actions = Array[ExtResource("13_ov1oi")]([ExtResource("16_pi3ps"), ExtResource("14_rn7t0"), ExtResource("18_kswpp"), ExtResource("20_v5i4m"), ExtResource("22_ro0t8"), ExtResource("23_x3qp0")])
+actions = Array[ExtResource("13_ov1oi")]([ExtResource("16_pi3ps"), ExtResource("14_rn7t0"), ExtResource("18_kswpp"), ExtResource("20_v5i4m"), ExtResource("22_ro0t8"), ExtResource("23_x3qp0"), ExtResource("25_1hh02")])
 
 [node name="HotbarUi" parent="." unique_id=2040517025 instance=ExtResource("17_ejd4k")]
 

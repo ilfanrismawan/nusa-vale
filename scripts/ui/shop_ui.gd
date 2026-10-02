@@ -2,7 +2,8 @@ class_name ShopUI
 extends CanvasLayer
 
 const STOCK := [
-	{"item_id": "seed_strawberry", "price": 15} 
+	{"item_id": "seed_strawberry", "price": 15},
+	{"item_id": "seed_carrot", "price": 25} 
 ]
 
 var _money_label: Label

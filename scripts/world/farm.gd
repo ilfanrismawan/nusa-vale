@@ -7,6 +7,9 @@ func _ready() -> void:
 	FarmManager.initialize(self)
 	DayCycle.time_tick.connect(_on_time_tick)
 	_on_time_tick(DayCycle.hour, DayCycle.minute)
+	
+	Notify.say("WASD JALAN | Klik pakai alat | 1-6 / Q E ganti alat")
+	Notify.say("Enter di deakt toko, bin, atau kasur | I tas | Esc menu")
 
 #efek pergantian siang sore malam
 func _on_time_tick(hour: int, _minute: int) -> void:
