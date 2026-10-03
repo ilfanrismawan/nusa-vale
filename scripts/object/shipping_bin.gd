@@ -27,16 +27,26 @@ func _unhandled_input(event: InputEvent) -> void:
 		sell_harvested_items()
 
 func sell_harvested_items() -> void:
-	var total_earned := 0
-	for item_id in sell_prices.keys():
-		var count = GameState.get_item_count(item_id)
-		if count > 0:
-			var price = sell_prices[item_id] * count
-			GameState.remove_item(item_id, count)
-			total_earned += price
+	var totals := {}
+	var items := {}
 	
-	if total_earned > 0:
-		GameState.add_money(total_earned)
-		Notify.say("Terjual +%d G" % total_earned)
+	for slot in GameState.inventory:
+		if slot == null:
+			continue
+			
+		var item: ItemData = slot["item"]
+		if item.sell_price <= 0:
+			continue
+		items[item.item_id] = item
+		totals[item.item_id] = totals.get(item.item_id, 0) + slot["count"]
+	
+	var earned := 0
+	for id in totals:
+		GameState.remove_item(id, totals[id])
+		earned += items[id].sell_price * totals[id]
+		
+	if earned > 0:
+		GameState.add_money(earned)
+		Notify.say("Terjual +%d G" % earned)
 	else:
 		Notify.say("Tidak ada yang bisa dijual")

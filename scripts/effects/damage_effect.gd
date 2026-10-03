@@ -3,10 +3,19 @@ extends ActionEffect
 
 @export var target_group: StringName = &"choppable"
 @export var damage: int = 1
+@export var stamina_cost: int = 6
 
 func apply(player: Player, cell: Vector2i) -> void:
-	for node in player.get_tree().get_nodes_in_group(target_group):
-		if not (node is Node2D and node.has_method("take_hit")):
-			continue
-		if player.world_to_cell(node.global_position) == cell:
-			node.take_hit(damage)
+	if GameState.stamina < stamina_cost:
+		Notify.say("Terlalu lelah! Istirahatlah.")
+		return
+	var hit := false
+	match target_group:
+		&"mineable":
+			hit = FarmManager.mine(player, cell, damage)
+		&"choppable":
+			hit = FarmManager.chop(player, cell, damage)
+		_:
+			hit = FarmManager.hit_world(player, cell, target_group, damage)
+	if hit:
+		GameState.spend_stamina(stamina_cost)

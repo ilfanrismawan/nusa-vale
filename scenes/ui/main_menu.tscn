@@ -1,0 +1,276 @@
+[gd_scene format=3 uid="uid://cxm4n2bq8k7w1"]
+
+[ext_resource type="Script" uid="uid://n4kthr1fwt5m" path="res://scenes/ui/MainMenu.gd" id="1_script"]
+[ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="2_font"]
+[ext_resource type="Texture2D" path="res://resources/ui/title_banner.tres" id="3_banner"]
+[ext_resource type="Texture2D" path="res://resources/ui/decor_border.tres" id="4_decor"]
+[ext_resource type="PackedScene" uid="uid://df67kn03yptm1" path="res://scenes/ui/settings_menu.tscn" id="5_settings"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.12, 0.15, 0.1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.18, 0.13, 0.1, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.55, 0.4, 0.25, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(0, 0, 0, 0.4)
+shadow_size = 6
+
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+font = ExtResource("2_font")
+font_size = 32
+font_color = Color(0.95, 0.88, 0.65, 1)
+outline_size = 2
+outline_color = Color(0.25, 0.15, 0.08, 1)
+shadow_size = 2
+shadow_color = Color(0, 0, 0, 0.5)
+shadow_offset = Vector2(1, 2)
+
+[sub_resource type="LabelSettings" id="LabelSettings_subtitle"]
+font = ExtResource("2_font")
+font_size = 16
+font_color = Color(0.75, 0.68, 0.55, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_version"]
+font = ExtResource("2_font")
+font_size = 12
+font_color = Color(0.5, 0.45, 0.35, 0.6)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_normal"]
+bg_color = Color(0.28, 0.22, 0.15, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5, 0.38, 0.22, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+bg_color = Color(0.4, 0.32, 0.2, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.7, 0.55, 0.3, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_pressed"]
+bg_color = Color(0.2, 0.16, 0.1, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.6, 0.45, 0.25, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_disabled"]
+bg_color = Color(0.2, 0.18, 0.14, 0.5)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.35, 0.3, 0.22, 0.5)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Background" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MenuPanel" type="PanelContainer" parent="CenterContainer"]
+texture_filter = 1
+custom_minimum_size = Vector2(220, 260)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Margin" type="MarginContainer" parent="CenterContainer/MenuPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="VBox" type="VBoxContainer" parent="CenterContainer/MenuPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="TitleBanner" type="TextureRect" parent="CenterContainer/MenuPanel/Margin/VBox"]
+texture_filter = 1
+custom_minimum_size = Vector2(100, 18)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("3_banner")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/MenuPanel/Margin/VBox/TitleBanner"]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Nusa Vale"
+label_settings = SubResource("LabelSettings_title")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SubtitleLabel" type="Label" parent="CenterContainer/MenuPanel/Margin/VBox"]
+texture_filter = 1
+layout_mode = 2
+text = "Petualangan Bertani di Nusantara"
+label_settings = SubResource("LabelSettings_subtitle")
+horizontal_alignment = 1
+
+[node name="DecorTop" type="TextureRect" parent="CenterContainer/MenuPanel/Margin/VBox"]
+texture_filter = 1
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("4_decor")
+expand_mode = 1
+stretch_mode = 2
+
+[node name="Spacer" type="Control" parent="CenterContainer/MenuPanel/Margin/VBox"]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+
+[node name="ButtonContainer" type="VBoxContainer" parent="CenterContainer/MenuPanel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 5
+
+[node name="BtnNew" type="Button" parent="CenterContainer/MenuPanel/Margin/VBox/ButtonContainer"]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(160, 26)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
+text = "Permainan Baru"
+
+[node name="BtnContinue" type="Button" parent="CenterContainer/MenuPanel/Margin/VBox/ButtonContainer"]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(160, 26)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
+text = "Lanjutkan"
+
+[node name="BtnSettings" type="Button" parent="CenterContainer/MenuPanel/Margin/VBox/ButtonContainer"]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(160, 26)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
+text = "Pengaturan"
+
+[node name="BtnQuit" type="Button" parent="CenterContainer/MenuPanel/Margin/VBox/ButtonContainer"]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(160, 26)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
+text = "Keluar"
+
+[node name="DecorBottom" type="TextureRect" parent="CenterContainer/MenuPanel/Margin/VBox"]
+texture_filter = 1
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("4_decor")
+expand_mode = 1
+stretch_mode = 2
+
+[node name="VersionLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "v0.1.0 Alpha"
+label_settings = SubResource("LabelSettings_version")
+horizontal_alignment = 2
+
+[node name="ConfirmDialog" type="ConfirmationDialog" parent="."]
+unique_name_in_owner = true
+title = "Konfirmasi"
+initial_position = 2
+size = Vector2i(280, 100)
+dialog_text = "Save yang ada akan dihapus. Mulai permainan baru?"
+ok_button_text = "Ya, Mulai Baru"
+cancel_button_text = "Batal"
+
+[node name="SettingsMenu" parent="." instance=ExtResource("5_settings")]
+unique_name_in_owner = true

@@ -37,13 +37,15 @@ func _apply(keep_frame: bool) -> void:
 		push_warning("Animasi '%s' tidak ada di SpriteFrames." % anim_name)
 		return
 	
-	if sprite.animation == anim_name:
+	if sprite.animation == anim_name and keep_frame:
 		if not sprite.is_playing():
 			sprite.play(anim_name)
 		return
-	
+
 	var frame := sprite.frame
 	var progress := sprite.frame_progress
 	sprite.play(anim_name)
 	if keep_frame:
 		sprite.set_frame_and_progress(frame, progress)
+	else:
+		sprite.set_frame_and_progress(0, 0.0)

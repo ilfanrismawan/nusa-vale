@@ -5,24 +5,30 @@
 [ext_resource type="Texture2D" uid="uid://hun4udw71hlk" path="res://assets/farm_rpg/Clock/clock hand.png" id="2_8qguk"]
 [ext_resource type="Texture2D" uid="uid://dcvh6rh0mven1" path="res://assets/farm_rpg/Clock/Extras.png" id="2_136eg"]
 [ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="3_136eg"]
+[ext_resource type="Texture2D" uid="uid://c8stes0isa8kg" path="res://assets/farm_rpg/ui/Bars.png" id="6_oj5la"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ovsut"]
 font = ExtResource("3_136eg")
-font_size = 16
 font_color = Color(0.13333334, 0.06666667, 0.13333334, 1)
 shadow_color = Color(0, 0, 0, 0.17254902)
 
 [sub_resource type="LabelSettings" id="LabelSettings_ywce2"]
 font = ExtResource("3_136eg")
-font_size = 16
 font_color = Color(0.13333334, 0.06666667, 0.13333334, 1)
 shadow_color = Color(0, 0, 0, 0.30588236)
 
 [sub_resource type="LabelSettings" id="LabelSettings_ajcru"]
 font = ExtResource("3_136eg")
-font_size = 16
 font_color = Color(0.13333334, 0.06666667, 0.13333334, 1)
 shadow_color = Color(0, 0, 0, 0.24705882)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ovsut"]
+atlas = ExtResource("6_oj5la")
+region = Rect2(164, 3, 8, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qn2nl"]
+atlas = ExtResource("6_oj5la")
+region = Rect2(132, 50, 10, 42)
 
 [node name="HUD" type="CanvasLayer" unique_id=1575410842]
 script = ExtResource("1_8qguk")
@@ -106,3 +112,23 @@ offset_right = 45.0
 offset_bottom = 6.0
 text = "06:00 AM"
 label_settings = SubResource("LabelSettings_ajcru")
+
+[node name="PlayerStatus" type="Control" parent="." unique_id=989920960]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="StaminaBar" type="TextureProgressBar" parent="PlayerStatus" unique_id=1027202583]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 795.0
+offset_top = 332.0
+offset_right = 835.0
+offset_bottom = 374.0
+scale = Vector2(3, 3)
+value = 100.0
+fill_mode = 3
+texture_under = SubResource("AtlasTexture_ovsut")
+texture_progress = SubResource("AtlasTexture_qn2nl")

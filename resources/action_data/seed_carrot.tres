@@ -1,20 +1,21 @@
-[gd_resource type="Resource" script_class="ActionData" format=3 uid="uid://cnny4htdujgkx"]
+[gd_resource type="Resource" script_class="ActionData" format=3 uid="uid://dyeg233pk6lnr"]
 
-[ext_resource type="Resource" uid="uid://rtu43cdyw34s" path="res://resources/crop_data/strawberry.tres" id="1_7sgop"]
-[ext_resource type="Script" uid="uid://d0igjkcw0vnha" path="res://scripts/effects/seed_effect.gd" id="2_2bxl4"]
-[ext_resource type="Texture2D" uid="uid://cdymqylaraqh1" path="res://resources/icons/icon_seed_strawberry.tres" id="3_8pcut"]
-[ext_resource type="Script" uid="uid://babxwm68vuqeh" path="res://scripts/state/action_data.gd" id="4_63sld"]
+[ext_resource type="Script" uid="uid://babxwm68vuqeh" path="res://scripts/state/action_data.gd" id="1_567ft"]
+[ext_resource type="Resource" uid="uid://bthgkm3o3elyo" path="res://resources/crop_data/carrot.tres" id="1_w5pi0"]
+[ext_resource type="Script" uid="uid://d0igjkcw0vnha" path="res://scripts/effects/seed_effect.gd" id="2_1dcyo"]
+[ext_resource type="Texture2D" uid="uid://beds64ghyqm00" path="res://resources/icons/icon_seed_carrot.tres" id="3_1dcyo"]
 
 [sub_resource type="Resource" id="Resource_apk74"]
-script = ExtResource("2_2bxl4")
-crop = ExtResource("1_7sgop")
+script = ExtResource("2_1dcyo")
+crop = ExtResource("1_w5pi0")
+seed_item_id = "seed_carrot"
 metadata/_custom_type_script = "uid://d0igjkcw0vnha"
 
 [resource]
-script = ExtResource("4_63sld")
-display_name = "Benih Strawberry"
-icon = ExtResource("3_8pcut")
+script = ExtResource("1_567ft")
+display_name = "Benih Carrot"
+icon = ExtResource("3_1dcyo")
 animation_name = &"throw"
-hit_frame = 5
+hit_frame = 3
 effect = SubResource("Resource_apk74")
 metadata/_custom_type_script = "uid://babxwm68vuqeh"

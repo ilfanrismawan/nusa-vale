@@ -5,12 +5,13 @@ extends CanvasLayer
 @onready var day_label: Label = %DayLabel
 @onready var money_label: Label = %MoneyLabel
 @onready var btn_settings: Button = %BtnSettings
-
+@onready var stamina_bar: TextureProgressBar = %StaminaBar
 
 func _ready() -> void:
 	DayCycle.time_tick.connect(_on_time_tick)
 	DayCycle.day_passed.connect(_on_day_passed)
 	GameState.money_changed.connect(_on_money_changed)
+	GameState.stamina_changed.connect(_on_stamina_changed)
 	
 	if is_instance_valid(btn_settings):
 		btn_settings.pressed.connect(_on_settings_pressed)
@@ -18,7 +19,17 @@ func _ready() -> void:
 	_update_day(DayCycle.current_day)
 	_update_time(DayCycle.hour, DayCycle.minute)
 	_update_money(GameState.money)
+	_on_stamina_changed(
+	GameState.stamina,
+	GameState.MAX_STAMINA
+)
 
+func _on_stamina_changed(current: int, maximum: int) -> void:
+	if not is_instance_valid(stamina_bar):
+		return
+	stamina_bar.max_value = maximum
+	stamina_bar.value = current
+		
 func _on_settings_pressed() -> void:
 	var settings = get_parent().get_node_or_null("SettingsMenu")
 	if settings:

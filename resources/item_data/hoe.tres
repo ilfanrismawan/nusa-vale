@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1_item"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_hoe.tres" id="2_icon"]
+[ext_resource type="Resource" path="res://resources/action_data/hoe.tres" id="3_action"]
+
+[resource]
+script = ExtResource("1_item")
+category = 3
+item_id = "hoe"
+display_name = "Cangkul"
+icon = ExtResource("2_icon")
+description = "Alat untuk mencangkul dan menggemburkan tanah."
+stackable = false
+max_stack = 1
+action_data = ExtResource("3_action")
+metadata/_custom_type_script = "uid://cm1okc20ussp3"

@@ -3,22 +3,103 @@
 [ext_resource type="Script" uid="uid://8410el0dtaeb" path="res://scripts/world/choppable.gd" id="1_5qchx"]
 [ext_resource type="Texture2D" uid="uid://330u8sijhc3s" path="res://assets/farm_rpg/objects/tree/Birch Tree Animation.png" id="1_r6wkp"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_5qchx"]
+atlas = ExtResource("1_r6wkp")
+region = Rect2(0, 48, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eogu4"]
+atlas = ExtResource("1_r6wkp")
+region = Rect2(32, 48, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7yu6v"]
+atlas = ExtResource("1_r6wkp")
+region = Rect2(64, 48, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mbbxw"]
+atlas = ExtResource("1_r6wkp")
+region = Rect2(96, 48, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lg7fn"]
+atlas = ExtResource("1_r6wkp")
+region = Rect2(0, 48, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_03oh1"]
+atlas = ExtResource("1_r6wkp")
+region = Rect2(0, 96, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0v8c2"]
+atlas = ExtResource("1_r6wkp")
+region = Rect2(32, 96, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_edpnc"]
+atlas = ExtResource("1_r6wkp")
+region = Rect2(64, 96, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1pa56"]
+atlas = ExtResource("1_r6wkp")
+region = Rect2(96, 96, 32, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ovsut"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5qchx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eogu4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7yu6v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mbbxw")
+}],
+"loop": 0,
+"name": &"chopping",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lg7fn")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_03oh1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0v8c2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_edpnc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1pa56")
+}],
+"loop": 0,
+"name": &"stump",
+"speed": 8.0
+}]
+
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_as7m0"]
 radius = 6.2499995
 height = 22.499996
 
-[node name="Tree" type="Node2D" unique_id=238171705]
+[node name="Tree" type="StaticBody2D" unique_id=2046111868]
 script = ExtResource("1_5qchx")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=237592714]
-texture = ExtResource("1_r6wkp")
-offset = Vector2(0, -20)
-region_enabled = true
-region_rect = Rect2(0, 48, 32, 48)
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1565149206]
+sprite_frames = SubResource("SpriteFrames_ovsut")
+animation = &"idle"
+autoplay = "idle"
+offset = Vector2(0, -24)
 
-[node name="StaticBody2D" type="StaticBody2D" parent="Sprite2D" unique_id=2109815010]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D/StaticBody2D" unique_id=501145078]
-position = Vector2(0, -4.9999995)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=501145078]
+position = Vector2(0, 0)
 scale = Vector2(0.8, 0.8)
 shape = SubResource("CapsuleShape2D_as7m0")
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

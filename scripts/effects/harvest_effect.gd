@@ -5,7 +5,8 @@ func apply(
 	_player: Player,
 	cell: Vector2i
 ) -> void:
-	if FarmManager.harvest(cell) :
-		Notify.say("Panen berhasil!")
-	else:
+	var data := FarmManager.get_cell_data(cell)
+	if data.is_empty() or data.get("crop") == null:
+		return
+	if not FarmManager.harvest(cell):
 		Notify.say("Belum ada tanaman matang")

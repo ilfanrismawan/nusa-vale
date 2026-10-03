@@ -1,7 +1,7 @@
-[gd_resource type="AtlasTexture" format=3]
+[gd_resource type="AtlasTexture" format=3 uid="uid://buaio0hwlbw0i"]
 
-[ext_resource type="Texture2D" uid="uid://bhban4lc64ndf" path="res://assets/farm_rpg/ui/inventory/Slots.png" id="1_slots"]
+[ext_resource type="Texture2D" uid="uid://cwgdwms3l80kv" path="res://assets/farm_rpg/ui/inventory/inventory.png" id="1_inv"]
 
 [resource]
-atlas = ExtResource("1_slots")
-region = Rect2(151, 6, 18, 18)
+atlas = ExtResource("1_inv")
+region = Rect2(7, 41, 18, 18)

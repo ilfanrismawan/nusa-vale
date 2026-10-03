@@ -2,6 +2,7 @@ extends Node
 
 signal time_tick(hour: int, minute: int)
 signal day_passed(day_number: int)
+signal player_passed_out
 
 @export var real_seconds_per_10_game_minutes: float = 5.0
 
@@ -11,6 +12,7 @@ var minute: int = 0
 
 const TICK_INTERVAL := 0.7
 var _timer: float = TICK_INTERVAL
+var _is_passing_out: bool = false
 
 func _process(delta: float) -> void:
 	_timer += delta
@@ -25,12 +27,51 @@ func advance_minute(amount: int) -> void:
 		minute = 0
 		hour += 1
 		
+		if hour == 2 and not _is_passing_out:
+			trigger_pass_out()
+			return
+		
 		if hour >= 24:
 			advance_day()
 			return
 			
-	time_tick.emit(hour, minute)		
+	time_tick.emit(hour, minute)	
 		
+func trigger_pass_out() -> void:
+	_is_passing_out = true
+	player_passed_out.emit()		
+	
+	var layer := CanvasLayer.new()
+	layer.layer = 100
+	var fade := ColorRect.new()
+	fade.color = Color(0, 0, 0, 0)
+	fade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	layer.add_child(fade)
+	get_tree().current_scene.add_child(layer)
+	
+	var tw := create_tween()
+	tw.tween_property(fade, "color:a", 1.0, 1.2)
+	tw.tween_callback(func():
+		advance_day()
+		hour = 8
+		minute = 0
+		time_tick.emit(hour, minute)
+		
+		GameState.stamina = int(GameState.MAX_STAMINA * 0.5)
+		GameState.stamina_changed.emit(GameState.stamina, GameState.MAX_STAMINA)
+		
+		GameState.next_spawn_position = Vector2(317, 151)
+		GameState.has_spawn_point = true
+		get_tree().change_scene_to_file("res://scenes/world/interior/interior_house.tscn")
+		SaveManager.save_game()
+		Notify.say("Kamu pingsan kelelahan jam 2 malam! Bangun jam 8 dengan energi 50%")
+		)
+	tw.tween_interval(1.0)
+	tw.tween_property(fade, "color:a", 0.0, 1.0)
+	tw.tween_callback(func ():
+		layer.queue_free()
+		_is_passing_out = false)
+	
 func advance_day() -> void:
 	hour = 6
 	minute = 0

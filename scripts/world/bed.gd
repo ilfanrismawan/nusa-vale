@@ -39,9 +39,10 @@ func _sleep() -> void:
 	tw.tween_callback(_end_sleep.bind(layer))
 
 func _new_day() -> void:
+	GameState.restore_stamina()
 	DayCycle.advance_day()
 	SaveManager.save_game()
-	Notify.say("Hari %d dimulai" % DayCycle.current_day)
+	Notify.say("Hari %d dimulai (Energi Pulih)" % DayCycle.current_day)
 	
 func _end_sleep(layer: CanvasLayer) -> void:
 	layer.queue_free()

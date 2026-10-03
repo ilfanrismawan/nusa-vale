@@ -19,7 +19,7 @@ texture = ExtResource("1_dd62a")
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Wall" unique_id=1506471825]
 position = Vector2(0, -5.4375)
 scale = Vector2(0.6634616, 0.8625)
-polygon = PackedVector2Array(-8, 37, -9, 23, -8, 17, 9, 17, 10, 22, 9, 30, 8, 40, 29, 39, 30, 15, 24, 9, 5, -10, -6, -10, -30, 14, -29, 39, -8, 39)
+polygon = PackedVector2Array(-8, 37, -9, 23, -8, 17, 9, 17, 10, 22, 9, 30, 8, 40, 36.17391, 46.884056, 30, 15, 24, 9, 5, -10, -6, -10, -30, 14, -34.66666, 46.884056, -8, 39)
 
 [node name="Door" type="Area2D" parent="Wall" unique_id=1324620855]
 script = ExtResource("2_coavl")

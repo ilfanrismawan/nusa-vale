@@ -10,4 +10,5 @@ item_id = "carrot"
 display_name = "Carrot"
 icon = ExtResource("1_0gd0j")
 description = "Buah Carrot yang segar."
+sell_price = 45
 metadata/_custom_type_script = "uid://cm1okc20ussp3"

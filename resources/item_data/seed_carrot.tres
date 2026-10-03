@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://beds64ghyqm00" path="res://resources/icons/icon_seed_carrot.tres" id="1_nkbpb"]
 [ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1_vr6yo"]
+[ext_resource type="Resource" uid="uid://dyeg233pk6lnr" path="res://resources/action_data/seed_carrot.tres" id="3_action"]
 
 [resource]
 script = ExtResource("1_vr6yo")
@@ -9,5 +10,7 @@ category = 1
 item_id = "seed_carrot"
 display_name = "Benih Carrot"
 icon = ExtResource("1_nkbpb")
-description = "Benih untuk menanam tanaman strawberry di musim spring."
+description = "Benih untuk menanam tanaman carrot di musim spring."
+buy_price = 25
+action_data = ExtResource("3_action")
 metadata/_custom_type_script = "uid://cm1okc20ussp3"
