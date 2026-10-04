@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ActionData" format=3 uid="uid://yagb52lugfke"]
+
+[ext_resource type="Script" uid="uid://iqqgx8vl32mk" path="res://scripts/effects/damage_effect.gd" id="1_ptaum"]
+[ext_resource type="Texture2D" uid="uid://cl1l1cchsdn2v" path="res://resources/icons/icon_axe.tres" id="2_e73xy"]
+[ext_resource type="Script" uid="uid://babxwm68vuqeh" path="res://scripts/state/action_data.gd" id="3_fhl0q"]
+
+[sub_resource type="Resource" id="Resource_76i7i"]
+script = ExtResource("1_ptaum")
+target_group = &"mineable"
+stamina_cost = 7
+metadata/_custom_type_script = "uid://iqqgx8vl32mk"
+
+[resource]
+script = ExtResource("3_fhl0q")
+display_name = "Pickaxe"
+icon = ExtResource("2_e73xy")
+animation_name = &"pickaxe"
+input_action = &"pickaxe"
+hit_frame = 4
+effect = SubResource("Resource_76i7i")
+metadata/_custom_type_script = "uid://babxwm68vuqeh"

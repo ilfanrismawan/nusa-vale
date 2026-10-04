@@ -21,6 +21,7 @@
 [ext_resource type="PackedScene" uid="uid://cita5dfs3657t" path="res://scenes/world/exterior/object/ShippingBin.tscn" id="16_fly3y"]
 [ext_resource type="PackedScene" uid="uid://bqqnf62q54j8r" path="res://scenes/objects/tree.tscn" id="17_as7m0"]
 [ext_resource type="PackedScene" uid="uid://bm4iun38bhd33" path="res://scenes/world/exterior/object/ShopCounter.tscn" id="18_n0hrw"]
+[ext_resource type="PackedScene" uid="uid://c25lnddqwh0jp" path="res://scenes/objects/rock.tscn" id="21_xtmeb"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4d820"]
 texture = ExtResource("5_2inl0")
@@ -8110,6 +8111,21 @@ position = Vector2(1070, 228)
 
 [node name="Tree4" parent="." unique_id=537721391 instance=ExtResource("17_as7m0")]
 position = Vector2(1218, 419)
+
+[node name="Rock" parent="." unique_id=2046111868 instance=ExtResource("21_xtmeb")]
+position = Vector2(1250, 180)
+
+[node name="Rock3" parent="." unique_id=1780260839 instance=ExtResource("21_xtmeb")]
+position = Vector2(1192, 113)
+
+[node name="Rock4" parent="." unique_id=603937657 instance=ExtResource("21_xtmeb")]
+position = Vector2(1255, 96)
+
+[node name="Rock5" parent="." unique_id=257443901 instance=ExtResource("21_xtmeb")]
+position = Vector2(993, 64)
+
+[node name="Rock2" parent="." unique_id=57346777 instance=ExtResource("21_xtmeb")]
+position = Vector2(1143, 148)
 
 [node name="ShopCounter" parent="." unique_id=1975726343 instance=ExtResource("18_n0hrw")]
 position = Vector2(958, 445)

@@ -9,6 +9,7 @@ size = Vector2(14, 13)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ajcru"]
 
 [node name="ShippingBin" type="Area2D" unique_id=1342505141]
+y_sort_enabled = true
 script = ExtResource("1_plga2")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1973431771]

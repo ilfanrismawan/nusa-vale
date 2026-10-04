@@ -55,7 +55,7 @@ func reset_game_state() -> void:
 
 ## Setup semua alat ke slot 0-4 inventory
 func _setup_tools() -> void:
-	var tool_ids := ["axe", "hoe", "shovel", "water", "sickle"]
+	var tool_ids := ["axe", "hoe", "shovel", "water", "sickle", "pickaxe"]
 	for i in range(tool_ids.size()):
 		var tid = tool_ids[i]
 		var item: ItemData = _resolve_item(tid)
@@ -68,7 +68,7 @@ func _setup_tools() -> void:
 
 ## Pastikan seluruh starter tools ada di inventory (misal jika load save file lama)
 func ensure_starter_tools() -> void:
-	var tool_ids := ["axe", "hoe", "shovel", "water", "sickle"]
+	var tool_ids := ["axe", "hoe", "shovel", "water", "sickle", "pickaxe"]
 	var changed := false
 	for tid in tool_ids:
 		if not has_item(tid, 1):

@@ -8,6 +8,8 @@ func _ready() -> void:
 
 
 func _on_body_entered(body):
+	if Transition.on_transition:
+		return
 	if body is Player or body.is_in_group("player"):
 		# Posisi pintu rumah di map Farm (1159, 275)
 		GameState.next_spawn_position = Vector2(1136, 285)
