@@ -6,6 +6,7 @@
 
 [sub_resource type="Resource" id="Resource_76i7i"]
 script = ExtResource("1_48v2d")
+stamina_cost = 2
 metadata/_custom_type_script = "uid://iqqgx8vl32mk"
 
 [resource]

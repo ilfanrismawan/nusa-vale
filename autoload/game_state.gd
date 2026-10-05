@@ -22,13 +22,43 @@ const SHOP_PRICES := {
 	"seed_carrot": 25,
 }
 
-
 func _ready() -> void:
 	inventory.resize(INVENTORY_SIZE)
 	for i in INVENTORY_SIZE:
 		inventory[i] = null
-	
-	reset_game_state()
+
+func new_game() -> void:
+	money = 100
+	stamina = MAX_STAMINA
+	chopped_trees.clear()
+	mined_rocks.clear()
+	has_spawn_point = false
+	next_spawn_position = Vector2.ZERO
+
+	for i in INVENTORY_SIZE:
+		inventory[i] = null
+
+	_setup_tools()
+	_add_item_silent("seed_strawberry", 5)
+	_add_item_silent("seed_carrot", 3)
+
+	stamina_changed.emit(stamina, MAX_STAMINA)
+	money_changed.emit(money)
+	inventory_changed.emit()
+	print("[GameState] new_game: state direset ke default.")
+
+## Reset inventory + isi starter items (tanpa reset money/stamina/flags).
+## @deprecated — gunakan new_game() untuk game baru, atau biarkan SaveManager
+## yang mengisi state saat load. Dipertahankan untuk kompatibilitas.
+func reset_game_state() -> void:
+	for i in INVENTORY_SIZE:
+		inventory[i] = null
+
+	_setup_tools()
+	_add_item_silent("seed_strawberry", 5)
+	_add_item_silent("seed_carrot", 3)
+
+	inventory_changed.emit()
 
 func spend_stamina(amount: int) -> bool:
 	if stamina < amount:
@@ -40,20 +70,7 @@ func spend_stamina(amount: int) -> bool:
 func restore_stamina(amount: int = MAX_STAMINA) -> void:
 	stamina = mini(MAX_STAMINA, stamina + amount)
 	stamina_changed.emit(stamina, MAX_STAMINA)
-	
-## Reset seluruh state dan isi inventory ke starter default
-func reset_game_state() -> void:
-	for i in INVENTORY_SIZE:
-		inventory[i] = null
-	
-	_setup_tools()
-	_add_item_silent("seed_strawberry", 5)
-	_add_item_silent("seed_carrot", 3)
-	
-	inventory_changed.emit()
 
-
-## Setup semua alat ke slot 0-4 inventory
 func _setup_tools() -> void:
 	var tool_ids := ["axe", "hoe", "shovel", "water", "sickle", "pickaxe"]
 	for i in range(tool_ids.size()):
@@ -157,15 +174,21 @@ func _resolve_item(item_or_id: Variant) -> ItemData:
 	return null
 
 func buy_item(item_id: String, amount: int = 1) -> bool:
-	if not SHOP_PRICES.has(item_id):
+	var item: ItemData = _resolve_item(item_id)
+	if item == null:
 		return false
-	var cost: int = SHOP_PRICES[item_id] * amount
+	var unit_price: int = item.buy_price
+	if unit_price <= 0 and SHOP_PRICES.has(item_id):
+		unit_price = SHOP_PRICES[item_id]
+	if unit_price <= 0:
+		return false
+	var cost: int = unit_price * amount
 	if not spend_money(cost):
-		print("Uang tidak cukup")
+		Notify.say("Uang tidak cukup!")
 		return false
-	var leftover := add_item(item_id, amount)
+	var leftover := add_item(item, amount)
 	if leftover > 0:
-		add_money(SHOP_PRICES[item_id] * leftover) # refund sisa yang tidak muat
+		add_money(unit_price * leftover) # refund sisa yang tidak muat
 		return leftover < amount
 	return true
 
@@ -240,7 +263,43 @@ func spend_money(amount: int) -> bool:
 		money_changed.emit(money)
 		return true
 	return false
-	
+
+func replace_tool(
+	old_tool_id: String,
+	new_tool_id: String
+)	-> bool:
+	for i in range(inventory.size()):
+		var slot = inventory[i]
+		
+		if slot == null:
+			continue		
+			
+		var item: ItemData = slot["item"]
+		
+		if item == null:
+			continue
+		
+		if item.item_id != old_tool_id:
+			continue
+		
+		var new_item: ItemData = _resolve_item(new_tool_id)
+		
+		if new_item == null:
+			push_error(
+				"Tool baru tidak ditemukan: %s"
+				% new_tool_id
+			)
+			return false
+		
+		inventory[i] = {
+			"item": new_item,
+			"count": 1
+		}
+		
+		inventory_changed.emit()
+		return true
+		
+	return false
 ## Cek apakah ada item sebanyak jumlah tertentu
 func has_item(item_id: String, amount: int = 1) -> bool:
 	return get_item_count(item_id) >= amount

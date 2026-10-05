@@ -1,0 +1,16 @@
+﻿[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Texture2D" path="res://resources/icons/icon_obsidian_bar.tres" id="1_icon"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="2_script"]
+
+[resource]
+script = ExtResource("2_script")
+category = 4
+item_id = "obsidian_bar"
+display_name = "Batangan Obsidian"
+icon = ExtResource("1_icon")
+description = "Batangan obsidian legendaris hitam pekat tak terpatahkan."
+stackable = true
+max_stack = 99
+sell_price = 40
+metadata/_custom_type_script = "uid://cm1okc20ussp3"

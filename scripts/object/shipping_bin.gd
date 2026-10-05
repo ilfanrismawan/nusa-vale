@@ -2,12 +2,6 @@ class_name ShippingBin
 extends Area2D
 
 
-@export var sell_prices: Dictionary = {
-	"strawberry": 20,
-	"carrot": 45,
-	"wood": 5
-}
-
 var player_in_range: bool = false
 
 func _ready() -> void:
@@ -24,6 +18,7 @@ func _on_body_exited(body: Node2D) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if player_in_range and event.is_action_pressed("ui_accept"):
+		get_viewport().set_input_as_handled()
 		sell_harvested_items()
 
 func sell_harvested_items() -> void:

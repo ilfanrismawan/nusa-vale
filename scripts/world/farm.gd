@@ -4,12 +4,16 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	DayCycle.is_running = true
 	FarmManager.initialize(self)
 	DayCycle.time_tick.connect(_on_time_tick)
 	_on_time_tick(DayCycle.hour, DayCycle.minute)
 	
 	Notify.say("WASD JALAN | Klik pakai alat | 1-6 / Q E ganti alat")
-	Notify.say("Enter di deakt toko, bin, atau kasur | I tas | Esc menu")
+	Notify.say("Enter di dekat toko, bin, atau kasur | I tas | Esc menu")
+
+func _exit_tree() -> void:
+	FarmManager.clear_references()
 
 #efek pergantian siang sore malam
 func _on_time_tick(hour: int, _minute: int) -> void:

@@ -18,10 +18,13 @@ const RESOLUTIONS: Array[Vector2i] = [
 	Vector2i(2560, 1440)
 ]
 
+const CONFIG_PATH := "user://settings.cfg"
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	hide()
 	_setup_ui()
+	load_settings()
 
 func _setup_ui() -> void:
 	# Window modes
@@ -62,6 +65,49 @@ func _setup_ui() -> void:
 	btn_close.pressed.connect(_close)
 
 	_sync_current_settings()
+
+func save_settings() -> void:
+	var config := ConfigFile.new()
+	var mode_idx := window_mode_option.selected
+	config.set_value("display", "window_mode", mode_idx)
+	
+	var win = get_window()
+	var cur_size = win.size
+	var res_idx = resolution_option.selected
+	if res_idx >= 0 and res_idx < RESOLUTIONS.size():
+		cur_size = RESOLUTIONS[res_idx]
+	config.set_value("display", "res_x", cur_size.x)
+	config.set_value("display", "res_y", cur_size.y)
+	config.set_value("display", "vsync", vsync_check.button_pressed)
+	config.set_value("audio", "master_volume", master_slider.value)
+	config.save(CONFIG_PATH)
+
+func load_settings() -> void:
+	var config := ConfigFile.new()
+	if config.load(CONFIG_PATH) != OK:
+		return
+	
+	var mode: int = config.get_value("display", "window_mode", 0)
+	var res_x: int = config.get_value("display", "res_x", 1280)
+	var res_y: int = config.get_value("display", "res_y", 720)
+	var vsync: bool = config.get_value("display", "vsync", true)
+	var volume: float = config.get_value("audio", "master_volume", 1.0)
+	
+	# Audio
+	AudioServer.set_bus_volume_db(0, linear_to_db(volume))
+	master_slider.value = volume
+	_update_volume_label(volume)
+	
+	# VSync
+	vsync_check.button_pressed = vsync
+	_on_vsync_toggled(vsync)
+	
+	# Mode & Resolution
+	if mode == 1 or mode == 2:
+		_on_window_mode_selected(mode)
+	else:
+		_apply_resolution(Vector2i(res_x, res_y))
+		_on_window_mode_selected(0)
 
 func _sync_current_settings() -> void:
 	var win = get_window()
@@ -106,10 +152,12 @@ func _on_window_mode_selected(index: int) -> void:
 			win.mode = Window.MODE_EXCLUSIVE_FULLSCREEN
 			resolution_option.disabled = true
 	window_mode_option.select(index)
+	save_settings()
 
 func _on_resolution_selected(index: int) -> void:
 	if index >= 0 and index < RESOLUTIONS.size():
 		_apply_resolution(RESOLUTIONS[index])
+	save_settings()
 
 func _apply_resolution(new_size: Vector2i) -> void:
 	print("[Settings] Mengubah resolusi ke: ", new_size)
@@ -131,10 +179,12 @@ func _on_vsync_toggled(enabled: bool) -> void:
 		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED)
 	else:
 		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+	save_settings()
 
 func _on_volume_changed(val: float) -> void:
 	AudioServer.set_bus_volume_db(0, linear_to_db(val))
 	_update_volume_label(val)
+	save_settings()
 
 func _update_volume_label(val: float) -> void:
 	master_label.text = "%d%%" % int(val * 100)
@@ -151,6 +201,7 @@ func _open() -> void:
 	get_tree().paused = true
 
 func _close() -> void:
+	save_settings()
 	hide()
 	get_tree().paused = false
 

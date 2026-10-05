@@ -26,58 +26,6 @@
 [ext_resource type="Texture2D" path="res://resources/ui/panel_bottom_right.tres" id="24_panel_bottom_right"]
 [ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="25_font"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_detail_title"]
-font = ExtResource("25_font")
-font_size = 16
-font_color = Color(0.22, 0.1, 0.04, 1)
-shadow_size = 1
-shadow_color = Color(0, 0, 0, 0.1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_detail_sub"]
-font = ExtResource("25_font")
-font_size = 14
-font_color = Color(0.48, 0.22, 0.1, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_detail_desc"]
-font = ExtResource("25_font")
-font_size = 14
-font_color = Color(0.25, 0.14, 0.08, 1)
-line_spacing = 2.0
-
-[sub_resource type="LabelSettings" id="LabelSettings_badge_title"]
-font = ExtResource("25_font")
-font_size = 16
-font_color = Color(0.22, 0.1, 0.04, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_badge_sub"]
-font = ExtResource("25_font")
-font_size = 14
-font_color = Color(0.35, 0.2, 0.1, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_page"]
-font = ExtResource("25_font")
-font_size = 16
-font_color = Color(0.32, 0.16, 0.08, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_capacity"]
-font = ExtResource("25_font")
-font_size = 14
-font_color = Color(0.4, 0.22, 0.1, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_gold"]
-font = ExtResource("25_font")
-font_size = 16
-font_color = Color(0.98, 0.9, 0.65, 1)
-shadow_size = 2
-shadow_color = Color(0, 0, 0, 0.6)
-
-[sub_resource type="LabelSettings" id="LabelSettings_price"]
-font = ExtResource("25_font")
-font_size = 14
-font_color = Color(0.95, 0.85, 0.55, 1)
-shadow_size = 1
-shadow_color = Color(0, 0, 0, 0.5)
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_page"]
 bg_color = Color(0.35, 0.2, 0.12, 0.8)
 border_width_left = 1
@@ -102,6 +50,52 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
+[sub_resource type="LabelSettings" id="LabelSettings_page"]
+font = ExtResource("25_font")
+font_color = Color(0.32, 0.16, 0.08, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_capacity"]
+font = ExtResource("25_font")
+font_size = 14
+font_color = Color(0.4, 0.22, 0.1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_detail_sub"]
+font = ExtResource("25_font")
+font_size = 14
+font_color = Color(0.48, 0.22, 0.1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_badge_title"]
+font = ExtResource("25_font")
+font_color = Color(0.22, 0.1, 0.04, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_badge_sub"]
+font = ExtResource("25_font")
+font_size = 14
+font_color = Color(0.35, 0.2, 0.1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_detail_title"]
+font = ExtResource("25_font")
+font_color = Color(0.22, 0.1, 0.04, 1)
+shadow_color = Color(0, 0, 0, 0.1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_detail_desc"]
+line_spacing = 2.0
+font = ExtResource("25_font")
+font_size = 14
+font_color = Color(0.25, 0.14, 0.08, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_gold"]
+font = ExtResource("25_font")
+font_color = Color(0.98, 0.9, 0.65, 1)
+shadow_size = 2
+shadow_color = Color(0, 0, 0, 0.6)
+
+[sub_resource type="LabelSettings" id="LabelSettings_price"]
+font = ExtResource("25_font")
+font_size = 14
+font_color = Color(0.95, 0.85, 0.55, 1)
+shadow_color = Color(0, 0, 0, 0.5)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tooltip"]
 bg_color = Color(0.12, 0.08, 0.06, 0.95)
 border_width_left = 2
@@ -113,12 +107,10 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
-shadow_color = Color(0, 0, 0, 0.6)
 shadow_size = 4
 
 [sub_resource type="LabelSettings" id="LabelSettings_tooltip_title"]
 font = ExtResource("25_font")
-font_size = 16
 font_color = Color(1, 0.92, 0.6, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_tooltip_cat"]
@@ -136,12 +128,12 @@ font = ExtResource("25_font")
 font_size = 14
 font_color = Color(1, 0.85, 0.45, 1)
 
-[node name="UIInventory" type="CanvasLayer"]
+[node name="UIInventory" type="CanvasLayer" unique_id=152005689]
 process_mode = 3
 layer = 35
 script = ExtResource("1_script")
 
-[node name="Dimmer" type="ColorRect" parent="."]
+[node name="Dimmer" type="ColorRect" parent="." unique_id=1681376390]
 unique_name_in_owner = true
 anchors_preset = 15
 anchor_right = 1.0
@@ -150,7 +142,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.5)
 
-[node name="BookRoot" type="Control" parent="Dimmer"]
+[node name="BookRoot" type="Control" parent="Dimmer" unique_id=1109639389]
 unique_name_in_owner = true
 texture_filter = 1
 custom_minimum_size = Vector2(476, 288)
@@ -167,21 +159,20 @@ offset_bottom = 144.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TopTabsContainer" type="Control" parent="Dimmer/BookRoot"]
+[node name="TopTabsContainer" type="Control" parent="Dimmer/BookRoot" unique_id=29984571]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 0
-offset_left = 36.0
-offset_top = -26.0
-offset_right = 220.0
-offset_bottom = 20.0
+offset_left = 34.0
+offset_top = -51.0
+offset_right = 218.0
+offset_bottom = -5.0
 
-[node name="TabSwords" type="TextureButton" parent="Dimmer/BookRoot/TopTabsContainer"]
+[node name="TabSwords" type="TextureButton" parent="Dimmer/BookRoot/TopTabsContainer" unique_id=1348069970]
 unique_name_in_owner = true
 texture_filter = 1
 custom_minimum_size = Vector2(36, 46)
 layout_mode = 0
-offset_left = 0.0
 offset_top = 8.0
 offset_right = 36.0
 offset_bottom = 54.0
@@ -189,7 +180,7 @@ texture_normal = ExtResource("3_tab_normal")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/TopTabsContainer/TabSwords"]
+[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/TopTabsContainer/TabSwords" unique_id=806671969]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 5
@@ -204,20 +195,19 @@ texture = ExtResource("5_icon_sword")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TabBook" type="TextureButton" parent="Dimmer/BookRoot/TopTabsContainer"]
+[node name="TabBook" type="TextureButton" parent="Dimmer/BookRoot/TopTabsContainer" unique_id=890337480]
 unique_name_in_owner = true
 texture_filter = 1
 custom_minimum_size = Vector2(36, 54)
 layout_mode = 0
 offset_left = 42.0
-offset_top = 0.0
 offset_right = 78.0
 offset_bottom = 54.0
 texture_normal = ExtResource("4_tab_active")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/TopTabsContainer/TabBook"]
+[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/TopTabsContainer/TabBook" unique_id=1771090054]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 5
@@ -232,7 +222,7 @@ texture = ExtResource("6_icon_book")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TabGear" type="TextureButton" parent="Dimmer/BookRoot/TopTabsContainer"]
+[node name="TabGear" type="TextureButton" parent="Dimmer/BookRoot/TopTabsContainer" unique_id=1238431858]
 unique_name_in_owner = true
 texture_filter = 1
 custom_minimum_size = Vector2(36, 46)
@@ -245,7 +235,7 @@ texture_normal = ExtResource("3_tab_normal")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/TopTabsContainer/TabGear"]
+[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/TopTabsContainer/TabGear" unique_id=1982057661]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 5
@@ -260,7 +250,7 @@ texture = ExtResource("7_icon_gear")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TabSave" type="TextureButton" parent="Dimmer/BookRoot/TopTabsContainer"]
+[node name="TabSave" type="TextureButton" parent="Dimmer/BookRoot/TopTabsContainer" unique_id=689328066]
 unique_name_in_owner = true
 texture_filter = 1
 custom_minimum_size = Vector2(36, 46)
@@ -273,7 +263,7 @@ texture_normal = ExtResource("3_tab_normal")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/TopTabsContainer/TabSave"]
+[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/TopTabsContainer/TabSave" unique_id=1823018363]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 5
@@ -288,7 +278,7 @@ texture = ExtResource("8_icon_save")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="RightRibbonsContainer" type="Control" parent="Dimmer/BookRoot"]
+[node name="RightRibbonsContainer" type="Control" parent="Dimmer/BookRoot" unique_id=1984179342]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 0
@@ -297,20 +287,18 @@ offset_top = 36.0
 offset_right = 530.0
 offset_bottom = 260.0
 
-[node name="RibbonRed" type="TextureButton" parent="Dimmer/BookRoot/RightRibbonsContainer"]
+[node name="RibbonRed" type="TextureButton" parent="Dimmer/BookRoot/RightRibbonsContainer" unique_id=177086437]
 unique_name_in_owner = true
 texture_filter = 1
 custom_minimum_size = Vector2(54, 36)
 layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
 offset_right = 54.0
 offset_bottom = 36.0
 texture_normal = ExtResource("9_ribbon_red")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonRed"]
+[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonRed" unique_id=1235575488]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 4
@@ -325,12 +313,11 @@ texture = ExtResource("14_icon_heart")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="RibbonBlue" type="TextureButton" parent="Dimmer/BookRoot/RightRibbonsContainer"]
+[node name="RibbonBlue" type="TextureButton" parent="Dimmer/BookRoot/RightRibbonsContainer" unique_id=2107410091]
 unique_name_in_owner = true
 texture_filter = 1
 custom_minimum_size = Vector2(54, 36)
 layout_mode = 0
-offset_left = 0.0
 offset_top = 44.0
 offset_right = 54.0
 offset_bottom = 80.0
@@ -338,7 +325,7 @@ texture_normal = ExtResource("10_ribbon_blue")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonBlue"]
+[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonBlue" unique_id=1350810680]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 4
@@ -353,12 +340,11 @@ texture = ExtResource("15_icon_person")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="RibbonGreen" type="TextureButton" parent="Dimmer/BookRoot/RightRibbonsContainer"]
+[node name="RibbonGreen" type="TextureButton" parent="Dimmer/BookRoot/RightRibbonsContainer" unique_id=1001551484]
 unique_name_in_owner = true
 texture_filter = 1
 custom_minimum_size = Vector2(54, 36)
 layout_mode = 0
-offset_left = 0.0
 offset_top = 88.0
 offset_right = 54.0
 offset_bottom = 124.0
@@ -366,7 +352,7 @@ texture_normal = ExtResource("11_ribbon_green")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonGreen"]
+[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonGreen" unique_id=1750822534]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 4
@@ -381,12 +367,11 @@ texture = ExtResource("16_icon_crop")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="RibbonOrange" type="TextureButton" parent="Dimmer/BookRoot/RightRibbonsContainer"]
+[node name="RibbonOrange" type="TextureButton" parent="Dimmer/BookRoot/RightRibbonsContainer" unique_id=2060420116]
 unique_name_in_owner = true
 texture_filter = 1
 custom_minimum_size = Vector2(54, 36)
 layout_mode = 0
-offset_left = 0.0
 offset_top = 132.0
 offset_right = 54.0
 offset_bottom = 168.0
@@ -394,7 +379,7 @@ texture_normal = ExtResource("12_ribbon_orange")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonOrange"]
+[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonOrange" unique_id=2030477832]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 4
@@ -409,12 +394,11 @@ texture = ExtResource("14_icon_heart")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="RibbonTan" type="TextureButton" parent="Dimmer/BookRoot/RightRibbonsContainer"]
+[node name="RibbonTan" type="TextureButton" parent="Dimmer/BookRoot/RightRibbonsContainer" unique_id=1094266433]
 unique_name_in_owner = true
 texture_filter = 1
 custom_minimum_size = Vector2(54, 36)
 layout_mode = 0
-offset_left = 0.0
 offset_top = 176.0
 offset_right = 54.0
 offset_bottom = 212.0
@@ -422,7 +406,7 @@ texture_normal = ExtResource("13_ribbon_tan")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonTan"]
+[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonTan" unique_id=1068373062]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 4
@@ -437,7 +421,7 @@ texture = ExtResource("6_icon_book")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="BookBg" type="TextureRect" parent="Dimmer/BookRoot"]
+[node name="BookBg" type="TextureRect" parent="Dimmer/BookRoot" unique_id=2014250803]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 1
@@ -450,7 +434,7 @@ texture = ExtResource("2_book_bg")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="BtnClose" type="TextureButton" parent="Dimmer/BookRoot"]
+[node name="BtnClose" type="TextureButton" parent="Dimmer/BookRoot" unique_id=1758772064]
 unique_name_in_owner = true
 texture_filter = 1
 custom_minimum_size = Vector2(32, 32)
@@ -469,7 +453,7 @@ texture_hover = ExtResource("18_btn_close_pressed")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="LeftPage" type="Control" parent="Dimmer/BookRoot"]
+[node name="LeftPage" type="Control" parent="Dimmer/BookRoot" unique_id=1213915201]
 layout_mode = 1
 anchors_preset = 0
 offset_left = 28.0
@@ -477,7 +461,7 @@ offset_top = 20.0
 offset_right = 228.0
 offset_bottom = 268.0
 
-[node name="SlotGrid" type="GridContainer" parent="Dimmer/BookRoot/LeftPage"]
+[node name="SlotGrid" type="GridContainer" parent="Dimmer/BookRoot/LeftPage" unique_id=354640233]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 1
@@ -493,7 +477,7 @@ theme_override_constants/h_separation = 4
 theme_override_constants/v_separation = 4
 columns = 4
 
-[node name="LeftBottomPanel" type="NinePatchRect" parent="Dimmer/BookRoot/LeftPage"]
+[node name="LeftBottomPanel" type="NinePatchRect" parent="Dimmer/BookRoot/LeftPage" unique_id=45581795]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 7
@@ -513,7 +497,7 @@ patch_margin_top = 10
 patch_margin_right = 10
 patch_margin_bottom = 10
 
-[node name="Margin" type="MarginContainer" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel"]
+[node name="Margin" type="MarginContainer" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel" unique_id=533257817]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -525,16 +509,16 @@ theme_override_constants/margin_top = 6
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 6
 
-[node name="VBox" type="VBoxContainer" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin"]
+[node name="VBox" type="VBoxContainer" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin" unique_id=1221380898]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="PageNav" type="HBoxContainer" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox"]
+[node name="PageNav" type="HBoxContainer" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox" unique_id=321833486]
 layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="BtnPrevPage" type="Button" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox/PageNav"]
+[node name="BtnPrevPage" type="Button" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox/PageNav" unique_id=781467441]
 unique_name_in_owner = true
 texture_filter = 1
 custom_minimum_size = Vector2(24, 20)
@@ -542,11 +526,11 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("25_font")
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_page")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_page_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_page_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_page_hover")
 text = "<"
 
-[node name="PageLabel" type="Label" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox/PageNav"]
+[node name="PageLabel" type="Label" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox/PageNav" unique_id=1652131168]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2
@@ -556,7 +540,7 @@ label_settings = SubResource("LabelSettings_page")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BtnNextPage" type="Button" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox/PageNav"]
+[node name="BtnNextPage" type="Button" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox/PageNav" unique_id=1026881388]
 unique_name_in_owner = true
 texture_filter = 1
 custom_minimum_size = Vector2(24, 20)
@@ -564,20 +548,20 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("25_font")
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_page")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_page_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_page_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_page_hover")
 text = ">"
 
-[node name="SliderContainer" type="HBoxContainer" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox"]
+[node name="SliderContainer" type="HBoxContainer" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox" unique_id=1417127710]
 layout_mode = 2
 theme_override_constants/separation = 6
 alignment = 1
 
-[node name="TrackBox" type="Control" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox/SliderContainer"]
+[node name="TrackBox" type="Control" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox/SliderContainer" unique_id=785757576]
 custom_minimum_size = Vector2(80, 16)
 layout_mode = 2
 
-[node name="Track" type="TextureRect" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox/SliderContainer/TrackBox"]
+[node name="Track" type="TextureRect" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox/SliderContainer/TrackBox" unique_id=52105750]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 4
@@ -591,7 +575,7 @@ texture = ExtResource("20_slider_track")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Handle" type="TextureRect" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox/SliderContainer/TrackBox/Track"]
+[node name="Handle" type="TextureRect" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox/SliderContainer/TrackBox/Track" unique_id=1537313908]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 1
@@ -607,7 +591,7 @@ texture = ExtResource("21_slider_handle")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="CapacityLabel" type="Label" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox/SliderContainer"]
+[node name="CapacityLabel" type="Label" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox/SliderContainer" unique_id=939150994]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2
@@ -617,7 +601,7 @@ label_settings = SubResource("LabelSettings_capacity")
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="HotbarHint" type="Label" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox"]
+[node name="HotbarHint" type="Label" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox" unique_id=995577374]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2
@@ -625,7 +609,7 @@ text = "★ Slot 1-8: Bar Alat HUD (Tekan 1-8)"
 label_settings = SubResource("LabelSettings_detail_sub")
 horizontal_alignment = 1
 
-[node name="RightPage" type="Control" parent="Dimmer/BookRoot"]
+[node name="RightPage" type="Control" parent="Dimmer/BookRoot" unique_id=1014387944]
 layout_mode = 1
 anchors_preset = 0
 offset_left = 248.0
@@ -633,7 +617,7 @@ offset_top = 20.0
 offset_right = 448.0
 offset_bottom = 268.0
 
-[node name="TopFrames" type="HBoxContainer" parent="Dimmer/BookRoot/RightPage"]
+[node name="TopFrames" type="HBoxContainer" parent="Dimmer/BookRoot/RightPage" unique_id=1214231530]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -646,7 +630,7 @@ grow_horizontal = 2
 theme_override_constants/separation = 12
 alignment = 1
 
-[node name="FramePreview" type="TextureRect" parent="Dimmer/BookRoot/RightPage/TopFrames"]
+[node name="FramePreview" type="TextureRect" parent="Dimmer/BookRoot/RightPage/TopFrames" unique_id=1509017898]
 texture_filter = 1
 custom_minimum_size = Vector2(84, 84)
 layout_mode = 2
@@ -654,7 +638,7 @@ texture = ExtResource("22_frame_square")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="DetailIcon" type="TextureRect" parent="Dimmer/BookRoot/RightPage/TopFrames/FramePreview"]
+[node name="DetailIcon" type="TextureRect" parent="Dimmer/BookRoot/RightPage/TopFrames/FramePreview" unique_id=1922754159]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 1
@@ -672,7 +656,7 @@ grow_vertical = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="FrameBadge" type="TextureRect" parent="Dimmer/BookRoot/RightPage/TopFrames"]
+[node name="FrameBadge" type="TextureRect" parent="Dimmer/BookRoot/RightPage/TopFrames" unique_id=270031366]
 texture_filter = 1
 custom_minimum_size = Vector2(84, 84)
 layout_mode = 2
@@ -680,7 +664,7 @@ texture = ExtResource("22_frame_square")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="BadgeBox" type="VBoxContainer" parent="Dimmer/BookRoot/RightPage/TopFrames/FrameBadge"]
+[node name="BadgeBox" type="VBoxContainer" parent="Dimmer/BookRoot/RightPage/TopFrames/FrameBadge" unique_id=1686490343]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -690,7 +674,7 @@ grow_vertical = 2
 theme_override_constants/separation = 2
 alignment = 1
 
-[node name="BadgeCount" type="Label" parent="Dimmer/BookRoot/RightPage/TopFrames/FrameBadge/BadgeBox"]
+[node name="BadgeCount" type="Label" parent="Dimmer/BookRoot/RightPage/TopFrames/FrameBadge/BadgeBox" unique_id=778438632]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2
@@ -699,16 +683,15 @@ label_settings = SubResource("LabelSettings_badge_title")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BadgeHotbar" type="Label" parent="Dimmer/BookRoot/RightPage/TopFrames/FrameBadge/BadgeBox"]
+[node name="BadgeHotbar" type="Label" parent="Dimmer/BookRoot/RightPage/TopFrames/FrameBadge/BadgeBox" unique_id=2105140067]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2
-text = ""
 label_settings = SubResource("LabelSettings_badge_sub")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="DetailBox" type="NinePatchRect" parent="Dimmer/BookRoot/RightPage"]
+[node name="DetailBox" type="NinePatchRect" parent="Dimmer/BookRoot/RightPage" unique_id=1123397558]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 7
@@ -728,7 +711,7 @@ patch_margin_top = 12
 patch_margin_right = 12
 patch_margin_bottom = 12
 
-[node name="Margin" type="MarginContainer" parent="Dimmer/BookRoot/RightPage/DetailBox"]
+[node name="Margin" type="MarginContainer" parent="Dimmer/BookRoot/RightPage/DetailBox" unique_id=1935271513]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -740,11 +723,11 @@ theme_override_constants/margin_top = 6
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 6
 
-[node name="VBox" type="VBoxContainer" parent="Dimmer/BookRoot/RightPage/DetailBox/Margin"]
+[node name="VBox" type="VBoxContainer" parent="Dimmer/BookRoot/RightPage/DetailBox/Margin" unique_id=1152246454]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="DetailTitle" type="Label" parent="Dimmer/BookRoot/RightPage/DetailBox/Margin/VBox"]
+[node name="DetailTitle" type="Label" parent="Dimmer/BookRoot/RightPage/DetailBox/Margin/VBox" unique_id=1786244471]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2
@@ -752,14 +735,14 @@ text = "Pilih Item"
 label_settings = SubResource("LabelSettings_detail_title")
 text_overrun_behavior = 3
 
-[node name="DetailSub" type="Label" parent="Dimmer/BookRoot/RightPage/DetailBox/Margin/VBox"]
+[node name="DetailSub" type="Label" parent="Dimmer/BookRoot/RightPage/DetailBox/Margin/VBox" unique_id=1021706769]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2
 text = "Arahkan kursor atau klik slot"
 label_settings = SubResource("LabelSettings_detail_sub")
 
-[node name="DetailDesc" type="Label" parent="Dimmer/BookRoot/RightPage/DetailBox/Margin/VBox"]
+[node name="DetailDesc" type="Label" parent="Dimmer/BookRoot/RightPage/DetailBox/Margin/VBox" unique_id=699189561]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2
@@ -768,7 +751,7 @@ text = "Arahkan kursor ke item atau perkakas untuk melihat fungsi dan deskripsi 
 label_settings = SubResource("LabelSettings_detail_desc")
 autowrap_mode = 2
 
-[node name="BottomActionBox" type="NinePatchRect" parent="Dimmer/BookRoot/RightPage"]
+[node name="BottomActionBox" type="NinePatchRect" parent="Dimmer/BookRoot/RightPage" unique_id=1402320186]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 7
@@ -788,7 +771,7 @@ patch_margin_top = 10
 patch_margin_right = 10
 patch_margin_bottom = 10
 
-[node name="Margin" type="MarginContainer" parent="Dimmer/BookRoot/RightPage/BottomActionBox"]
+[node name="Margin" type="MarginContainer" parent="Dimmer/BookRoot/RightPage/BottomActionBox" unique_id=1686568039]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -800,14 +783,14 @@ theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 4
 
-[node name="VBox" type="VBoxContainer" parent="Dimmer/BookRoot/RightPage/BottomActionBox/Margin"]
+[node name="VBox" type="VBoxContainer" parent="Dimmer/BookRoot/RightPage/BottomActionBox/Margin" unique_id=737906576]
 layout_mode = 2
 theme_override_constants/separation = 1
 
-[node name="Row" type="HBoxContainer" parent="Dimmer/BookRoot/RightPage/BottomActionBox/Margin/VBox"]
+[node name="Row" type="HBoxContainer" parent="Dimmer/BookRoot/RightPage/BottomActionBox/Margin/VBox" unique_id=2095256140]
 layout_mode = 2
 
-[node name="GoldLabel" type="Label" parent="Dimmer/BookRoot/RightPage/BottomActionBox/Margin/VBox/Row"]
+[node name="GoldLabel" type="Label" parent="Dimmer/BookRoot/RightPage/BottomActionBox/Margin/VBox/Row" unique_id=218549408]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2
@@ -816,22 +799,21 @@ text = "Uang: 100 G"
 label_settings = SubResource("LabelSettings_gold")
 vertical_alignment = 1
 
-[node name="PriceLabel" type="Label" parent="Dimmer/BookRoot/RightPage/BottomActionBox/Margin/VBox/Row"]
+[node name="PriceLabel" type="Label" parent="Dimmer/BookRoot/RightPage/BottomActionBox/Margin/VBox/Row" unique_id=183716143]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2
-text = ""
 label_settings = SubResource("LabelSettings_price")
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="TipLabel" type="Label" parent="Dimmer/BookRoot/RightPage/BottomActionBox/Margin/VBox"]
+[node name="TipLabel" type="Label" parent="Dimmer/BookRoot/RightPage/BottomActionBox/Margin/VBox" unique_id=253532875]
 texture_filter = 1
 layout_mode = 2
 text = "Tarik item untuk menukar posisi slot tas & HUD"
 label_settings = SubResource("LabelSettings_price")
 
-[node name="HoverTooltip" type="PanelContainer" parent="."]
+[node name="HoverTooltip" type="PanelContainer" parent="." unique_id=1822203427]
 unique_name_in_owner = true
 visible = false
 z_index = 60
@@ -842,39 +824,39 @@ offset_bottom = 54.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_tooltip")
 
-[node name="Margin" type="MarginContainer" parent="HoverTooltip"]
+[node name="Margin" type="MarginContainer" parent="HoverTooltip" unique_id=1757914975]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 6
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 6
 
-[node name="VBox" type="VBoxContainer" parent="HoverTooltip/Margin"]
+[node name="VBox" type="VBoxContainer" parent="HoverTooltip/Margin" unique_id=783236084]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="TooltipTitle" type="Label" parent="HoverTooltip/Margin/VBox"]
+[node name="TooltipTitle" type="Label" parent="HoverTooltip/Margin/VBox" unique_id=1391184916]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2
 text = "Nama Item"
 label_settings = SubResource("LabelSettings_tooltip_title")
 
-[node name="TooltipCategory" type="Label" parent="HoverTooltip/Margin/VBox"]
+[node name="TooltipCategory" type="Label" parent="HoverTooltip/Margin/VBox" unique_id=1197510948]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2
 text = "[Kategori]"
 label_settings = SubResource("LabelSettings_tooltip_cat")
 
-[node name="TooltipHotbar" type="Label" parent="HoverTooltip/Margin/VBox"]
+[node name="TooltipHotbar" type="Label" parent="HoverTooltip/Margin/VBox" unique_id=933965854]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2
 text = "[HUD Slot #1 • Tombol 1]"
 label_settings = SubResource("LabelSettings_tooltip_hotbar")
 
-[node name="TooltipPrice" type="Label" parent="HoverTooltip/Margin/VBox"]
+[node name="TooltipPrice" type="Label" parent="HoverTooltip/Margin/VBox" unique_id=1326480251]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 2

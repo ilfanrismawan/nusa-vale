@@ -1,13 +1,15 @@
 class_name HoeEffect
 extends ActionEffect
 
-@export var stamina_cost: int = 4
+func _init() -> void:
+	stamina_cost = 4
 
 func apply(
 	player: Player,
 	cell: Vector2i
 ) -> void:
-	if not GameState.spend_stamina(stamina_cost):
+	if GameState.stamina < stamina_cost:
 		Notify.say("Terlalu lelah! Istirahatlah.")
 		return
-	FarmManager.hoe(cell)
+	if FarmManager.hoe(cell):
+		GameState.spend_stamina(stamina_cost)

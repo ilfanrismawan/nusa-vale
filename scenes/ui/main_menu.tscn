@@ -35,13 +35,7 @@ shadow_offset = Vector2(1, 2)
 
 [sub_resource type="LabelSettings" id="LabelSettings_subtitle"]
 font = ExtResource("2_font")
-font_size = 16
 font_color = Color(0.75, 0.68, 0.55, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_version"]
-font = ExtResource("2_font")
-font_size = 12
-font_color = Color(0.5, 0.45, 0.35, 0.6)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_normal"]
 bg_color = Color(0.28, 0.22, 0.15, 0.9)
@@ -50,18 +44,6 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.5, 0.38, 0.22, 1)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
-bg_color = Color(0.4, 0.32, 0.2, 0.95)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.7, 0.55, 0.3, 1)
 corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
@@ -79,6 +61,18 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+bg_color = Color(0.4, 0.32, 0.2, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.7, 0.55, 0.3, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_disabled"]
 bg_color = Color(0.2, 0.18, 0.14, 0.5)
 border_width_left = 1
@@ -91,7 +85,12 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
-[node name="MainMenu" type="Control"]
+[sub_resource type="LabelSettings" id="LabelSettings_version"]
+font = ExtResource("2_font")
+font_size = 12
+font_color = Color(0.5, 0.45, 0.35, 0.6)
+
+[node name="MainMenu" type="Control" unique_id=983838656]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -100,7 +99,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_script")
 
-[node name="Background" type="Panel" parent="."]
+[node name="Background" type="Panel" parent="." unique_id=1424761214]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -109,7 +108,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1510681135]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -117,24 +116,24 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MenuPanel" type="PanelContainer" parent="CenterContainer"]
+[node name="MenuPanel" type="PanelContainer" parent="CenterContainer" unique_id=791278464]
 texture_filter = 1
 custom_minimum_size = Vector2(220, 260)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
-[node name="Margin" type="MarginContainer" parent="CenterContainer/MenuPanel"]
+[node name="Margin" type="MarginContainer" parent="CenterContainer/MenuPanel" unique_id=293868008]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 12
 
-[node name="VBox" type="VBoxContainer" parent="CenterContainer/MenuPanel/Margin"]
+[node name="VBox" type="VBoxContainer" parent="CenterContainer/MenuPanel/Margin" unique_id=1246551483]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="TitleBanner" type="TextureRect" parent="CenterContainer/MenuPanel/Margin/VBox"]
+[node name="TitleBanner" type="TextureRect" parent="CenterContainer/MenuPanel/Margin/VBox" unique_id=1215700580]
 texture_filter = 1
 custom_minimum_size = Vector2(100, 18)
 layout_mode = 2
@@ -143,7 +142,7 @@ texture = ExtResource("3_banner")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TitleLabel" type="Label" parent="CenterContainer/MenuPanel/Margin/VBox/TitleBanner"]
+[node name="TitleLabel" type="Label" parent="CenterContainer/MenuPanel/Margin/VBox/TitleBanner" unique_id=2092956322]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 1
@@ -157,14 +156,14 @@ label_settings = SubResource("LabelSettings_title")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="SubtitleLabel" type="Label" parent="CenterContainer/MenuPanel/Margin/VBox"]
+[node name="SubtitleLabel" type="Label" parent="CenterContainer/MenuPanel/Margin/VBox" unique_id=1416325408]
 texture_filter = 1
 layout_mode = 2
 text = "Petualangan Bertani di Nusantara"
 label_settings = SubResource("LabelSettings_subtitle")
 horizontal_alignment = 1
 
-[node name="DecorTop" type="TextureRect" parent="CenterContainer/MenuPanel/Margin/VBox"]
+[node name="DecorTop" type="TextureRect" parent="CenterContainer/MenuPanel/Margin/VBox" unique_id=90055056]
 texture_filter = 1
 custom_minimum_size = Vector2(0, 3)
 layout_mode = 2
@@ -173,16 +172,16 @@ texture = ExtResource("4_decor")
 expand_mode = 1
 stretch_mode = 2
 
-[node name="Spacer" type="Control" parent="CenterContainer/MenuPanel/Margin/VBox"]
+[node name="Spacer" type="Control" parent="CenterContainer/MenuPanel/Margin/VBox" unique_id=1575410009]
 custom_minimum_size = Vector2(0, 6)
 layout_mode = 2
 
-[node name="ButtonContainer" type="VBoxContainer" parent="CenterContainer/MenuPanel/Margin/VBox"]
+[node name="ButtonContainer" type="VBoxContainer" parent="CenterContainer/MenuPanel/Margin/VBox" unique_id=1630320428]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 5
 
-[node name="BtnNew" type="Button" parent="CenterContainer/MenuPanel/Margin/VBox/ButtonContainer"]
+[node name="BtnNew" type="Button" parent="CenterContainer/MenuPanel/Margin/VBox/ButtonContainer" unique_id=1385040626]
 unique_name_in_owner = true
 texture_filter = 1
 custom_minimum_size = Vector2(160, 26)
@@ -191,12 +190,12 @@ size_flags_horizontal = 4
 theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
 text = "Permainan Baru"
 
-[node name="BtnContinue" type="Button" parent="CenterContainer/MenuPanel/Margin/VBox/ButtonContainer"]
+[node name="BtnContinue" type="Button" parent="CenterContainer/MenuPanel/Margin/VBox/ButtonContainer" unique_id=964242460]
 unique_name_in_owner = true
 texture_filter = 1
 custom_minimum_size = Vector2(160, 26)
@@ -205,12 +204,12 @@ size_flags_horizontal = 4
 theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
 text = "Lanjutkan"
 
-[node name="BtnSettings" type="Button" parent="CenterContainer/MenuPanel/Margin/VBox/ButtonContainer"]
+[node name="BtnSettings" type="Button" parent="CenterContainer/MenuPanel/Margin/VBox/ButtonContainer" unique_id=28639292]
 unique_name_in_owner = true
 texture_filter = 1
 custom_minimum_size = Vector2(160, 26)
@@ -219,12 +218,12 @@ size_flags_horizontal = 4
 theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
 text = "Pengaturan"
 
-[node name="BtnQuit" type="Button" parent="CenterContainer/MenuPanel/Margin/VBox/ButtonContainer"]
+[node name="BtnQuit" type="Button" parent="CenterContainer/MenuPanel/Margin/VBox/ButtonContainer" unique_id=1627707959]
 unique_name_in_owner = true
 texture_filter = 1
 custom_minimum_size = Vector2(160, 26)
@@ -233,12 +232,12 @@ size_flags_horizontal = 4
 theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_disabled")
 text = "Keluar"
 
-[node name="DecorBottom" type="TextureRect" parent="CenterContainer/MenuPanel/Margin/VBox"]
+[node name="DecorBottom" type="TextureRect" parent="CenterContainer/MenuPanel/Margin/VBox" unique_id=1691650527]
 texture_filter = 1
 custom_minimum_size = Vector2(0, 3)
 layout_mode = 2
@@ -247,7 +246,7 @@ texture = ExtResource("4_decor")
 expand_mode = 1
 stretch_mode = 2
 
-[node name="VersionLabel" type="Label" parent="."]
+[node name="VersionLabel" type="Label" parent="." unique_id=1938486055]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 3
@@ -263,14 +262,14 @@ text = "v0.1.0 Alpha"
 label_settings = SubResource("LabelSettings_version")
 horizontal_alignment = 2
 
-[node name="ConfirmDialog" type="ConfirmationDialog" parent="."]
+[node name="ConfirmDialog" type="ConfirmationDialog" parent="." unique_id=1173453792]
 unique_name_in_owner = true
 title = "Konfirmasi"
 initial_position = 2
 size = Vector2i(280, 100)
-dialog_text = "Save yang ada akan dihapus. Mulai permainan baru?"
 ok_button_text = "Ya, Mulai Baru"
+dialog_text = "Save yang ada akan dihapus. Mulai permainan baru?"
 cancel_button_text = "Batal"
 
-[node name="SettingsMenu" parent="." instance=ExtResource("5_settings")]
+[node name="SettingsMenu" parent="." unique_id=2146977693 instance=ExtResource("5_settings")]
 unique_name_in_owner = true

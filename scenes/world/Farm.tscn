@@ -7979,9 +7979,6 @@ size = Vector2(152, 25)
 a = Vector2(0, -23)
 b = Vector2(0, 7)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ovsut"]
-size = Vector2(34, 15)
-
 [node name="Farm" type="Node2D" unique_id=232664316]
 y_sort_enabled = true
 script = ExtResource("1_7od4w")
@@ -8078,21 +8075,6 @@ position = Vector2(1136, 285)
 
 [node name="House" parent="." unique_id=285203614 instance=ExtResource("9_2inl0")]
 position = Vector2(1136, 241)
-
-[node name="Area2D" type="Area2D" parent="." unique_id=1395119895]
-position = Vector2(-23, 0)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1753404903]
-position = Vector2(1061, -7.5)
-shape = SubResource("RectangleShape2D_ovsut")
-
-[node name="Area2D2" type="Area2D" parent="." unique_id=633701617]
-position = Vector2(209, 388)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D2" unique_id=43125685]
-position = Vector2(1060, -4)
-rotation = 1.5707964
-shape = SubResource("RectangleShape2D_ovsut")
 
 [node name="ShippingBin" parent="." unique_id=1342505141 instance=ExtResource("16_fly3y")]
 position = Vector2(1176, 276)

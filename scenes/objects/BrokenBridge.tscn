@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://dype6nh84754b"]
+
+[ext_resource type="Script" uid="uid://c1caw3lm43ilb" path="res://scripts/world/broken_bridge.gd" id="1_8dig8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ovsut"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ajcru"]
+
+[node name="StaticBody2D" type="StaticBody2D" unique_id=980553921]
+script = ExtResource("1_8dig8")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=507080605]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2117187070]
+shape = SubResource("RectangleShape2D_ovsut")
+
+[node name="InteractionArea" type="Area2D" parent="." unique_id=743118520]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=1614458348]
+shape = SubResource("RectangleShape2D_ajcru")

@@ -59,19 +59,22 @@ func _on_money_changed(_amount: int) -> void:
 func _refresh() -> void:
 	_money_label.text = "Uang: %d G" % GameState.money
 	for child in _list.get_children():
-		child.free()
+		child.queue_free()
 	for entry in STOCK:
 		var item: ItemData = load("res://resources/item_data/%s.tres" % entry["item_id"])
 		if item == null:
 			continue
+		var price: int = entry.get("price", item.buy_price)
+		if price <= 0:
+			price = item.buy_price
 		var row := HBoxContainer.new()
 		var label := Label.new()
-		label.text = "%s %d G" % [item.display_name, entry["price"]]
+		label.text = "%s %d G" % [item.display_name, price]
 		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		var btn := Button.new()
 		btn.text = "Beli"
-		btn.disabled = GameState.money < entry["price"]
-		btn.pressed.connect(_buy.bind(entry["item_id"], entry["price"]))
+		btn.disabled = GameState.money < price
+		btn.pressed.connect(_buy.bind(entry["item_id"], price))
 		row.add_child(label)
 		row.add_child(btn)
 		_list.add_child(row)

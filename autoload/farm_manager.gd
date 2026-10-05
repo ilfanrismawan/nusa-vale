@@ -16,10 +16,13 @@ const TERRAIN_SET_SOIL := 0
 const TERRAIN_TILLED := 0
 
 func initialize(world: Node) -> void:
-	base_layer_ground = world.get_node("BaseLayerGround")
-	watered_layer = world.get_node("WateredLayer")
-	soil_layer = world.get_node("SoilLayer")
-	crop_layer = world.get_node("Crop")
+	if world == null:
+		clear_references()
+		return
+	base_layer_ground = world.get_node_or_null("BaseLayerGround")
+	watered_layer = world.get_node_or_null("WateredLayer")
+	soil_layer = world.get_node_or_null("SoilLayer")
+	crop_layer = world.get_node_or_null("Crop")
 	
 	if base_layer_ground:
 		if soil_layer:
@@ -33,31 +36,44 @@ func initialize(world: Node) -> void:
 		DayCycle.day_passed.connect(_on_day_passed)
 	
 	_restore_tiles()
+
+func clear_references() -> void:
+	base_layer_ground = null
+	watered_layer = null
+	soil_layer = null
+	crop_layer = null
 	
 func _restore_tiles() -> void:
+	var can_soil := is_instance_valid(soil_layer)
+	var can_water := is_instance_valid(watered_layer)
+	var can_crop := is_instance_valid(crop_layer)
+	
 	for cell in farm_data:
 		var data: Dictionary = farm_data[cell]
 		
-		soil_layer.set_cells_terrain_connect(
-			[cell], TERRAIN_SET_SOIL, TERRAIN_TILLED
-		)
+		if can_soil:
+			soil_layer.set_cells_terrain_connect(
+				[cell], TERRAIN_SET_SOIL, TERRAIN_TILLED
+			)
 		
-		if data["watered"]:
+		if can_water and data["watered"]:
 			watered_layer.set_cells_terrain_connect(
 				[cell], TERRAIN_SET_SOIL, 0
 			)
 		
-		if data["crop"] != null:
+		if can_crop and data["crop"] != null:
 			_update_crop_tile(cell, data["crop"], data["stage"])
 	
 	if not farm_data.is_empty():
 		print("Restore tile: %d petak dikembalikan" % farm_data.size())
 	
-func hoe(cell: Vector2i) -> void:
+func hoe(cell: Vector2i) -> bool:
+	if not is_instance_valid(soil_layer):
+		return false
 	if not is_tile_farmable(cell):
-		return
+		return false
 	if farm_data.has(cell):
-		return
+		return false
 	soil_layer.set_cells_terrain_connect(
 		[cell], TERRAIN_SET_SOIL, TERRAIN_TILLED
 	)
@@ -69,6 +85,7 @@ func hoe(cell: Vector2i) -> void:
 		"watered": false
 	}
 	print("Tanah dicangkul: ", cell)
+	return true
 	
 func plant(cell: Vector2i, crop: CropData) -> bool:
 	if not farm_data.has(cell):
@@ -88,10 +105,14 @@ func plant(cell: Vector2i, crop: CropData) -> bool:
 	print("Ditanam: %s di %s" % [crop.display_name, cell])
 	return true
 
-func water(cell: Vector2i) -> void:
+func water(cell: Vector2i) -> bool:
+	if not is_instance_valid(watered_layer):
+		return false
 	if not farm_data.has(cell):
-		return
-	var data:Dictionary = farm_data[cell]
+		return false
+	var data: Dictionary = farm_data[cell]
+	if data.get("watered", false):
+		return false
 	
 	data["watered"] = true
 	print("Disiram: ", cell)
@@ -99,6 +120,7 @@ func water(cell: Vector2i) -> void:
 	watered_layer.set_cells_terrain_connect(
 		[cell], TERRAIN_SET_SOIL, 0
 	)
+	return true
 	
 func can_harvest(cell: Vector2i) -> bool:
 	if not farm_data.has(cell):
@@ -178,31 +200,32 @@ func _update_crop_tile(cell: Vector2i, crop: CropData, stage: int) -> void:
 	crop_layer.set_cell(cell, crop.tileset_source_id, coords)
 	
 func is_tile_farmable(cell: Vector2i) -> bool:
+	if not is_instance_valid(base_layer_ground):
+		return false
 	var tile_data := base_layer_ground.get_cell_tile_data(cell)
-	
 	if tile_data == null:
 		return false
-
 	return tile_data.get_custom_data("farmable") == true
 	
 func get_cell_data(cell: Vector2i) -> Dictionary:
 	return farm_data.get(cell, {})
 
 
-func shovel(cell: Vector2i) -> void:
+func shovel(cell: Vector2i) -> bool:
 	if not farm_data.has(cell):
 		print("Tidak ada tanah di sini")
-		return
+		return false
 	var data: Dictionary = farm_data[cell]
 	if data["crop"] != null:
 		print("Ada tanaman di sini, tidak bisa digali!")
-		return
+		return false
 	if is_instance_valid(soil_layer):
 		soil_layer.erase_cell(cell)
 	if is_instance_valid(watered_layer):
 		watered_layer.erase_cell(cell)
 	farm_data.erase(cell)
 	print("Tanah dihapus: ", cell)
+	return true
 
 
 func chop(player: Player, cell: Vector2i, damage: int = 1) -> bool:
@@ -222,7 +245,7 @@ func hit_world(player: Player, cell: Vector2i, target_group: StringName, damage:
 	var target_pos := player.get_target_world_position()
 	const REACH := 24.0
 	for node in scene_tree.get_nodes_in_group(target_group):
-		if not (node is Node2D and node.has_method("take_hit")):
+		if not is_instance_valid(node) or not (node is Node2D and node.has_method("take_hit")):
 			continue
 		var hit_pos := _hit_origin(node)
 		if player.world_to_cell(hit_pos) == cell or hit_pos.distance_to(target_pos) <= REACH:

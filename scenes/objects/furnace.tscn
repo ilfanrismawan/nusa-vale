@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://drgsyvponulc3"]
+
+[ext_resource type="Script" uid="uid://d31rtu60pv6cu" path="res://scripts/world/furnace.gd" id="1_sjjya"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ajcru"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ovsut"]
+
+[node name="Furnace" type="StaticBody2D" unique_id=2050082458]
+script = ExtResource("1_sjjya")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=875476556]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=685886349]
+shape = SubResource("RectangleShape2D_ajcru")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=470138038]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1874035515]
+shape = SubResource("RectangleShape2D_ovsut")

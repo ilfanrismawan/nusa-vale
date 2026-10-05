@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ActionData" format=3 uid="uid://dnmdq6qsbqiyp"]
+
+[ext_resource type="Script" uid="uid://iqqgx8vl32mk" path="res://scripts/effects/damage_effect.gd" id="1_8iomj"]
+[ext_resource type="Script" uid="uid://babxwm68vuqeh" path="res://scripts/state/action_data.gd" id="1_jx4gm"]
+[ext_resource type="Texture2D" uid="uid://rcatwn00kcde" path="res://resources/icons/icon_axe_copper.tres" id="2_0a4p3"]
+[ext_resource type="Resource" uid="uid://vw072mtq0naj" path="res://resources/tool_data/axe_copper.tres" id="4_epp55"]
+
+[sub_resource type="Resource" id="Resource_76i7i"]
+script = ExtResource("1_8iomj")
+stamina_cost = 2
+metadata/_custom_type_script = "uid://iqqgx8vl32mk"
+
+[resource]
+script = ExtResource("1_jx4gm")
+display_name = "Copper Axe"
+icon = ExtResource("2_0a4p3")
+animation_name = &"axe"
+input_action = &"use_tool"
+hit_frame = 4
+effect = SubResource("Resource_76i7i")
+tool_data = ExtResource("4_epp55")
+metadata/_custom_type_script = "uid://babxwm68vuqeh"

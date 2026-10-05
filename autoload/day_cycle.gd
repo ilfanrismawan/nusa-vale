@@ -10,11 +10,14 @@ var current_day: int = 1
 var hour: int = 6
 var minute: int = 0
 
+var is_running: bool = false
 const TICK_INTERVAL := 0.7
 var _timer: float = TICK_INTERVAL
 var _is_passing_out: bool = false
 
 func _process(delta: float) -> void:
+	if not is_running or get_tree().paused or _is_passing_out:
+		return
 	_timer += delta
 	
 	if _timer >= real_seconds_per_10_game_minutes:
@@ -27,12 +30,11 @@ func advance_minute(amount: int) -> void:
 		minute = 0
 		hour += 1
 		
+		if hour >= 24:
+			hour = 0
+		
 		if hour == 2 and not _is_passing_out:
 			trigger_pass_out()
-			return
-		
-		if hour >= 24:
-			advance_day()
 			return
 			
 	time_tick.emit(hour, minute)	
@@ -47,7 +49,7 @@ func trigger_pass_out() -> void:
 	fade.color = Color(0, 0, 0, 0)
 	fade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	layer.add_child(fade)
-	get_tree().current_scene.add_child(layer)
+	add_child(layer)
 	
 	var tw := create_tween()
 	tw.tween_property(fade, "color:a", 1.0, 1.2)
@@ -78,7 +80,7 @@ func advance_day() -> void:
 	current_day += 1
 	day_passed.emit(current_day)
 	time_tick.emit(hour, minute)
-	print("Hari baru dimulai: Hari", current_day)
+	print("Hari baru dimulai: Hari %d" % current_day)
 	
 	
 func _unhandled_input(event: InputEvent) -> void:

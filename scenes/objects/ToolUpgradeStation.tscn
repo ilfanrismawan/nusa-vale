@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://dylbtlv7ls54o"]
+
+[ext_resource type="Script" uid="uid://co8brugnkd03v" path="res://scripts/world/tool_upgrade_station.gd" id="1_g37po"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ovsut"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ajcru"]
+
+[node name="ToolUpgradeStation" type="StaticBody2D" unique_id=1041760896]
+script = ExtResource("1_g37po")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1688013187]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=180059163]
+shape = SubResource("RectangleShape2D_ovsut")
+
+[node name="InteractionArea" type="Area2D" parent="." unique_id=286710372]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=214606275]
+shape = SubResource("RectangleShape2D_ajcru")

@@ -1,7 +1,7 @@
 class_name ActionState
 extends State
 
-signal action_performed(action_name: StringName, cell: Vector2i)
+signal action_performed(action: ActionData, cell: Vector2i)
 
 @export var idle_state: State
 

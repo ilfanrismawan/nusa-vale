@@ -2,7 +2,9 @@ class_name ChopEffect
 extends ActionEffect
 
 @export var damage: int = 1
-@export var stamina_cost: int = 6
+
+func _init() -> void:
+	stamina_cost = 6
 
 func apply(player: Player, cell: Vector2i) -> void:
 	if GameState.stamina < stamina_cost:

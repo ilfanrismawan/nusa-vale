@@ -419,7 +419,7 @@ func _on_slot_clicked(index: int, button: int) -> void:
 	if button != MOUSE_BUTTON_LEFT:
 		return
 
-	var global_idx := current_page * SLOTS_PER_PAGE + index
+	var global_idx := index
 	if global_idx < 0 or global_idx >= GameState.INVENTORY_SIZE:
 		return
 

@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://bye3dnnqckqj5"]
 
 [ext_resource type="Script" uid="uid://c8ojk7tmj27e5" path="res://scripts/player/player.gd" id="1_524rm"]
-[ext_resource type="Script" path="res://scripts/player/player_root.gd" id="28_root"]
 [ext_resource type="Texture2D" uid="uid://dwvxga3k08686" path="res://assets/farm_rpg/Character/Character/Pre-made/Josh/Axe.png" id="2_8qjgm"]
 [ext_resource type="Texture2D" uid="uid://cbmqiypf0dowj" path="res://assets/farm_rpg/Character/Character/Pre-made/Josh/Hoe.png" id="2_c3xxp"]
 [ext_resource type="Texture2D" uid="uid://bgth8cn7tfmyn" path="res://assets/farm_rpg/Character/Character/Pre-made/Josh/Idle.png" id="2_tpg5x"]
@@ -25,6 +24,7 @@
 [ext_resource type="PackedScene" uid="uid://dufirbfujpiry" path="res://scenes/ui/ui_inventory.tscn" id="24_8nn5r"]
 [ext_resource type="PackedScene" uid="uid://cw8nmal7ii5ue" path="res://scenes/ui/hud.tscn" id="25_kvwax"]
 [ext_resource type="PackedScene" uid="uid://df67kn03yptm1" path="res://scenes/ui/settings_menu.tscn" id="26_settings"]
+[ext_resource type="Script" uid="uid://m8t502kw6fib" path="res://scripts/player/player_root.gd" id="28_root"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rfmjp"]
 atlas = ExtResource("2_8qjgm")
@@ -1492,9 +1492,6 @@ position_smoothing_speed = 6.5
 
 [node name="Marker2D" type="Marker2D" parent="CharacterBody2D" unique_id=1781907976]
 
-[node name="AnimationController" type="Node" parent="CharacterBody2D" unique_id=2146010580]
-script = ExtResource("6_npwbq")
-
 [node name="StateMachine" type="Node" parent="CharacterBody2D" unique_id=521653661 node_paths=PackedStringArray("initial_state")]
 script = ExtResource("7_pn6s4")
 initial_state = NodePath("IdleState")
@@ -1518,6 +1515,9 @@ walk_state = NodePath("../MoveState")
 idle_state = NodePath("../IdleState")
 run_state = NodePath(".")
 speed_multiplier = 3.0
+
+[node name="AnimationController" type="Node" parent="CharacterBody2D" unique_id=2146010580]
+script = ExtResource("6_npwbq")
 
 [node name="ToolController" type="Node" parent="CharacterBody2D" unique_id=581944347]
 script = ExtResource("7_v42im")

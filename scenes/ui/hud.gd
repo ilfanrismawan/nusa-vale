@@ -55,7 +55,8 @@ func _update_time(h: int, m: int) -> void:
 	
 	time_label.text = "%02d:%02d %s" % [display_hour, m, period]
 	
-	var frame_idx = clampi(int((h - 6) / 2.0), 0,7)
+	var effective_h: int = h if h >= 6 else h + 24
+	var frame_idx: int = clampi(int((effective_h - 6) / 2.0), 0, 7)
 	clock_hand.frame = frame_idx
 
 func _update_money(amount: int) -> void:

@@ -15,6 +15,7 @@ var _tween: Tween
 
 
 func _ready() -> void:
+	DayCycle.is_running = false
 	btn_new.pressed.connect(_on_new_game_pressed)
 	btn_continue.pressed.connect(_on_continue_pressed)
 	btn_settings.pressed.connect(_on_settings_pressed)
@@ -61,7 +62,7 @@ func _on_new_game_pressed() -> void:
 
 
 func _on_continue_pressed() -> void:
-	# Data sudah di-load otomatis oleh SaveManager._ready()
+	SaveManager.load_game()
 	_transition_to_game()
 
 
@@ -79,12 +80,8 @@ func _start_new_game() -> void:
 	if FileAccess.file_exists(SaveManager.SAVE_PATH):
 		DirAccess.remove_absolute(SaveManager.SAVE_PATH)
 
-	# Reset seluruh state autoload ke nilai awal
-	GameState.money = 100
-	GameState.stamina = GameState.MAX_STAMINA
-	GameState.chopped_trees.clear()
-	GameState.mined_rocks.clear()
-	GameState.reset_game_state()
+	# GameState.new_game() menangani semua reset: money, stamina, inventory, flags
+	GameState.new_game()
 
 	DayCycle.current_day = 1
 	DayCycle.hour = 6
@@ -95,7 +92,9 @@ func _start_new_game() -> void:
 	_transition_to_game()
 
 
+
 func _transition_to_game() -> void:
+	DayCycle.is_running = true
 	# Fade-out sebelum pindah scene
 	var fade_tween := create_tween()
 	fade_tween.set_ease(Tween.EASE_IN)

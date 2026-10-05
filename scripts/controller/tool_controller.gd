@@ -83,6 +83,10 @@ func use_action(action: ActionData) -> void:
 	if player.base_layer_ground == null:
 		Notify.say("Tidak bisa pakai alat di sini")
 		return
+	if action.effect and action.effect.stamina_cost > 0:
+		if GameState.stamina < action.effect.stamina_cost:
+			Notify.say("Terlalu lelah! Istirahatlah.")
+			return
 	action_state.start(action, player.get_target_cell())
 	state_machine.change_state(action_state)
 

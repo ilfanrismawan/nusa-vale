@@ -11,7 +11,7 @@ extends CharacterBody2D
 @onready var hud_ui = $"../HUD"
 @onready var ui_inventory = $"../UIInventory"
 @onready var settings_menu = $"../SettingsMenu"
-@onready var tool_ctrl = $ToolController
+@onready var tool_controller: ToolController = $ToolController
 
 @onready var tile_cursor: CanvasItem = get_node_or_null("TileCursor")
 
@@ -25,8 +25,8 @@ func _ready() -> void:
 	hotbar_ui.show()
 	hud_ui.show()
 
-	hotbar_ui.slot_selected.connect(func(index: int): tool_ctrl.select_tool(index))
-	tool_ctrl.tool_changed.connect(func(_a): hotbar_ui.highlight_slot(tool_ctrl.current_index))
+	hotbar_ui.slot_selected.connect(func(index: int): tool_controller.select_tool(index))
+	tool_controller.tool_changed.connect(func(_a): hotbar_ui.highlight_slot(tool_controller.current_index))
 
 	hotbar_ui.refresh.call_deferred()
 	

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://dbdcx2jqajaks"]
+
+[ext_resource type="Script" uid="uid://ce87yxxpq5y37" path="res://scripts/data/tool_data.gd" id="1_nng7o"]
+
+[resource]
+script = ExtResource("1_nng7o")
+tool_id = "hoe_wood"
+display_name = "Wood Hoe"
+tool_type = 1
+metadata/_custom_type_script = "uid://ce87yxxpq5y37"
