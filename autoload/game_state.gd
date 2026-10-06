@@ -93,7 +93,7 @@ func _setup_tools() -> void:
 
 
 func ensure_starter_tools() -> void:
-	var tool_ids := ["axe_wood", "hoe_wood", "shovel_wood", "water_wood", "sickle_wood", "pickaxe_wood"]
+	var tool_ids := ["axe_wood", "hoe_wood", "shovel_wood", "watering_can_wood", "sickle_wood", "pickaxe_wood"]
 	var changed := false
 	for tid in tool_ids:
 		if not has_item(tid, 1):

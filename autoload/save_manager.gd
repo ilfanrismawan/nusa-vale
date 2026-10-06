@@ -1,10 +1,10 @@
 extends Node
 
 const SAVE_PATH := "user://nusa_vale_save.json"
-const BACKUP_PATH := "user://nusa_vale_sav.json.bak"
+const BACKUP_PATH := "user://nusa_vale_save.json.bak"
 const TEMP_PATH := "user://nusa_vale_save.json.tmp"
 
-const SAVE_VERSION := 2
+const SAVE_VERSION := 3
 
 signal game_saved
 signal game_loaded
@@ -135,8 +135,8 @@ func load_game() -> bool:
 		
 		push_error(reason)
 		load_failed.emit(reason)
-		
-		return false
+
+		return _try_load_backup()
 		
 	var data: Dictionary = parsed
 	
@@ -153,18 +153,17 @@ func load_game() -> bool:
 		
 		return false
 	
+	
 	_load_day_cycle(parsed)
 	_load_player(parsed)
 	_load_inventory(parsed)
 	_load_farm(parsed)
 	_load_world_state(parsed)
+	_load_unlocks(parsed)
 	_load_discoveries(parsed)
 	_load_resources(parsed)
 	
-	print(
-		"Loading save version: %d"
-		% [version, DayCycle.current_day]
-	)
+	print("Loading save version: %d (hari %d)" % [version, DayCycle.current_day])
 	
 	game_loaded.emit()
 	
@@ -191,6 +190,8 @@ func _build_save_data() -> Dictionary:
 		"farm": _serialize_farm(),
 
 		"world_state": WorldState.flags.duplicate(true),
+		
+		"unlocks": UnlockManager.get_unlocks(),
 
 		"discoveries": DiscoveryManager.discoveries.duplicate(true),
 
@@ -199,6 +200,15 @@ func _build_save_data() -> Dictionary:
 			"mined_rocks": GameState.mined_rocks.duplicate(),
 		},
 	}
+
+func _load_unlocks(data: Dictionary) -> void:
+	UnlockManager.reset()
+	var unlock_data: Variant = data.get("unlocks", {})
+	if unlock_data is Dictionary:
+		UnlockManager.load_unlocks(unlock_data)
+		
+	if WorldState.has_flag("bridge_repaired"):
+		UnlockManager.unlock("forest")
 	
 func _load_day_cycle(data: Dictionary) -> void:
 	var day_data: Dictionary = data.get(

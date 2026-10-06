@@ -22,7 +22,6 @@
 [ext_resource type="PackedScene" uid="uid://cita5dfs3657t" path="res://scenes/world/exterior/object/ShippingBin.tscn" id="16_fly3y"]
 [ext_resource type="PackedScene" uid="uid://bm4iun38bhd33" path="res://scenes/world/exterior/object/ShopCounter.tscn" id="18_n0hrw"]
 [ext_resource type="PackedScene" uid="uid://dype6nh84754b" path="res://scenes/objects/BrokenBridge.tscn" id="22_xtmeb"]
-[ext_resource type="Script" uid="uid://bd6yfdpkv3sah" path="res://scripts/world/forest_entrance.gd" id="23_txx04"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4d820"]
 texture = ExtResource("5_2inl0")
@@ -9966,8 +9965,6 @@ b = Vector2(0, 7)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ovsut"]
 size = Vector2(20, 31)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ajcru"]
-
 [node name="Farm" type="Node2D" unique_id=232664316]
 y_sort_enabled = true
 script = ExtResource("1_7od4w")
@@ -10076,6 +10073,7 @@ position = Vector2(-46, 0)
 position = Vector2(935, 445)
 
 [node name="BrokenBridge" parent="." unique_id=1416927716 instance=ExtResource("22_xtmeb")]
+z_index = -1
 position = Vector2(992, 607)
 
 [node name="EnterTown" type="Area2D" parent="." unique_id=355427603]
@@ -10095,9 +10093,3 @@ shape = SubResource("RectangleShape2D_ovsut")
 
 [node name="ForestEntrance" type="Node2D" parent="." unique_id=580845325]
 position = Vector2(971, 600)
-
-[node name="Area2D" type="Area2D" parent="ForestEntrance" unique_id=215442418]
-script = ExtResource("23_txx04")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ForestEntrance/Area2D" unique_id=833054060]
-shape = SubResource("RectangleShape2D_ajcru")

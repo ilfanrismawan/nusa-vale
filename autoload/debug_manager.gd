@@ -79,6 +79,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		KEY_F11:
 			_cheat_upgrade_tools()
 			get_viewport().set_input_as_handled()
+		KEY_INSERT:
+			_cheat_add_bridge_materials()
+			get_viewport().set_input_as_handled()
 
 ## ── God Mode Hook ─────────────────────────────────────────────────────────────
 func _process(_delta: float) -> void:
@@ -186,6 +189,12 @@ func _toggle_panel() -> void:
 
 ## ── Cheat Functions ───────────────────────────────────────────────────────────
 
+func _cheat_add_bridge_materials() -> void:
+	GameState.add_item("wood", 20)
+	GameState.add_item("stone", 10)
+	_notify("🌉 +20 Wood & +10 Stone (cukup untuk perbaiki jembatan)")
+
+#func _cheat_reset
 func _cheat_add_gold(amount: int) -> void:
 	GameState.add_money(amount)
 	_notify("💰 +%d Gold  (Total: %d G)" % [amount, GameState.money])

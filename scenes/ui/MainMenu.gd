@@ -62,8 +62,10 @@ func _on_new_game_pressed() -> void:
 
 
 func _on_continue_pressed() -> void:
-	SaveManager.load_game()
-	_transition_to_game()
+	if SaveManager.load_game():
+		_transition_to_game()
+	else:
+		Notify.say("Gagal memuat save.")
 
 
 func _on_settings_pressed() -> void:
@@ -82,6 +84,9 @@ func _start_new_game() -> void:
 
 	# GameState.new_game() menangani semua reset: money, stamina, inventory, flags
 	GameState.new_game()
+	WorldState.reset()
+	DiscoveryManager.reset()
+	UnlockManager.reset()
 
 	DayCycle.current_day = 1
 	DayCycle.hour = 6

@@ -12,7 +12,7 @@ enum ToolType {
 
 enum ToolTier {
 	WOOD,
-	COOPER,
+	COPPER,
 	IRON,
 	GOLD,
 	PLATINUM,

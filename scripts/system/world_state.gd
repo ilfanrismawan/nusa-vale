@@ -4,9 +4,9 @@ signal flag_changed(flag_id: String, value: bool)
 
 const DEFAULT_FLAGS := {
 	"bridge_repaired": false,
-		"forest_unlocked": false,
-		"cave_unlocked": false,
-		"school_open": false
+	#"forest_unlocked": false,
+	#"cave_unlocked": false,
+	"school_open": false
 }
 var flags: Dictionary = {}
 
