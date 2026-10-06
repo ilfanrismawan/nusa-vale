@@ -66,7 +66,6 @@ func _find_interactable() -> Node:
 	
 	query.position = target_position
 	query.collide_with_areas = true
-	query.collide_with_areas = true
 	query.collide_with_bodies = true
 	query.collision_mask = 0xFFFFFFFF
 	
@@ -77,7 +76,7 @@ func _find_interactable() -> Node:
 		if collider == null:
 			continue
 		
-		if collider.has_mothod("interact"):
+		if collider.has_method("interact"):
 			return collider
 		
 		var parent: Node = collider.get_parent()

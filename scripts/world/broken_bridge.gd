@@ -46,7 +46,7 @@ func repair_bridge() -> bool:
 		Notify.say("Butuh %d Wood." % REQUIRED_WOOD)
 		return false
 	
-	if not GameState.has_item("Butuh %d Stone.", REQUIRED_STONE):
+	if not GameState.has_item("stone", REQUIRED_STONE):
 		Notify.say("Butuh %d Stone." % REQUIRED_STONE)	
 		return false
 	
@@ -55,8 +55,6 @@ func repair_bridge() -> bool:
 	
 	WorldState.set_flag(BRIDGE_FLAG, true)
 	WorldState.set_flag(FOREST_FLAG, true)
-	
-	DiscoveryManager.discover("forest")
 	
 	Notify.say("Jembatan berhasil diperbaiki!")
 		

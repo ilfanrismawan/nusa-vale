@@ -1,0 +1,104 @@
+[gd_scene format=3 uid="uid://drwb7t1ot0ovt"]
+
+[ext_resource type="Script" uid="uid://8410el0dtaeb" path="res://scripts/world/choppable.gd" id="1_7ea5v"]
+[ext_resource type="Texture2D" uid="uid://c0ujkri0kdl6p" path="res://assets/farm_rpg/objects/tree/Maple Tree Animation.png" id="2_7ea5v"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1mnb1"]
+atlas = ExtResource("2_7ea5v")
+region = Rect2(0, 48, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3c31m"]
+atlas = ExtResource("2_7ea5v")
+region = Rect2(32, 48, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j83go"]
+atlas = ExtResource("2_7ea5v")
+region = Rect2(64, 48, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hl47q"]
+atlas = ExtResource("2_7ea5v")
+region = Rect2(96, 48, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rmad7"]
+atlas = ExtResource("2_7ea5v")
+region = Rect2(0, 48, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l030p"]
+atlas = ExtResource("2_7ea5v")
+region = Rect2(0, 240, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_muj5y"]
+atlas = ExtResource("2_7ea5v")
+region = Rect2(32, 240, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_17yat"]
+atlas = ExtResource("2_7ea5v")
+region = Rect2(64, 240, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j8tyu"]
+atlas = ExtResource("2_7ea5v")
+region = Rect2(96, 240, 32, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ovsut"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1mnb1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3c31m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j83go")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hl47q")
+}],
+"loop": 0,
+"name": &"chopping",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rmad7")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l030p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_muj5y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_17yat")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j8tyu")
+}],
+"loop": 0,
+"name": &"stump",
+"speed": 8.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_trunk"]
+radius = 4.5
+
+[node name="MapleTree" type="StaticBody2D" unique_id=2046111868]
+y_sort_enabled = true
+script = ExtResource("1_7ea5v")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1565149206]
+sprite_frames = SubResource("SpriteFrames_ovsut")
+animation = &"chopping"
+autoplay = "idle"
+offset = Vector2(0, -24)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=501145078]
+position = Vector2(0, -2)
+shape = SubResource("CircleShape2D_trunk")
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
