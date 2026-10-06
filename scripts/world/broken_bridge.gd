@@ -1,57 +1,63 @@
 class_name BrokenBridge
-extends StaticBody2D
+extends Node2D
 
-@export var wood_required: int = 20
-@export var stone_required: int = 10
+const BRIDGE_FLAG := "bridge_repaired"
+const FOREST_FLAG := "forest_unlocked"
 
-@onready var collision_shape: CollisionShape2D = $CollisionShape2D
-@onready var sprite: Sprite2D = $Sprite2D
+const REQUIRED_WOOD: int = 20
+const REQUIRED_STONE: int = 10
+
+@onready var broken_sprite: Sprite2D = $Visual/BrokenSprite
+@onready var repaired_sprite: Sprite2D = $Visual/RepairedSprite
+@onready var blocker: StaticBody2D = $Blocker
+@onready var interaction_area: Area2D = $InteractionArea
+@onready var blocker_collision: CollisionShape2D = $Blocker/CollisionShape2D
+
 
 func _ready() -> void:
-	if WorldState.has_flag("bridge_repaired"):
-		_repaired()
-
-
-func repair() -> bool:
-	
-	if WorldState.has_flag("bridge_repaired"):
-		return false
-	
-	if not GameState.has_item(
-		"wood",
-		wood_required
-	):
-		Notify.say("Butuh Wood x%d." % wood_required)
-		return false
-	
-	if not GameState.has_item(
-		"stone",
-		stone_required
-	):
-		Notify.say("Butuh Stone x%d." %stone_required)
+	_apply_world_state()
+	WorldState.flag_changed.connect(_on_world_flag_changed)	
 		
-	GameState.remove_item(
-		"wood",
-		wood_required
-	)
+func _on_world_flag_changed(flag_id: String, value: bool) -> void:
+	if flag_id == BRIDGE_FLAG:
+		_apply_world_state()
+		
+func _apply_world_state() -> void:
+	var repaired := WorldState.has_flag(BRIDGE_FLAG)
 	
-	GameState.remove_item(
-		"stone",
-		stone_required
-	)
+	broken_sprite.visible = not repaired
+	repaired_sprite.visible = repaired
 	
-	WorldState.set_flag(
-		"bridge_repaired",
-		true
-	)
-	_repaired()
+	blocker_collision.set_deferred("disabled", repaired)
+
 	
-	Notify.say("Jembatan berhasil diperbaiki.")
+func interact() -> void:
+	if WorldState.has_flag("bridge_repaired"):
+		Notify.say("Jembatan sudah diperbaiki.")
+		return
 	
+	repair_bridge()
+
+func repair_bridge() -> bool:
+	if WorldState.has_flag(BRIDGE_FLAG):
+		return false
+	
+	if not GameState.has_item("wood", REQUIRED_WOOD):
+		Notify.say("Butuh %d Wood." % REQUIRED_WOOD)
+		return false
+	
+	if not GameState.has_item("Butuh %d Stone.", REQUIRED_STONE):
+		Notify.say("Butuh %d Stone." % REQUIRED_STONE)	
+		return false
+	
+	GameState.remove_item("wood", REQUIRED_WOOD)
+	GameState.remove_item("stone", REQUIRED_STONE)
+	
+	WorldState.set_flag(BRIDGE_FLAG, true)
+	WorldState.set_flag(FOREST_FLAG, true)
+	
+	DiscoveryManager.discover("forest")
+	
+	Notify.say("Jembatan berhasil diperbaiki!")
+		
 	return true
-	
-func _repaired() -> void:
-	collision_shape.set_deferred("disabled", true)
-	
-	if sprite:
-		sprite.visible = false

@@ -7,4 +7,8 @@ func apply(
 	_player: Player,
 	_cell: Vector2i
 ) -> void:
-	pass
+	push_warning(
+		"ActionEffect.apply() dipanggil langsung. "
+		+ "Gunakan class turunan seperti DamageEffect, "
+		+ "HarvestEffect, atau SeedEffect."
+	)

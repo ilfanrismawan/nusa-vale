@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://backpack_medium"]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1_item_script"]
+[ext_resource type="Texture2D" uid="uid://cwgdwms3l80kv" path="res://assets/farm_rpg/ui/inventory/inventory.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_item_script")
+category = 0
+item_id = "backpack_medium"
+display_name = "Ransel (24 slot)"
+description = "Upgrade tas menjadi 24 slot. Dibeli di Toko."
+icon = ExtResource("2_icon")
+stackable = false
+max_stack = 1
+buy_price = 2000
+sell_price = 0
+metadata/_custom_type_script = "uid://cm1okc20ussp3"

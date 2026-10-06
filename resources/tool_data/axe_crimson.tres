@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ToolData" format=3 uid="uid://67twqmcxs04c"]
+
+[ext_resource type="Script" uid="uid://ce87yxxpq5y37" path="res://scripts/data/tool_data.gd" id="1_td"]
+
+[resource]
+script = ExtResource("1_td")
+tool_id = "axe_crimson"
+display_name = "Kapak Crimson"
+tier = 5
+damage = 6
+stamina_cost = 4
+action_speed = 1.75
+upgrade_cost_money = 5000
+required_items = {
+"crimson_bar": 5
+}
+metadata/_custom_type_script = "uid://ce87yxxpq5y37"

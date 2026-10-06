@@ -1,20 +1,138 @@
 [gd_scene format=3 uid="uid://drgsyvponulc3"]
 
 [ext_resource type="Script" uid="uid://d31rtu60pv6cu" path="res://scripts/world/furnace.gd" id="1_sjjya"]
+[ext_resource type="Texture2D" uid="uid://coe3shqd8hgfb" path="res://assets/farm_rpg/objects/Work Benches/Furnace.png" id="2_jdhxq"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bocnr"]
+atlas = ExtResource("2_jdhxq")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yunug"]
+atlas = ExtResource("2_jdhxq")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yyg2b"]
+atlas = ExtResource("2_jdhxq")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x10cr"]
+atlas = ExtResource("2_jdhxq")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_njbdr"]
+atlas = ExtResource("2_jdhxq")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d65ii"]
+atlas = ExtResource("2_jdhxq")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_37m1x"]
+atlas = ExtResource("2_jdhxq")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qxd5m"]
+atlas = ExtResource("2_jdhxq")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ovsut"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bocnr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yunug")
+}],
+"loop": 1,
+"name": &"finished",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yyg2b")
+}],
+"loop": 0,
+"name": &"idle",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x10cr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_njbdr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d65ii")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_37m1x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qxd5m")
+}],
+"loop": 1,
+"name": &"working",
+"speed": 8.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ajcru"]
+size = Vector2(24, 16)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ovsut"]
+size = Vector2(36, 36)
 
-[node name="Furnace" type="StaticBody2D" unique_id=2050082458]
+[sub_resource type="Gradient" id="Gradient_bocnr"]
+offsets = PackedFloat32Array(0, 0.9936709)
+colors = PackedColorArray(1, 0.5058824, 0, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ovsut"]
+gradient = SubResource("Gradient_bocnr")
+fill = 1
+fill_from = Vector2(0.52362204, 0.515748)
+
+[sub_resource type="Gradient" id="Gradient_yunug"]
+colors = PackedColorArray(0.9764706, 0.015686275, 0, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ajcru"]
+gradient = SubResource("Gradient_yunug")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ovsut"]
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+spread = 20.0
+initial_velocity_min = 30.0
+initial_velocity_max = 60.0
+gravity = Vector3(0, -50, 0)
+color_ramp = SubResource("GradientTexture1D_ajcru")
+
+[node name="Furnace" type="Node2D" unique_id=1933989755]
+y_sort_enabled = true
 script = ExtResource("1_sjjya")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=875476556]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1446328699]
+sprite_frames = SubResource("SpriteFrames_ovsut")
+animation = &"idle"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=685886349]
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=2048416131]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=685886349]
 shape = SubResource("RectangleShape2D_ajcru")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=470138038]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1874035515]
 shape = SubResource("RectangleShape2D_ovsut")
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=975963698]
+texture_filter = 1
+position = Vector2(-1, 7)
+texture = SubResource("GradientTexture2D_ovsut")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1621124372]
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=552316101]
+amount = 15
+lifetime = 0.8
+process_material = SubResource("ParticleProcessMaterial_ovsut")

@@ -1,8 +1,10 @@
-[gd_resource type="Resource" script_class="ItemData" format=3]
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://mvuiq2qv55ss"]
 
-[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1_item"]
-[ext_resource type="Texture2D" path="res://resources/icons/icon_axe.tres" id="2_icon"]
-[ext_resource type="Resource" path="res://resources/action_data/axe.tres" id="3_action"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1_item"]
+[ext_resource type="Texture2D" uid="uid://cl1l1cchsdn2v" path="res://resources/icons/icon_axe.tres" id="2_icon"]
+
+[sub_resource type="Resource" id="Resource_k3a6n"]
+metadata/__load_path__ = "res://resources/action_data/axe.tres"
 
 [resource]
 script = ExtResource("1_item")
@@ -13,5 +15,5 @@ icon = ExtResource("2_icon")
 description = "Alat untuk menebang pohon dan memotong kayu."
 stackable = false
 max_stack = 1
-action_data = ExtResource("3_action")
+action_data = SubResource("Resource_k3a6n")
 metadata/_custom_type_script = "uid://cm1okc20ussp3"

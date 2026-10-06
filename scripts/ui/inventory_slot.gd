@@ -7,11 +7,14 @@ signal slot_unhovered(slot_index: int, slot_ui: InventorySlotUI)
 
 ## Preloaded textures for slot states
 const TEX_NORMAL := preload("res://resources/ui/slot_normal.tres")
-const TEX_SELECTED := preload("res://resources/ui/slot_selected.tres")
+const TEX_SELECTED_BG := preload("res://resources/ui/slot_selected.tres")
+const TEX_OVERLAY_HOVER := preload("res://resources/icons/icon_hover.tres")
+const TEX_OVERLAY_SELECT := preload("res://resources/icons/icon_select.tres")
 
 @onready var icon: TextureRect = $Icon
 @onready var count_label: Label = $CountLabel
 @onready var hover_border: Panel = %HoverBorder
+@onready var overlay_icon: TextureRect = %OverlayIcon
 
 var slot_index: int = -1
 var _is_selected := false
@@ -39,6 +42,7 @@ func set_item(item_data: ItemData, amount: int) -> void:
 		icon.show()
 		count_label.text = str(amount) if amount > 1 else ""
 		count_label.visible = amount > 1
+		tooltip_text = item_data.display_name
 	else:
 		clear()
 
@@ -48,6 +52,7 @@ func clear() -> void:
 	icon.hide()
 	count_label.text = ""
 	count_label.hide()
+	tooltip_text = ""
 
 
 func set_selected(selected: bool) -> void:
@@ -79,18 +84,25 @@ func _on_mouse_exited() -> void:
 
 
 func _update_visuals() -> void:
+	if not is_instance_valid(overlay_icon):
+		return
+
 	if _is_selected:
-		texture = TEX_SELECTED
-		if is_instance_valid(hover_border):
-			hover_border.show()
+		texture = TEX_SELECTED_BG
+		overlay_icon.texture = TEX_OVERLAY_SELECT
+		overlay_icon.show()
 	elif _is_hovered:
-		texture = TEX_NORMAL
-		if is_instance_valid(hover_border):
-			hover_border.show()
+		texture = TEX_SELECTED_BG
+		overlay_icon.texture = TEX_OVERLAY_HOVER
+		overlay_icon.show()
 	else:
 		texture = TEX_NORMAL
-		if is_instance_valid(hover_border):
-			hover_border.hide()
+		overlay_icon.texture = null
+		overlay_icon.hide()
+
+	# HoverBorder tidak lagi digunakan (sembunyikan selalu)
+	if is_instance_valid(hover_border):
+		hover_border.hide()
 
 
 func _gui_input(event: InputEvent) -> void:

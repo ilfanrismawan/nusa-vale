@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cbg24vroh5cka"]
 
 [ext_resource type="Script" uid="uid://nl1l1bhh5soy" path="res://scripts/ui/inventory_slot.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://resources/ui/slot_normal.tres" id="2_slot_tex"]
+[ext_resource type="Texture2D" uid="uid://buaio0hwlbw0i" path="res://resources/ui/slot_normal.tres" id="2_slot_tex"]
 [ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="3_font"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hover"]
@@ -18,14 +18,13 @@ corner_radius_bottom_left = 4
 
 [sub_resource type="LabelSettings" id="LabelSettings_count"]
 font = ExtResource("3_font")
-font_size = 16
 font_color = Color(1, 0.98, 0.9, 1)
 outline_size = 3
 outline_color = Color(0.18, 0.08, 0.04, 1)
 shadow_size = 2
 shadow_color = Color(0, 0, 0, 0.7)
 
-[node name="InventorySlot" type="TextureRect"]
+[node name="InventorySlot" type="TextureRect" unique_id=1118636497]
 texture_filter = 1
 custom_minimum_size = Vector2(36, 36)
 offset_right = 36.0
@@ -36,7 +35,7 @@ expand_mode = 1
 stretch_mode = 5
 script = ExtResource("1_script")
 
-[node name="Icon" type="TextureRect" parent="."]
+[node name="Icon" type="TextureRect" parent="." unique_id=1192579004]
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 8
@@ -52,7 +51,21 @@ grow_horizontal = 2
 grow_vertical = 2
 stretch_mode = 5
 
-[node name="HoverBorder" type="Panel" parent="."]
+[node name="OverlayIcon" type="TextureRect" parent="." unique_id=538069014]
+unique_name_in_owner = true
+visible = false
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HoverBorder" type="Panel" parent="." unique_id=1736096753]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -64,7 +77,7 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_hover")
 
-[node name="CountLabel" type="Label" parent="."]
+[node name="CountLabel" type="Label" parent="." unique_id=1532277043]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -74,7 +87,6 @@ anchor_bottom = 1.0
 offset_left = -22.0
 offset_top = -16.0
 offset_right = -2.0
-offset_bottom = 0.0
 grow_horizontal = 0
 grow_vertical = 0
 label_settings = SubResource("LabelSettings_count")

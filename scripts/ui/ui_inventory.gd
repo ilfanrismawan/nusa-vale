@@ -1,4 +1,4 @@
-extends CanvasLayer
+﻿extends CanvasLayer
 
 ## ── Node References ─────────────────────────────────────────────────────────
 @onready var dimmer: ColorRect = %Dimmer
@@ -52,7 +52,9 @@ const TEX_TAB_NORMAL := preload("res://resources/ui/tab_top_normal.tres")
 const TEX_TAB_ACTIVE := preload("res://resources/ui/tab_top_active.tres")
 
 const SLOTS_PER_PAGE: int = 12
-const TOTAL_PAGES: int = 2 # 20 slots total (Page 0: 0-11, Page 1: 12-19)
+## TOTAL_PAGES dihitung dinamis dari bag_size
+var total_pages: int:
+	get: return ceili(float(GameState.bag_size) / float(SLOTS_PER_PAGE))
 
 var _slots: Array[InventorySlotUI] = []
 var current_category: ItemData.Category = ItemData.Category.ALL
@@ -81,6 +83,7 @@ func _ready() -> void:
 	if GameState:
 		GameState.inventory_changed.connect(refresh_inventory)
 		GameState.money_changed.connect(_on_money_changed)
+		GameState.bag_upgraded.connect(_on_bag_upgraded)
 
 	refresh_inventory()
 	_clear_item_detail()
@@ -222,7 +225,7 @@ func _prev_page() -> void:
 
 
 func _next_page() -> void:
-	if current_page < TOTAL_PAGES - 1:
+	if current_page < total_pages - 1:
 		current_page += 1
 		refresh_inventory()
 
@@ -357,8 +360,10 @@ func _show_item_tooltip(slot_pos: Vector2, item: ItemData, count: int, slot_idx:
 
 	tooltip_category.text = "[%s]" % cat_str
 
-	if slot_idx >= 0 and slot_idx < 8:
-		tooltip_hotbar.text = "★ HUD Slot #%d (Tekan '%d')" % [slot_idx + 1, slot_idx + 1]
+	var is_in_hotbar = (GameState.hotbar_page * 8) <= slot_idx and slot_idx < ((GameState.hotbar_page + 1) * 8)
+	if is_in_hotbar:
+		var hud_idx = (slot_idx % 8) + 1
+		tooltip_hotbar.text = "HUD Slot #%d (Tekan'%d')" % [hud_idx, hud_idx]
 		tooltip_hotbar.modulate = Color(0.4, 0.85, 0.4, 1.0)
 		tooltip_hotbar.show()
 	else:
@@ -472,8 +477,9 @@ func _display_item_detail(item: ItemData, count: int, slot_idx: int = -1) -> voi
 	if badge_count:
 		badge_count.text = "Jumlah: %d" % count
 	if badge_hotbar:
-		if slot_idx >= 0 and slot_idx < 8:
-			badge_hotbar.text = "HUD Slot #%d (Tombol %d)" % [slot_idx + 1, slot_idx + 1]
+		if (GameState.hotbar_page * 8) <= slot_idx and slot_idx < ((GameState.hotbar_page + 1) * 8):
+			var hud_slot_idx = (slot_idx % 8) + 1
+			badge_hotbar.text = "HUD Slot #%d (Tombol %d)" % [hud_slot_idx, hud_slot_idx]
 			badge_hotbar.modulate = Color(0.25, 0.6, 0.25, 1.0)
 		else:
 			badge_hotbar.text = "Di Tas Penyimpanan"
@@ -567,24 +573,25 @@ func refresh_inventory() -> void:
 
 	# Update nomor halaman
 	if is_instance_valid(page_label):
-		page_label.text = "Halaman %d / %d" % [current_page + 1, TOTAL_PAGES]
+		page_label.text = "Halaman %d / %d" % [current_page + 1, total_pages]
 	if is_instance_valid(btn_prev_page):
 		btn_prev_page.disabled = (current_page == 0)
 	if is_instance_valid(btn_next_page):
-		btn_next_page.disabled = (current_page >= TOTAL_PAGES - 1)
+		btn_next_page.disabled = (current_page >= total_pages - 1)
 
-	# Hitung total item terisi di inventory
+	# Hitung total item terisi di inventory (hanya dalam bag_size aktif)
 	var total_used := 0
-	for slot_data in GameState.inventory:
+	for i in GameState.bag_size:
+		var slot_data = GameState.inventory[i]
 		if slot_data != null and slot_data.get("item") != null:
 			total_used += 1
 
 	# Update kapasitas dan posisi slider handle
 	if is_instance_valid(capacity_label):
-		capacity_label.text = "%d / %d" % [total_used, GameState.INVENTORY_SIZE]
+		capacity_label.text = "%d / %d" % [total_used, GameState.bag_size]
 
 	if is_instance_valid(handle):
-		var ratio: float = float(total_used) / float(maxi(1, GameState.INVENTORY_SIZE))
+		var ratio: float = float(total_used) / float(maxi(1, GameState.bag_size))
 		var target_x: float = lerpf(HANDLE_MIN_X, HANDLE_MAX_X, clampf(ratio, 0.0, 1.0))
 		handle.position.x = target_x
 
@@ -604,3 +611,9 @@ func refresh_inventory() -> void:
 func _on_money_changed(new_amount: int) -> void:
 	if is_instance_valid(gold_label):
 		gold_label.text = "Uang: %d G" % new_amount
+
+func _on_bag_upgraded(_new_size: int) -> void:
+	# Jika halaman saat ini melebihi total halaman baru, reset ke halaman terakhir
+	if current_page >= total_pages:
+		current_page = total_pages - 1
+	refresh_inventory()

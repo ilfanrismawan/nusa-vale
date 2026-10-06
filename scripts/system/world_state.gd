@@ -24,10 +24,7 @@ func set_flag(flag_id: String, value: bool = true) -> void:
 	
 	flags[flag_id] = value
 	
-	flag_changed.emit(
-		flag_id,
-		value
-	)
+	flag_changed.emit(flag_id, value)
 	
 func has_flag(flag_id: String) -> bool:
 	return bool(flags.get(flag_id, false))

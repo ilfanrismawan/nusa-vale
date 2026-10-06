@@ -13,7 +13,8 @@ func apply(_player: Player,	cell: Vector2i) -> void:
 		Notify.say("Bibit habis! Beli di toko")
 		return
 	
-	var success := FarmManager.plant(cell, crop)
+	var success: bool = FarmManager.plant(cell, crop)
+	
 	if success:
 		GameState.remove_item(seed_item_id, 1)
 		print("Berhasil menanam: %s (Sisa bibit: %d)" % [crop.display_name, GameState.get_item_count(seed_item_id)])

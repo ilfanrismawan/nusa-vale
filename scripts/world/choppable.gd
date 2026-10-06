@@ -7,6 +7,8 @@ const ItemPickupScript = preload("res://scripts/world/item_pickup.gd")
 @export var drop_item_id: String = "wood"
 @export var drop_count: int = 3
 @export var object_group: StringName = &"choppable"
+## Jika false, node tidak disimpan ke save saat dihancurkan (selalu respawn tiap hari baru).
+@export var persistent: bool = true
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
@@ -15,7 +17,7 @@ var is_destroyed: bool = false
 
 
 func _ready() -> void:
-	if _removed_ids().has(str(get_path())):
+	if persistent and _removed_ids().has(str(get_path())):
 		queue_free()
 		return
 	add_to_group(object_group)
@@ -58,10 +60,11 @@ func _destroy_tree() -> void:
 		return
 	is_destroyed = true
 	_spawn_wood_drop()
-	var path_id := str(get_path())
-	var removed := _removed_ids()
-	if not removed.has(path_id):
-		removed.append(path_id)
+	if persistent:
+		var path_id := str(get_path())
+		var removed := _removed_ids()
+		if not removed.has(path_id):
+			removed.append(path_id)
 	collision_layer = 0
 	collision_mask = 0
 	_play(&"stump")

@@ -11,6 +11,6 @@ item_id = "seed_carrot"
 display_name = "Benih Carrot"
 icon = ExtResource("1_nkbpb")
 description = "Benih untuk menanam tanaman carrot di musim spring."
-buy_price = 25
 action_data = ExtResource("3_action")
+buy_price = 25
 metadata/_custom_type_script = "uid://cm1okc20ussp3"

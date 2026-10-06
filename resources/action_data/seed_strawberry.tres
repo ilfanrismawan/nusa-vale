@@ -8,7 +8,6 @@
 [sub_resource type="Resource" id="Resource_apk74"]
 script = ExtResource("2_2bxl4")
 crop = ExtResource("1_7sgop")
-seed_item_id = "seed_strawberry"
 metadata/_custom_type_script = "uid://d0igjkcw0vnha"
 
 [resource]

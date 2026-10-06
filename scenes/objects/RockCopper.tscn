@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://de0ckbejo0bdr"]
+
+[ext_resource type="Script" uid="uid://8410el0dtaeb" path="res://scripts/world/choppable.gd" id="1_7c88i"]
+[ext_resource type="Texture2D" uid="uid://b84j5wtiu3igo" path="res://assets/farm_rpg/objects/mine/stone with minerals.png" id="2_dbtaf"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7b7sk"]
+atlas = ExtResource("2_dbtaf")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6i0bw"]
+atlas = ExtResource("2_dbtaf")
+region = Rect2(160, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7g0rq"]
+atlas = ExtResource("2_dbtaf")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rt4xk"]
+atlas = ExtResource("2_dbtaf")
+region = Rect2(160, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ovsut"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7b7sk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6i0bw")
+}],
+"loop": 0,
+"name": &"chopping",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7g0rq")
+}],
+"loop": 0,
+"name": &"idle",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rt4xk")
+}],
+"loop": 0,
+"name": &"stump",
+"speed": 8.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xnkle"]
+
+[node name="RockCopper" type="StaticBody2D" unique_id=875742966]
+y_sort_enabled = true
+script = ExtResource("1_7c88i")
+drop_item_id = "copper_ore"
+drop_count = 4
+object_group = &"mineable"
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1382124243]
+modulate = Color(1, 0.68, 0.45, 1)
+sprite_frames = SubResource("SpriteFrames_ovsut")
+animation = &"stump"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=50161314]
+scale = Vector2(0.8, 0.8)
+shape = SubResource("CircleShape2D_xnkle")
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

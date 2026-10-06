@@ -11,6 +11,6 @@ item_id = "seed_strawberry"
 display_name = "Benih Strawberry"
 icon = ExtResource("2_icon")
 description = "Benih untuk menanam tanaman strawberry di musim spring."
-buy_price = 15
 action_data = ExtResource("3_action")
+buy_price = 15
 metadata/_custom_type_script = "uid://cm1okc20ussp3"

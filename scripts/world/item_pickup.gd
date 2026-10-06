@@ -226,12 +226,12 @@ func _on_body_entered(body: Node2D) -> void:
 	# INVENTORY
 	# =========================
 
-	var leftover := GameState.add_item(
+	var leftover: int = int(GameState.add_item(
 		item_id,
 		amount
-	)
+	))
 
-	var got := amount - leftover
+	var got: int = amount - leftover
 
 
 	# =========================

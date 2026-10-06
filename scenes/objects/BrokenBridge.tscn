@@ -1,20 +1,39 @@
 [gd_scene format=3 uid="uid://dype6nh84754b"]
 
 [ext_resource type="Script" uid="uid://c1caw3lm43ilb" path="res://scripts/world/broken_bridge.gd" id="1_8dig8"]
+[ext_resource type="Texture2D" uid="uid://barfylevbemhi" path="res://assets/farm_rpg/tileset/ext/Bridge Wood.png" id="2_1eit2"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ovsut"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ywce2"]
+size = Vector2(20, 52)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ajcru"]
+size = Vector2(61, 48)
 
-[node name="StaticBody2D" type="StaticBody2D" unique_id=980553921]
+[node name="BrokenBridge" type="Node2D" unique_id=1416927716]
+texture_filter = 1
 script = ExtResource("1_8dig8")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=507080605]
+[node name="Visual" type="Node2D" parent="." unique_id=1623431133]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2117187070]
-shape = SubResource("RectangleShape2D_ovsut")
+[node name="BrokenSprite" type="Sprite2D" parent="Visual" unique_id=507080605]
+texture = ExtResource("2_1eit2")
+region_enabled = true
+region_rect = Rect2(9, 196, 61, 51)
+
+[node name="RepairedSprite" type="Sprite2D" parent="Visual" unique_id=563167893]
+texture = ExtResource("2_1eit2")
+region_enabled = true
+region_rect = Rect2(9, 68, 61, 51)
+
+[node name="Blocker" type="StaticBody2D" parent="." unique_id=1065840017]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Blocker" unique_id=1997496721]
+shape = SubResource("RectangleShape2D_ywce2")
 
 [node name="InteractionArea" type="Area2D" parent="." unique_id=743118520]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=1614458348]
+position = Vector2(0.5, 0)
 shape = SubResource("RectangleShape2D_ajcru")
+
+[node name="RepairPoint" type="Marker2D" parent="." unique_id=28845873]

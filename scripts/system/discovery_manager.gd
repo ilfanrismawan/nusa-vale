@@ -21,3 +21,6 @@ func has_discovered(discovery_id: String) -> bool:
 
 func reset() -> void:
 	discoveries.clear()
+	
+func load_data(data: Dictionary) -> void:
+	discoveries = data.duplicate(true)

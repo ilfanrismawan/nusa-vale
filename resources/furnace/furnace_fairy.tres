@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="FurnaceRecipe" format=3]
+
+[ext_resource type="Script" uid="uid://tbdi8cy81w3j" path="res://scripts/resources/furnace_recipe.gd" id="1_p64s0"]
+
+[resource]
+script = ExtResource("1_p64s0")
+recipe_id = "fairy_bar"
+input_item_id = "fairy_ore"
+input_amount = 2
+output_item_id = "fairy_bar"
+output_amount = 1
+process_time = 7.0
+metadata/_custom_type_script = "uid://tbdi8cy81w3j"

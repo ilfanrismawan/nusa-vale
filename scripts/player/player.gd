@@ -17,6 +17,8 @@ extends CharacterBody2D
 
 var facing_direction := Vector2.DOWN
 
+const INTERACTION_DISTANCE := 32.0
+
 const FEET_OFFSET := Vector2(0, 8)
 const ACTION_DISTANCE := 16.0
 const MAX_ACTION_DISTANCE := 28.0
@@ -37,10 +39,54 @@ func _ready() -> void:
 		GameState.has_spawn_point = false
 		
 func _process(delta: float) -> void:
+	if Input.is_action_just_pressed("interact"):
+		_try_interact()
 	_update_tile_cursor()
-		
+	
 func _physics_process(delta: float) -> void:
 	state_machine.physics_update(delta)
+	
+func _try_interact() -> void:
+	var target := _find_interactable()
+	if target == null:
+		return
+		
+	if target.has_method("interact")		:
+		target.interact()
+
+func _find_interactable() -> Node:
+	var space_state := get_world_2d().direct_space_state
+	if space_state == null:
+		return null
+	
+	var origin := global_position + FEET_OFFSET
+	var direction := facing_direction.normalized()
+	var target_position := origin + (direction * INTERACTION_DISTANCE)
+	var query := PhysicsPointQueryParameters2D.new()		
+	
+	query.position = target_position
+	query.collide_with_areas = true
+	query.collide_with_areas = true
+	query.collide_with_bodies = true
+	query.collision_mask = 0xFFFFFFFF
+	
+	var results := space_state.intersect_point(query, 16)
+	
+	for result in results:
+		var collider = result.get("collider")
+		if collider == null:
+			continue
+		
+		if collider.has_mothod("interact"):
+			return collider
+		
+		var parent: Node = collider.get_parent()
+		
+		if parent != null:
+			if parent.has_method("interact"):
+				return parent	
+			
+	return null
 	
 func _update_tile_cursor() -> void:
 	if not is_instance_valid(tile_cursor):
