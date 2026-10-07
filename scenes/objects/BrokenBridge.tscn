@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dype6nh84754b"]
 
 [ext_resource type="Script" uid="uid://c1caw3lm43ilb" path="res://scripts/world/broken_bridge.gd" id="1_8dig8"]
-[ext_resource type="Texture2D" uid="uid://barfylevbemhi" path="res://assets/farm_rpg/tileset/ext/Bridge Wood.png" id="2_1eit2"]
+[ext_resource type="Texture2D" uid="uid://c44s7e7ddpruv" path="res://assets/farm_rpg/objects/exterior/broken bridge.png" id="2_rdbio"]
 [ext_resource type="Script" uid="uid://bd6yfdpkv3sah" path="res://scripts/world/forest_entrance.gd" id="3_rdbio"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ywce2"]
@@ -11,7 +11,7 @@ size = Vector2(20, 52)
 size = Vector2(61, 48)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ovsut"]
-size = Vector2(26, 33)
+size = Vector2(27, 34)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_43k3h"]
 size = Vector2(11, 35)
@@ -21,43 +21,43 @@ texture_filter = 1
 script = ExtResource("1_8dig8")
 
 [node name="Visual" type="Node2D" parent="." unique_id=1623431133]
+texture_filter = 1
 
 [node name="BrokenSprite" type="Sprite2D" parent="Visual" unique_id=507080605]
-texture = ExtResource("2_1eit2")
+texture_filter = 1
+texture = ExtResource("2_rdbio")
 region_enabled = true
-region_rect = Rect2(9, 196, 61, 51)
+region_rect = Rect2(7, 5, 124, 51)
 
 [node name="RepairedSprite" type="Sprite2D" parent="Visual" unique_id=563167893]
-texture = ExtResource("2_1eit2")
+visible = false
+texture_filter = 1
+position = Vector2(1, 1)
+texture = ExtResource("2_rdbio")
 region_enabled = true
-region_rect = Rect2(9, 68, 61, 51)
+region_rect = Rect2(7, 57, 124, 62)
 
 [node name="Blocker" type="StaticBody2D" parent="." unique_id=1065840017]
-visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Blocker" unique_id=1997496721]
 shape = SubResource("RectangleShape2D_ywce2")
 
 [node name="InteractionArea" type="Area2D" parent="." unique_id=743118520]
-visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=1614458348]
 position = Vector2(0.5, 0)
 shape = SubResource("RectangleShape2D_ajcru")
 
 [node name="RepairPoint" type="Marker2D" parent="." unique_id=28845873]
-visible = false
 
 [node name="BlockerWarningArea" type="Area2D" parent="." unique_id=276147046]
-visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BlockerWarningArea" unique_id=2117270343]
-visible = false
-position = Vector2(0, -0.5)
+position = Vector2(-0.5, 0)
 shape = SubResource("RectangleShape2D_ovsut")
 
 [node name="ForestEntrance" type="Node2D" parent="." unique_id=1639463811]
-position = Vector2(-27, -10)
+position = Vector2(-54, -8)
 
 [node name="Area2D" type="Area2D" parent="ForestEntrance" unique_id=689470473]
 script = ExtResource("3_rdbio")
