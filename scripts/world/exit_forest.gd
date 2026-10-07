@@ -2,7 +2,7 @@ extends Area2D
 
 const FARM_SCENE := "res://scenes/world/Farm.tscn"
 # Posisi keluar di Farm, dekat jembatan / ForestEntrance (971, 600)
-const SPAWN_POSITION := Vector2(980, 580)
+const SPAWN_POSITION := Vector2(6.0, 865.0)
 
 func _ready() -> void:
 	if not body_entered.is_connected(_on_body_entered):

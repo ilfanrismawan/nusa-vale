@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://c1caw3lm43ilb" path="res://scripts/world/broken_bridge.gd" id="1_8dig8"]
 [ext_resource type="Texture2D" uid="uid://c44s7e7ddpruv" path="res://assets/farm_rpg/objects/exterior/broken bridge.png" id="2_rdbio"]
-[ext_resource type="Script" uid="uid://bd6yfdpkv3sah" path="res://scripts/world/forest_entrance.gd" id="3_rdbio"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ywce2"]
 size = Vector2(20, 52)
@@ -13,11 +12,11 @@ size = Vector2(50, 43)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ovsut"]
 size = Vector2(27, 34)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_43k3h"]
-size = Vector2(11, 35)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e2t5s"]
 size = Vector2(121, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_37gcr"]
+size = Vector2(120, 11)
 
 [node name="BrokenBridge" type="Node2D" unique_id=1416927716]
 texture_filter = 1
@@ -35,7 +34,6 @@ region_rect = Rect2(7, 5, 124, 51)
 [node name="RepairedSprite" type="Sprite2D" parent="Visual" unique_id=563167893]
 visible = false
 texture_filter = 1
-position = Vector2(1, 1)
 texture = ExtResource("2_rdbio")
 region_enabled = true
 region_rect = Rect2(7, 57, 124, 62)
@@ -59,22 +57,12 @@ shape = SubResource("RectangleShape2D_ajcru")
 position = Vector2(-0.5, 0)
 shape = SubResource("RectangleShape2D_ovsut")
 
-[node name="ForestEntrance" type="Node2D" parent="." unique_id=1639463811]
-position = Vector2(-54, -8)
-
-[node name="Area2D" type="Area2D" parent="ForestEntrance" unique_id=689470473]
-script = ExtResource("3_rdbio")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ForestEntrance/Area2D" unique_id=303878110]
-position = Vector2(-0.5, 7.5)
-shape = SubResource("RectangleShape2D_43k3h")
-
 [node name="Col" type="Area2D" parent="." unique_id=1486352030]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Col" unique_id=1388460773]
-position = Vector2(1.5, 17)
+position = Vector2(2, 15)
 shape = SubResource("RectangleShape2D_e2t5s")
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="Col" unique_id=1457460975]
-position = Vector2(2, -26)
-shape = SubResource("RectangleShape2D_e2t5s")
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Col" unique_id=1170877051]
+position = Vector2(2, -19.5)
+shape = SubResource("RectangleShape2D_37gcr")

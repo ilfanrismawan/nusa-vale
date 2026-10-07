@@ -7154,7 +7154,8 @@ limit_bottom = 800
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=352569491]
 
 [node name="ExitForest" type="Area2D" parent="." unique_id=123162124]
-position = Vector2(536, 792)
+position = Vector2(757, 556)
+rotation = 1.5707964
 script = ExtResource("24_fv2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ExitForest" unique_id=7631306]
