@@ -8,6 +8,9 @@ const REQUIRED_STONE: int = 10
 
 const WARNING_COOLDOWN: float = 2.0
 
+@export var water_layer: PassableTileLayer
+@export var walkaway: Rect2 = Rect2(-62, -16, 124, 23)
+
 @onready var broken_sprite: Sprite2D = $Visual/BrokenSprite
 @onready var repaired_sprite: Sprite2D = $Visual/RepairedSprite
 @onready var blocker: StaticBody2D = $Blocker
@@ -19,9 +22,11 @@ const WARNING_COOLDOWN: float = 2.0
 var _warning_ready: bool = true
 
 func _ready() -> void:
+	_open_water_under_walkaway()
 	_apply_world_state()
 	WorldState.flag_changed.connect(_on_world_flag_changed)	
 	warning_area.body_entered.connect(_on_warning_body_entered)
+	
 func _on_world_flag_changed(flag_id: String, value: bool) -> void:
 	if flag_id == BRIDGE_FLAG:
 		_apply_world_state()
@@ -35,7 +40,17 @@ func _apply_world_state() -> void:
 	
 	blocker_collision.set_deferred("disabled", repaired)
 
-
+func _open_water_under_walkaway() -> void:
+	if water_layer == null:
+		return
+	var top_left: Vector2i = water_layer.local_to_map(water_layer.to_local(to_global(walkaway.position)))
+	var bottom_right: Vector2i = water_layer.local_to_map(water_layer.to_local(to_global((walkaway.end - Vector2.ONE))))
+	var cells: Array[Vector2i] = []
+	for y in range(top_left.y, bottom_right.y + 1):
+		for x in range(top_left.x, bottom_right.x + 1):
+			cells.append(Vector2i(x, y))
+	water_layer.set_cells_passable(cells, true)
+			
 func _on_warning_body_entered(body: Node2D) -> void:
 	if not body.is_in_group("player"):
 		return
@@ -57,6 +72,8 @@ func _show_requirements() -> void:
 		REQUIRED_WOOD, wood, REQUIRED_WOOD,
 		REQUIRED_STONE, stone, REQUIRED_STONE,
 	])
+	Notify.say("Tekan E untuk Tnteract/Memperbaiki")
+	
 func interact() -> void:
 	if WorldState.has_flag("bridge_repaired"):
 		Notify.say("Jembatan sudah diperbaiki.")
@@ -78,10 +95,15 @@ func repair_bridge() -> bool:
 	
 	GameState.remove_item("wood", REQUIRED_WOOD)
 	GameState.remove_item("stone", REQUIRED_STONE)
+		
+	_play_repair_transition()
+	return true
 	
-	WorldState.set_flag(BRIDGE_FLAG, true)
-	UnlockManager.unlock("forest")
+func _play_repair_transition() -> void:
+	await Transition.fade_action(_finish_repair)
 	
 	Notify.say("Jembatan berhasil diperbaiki!")
-		
-	return true
+	
+func _finish_repair() -> void:
+	WorldState.set_flag(BRIDGE_FLAG, true)
+	UnlockManager.unlock("forest")

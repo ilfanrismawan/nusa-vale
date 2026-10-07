@@ -8,13 +8,16 @@
 size = Vector2(20, 52)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ajcru"]
-size = Vector2(61, 48)
+size = Vector2(50, 43)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ovsut"]
 size = Vector2(27, 34)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_43k3h"]
 size = Vector2(11, 35)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e2t5s"]
+size = Vector2(121, 20)
 
 [node name="BrokenBridge" type="Node2D" unique_id=1416927716]
 texture_filter = 1
@@ -45,7 +48,7 @@ shape = SubResource("RectangleShape2D_ywce2")
 [node name="InteractionArea" type="Area2D" parent="." unique_id=743118520]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=1614458348]
-position = Vector2(0.5, 0)
+position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_ajcru")
 
 [node name="RepairPoint" type="Marker2D" parent="." unique_id=28845873]
@@ -65,3 +68,13 @@ script = ExtResource("3_rdbio")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ForestEntrance/Area2D" unique_id=303878110]
 position = Vector2(-0.5, 7.5)
 shape = SubResource("RectangleShape2D_43k3h")
+
+[node name="Col" type="Area2D" parent="." unique_id=1486352030]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Col" unique_id=1388460773]
+position = Vector2(1.5, 17)
+shape = SubResource("RectangleShape2D_e2t5s")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Col" unique_id=1457460975]
+position = Vector2(2, -26)
+shape = SubResource("RectangleShape2D_e2t5s")

@@ -19,22 +19,6 @@ region = Rect2(64, 48, 32, 48)
 atlas = ExtResource("2_4r4yi")
 region = Rect2(96, 48, 32, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_eius5"]
-atlas = ExtResource("2_4r4yi")
-region = Rect2(0, 96, 32, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ugd3q"]
-atlas = ExtResource("2_4r4yi")
-region = Rect2(32, 96, 32, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_s13qj"]
-atlas = ExtResource("2_4r4yi")
-region = Rect2(64, 96, 32, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4cnrn"]
-atlas = ExtResource("2_4r4yi")
-region = Rect2(96, 96, 32, 48)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_vuf6w"]
 atlas = ExtResource("2_4r4yi")
 region = Rect2(0, 48, 32, 48)
@@ -69,18 +53,6 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_n2ky5")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_eius5")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ugd3q")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_s13qj")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4cnrn")
 }],
 "loop": 0,
 "name": &"chopping",
@@ -121,7 +93,7 @@ script = ExtResource("1_4r4yi")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1565149206]
 sprite_frames = SubResource("SpriteFrames_ovsut")
-animation = &"idle"
+animation = &"chopping"
 autoplay = "idle"
 offset = Vector2(0, -24)
 

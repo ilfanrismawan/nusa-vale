@@ -1,0 +1,623 @@
+[gd_scene format=3 uid="uid://cd3aj6rv1alwc"]
+
+[ext_resource type="Texture2D" uid="uid://omf8whfi0m45" path="res://assets/farm_rpg/tileset/int/Tileset House.png" id="1_sv2"]
+[ext_resource type="Texture2D" uid="uid://clbp8bpc31l5r" path="res://assets/farm_rpg/objects/interior/School.png" id="2_sv2"]
+[ext_resource type="PackedScene" uid="uid://bye3dnnqckqj5" path="res://scenes/player/Player.tscn" id="3_sv2"]
+[ext_resource type="Script" path="res://scripts/world/school.gd" id="4_sv2"]
+[ext_resource type="Script" path="res://scripts/world/school_notice.gd" id="5_sv2"]
+[ext_resource type="Script" path="res://scripts/world/exit_door_school.gd" id="6_sv2"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_sv2"]
+texture = ExtResource("1_sv2")
+0:0/0 = 0
+1:0/0 = 0
+3:0/0 = 0
+23:0/0 = 0
+24:0/0 = 0
+25:0/0 = 0
+0:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+3:2/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+25:5/0 = 0
+26:5/0 = 0
+27:5/0 = 0
+29:5/0 = 0
+30:5/0 = 0
+31:5/0 = 0
+25:6/0 = 0
+26:6/0 = 0
+27:6/0 = 0
+29:6/0 = 0
+30:6/0 = 0
+31:6/0 = 0
+45:6/0 = 0
+46:6/0 = 0
+47:6/0 = 0
+25:7/0 = 0
+26:7/0 = 0
+27:7/0 = 0
+29:7/0 = 0
+30:7/0 = 0
+31:7/0 = 0
+45:7/0 = 0
+46:7/0 = 0
+47:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_sv2"]
+sources/0 = SubResource("TileSetAtlasSource_sv2")
+
+[sub_resource type="RectangleShape2D" id="Rect_01"]
+size = Vector2(64, 40)
+
+[sub_resource type="RectangleShape2D" id="Rect_02"]
+size = Vector2(45, 33)
+
+[sub_resource type="RectangleShape2D" id="Rect_03"]
+size = Vector2(48, 24)
+
+[sub_resource type="RectangleShape2D" id="Rect_04"]
+size = Vector2(23, 14)
+
+[sub_resource type="RectangleShape2D" id="Rect_05"]
+size = Vector2(10, 6)
+
+[sub_resource type="RectangleShape2D" id="Rect_06"]
+size = Vector2(16, 32)
+
+[sub_resource type="RectangleShape2D" id="Rect_07"]
+size = Vector2(26, 8)
+
+[sub_resource type="RectangleShape2D" id="Rect_08"]
+size = Vector2(7, 6)
+
+[sub_resource type="RectangleShape2D" id="Rect_09"]
+size = Vector2(46, 23)
+
+[sub_resource type="RectangleShape2D" id="Rect_10"]
+size = Vector2(28, 9)
+
+[sub_resource type="RectangleShape2D" id="Rect_11"]
+size = Vector2(448, 64)
+
+[sub_resource type="RectangleShape2D" id="Rect_12"]
+size = Vector2(16, 272)
+
+[sub_resource type="RectangleShape2D" id="Rect_13"]
+size = Vector2(12, 144)
+
+[sub_resource type="RectangleShape2D" id="Rect_14"]
+size = Vector2(12, 64)
+
+[sub_resource type="RectangleShape2D" id="Rect_15"]
+size = Vector2(80, 48)
+
+[sub_resource type="RectangleShape2D" id="Rect_16"]
+size = Vector2(336, 48)
+
+[sub_resource type="RectangleShape2D" id="Rect_17"]
+size = Vector2(32, 16)
+
+[node name="SchoolV2" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("4_sv2")
+
+[node name="Background" type="ColorRect" parent="."]
+z_index = -20
+offset_left = -416
+offset_top = -316
+offset_right = 864
+offset_bottom = 588
+mouse_filter = 2
+color = Color(0.0784, 0.0549, 0.0706, 1)
+
+[node name="Floor" type="TileMapLayer" parent="."]
+z_index = -10
+tile_map_data = PackedByteArray("AAABAAQAAAAYAAAAAAACAAQAAAAXAAAAAAADAAQAAAAYAAAAAAAEAAQAAAAXAAAAAAAFAAQAAAAYAAAAAAAGAAQAAAAXAAAAAAAHAAQAAAAYAAAAAAAIAAQAAAAXAAAAAAAJAAQAAAAYAAAAAAAKAAQAAAAXAAAAAAAMAAQAAAAZAAAAAAANAAQAAAAZAAAAAAAOAAQAAAAZAAAAAAAPAAQAAAAZAAAAAAAQAAQAAAAZAAAAAAARAAQAAAAZAAAAAAASAAQAAAAZAAAAAAATAAQAAAAZAAAAAAAUAAQAAAAZAAAAAAAVAAQAAAAZAAAAAAAWAAQAAAAZAAAAAAAXAAQAAAAZAAAAAAAYAAQAAAAZAAAAAAAZAAQAAAAZAAAAAAAaAAQAAAAZAAAAAAABAAUAAAAXAAAAAAACAAUAAAAYAAAAAAADAAUAAAAXAAAAAAAEAAUAAAAYAAAAAAAFAAUAAAAXAAAAAAAGAAUAAAAYAAAAAAAHAAUAAAAXAAAAAAAIAAUAAAAYAAAAAAAJAAUAAAAXAAAAAAAKAAUAAAAYAAAAAAAMAAUAAAAZAAAAAAANAAUAAAAZAAAAAAAOAAUAAAAZAAAAAAAPAAUAAAAZAAAAAAAQAAUAAAAZAAAAAAARAAUAAAAZAAAAAAASAAUAAAAZAAAAAAATAAUAAAAZAAAAAAAUAAUAAAAZAAAAAAAVAAUAAAAZAAAAAAAWAAUAAAAZAAAAAAAXAAUAAAAZAAAAAAAYAAUAAAAZAAAAAAAZAAUAAAAZAAAAAAAaAAUAAAAZAAAAAAABAAYAAAAYAAAAAAACAAYAAAAXAAAAAAADAAYAAAAYAAAAAAAEAAYAAAAXAAAAAAAFAAYAAAAYAAAAAAAGAAYAAAAXAAAAAAAHAAYAAAAYAAAAAAAIAAYAAAAXAAAAAAAJAAYAAAAYAAAAAAAKAAYAAAAXAAAAAAAMAAYAAAAZAAAAAAANAAYAAAAZAAAAAAAOAAYAAAAZAAAAAAAPAAYAAAAZAAAAAAAQAAYAAAAZAAAAAAARAAYAAAAZAAAAAAASAAYAAAAZAAAAAAATAAYAAAAZAAAAAAAUAAYAAAAZAAAAAAAVAAYAAAAZAAAAAAAWAAYAAAAZAAAAAAAXAAYAAAAZAAAAAAAYAAYAAAAZAAAAAAAZAAYAAAAZAAAAAAAaAAYAAAAZAAAAAAABAAcAAAAXAAAAAAACAAcAAAAYAAAAAAADAAcAAAAXAAAAAAAEAAcAAAAYAAAAAAAFAAcAAAAXAAAAAAAGAAcAAAAYAAAAAAAHAAcAAAAXAAAAAAAIAAcAAAAYAAAAAAAJAAcAAAAXAAAAAAAKAAcAAAAYAAAAAAAMAAcAAAAZAAAAAAANAAcAAAAZAAAAAAAOAAcAAAAZAAAAAAAPAAcAAAAZAAAAAAAQAAcAAAAZAAAAAAARAAcAAAAZAAAAAAASAAcAAAAZAAAAAAATAAcAAAAZAAAAAAAUAAcAAAAZAAAAAAAVAAcAAAAZAAAAAAAWAAcAAAAZAAAAAAAXAAcAAAAZAAAAAAAYAAcAAAAZAAAAAAAZAAcAAAAZAAAAAAAaAAcAAAAZAAAAAAABAAgAAAAYAAAAAAACAAgAAAAXAAAAAAADAAgAAAAYAAAAAAAEAAgAAAAXAAAAAAAFAAgAAAAYAAAAAAAGAAgAAAAXAAAAAAAHAAgAAAAYAAAAAAAIAAgAAAAXAAAAAAAJAAgAAAAYAAAAAAAKAAgAAAAXAAAAAAAMAAgAAAAZAAAAAAANAAgAAAAZAAAAAAAOAAgAAAAZAAAAAAAPAAgAAAAZAAAAAAAQAAgAAAAZAAAAAAARAAgAAAAZAAAAAAASAAgAAAAZAAAAAAATAAgAAAAZAAAAAAAUAAgAAAAZAAAAAAAVAAgAAAAZAAAAAAAWAAgAAAAZAAAAAAAXAAgAAAAZAAAAAAAYAAgAAAAZAAAAAAAZAAgAAAAZAAAAAAAaAAgAAAAZAAAAAAABAAkAAAAXAAAAAAACAAkAAAAYAAAAAAADAAkAAAAXAAAAAAAEAAkAAAAYAAAAAAAFAAkAAAAXAAAAAAAGAAkAAAAYAAAAAAAHAAkAAAAXAAAAAAAIAAkAAAAYAAAAAAAJAAkAAAAXAAAAAAAKAAkAAAAYAAAAAAALAAkAAAAZAAAAAAAMAAkAAAAZAAAAAAANAAkAAAAZAAAAAAAOAAkAAAAZAAAAAAAPAAkAAAAZAAAAAAAQAAkAAAAZAAAAAAARAAkAAAAZAAAAAAASAAkAAAAZAAAAAAATAAkAAAAZAAAAAAAUAAkAAAAZAAAAAAAVAAkAAAAZAAAAAAAWAAkAAAAZAAAAAAAXAAkAAAAZAAAAAAAYAAkAAAAZAAAAAAAZAAkAAAAZAAAAAAAaAAkAAAAZAAAAAAABAAoAAAAYAAAAAAACAAoAAAAXAAAAAAADAAoAAAAYAAAAAAAEAAoAAAAXAAAAAAAFAAoAAAAYAAAAAAAGAAoAAAAXAAAAAAAHAAoAAAAYAAAAAAAIAAoAAAAXAAAAAAAJAAoAAAAYAAAAAAAKAAoAAAAXAAAAAAALAAoAAAAZAAAAAAAMAAoAAAAZAAAAAAANAAoAAAAZAAAAAAAOAAoAAAAZAAAAAAAPAAoAAAAZAAAAAAAQAAoAAAAZAAAAAAARAAoAAAAZAAAAAAASAAoAAAAZAAAAAAATAAoAAAAZAAAAAAAUAAoAAAAZAAAAAAAVAAoAAAAZAAAAAAAWAAoAAAAZAAAAAAAXAAoAAAAZAAAAAAAYAAoAAAAZAAAAAAAZAAoAAAAZAAAAAAAaAAoAAAAZAAAAAAABAAsAAAAXAAAAAAACAAsAAAAYAAAAAAADAAsAAAAXAAAAAAAEAAsAAAAYAAAAAAAFAAsAAAAXAAAAAAAGAAsAAAAYAAAAAAAHAAsAAAAXAAAAAAAIAAsAAAAYAAAAAAAJAAsAAAAXAAAAAAAKAAsAAAAYAAAAAAAMAAsAAAAZAAAAAAANAAsAAAAZAAAAAAAOAAsAAAAZAAAAAAAPAAsAAAAZAAAAAAAQAAsAAAAZAAAAAAARAAsAAAAZAAAAAAASAAsAAAAZAAAAAAATAAsAAAAZAAAAAAAUAAsAAAAZAAAAAAAVAAsAAAAZAAAAAAAWAAsAAAAZAAAAAAAXAAsAAAAZAAAAAAAYAAsAAAAZAAAAAAAZAAsAAAAZAAAAAAAaAAsAAAAZAAAAAAABAAwAAAAYAAAAAAACAAwAAAAXAAAAAAADAAwAAAAYAAAAAAAEAAwAAAAXAAAAAAAFAAwAAAAYAAAAAAAGAAwAAAAXAAAAAAAHAAwAAAAYAAAAAAAIAAwAAAAXAAAAAAAJAAwAAAAYAAAAAAAKAAwAAAAXAAAAAAAMAAwAAAAZAAAAAAANAAwAAAAZAAAAAAAOAAwAAAAZAAAAAAAPAAwAAAAZAAAAAAAQAAwAAAAZAAAAAAARAAwAAAAZAAAAAAASAAwAAAAZAAAAAAATAAwAAAAZAAAAAAAUAAwAAAAZAAAAAAAVAAwAAAAZAAAAAAAWAAwAAAAZAAAAAAAXAAwAAAAZAAAAAAAYAAwAAAAZAAAAAAAZAAwAAAAZAAAAAAAaAAwAAAAZAAAAAAABAA0AAAAXAAAAAAACAA0AAAAYAAAAAAADAA0AAAAXAAAAAAAEAA0AAAAYAAAAAAAFAA0AAAAXAAAAAAAGAA0AAAAYAAAAAAAHAA0AAAAXAAAAAAAIAA0AAAAYAAAAAAAJAA0AAAAXAAAAAAAKAA0AAAAYAAAAAAAMAA0AAAAZAAAAAAANAA0AAAAZAAAAAAAOAA0AAAAZAAAAAAAPAA0AAAAZAAAAAAAQAA0AAAAZAAAAAAARAA0AAAAZAAAAAAASAA0AAAAZAAAAAAATAA0AAAAZAAAAAAAUAA0AAAAZAAAAAAAVAA0AAAAZAAAAAAAWAA0AAAAZAAAAAAAXAA0AAAAZAAAAAAAYAA0AAAAZAAAAAAAZAA0AAAAZAAAAAAAaAA0AAAAZAAAAAAAFAA4AAAAYAAAAAAAGAA4AAAAXAAAAAAAFAA8AAAAXAAAAAAAGAA8AAAAYAAAAAAAFABAAAAAYAAAAAAAGABAAAAAXAAAAAAA=")
+tile_set = SubResource("TileSet_sv2")
+
+[node name="Walls" type="TileMapLayer" parent="."]
+z_index = -9
+tile_map_data = PackedByteArray("AAAAAAAAAAABAAAAAAABAAAAAAACAAMAAAACAAAAAAACAAMAAAADAAAAAAACAAMAAAAEAAAAAAACAAMAAAAFAAAAAAACAAMAAAAGAAAAAAACAAMAAAAHAAAAAAACAAMAAAAIAAAAAAACAAMAAAAJAAAAAAACAAMAAAAKAAAAAAACAAMAAAALAAAAAAAAAAAAAAAMAAAAAAACAAMAAAANAAAAAAACAAMAAAAOAAAAAAACAAMAAAAPAAAAAAACAAMAAAAQAAAAAAACAAMAAAARAAAAAAACAAMAAAASAAAAAAACAAMAAAATAAAAAAACAAMAAAAUAAAAAAACAAMAAAAVAAAAAAACAAMAAAAWAAAAAAACAAMAAAAXAAAAAAACAAMAAAAYAAAAAAACAAMAAAAZAAAAAAACAAMAAAAaAAAAAAACAAMAAAAbAAAAAAADAAAAAAAAAAEAAAAAAAEAAAABAAEAAAAZAAYAAAACAAEAAAAaAAYAAAADAAEAAAAaAAYAAAAEAAEAAAAaAAYAAAAFAAEAAAAaAAYAAAAGAAEAAAAaAAYAAAAHAAEAAAAaAAYAAAAIAAEAAAAaAAYAAAAJAAEAAAAaAAYAAAAKAAEAAAAbAAYAAAALAAEAAAAAAAEAAAAMAAEAAAAdAAYAAAANAAEAAAAeAAYAAAAOAAEAAAAeAAYAAAAPAAEAAAAeAAYAAAAQAAEAAAAeAAYAAAARAAEAAAAeAAYAAAASAAEAAAAeAAYAAAATAAEAAAAeAAYAAAAUAAEAAAAeAAYAAAAVAAEAAAAeAAYAAAAWAAEAAAAeAAYAAAAXAAEAAAAeAAYAAAAYAAEAAAAeAAYAAAAZAAEAAAAeAAYAAAAaAAEAAAAfAAYAAAAbAAEAAAAAAAEAAAAAAAIAAAAAAAEAAAABAAIAAAAZAAcAAAACAAIAAAAaAAcAAAADAAIAAAAaAAcAAAAEAAIAAAAaAAcAAAAFAAIAAAAaAAcAAAAGAAIAAAAaAAcAAAAHAAIAAAAaAAcAAAAIAAIAAAAaAAcAAAAJAAIAAAAaAAcAAAAKAAIAAAAbAAcAAAALAAIAAAAAAAEAAAAMAAIAAAAdAAcAAAANAAIAAAAeAAcAAAAOAAIAAAAeAAcAAAAPAAIAAAAeAAcAAAAQAAIAAAAeAAcAAAARAAIAAAAeAAcAAAASAAIAAAAeAAcAAAATAAIAAAAeAAcAAAAUAAIAAAAeAAcAAAAVAAIAAAAeAAcAAAAWAAIAAAAeAAcAAAAXAAIAAAAeAAcAAAAYAAIAAAAeAAcAAAAZAAIAAAAeAAcAAAAaAAIAAAAfAAcAAAAbAAIAAAAAAAEAAAAAAAMAAAAAAAEAAAABAAMAAAAZAAUAAAACAAMAAAAaAAUAAAADAAMAAAAaAAUAAAAEAAMAAAAaAAUAAAAFAAMAAAAaAAUAAAAGAAMAAAAaAAUAAAAHAAMAAAAaAAUAAAAIAAMAAAAaAAUAAAAJAAMAAAAaAAUAAAAKAAMAAAAbAAUAAAALAAMAAAAAAAEAAAAMAAMAAAAdAAUAAAANAAMAAAAeAAUAAAAOAAMAAAAeAAUAAAAPAAMAAAAeAAUAAAAQAAMAAAAeAAUAAAARAAMAAAAeAAUAAAASAAMAAAAeAAUAAAATAAMAAAAeAAUAAAAUAAMAAAAeAAUAAAAVAAMAAAAeAAUAAAAWAAMAAAAeAAUAAAAXAAMAAAAeAAUAAAAYAAMAAAAeAAUAAAAZAAMAAAAeAAUAAAAaAAMAAAAfAAUAAAAbAAMAAAAAAAEAAAAAAAQAAAAAAAEAAAALAAQAAAAAAAEAAAAbAAQAAAAAAAEAAAAAAAUAAAAAAAEAAAALAAUAAAAAAAEAAAAbAAUAAAAAAAEAAAAAAAYAAAAAAAEAAAALAAYAAAAAAAEAAAAbAAYAAAAAAAEAAAAAAAcAAAAAAAEAAAALAAcAAAAAAAEAAAAbAAcAAAAAAAEAAAAAAAgAAAAAAAEAAAALAAgAAAAAAAIAAAAbAAgAAAAAAAEAAAAAAAkAAAAAAAEAAAAbAAkAAAAAAAEAAAAAAAoAAAAAAAEAAAAbAAoAAAAAAAEAAAAAAAsAAAAAAAEAAAALAAsAAAAAAAAAAAAbAAsAAAAAAAEAAAAAAAwAAAAAAAEAAAALAAwAAAAAAAEAAAAbAAwAAAAAAAEAAAAAAA0AAAAAAAEAAAALAA0AAAAAAAEAAAAbAA0AAAAAAAEAAAAAAA4AAAABAAIAAAABAA4AAAACAAMAAAACAA4AAAACAAMAAAADAA4AAAACAAMAAAAEAA4AAAADAAMAAAAHAA4AAAABAAMAAAAIAA4AAAACAAMAAAAJAA4AAAACAAMAAAAKAA4AAAACAAMAAAALAA4AAAAAAAIAAAAMAA4AAAACAAMAAAANAA4AAAACAAMAAAAOAA4AAAACAAMAAAAPAA4AAAACAAMAAAAQAA4AAAACAAMAAAARAA4AAAACAAMAAAASAA4AAAACAAMAAAATAA4AAAACAAMAAAAUAA4AAAACAAMAAAAVAA4AAAACAAMAAAAWAA4AAAACAAMAAAAXAA4AAAACAAMAAAAYAA4AAAACAAMAAAAZAA4AAAACAAMAAAAaAA4AAAACAAMAAAAbAA4AAAADAAIAAAAAAA8AAAAtAAYAAAABAA8AAAAuAAYAAAACAA8AAAAuAAYAAAADAA8AAAAuAAYAAAAEAA8AAAAvAAYAAAAHAA8AAAAtAAYAAAAIAA8AAAAuAAYAAAAJAA8AAAAuAAYAAAAKAA8AAAAuAAYAAAALAA8AAAAuAAYAAAAMAA8AAAAuAAYAAAANAA8AAAAuAAYAAAAOAA8AAAAuAAYAAAAPAA8AAAAuAAYAAAAQAA8AAAAuAAYAAAARAA8AAAAuAAYAAAASAA8AAAAuAAYAAAATAA8AAAAuAAYAAAAUAA8AAAAuAAYAAAAVAA8AAAAuAAYAAAAWAA8AAAAuAAYAAAAXAA8AAAAuAAYAAAAYAA8AAAAuAAYAAAAZAA8AAAAuAAYAAAAaAA8AAAAuAAYAAAAbAA8AAAAvAAYAAAAAABAAAAAtAAcAAAABABAAAAAuAAcAAAACABAAAAAuAAcAAAADABAAAAAuAAcAAAAEABAAAAAvAAcAAAAHABAAAAAtAAcAAAAIABAAAAAuAAcAAAAJABAAAAAuAAcAAAAKABAAAAAuAAcAAAALABAAAAAuAAcAAAAMABAAAAAuAAcAAAANABAAAAAuAAcAAAAOABAAAAAuAAcAAAAPABAAAAAuAAcAAAAQABAAAAAuAAcAAAARABAAAAAuAAcAAAASABAAAAAuAAcAAAATABAAAAAuAAcAAAAUABAAAAAuAAcAAAAVABAAAAAuAAcAAAAWABAAAAAuAAcAAAAXABAAAAAuAAcAAAAYABAAAAAuAAcAAAAZABAAAAAuAAcAAAAaABAAAAAuAAcAAAAbABAAAAAvAAcAAAA=")
+tile_set = SubResource("TileSet_sv2")
+
+[node name="WallDecor" type="Node2D" parent="."]
+z_index = -8
+
+[node name="Blackboard" type="StaticBody2D" parent="WallDecor"]
+position = Vector2(312, 36)
+script = ExtResource("5_sv2")
+message = "Papan tulis: \"Pelajaran hari ini: wortel tumbuh paling baik di musim semi.\""
+
+[node name="Sprite2D" type="Sprite2D" parent="WallDecor/Blackboard"]
+texture = ExtResource("2_sv2")
+region_enabled = true
+region_rect = Rect2(144, 192, 64, 24)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WallDecor/Blackboard"]
+position = Vector2(0, 8)
+shape = SubResource("Rect_01")
+
+[node name="PosterABC" type="Sprite2D" parent="WallDecor"]
+position = Vector2(250, 32)
+texture = ExtResource("2_sv2")
+region_enabled = true
+region_rect = Rect2(39, 6, 18, 22)
+
+[node name="PictureSmall" type="Sprite2D" parent="WallDecor"]
+position = Vector2(372, 30)
+texture = ExtResource("2_sv2")
+region_enabled = true
+region_rect = Rect2(8, 9, 15, 16)
+
+[node name="PictureButterfly" type="Sprite2D" parent="WallDecor"]
+position = Vector2(40, 30)
+texture = ExtResource("2_sv2")
+region_enabled = true
+region_rect = Rect2(7, 40, 17, 17)
+
+[node name="PictureTomato" type="Sprite2D" parent="WallDecor"]
+position = Vector2(108, 30)
+texture = ExtResource("2_sv2")
+region_enabled = true
+region_rect = Rect2(39, 39, 18, 18)
+
+[node name="PictureHall" type="Sprite2D" parent="WallDecor"]
+position = Vector2(156, 30)
+texture = ExtResource("2_sv2")
+region_enabled = true
+region_rect = Rect2(8, 9, 15, 16)
+
+[node name="Furniture" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="BookshelfL" type="StaticBody2D" parent="Furniture"]
+position = Vector2(218, 70)
+script = ExtResource("5_sv2")
+message = "Rak buku penuh buku pelajaran dan cerita rakyat Nusa Vale."
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/BookshelfL"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -16.5)
+region_enabled = true
+region_rect = Rect2(305, 9, 47, 33)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/BookshelfL"]
+position = Vector2(0, -16.5)
+shape = SubResource("Rect_02")
+
+[node name="BookshelfR" type="StaticBody2D" parent="Furniture"]
+position = Vector2(406, 70)
+script = ExtResource("5_sv2")
+message = "Rak buku: atlas, kamus, dan buku tentang tanaman."
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/BookshelfR"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -16.5)
+region_enabled = true
+region_rect = Rect2(353, 9, 47, 33)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/BookshelfR"]
+position = Vector2(0, -16.5)
+shape = SubResource("Rect_02")
+
+[node name="TeacherDesk" type="StaticBody2D" parent="Furniture"]
+position = Vector2(312, 110)
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/TeacherDesk"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -19)
+region_enabled = true
+region_rect = Rect2(70, 74, 52, 38)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/TeacherDesk"]
+position = Vector2(0, -12)
+shape = SubResource("Rect_03")
+
+[node name="StudentDesk11" type="StaticBody2D" parent="Furniture"]
+position = Vector2(234, 150)
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/StudentDesk11"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -14.5)
+region_enabled = true
+region_rect = Rect2(131, 42, 27, 29)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/StudentDesk11"]
+position = Vector2(0, -7)
+shape = SubResource("Rect_04")
+
+[node name="StudentDesk12" type="StaticBody2D" parent="Furniture"]
+position = Vector2(286, 150)
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/StudentDesk12"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -14.5)
+region_enabled = true
+region_rect = Rect2(131, 42, 27, 29)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/StudentDesk12"]
+position = Vector2(0, -7)
+shape = SubResource("Rect_04")
+
+[node name="StudentDesk13" type="StaticBody2D" parent="Furniture"]
+position = Vector2(338, 150)
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/StudentDesk13"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -14.5)
+region_enabled = true
+region_rect = Rect2(131, 42, 27, 29)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/StudentDesk13"]
+position = Vector2(0, -7)
+shape = SubResource("Rect_04")
+
+[node name="StudentDesk14" type="StaticBody2D" parent="Furniture"]
+position = Vector2(390, 150)
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/StudentDesk14"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -14.5)
+region_enabled = true
+region_rect = Rect2(131, 42, 27, 29)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/StudentDesk14"]
+position = Vector2(0, -7)
+shape = SubResource("Rect_04")
+
+[node name="StudentDesk21" type="StaticBody2D" parent="Furniture"]
+position = Vector2(234, 184)
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/StudentDesk21"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -14.5)
+region_enabled = true
+region_rect = Rect2(131, 42, 27, 29)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/StudentDesk21"]
+position = Vector2(0, -7)
+shape = SubResource("Rect_04")
+
+[node name="StudentDesk22" type="StaticBody2D" parent="Furniture"]
+position = Vector2(286, 184)
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/StudentDesk22"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -14.5)
+region_enabled = true
+region_rect = Rect2(131, 42, 27, 29)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/StudentDesk22"]
+position = Vector2(0, -7)
+shape = SubResource("Rect_04")
+
+[node name="StudentDesk23" type="StaticBody2D" parent="Furniture"]
+position = Vector2(338, 184)
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/StudentDesk23"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -14.5)
+region_enabled = true
+region_rect = Rect2(131, 42, 27, 29)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/StudentDesk23"]
+position = Vector2(0, -7)
+shape = SubResource("Rect_04")
+
+[node name="StudentDesk24" type="StaticBody2D" parent="Furniture"]
+position = Vector2(390, 184)
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/StudentDesk24"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -14.5)
+region_enabled = true
+region_rect = Rect2(131, 42, 27, 29)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/StudentDesk24"]
+position = Vector2(0, -7)
+shape = SubResource("Rect_04")
+
+[node name="StudentDesk31" type="StaticBody2D" parent="Furniture"]
+position = Vector2(234, 218)
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/StudentDesk31"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -14.5)
+region_enabled = true
+region_rect = Rect2(131, 42, 27, 29)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/StudentDesk31"]
+position = Vector2(0, -7)
+shape = SubResource("Rect_04")
+
+[node name="StudentDesk32" type="StaticBody2D" parent="Furniture"]
+position = Vector2(286, 218)
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/StudentDesk32"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -14.5)
+region_enabled = true
+region_rect = Rect2(131, 42, 27, 29)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/StudentDesk32"]
+position = Vector2(0, -7)
+shape = SubResource("Rect_04")
+
+[node name="StudentDesk33" type="StaticBody2D" parent="Furniture"]
+position = Vector2(338, 218)
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/StudentDesk33"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -14.5)
+region_enabled = true
+region_rect = Rect2(131, 42, 27, 29)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/StudentDesk33"]
+position = Vector2(0, -7)
+shape = SubResource("Rect_04")
+
+[node name="StudentDesk34" type="StaticBody2D" parent="Furniture"]
+position = Vector2(390, 218)
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/StudentDesk34"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -14.5)
+region_enabled = true
+region_rect = Rect2(131, 42, 27, 29)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/StudentDesk34"]
+position = Vector2(0, -7)
+shape = SubResource("Rect_04")
+
+[node name="PlantClassL" type="StaticBody2D" parent="Furniture"]
+position = Vector2(202, 222)
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/PlantClassL"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -9)
+region_enabled = true
+region_rect = Rect2(8, 71, 16, 18)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/PlantClassL"]
+position = Vector2(0, -3)
+shape = SubResource("Rect_05")
+
+[node name="PlantClassR" type="StaticBody2D" parent="Furniture"]
+position = Vector2(422, 222)
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/PlantClassR"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -9)
+region_enabled = true
+region_rect = Rect2(40, 71, 16, 18)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/PlantClassR"]
+position = Vector2(0, -3)
+shape = SubResource("Rect_05")
+
+[node name="Locker1" type="StaticBody2D" parent="Furniture"]
+position = Vector2(26, 72)
+script = ExtResource("5_sv2")
+message = "Loker murid. Semuanya terkunci."
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/Locker1"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -16)
+region_enabled = true
+region_rect = Rect2(128, 80, 16, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/Locker1"]
+position = Vector2(0, -16)
+shape = SubResource("Rect_06")
+
+[node name="Locker2" type="StaticBody2D" parent="Furniture"]
+position = Vector2(42, 72)
+script = ExtResource("5_sv2")
+message = "Loker murid. Semuanya terkunci."
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/Locker2"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -16)
+region_enabled = true
+region_rect = Rect2(128, 80, 16, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/Locker2"]
+position = Vector2(0, -16)
+shape = SubResource("Rect_06")
+
+[node name="Locker3" type="StaticBody2D" parent="Furniture"]
+position = Vector2(58, 72)
+script = ExtResource("5_sv2")
+message = "Loker murid. Semuanya terkunci."
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/Locker3"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -16)
+region_enabled = true
+region_rect = Rect2(128, 80, 16, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/Locker3"]
+position = Vector2(0, -16)
+shape = SubResource("Rect_06")
+
+[node name="ShelfHall1" type="StaticBody2D" parent="Furniture"]
+position = Vector2(124, 70)
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ShelfHall1"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -10)
+region_enabled = true
+region_rect = Rect2(210, 9, 28, 20)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ShelfHall1"]
+position = Vector2(0, -4)
+shape = SubResource("Rect_07")
+
+[node name="ShelfHall2" type="StaticBody2D" parent="Furniture"]
+position = Vector2(156, 70)
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ShelfHall2"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -10)
+region_enabled = true
+region_rect = Rect2(242, 9, 28, 20)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ShelfHall2"]
+position = Vector2(0, -4)
+shape = SubResource("Rect_07")
+
+[node name="CounterChair" type="StaticBody2D" parent="Furniture"]
+position = Vector2(140, 114)
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/CounterChair"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -9)
+region_enabled = true
+region_rect = Rect2(66, 45, 11, 18)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/CounterChair"]
+position = Vector2(0, -3)
+shape = SubResource("Rect_08")
+
+[node name="Counter" type="StaticBody2D" parent="Furniture"]
+position = Vector2(140, 134)
+script = ExtResource("5_sv2")
+message = "Meja penerima tamu. Belum ada yang berjaga."
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/Counter"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -11.5)
+region_enabled = true
+region_rect = Rect2(160, 121, 48, 23)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/Counter"]
+position = Vector2(0, -11.5)
+shape = SubResource("Rect_09")
+
+[node name="PlantHall" type="StaticBody2D" parent="Furniture"]
+position = Vector2(168, 134)
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/PlantHall"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -9)
+region_enabled = true
+region_rect = Rect2(8, 71, 16, 18)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/PlantHall"]
+position = Vector2(0, -3)
+shape = SubResource("Rect_05")
+
+[node name="BenchL1" type="StaticBody2D" parent="Furniture"]
+position = Vector2(34, 150)
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/BenchL1"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -6.5)
+region_enabled = true
+region_rect = Rect2(17, 226, 30, 13)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/BenchL1"]
+position = Vector2(0, -4.5)
+shape = SubResource("Rect_10")
+
+[node name="BenchL2" type="StaticBody2D" parent="Furniture"]
+position = Vector2(34, 182)
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/BenchL2"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -6.5)
+region_enabled = true
+region_rect = Rect2(17, 226, 30, 13)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/BenchL2"]
+position = Vector2(0, -4.5)
+shape = SubResource("Rect_10")
+
+[node name="PlantDoorL" type="StaticBody2D" parent="Furniture"]
+position = Vector2(68, 222)
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/PlantDoorL"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -9)
+region_enabled = true
+region_rect = Rect2(40, 71, 16, 18)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/PlantDoorL"]
+position = Vector2(0, -3)
+shape = SubResource("Rect_05")
+
+[node name="PlantDoorR" type="StaticBody2D" parent="Furniture"]
+position = Vector2(124, 222)
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/PlantDoorR"]
+texture = ExtResource("2_sv2")
+offset = Vector2(0, -9)
+region_enabled = true
+region_rect = Rect2(8, 71, 16, 18)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/PlantDoorR"]
+position = Vector2(0, -3)
+shape = SubResource("Rect_05")
+
+[node name="Player" parent="Furniture" instance=ExtResource("3_sv2")]
+
+[node name="WallCollision" type="StaticBody2D" parent="."]
+
+[node name="Wall01" type="CollisionShape2D" parent="WallCollision"]
+position = Vector2(224, 32)
+shape = SubResource("Rect_11")
+
+[node name="Wall02" type="CollisionShape2D" parent="WallCollision"]
+position = Vector2(8, 136)
+shape = SubResource("Rect_12")
+
+[node name="Wall03" type="CollisionShape2D" parent="WallCollision"]
+position = Vector2(440, 136)
+shape = SubResource("Rect_12")
+
+[node name="Wall04" type="CollisionShape2D" parent="WallCollision"]
+position = Vector2(184, 72)
+shape = SubResource("Rect_13")
+
+[node name="Wall05" type="CollisionShape2D" parent="WallCollision"]
+position = Vector2(184, 208)
+shape = SubResource("Rect_14")
+
+[node name="Wall06" type="CollisionShape2D" parent="WallCollision"]
+position = Vector2(40, 248)
+shape = SubResource("Rect_15")
+
+[node name="Wall07" type="CollisionShape2D" parent="WallCollision"]
+position = Vector2(280, 248)
+shape = SubResource("Rect_16")
+
+[node name="Wall08" type="CollisionShape2D" parent="WallCollision"]
+position = Vector2(96, 280)
+shape = SubResource("Rect_17")
+
+[node name="ExitDoor" type="Area2D" parent="."]
+position = Vector2(96, 264)
+script = ExtResource("6_sv2")
+target_scene = "res://scenes/world/Farm.tscn"
+spawn_position = Vector2(1136, 285)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitDoor"]
+shape = SubResource("Rect_17")
+
+[node name="SpawnPoint" type="Marker2D" parent="."]
+position = Vector2(96, 206)
+
+[node name="CharacterBody2D" parent="Furniture/Player"]
+position = Vector2(96, 206)
+
+[node name="Camera2D" parent="Furniture/Player/CharacterBody2D"]
+limit_left = -16
+limit_top = -16
+limit_right = 464
+limit_bottom = 288
+
+[editable path="Furniture/Player"]

@@ -38,7 +38,32 @@ func scene_transition(path: String) -> void:
 	get_tree().paused = false
 	on_transition = false
 
-
+func fade_action(action: Callable, hold: float = 0.3) -> void:
+	if on_transition:
+		action.call()
+		return
+	on_transition = true
+	
+	_stop_player()
+	get_tree().paused = true
+	rect.mouse_filter = Control.MOUSE_FILTER_STOP
+	
+	var tween := _transition_tween()
+	tween.tween_property(rect, "modulate:a", 1.0, DURATION)
+	await tween.finished
+	
+	action.call()
+	await get_tree().create_timer(hold, true).timeout
+	
+	tween = _transition_tween()
+	tween.tween_property(rect, "modulate:a", 0.0, DURATION)
+	await tween.finished
+	
+	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	get_tree().paused = false
+	on_transition = false
+	
+	
 func _transition_tween() -> Tween:
 	var tween := create_tween()
 	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
