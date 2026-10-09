@@ -210,7 +210,7 @@ func _load_unlocks(data: Dictionary) -> void:
 	if WorldState.has_flag("bridge_repaired"):
 		UnlockManager.unlock("forest")
 	
-func _load_day_cycle(data: Dictionary) -> void:
+func _load_day_cycle(data: Variant) -> void:
 	var day_data: Dictionary = data.get(
 		"day_cycle",
 		{}
@@ -236,7 +236,7 @@ func _load_day_cycle(data: Dictionary) -> void:
 		59
 	)
 	
-func _load_player(data: Dictionary) -> void:
+func _load_player(data: Variant) -> void:
 	var player_data: Dictionary = data.get(
 		"player", 
 		{}
@@ -439,7 +439,7 @@ func _load_world_state(data: Dictionary) -> void:
 		
 		WorldState.flags[id] = bool(world_data[flag_id])
 	
-func _load_discoveries(data: Dictionary) -> void:
+func _load_discoveries(data: Variant) -> void:
 	DiscoveryManager.reset()
 	
 	var discovery_data: Dictionary = data.get(
@@ -514,6 +514,7 @@ func _try_load_backup() -> bool:
 	_load_inventory(backup_data)
 	_load_farm(backup_data)
 	_load_world_state(backup_data)
+	_load_unlocks(backup_data)
 	_load_discoveries(backup_data)
 	_load_resources(backup_data)
 	

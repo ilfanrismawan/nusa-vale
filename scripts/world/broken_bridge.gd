@@ -37,7 +37,7 @@ func _apply_world_state() -> void:
 	var repaired := WorldState.has_flag(BRIDGE_FLAG)
 	
 	broken_sprite.visible = not repaired
-	repaired_sprite.visible = not repaired == false
+	repaired_sprite.visible = repaired
 	
 	blocker_collision.set_deferred("disabled", repaired)
 
