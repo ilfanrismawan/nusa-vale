@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="FishData" format=3 uid="uid://crliglptxi4bl"]
+
+[ext_resource type="Resource" uid="uid://e5yqqq5a768e" path="res://resources/item_data/fish_gurame.tres" id="1_0ribb"]
+[ext_resource type="Script" uid="uid://chacbmvpw52cc" path="res://scripts/data/fish_data.gd" id="1_ow22i"]
+
+[resource]
+script = ExtResource("1_ow22i")
+item = ExtResource("1_0ribb")
+locations = ["farm_pond", "forest_river"]
+min_hour = 6
+max_hour = 10
+difficulty = 0.85
+metadata/_custom_type_script = "uid://chacbmvpw52cc"

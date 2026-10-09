@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="FishData" format=3 uid="uid://hgab404ha3o"]
+
+[ext_resource type="Resource" uid="uid://dus084so4a3it" path="res://resources/item_data/fish_mas.tres" id="1_m7p5h"]
+[ext_resource type="Script" uid="uid://chacbmvpw52cc" path="res://scripts/data/fish_data.gd" id="2_to6q8"]
+
+[resource]
+script = ExtResource("2_to6q8")
+item = ExtResource("1_m7p5h")
+locations = ["farm_pond", " forest_river"]
+min_hour = 6
+max_hour = 20
+difficulty = 0.3
+weight = 5.0
+metadata/_custom_type_script = "uid://chacbmvpw52cc"

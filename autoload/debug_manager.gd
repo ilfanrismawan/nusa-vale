@@ -243,7 +243,15 @@ func _cheat_print_inventory() -> void:
 			print("  [%02d] %s  ×%d" % [i, slot["item"].item_id, slot["count"]])
 	print("═════════════════════════════════════════════\n")
 	_notify("📋 Inventory dicetak ke Output console.")
-
+	
+func _cheat_set_hour(h: int) -> void:
+	DayCycle.hour = h
+	DayCycle.time_tick.emit(h, 0)
+	
+func _cheat_add_fish() -> void:
+	for id in ["fish_mas", "fish_lele", "fish_nila", "fish_gurame"]:
+		GameState.add_item(id, 3)
+	
 func _cheat_delete_save() -> void:
 	SaveManager.delete_save() if SaveManager.has_method("delete_save") else _delete_save_fallback()
 	_notify("🗑  Save file dihapus. Restart game untuk new game.")

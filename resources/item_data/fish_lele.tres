@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://bmiul435r3qnq"]
+
+[ext_resource type="Texture2D" uid="uid://cplqbi4dvu6y6" path="res://resources/icons/icon_catfish.tres" id="1_b2egp"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="2_b6ftg"]
+
+[resource]
+script = ExtResource("2_b6ftg")
+category = 5
+item_id = "fish_lele"
+display_name = "Ikan Lele"
+icon = ExtResource("1_b2egp")
+description = "Ikan air tawar yang gesit"
+sell_price = 40
+metadata/_custom_type_script = "uid://cm1okc20ussp3"

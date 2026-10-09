@@ -6,6 +6,7 @@ signal tool_changed(action: ActionData)
 @onready var player: Player = get_parent()
 @onready var state_machine: StateMachine = $"../StateMachine"
 @onready var action_state: ActionState = $"../StateMachine/ActionState"
+@onready var fishing_state: FishingState = $"../StateMachine/FishingState"
 
 const HAND_HARVEST: ActionData = preload("res://resources/action_data/hand_harvest.tres")
 
@@ -97,6 +98,11 @@ func use_action(action: ActionData) -> void:
 		return
 	if state_machine.current_state == action_state:
 		return
+	if state_machine.current_state == fishing_state:
+		return
+	if action.effect is FishingEffect:
+		_start_fishing(action)
+		return
 	if player.base_layer_ground == null:
 		Notify.say("Tidak bisa pakai alat di sini")
 		return
@@ -116,6 +122,17 @@ func use_action(action: ActionData) -> void:
 	action_state.start(action, player.get_target_cell())
 	state_machine.change_state(action_state)
 
+func _start_fishing(action: ActionData) -> void:
+	var spot := FishingManager.find_spot(player)
+	if spot == null:
+		Notify.say("Tidak ada air disini.")
+		return
+	if not GameState.spend_stamina(action.effect.stamina_cost):
+		Notify.say("Terlalu lelah! Istirahatlah.")
+		return
+	fishing_state.start(spot)
+	state_machine.change_state(fishing_state)
+	
 func _get_stamina_cost(action: ActionData) -> int:
 	if action == null:
 		return 0

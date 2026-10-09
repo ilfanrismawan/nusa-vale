@@ -1,0 +1,104 @@
+[gd_scene format=3 uid="uid://hwtm1so1h6tb"]
+
+[ext_resource type="Script" uid="uid://8410el0dtaeb" path="res://scripts/world/choppable.gd" id="1_4r4yi"]
+[ext_resource type="Texture2D" uid="uid://chf556ecvopfi" path="res://assets/farm_rpg/objects/tree/Pine Tree Animation.png" id="2_4r4yi"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vawpu"]
+atlas = ExtResource("2_4r4yi")
+region = Rect2(0, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s8tic"]
+atlas = ExtResource("2_4r4yi")
+region = Rect2(32, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_54i31"]
+atlas = ExtResource("2_4r4yi")
+region = Rect2(64, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r5436"]
+atlas = ExtResource("2_4r4yi")
+region = Rect2(96, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7bykr"]
+atlas = ExtResource("2_4r4yi")
+region = Rect2(0, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_02634"]
+atlas = ExtResource("2_4r4yi")
+region = Rect2(0, 144, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_78naa"]
+atlas = ExtResource("2_4r4yi")
+region = Rect2(32, 144, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kp0bp"]
+atlas = ExtResource("2_4r4yi")
+region = Rect2(64, 144, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5ylq2"]
+atlas = ExtResource("2_4r4yi")
+region = Rect2(96, 144, 32, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ovsut"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vawpu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s8tic")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_54i31")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r5436")
+}],
+"loop": 0,
+"name": &"chopping",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7bykr")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_02634")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_78naa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kp0bp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5ylq2")
+}],
+"loop": 0,
+"name": &"stump",
+"speed": 8.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_trunk"]
+radius = 4.5
+
+[node name="PineTree" type="StaticBody2D" unique_id=2046111868]
+y_sort_enabled = true
+script = ExtResource("1_4r4yi")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1565149206]
+sprite_frames = SubResource("SpriteFrames_ovsut")
+animation = &"chopping"
+autoplay = "idle"
+offset = Vector2(0, -24)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=501145078]
+position = Vector2(0, -2)
+shape = SubResource("CircleShape2D_trunk")
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

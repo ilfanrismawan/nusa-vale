@@ -3,23 +3,23 @@
 [ext_resource type="Script" uid="uid://8410el0dtaeb" path="res://scripts/world/choppable.gd" id="1_b2s7q"]
 [ext_resource type="Texture2D" uid="uid://c7fn2n6vymw5l" path="res://assets/farm_rpg/objects/tree/Mahogany Tree Animation.png" id="2_b2s7q"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_3c31m"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_3juxd"]
 atlas = ExtResource("2_b2s7q")
 region = Rect2(0, 48, 32, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_j83go"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ihg3f"]
 atlas = ExtResource("2_b2s7q")
 region = Rect2(32, 48, 32, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_hl47q"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_rl2j6"]
 atlas = ExtResource("2_b2s7q")
 region = Rect2(64, 48, 32, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_rmad7"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_oi21x"]
 atlas = ExtResource("2_b2s7q")
 region = Rect2(96, 48, 32, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_l030p"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_cori5"]
 atlas = ExtResource("2_b2s7q")
 region = Rect2(0, 48, 32, 48)
 
@@ -43,16 +43,16 @@ region = Rect2(96, 240, 32, 48)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_3c31m")
+"texture": SubResource("AtlasTexture_3juxd")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_j83go")
+"texture": SubResource("AtlasTexture_ihg3f")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_hl47q")
+"texture": SubResource("AtlasTexture_rl2j6")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_rmad7")
+"texture": SubResource("AtlasTexture_oi21x")
 }],
 "loop": 0,
 "name": &"chopping",
@@ -60,7 +60,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_l030p")
+"texture": SubResource("AtlasTexture_cori5")
 }],
 "loop": 1,
 "name": &"idle",
@@ -90,10 +90,12 @@ radius = 4.5
 [node name="MahoganyTree" type="StaticBody2D" unique_id=2046111868]
 y_sort_enabled = true
 script = ExtResource("1_b2s7q")
+health = 5
+drop_count = 4
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1565149206]
 sprite_frames = SubResource("SpriteFrames_ovsut")
-animation = &"chopping"
+animation = &"idle"
 autoplay = "idle"
 offset = Vector2(0, -24)
 

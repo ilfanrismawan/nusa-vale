@@ -1,4 +1,4 @@
-﻿extends CanvasLayer
+extends CanvasLayer
 
 ## ── Node References ─────────────────────────────────────────────────────────
 @onready var dimmer: ColorRect = %Dimmer
@@ -356,6 +356,7 @@ func _show_item_tooltip(slot_pos: Vector2, item: ItemData, count: int, slot_idx:
 		ItemData.Category.CROP: cat_str = "Hasil Panen"
 		ItemData.Category.TOOL: cat_str = "Peralatan Kebun"
 		ItemData.Category.MATERIAL: cat_str = "Material Bangunan"
+		ItemData.Category.FISH: cat_str = "Hasil Tangkapan"
 		_: cat_str = "Item Tas"
 
 	tooltip_category.text = "[%s]" % cat_str

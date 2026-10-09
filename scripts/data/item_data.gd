@@ -1,7 +1,7 @@
 class_name ItemData
 extends Resource
 
-enum Category { ALL, SEED, CROP, TOOL, MATERIAL}
+enum Category { ALL, SEED, CROP, TOOL, MATERIAL, FISH}
 
 enum Rarity {
 	COMMON,

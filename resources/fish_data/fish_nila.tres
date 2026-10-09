@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="FishData" format=3 uid="uid://dxcgu055ru05w"]
+
+[ext_resource type="Resource" uid="uid://b6ru3npt44ati" path="res://resources/item_data/fish_nila.tres" id="1_j2eco"]
+[ext_resource type="Script" uid="uid://chacbmvpw52cc" path="res://scripts/data/fish_data.gd" id="1_ujy6u"]
+
+[resource]
+script = ExtResource("1_ujy6u")
+item = ExtResource("1_j2eco")
+locations = ["forest_river"]
+min_hour = 6
+max_hour = 18
+difficulty = 0.4
+weight = 4.0
+metadata/_custom_type_script = "uid://chacbmvpw52cc"

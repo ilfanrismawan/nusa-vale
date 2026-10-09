@@ -1,0 +1,7 @@
+[gd_resource type="AtlasTexture" format=3 uid="uid://cplqbi4dvu6y6"]
+
+[ext_resource type="Texture2D" uid="uid://bkm8q5vr15uph" path="res://assets/farm_rpg/icons/Fish/River/Bullhead Catfish.png" id="1_kfdx5"]
+
+[resource]
+atlas = ExtResource("1_kfdx5")
+region = Rect2(2, 2, 11, 12)

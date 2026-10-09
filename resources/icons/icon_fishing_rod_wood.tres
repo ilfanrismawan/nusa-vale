@@ -1,0 +1,7 @@
+[gd_resource type="AtlasTexture" format=3 uid="uid://dmownt3h81iyb"]
+
+[ext_resource type="Texture2D" uid="uid://c7a6mhq1fr2ma" path="res://assets/farm_rpg/icons/Weapons and Armor/1. Wood/Fishing Rod.png" id="1_c4yo4"]
+
+[resource]
+atlas = ExtResource("1_c4yo4")
+region = Rect2(1, 1, 14, 14)

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ActionData" format=3 uid="uid://cmoti33cpbxxv"]
+
+[ext_resource type="Script" uid="uid://babxwm68vuqeh" path="res://scripts/state/action_data.gd" id="1_bmpsm"]
+[ext_resource type="Script" uid="uid://i8hpmlwkmcbr" path="res://scripts/effects/fishing_effect.gd" id="1_ljrmv"]
+[ext_resource type="Texture2D" uid="uid://dmownt3h81iyb" path="res://resources/icons/icon_fishing_rod_wood.tres" id="2_t5wmg"]
+
+[sub_resource type="Resource" id="Resource_ljrmv"]
+script = ExtResource("1_ljrmv")
+metadata/_custom_type_script = "uid://i8hpmlwkmcbr"
+
+[resource]
+script = ExtResource("1_bmpsm")
+display_name = "fishing_rod"
+icon = ExtResource("2_t5wmg")
+animation_name = &"Throw"
+effect = SubResource("Resource_ljrmv")
+metadata/_custom_type_script = "uid://babxwm68vuqeh"

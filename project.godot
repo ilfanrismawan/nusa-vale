@@ -28,6 +28,12 @@ WorldState="*uid://d3yetf3bmmrm6"
 DiscoveryManager="*uid://bu2cui5xw7dw7"
 UnlockManager="*uid://d2o7nqhie38h0"
 DebugManager="*res://autoload/debug_manager.gd"
+FishingManager="*uid://c2xnqbwdoyb7p"
+
+[debug]
+
+shapes/collision/shape_color=Color(0.8392157, 0.33333334, 0.26666668, 0.53333336)
+shapes/collision/contact_color=Color(1, 0.84313726, 0.101960786, 0.8)
 
 [display]
 

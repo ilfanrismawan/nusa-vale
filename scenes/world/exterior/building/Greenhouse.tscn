@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://daul5lupl2ntr"]
+
+[ext_resource type="Texture2D" uid="uid://bm5jr5q8r7lsd" path="res://assets/farm_rpg/objects/exterior/Houses/Farm Buildings/Greenhouse/Greenhouse.png" id="1_o3ltr"]
+[ext_resource type="Texture2D" uid="uid://288u3qxytt4t" path="res://assets/farm_rpg/objects/exterior/Greenhouse/Door.png" id="2_wyvxl"]
+
+[node name="Greenhouse" type="Node2D" unique_id=129607258]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=374117690]
+texture = ExtResource("1_o3ltr")
+region_enabled = true
+region_rect = Rect2(95, 7, 60, 81)
+
+[node name="Sprite2D2" type="Sprite2D" parent="." unique_id=419653624]
+position = Vector2(1, 25)
+texture = ExtResource("2_wyvxl")
+region_enabled = true
+region_rect = Rect2(67, 9, 28, 31)

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://dus084so4a3it"]
+
+[ext_resource type="Texture2D" uid="uid://b40xouex6gxvn" path="res://resources/icons/carp.tres" id="1_4r84l"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="2_11w57"]
+
+[resource]
+script = ExtResource("2_11w57")
+category = 5
+item_id = "fish_mas"
+display_name = "Ikan Mas"
+icon = ExtResource("1_4r84l")
+description = "Ikan air tawar yang gesit"
+sell_price = 30
+metadata/_custom_type_script = "uid://cm1okc20ussp3"

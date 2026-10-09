@@ -81,9 +81,9 @@ func restore_stamina(amount: int = MAX_STAMINA) -> void:
 	stamina_changed.emit(stamina, MAX_STAMINA)
 
 func _setup_tools() -> void:
-	var tool_ids := ["axe_wood", "hoe_wood", "shovel_wood", "watering_can_wood", "sickle_wood", "pickaxe_wood"]
-	for i in range(tool_ids.size()):
-		var tid = tool_ids[i]
+	var STARTER_TOOLS := ["axe_wood", "hoe_wood", "shovel_wood", "watering_can_wood", "sickle_wood", "pickaxe_wood", "fishing_rod_wood"]
+	for i in range(STARTER_TOOLS.size()):
+		var tid = STARTER_TOOLS[i]
 		var item: ItemData = _resolve_item(tid)
 		if item != null:
 			inventory[i] = {"item": item, "count": 1}
@@ -93,9 +93,9 @@ func _setup_tools() -> void:
 
 
 func ensure_starter_tools() -> void:
-	var tool_ids := ["axe_wood", "hoe_wood", "shovel_wood", "watering_can_wood", "sickle_wood", "pickaxe_wood"]
+	var STARTER_TOOLS := ["axe_wood", "hoe_wood", "shovel_wood", "watering_can_wood", "sickle_wood", "pickaxe_wood", "fishing_rod_wood"]
 	var changed := false
-	for tid in tool_ids:
+	for tid in STARTER_TOOLS:
 		if not has_item(tid, 1):
 			var item = _resolve_item(tid)
 			if item != null:
