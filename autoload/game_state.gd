@@ -244,11 +244,24 @@ func add_item(item_or_id: Variant, amount: int = 1) -> int:
 
 ## Hapus item di slot tertentu
 func remove_item_at(slot: int, amount: int = 1) -> bool:
-	if slot < 0 or slot >= INVENTORY_SIZE or inventory[slot] == null:
+	if amount <= 0:
 		return false
-	inventory[slot]["count"] -= amount
-	if inventory[slot]["count"] <= 0:
+		
+	if slot < 0 or slot >= bag_size:
+		return false
+		
+	if slot >= inventory.size() or inventory[slot] == null:
+		return false
+
+	var current_count: int = inventory[slot]["count"]
+	if amount > current_count:
+		return false
+						
+	inventory[slot]["count"] = current_count - amount
+	
+	if inventory[slot]["count"] == 0:
 		inventory[slot] = null
+		
 	inventory_changed.emit()
 	return true
 

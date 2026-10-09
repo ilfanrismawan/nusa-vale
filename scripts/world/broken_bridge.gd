@@ -20,6 +20,7 @@ const WARNING_COOLDOWN: float = 2.0
 @onready var warning_collisioon: CollisionShape2D = $BlockerWarningArea/CollisionShape2D
 
 var _warning_ready: bool = true
+var _repair_in_progress: bool = false
 
 func _ready() -> void:
 	_open_water_under_walkaway()
@@ -78,10 +79,16 @@ func interact() -> void:
 	if WorldState.has_flag("bridge_repaired"):
 		Notify.say("Jembatan sudah diperbaiki.")
 		return
+		
+	if _repair_in_progress:
+		return
 	
 	repair_bridge()
 
 func repair_bridge() -> bool:
+	if _repair_in_progress:
+		return false
+	
 	if WorldState.has_flag(BRIDGE_FLAG):
 		return false
 	
@@ -93,8 +100,20 @@ func repair_bridge() -> bool:
 		Notify.say("Butuh %d Stone." % REQUIRED_STONE)	
 		return false
 	
-	GameState.remove_item("wood", REQUIRED_WOOD)
-	GameState.remove_item("stone", REQUIRED_STONE)
+	_repair_in_progress = true
+	
+	if not GameState.remove_item("wood", REQUIRED_WOOD):
+		_repair_in_progress = false
+		return false
+		
+	if not GameState.remove_item("stone", REQUIRED_STONE):
+		var remaining := GameState.add_item("wood", REQUIRED_WOOD)
+		
+		if remaining > 0:
+			push_error("BrokenBridge: Gagal mengembalikan seluruh wood")
+		
+		_repair_in_progress = false
+		return false
 		
 	_play_repair_transition()
 	return true
@@ -107,3 +126,4 @@ func _play_repair_transition() -> void:
 func _finish_repair() -> void:
 	WorldState.set_flag(BRIDGE_FLAG, true)
 	UnlockManager.unlock("forest")
+	_repair_in_progress = false

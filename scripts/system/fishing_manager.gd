@@ -41,24 +41,25 @@ func find_spot(player: Player) -> FishingSpot:
 func roll_catch(location_id: String) -> FishData:
 	var pool: Array[FishData] = []
 	var total := 0.0
+	
 	for f in _fish:
-#		 DEBUG FISHING		
-		if debug_force_tier >= 0 and int(f.item.rarity) != debug_force_tier:
+		if f.weight <= 0.0:
 			continue
 			
 		if f.is_available(location_id, DayCycle.hour):
 			pool.append(f)
 			total += f.weight
 			
-	if pool.is_empty():
+	if pool.is_empty() or total <= 0.0:
 		return null
 		
 	var r := randf() * total
 	
 	for f in pool:
-		if r <= 0.0:
+		if r <= f.weight:
 			return f
-			
+		r -= f.weight
+		
 	return pool.back()
 	
 func register_catch(fish: FishData) -> bool:
