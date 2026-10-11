@@ -1,0 +1,7 @@
+[gd_resource type="AtlasTexture" format=3]
+
+[ext_resource type="Texture2D" uid="uid://duh7k2bv6sk0i" path="res://assets/farm_rpg/ui/inventory/Banner.png" id="1_banner"]
+
+[resource]
+atlas = ExtResource("1_banner")
+region = Rect2(2, 113, 44, 15)

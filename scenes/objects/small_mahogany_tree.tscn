@@ -1,0 +1,104 @@
+[gd_scene format=3 uid="uid://1625sdivdquw"]
+
+[ext_resource type="Script" uid="uid://8410el0dtaeb" path="res://scripts/world/choppable.gd" id="1_b2s7q"]
+[ext_resource type="Texture2D" uid="uid://c7fn2n6vymw5l" path="res://assets/farm_rpg/objects/tree/Mahogany Tree Animation.png" id="2_b2s7q"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3juxd"]
+atlas = ExtResource("2_b2s7q")
+region = Rect2(0, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ihg3f"]
+atlas = ExtResource("2_b2s7q")
+region = Rect2(32, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rl2j6"]
+atlas = ExtResource("2_b2s7q")
+region = Rect2(64, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oi21x"]
+atlas = ExtResource("2_b2s7q")
+region = Rect2(96, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cori5"]
+atlas = ExtResource("2_b2s7q")
+region = Rect2(0, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_muj5y"]
+atlas = ExtResource("2_b2s7q")
+region = Rect2(0, 240, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_17yat"]
+atlas = ExtResource("2_b2s7q")
+region = Rect2(32, 240, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j8tyu"]
+atlas = ExtResource("2_b2s7q")
+region = Rect2(64, 240, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_08kql"]
+atlas = ExtResource("2_b2s7q")
+region = Rect2(96, 240, 32, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ovsut"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3juxd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ihg3f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rl2j6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oi21x")
+}],
+"loop": 0,
+"name": &"chopping",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cori5")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_muj5y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_17yat")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j8tyu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_08kql")
+}],
+"loop": 0,
+"name": &"stump",
+"speed": 8.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_trunk"]
+radius = 4.5
+
+[node name="SmallMahoganyTree" type="StaticBody2D" unique_id=2046111868]
+y_sort_enabled = true
+script = ExtResource("1_b2s7q")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1565149206]
+sprite_frames = SubResource("SpriteFrames_ovsut")
+animation = &"idle"
+autoplay = "idle"
+offset = Vector2(0, -24)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=501145078]
+position = Vector2(0, -2)
+shape = SubResource("CircleShape2D_trunk")
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

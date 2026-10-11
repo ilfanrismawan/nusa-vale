@@ -1,0 +1,57 @@
+[gd_resource type="Resource" script_class="ShopData" format=3 uid="uid://b40c61yuwomfj"]
+
+[ext_resource type="Texture2D" uid="uid://iwxnkwqq702h" path="res://assets/farm_rpg/Character/PNG/Portrait.png" id="1_q5123"]
+[ext_resource type="Script" uid="uid://bosipocdasjvg" path="res://scripts/resources/shop_data.gd" id="1_shop"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="2_item"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_cherry.tres" id="3_seed_cherry"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_apricot.tres" id="4_seed_apricot"]
+[ext_resource type="Resource" uid="uid://d15i51w7u6xbx" path="res://resources/item_data/seed_strawberry.tres" id="5_seed_strawberry"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_leek.tres" id="6_seed_leek"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_potato.tres" id="7_seed_potato"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_onion.tres" id="8_seed_onion"]
+[ext_resource type="Resource" uid="uid://bwoebwa1olmhq" path="res://resources/item_data/seed_carrot.tres" id="9_seed_carrot"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_blueberry.tres" id="10_seed_blueberry"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_parsnip.tres" id="11_seed_parsnip"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_cabbage.tres" id="12_seed_cabbage"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_cauliflower.tres" id="13_seed_cauliflower"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_rice.tres" id="14_seed_rice"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_broccoli.tres" id="15_seed_broccoli"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_rhubarb.tres" id="16_seed_rhubarb"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_banana.tres" id="17_seed_banana"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_orange.tres" id="18_seed_orange"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_mango.tres" id="19_seed_mango"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_peach.tres" id="20_seed_peach"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_tomato.tres" id="21_seed_tomato"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_sunflower.tres" id="22_seed_sunflower"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_chili.tres" id="23_seed_chili"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_green_apple.tres" id="24_seed_green_apple"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_red_pepper.tres" id="25_seed_red_pepper"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_yellow_pepper.tres" id="26_seed_yellow_pepper"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_melon.tres" id="27_seed_melon"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_watermelon.tres" id="28_seed_watermelon"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_cucumber.tres" id="29_seed_cucumber"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_pineapple.tres" id="30_seed_pineapple"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_pea.tres" id="31_seed_pea"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_garlic.tres" id="32_seed_garlic"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_blackberry.tres" id="33_seed_blackberry"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_wheat.tres" id="34_seed_wheat"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_apple.tres" id="35_seed_apple"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_beet.tres" id="36_seed_beet"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_pumpkin.tres" id="37_seed_pumpkin"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_grape.tres" id="38_seed_grape"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_corn.tres" id="39_seed_corn"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_eggplant.tres" id="40_seed_eggplant"]
+[ext_resource type="Resource" path="res://resources/item_data/seed_zucchini.tres" id="41_seed_zucchini"]
+[ext_resource type="Resource" path="res://resources/item_data/backpack_medium.tres" id="42_bag_m"]
+[ext_resource type="Resource" path="res://resources/item_data/backpack_large.tres" id="43_bag_l"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tv5lx"]
+atlas = ExtResource("1_q5123")
+region = Rect2(1, 7, 61, 57)
+
+[resource]
+script = ExtResource("1_shop")
+shop_id = "general_store"
+portrait = SubResource("AtlasTexture_tv5lx")
+greeting = "Selamat datang! Mau cari benih apa hari ini?"
+stock = Array[ExtResource("2_item")]([ExtResource("3_seed_cherry"), ExtResource("4_seed_apricot"), ExtResource("5_seed_strawberry"), ExtResource("6_seed_leek"), ExtResource("7_seed_potato"), ExtResource("8_seed_onion"), ExtResource("9_seed_carrot"), ExtResource("10_seed_blueberry"), ExtResource("11_seed_parsnip"), ExtResource("12_seed_cabbage"), ExtResource("13_seed_cauliflower"), ExtResource("14_seed_rice"), ExtResource("15_seed_broccoli"), ExtResource("16_seed_rhubarb"), ExtResource("17_seed_banana"), ExtResource("18_seed_orange"), ExtResource("19_seed_mango"), ExtResource("20_seed_peach"), ExtResource("21_seed_tomato"), ExtResource("22_seed_sunflower"), ExtResource("23_seed_chili"), ExtResource("24_seed_green_apple"), ExtResource("25_seed_red_pepper"), ExtResource("26_seed_yellow_pepper"), ExtResource("27_seed_melon"), ExtResource("28_seed_watermelon"), ExtResource("29_seed_cucumber"), ExtResource("30_seed_pineapple"), ExtResource("31_seed_pea"), ExtResource("32_seed_garlic"), ExtResource("33_seed_blackberry"), ExtResource("34_seed_wheat"), ExtResource("35_seed_apple"), ExtResource("36_seed_beet"), ExtResource("37_seed_pumpkin"), ExtResource("38_seed_grape"), ExtResource("39_seed_corn"), ExtResource("40_seed_eggplant"), ExtResource("41_seed_zucchini"), ExtResource("42_bag_m"), ExtResource("43_bag_l")])

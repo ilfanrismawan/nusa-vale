@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://t5ck5euu817u"]
+
+[ext_resource type="Texture2D" path="res://resources/icons/icon_fish_dynamite_fish.tres" id="1_icon"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="2_tdpvs"]
+
+[resource]
+script = ExtResource("2_tdpvs")
+category = 5
+item_id = "fish_dynamite_fish"
+display_name = "Ikan Dinamit"
+icon = ExtResource("1_icon")
+sell_price = 160
+rarity = 2

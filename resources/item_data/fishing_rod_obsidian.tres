@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1_id"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_fishing_rod_obsidian.tres" id="2_icon"]
+[ext_resource type="Resource" path="res://resources/action_data/fishing_rod_obsidian.tres" id="3_action"]
+
+[resource]
+script = ExtResource("1_id")
+category = 3
+item_id = "fishing_rod_obsidian"
+display_name = "Pancing Obsidian"
+icon = ExtResource("2_icon")
+description = "Ikan legendaris x2 dan semua bonus maksimal. Jangkauan 8 tile. Termasuk semua kemampuan tier sebelumnya."
+stackable = false
+max_stack = 1
+action_data = ExtResource("3_action")

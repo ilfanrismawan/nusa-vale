@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="FishData" format=3 uid="uid://gft2b7mga5av"]
+
+[ext_resource type="Resource" uid="uid://cpwmobqf1xnoj" path="res://resources/item_data/fish_halibut.tres" id="1_dsb2r"]
+[ext_resource type="Script" uid="uid://chacbmvpw52cc" path="res://scripts/data/fish_data.gd" id="2_snkqu"]
+
+[resource]
+script = ExtResource("2_snkqu")
+item = ExtResource("1_dsb2r")
+locations = PackedStringArray("beach_sea")

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="FishData" format=3 uid="uid://ct470ejygrvay"]
+
+[ext_resource type="Resource" uid="uid://dnxqgi2ua7nky" path="res://resources/item_data/fish_clownfish.tres" id="1_qb8ru"]
+[ext_resource type="Script" uid="uid://chacbmvpw52cc" path="res://scripts/data/fish_data.gd" id="2_ktavb"]
+
+[resource]
+script = ExtResource("2_ktavb")
+item = ExtResource("1_qb8ru")
+locations = PackedStringArray("beach_sea")
+min_hour = 6
+max_hour = 18

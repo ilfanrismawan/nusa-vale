@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="FishData" format=3 uid="uid://wknqxbplcfgv"]
+
+[ext_resource type="Script" uid="uid://chacbmvpw52cc" path="res://scripts/data/fish_data.gd" id="1_j678w"]
+[ext_resource type="Resource" uid="uid://bmiul435r3qnq" path="res://resources/item_data/fish_lele.tres" id="1_o1ukm"]
+
+[resource]
+script = ExtResource("1_j678w")
+item = ExtResource("1_o1ukm")
+locations = ["farm_pond"]
+min_hour = 18
+max_hour = 6
+difficulty = 0.45
+weight = 4.0
+metadata/_custom_type_script = "uid://chacbmvpw52cc"

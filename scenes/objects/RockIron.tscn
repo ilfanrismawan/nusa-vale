@@ -1,0 +1,73 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://8410el0dtaeb" path="res://scripts/world/choppable.gd" id="1_7c88i"]
+[ext_resource type="Texture2D" uid="uid://btif0yj7mr4gj" path="res://assets/farm_rpg/objects/mine/stone with minerals2.png" id="2_7c88i"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6jkjv"]
+atlas = ExtResource("2_7c88i")
+region = Rect2(0, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xnkle"]
+atlas = ExtResource("2_7c88i")
+region = Rect2(32, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7c88i"]
+atlas = ExtResource("2_7c88i")
+region = Rect2(0, 0, 32, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1nmxg"]
+atlas = ExtResource("2_7c88i")
+region = Rect2(32, 0, 32, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ovsut"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6jkjv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xnkle")
+}],
+"loop": 0,
+"name": &"chopping",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7c88i")
+}],
+"loop": 0,
+"name": &"idle",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1nmxg")
+}],
+"loop": 0,
+"name": &"stump",
+"speed": 8.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xnkle"]
+radius = 10.0
+
+[node name="RockIron" type="StaticBody2D"]
+y_sort_enabled = true
+script = ExtResource("1_7c88i")
+health = 4
+drop_item_id = "iron_ore"
+drop_count = 4
+object_group = &"mineable"
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+modulate = Color(0.82, 0.92, 1, 1)
+sprite_frames = SubResource("SpriteFrames_ovsut")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(0.8, 0.8)
+shape = SubResource("CircleShape2D_xnkle")
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="FishData" format=3 uid="uid://crq72cwv7nunf"]
+
+[ext_resource type="Resource" uid="uid://bv866jb7esh7y" path="res://resources/item_data/fish_perch.tres" id="1_w3bn5"]
+[ext_resource type="Script" uid="uid://chacbmvpw52cc" path="res://scripts/data/fish_data.gd" id="2_ccp0e"]
+
+[resource]
+script = ExtResource("2_ccp0e")
+item = ExtResource("1_w3bn5")
+locations = PackedStringArray("farm_pond", "farm_river", "forest_river")

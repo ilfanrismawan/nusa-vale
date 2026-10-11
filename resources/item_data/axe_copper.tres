@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://b8fvl0klg5kjh"]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1_a2ypi"]
+[ext_resource type="Texture2D" uid="uid://c7f1fl8ga28uw" path="res://assets/farm_rpg/icons/Weapons and Armor/2. Cooper/Axe.png" id="1_mie0r"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vpbfi"]
+atlas = ExtResource("1_mie0r")
+region = Rect2(0, 0, 16, 16)
+
+[resource]
+script = ExtResource("1_a2ypi")
+category = 3
+item_id = "axe_copper"
+display_name = "Copper Axe"
+icon = SubResource("AtlasTexture_vpbfi")
+stackable = false
+max_stack = 1
+metadata/_custom_type_script = "uid://cm1okc20ussp3"

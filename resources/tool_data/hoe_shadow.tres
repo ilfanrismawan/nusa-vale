@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ToolData" format=3]
+
+[ext_resource type="Script" uid="uid://ce87yxxpq5y37" path="res://scripts/data/tool_data.gd" id="1_td"]
+
+[resource]
+script = ExtResource("1_td")
+tool_id = "hoe_shadow"
+display_name = "Cangkul Shadow"
+tool_type = 1
+tier = 7
+damage = 8
+stamina_cost = 3
+action_speed = 2
+upgrade_cost_money = 9000
+required_items = {
+"shadow_bar": 5
+}
+metadata/_custom_type_script = "uid://ce87yxxpq5y37"

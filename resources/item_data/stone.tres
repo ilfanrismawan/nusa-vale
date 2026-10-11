@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://mtucqilct43f"]
+
+[ext_resource type="Texture2D" uid="uid://c6qejnmrms4qu" path="res://resources/icons/icon_stone.tres" id="1_agaqo"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="2_w6pja"]
+
+[resource]
+script = ExtResource("2_w6pja")
+item_id = "stone"
+display_name = "Stone"
+icon = ExtResource("1_agaqo")
+sell_price = 3
+rarity = 1
+metadata/_custom_type_script = "uid://cm1okc20ussp3"

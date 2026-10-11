@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://bwoebwa1olmhq"]
+
+[ext_resource type="Texture2D" uid="uid://dnuda24td53re" path="res://resources/icons/icon_seed_carrot.tres" id="1_icon"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="2_script"]
+[ext_resource type="Resource" uid="uid://bcahk3biygjoa" path="res://resources/action_data/seed_carrot.tres" id="3_action"]
+
+[resource]
+script = ExtResource("2_script")
+category = 1
+item_id = "seed_carrot"
+display_name = "Benih Wortel"
+icon = ExtResource("1_icon")
+description = "Benih untuk menanam tanaman Wortel di musim semi."
+action_data = ExtResource("3_action")
+season = "spring"
+buy_price = 25
+sell_price = 12
+metadata/_custom_type_script = "uid://cm1okc20ussp3"

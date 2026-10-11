@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ActionFeedback" format=3 uid="uid://lxj2u6fqc3ph"]
+
+[ext_resource type="Script" uid="uid://bkypsghuif7rw" path="res://scripts/data/action_feedback.gd" id="1_fb"]
+[ext_resource type="AudioStream" uid="uid://cfrihy02bcqbe" path="res://assets/audio/sfx/splash_small.wav" id="2_sfx"]
+
+[resource]
+script = ExtResource("1_fb")
+sound = ExtResource("2_sfx")
+volume_db = -3.0
+particle_count = 4
+particle_color = Color(0.55, 0.8, 0.95, 1)
+particle_color_alt = Color(0.88, 0.96, 1, 1)
+particle_speed = 25.0
+particle_gravity = 140.0
+particle_spread = 50.0
+particle_size = 1
+ripple = true

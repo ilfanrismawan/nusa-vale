@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Texture2D" path="res://resources/icons/icon_holly.tres" id="1_icon"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="2_script"]
+
+[resource]
+script = ExtResource("2_script")
+category = 6
+item_id = "holly"
+display_name = "Holly"
+icon = ExtResource("1_icon")
+description = "Daun holly berduri dengan buah merah. Jangan dimakan!"
+sell_price = 40
+rarity = 0
+season = "winter"
+metadata/_custom_type_script = "uid://cm1okc20ussp3"

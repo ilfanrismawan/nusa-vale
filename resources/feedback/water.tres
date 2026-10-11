@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ActionFeedback" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/action_feedback.gd" id="1_fb"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/water.wav" id="2_sfx"]
+
+[resource]
+script = ExtResource("1_fb")
+sound = ExtResource("2_sfx")
+volume_db = -4.0
+particle_count = 8
+particle_color = Color(0.55, 0.8, 0.95, 1)
+particle_color_alt = Color(0.88, 0.96, 1, 1)
+particle_speed = 30.0
+particle_gravity = 120.0
+particle_lifetime = 0.5
+particle_spread = 70.0

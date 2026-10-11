@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://dm2bgvhs3mxq8"]
+
+[ext_resource type="Texture2D" path="res://resources/icons/icon_fish_herring.tres" id="1_icon"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="2_2d15y"]
+
+[resource]
+script = ExtResource("2_2d15y")
+category = 5
+item_id = "fish_herring"
+display_name = "Haring"
+icon = ExtResource("1_icon")
+sell_price = 25

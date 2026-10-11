@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://cgbway4egoo5b"]
+
+[ext_resource type="Texture2D" path="res://resources/icons/icon_fish_nautilus.tres" id="1_icon"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="2_fjhyg"]
+
+[resource]
+script = ExtResource("2_fjhyg")
+category = 5
+item_id = "fish_nautilus"
+display_name = "Nautilus"
+icon = ExtResource("1_icon")
+sell_price = 400
+rarity = 3

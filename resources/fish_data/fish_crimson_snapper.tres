@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="FishData" format=3 uid="uid://b8txlhikwd85y"]
+
+[ext_resource type="Resource" uid="uid://bqk3ailfk6cpr" path="res://resources/item_data/fish_crimson_snapper.tres" id="1_k6uwv"]
+[ext_resource type="Script" uid="uid://chacbmvpw52cc" path="res://scripts/data/fish_data.gd" id="2_8ldtc"]
+
+[resource]
+script = ExtResource("2_8ldtc")
+item = ExtResource("1_k6uwv")
+locations = PackedStringArray("beach_sea")

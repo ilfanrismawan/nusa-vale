@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="FishData" format=3 uid="uid://tihkdbvkisbn"]
+
+[ext_resource type="Resource" uid="uid://ouknnmkwdy4m" path="res://resources/item_data/fish_dolphin.tres" id="1_5ifj5"]
+[ext_resource type="Script" uid="uid://chacbmvpw52cc" path="res://scripts/data/fish_data.gd" id="2_joos8"]
+
+[resource]
+script = ExtResource("2_joos8")
+item = ExtResource("1_5ifj5")
+locations = PackedStringArray("beach_sea")
+min_hour = 6
+max_hour = 18

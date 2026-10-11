@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://t65ht21tuaf7"]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1_lvgki"]
+[ext_resource type="Resource" uid="uid://yagb52lugfke" path="res://resources/action_data/pickaxe.tres" id="1_s57rs"]
+[ext_resource type="Texture2D" uid="uid://dmyoclu6cx4d8" path="res://resources/icons/icon_pickaxe.tres" id="2_iqow1"]
+
+[resource]
+script = ExtResource("1_lvgki")
+category = 3
+item_id = "pickaxe"
+display_name = "Pickaxe"
+icon = ExtResource("2_iqow1")
+stackable = false
+max_stack = 1
+action_data = ExtResource("1_s57rs")
+metadata/_custom_type_script = "uid://cm1okc20ussp3"

@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="RodData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/rod_data.gd" id="1_rod"]
+
+[resource]
+script = ExtResource("1_rod")
+tool_id = "fishing_rod_wood"
+display_name = "Pancing Kayu"
+tool_type = 6
+tier = 0
+stamina_cost = 3
+upgrade_cost_money = 0
+min_cast_tiles = 1.0
+max_cast_tiles = 3.0
+charge_time = 1.2
+perfect_window = 0.05
+bite_time_mult = 1.0
+zone_mult = 1.0
+drain_mult = 1.0
+fish_speed_mult = 1.0
+rare_weight_mult = 1.0
+legendary_weight_mult = 1.0
+double_catch_chance = 0.0

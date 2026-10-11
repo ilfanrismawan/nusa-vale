@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://uikrblddw3m2"]
+
+[ext_resource type="Texture2D" path="res://resources/icons/icon_fish_tiger_trout.tres" id="1_icon"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="2_q16up"]
+
+[resource]
+script = ExtResource("2_q16up")
+category = 5
+item_id = "fish_tiger_trout"
+display_name = "Trout Harimau"
+icon = ExtResource("1_icon")
+sell_price = 70
+rarity = 1

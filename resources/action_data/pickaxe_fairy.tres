@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ActionData" format=3]
+
+[ext_resource type="Script" uid="uid://iqqgx8vl32mk" path="res://scripts/effects/damage_effect.gd" id="1_eff"]
+[ext_resource type="Script" uid="uid://babxwm68vuqeh" path="res://scripts/state/action_data.gd" id="2_ad"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_pickaxe_fairy.tres" id="3_icon"]
+[ext_resource type="Resource" path="res://resources/tool_data/pickaxe_fairy.tres" id="4_td"]
+
+[sub_resource type="Resource" id="eff_sub"]
+script = ExtResource("1_eff")
+target_group = &"mineable"
+metadata/_custom_type_script = "uid://iqqgx8vl32mk"
+
+[resource]
+script = ExtResource("2_ad")
+display_name = "Pickaxe Fairy"
+icon = ExtResource("3_icon")
+animation_name = &"pickaxe"
+input_action = &"use_tool"
+hit_frame = 4
+effect = SubResource("eff_sub")
+tool_data = ExtResource("4_td")
+metadata/_custom_type_script = "uid://babxwm68vuqeh"

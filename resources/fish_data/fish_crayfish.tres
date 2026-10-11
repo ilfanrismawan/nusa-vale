@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="FishData" format=3 uid="uid://b6fww3b0eo7vx"]
+
+[ext_resource type="Resource" uid="uid://cyj0yjs7inela" path="res://resources/item_data/fish_crayfish.tres" id="1_85dsa"]
+[ext_resource type="Script" uid="uid://chacbmvpw52cc" path="res://scripts/data/fish_data.gd" id="2_ks4q7"]
+
+[resource]
+script = ExtResource("2_ks4q7")
+item = ExtResource("1_85dsa")
+locations = PackedStringArray("farm_pond", "farm_river", "forest_river")

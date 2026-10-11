@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1_id"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_fishing_rod_fairy.tres" id="2_icon"]
+[ext_resource type="Resource" path="res://resources/action_data/fishing_rod_fairy.tres" id="3_action"]
+
+[resource]
+script = ExtResource("1_id")
+category = 3
+item_id = "fishing_rod_fairy"
+display_name = "Pancing Fairy"
+icon = ExtResource("2_icon")
+description = "Jendela lemparan Sempurna lebih lebar. Jangkauan 7 tile. Termasuk semua kemampuan tier sebelumnya."
+stackable = false
+max_stack = 1
+action_data = ExtResource("3_action")

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://br5xkoivqw6h6"]
+
+[ext_resource type="Texture2D" path="res://resources/icons/icon_fish_sea_bullhead.tres" id="1_icon"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="2_mfhh4"]
+
+[resource]
+script = ExtResource("2_mfhh4")
+category = 5
+item_id = "fish_sea_bullhead"
+display_name = "Bullhead Laut"
+icon = ExtResource("1_icon")
+sell_price = 25

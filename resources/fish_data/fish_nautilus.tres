@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="FishData" format=3 uid="uid://d4apxiecmdsq5"]
+
+[ext_resource type="Resource" uid="uid://cgbway4egoo5b" path="res://resources/item_data/fish_nautilus.tres" id="1_rmyig"]
+[ext_resource type="Script" uid="uid://chacbmvpw52cc" path="res://scripts/data/fish_data.gd" id="2_5pw7c"]
+
+[resource]
+script = ExtResource("2_5pw7c")
+item = ExtResource("1_rmyig")
+locations = PackedStringArray("beach_sea")

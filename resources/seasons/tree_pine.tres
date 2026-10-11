@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="SeasonalTextureSet" format=3]
+
+[ext_resource type="Script" uid="uid://meiuymlm20wt" path="res://scripts/resources/seasonal_texture_set.gd" id="1_set"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/tree/Pine Tree Animation.png" id="2_tex"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/tree/seasonal/Pine Tree Animation Winter.png" id="3_tex"]
+
+[resource]
+script = ExtResource("1_set")
+spring = ExtResource("2_tex")
+winter = ExtResource("3_tex")
+metadata/_custom_type_script = "uid://meiuymlm20wt"

@@ -1,0 +1,419 @@
+[gd_resource type="Resource" script_class="CharacterCatalog" format=3 uid="uid://diidtanyjyp25"]
+
+[ext_resource type="Script" uid="uid://d4ip6ty24jree" path="res://scripts/data/character_catalog.gd" id="1_catalog"]
+[ext_resource type="Script" uid="uid://6uoc46fpa51i" path="res://scripts/data/character_part.gd" id="2_part"]
+[ext_resource type="Script" uid="uid://u7fb45qsndjw" path="res://scripts/data/character_sheet.gd" id="3_sheet"]
+
+[sub_resource type="Resource" id="part_skin_1"]
+script = ExtResource("2_part")
+id = "skin_1"
+display_name = "Skin 1"
+asset = "Skins/1.png"
+
+[sub_resource type="Resource" id="part_skin_2"]
+script = ExtResource("2_part")
+id = "skin_2"
+display_name = "Skin 2"
+asset = "Skins/2.png"
+
+[sub_resource type="Resource" id="part_skin_3"]
+script = ExtResource("2_part")
+id = "skin_3"
+display_name = "Skin 3"
+asset = "Skins/3.png"
+
+[sub_resource type="Resource" id="part_skin_4"]
+script = ExtResource("2_part")
+id = "skin_4"
+display_name = "Skin 4"
+asset = "Skins/4.png"
+
+[sub_resource type="Resource" id="part_eyes_male"]
+script = ExtResource("2_part")
+id = "eyes_male"
+display_name = "Male"
+layer = 1
+asset = "Eyes/Male/{color}.png"
+colors = PackedStringArray("black", "blue", "brown", "green")
+
+[sub_resource type="Resource" id="part_eyes_female"]
+script = ExtResource("2_part")
+id = "eyes_female"
+display_name = "Female"
+layer = 1
+asset = "Eyes/Female/{color}.png"
+colors = PackedStringArray("black", "blue", "brown", "green")
+
+[sub_resource type="Resource" id="part_hair_standard"]
+script = ExtResource("2_part")
+id = "hair_standard"
+display_name = "Standard"
+layer = 3
+asset = "Hair's/Standard/{color}.png"
+colors = PackedStringArray("black", "blonde", "brown", "ginger")
+
+[sub_resource type="Resource" id="part_hair_josh"]
+script = ExtResource("2_part")
+id = "hair_josh"
+display_name = "Josh"
+layer = 3
+asset = "Hair's/Josh/{color}.png"
+colors = PackedStringArray("black", "blonde", "brown", "ginger")
+
+[sub_resource type="Resource" id="part_hair_korean_curtain"]
+script = ExtResource("2_part")
+id = "hair_korean_curtain"
+display_name = "Korean Curtain"
+layer = 3
+asset = "Hair's/Josh/{color}.png"
+colors = PackedStringArray("black", "blonde", "brown", "ginger")
+hair_style = "korean_curtain"
+design_source = "res://assets/custom_hair/korean_curtain.png"
+
+[sub_resource type="Resource" id="part_hair_sebastian"]
+script = ExtResource("2_part")
+id = "hair_sebastian"
+display_name = "Sebastian"
+layer = 3
+asset = "Hair's/Sebastian/{color}.png"
+colors = PackedStringArray("black", "blonde", "brown", "ginger")
+
+[sub_resource type="Resource" id="part_hair_fawn"]
+script = ExtResource("2_part")
+id = "hair_fawn"
+display_name = "Fawn"
+layer = 3
+asset = "Hair's/Fawn/{color}.png"
+colors = PackedStringArray("black", "blonde", "brown", "ginger")
+
+[sub_resource type="Resource" id="part_hair_iridessa"]
+script = ExtResource("2_part")
+id = "hair_iridessa"
+display_name = "Iridessa"
+layer = 3
+asset = "Hair's/Iridessa/{color}.png"
+colors = PackedStringArray("black", "blonde", "brown", "ginger")
+
+[sub_resource type="Resource" id="part_hair_lyria"]
+script = ExtResource("2_part")
+id = "hair_lyria"
+display_name = "Lyria"
+layer = 3
+asset = "Hair's/Lyria/{color}.png"
+colors = PackedStringArray("black", "blonde", "brown", "ginger")
+
+[sub_resource type="Resource" id="part_hair_silvermist"]
+script = ExtResource("2_part")
+id = "hair_silvermist"
+display_name = "Silvermist"
+layer = 3
+asset = "Hair's/Silvermist/{color}.png"
+colors = PackedStringArray("black", "blonde", "brown", "ginger")
+
+[sub_resource type="Resource" id="part_outfit_farm"]
+script = ExtResource("2_part")
+id = "outfit_farm"
+display_name = "Farm Clothes"
+layer = 2
+asset = "Clothers/Farm/{color}.png"
+colors = PackedStringArray("blue", "green", "pink", "purple", "red")
+
+[sub_resource type="Resource" id="part_outfit_cardigan"]
+script = ExtResource("2_part")
+id = "outfit_cardigan"
+display_name = "Cardigan"
+layer = 2
+asset = "Clothers/Cardigan/{color}.png"
+colors = PackedStringArray("blue", "pink", "yellow")
+
+[sub_resource type="Resource" id="part_outfit_sweater_vest"]
+script = ExtResource("2_part")
+id = "outfit_sweater_vest"
+display_name = "Sweater Vest"
+layer = 2
+asset = "Clothers/Sweater Vest/{color}.png"
+colors = PackedStringArray("green", "navy", "red")
+
+[sub_resource type="Resource" id="part_outfit_striped_tee"]
+script = ExtResource("2_part")
+id = "outfit_striped_tee"
+display_name = "Striped Tee"
+layer = 2
+asset = "Clothers/Striped Tee/{color}.png"
+colors = PackedStringArray("black", "blue", "red")
+
+[sub_resource type="Resource" id="part_outfit_track_jacket"]
+script = ExtResource("2_part")
+id = "outfit_track_jacket"
+display_name = "Track Jacket"
+layer = 2
+asset = "Clothers/Track Jacket/{color}.png"
+colors = PackedStringArray("black", "navy", "red")
+
+[sub_resource type="Resource" id="part_outfit_ringer_tee"]
+script = ExtResource("2_part")
+id = "outfit_ringer_tee"
+display_name = "Ringer Tee"
+layer = 2
+asset = "Clothers/Ringer Tee/{color}.png"
+colors = PackedStringArray("black", "navy", "red")
+
+[sub_resource type="Resource" id="part_outfit_zip_track_top"]
+script = ExtResource("2_part")
+id = "outfit_zip_track_top"
+display_name = "Zip Track Top"
+layer = 2
+asset = "Clothers/Zip Track Top/{color}.png"
+colors = PackedStringArray("black", "navy", "red")
+
+[sub_resource type="Resource" id="part_face_beard"]
+script = ExtResource("2_part")
+id = "face_beard"
+display_name = "Beard"
+layer = 4
+asset = "Acc/Beard/{hair_color}.png"
+
+[sub_resource type="Resource" id="part_face_eye_patch"]
+script = ExtResource("2_part")
+id = "face_eye_patch"
+display_name = "Eye Patch"
+layer = 4
+asset = "Acc/pirate eye patch.png"
+
+[sub_resource type="Resource" id="part_face_elf_ears"]
+script = ExtResource("2_part")
+id = "face_elf_ears"
+display_name = "Elf Ears"
+layer = 4
+asset = "Acc/Elf/{skin}.png"
+
+[sub_resource type="Resource" id="part_head_farm"]
+script = ExtResource("2_part")
+id = "head_farm"
+display_name = "Farm Hat"
+layer = 5
+asset = "Acc/Farm.png"
+
+[sub_resource type="Resource" id="part_head_beret"]
+script = ExtResource("2_part")
+id = "head_beret"
+display_name = "Beret"
+layer = 5
+asset = "Acc/Beret.png"
+
+[sub_resource type="Resource" id="part_head_cook"]
+script = ExtResource("2_part")
+id = "head_cook"
+display_name = "Chef Hat"
+layer = 5
+asset = "Acc/Cook.png"
+
+[sub_resource type="Resource" id="part_head_pirate"]
+script = ExtResource("2_part")
+id = "head_pirate"
+display_name = "Pirate Hat"
+layer = 5
+asset = "Acc/Pirate.png"
+
+[sub_resource type="Resource" id="part_head_wizard"]
+script = ExtResource("2_part")
+id = "head_wizard"
+display_name = "Wizard Hat"
+layer = 5
+asset = "Acc/Wizard.png"
+
+[sub_resource type="Resource" id="part_head_santa_hat"]
+script = ExtResource("2_part")
+id = "head_santa_hat"
+display_name = "Santa Hat"
+layer = 5
+asset = "Acc/Santa Hat.png"
+
+[sub_resource type="Resource" id="part_head_leprechaun"]
+script = ExtResource("2_part")
+id = "head_leprechaun"
+display_name = "Leprechaun Hat"
+layer = 5
+asset = "Acc/Leprechaun.png"
+
+[sub_resource type="Resource" id="part_head_chicken"]
+script = ExtResource("2_part")
+id = "head_chicken"
+display_name = "Chicken Hat"
+layer = 5
+asset = "Acc/Chicken.png"
+
+[sub_resource type="Resource" id="part_head_cow"]
+script = ExtResource("2_part")
+id = "head_cow"
+display_name = "Cow Hat"
+layer = 5
+asset = "Acc/Cow.png"
+
+[sub_resource type="Resource" id="part_head_deer"]
+script = ExtResource("2_part")
+id = "head_deer"
+display_name = "Deer Antlers"
+layer = 5
+asset = "Acc/Deer.png"
+
+[sub_resource type="Resource" id="part_head_frog"]
+script = ExtResource("2_part")
+id = "head_frog"
+display_name = "Frog Hat"
+layer = 5
+asset = "Acc/Frog.png"
+
+[sub_resource type="Resource" id="part_head_butterfly"]
+script = ExtResource("2_part")
+id = "head_butterfly"
+display_name = "Butterfly Clip"
+layer = 5
+asset = "Acc/Butterfly/{color}.png"
+colors = PackedStringArray("blue", "green", "pink", "purple", "red")
+
+[sub_resource type="Resource" id="part_custom_shirt"]
+script = ExtResource("2_part")
+id = "outfit_sports_shirt"
+display_name = "Kaus Garis Lengan"
+layer = 2
+asset = "Clothers/Striped Tee/Black.png"
+clothing_style = "striped_shirt"
+design_source = "res://assets/custom_clothes/striped_shirt.png"
+
+[sub_resource type="Resource" id="part_custom_tracktop"]
+script = ExtResource("2_part")
+id = "outfit_sports_tracktop"
+display_name = "Tracktop Garis"
+layer = 2
+asset = "Clothers/Track Jacket/Black.png"
+clothing_style = "striped_tracktop"
+design_source = "res://assets/custom_clothes/striped_tracktop.png"
+
+[sub_resource type="Resource" id="part_baggy_jeans"]
+script = ExtResource("2_part")
+id = "pants_baggy_jeans"
+display_name = "Baggy Jeans"
+layer = 6
+design_source = "res://assets/custom_clothes/baggy_jeans.png"
+
+[sub_resource type="Resource" id="sheet_0"]
+script = ExtResource("3_sheet")
+source_sheet = "res://assets/farm_rpg/Character/Pre-made/Josh/Idle.png"
+part_folder = "res://assets/farm_rpg/Character/PNG/1. Idle"
+
+[sub_resource type="Resource" id="sheet_1"]
+script = ExtResource("3_sheet")
+source_sheet = "res://assets/farm_rpg/Character/Pre-made/Josh/Walk.png"
+part_folder = "res://assets/farm_rpg/Character/PNG/2. Walk"
+
+[sub_resource type="Resource" id="sheet_2"]
+script = ExtResource("3_sheet")
+source_sheet = "res://assets/farm_rpg/Character/Pre-made/Josh/Run.png"
+part_folder = "res://assets/farm_rpg/Character/PNG/3. Run"
+
+[sub_resource type="Resource" id="sheet_3"]
+script = ExtResource("3_sheet")
+source_sheet = "res://assets/farm_rpg/Character/Pre-made/Josh/Hoe.png"
+part_folder = "res://assets/farm_rpg/Character/PNG/4. Pickaxe, Hoe and Catching insects"
+tool_type = 1
+tool_asset = "Weapons/Hoe/{tier}.png"
+
+[sub_resource type="Resource" id="sheet_4"]
+script = ExtResource("3_sheet")
+source_sheet = "res://assets/farm_rpg/Character/Pre-made/Josh/Pickaxe.png"
+part_folder = "res://assets/farm_rpg/Character/PNG/4. Pickaxe, Hoe and Catching insects"
+tool_type = 2
+tool_asset = "Weapons/Pickaxe/{tier}.png"
+
+[sub_resource type="Resource" id="sheet_5"]
+script = ExtResource("3_sheet")
+source_sheet = "res://assets/farm_rpg/Character/Pre-made/Josh/Axe.png"
+part_folder = "res://assets/farm_rpg/Character/PNG/5. Axe and Sickle"
+tool_type = 0
+tool_asset = "Weapons/Axe/{tier}.png"
+
+[sub_resource type="Resource" id="sheet_6"]
+script = ExtResource("3_sheet")
+source_sheet = "res://assets/farm_rpg/Character/Pre-made/Josh/Sickle.png"
+part_folder = "res://assets/farm_rpg/Character/PNG/5. Axe and Sickle"
+tool_type = 5
+tool_asset = "Weapons/Sickle/{tier}.png"
+
+[sub_resource type="Resource" id="sheet_7"]
+script = ExtResource("3_sheet")
+source_sheet = "res://assets/farm_rpg/Character/Pre-made/Josh/Shovel.png"
+part_folder = "res://assets/farm_rpg/Character/PNG/6. Shovel"
+tool_type = 3
+tool_asset = "Weapons/Shovel/{tier}.png"
+
+[sub_resource type="Resource" id="sheet_8"]
+script = ExtResource("3_sheet")
+source_sheet = "res://assets/farm_rpg/Character/Pre-made/Josh/Watering.png"
+part_folder = "res://assets/farm_rpg/Character/PNG/7. Watering"
+tool_type = 4
+tool_asset = "Weapons/Watering/{tier}.png"
+
+[sub_resource type="Resource" id="sheet_9"]
+script = ExtResource("3_sheet")
+source_sheet = "res://assets/farm_rpg/Character/Pre-made/Josh/Throwing items.png"
+part_folder = "res://assets/farm_rpg/Character/PNG/13.4 Carrying - Throwing items"
+
+[sub_resource type="Resource" id="sheet_10"]
+script = ExtResource("3_sheet")
+source_sheet = "res://assets/farm_rpg/Character/Pre-made/Josh/Sleep.png"
+part_folder = "res://assets/farm_rpg/Character/PNG/19. Sleep"
+directions = 1
+
+[sub_resource type="Resource" id="sheet_11"]
+script = ExtResource("3_sheet")
+source_sheet = "res://assets/farm_rpg/Character/Pre-made/Josh/Fishing/Casting.png"
+part_folder = "res://assets/farm_rpg/Character/PNG/12. Fishing - Cast"
+frame_size = 64
+tool_type = 6
+tool_asset = "Weapons/{tier}.png"
+
+[sub_resource type="Resource" id="sheet_12"]
+script = ExtResource("3_sheet")
+source_sheet = "res://assets/farm_rpg/Character/Pre-made/Josh/Fishing/Wait Idle.png"
+part_folder = "res://assets/farm_rpg/Character/PNG/12.1. Fishing - Wait"
+frame_size = 64
+tool_type = 6
+tool_asset = "Weapons/{tier}.png"
+
+[sub_resource type="Resource" id="sheet_13"]
+script = ExtResource("3_sheet")
+source_sheet = "res://assets/farm_rpg/Character/Pre-made/Josh/Fishing/Hooked.png"
+part_folder = "res://assets/farm_rpg/Character/PNG/12.2. Fishing - Bite"
+frame_size = 64
+tool_type = 6
+tool_asset = "Weapons/{tier}.png"
+
+[sub_resource type="Resource" id="sheet_14"]
+script = ExtResource("3_sheet")
+source_sheet = "res://assets/farm_rpg/Character/Pre-made/Josh/Fishing/Roll.png"
+part_folder = "res://assets/farm_rpg/Character/PNG/12.3. Fishing - Reel"
+frame_size = 64
+tool_type = 6
+tool_asset = "Weapons/{tier}.png"
+
+[sub_resource type="Resource" id="sheet_15"]
+script = ExtResource("3_sheet")
+source_sheet = "res://assets/farm_rpg/Character/Pre-made/Josh/Fishing/Captured Fish.png"
+part_folder = "res://assets/farm_rpg/Character/PNG/12.4. Fishing - Catch"
+frame_size = 64
+tool_type = 6
+tool_asset = "Weapons/{tier}.png"
+
+[sub_resource type="Resource" id="sheet_16"]
+script = ExtResource("3_sheet")
+source_sheet = "res://assets/farm_rpg/Character/Pre-made/Josh/Fishing/Captured No Fish.png"
+part_folder = "res://assets/farm_rpg/Character/PNG/12.4. Fishing - Catch"
+frame_size = 64
+tool_type = 6
+tool_asset = "Weapons/{tier}.png"
+
+[resource]
+script = ExtResource("1_catalog")
+parts = Array[ExtResource("2_part")]([SubResource("part_skin_1"), SubResource("part_skin_2"), SubResource("part_skin_3"), SubResource("part_skin_4"), SubResource("part_eyes_male"), SubResource("part_eyes_female"), SubResource("part_hair_standard"), SubResource("part_hair_josh"), SubResource("part_hair_korean_curtain"), SubResource("part_hair_sebastian"), SubResource("part_hair_fawn"), SubResource("part_hair_iridessa"), SubResource("part_hair_lyria"), SubResource("part_hair_silvermist"), SubResource("part_outfit_farm"), SubResource("part_outfit_cardigan"), SubResource("part_outfit_sweater_vest"), SubResource("part_outfit_striped_tee"), SubResource("part_outfit_track_jacket"), SubResource("part_outfit_ringer_tee"), SubResource("part_outfit_zip_track_top"), SubResource("part_face_beard"), SubResource("part_face_eye_patch"), SubResource("part_face_elf_ears"), SubResource("part_head_farm"), SubResource("part_head_beret"), SubResource("part_head_cook"), SubResource("part_head_pirate"), SubResource("part_head_wizard"), SubResource("part_head_santa_hat"), SubResource("part_head_leprechaun"), SubResource("part_head_chicken"), SubResource("part_head_cow"), SubResource("part_head_deer"), SubResource("part_head_frog"), SubResource("part_head_butterfly"), SubResource("part_custom_shirt"), SubResource("part_custom_tracktop"), SubResource("part_baggy_jeans")])
+sheets = Array[ExtResource("3_sheet")]([SubResource("sheet_0"), SubResource("sheet_1"), SubResource("sheet_2"), SubResource("sheet_3"), SubResource("sheet_4"), SubResource("sheet_5"), SubResource("sheet_6"), SubResource("sheet_7"), SubResource("sheet_8"), SubResource("sheet_9"), SubResource("sheet_10"), SubResource("sheet_11"), SubResource("sheet_12"), SubResource("sheet_13"), SubResource("sheet_14"), SubResource("sheet_15"), SubResource("sheet_16")])

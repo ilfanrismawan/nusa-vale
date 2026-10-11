@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Texture2D" path="res://resources/icons/icon_seed_mango.tres" id="1_icon"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="2_script"]
+[ext_resource type="Resource" path="res://resources/action_data/seed_mango.tres" id="3_action"]
+
+[resource]
+script = ExtResource("2_script")
+category = 1
+item_id = "seed_mango"
+display_name = "Benih Mangga"
+icon = ExtResource("1_icon")
+description = "Benih untuk menanam tanaman Mangga di musim panas."
+stackable = true
+max_stack = 99
+action_data = ExtResource("3_action")
+buy_price = 70
+sell_price = 35
+season = "summer"
+metadata/_custom_type_script = "uid://cm1okc20ussp3"

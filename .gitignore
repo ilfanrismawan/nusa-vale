@@ -1,0 +1,10 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+*.tmp
+.cursor
+
+# Local editor settings and disposable experiments
+/Godot/
+/scratch/
+*.TMP

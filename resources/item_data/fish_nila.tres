@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://b6ru3npt44ati"]
+
+[ext_resource type="Texture2D" uid="uid://5vh4qjvypbi" path="res://resources/icons/icon_tilapia.tres" id="1_jiws6"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="2_gvg6n"]
+
+[resource]
+script = ExtResource("2_gvg6n")
+category = 5
+item_id = "fish_nila"
+display_name = "Ikan Nila"
+icon = ExtResource("1_jiws6")
+description = "Ikan air tawar yang gesit"
+sell_price = 35
+metadata/_custom_type_script = "uid://cm1okc20ussp3"

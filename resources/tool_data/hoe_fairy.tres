@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ToolData" format=3]
+
+[ext_resource type="Script" uid="uid://ce87yxxpq5y37" path="res://scripts/data/tool_data.gd" id="1_td"]
+
+[resource]
+script = ExtResource("1_td")
+tool_id = "hoe_fairy"
+display_name = "Cangkul Fairy"
+tool_type = 1
+tier = 8
+damage = 9
+stamina_cost = 2
+action_speed = 2.15
+upgrade_cost_money = 12000
+required_items = {
+"fairy_bar": 5
+}
+metadata/_custom_type_script = "uid://ce87yxxpq5y37"

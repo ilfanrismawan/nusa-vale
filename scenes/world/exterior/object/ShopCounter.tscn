@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://bm4iun38bhd33"]
+
+[ext_resource type="Script" uid="uid://b14vsibn0fm0q" path="res://scripts/object/shop_counter.gd" id="1_ynn0i"]
+[ext_resource type="Texture2D" uid="uid://bgsc3yl2pss6j" path="res://assets/farm_rpg/objects/exterior/Base houses.png" id="2_tv5lx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ovsut"]
+size = Vector2(89, 28)
+
+[node name="ShopCounter" type="Area2D" unique_id=1975726343]
+script = ExtResource("1_ynn0i")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1512891062]
+position = Vector2(-2.3841858e-07, 0.4999997)
+texture = ExtResource("2_tv5lx")
+region_enabled = true
+region_rect = Rect2(337, 48, 94, 113)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1918241142]
+position = Vector2(0.5, 44)
+shape = SubResource("RectangleShape2D_ovsut")

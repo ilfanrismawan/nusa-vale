@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ActionData" format=3]
+
+[ext_resource type="Script" uid="uid://d1yq110coek5k" path="res://scripts/effects/shovel_effect.gd" id="1_eff"]
+[ext_resource type="Script" uid="uid://babxwm68vuqeh" path="res://scripts/state/action_data.gd" id="2_ad"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_shovel_iron.tres" id="3_icon"]
+[ext_resource type="Resource" path="res://resources/tool_data/shovel_iron.tres" id="4_td"]
+
+[sub_resource type="Resource" id="eff_sub"]
+script = ExtResource("1_eff")
+
+metadata/_custom_type_script = "uid://d1yq110coek5k"
+
+[resource]
+script = ExtResource("2_ad")
+display_name = "Sekop Besi"
+icon = ExtResource("3_icon")
+animation_name = &"Shovel"
+input_action = &"use_tool"
+hit_frame = 3
+effect = SubResource("eff_sub")
+tool_data = ExtResource("4_td")
+metadata/_custom_type_script = "uid://babxwm68vuqeh"

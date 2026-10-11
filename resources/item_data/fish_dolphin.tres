@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://ouknnmkwdy4m"]
+
+[ext_resource type="Texture2D" path="res://resources/icons/icon_fish_dolphin.tres" id="1_icon"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="2_stw1c"]
+
+[resource]
+script = ExtResource("2_stw1c")
+category = 5
+item_id = "fish_dolphin"
+display_name = "Lumba-lumba"
+icon = ExtResource("1_icon")
+sell_price = 1000
+rarity = 4

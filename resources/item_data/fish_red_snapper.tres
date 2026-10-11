@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://m06gil11ahgu"]
+
+[ext_resource type="Texture2D" path="res://resources/icons/icon_fish_red_snapper.tres" id="1_icon"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="2_lo6vg"]
+
+[resource]
+script = ExtResource("2_lo6vg")
+category = 5
+item_id = "fish_red_snapper"
+display_name = "Kakap Merah"
+icon = ExtResource("1_icon")
+sell_price = 70
+rarity = 1
