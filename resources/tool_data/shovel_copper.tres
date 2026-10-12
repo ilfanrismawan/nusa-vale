@@ -4,13 +4,19 @@
 
 [resource]
 script = ExtResource("1_td")
+dig_bonus_chance = 0.05
+water_capacity = 0
+reach_tiles = 1.6
+area_depth = 2
+area_width = 1
+area_size = 2
 tool_id = "shovel_copper"
 display_name = "Sekop Tembaga"
 tool_type = 3
 tier = 1
 damage = 2
-stamina_cost = 6
-action_speed = 1.15
+stamina_cost = 4
+action_speed = 1.1
 upgrade_cost_money = 500
 required_items = {
 "copper_bar": 5,

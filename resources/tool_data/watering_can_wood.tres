@@ -4,12 +4,18 @@
 
 [resource]
 script = ExtResource("1_td")
+dig_bonus_chance = 0
+water_capacity = 20
+reach_tiles = 1.5
+area_depth = 1
+area_width = 1
+area_size = 1
 tool_id = "watering_can_wood"
 display_name = "Kaleng Air Kayu"
 tool_type = 4
 tier = 0
 damage = 1
-stamina_cost = 6
+stamina_cost = 2
 action_speed = 1
 upgrade_cost_money = 0
 

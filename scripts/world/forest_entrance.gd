@@ -13,7 +13,7 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 	if not (body is Player or body.is_in_group("player")):
 		return
-	if not WorldState.has_flag(BRIDGE_FLAG):
+	if not UnlockManager.is_unlocked("forest"):
 		return
 	
 	if DiscoveryManager.discover("forest"):

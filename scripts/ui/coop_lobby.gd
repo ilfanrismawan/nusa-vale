@@ -115,7 +115,8 @@ func _refresh() -> void:
 			label.text = "P%d  tekan A / Start di gamepad untuk ikut" % (i + 1)
 			label.add_theme_color_override("font_color", COLOR_DIM)
 
-	var save_text := "Melanjutkan save yang ada." if SaveManager.has_save() else "Belum ada save: mulai game baru."
+	var slot := SaveManager.current_slot
+	var save_text := ("Slot %d: melanjutkan save." % slot) if SaveManager.has_save() else ("Slot %d kosong: mulai game baru." % slot)
 	var hint := "%s\nB di gamepad = keluar dari lobby." % save_text
 	if OS.is_debug_build():
 		hint += "\nUji tanpa gamepad: F2 tambah pemain numpad (8456 jalan, 0 alat, 1 interaksi)."

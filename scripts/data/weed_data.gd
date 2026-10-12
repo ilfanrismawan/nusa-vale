@@ -12,6 +12,9 @@ extends Resource
 @export var regions_winter: Array[Rect2] = []
 ## Area tempat rumput ini tumbuh (location_id spawner).
 @export var locations: PackedStringArray = ["farm", "forest"]
+## Musim rumput ini tumbuh ("spring", "summer", "fall", "winter"). Kosong = semua musim.
+## Saat musimnya habis, rumput jenis ini layu dan hilang.
+@export var seasons: PackedStringArray = []
 @export_range(0.0, 10.0, 0.05) var weight: float = 1.0
 @export_category("Drop")
 @export var drop_item: ItemData
@@ -29,3 +32,11 @@ func regions_for(season: String) -> Array[Rect2]:
 		"winter":
 			list = regions_winter
 	return list if not list.is_empty() else regions_spring
+
+
+func is_in_season(season: String) -> bool:
+	if seasons.is_empty():
+		return true
+	if season == "autumn":
+		season = "fall"
+	return seasons.has(season)

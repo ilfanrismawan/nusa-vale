@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_bow_gold.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+category = 7
+item_id = "bow_gold"
+display_name = "Busur Emas"
+icon = ExtResource("2")
+description = "Busur Emas. Menyerang dari jauh, butuh anak panah."
+stackable = false
+max_stack = 1
+equipment_slot = 1
+attack_bonus = 13
+weapon_type = 2
+equipment_tier = 3
+buy_price = 1800
+sell_price = 720
+rarity = 1

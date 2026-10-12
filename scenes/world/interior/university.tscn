@@ -2296,8 +2296,8 @@ shape = SubResource("Rect_08")
 [node name="ProfAdrian" type="StaticBody2D" parent="Furniture"]
 position = Vector2(524, 190)
 script = ExtResource("8_un")
-npc_name = "Prof. Adrian"
-lines = PackedStringArray("Kalau kamu tertarik dengan penelitian hutan, aku punya beberapa dokumen menarik di perpustakaan.", "Rasa ingin tahu adalah langkah pertama untuk mengubah dunia.", "Hutan di seberang jembatan menyimpan banyak hal yang belum kita pahami.")
+npc_name = "Prof. Baskoro"
+lines = PackedStringArray("Kalau kamu tertarik dengan penelitian hutan, aku punya beberapa dokumen menarik di perpustakaan.", "Rasa ingin tahu adalah langkah pertama untuk memajukan peradaban pulau ini.", "Hutan di seberang jembatan menyimpan keanekaragaman flora dan fauna yang belum kita teliti.")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Furniture/ProfAdrian"]
 sprite_frames = SubResource("SpriteFrames_adrian")

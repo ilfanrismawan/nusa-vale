@@ -1,6 +1,6 @@
-[gd_resource type="AtlasTexture" format=3]
+[gd_resource type="AtlasTexture" format=3 uid="uid://birkrsryiufsg"]
 
-[ext_resource type="Texture2D" path="res://assets/farm_rpg/icons/tools/wood/Sword.png" id="1_sword"]
+[ext_resource type="Texture2D" uid="uid://d0jle0x084bmw" path="res://assets/farm_rpg/icons/tools/wood/Sword.png" id="1_sword"]
 
 [resource]
 atlas = ExtResource("1_sword")

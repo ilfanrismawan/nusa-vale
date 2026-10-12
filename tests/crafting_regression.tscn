@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cesifnkcuwxbp"]
+
+[ext_resource type="Script" uid="uid://bdk1oof13hwkl" path="res://tests/crafting_regression.gd" id="1"]
+
+[node name="CraftingRegression" type="Node" unique_id=1081804654]
+script = ExtResource("1")

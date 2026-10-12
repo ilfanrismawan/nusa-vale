@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_armor_platinum.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+category = 7
+item_id = "armor_platinum"
+display_name = "Armor Platinum"
+icon = ExtResource("2")
+description = "Pelindung badan Platinum."
+stackable = false
+max_stack = 1
+equipment_slot = 2
+defense_bonus = 15
+equipment_tier = 4
+buy_price = 2880
+sell_price = 1152
+rarity = 2

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_helmet_shadow.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+category = 7
+item_id = "helmet_shadow"
+display_name = "Helm Shadow"
+icon = ExtResource("2")
+description = "Helm Shadow. Melindungi kepala."
+stackable = false
+max_stack = 1
+equipment_slot = 3
+defense_bonus = 18
+equipment_tier = 7
+buy_price = 6500
+sell_price = 2600
+rarity = 3

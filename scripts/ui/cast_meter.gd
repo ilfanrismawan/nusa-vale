@@ -1,23 +1,23 @@
 class_name CastMeter
 extends Node2D
-## Meter power lemparan di samping kepala pemain + penanda titik jatuh kail.
+## Meter power lemparan (horizontal) di atas kepala pemain + penanda titik jatuh kail.
 ## Dibuat FishingState saat tahan klik, lalu dipakai untuk animasi kail terbang.
 
 const TEX_BARS: Texture2D = preload("res://assets/farm_rpg/ui/Bars.png")
 
-# --- Bingkai kayu vertikal di Bars.png (7x42) ---
-const FRAME_REGION := Rect2(101, 51, 7, 42)
-const FRAME_MARGIN_TOP := 14    # tutup atas (kotak oranye) tidak ikut melar
-const FRAME_MARGIN_BOTTOM := 3
-const METER_H := 30.0           # tinggi meter di dunia (piksel)
-const FILL_X := 2.0             # kanal isi di dalam bingkai
-const FILL_W := 3.0
-const FILL_TOP := 13.0
-const CAP_RECT := Rect2(2, 2, 3, 9) # isi kotak tutup atas, menyala saat "Sempurna"
+# --- Bingkai kayu horizontal di Bars.png (42x7), tutup kotak di kanan ---
+const FRAME_REGION := Rect2(147, 118, 42, 7)
+const FRAME_MARGIN_LEFT := 3
+const FRAME_MARGIN_RIGHT := 13  # tutup kanan (kotak oranye) tidak ikut melar
+const METER_W := 38.0           # lebar meter di dunia (piksel)
+const FILL_LEFT := 2.0          # kanal isi di dalam bingkai, mengisi kiri -> kanan
+const FILL_Y := 2.0
+const FILL_H := 3.0
+const CAP_W := 8.0              # isi kotak tutup kanan, menyala saat "Sempurna"
+const CAP_RIGHT := 10.0         # jarak tepi kiri isi tutup dari tepi kanan meter
 
-# --- Posisi relatif terhadap pemain ---
-const SIDE_GAP := 9.0           # jarak dari pusat pemain ke tepi meter
-const TOP_Y := -32.0
+# --- Posisi relatif terhadap pemain (kaki) ---
+const TOP_Y := -40.0            # tepi atas meter, sedikit di atas kepala
 
 # --- Warna (sama dengan mini-game, dari palet) ---
 const FILL_LOW := Color8(228, 33, 43)
@@ -56,29 +56,29 @@ func _ready() -> void:
 	var frame := NinePatchRect.new()
 	frame.texture = TEX_BARS
 	frame.region_rect = FRAME_REGION
-	frame.patch_margin_top = FRAME_MARGIN_TOP
-	frame.patch_margin_bottom = FRAME_MARGIN_BOTTOM
-	frame.size = Vector2(FRAME_REGION.size.x, METER_H)
+	frame.patch_margin_left = FRAME_MARGIN_LEFT
+	frame.patch_margin_right = FRAME_MARGIN_RIGHT
+	frame.size = Vector2(METER_W, FRAME_REGION.size.y)
 	frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_meter.add_child(frame)
 
 	_cap = ColorRect.new()
-	_cap.position = CAP_RECT.position
-	_cap.size = CAP_RECT.size
+	_cap.position = Vector2(METER_W - CAP_RIGHT, FILL_Y)
+	_cap.size = Vector2(CAP_W, FILL_H)
 	_cap.color = CAP_IDLE
 	_cap.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_meter.add_child(_cap)
 
 	_fill = ColorRect.new()
-	_fill.position.x = FILL_X
-	_fill.size.x = FILL_W
+	_fill.position = Vector2(FILL_LEFT, FILL_Y)
+	_fill.size.y = FILL_H
 	_fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_meter.add_child(_fill)
 
 	_shine = ColorRect.new()
 	_shine.color = FILL_SHINE
-	_shine.size = Vector2(FILL_W, 1)
-	_shine.position.x = FILL_X
+	_shine.size = Vector2(1, FILL_H)
+	_shine.position.y = FILL_Y
 	_shine.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_meter.add_child(_shine)
 
@@ -108,22 +108,17 @@ func _process(delta: float) -> void:
 
 
 func _place_meter() -> void:
-	# Meter di sisi kiri pemain, pindah ke kanan saat pemain menghadap kiri.
-	var facing_left := false
-	if follow_target is Player:
-		facing_left = (follow_target as Player).facing_direction.x < 0.0
+	# Meter di tengah, tepat di atas kepala pemain (ikut pemainnya masing-masing saat co-op).
 	var origin := follow_target.global_position
-	var x := origin.x + SIDE_GAP if facing_left else origin.x - SIDE_GAP - FRAME_REGION.size.x
-	_meter.position = Vector2(x, origin.y + TOP_Y).round()
+	_meter.position = Vector2(origin.x - METER_W * 0.5, origin.y + TOP_Y).round()
 
 
 func _update_meter() -> void:
-	var inner_h := METER_H - FRAME_MARGIN_BOTTOM - FILL_TOP
-	var h := roundf(inner_h * clampf(power, 0.0, 1.0))
-	_fill.size.y = h
-	_fill.position.y = FILL_TOP + inner_h - h
-	_shine.position.y = _fill.position.y
-	_shine.visible = h >= 2.0
+	var inner_w := METER_W - FRAME_MARGIN_RIGHT - FILL_LEFT
+	var w := roundf(inner_w * clampf(power, 0.0, 1.0))
+	_fill.size.x = w
+	_shine.position.x = FILL_LEFT + w - 1.0
+	_shine.visible = w >= 2.0
 	var blink := 0.5 + 0.5 * sin(_time * 30.0)
 	if is_perfect():
 		_fill.color = FILL_HIGH.lerp(FILL_SHINE, blink)

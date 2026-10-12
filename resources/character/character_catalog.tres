@@ -34,7 +34,6 @@ id = "eyes_male"
 display_name = "Male"
 layer = 1
 asset = "Eyes/Male/{color}.png"
-colors = PackedStringArray("black", "blue", "brown", "green")
 
 [sub_resource type="Resource" id="part_eyes_female"]
 script = ExtResource("2_part")
@@ -42,7 +41,6 @@ id = "eyes_female"
 display_name = "Female"
 layer = 1
 asset = "Eyes/Female/{color}.png"
-colors = PackedStringArray("black", "blue", "brown", "green")
 
 [sub_resource type="Resource" id="part_hair_standard"]
 script = ExtResource("2_part")
@@ -50,7 +48,6 @@ id = "hair_standard"
 display_name = "Standard"
 layer = 3
 asset = "Hair's/Standard/{color}.png"
-colors = PackedStringArray("black", "blonde", "brown", "ginger")
 
 [sub_resource type="Resource" id="part_hair_josh"]
 script = ExtResource("2_part")
@@ -58,7 +55,6 @@ id = "hair_josh"
 display_name = "Josh"
 layer = 3
 asset = "Hair's/Josh/{color}.png"
-colors = PackedStringArray("black", "blonde", "brown", "ginger")
 
 [sub_resource type="Resource" id="part_hair_korean_curtain"]
 script = ExtResource("2_part")
@@ -66,7 +62,6 @@ id = "hair_korean_curtain"
 display_name = "Korean Curtain"
 layer = 3
 asset = "Hair's/Josh/{color}.png"
-colors = PackedStringArray("black", "blonde", "brown", "ginger")
 hair_style = "korean_curtain"
 design_source = "res://assets/custom_hair/korean_curtain.png"
 
@@ -76,7 +71,6 @@ id = "hair_sebastian"
 display_name = "Sebastian"
 layer = 3
 asset = "Hair's/Sebastian/{color}.png"
-colors = PackedStringArray("black", "blonde", "brown", "ginger")
 
 [sub_resource type="Resource" id="part_hair_fawn"]
 script = ExtResource("2_part")
@@ -84,7 +78,6 @@ id = "hair_fawn"
 display_name = "Fawn"
 layer = 3
 asset = "Hair's/Fawn/{color}.png"
-colors = PackedStringArray("black", "blonde", "brown", "ginger")
 
 [sub_resource type="Resource" id="part_hair_iridessa"]
 script = ExtResource("2_part")
@@ -92,7 +85,6 @@ id = "hair_iridessa"
 display_name = "Iridessa"
 layer = 3
 asset = "Hair's/Iridessa/{color}.png"
-colors = PackedStringArray("black", "blonde", "brown", "ginger")
 
 [sub_resource type="Resource" id="part_hair_lyria"]
 script = ExtResource("2_part")
@@ -100,7 +92,6 @@ id = "hair_lyria"
 display_name = "Lyria"
 layer = 3
 asset = "Hair's/Lyria/{color}.png"
-colors = PackedStringArray("black", "blonde", "brown", "ginger")
 
 [sub_resource type="Resource" id="part_hair_silvermist"]
 script = ExtResource("2_part")
@@ -108,7 +99,6 @@ id = "hair_silvermist"
 display_name = "Silvermist"
 layer = 3
 asset = "Hair's/Silvermist/{color}.png"
-colors = PackedStringArray("black", "blonde", "brown", "ginger")
 
 [sub_resource type="Resource" id="part_outfit_farm"]
 script = ExtResource("2_part")
@@ -116,7 +106,6 @@ id = "outfit_farm"
 display_name = "Farm Clothes"
 layer = 2
 asset = "Clothers/Farm/{color}.png"
-colors = PackedStringArray("blue", "green", "pink", "purple", "red")
 
 [sub_resource type="Resource" id="part_outfit_cardigan"]
 script = ExtResource("2_part")
@@ -124,7 +113,6 @@ id = "outfit_cardigan"
 display_name = "Cardigan"
 layer = 2
 asset = "Clothers/Cardigan/{color}.png"
-colors = PackedStringArray("blue", "pink", "yellow")
 
 [sub_resource type="Resource" id="part_outfit_sweater_vest"]
 script = ExtResource("2_part")
@@ -132,7 +120,6 @@ id = "outfit_sweater_vest"
 display_name = "Sweater Vest"
 layer = 2
 asset = "Clothers/Sweater Vest/{color}.png"
-colors = PackedStringArray("green", "navy", "red")
 
 [sub_resource type="Resource" id="part_outfit_striped_tee"]
 script = ExtResource("2_part")
@@ -140,7 +127,6 @@ id = "outfit_striped_tee"
 display_name = "Striped Tee"
 layer = 2
 asset = "Clothers/Striped Tee/{color}.png"
-colors = PackedStringArray("black", "blue", "red")
 
 [sub_resource type="Resource" id="part_outfit_track_jacket"]
 script = ExtResource("2_part")
@@ -148,7 +134,6 @@ id = "outfit_track_jacket"
 display_name = "Track Jacket"
 layer = 2
 asset = "Clothers/Track Jacket/{color}.png"
-colors = PackedStringArray("black", "navy", "red")
 
 [sub_resource type="Resource" id="part_outfit_ringer_tee"]
 script = ExtResource("2_part")
@@ -156,7 +141,6 @@ id = "outfit_ringer_tee"
 display_name = "Ringer Tee"
 layer = 2
 asset = "Clothers/Ringer Tee/{color}.png"
-colors = PackedStringArray("black", "navy", "red")
 
 [sub_resource type="Resource" id="part_outfit_zip_track_top"]
 script = ExtResource("2_part")
@@ -164,7 +148,6 @@ id = "outfit_zip_track_top"
 display_name = "Zip Track Top"
 layer = 2
 asset = "Clothers/Zip Track Top/{color}.png"
-colors = PackedStringArray("black", "navy", "red")
 
 [sub_resource type="Resource" id="part_face_beard"]
 script = ExtResource("2_part")
@@ -270,7 +253,6 @@ id = "head_butterfly"
 display_name = "Butterfly Clip"
 layer = 5
 asset = "Acc/Butterfly/{color}.png"
-colors = PackedStringArray("blue", "green", "pink", "purple", "red")
 
 [sub_resource type="Resource" id="part_custom_shirt"]
 script = ExtResource("2_part")
@@ -413,7 +395,237 @@ frame_size = 64
 tool_type = 6
 tool_asset = "Weapons/{tier}.png"
 
+[sub_resource type="Resource" id="sheet_extra_sword"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/8. SwordAttack"
+animation_name = &"sword"
+animation_fps = 12.0
+animation_loop = false
+
+[sub_resource type="Resource" id="sheet_extra_archer"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/9. Archer"
+animation_name = &"archer"
+animation_fps = 10.0
+animation_loop = false
+
+[sub_resource type="Resource" id="sheet_extra_catch_insect"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/4. Pickaxe, Hoe and Catching insects"
+animation_name = &"catch_insect"
+animation_fps = 10.0
+animation_loop = false
+
+[sub_resource type="Resource" id="sheet_extra_damage"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/10. Damage"
+animation_name = &"damage"
+animation_fps = 10.0
+animation_loop = false
+
+[sub_resource type="Resource" id="sheet_extra_death"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/11. Death"
+animation_name = &"death"
+animation_loop = false
+
+[sub_resource type="Resource" id="sheet_extra_carry_idle"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/13. Carrying - Idle"
+animation_name = &"carry_idle"
+animation_fps = 6.0
+
+[sub_resource type="Resource" id="sheet_extra_carry_walk"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/13.1 Carrying - Walk"
+animation_name = &"carry_walk"
+
+[sub_resource type="Resource" id="sheet_extra_carry_run"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/13.2 Carrying - Run"
+animation_name = &"carry_run"
+animation_fps = 12.0
+
+[sub_resource type="Resource" id="sheet_extra_pick_up"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/13.3 Carrying - Pick Up"
+animation_name = &"pick_up"
+animation_loop = false
+
+[sub_resource type="Resource" id="sheet_extra_item_drop"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/13.4 Carrying - Throwing items"
+animation_name = &"item_drop"
+animation_fps = 12.0
+animation_loop = false
+
+[sub_resource type="Resource" id="sheet_extra_horse_idle"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/14. Horse - Idle"
+frame_size = 64
+animation_name = &"horse_idle"
+animation_fps = 6.0
+
+[sub_resource type="Resource" id="sheet_extra_horse_walk"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/14.1 Horse - Walk"
+frame_size = 64
+animation_name = &"horse_walk"
+
+[sub_resource type="Resource" id="sheet_extra_horse_run"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/14.2 Horse - Run"
+frame_size = 64
+animation_name = &"horse_run"
+animation_fps = 12.0
+
+[sub_resource type="Resource" id="sheet_extra_horse_lower"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/14.3 Horse - Lower"
+frame_size = 64
+animation_name = &"horse_lower"
+animation_loop = false
+
+[sub_resource type="Resource" id="sheet_extra_horse_eat"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/14.4 Horse - Eating"
+frame_size = 64
+animation_name = &"horse_eat"
+animation_fps = 6.0
+
+[sub_resource type="Resource" id="sheet_extra_bicycle_idle"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/15. Bicycle - Idle"
+animation_name = &"bicycle_idle"
+animation_fps = 6.0
+
+[sub_resource type="Resource" id="sheet_extra_bicycle_run"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/15.1 Bicycle - Run"
+animation_name = &"bicycle_run"
+animation_fps = 10.0
+
+[sub_resource type="Resource" id="sheet_extra_bear_idle"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/16. Bear - Idle"
+frame_size = 64
+animation_name = &"bear_idle"
+animation_fps = 6.0
+
+[sub_resource type="Resource" id="sheet_extra_bear_walk"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/16.1 Bear - Walk"
+frame_size = 64
+animation_name = &"bear_walk"
+
+[sub_resource type="Resource" id="sheet_extra_bear_run"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/16.2 Bear - Run"
+frame_size = 64
+animation_name = &"bear_run"
+animation_fps = 12.0
+
+[sub_resource type="Resource" id="sheet_extra_bear_attack"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/16.3 Bear - Attack"
+frame_size = 64
+animation_name = &"bear_attack"
+animation_fps = 10.0
+animation_loop = false
+
+[sub_resource type="Resource" id="sheet_extra_bear_hit"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/16.4 Bear - Hit"
+frame_size = 64
+animation_name = &"bear_hit"
+animation_fps = 10.0
+animation_loop = false
+
+[sub_resource type="Resource" id="sheet_extra_bear_death"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/16.5 Bear - Dead"
+frame_size = 64
+animation_name = &"bear_death"
+animation_loop = false
+
+[sub_resource type="Resource" id="sheet_extra_umbrella_idle"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/17 Umbrela - Idle"
+animation_name = &"umbrella_idle"
+animation_fps = 6.0
+
+[sub_resource type="Resource" id="sheet_extra_umbrella_walk"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/17.1 Umbrela - Walk"
+animation_name = &"umbrella_walk"
+
+[sub_resource type="Resource" id="sheet_extra_umbrella_run"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/17.2 Umbrela - Run"
+animation_name = &"umbrella_run"
+animation_fps = 12.0
+
+[sub_resource type="Resource" id="sheet_extra_sit"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/18. Setting"
+animation_name = &"sit"
+animation_fps = 6.0
+
+[sub_resource type="Resource" id="sheet_extra_petting"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/20. Petting"
+directions = 3
+animation_name = &"petting"
+animation_loop = false
+
+[sub_resource type="Resource" id="sheet_extra_climb"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/21. Climbing"
+directions = 1
+animation_name = &"climb"
+
+[sub_resource type="Resource" id="sheet_extra_flute"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/22. Flute"
+directions = 3
+animation_name = &"flute"
+
+[sub_resource type="Resource" id="sheet_extra_mage"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/23. Mage"
+animation_name = &"mage"
+animation_fps = 10.0
+animation_loop = false
+
+[sub_resource type="Resource" id="sheet_extra_swim_idle"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/24. Swim - Idle"
+animation_name = &"swim_idle"
+animation_fps = 6.0
+
+[sub_resource type="Resource" id="sheet_extra_swim_out"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/24.1 Swim - Outwater"
+animation_name = &"swim_out"
+animation_loop = false
+
+[sub_resource type="Resource" id="sheet_extra_swim_submerged"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/24.2 Swim - Submerged"
+animation_name = &"swim_submerged"
+animation_loop = false
+
+[sub_resource type="Resource" id="sheet_extra_swim"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/24.3 Swim - Swim"
+animation_name = &"swim"
+
+[sub_resource type="Resource" id="sheet_extra_broomstick"]
+script = ExtResource("3_sheet")
+part_folder = "res://assets/farm_rpg/Character/PNG/25. Broomstick"
+animation_name = &"broomstick"
+
 [resource]
 script = ExtResource("1_catalog")
 parts = Array[ExtResource("2_part")]([SubResource("part_skin_1"), SubResource("part_skin_2"), SubResource("part_skin_3"), SubResource("part_skin_4"), SubResource("part_eyes_male"), SubResource("part_eyes_female"), SubResource("part_hair_standard"), SubResource("part_hair_josh"), SubResource("part_hair_korean_curtain"), SubResource("part_hair_sebastian"), SubResource("part_hair_fawn"), SubResource("part_hair_iridessa"), SubResource("part_hair_lyria"), SubResource("part_hair_silvermist"), SubResource("part_outfit_farm"), SubResource("part_outfit_cardigan"), SubResource("part_outfit_sweater_vest"), SubResource("part_outfit_striped_tee"), SubResource("part_outfit_track_jacket"), SubResource("part_outfit_ringer_tee"), SubResource("part_outfit_zip_track_top"), SubResource("part_face_beard"), SubResource("part_face_eye_patch"), SubResource("part_face_elf_ears"), SubResource("part_head_farm"), SubResource("part_head_beret"), SubResource("part_head_cook"), SubResource("part_head_pirate"), SubResource("part_head_wizard"), SubResource("part_head_santa_hat"), SubResource("part_head_leprechaun"), SubResource("part_head_chicken"), SubResource("part_head_cow"), SubResource("part_head_deer"), SubResource("part_head_frog"), SubResource("part_head_butterfly"), SubResource("part_custom_shirt"), SubResource("part_custom_tracktop"), SubResource("part_baggy_jeans")])
-sheets = Array[ExtResource("3_sheet")]([SubResource("sheet_0"), SubResource("sheet_1"), SubResource("sheet_2"), SubResource("sheet_3"), SubResource("sheet_4"), SubResource("sheet_5"), SubResource("sheet_6"), SubResource("sheet_7"), SubResource("sheet_8"), SubResource("sheet_9"), SubResource("sheet_10"), SubResource("sheet_11"), SubResource("sheet_12"), SubResource("sheet_13"), SubResource("sheet_14"), SubResource("sheet_15"), SubResource("sheet_16")])
+sheets = Array[ExtResource("3_sheet")]([SubResource("sheet_0"), SubResource("sheet_1"), SubResource("sheet_2"), SubResource("sheet_3"), SubResource("sheet_4"), SubResource("sheet_5"), SubResource("sheet_6"), SubResource("sheet_7"), SubResource("sheet_8"), SubResource("sheet_9"), SubResource("sheet_10"), SubResource("sheet_11"), SubResource("sheet_12"), SubResource("sheet_13"), SubResource("sheet_14"), SubResource("sheet_15"), SubResource("sheet_16"), SubResource("sheet_extra_sword"), SubResource("sheet_extra_archer"), SubResource("sheet_extra_catch_insect"), SubResource("sheet_extra_damage"), SubResource("sheet_extra_death"), SubResource("sheet_extra_carry_idle"), SubResource("sheet_extra_carry_walk"), SubResource("sheet_extra_carry_run"), SubResource("sheet_extra_pick_up"), SubResource("sheet_extra_item_drop"), SubResource("sheet_extra_horse_idle"), SubResource("sheet_extra_horse_walk"), SubResource("sheet_extra_horse_run"), SubResource("sheet_extra_horse_lower"), SubResource("sheet_extra_horse_eat"), SubResource("sheet_extra_bicycle_idle"), SubResource("sheet_extra_bicycle_run"), SubResource("sheet_extra_bear_idle"), SubResource("sheet_extra_bear_walk"), SubResource("sheet_extra_bear_run"), SubResource("sheet_extra_bear_attack"), SubResource("sheet_extra_bear_hit"), SubResource("sheet_extra_bear_death"), SubResource("sheet_extra_umbrella_idle"), SubResource("sheet_extra_umbrella_walk"), SubResource("sheet_extra_umbrella_run"), SubResource("sheet_extra_sit"), SubResource("sheet_extra_petting"), SubResource("sheet_extra_climb"), SubResource("sheet_extra_flute"), SubResource("sheet_extra_mage"), SubResource("sheet_extra_swim_idle"), SubResource("sheet_extra_swim_out"), SubResource("sheet_extra_swim_submerged"), SubResource("sheet_extra_swim"), SubResource("sheet_extra_broomstick")])

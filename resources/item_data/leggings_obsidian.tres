@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_leggings_obsidian.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+category = 7
+item_id = "leggings_obsidian"
+display_name = "Celana Zirah Obsidian"
+icon = ExtResource("2")
+description = "Celana zirah Obsidian. Melindungi kaki."
+stackable = false
+max_stack = 1
+equipment_slot = 4
+defense_bonus = 34
+equipment_tier = 9
+buy_price = 16250
+sell_price = 6500
+rarity = 4

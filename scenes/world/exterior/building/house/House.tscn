@@ -19,6 +19,7 @@ polygon = PackedVector2Array(-34, 14, -26, 8, -7, -13, 3, -17, 26, 7, 35, 15, 28
 
 [node name="Door" type="Area2D" parent="." unique_id=1324620855]
 script = ExtResource("2_coavl")
+target_spawn_pos = Vector2(310, 190)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Door" unique_id=675798593]
 position = Vector2(0, 28)

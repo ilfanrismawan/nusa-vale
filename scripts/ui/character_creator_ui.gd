@@ -16,7 +16,6 @@ const TEX_BANNER := preload("res://assets/farm_rpg/ui/inventory/Banner.png")
 const COLOR_TEXT := Color(0.36, 0.2, 0.15)
 const COLOR_TEXT_LIGHT := Color(0.97, 0.88, 0.78)
 const PREVIEW_SCALE := 4.0
-const PREVIEW_ANIMATIONS: PackedStringArray = ["idle_down", "idle_right", "idle_up", "walk_down", "walk_right", "walk_up"]
 ## Urutan putar preview: depan, kanan, belakang, kiri.
 const DIRECTIONS: Array[String] = ["down", "right", "up", "left"]
 
@@ -53,6 +52,10 @@ const ROWS := [
 @export var allow_cancel: bool = true
 ## Pause game selama layar terbuka (dari lemari). false di Main Menu.
 @export var pause_game: bool = true
+## Tampilkan kolom nama (Game Baru). Nama tampil di menu slot save.
+@export var ask_name: bool = false
+
+const NAME_MAX_LENGTH := 16
 
 var appearance: CharacterAppearance
 ## Pemain yang mengganti penampilan (lemari co-op). Kosong = P1.
@@ -63,6 +66,9 @@ var _preview: AnimatedSprite2D
 var _direction_index := 0
 var _value_labels: Dictionary = {}
 var _row_nodes: Dictionary = {}
+var _name_edit: LineEdit
+var _animation_picker: OptionButton
+var _preview_action := "walk"
 
 func _ready() -> void:
 	layer = 25
@@ -104,6 +110,9 @@ func _build_ui() -> void:
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(title)
 
+	if ask_name:
+		box.add_child(_build_name_row())
+
 	var body := HBoxContainer.new()
 	body.add_theme_constant_override("separation", 10)
 	box.add_child(body)
@@ -118,6 +127,21 @@ func _build_ui() -> void:
 	if allow_cancel:
 		buttons.add_child(_make_button("Batal", _cancel))
 	buttons.add_child(_make_button("Selesai", _confirm))
+
+func _build_name_row() -> HBoxContainer:
+	var row := HBoxContainer.new()
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.add_theme_constant_override("separation", 6)
+	var label := Label.new()
+	label.text = "Nama"
+	row.add_child(label)
+	_name_edit = LineEdit.new()
+	_name_edit.text = data.player_name
+	_name_edit.placeholder_text = SaveManager.DEFAULT_PLAYER_NAME
+	_name_edit.max_length = NAME_MAX_LENGTH
+	_name_edit.custom_minimum_size = Vector2(160, 0)
+	row.add_child(_name_edit)
+	return row
 
 func _build_preview_column() -> VBoxContainer:
 	var column := VBoxContainer.new()
@@ -145,6 +169,28 @@ func _build_preview_column() -> VBoxContainer:
 	turn.add_child(turn_label)
 	turn.add_child(_make_button(">", _turn.bind(1)))
 	column.add_child(turn)
+	_animation_picker = OptionButton.new()
+	_animation_picker.custom_minimum_size.x = 128
+	_animation_picker.add_item("Animasi: walk")
+	_animation_picker.set_item_metadata(0, "walk")
+	var actions: PackedStringArray = ["walk"]
+	var template := CharacterSpriteBuilder.get_template(CATALOG)
+	for anim in template.get_animation_names():
+		var action := String(anim).trim_suffix("_down").trim_suffix("_right").trim_suffix("_up")
+		if not actions.has(action):
+			actions.append(action)
+	for sheet in CATALOG.sheets:
+		if not sheet.animation_name.is_empty() and not actions.has(String(sheet.animation_name)):
+			actions.append(String(sheet.animation_name))
+	for i in range(1, actions.size()):
+		_animation_picker.add_item("Animasi: " + actions[i])
+		_animation_picker.set_item_metadata(i, actions[i])
+	_animation_picker.item_selected.connect(func(index: int):
+		_preview_action = _animation_picker.get_item_metadata(index)
+		_refresh_preview())
+	column.add_child(_animation_picker)
+	# Preview aksi sekali putar diulang hanya di layar kustomisasi.
+	_preview.animation_finished.connect(func(): _preview.play())
 	return column
 
 func _build_options_grid() -> GridContainer:
@@ -257,7 +303,13 @@ func _refresh() -> void:
 		for node in _row_nodes[i]:
 			node.visible = visible_row
 
-	var result := CharacterSpriteBuilder.build(CATALOG, appearance, {}, PREVIEW_ANIMATIONS)
+	_refresh_preview()
+
+func _refresh_preview() -> void:
+	var animations: PackedStringArray = [_preview_action]
+	for direction in DIRECTIONS:
+		animations.append("%s_%s" % [_preview_action, direction])
+	var result := CharacterSpriteBuilder.build(CATALOG, appearance, {}, animations)
 	_preview.sprite_frames = result["frames"]
 	_play_preview()
 
@@ -265,9 +317,17 @@ func _play_preview() -> void:
 	if _preview.sprite_frames == null:
 		return
 	var direction := DIRECTIONS[_direction_index]
-	_preview.flip_h = direction == "left"
-	var anim := "walk_%s" % ("right" if direction == "left" else direction)
+	_preview.flip_h = false
+	var anim := "%s_%s" % [_preview_action, direction]
+	if not _preview.sprite_frames.has_animation(anim) and direction == "left":
+		anim = "%s_right" % _preview_action
+		_preview.flip_h = true
+	if not _preview.sprite_frames.has_animation(anim):
+		anim = _preview_action
+		_preview.flip_h = false
 	if _preview.sprite_frames.has_animation(anim):
+		var texture := _preview.sprite_frames.get_frame_texture(anim, 0)
+		_preview.scale = Vector2.ONE * minf(PREVIEW_SCALE, 128.0 / maxf(texture.get_width(), texture.get_height()))
 		_preview.play(anim)
 
 # ── Selesai / Batal ─────────────────────────────────────────────────
@@ -279,6 +339,8 @@ func _input(event: InputEvent) -> void:
 		_cancel()
 
 func _confirm() -> void:
+	if _name_edit != null:
+		data.player_name = _name_edit.text.strip_edges()
 	data.set_appearance(appearance)
 	finished.emit(data.appearance)
 	_close()

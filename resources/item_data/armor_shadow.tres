@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_armor_shadow.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+category = 7
+item_id = "armor_shadow"
+display_name = "Armor Shadow"
+icon = ExtResource("2")
+description = "Pelindung badan Shadow."
+stackable = false
+max_stack = 1
+equipment_slot = 2
+defense_bonus = 33
+equipment_tier = 7
+buy_price = 10400
+sell_price = 4160
+rarity = 3

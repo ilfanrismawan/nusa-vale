@@ -4,13 +4,19 @@
 
 [resource]
 script = ExtResource("1_td")
+dig_bonus_chance = 0
+water_capacity = 185
+reach_tiles = 2.6
+area_depth = 4
+area_width = 3
+area_size = 12
 tool_id = "watering_can_frost"
 display_name = "Kaleng Air Frost"
 tool_type = 4
 tier = 6
-damage = 7
-stamina_cost = 3
-action_speed = 1.9
+damage = 9
+stamina_cost = 1
+action_speed = 1.7
 upgrade_cost_money = 7000
 required_items = {
 "frost_bar": 5

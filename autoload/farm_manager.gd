@@ -47,6 +47,10 @@ func _bind_layers(world: Node) -> void:
 	watered_layer = world.get_node_or_null("WateredLayer")
 	soil_layer = world.get_node_or_null("SoilLayer")
 	crop_layer = world.get_node_or_null("Crop")
+	if crop_layer and crop_layer.tile_set and not crop_layer.has_meta(&"crop_sources_ready"):
+		# Source runtime milik layer ini; jangan ubah resource scene yang dibagi world lain.
+		crop_layer.tile_set = crop_layer.tile_set.duplicate()
+		crop_layer.set_meta(&"crop_sources_ready", true)
 	
 	if base_layer_ground:
 		if soil_layer:
@@ -62,6 +66,21 @@ func clear_references() -> void:
 	watered_layer = null
 	soil_layer = null
 	crop_layer = null
+
+func area_id() -> String:
+	return str(_bound_world.get_meta("farm_area", "farm")) if is_instance_valid(_bound_world) else "farm"
+
+func _visible_plot(data: Dictionary) -> bool:
+	return str(data.get("area", "farm")) == area_id()
+
+func _can_access_plot(data: Dictionary) -> bool:
+	return _visible_plot(data) and (area_id() != "greenhouse" or GameState.balai_nadi.completed("greenhouse_restoration"))
+
+func _set_ground_tile(layer: TileMapLayer, cell: Vector2i) -> void:
+	if area_id() == "greenhouse":
+		layer.set_cell(cell, 0, Vector2i.ZERO)
+	else:
+		layer.set_cells_terrain_connect([cell], TERRAIN_SET_SOIL, 0)
 	
 func _restore_tiles() -> void:
 	var can_soil := is_instance_valid(soil_layer)
@@ -70,16 +89,14 @@ func _restore_tiles() -> void:
 	
 	for cell in farm_data:
 		var data: Dictionary = farm_data[cell]
+		if not _visible_plot(data):
+			continue
 		
 		if can_soil:
-			soil_layer.set_cells_terrain_connect(
-				[cell], TERRAIN_SET_SOIL, TERRAIN_TILLED
-			)
+			_set_ground_tile(soil_layer, cell)
 		
 		if can_water and data["watered"]:
-			watered_layer.set_cells_terrain_connect(
-				[cell], TERRAIN_SET_SOIL, 0
-			)
+			_set_ground_tile(watered_layer, cell)
 		
 		if can_crop and data["crop"] != null:
 			_update_crop_tile(cell, data["crop"], data["stage"])
@@ -94,10 +111,9 @@ func hoe(cell: Vector2i) -> bool:
 		return false
 	if farm_data.has(cell):
 		return false
-	soil_layer.set_cells_terrain_connect(
-		[cell], TERRAIN_SET_SOIL, TERRAIN_TILLED
-	)
+	_set_ground_tile(soil_layer, cell)
 	farm_data[cell] = {
+		"area": area_id(),
 		"state": "tilled",
 		"crop": null,
 		"stage": 0,
@@ -109,10 +125,14 @@ func hoe(cell: Vector2i) -> bool:
 	
 ## Tanaman tanpa season (kosong) boleh ditanam kapan saja.
 func is_crop_in_season(crop: CropData) -> bool:
+	if area_id() == "greenhouse" and GameState.balai_nadi.completed("greenhouse_restoration"):
+		return true
 	return crop.season.is_empty() or crop.season == DayCycle.get_current_season()
 
 func plant(cell: Vector2i, crop: CropData) -> bool:
 	if not farm_data.has(cell):
+		return false
+	if not _can_access_plot(farm_data[cell]):
 		return false
 	if not is_crop_in_season(crop):
 		return false
@@ -136,6 +156,8 @@ func water(cell: Vector2i) -> bool:
 		return false
 	if not farm_data.has(cell):
 		return false
+	if not _can_access_plot(farm_data[cell]):
+		return false
 	var data: Dictionary = farm_data[cell]
 	if data.get("watered", false):
 		return false
@@ -143,13 +165,13 @@ func water(cell: Vector2i) -> bool:
 	data["watered"] = true
 	print("Disiram: ", cell)
 	
-	watered_layer.set_cells_terrain_connect(
-		[cell], TERRAIN_SET_SOIL, 0
-	)
+	_set_ground_tile(watered_layer, cell)
 	return true
 	
 func can_harvest(cell: Vector2i) -> bool:
 	if not farm_data.has(cell):
+		return false
+	if not _can_access_plot(farm_data[cell]):
 		return false
 	var data: Dictionary = farm_data[cell]
 	if data.get("crop") == null:
@@ -208,7 +230,7 @@ func _on_day_passed(_day: int) -> void:
 				if data["days_in_stage"] >= crop.days_per_stage:
 					data["stage"] += 1
 					data["days_in_stage"] = 0
-					if layers_valid:
+					if layers_valid and _visible_plot(data):
 						_update_crop_tile(cell, crop, data["stage"])
 					print("%s tumbuh ke stage %d" % [crop.display_name, data["stage"]])
 			else:
@@ -216,7 +238,7 @@ func _on_day_passed(_day: int) -> void:
 		
 		data["watered"] = false
 		
-		if layers_valid:
+		if layers_valid and _visible_plot(data):
 			watered_layer.erase_cell(cell)
 			
 ## Tanaman di luar musimnya layu saat musim berganti; tanahnya tetap tercangkul.
@@ -225,9 +247,9 @@ func _on_season_changed(_season: int) -> void:
 	for cell in farm_data:
 		var data: Dictionary = farm_data[cell]
 		var crop: CropData = data["crop"]
-		if crop == null or is_crop_in_season(crop):
+		if crop == null or data.get("area", "farm") == "greenhouse" or crop.season.is_empty() or crop.season == DayCycle.get_current_season():
 			continue
-		if is_instance_valid(crop_layer):
+		if is_instance_valid(crop_layer) and _visible_plot(data):
 			crop_layer.erase_cell(cell)
 		data["state"] = "tilled"
 		data["crop"] = null
@@ -240,10 +262,31 @@ func _on_season_changed(_season: int) -> void:
 func _update_crop_tile(cell: Vector2i, crop: CropData, stage: int) -> void:
 	if not is_instance_valid(crop_layer):
 		return
-	var coords := crop.growth_stages[stage]
-	crop_layer.set_cell(cell, crop.tileset_source_id, coords)
+	var texture := crop.get_growth_texture()
+	if texture == null or crop_layer.tile_set == null:
+		return
+	var sources: Dictionary = crop_layer.get_meta(&"crop_source_ids", {})
+	if not sources.has(crop.crop_id):
+		var source := TileSetAtlasSource.new()
+		source.texture = texture
+		var frame_size := crop.get_growth_frame_size()
+		source.texture_region_size = frame_size
+		for i in crop.get_total_stages():
+			var coords := crop.get_growth_coords(i)
+			if not source.has_tile(coords):
+				source.create_tile(coords)
+				source.get_tile_data(coords, 0).texture_origin = Vector2i(0, (frame_size.y - 16) / 2)
+		var source_id := crop_layer.tile_set.get_next_source_id()
+		crop_layer.tile_set.add_source(source, source_id)
+		sources[crop.crop_id] = source_id
+		crop_layer.set_meta(&"crop_source_ids", sources)
+	crop_layer.set_cell(cell, sources[crop.crop_id], crop.get_growth_coords(stage))
 	
 func is_tile_farmable(cell: Vector2i) -> bool:
+	if area_id() == "greenhouse" and not GameState.balai_nadi.completed("greenhouse_restoration"):
+		return false
+	if is_instance_valid(_bound_world) and _bound_world.get_meta("structure_area", "") == "farm" and StructureManager.occupies(cell):
+		return false
 	if not is_instance_valid(base_layer_ground):
 		return false
 	var tile_data := base_layer_ground.get_cell_tile_data(cell)
@@ -258,6 +301,8 @@ func get_cell_data(cell: Vector2i) -> Dictionary:
 func shovel(cell: Vector2i) -> bool:
 	if not farm_data.has(cell):
 		print("Tidak ada tanah di sini")
+		return false
+	if not _can_access_plot(farm_data[cell]):
 		return false
 	var data: Dictionary = farm_data[cell]
 	if data["crop"] != null:
@@ -286,7 +331,7 @@ func hit_world(player: Player, cell: Vector2i, target_group: StringName, damage:
 	var scene_tree := player.get_tree()
 	if scene_tree == null:
 		return false
-	var target_pos := player.get_target_world_position()
+	var target_pos := Juice.cell_center(player, cell)
 	const REACH := 24.0
 	var world := player.get_world_2d()
 	for node in scene_tree.get_nodes_in_group(target_group):

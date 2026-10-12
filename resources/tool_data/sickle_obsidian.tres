@@ -4,13 +4,19 @@
 
 [resource]
 script = ExtResource("1_td")
+dig_bonus_chance = 0
+water_capacity = 0
+reach_tiles = 3.2
+area_depth = 5
+area_width = 5
+area_size = 25
 tool_id = "sickle_obsidian"
 display_name = "Sabit Obsidian"
 tool_type = 5
 tier = 9
-damage = 10
-stamina_cost = 2
-action_speed = 2.3
+damage = 20
+stamina_cost = 1
+action_speed = 2.2
 upgrade_cost_money = 18000
 required_items = {
 "obsidian_bar": 5

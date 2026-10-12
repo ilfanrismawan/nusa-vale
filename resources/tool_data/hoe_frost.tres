@@ -4,13 +4,19 @@
 
 [resource]
 script = ExtResource("1_td")
+dig_bonus_chance = 0
+water_capacity = 0
+reach_tiles = 2.6
+area_depth = 4
+area_width = 3
+area_size = 12
 tool_id = "hoe_frost"
 display_name = "Cangkul Frost"
 tool_type = 1
 tier = 6
-damage = 7
-stamina_cost = 3
-action_speed = 1.9
+damage = 9
+stamina_cost = 2
+action_speed = 1.7
 upgrade_cost_money = 7000
 required_items = {
 "frost_bar": 5

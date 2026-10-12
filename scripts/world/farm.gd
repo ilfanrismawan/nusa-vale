@@ -6,9 +6,11 @@ extends Node2D
 func _ready() -> void:
 	DayCycle.is_running = true
 	FarmManager.initialize(self)
+	StructureManager.attach.call_deferred(self)
 	DayCycle.time_tick.connect(_on_time_tick)
 	_on_time_tick(DayCycle.hour, DayCycle.minute)
 	WeedSpawner.attach_weeds(self, "farm", ^"YSort", 4, 30, true)
+	DigSpotSpawner.attach_dig_spots(self, "farm", ^"YSort", 1, 3, true)
 	
 	Notify.say("WASD JALAN | Klik pakai alat | 1-6 / Q E ganti alat")
 	Notify.say("Enter di dekat toko, bin, atau kasur | I tas | Esc menu")

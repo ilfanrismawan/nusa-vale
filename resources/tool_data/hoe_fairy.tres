@@ -4,13 +4,19 @@
 
 [resource]
 script = ExtResource("1_td")
+dig_bonus_chance = 0
+water_capacity = 0
+reach_tiles = 3
+area_depth = 5
+area_width = 4
+area_size = 20
 tool_id = "hoe_fairy"
 display_name = "Cangkul Fairy"
 tool_type = 1
 tier = 8
-damage = 9
+damage = 15
 stamina_cost = 2
-action_speed = 2.15
+action_speed = 2
 upgrade_cost_money = 12000
 required_items = {
 "fairy_bar": 5

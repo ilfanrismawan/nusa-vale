@@ -67,7 +67,7 @@ func _refresh_tool_sheets(tool_type: int) -> void:
 	for sheet in CATALOG.sheets:
 		if sheet == null or sheet.tool_type != tool_type:
 			continue
-		var texture: ImageTexture = _textures.get(sheet.source_sheet)
+		var texture: ImageTexture = _textures.get(sheet.part_folder if not sheet.animation_name.is_empty() else sheet.source_sheet)
 		if texture == null:
 			continue
 		var tier := int(_tool_tiers.get(tool_type, 0))

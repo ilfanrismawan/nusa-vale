@@ -4,13 +4,14 @@ extends ActionEffect
 func _init() -> void:
 	stamina_cost = 4
 
-func apply(
-	player: Player,
-	cell: Vector2i
-) -> void:
-	if GameState.stamina < stamina_cost:
-		Notify.say("Terlalu lelah! Istirahatlah.")
+func apply(player: Player, cell: Vector2i) -> void:
+	var cost := cost_for(player)
+	if player.data.stamina < cost:
 		return
-	if FarmManager.hoe(cell):
-		GameState.spend_stamina(stamina_cost)
-		Juice.play(&"hoe", Juice.cell_center(player, cell))
+	var worked := false
+	for target in cells_for(player, cell):
+		if FarmManager.hoe(target):
+			worked = true
+			Juice.play(&"hoe", Juice.cell_center(player, target))
+	if worked:
+		player.data.spend_stamina(cost)

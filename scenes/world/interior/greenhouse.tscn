@@ -1,0 +1,39 @@
+[gd_scene load_steps=7 format=3]
+[ext_resource type="Script" path="res://scripts/world/greenhouse_interior.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="2"]
+[ext_resource type="Script" path="res://scripts/world/balai_nadi_interactable.gd" id="3"]
+[sub_resource type="RectangleShape2D" id="door"]
+size = Vector2(32, 20)
+[sub_resource type="RectangleShape2D" id="horizontal"]
+size = Vector2(220, 8)
+[sub_resource type="RectangleShape2D" id="vertical"]
+size = Vector2(8, 186)
+
+[node name="GreenhouseInterior" type="Node2D"]
+texture_filter = 1
+script = ExtResource("1")
+[node name="Player" parent="." instance=ExtResource("2")]
+position = Vector2(427, 312)
+[node name="spawn" type="Marker2D" parent="."]
+position = Vector2(427, 312)
+[node name="Exit" type="Area2D" parent="."]
+position = Vector2(427, 329)
+script = ExtResource("3")
+interaction_type = 1
+target_scene = "res://scenes/world/farm.tscn"
+spawn_position = Vector2(576, 123)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exit"]
+shape = SubResource("door")
+[node name="Bounds" type="StaticBody2D" parent="."]
+[node name="Top" type="CollisionShape2D" parent="Bounds"]
+position = Vector2(427, 146)
+shape = SubResource("horizontal")
+[node name="Bottom" type="CollisionShape2D" parent="Bounds"]
+position = Vector2(427, 344)
+shape = SubResource("horizontal")
+[node name="Left" type="CollisionShape2D" parent="Bounds"]
+position = Vector2(316, 245)
+shape = SubResource("vertical")
+[node name="Right" type="CollisionShape2D" parent="Bounds"]
+position = Vector2(538, 245)
+shape = SubResource("vertical")

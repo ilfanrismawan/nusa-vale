@@ -49,6 +49,9 @@ func _coop_input(event: InputEvent) -> void:
 
 func _sleep() -> void:
 	_sleeping = true
+	for p in _players:
+		if is_instance_valid(p):
+			p.set_input_locked(&"sleep", true)
 	var layer := CanvasLayer.new()
 	layer.layer = 50
 	var fade := ColorRect.new()
@@ -78,4 +81,7 @@ func _new_day() -> void:
 	
 func _end_sleep(layer: CanvasLayer) -> void:
 	layer.queue_free()
+	for p in _players:
+		if is_instance_valid(p):
+			p.set_input_locked(&"sleep", false)
 	_sleeping = false

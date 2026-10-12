@@ -4,6 +4,15 @@
 
 [resource]
 script = ExtResource("1_nng7o")
+dig_bonus_chance = 0
+water_capacity = 0
+reach_tiles = 1.5
+area_depth = 1
+area_width = 1
+area_size = 1
+action_speed = 1
+stamina_cost = 4
+damage = 1
 tool_id = "hoe_wood"
 display_name = "Wood Hoe"
 tool_type = 1

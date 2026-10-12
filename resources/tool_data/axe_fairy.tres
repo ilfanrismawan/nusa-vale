@@ -4,12 +4,18 @@
 
 [resource]
 script = ExtResource("1_td")
+dig_bonus_chance = 0
+water_capacity = 0
+reach_tiles = 3
+area_depth = 1
+area_width = 1
+area_size = 1
 tool_id = "axe_fairy"
 display_name = "Kapak Fairy"
 tier = 8
-damage = 9
+damage = 15
 stamina_cost = 2
-action_speed = 2.15
+action_speed = 2
 upgrade_cost_money = 12000
 required_items = {
 "fairy_bar": 5

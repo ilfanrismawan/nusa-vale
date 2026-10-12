@@ -1,0 +1,92 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/balai_nadi_area.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="2"]
+[ext_resource type="Script" path="res://scripts/world/balai_nadi_interactable.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/world/balai_nadi_visual.gd" id="4"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_crafting_workbench.tres" id="5"]
+
+[sub_resource type="RectangleShape2D" id="table"]
+size = Vector2(38, 32)
+[sub_resource type="RectangleShape2D" id="door"]
+size = Vector2(36, 20)
+[sub_resource type="RectangleShape2D" id="horizontal"]
+size = Vector2(220, 8)
+[sub_resource type="RectangleShape2D" id="vertical"]
+size = Vector2(8, 176)
+
+[node name="BalaiNadiInterior" type="Node2D"]
+texture_filter = 1
+script = ExtResource("1")
+interior = true
+
+[node name="ContributionTable" type="Area2D" parent="."]
+position = Vector2(427, 222)
+collision_layer = 1
+script = ExtResource("3")
+[node name="Sprite2D" type="Sprite2D" parent="ContributionTable"]
+texture = ExtResource("5")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ContributionTable"]
+shape = SubResource("table")
+[node name="Blocker" type="StaticBody2D" parent="ContributionTable"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ContributionTable/Blocker"]
+shape = SubResource("table")
+
+[node name="Exit" type="Area2D" parent="."]
+position = Vector2(427, 317)
+collision_layer = 1
+script = ExtResource("3")
+interaction_type = 1
+target_scene = "res://scenes/world/balai_nadi/exterior.tscn"
+spawn_position = Vector2(427, 261)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exit"]
+shape = SubResource("door")
+
+[node name="RestorationVisual" type="Node2D" parent="."]
+script = ExtResource("4")
+[node name="Unrestored" type="Node2D" parent="RestorationVisual"]
+[node name="Debris" type="Polygon2D" parent="RestorationVisual/Unrestored"]
+polygon = PackedVector2Array(351, 214, 375, 228, 373, 232, 349, 218)
+color = Color(0.28, 0.23, 0.19, 1)
+[node name="CrackedBench" type="Polygon2D" parent="RestorationVisual/Unrestored"]
+polygon = PackedVector2Array(474, 230, 494, 230, 492, 238, 480, 237)
+color = Color(0.34, 0.26, 0.19, 1)
+[node name="Restored" type="Node2D" parent="RestorationVisual"]
+visible = false
+[node name="WelcomeRug" type="Polygon2D" parent="RestorationVisual/Restored"]
+polygon = PackedVector2Array(396, 265, 458, 265, 458, 289, 396, 289)
+color = Color(0.63, 0.31, 0.23, 1)
+[node name="Bench" type="Polygon2D" parent="RestorationVisual/Restored"]
+polygon = PackedVector2Array(477, 218, 510, 218, 510, 228, 477, 228)
+color = Color(0.66, 0.44, 0.23, 1)
+[node name="Planter" type="Polygon2D" parent="RestorationVisual/Restored"]
+polygon = PackedVector2Array(341, 181, 354, 181, 358, 196, 338, 196)
+color = Color(0.39, 0.57, 0.28, 1)
+
+[node name="Bounds" type="StaticBody2D" parent="."]
+[node name="Top" type="CollisionShape2D" parent="Bounds"]
+position = Vector2(427, 151)
+shape = SubResource("horizontal")
+[node name="Bottom" type="CollisionShape2D" parent="Bounds"]
+position = Vector2(427, 335)
+shape = SubResource("horizontal")
+[node name="Left" type="CollisionShape2D" parent="Bounds"]
+position = Vector2(316, 243)
+shape = SubResource("vertical")
+[node name="Right" type="CollisionShape2D" parent="Bounds"]
+position = Vector2(538, 243)
+shape = SubResource("vertical")
+
+[node name="Player" parent="." instance=ExtResource("2")]
+position = Vector2(427, 296)
+
+[node name="TableHint" type="Label" parent="."]
+offset_left = 376.0
+offset_top = 184.0
+offset_right = 480.0
+offset_bottom = 204.0
+theme_override_font_sizes/font_size = 9
+text = "Meja Kontribusi (E)"
+
+[node name="spawn" type="Marker2D" parent="."]
+position = Vector2(427, 296)

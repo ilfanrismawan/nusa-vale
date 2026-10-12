@@ -65,10 +65,11 @@ func _clear_on_season() -> bool:
 
 
 func _pick_id() -> String:
+	var season := DayCycle.get_current_season()
 	var total := 0.0
 	var pool: Array[WeedData] = []
 	for w in all_weeds():
-		if w.locations.has(location_id) and w.weight > 0.0:
+		if w.locations.has(location_id) and w.weight > 0.0 and w.is_in_season(season):
 			pool.append(w)
 			total += w.weight
 	if pool.is_empty():
@@ -79,6 +80,18 @@ func _pick_id() -> String:
 		if r <= 0.0:
 			return w.id
 	return pool[-1].id
+
+
+## Rumput yang musimnya sudah lewat (mis. Rumput Berbunga di musim dingin) dibuang dulu.
+func _sync(animate_existing: bool) -> void:
+	if is_inside_tree():
+		var season := DayCycle.get_current_season()
+		var items := ForageManager.get_items(_area_key())
+		for key in items.keys():
+			var data := find_weed(str(items[key]))
+			if data != null and not data.is_in_season(season):
+				ForageManager.remove_item(_area_key(), ForageManager.cell_from_key(key))
+	super(animate_existing)
 
 
 func _make_node(id: String, cell: Vector2i) -> Node2D:
@@ -100,7 +113,7 @@ func _cell_allowed(cell: Vector2i) -> bool:
 
 func _on_spawned(_count: int) -> void:
 	if DiscoveryManager.discover("weed_tip"):
-		Notify.say("Rumput liar tumbuh! Tebas pakai sabit untuk dapat Fiber.")
+		Notify.say("Rumput liar tumbuh! Tebas pakai sabit untuk dapat Fiber atau bahan lain.")
 
 
 func _uses_farm_soil() -> bool:

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Texture2D" path="res://resources/icons/icon_worm.tres" id="1_icon"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="2_script"]
+
+[resource]
+script = ExtResource("2_script")
+category = 4
+item_id = "worm"
+display_name = "Cacing"
+icon = ExtResource("1_icon")
+description = "Cacing tanah gemuk dari titik gali. Umpan pancing yang bagus."
+sell_price = 5
+rarity = 0
+metadata/_custom_type_script = "uid://cm1okc20ussp3"

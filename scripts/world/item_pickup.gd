@@ -1,18 +1,26 @@
 class_name ItemPickup
 extends Area2D
 
+## Jarak barang buangan dari kaki pemain (px).
+const DROP_DISTANCE := 18.0
 
 var item_id: String = ""
 var amount: int = 1
 var _can_collect: bool = false
 var _icon: Texture2D
+## Tekstur asli tanpa outline untuk ikon yang dibawa karakter.
+var _raw_icon: Texture2D
+## Body yang tidak bisa memungut sampai ia keluar dulu dari area pickup
+## (pemain yang baru membuang barang ini dari tas).
+var _ignore_body: Node2D
 
 
 static func spawn(
 	parent: Node,
 	world_pos: Vector2,
 	p_item_id: String,
-	p_amount: int = 1
+	p_amount: int = 1,
+	p_icon: Texture2D = null
 ) -> ItemPickup:
 	if parent == null or p_item_id.is_empty() or p_amount <= 0:
 		return null
@@ -21,12 +29,38 @@ static func spawn(
 	parent.add_child(pickup)
 
 	pickup.global_position = world_pos
+	# Di tanah pakai versi ikon ber-outline putih (lihat OutlineIcon).
 	pickup.setup(
 		p_item_id,
 		p_amount,
-		_icon_for(p_item_id)
+		OutlineIcon.get_for(p_icon if p_icon != null else _icon_for(p_item_id))
 	)
+	pickup._raw_icon = p_icon if p_icon != null else _icon_for(p_item_id)
 
+	return pickup
+
+
+## Barang yang dibuang pemain dari tas: jatuh di depan kakinya dan baru bisa
+## dipungut pemain itu lagi setelah ia melangkah keluar lalu masuk lagi.
+static func drop_from(
+	player: Player,
+	p_item_id: String,
+	p_amount: int,
+	p_icon: Texture2D = null
+) -> ItemPickup:
+	if not is_instance_valid(player):
+		return null
+	var holder: Node = player.get_parent().get_parent() if player.get_parent() != null else null
+	if holder == null:
+		holder = player.world_root()
+	var land: Vector2 = player.global_position + Player.FEET_OFFSET \
+		+ player.facing_direction.normalized() * DROP_DISTANCE
+	var pickup := spawn(holder, land, p_item_id, p_amount, p_icon)
+	if pickup:
+		pickup._ignore_body = player
+		player.bind_context()
+		Juice.play_sound(&"item_drop")
+		player.play_item_gesture()
 	return pickup
 
 
@@ -138,6 +172,7 @@ func setup(
 	# =========================
 
 	body_entered.connect(_on_body_entered)
+	body_exited.connect(_on_body_exited)
 
 
 	# =========================
@@ -201,10 +236,21 @@ func _enable_collect() -> void:
 	# dari callback/tween yang berhubungan dengan physics.
 	set_deferred("monitoring", true)
 
+	# Barang buangan yang mendarat tidak menyentuh pemain: langsung boleh dipungut.
+	# Kalau masih menyentuh, tunggu body_exited.
+	if _ignore_body != null:
+		await get_tree().physics_frame
+		await get_tree().physics_frame
+		if is_instance_valid(_ignore_body) and not overlaps_body(_ignore_body):
+			_ignore_body = null
+
 
 func _on_body_entered(body: Node2D) -> void:
 
 	if not _can_collect:
+		return
+
+	if body == _ignore_body:
 		return
 
 	if not (
@@ -266,7 +312,9 @@ func _on_body_entered(body: Node2D) -> void:
 		]
 	)
 
-	Juice.collect(item_id, _icon, global_position)
+	Juice.collect(item_id, _raw_icon if _raw_icon != null else _icon, global_position)
+	if body is Player:
+		(body as Player).play_item_gesture(true, _raw_icon if _raw_icon != null else _icon, item_id)
 
 
 	# =========================
@@ -289,6 +337,11 @@ func _on_body_entered(body: Node2D) -> void:
 	# =========================
 
 	queue_free()
+
+
+func _on_body_exited(body: Node2D) -> void:
+	if body == _ignore_body:
+		_ignore_body = null
 
 
 func _display_name() -> String:

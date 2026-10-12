@@ -13,10 +13,10 @@ size = Vector2(50, 43)
 size = Vector2(27, 34)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e2t5s"]
-size = Vector2(121, 20)
+size = Vector2(121, 23)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_37gcr"]
-size = Vector2(120, 11)
+size = Vector2(120, 14)
 
 [node name="BrokenBridge" type="Node2D" unique_id=1416927716]
 texture_filter = 1
@@ -32,7 +32,6 @@ region_enabled = true
 region_rect = Rect2(7, 5, 124, 51)
 
 [node name="RepairedSprite" type="Sprite2D" parent="Visual" unique_id=563167893]
-visible = false
 texture_filter = 1
 texture = ExtResource("2_rdbio")
 region_enabled = true
@@ -60,9 +59,9 @@ shape = SubResource("RectangleShape2D_ovsut")
 [node name="Col" type="Area2D" parent="." unique_id=1486352030]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Col" unique_id=1388460773]
-position = Vector2(2, 15)
+position = Vector2(2, 13.5)
 shape = SubResource("RectangleShape2D_e2t5s")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Col" unique_id=1170877051]
-position = Vector2(2, -19.5)
+position = Vector2(2, -21)
 shape = SubResource("RectangleShape2D_37gcr")

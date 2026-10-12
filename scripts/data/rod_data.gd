@@ -27,3 +27,6 @@ extends ToolData
 @export var legendary_weight_mult: float = 1.0
 ## Peluang mendapat 2 ikan sekaligus (0.1 = 10%).
 @export_range(0.0, 1.0, 0.01) var double_catch_chance: float = 0.0
+
+func ability_text() -> String:
+	return "Lempar %.1f–%.1f petak | Stamina %d\nGigitan %.2fx waktu | Zona %.2fx\nDrain %.2fx | Gerak ikan %.2fx\nBobot langka %.2fx | Legendaris %.2fx\nTangkapan ganda %d%% | Perfect %d%%" % [min_cast_tiles, max_cast_tiles, stamina_cost, bite_time_mult, zone_mult, drain_mult, fish_speed_mult, rare_weight_mult, legendary_weight_mult, roundi(double_catch_chance * 100), roundi(perfect_window * 100)]

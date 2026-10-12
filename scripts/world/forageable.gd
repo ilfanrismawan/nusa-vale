@@ -1,9 +1,15 @@
 class_name Forageable
 extends Area2D
-## Barang liar di tanah. Hadap ke barang lalu tekan tombol interact (E) untuk memungut.
+## Barang liar di tanah. Seperti Stardew: hadap ke barang lalu tekan E (ditangani ForageSpawner),
+## atau klik barangnya dengan Tangan (HarvestEffect tanpa alat).
 ## Dibuat oleh ForageSpawner; jangan ditaruh manual di scene.
 
 const LAYER_BIT := 1 << 10
+## Titik y-sort digeser ke atas supaya sejajar dengan titik y-sort pemain
+## (badan pemain 8 px di atas kakinya). Tanpa ini barang tergambar di atas kaki pemain.
+const SORT_SHIFT := Vector2(0, -4)
+const GROUP := &"forageable"
+const RADIUS := 8.0
 
 var item: ItemData
 var location_id: String = ""
@@ -22,18 +28,26 @@ func setup(p_item: ItemData, p_location_id: String, p_cell: Vector2i) -> void:
 	collision_mask = 0
 	monitoring = false
 	monitorable = true
+	add_to_group(GROUP)
 
 	_sprite = Sprite2D.new()
-	_sprite.texture = item.icon
+	_sprite.texture = OutlineIcon.get_for(item.icon)
 	_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_sprite.position = -SORT_SHIFT
 	_sprite.offset = Vector2(0, -4)
 	add_child(_sprite)
 
 	var shape := CollisionShape2D.new()
 	var circle := CircleShape2D.new()
-	circle.radius = 8.0
+	circle.radius = RADIUS
 	shape.shape = circle
+	shape.position = -SORT_SHIFT
 	add_child(shape)
+
+
+## Dipanggil ForageSpawner setelah node ditaruh di tengah sel.
+func apply_sort_shift() -> void:
+	position += SORT_SHIFT
 
 
 ## Muncul dengan "pop" kecil (dipakai untuk barang yang baru tumbuh hari ini).
@@ -43,6 +57,11 @@ func play_appear() -> void:
 	_sprite.scale = Vector2(0.2, 0.2)
 	var tw := create_tween()
 	tw.tween_property(_sprite, "scale", Vector2.ONE, 0.25).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+
+## Titik tengah sel barang ini (node-nya digeser SORT_SHIFT untuk y-sort).
+func ground_position() -> Vector2:
+	return global_position - SORT_SHIFT
 
 
 func interact() -> void:

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_armor_crimson.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+category = 7
+item_id = "armor_crimson"
+display_name = "Armor Crimson"
+icon = ExtResource("2")
+description = "Pelindung badan Crimson."
+stackable = false
+max_stack = 1
+equipment_slot = 2
+defense_bonus = 20
+equipment_tier = 5
+buy_price = 4800
+sell_price = 1920
+rarity = 2

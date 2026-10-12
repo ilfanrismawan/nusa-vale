@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="RestorationProject" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/restoration_project.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+project_id = "balai_nadi_restoration"
+display_name = "Restorasi Balai Nadi"
+description = "Atap yang bocor dan bangku yang lapuk menunggu tangan yang peduli. Pulihkan balai agar kembali menjadi tempat warga berkumpul."
+requirements = Dictionary[String, int]({"wood": 100, "stone": 50})
+completion_flag = "balai_nadi_restored"
+completion_message = "Balai Nadi kembali hidup. Kini ada tempat hangat untuk berkumpul."

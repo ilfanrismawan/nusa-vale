@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://tw7i8ohp1n1" path="res://scripts/world/exit_door_house.gd" id="4_5n7fl"]
 [ext_resource type="Script" uid="uid://bubk6r06ryn05" path="res://scripts/world/bed.gd" id="6_4cxdx"]
 [ext_resource type="Texture2D" uid="uid://jy6e75i02lwh" path="res://scenes/world/interior/objects/Beds.png" id="7_cnadn"]
+[ext_resource type="PackedScene" path="res://scenes/objects/Wardrobe.tscn" id="8_wardrobe"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fasb7"]
 texture = ExtResource("2_gvyf1")
@@ -2521,7 +2522,7 @@ shape = SubResource("RectangleShape2D_ywce2")
 position = Vector2(310, 193)
 
 [node name="spawn" type="Marker2D" parent="." unique_id=121107213]
-position = Vector2(270, 122)
+position = Vector2(311, 203)
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=984481222]
 position = Vector2(270, 122)
@@ -2554,7 +2555,14 @@ shape = SubResource("RectangleShape2D_r2eyg")
 position = Vector2(267, 121)
 script = ExtResource("4_5n7fl")
 target_scene = "uid://bpk7kk0a4ctut"
+target_spawn_pos = Vector2(1113, 290)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ExitDoor" unique_id=1169761824]
 position = Vector2(43, 102)
 shape = SubResource("RectangleShape2D_ovsut")
+
+[node name="BedSpawn" type="Marker2D" parent="." unique_id=413548139]
+position = Vector2(304, 147)
+
+[node name="Wardrobe" parent="." instance=ExtResource("8_wardrobe")]
+position = Vector2(336, 126)

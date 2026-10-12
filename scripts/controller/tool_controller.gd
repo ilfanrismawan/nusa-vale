@@ -43,11 +43,20 @@ func _unhandled_input(event: InputEvent) -> void:
 	# Co-op: setiap pemain hanya bereaksi pada perangkatnya sendiri (PlayerInput).
 	if player.is_input_locked():
 		return
+	if state_machine.current_state == action_state or state_machine.current_state == fishing_state:
+		return
 	var input := player.input
 	if input.is_event(event, &"use_tool"):
 		player.bind_context()
-		if current_tool != null:
+		if current_item != null and current_item.placeable:
+			var result := StructureManager.place(player, player.data.hotbar_page * 8 + current_index, player.get_target_cell())
+			Notify.say(result["message"])
+			get_viewport().set_input_as_handled()
+		elif current_tool != null:
 			use_action(current_tool)
+		elif current_item != null:
+			player.ui_inventory.drop_from_slot(player.data.hotbar_page * 8 + current_index, 1)
+			get_viewport().set_input_as_handled()
 		elif _can_hand_harvest():
 			use_action(HAND_HARVEST)
 			
@@ -72,12 +81,15 @@ func switch_tool(direction: int) -> void:
 	select_tool(new_index)
 
 
-func select_tool(index: int) -> void:
+func select_tool(index: int, preview: bool = true) -> void:
 	if index < 0 or index >= 8:
 		return
 	current_index = index
+	player._sync_carried_item()
 	var item: ItemData = current_item
 	tool_changed.emit(current_tool)
+	if preview:
+		player.show_tool_preview(item)
 	if item != null:
 		print("Slot aktif [%d]: %s" % [index, item.display_name])
 	else:
@@ -99,6 +111,8 @@ func use_action(action: ActionData) -> void:
 		Notify.say("Tidak bisa pakai alat di sini")
 		return
 	
+	if action.effect is WaterEffect and action.effect.try_refill(player, player.get_target_cell(), action.tool_data):
+		return
 	var stamina_cost: int = _get_stamina_cost(action)
 	
 	if action.effect:
@@ -112,6 +126,7 @@ func use_action(action: ActionData) -> void:
 			return
 			
 	action_state.start(action, player.get_target_cell())
+	player._clear_pickup_visual()
 	state_machine.change_state(action_state)
 
 func _start_fishing(action: ActionData) -> void:
@@ -121,6 +136,7 @@ func _start_fishing(action: ActionData) -> void:
 		Notify.say("Terlalu lelah! Istirahatlah.")
 		return
 	fishing_state.start(action.tool_data as RodData, stamina_cost)
+	player._clear_pickup_visual()
 	state_machine.change_state(fishing_state)
 	
 func _get_stamina_cost(action: ActionData) -> int:

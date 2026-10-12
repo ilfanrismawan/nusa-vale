@@ -110,6 +110,8 @@ func refresh() -> void:
 		var slot_data = null
 		if global_idx < data.bag_size:
 			slot_data = data.inventory[global_idx]
+		# Indeks tas sebenarnya (halaman hotbar 2/3), supaya tarik-lepas menukar slot yang benar.
+		_slots[i].slot_index = global_idx
 			
 		if slot_data != null and slot_data.get("item") != null:
 			_slots[i].set_item(slot_data["item"], slot_data["count"])
@@ -130,13 +132,13 @@ func highlight_slot(index: int) -> void:
 
 func _on_slot_clicked(index: int, button: int) -> void:
 	if button == MOUSE_BUTTON_LEFT:
-		_select(index)
+		_select(index % HOTBAR_SLOTS)
 
 func _on_slot_hovered(index: int, _slot_ui: InventorySlotUI) -> void:
-	_hovered_index = index
+	_hovered_index = index % HOTBAR_SLOTS
 
 func _on_slot_unhovered(index: int, _slot_ui: InventorySlotUI) -> void:
-	if _hovered_index == index:
+	if _hovered_index == index % HOTBAR_SLOTS:
 		_hovered_index = -1
 
 ## Posisi tengah (layar) slot hotbar yang berisi item_id, atau null jika tidak ada di halaman ini.
@@ -184,6 +186,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	var input := _owner_input()
 	if input.is_event(event, &"cycle_hotbar"):
 		data.cycle_hotbar()
+		if is_instance_valid(player):
+			player.tool_controller.select_tool(active_index)
 		get_viewport().set_input_as_handled()
 		return
 		
@@ -191,11 +195,4 @@ func _unhandled_input(event: InputEvent) -> void:
 		data.sort_inventory()
 		get_viewport().set_input_as_handled()
 		return
-		
-	if event is InputEventMouseButton and event.pressed and input.uses_mouse():
-		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-			_select(wrapi(active_index - 1, 0, HOTBAR_SLOTS))
-			get_viewport().set_input_as_handled()
-		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			_select(wrapi(active_index + 1, 0, HOTBAR_SLOTS))
-			get_viewport().set_input_as_handled()
+	# Scroll mouse ganti slot ditangani ToolController lewat aksi tool_next/tool_prev.

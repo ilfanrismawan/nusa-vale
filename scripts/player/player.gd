@@ -35,6 +35,13 @@ var input: PlayerInput:
 ## Alasan input dikunci (menu terbuka, pindah area, tidur, kontroler lepas). Co-op saja;
 ## solo memakai pause tree seperti sebelumnya.
 var _input_locks: Dictionary = {}
+var _pending_item_gesture: StringName
+var _pending_pickup_icon: Texture2D
+var _pending_pickup_id := ""
+var _carried_item_id := ""
+var _preview_item_id := ""
+var _pickup_visual: Sprite2D
+var _pickup_visual_tween: Tween
 
 const INTERACTION_DISTANCE := 32.0
 
@@ -70,12 +77,18 @@ func _ready() -> void:
 		
 func _process(delta: float) -> void:
 	bind_context()
+	_sync_carried_item()
+	_flush_item_gesture()
+	_update_held_item_position()
 	if not is_input_locked() and input.just_pressed(&"interact"):
 		_try_interact()
 	_update_tile_cursor()
 	
 func _physics_process(delta: float) -> void:
 	bind_context()
+	if _input_locks.has(&"sleep") or animation_controller.item_gesture_playing:
+		velocity = Vector2.ZERO
+		return
 	state_machine.physics_update(delta)
 
 ## Arahkan GameState (tas/stamina) dan FarmManager (tile) ke pemain dan area ini
@@ -107,11 +120,123 @@ func set_input_locked(reason: StringName, locked: bool) -> void:
 		velocity = Vector2.ZERO
 	else:
 		_input_locks.erase(reason)
+	if reason == &"sleep":
+		animation_controller.set_visual_override(&"sleep" if locked else &"")
 
 func is_input_locked() -> bool:
-	return not _input_locks.is_empty()
+	return not _input_locks.is_empty() or animation_controller.item_gesture_playing
+
+func play_item_gesture(pickup: bool = false, icon: Texture2D = null, item_id: String = "") -> void:
+	_pending_item_gesture = &"pick_up" if pickup else &"item_drop"
+	_pending_pickup_icon = icon if pickup else null
+	_pending_pickup_id = item_id if pickup else ""
+	_flush_item_gesture()
+
+## Preview the selected hotbar item briefly above the player when scrolling tools.
+func show_tool_preview(item: ItemData) -> void:
+	if item != null and _carried_item_id == item.item_id and is_instance_valid(_pickup_visual):
+		return
+	_clear_pickup_visual()
+	if item == null or item.icon == null:
+		return
+	_preview_item_id = item.item_id
+	_show_static_item_visual(item.icon)
+	animation_controller.set_carrying_item(true)
+	_pickup_visual_tween = create_tween()
+	_pickup_visual_tween.tween_interval(0.8)
+	_pickup_visual_tween.tween_callback(_clear_pickup_visual)
+
+func _flush_item_gesture() -> void:
+	if _pending_item_gesture.is_empty() or is_input_locked() or get_tree().paused:
+		return
+	# Pickups can arrive during a tool hit. Finish that action before showing the gesture.
+	if state_machine.current_state == tool_controller.action_state or state_machine.current_state == tool_controller.fishing_state:
+		return
+	animation_controller.set_direction(facing_direction)
+	if animation_controller.play_item_gesture(_pending_item_gesture):
+		_clear_pickup_visual()
+		if _pending_item_gesture == &"pick_up" and _pending_pickup_icon != null:
+			for slot in data.bag_size:
+				if data.inventory[slot] != null and data.inventory[slot]["item"].item_id == _pending_pickup_id:
+					@warning_ignore("integer_division")
+					data.hotbar_page = slot / 8
+					tool_controller.select_tool(slot % 8, false)
+					hotbar_ui.refresh()
+					break
+			_carried_item_id = _pending_pickup_id
+			_show_pickup_visual(_pending_pickup_icon)
+			animation_controller.set_carrying_item(true)
+	_pending_item_gesture = &""
+	_pending_pickup_icon = null
+	_pending_pickup_id = ""
+
+func _sync_carried_item() -> void:
+	var visible_id := _carried_item_id if not _carried_item_id.is_empty() else _preview_item_id
+	if visible_id.is_empty():
+		return
+	var held := tool_controller.current_item
+	if held == null or held.item_id != visible_id or not data.has_item(visible_id):
+		_clear_pickup_visual()
+
+## Local to the collecting character, so it follows movement and its own co-op viewport.
+func _show_pickup_visual(icon: Texture2D) -> void:
+	_show_static_item_visual(icon)
+
+func _show_static_item_visual(icon: Texture2D) -> void:
+	# All callers share one visual; replacement removes the old node immediately.
+	_dispose_item_visual()
+	if icon == null:
+		return
+	_pickup_visual = Sprite2D.new()
+	_pickup_visual.name = "HeldPickupItem"
+	_pickup_visual.texture = icon
+	_pickup_visual.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	var bounds := Rect2(Vector2.ZERO, icon.get_size())
+	var image := icon.get_image()
+	if image != null and image.get_used_rect().has_area():
+		bounds = Rect2(image.get_used_rect())
+	_pickup_visual.scale = Vector2.ONE * minf(1.0, 16.0 / maxf(1.0, maxf(bounds.size.x, bounds.size.y)))
+	_pickup_visual.offset = icon.get_size() * 0.5 - bounds.get_center()
+	_pickup_visual.set_meta("visible_height", bounds.size.y * _pickup_visual.scale.y)
+	_pickup_visual.z_index = 10
+	add_child(_pickup_visual)
+	_update_held_item_position()
+
+func _update_held_item_position() -> void:
+	if not is_instance_valid(_pickup_visual):
+		return
+	var sprite := animation_controller.sprite
+	var animation := String(sprite.animation)
+	var hand_y := -6.0
+	if animation.begins_with("pick_up_"):
+		var last_frame := maxi(1, sprite.sprite_frames.get_frame_count(sprite.animation) - 1)
+		var progress := clampf((sprite.frame + sprite.frame_progress) / last_frame, 0.0, 1.0)
+		hand_y = lerpf(3.0, -6.0, progress)
+	elif animation.begins_with("carry_walk_") or animation.begins_with("carry_run_"):
+		hand_y += float(sprite.frame % 2)
+	var hand_x := signf(facing_direction.x)
+	_pickup_visual.position = Vector2(hand_x, hand_y - float(_pickup_visual.get_meta("visible_height", 16.0)) * 0.5)
+
+func _clear_pickup_visual() -> void:
+	_carried_item_id = ""
+	_preview_item_id = ""
+	animation_controller.set_carrying_item(false)
+	_dispose_item_visual()
+
+func _dispose_item_visual() -> void:
+	if _pickup_visual_tween != null and _pickup_visual_tween.is_valid():
+		_pickup_visual_tween.kill()
+	_pickup_visual_tween = null
+	if is_instance_valid(_pickup_visual):
+		_pickup_visual.hide()
+		if _pickup_visual.get_parent() == self:
+			remove_child(_pickup_visual)
+		_pickup_visual.queue_free()
+	_pickup_visual = null
 	
 func _try_interact() -> void:
+	if StructureManager.interact_near(self):
+		return
 	var target := _find_interactable()
 	if target == null:
 		return
@@ -220,7 +345,10 @@ func get_target_cell() -> Vector2i:
 	var foot_position := global_position + FEET_OFFSET
 	var dist_to_mouse := foot_position.distance_to(mouse_world_pos)
 	
-	if dist_to_mouse <= MAX_ACTION_DISTANCE and dist_to_mouse > 4.0:
+	var reach := MAX_ACTION_DISTANCE
+	if tool_controller != null and tool_controller.current_tool != null and tool_controller.current_tool.tool_data != null and not (tool_controller.current_item != null and tool_controller.current_item.placeable):
+		reach = tool_controller.current_tool.tool_data.reach_tiles * 16.0
+	if dist_to_mouse <= reach and dist_to_mouse > 4.0:
 		var dir := (mouse_world_pos - foot_position).normalized()
 		update_facing_direction(dir)
 		return base_layer_ground.local_to_map(base_layer_ground.to_local(mouse_world_pos))

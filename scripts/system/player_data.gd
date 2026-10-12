@@ -10,7 +10,7 @@ signal stamina_changed(current: int, maximum: int)
 signal appearance_changed(appearance: CharacterAppearance)
 
 const MAX_STAMINA: int = 100
-## Ukuran maksimal absolut array inventory (tidak pernah berubah)
+## Ukuran array inventory pemain; inventory peti sementara memakai configure_storage.
 const INVENTORY_SIZE := 36
 ## Level tas: 0=Tas Kecil(12), 1=Ransel(24), 2=Ransel Besar(36)
 const BAG_SIZES := [12, 24, 36]
@@ -24,14 +24,27 @@ var stamina: int = MAX_STAMINA:
 		stamina = value
 		stamina_changed.emit(stamina, MAX_STAMINA)
 
+var watering_water: int = 20
+
 var bag_level: int = 0
+## Only temporary chest inventories use this override; player bags keep BAG_SIZES.
+var _storage_capacity: int = 0
 var hotbar_page: int = 0
 var inventory: Array = []
+const EQUIPMENT_KEYS: Array[String] = ["weapon", "helmet", "armor", "leggings", "boots"]
+var equipment: Dictionary = empty_equipment()
 var appearance: CharacterAppearance = CharacterAppearance.new()
+## Nama yang diketik saat Game Baru (ditampilkan di menu slot save). Kosong = belum diberi nama.
+var player_name: String = ""
 
 ## Jumlah slot yang aktif/terlihat saat ini
 var bag_size: int:
-	get: return BAG_SIZES[clampi(bag_level, 0, BAG_SIZES.size() - 1)]
+	get: return _storage_capacity if _storage_capacity > 0 else BAG_SIZES[clampi(bag_level, 0, BAG_SIZES.size() - 1)]
+
+func configure_storage(capacity: int) -> void:
+	assert(index == -1, "Storage capacity is reserved for temporary chest inventories.")
+	_storage_capacity = clampi(capacity, 1, 60)
+	inventory.resize(_storage_capacity)
 
 
 func _init(p_index: int = 0) -> void:
@@ -43,7 +56,11 @@ func _init(p_index: int = 0) -> void:
 
 ## Isi awal pemain baru: tas kosong + alat kayu + bibit.
 func reset_to_starter() -> void:
+	equipment = empty_equipment()
+	equipment["weapon"] = GameState._resolve_item("sword_wood")
+	equipment["armor"] = GameState._resolve_item("armor_wood")
 	stamina = MAX_STAMINA
+	watering_water = 20
 	bag_level = 0
 	hotbar_page = 0
 	for i in INVENTORY_SIZE:
@@ -155,9 +172,13 @@ func _store(item: ItemData, amount: int) -> int:
 		var stack := mini(remaining, item.max_stack)
 		inventory[empty_slot] = {"item": item, "count": stack}
 		remaining -= stack
+	if remaining < amount and item.category in [ItemData.Category.FISH, ItemData.Category.FORAGE, ItemData.Category.CROP, ItemData.Category.MATERIAL]:
+		DiscoveryManager.discover("item_" + item.item_id)
 	return remaining
 
 func buy_item(item_id: String, amount: int = 1) -> bool:
+	if amount <= 0:
+		return false
 	var item: ItemData = GameState._resolve_item(item_id)
 	if item == null:
 		return false
@@ -198,6 +219,8 @@ func remove_item_at(slot: int, amount: int = 1) -> bool:
 
 ## Hapus item berdasarkan item_id
 func remove_item(item_id: String, amount: int = 1) -> bool:
+	if amount <= 0:
+		return false
 	if not has_item(item_id, amount):
 		return false
 	var remaining := amount
@@ -344,6 +367,76 @@ func _changed() -> void:
 	GameState.inventory_changed.emit()
 
 
+## Swap through the source slot, so replacing equipment also works with a full bag.
+func equip_from_slot(slot: int) -> bool:
+	if slot < 0 or slot >= bag_size or inventory[slot] == null:
+		return false
+	var item: ItemData = inventory[slot]["item"]
+	var key := equipment_key(item)
+	if key.is_empty() or int(inventory[slot]["count"]) != 1:
+		return false
+	var previous: ItemData = equipment[key]
+	inventory[slot] = {"item": previous, "count": 1} if previous != null else null
+	equipment[key] = item
+	_changed()
+	return true
+
+func unequip(key: String) -> bool:
+	if not equipment.has(key) or equipment[key] == null:
+		return false
+	var empty := find_empty_slot()
+	if empty < 0:
+		return false
+	inventory[empty] = {"item": equipment[key], "count": 1}
+	equipment[key] = null
+	_changed()
+	return true
+
+static func equipment_key(item: ItemData) -> String:
+	if item == null or item.stackable or item.max_stack != 1:
+		return ""
+	match item.equipment_slot:
+		ItemData.EquipmentSlot.WEAPON: return "weapon"
+		ItemData.EquipmentSlot.ARMOR: return "armor"
+		ItemData.EquipmentSlot.HELMET: return "helmet"
+		ItemData.EquipmentSlot.LEGGINGS: return "leggings"
+		ItemData.EquipmentSlot.BOOTS: return "boots"
+	return ""
+
+func equipment_stats() -> Vector2i:
+	var stats := Vector2i.ZERO
+	for item in equipment.values():
+		if item is ItemData:
+			stats += Vector2i(item.attack_bonus, item.defense_bonus)
+	return stats
+
+func serialize_equipment() -> Dictionary:
+	var result := {}
+	for key in equipment:
+		if equipment[key] != null:
+			result[key] = equipment[key].item_id
+	return result
+
+static func empty_equipment() -> Dictionary:
+	var result := {}
+	for key in EQUIPMENT_KEYS:
+		result[key] = null
+	return result
+
+## Save lama hanya punya weapon/armor; slot lain otomatis kosong.
+func load_equipment(saved: Variant) -> void:
+	equipment = empty_equipment()
+	if not saved is Dictionary:
+		return
+	for key in equipment:
+		var id: Variant = saved.get(key, "")
+		if not id is String or id.is_empty() or not ResourceLoader.exists("res://resources/item_data/%s.tres" % id):
+			continue
+		var item := GameState._resolve_item(id)
+		if equipment_key(item) == key:
+			equipment[key] = item
+
+
 # ── Save ────────────────────────────────────────────────────────────
 
 func serialize_inventory() -> Array:
@@ -360,7 +453,7 @@ func serialize_inventory() -> Array:
 	return result
 
 func load_inventory(entries: Variant) -> void:
-	for i in INVENTORY_SIZE:
+	for i in inventory.size():
 		inventory[i] = null
 	if not entries is Array:
 		return
@@ -370,7 +463,7 @@ func load_inventory(entries: Variant) -> void:
 		var item_id: String = str(entry.get("id", ""))
 		var count: int = int(entry.get("count", 1))
 		var slot_id: int = int(entry.get("slot", -1))
-		if item_id.is_empty() or slot_id < 0 or slot_id >= INVENTORY_SIZE or count <= 0:
+		if item_id.is_empty() or slot_id < 0 or slot_id >= inventory.size() or count <= 0:
 			continue
 		var item: ItemData = GameState._resolve_item(item_id)
 		if item == null:
@@ -381,16 +474,23 @@ func load_inventory(entries: Variant) -> void:
 ## Data pemain P2-P4 di save (P1 tetap memakai key lama "player" dan "inventory").
 func to_dict() -> Dictionary:
 	return {
+		"name": player_name,
 		"stamina": clampi(stamina, 0, MAX_STAMINA),
 		"bag_level": bag_level,
+		"watering_water": watering_water,
 		"appearance": appearance.to_dict(),
 		"inventory": serialize_inventory(),
+		"equipment": serialize_equipment(),
 	}
 
 func load_dict(data: Dictionary) -> void:
+	var saved_name: Variant = data.get("name", "")
+	player_name = saved_name if saved_name is String else ""
+	watering_water = clampi(int(data.get("watering_water", 20)), 0, 350)
 	stamina = clampi(int(data.get("stamina", MAX_STAMINA)), 0, MAX_STAMINA)
 	bag_level = clampi(int(data.get("bag_level", 0)), 0, BAG_SIZES.size() - 1)
 	hotbar_page = 0
 	var look: Variant = data.get("appearance", {})
 	set_appearance(CharacterAppearance.from_dict(look if look is Dictionary else {}))
 	load_inventory(data.get("inventory", []))
+	load_equipment(data.get("equipment", {}))

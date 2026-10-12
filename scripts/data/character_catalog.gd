@@ -55,8 +55,35 @@ func _valid_part(id: String, layer: CharacterPart.Layer, fallback: String, allow
 
 func _valid_color(part_id: String, color: String) -> String:
 	var part := find_part(part_id)
-	if part == null or not part.has_colors():
+	if part == null:
+		return ""
+	if not part.has_colors():
+		# Pilihan warna boleh disembunyikan dari UI, tetapi asset masih
+		# membutuhkan warna untuk placeholder di nama file.
+		if part.asset.contains("{color}"):
+			var available := _asset_colors(part)
+			if color in available:
+				return color
+			var preferred := "blue" if part.layer == CharacterPart.Layer.OUTFIT else "black"
+			if preferred in available:
+				return preferred
+			return available[0] if not available.is_empty() else preferred
 		return ""
 	if color in part.colors:
 		return color
 	return part.colors[0]
+
+func _asset_colors(part: CharacterPart) -> PackedStringArray:
+	for sheet in sheets:
+		if sheet == null:
+			continue
+		var folder := sheet.part_folder.path_join(part.asset.get_base_dir())
+		if not DirAccess.dir_exists_absolute(folder):
+			continue
+		var result: PackedStringArray = []
+		for file in ResourceLoader.list_directory(folder):
+			if file.get_extension().to_lower() == "png":
+				result.append(file.get_basename().to_lower())
+		if not result.is_empty():
+			return result
+	return []

@@ -1,0 +1,204 @@
+[gd_resource type="Resource" script_class="CraftingCatalog" format=3 uid="uid://njt14ava3rx7"]
+
+[ext_resource type="Script" uid="uid://b48f86kva881a" path="res://scripts/resources/crafting_catalog.gd" id="1"]
+[ext_resource type="Script" uid="uid://cifuu4is8ndbw" path="res://scripts/resources/crafting_recipe.gd" id="2"]
+
+[sub_resource type="Resource" id="Recipe_sword_wood"]
+script = ExtResource("2")
+recipe_id = "sword_wood"
+output_item_id = "sword_wood"
+ingredients = {
+"wood": 8
+}
+
+[sub_resource type="Resource" id="Recipe_bow_wood"]
+script = ExtResource("2")
+recipe_id = "bow_wood"
+output_item_id = "bow_wood"
+ingredients = {
+"fiber": 6,
+"wood": 10
+}
+
+[sub_resource type="Resource" id="Recipe_staff_wood"]
+script = ExtResource("2")
+recipe_id = "staff_wood"
+output_item_id = "staff_wood"
+ingredients = {
+"stone": 4,
+"wood": 8
+}
+
+[sub_resource type="Resource" id="Recipe_helmet_wood"]
+script = ExtResource("2")
+recipe_id = "helmet_wood"
+output_item_id = "helmet_wood"
+ingredients = {
+"fiber": 2,
+"wood": 6
+}
+
+[sub_resource type="Resource" id="Recipe_armor_wood"]
+script = ExtResource("2")
+recipe_id = "armor_wood"
+output_item_id = "armor_wood"
+ingredients = {
+"fiber": 4,
+"wood": 12
+}
+
+[sub_resource type="Resource" id="Recipe_leggings_wood"]
+script = ExtResource("2")
+recipe_id = "leggings_wood"
+output_item_id = "leggings_wood"
+ingredients = {
+"fiber": 4,
+"wood": 8
+}
+
+[sub_resource type="Resource" id="Recipe_boots_wood"]
+script = ExtResource("2")
+recipe_id = "boots_wood"
+output_item_id = "boots_wood"
+ingredients = {
+"fiber": 4,
+"wood": 6
+}
+
+[sub_resource type="Resource" id="Recipe_arrow_wood"]
+script = ExtResource("2")
+recipe_id = "arrow_wood"
+output_item_id = "arrow_wood"
+output_amount = 10
+ingredients = {
+"stone": 1,
+"wood": 2
+}
+group = "Amunisi"
+
+[sub_resource type="Resource" id="Recipe_sword_copper"]
+script = ExtResource("2")
+recipe_id = "sword_copper"
+output_item_id = "sword_copper"
+ingredients = {
+"copper_bar": 3,
+"wood": 4
+}
+
+[sub_resource type="Resource" id="Recipe_armor_copper"]
+script = ExtResource("2")
+recipe_id = "armor_copper"
+output_item_id = "armor_copper"
+ingredients = {
+"copper_bar": 5,
+"fiber": 6
+}
+
+[sub_resource type="Resource" id="Recipe_sword_iron"]
+script = ExtResource("2")
+recipe_id = "sword_iron"
+output_item_id = "sword_iron"
+ingredients = {
+"iron_bar": 3,
+"wood": 4
+}
+
+[sub_resource type="Resource" id="Recipe_armor_iron"]
+script = ExtResource("2")
+recipe_id = "armor_iron"
+output_item_id = "armor_iron"
+ingredients = {
+"fiber": 6,
+"iron_bar": 5
+}
+
+[sub_resource type="Resource" id="Recipe_furnace"]
+script = ExtResource("2")
+recipe_id = "furnace"
+output_item_id = "furnace"
+ingredients = {
+"copper_ore": 10,
+"stone": 25
+}
+group = "Bangunan"
+
+[sub_resource type="Resource" id="Recipe_wooden_chest"]
+script = ExtResource("2")
+recipe_id = "wooden_chest"
+output_item_id = "wooden_chest"
+ingredients = {
+"wood": 30
+}
+group = "Bangunan"
+
+[sub_resource type="Resource" id="Recipe_wooden_fence"]
+script = ExtResource("2")
+recipe_id = "wooden_fence"
+output_item_id = "wooden_fence"
+ingredients = {
+"wood": 4
+}
+group = "Bangunan"
+
+[sub_resource type="Resource" id="Recipe_crafting_workbench"]
+script = ExtResource("2")
+recipe_id = "crafting_workbench"
+output_item_id = "crafting_workbench"
+ingredients = {
+"stone": 10,
+"wood": 20
+}
+group = "Bangunan"
+
+[sub_resource type="Resource" id="Recipe_stone_fence"]
+script = ExtResource("2")
+recipe_id = "stone_fence"
+output_item_id = "stone_fence"
+ingredients = {
+"stone": 4
+}
+group = "Bangunan"
+
+[sub_resource type="Resource" id="Recipe_wooden_gate"]
+script = ExtResource("2")
+recipe_id = "wooden_gate"
+output_item_id = "wooden_gate"
+ingredients = {
+"fiber": 2,
+"wood": 6
+}
+group = "Bangunan"
+
+[sub_resource type="Resource" id="Recipe_copper_chest"]
+script = ExtResource("2")
+recipe_id = "copper_chest"
+output_item_id = "copper_chest"
+ingredients = {
+"copper_bar": 5,
+"wood": 30
+}
+group = "Bangunan"
+
+[sub_resource type="Resource" id="Recipe_iron_chest"]
+script = ExtResource("2")
+recipe_id = "iron_chest"
+output_item_id = "iron_chest"
+ingredients = {
+"iron_bar": 8,
+"wood": 40
+}
+group = "Bangunan"
+
+[sub_resource type="Resource" id="Recipe_gold_chest"]
+script = ExtResource("2")
+recipe_id = "gold_chest"
+output_item_id = "gold_chest"
+ingredients = {
+"gold_bar": 10,
+"wood": 50
+}
+group = "Bangunan"
+
+[resource]
+script = ExtResource("1")
+recipes = Array[ExtResource("2")]([SubResource("Recipe_sword_wood"), SubResource("Recipe_bow_wood"), SubResource("Recipe_staff_wood"), SubResource("Recipe_helmet_wood"), SubResource("Recipe_armor_wood"), SubResource("Recipe_leggings_wood"), SubResource("Recipe_boots_wood"), SubResource("Recipe_arrow_wood"), SubResource("Recipe_sword_copper"), SubResource("Recipe_armor_copper"), SubResource("Recipe_sword_iron"), SubResource("Recipe_armor_iron"), SubResource("Recipe_furnace"), SubResource("Recipe_wooden_chest"), SubResource("Recipe_wooden_fence"), SubResource("Recipe_crafting_workbench"), SubResource("Recipe_stone_fence"), SubResource("Recipe_wooden_gate"), SubResource("Recipe_copper_chest"), SubResource("Recipe_iron_chest"), SubResource("Recipe_gold_chest")])

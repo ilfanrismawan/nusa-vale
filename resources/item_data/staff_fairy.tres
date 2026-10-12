@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_staff_fairy.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+category = 7
+item_id = "staff_fairy"
+display_name = "Tongkat Sihir Fairy"
+icon = ExtResource("2")
+description = "Tongkat sihir Fairy. Menyalurkan serangan sihir."
+stackable = false
+max_stack = 1
+equipment_slot = 1
+attack_bonus = 47
+weapon_type = 3
+equipment_tier = 8
+buy_price = 18000
+sell_price = 7200
+rarity = 4

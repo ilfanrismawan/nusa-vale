@@ -59,7 +59,44 @@ static func build(
 			var duration := template.get_frame_duration(anim, i)
 			frames.add_frame(anim, _swap_atlas(texture, sheets, textures, catalog, appearance, tool_tiers), duration)
 
+	for sheet in catalog.sheets:
+		if sheet == null or sheet.animation_name.is_empty():
+			continue
+		_add_layer_animation(frames, textures, sheet, catalog, appearance, tool_tiers, only_animations)
 	return {"frames": frames, "textures": textures}
+
+@warning_ignore("integer_division")
+static func _add_layer_animation(frames: SpriteFrames, textures: Dictionary, sheet: CharacterSheet,
+		catalog: CharacterCatalog, appearance: CharacterAppearance, tool_tiers: Dictionary,
+		only_animations: PackedStringArray) -> void:
+	var suffixes: Array[String] = ["down", "up", "right", "left"]
+	var names: PackedStringArray = []
+	for row in sheet.directions:
+		var anim := String(sheet.animation_name) + ("_" + suffixes[row] if sheet.directions > 1 else "")
+		if only_animations.is_empty() or only_animations.has(anim):
+			names.append(anim)
+	if names.is_empty():
+		return
+	var skin := _load_image(_resolve_file(sheet.part_folder, "Skins/1.png"))
+	if skin == null:
+		return
+	var count := skin.get_width() / skin.get_height() / sheet.directions
+	var size := Vector2i(count * sheet.frame_size, sheet.directions * sheet.frame_size)
+	var image := compose_sheet(sheet, catalog, appearance, int(tool_tiers.get(sheet.tool_type, 0)), size)
+	var texture := ImageTexture.create_from_image(image)
+	textures[sheet.part_folder] = texture
+	for row in sheet.directions:
+		var anim := String(sheet.animation_name) + ("_" + suffixes[row] if sheet.directions > 1 else "")
+		if not names.has(anim):
+			continue
+		frames.add_animation(anim)
+		frames.set_animation_speed(anim, sheet.animation_fps)
+		frames.set_animation_loop(anim, sheet.animation_loop)
+		for col in count:
+			var atlas := AtlasTexture.new()
+			atlas.atlas = texture
+			atlas.region = Rect2(col * sheet.frame_size, row * sheet.frame_size, sheet.frame_size, sheet.frame_size)
+			frames.add_frame(anim, atlas)
 
 ## Menyusun satu sheet. `size` = ukuran sheet Josh yang digantikan.
 static func compose_sheet(
@@ -70,6 +107,12 @@ static func compose_sheet(
 		size: Vector2i
 ) -> Image:
 	var out := Image.create_empty(size.x, size.y, false, Image.FORMAT_RGBA8)
+	for relative in sheet.background_layers:
+		var path := _resolve_file(sheet.part_folder, relative)
+		if not path.is_empty():
+			var background := _load_image(path)
+			if background != null:
+				_blit_layer(out, background, sheet)
 	for path in _layer_paths(sheet, catalog, appearance, tool_tier):
 		var layer := _load_image(path)
 		if layer != null:
@@ -84,7 +127,7 @@ static func compose_sheet(
 				var style := outfit.clothing_style if outfit != null else ""
 				var key := "%s|%s|%s" % [path, style, appearance.pants]
 				if not _clothing_cache.has(key):
-					var reference_path := _resolve_file(sheet.part_folder, "Clothers/Track Jacket/Black.png")
+					var reference_path := _resolve_file(sheet.part_folder, "Clothers/Track Jacket/Black.png", false)
 					var reference := _load_image(reference_path) if not reference_path.is_empty() else layer
 					_clothing_cache[key] = CharacterClothingStyler.apply(layer, style, appearance.pants == "pants_baggy_jeans", reference)
 				layer = _clothing_cache[key]
@@ -165,7 +208,16 @@ static func _layer_paths(
 			continue
 		var part_values := values.duplicate()
 		part_values["color"] = String(pick[1]).capitalize()
-		var path := _resolve_file(sheet.part_folder, part.resolve_asset(part_values))
+		var path := _resolve_file(sheet.part_folder, part.resolve_asset(part_values), false)
+		# Paket pose tambahan hanya menyediakan Farm; tetap gunakan mask pose asli
+		# supaya gaya baju custom dan celana dapat diterapkan tanpa tubuh menghilang.
+		if path.is_empty() and layer == CharacterPart.Layer.OUTFIT:
+			path = _resolve_file(sheet.part_folder, "Clothers/Farm/{color}.png".replace("{color}", String(pick[1]).capitalize()), false)
+			if path.is_empty():
+				path = _resolve_file(sheet.part_folder, "Clothers/Farm/Blue.png", false)
+		# Efek tenggelam tidak memiliki varian warna kulit.
+		if path.is_empty() and layer == CharacterPart.Layer.SKIN:
+			path = _resolve_file(sheet.part_folder, "Skins/1.png", false)
 		if not path.is_empty():
 			paths.append(path)
 
@@ -187,7 +239,8 @@ static func _layer_paths(
 ## (badan 32px di frame memancing 64px).
 @warning_ignore_start("integer_division")
 static func _blit_layer(out: Image, layer: Image, sheet: CharacterSheet) -> void:
-	var layer_frame := layer.get_height()
+	# Mount layers use 32x48 cells; fishing equipment uses square 64px cells.
+	var layer_frame := 32 if layer.get_height() == 48 else layer.get_height()
 	if layer_frame <= 0:
 		return
 	var count := layer.get_width() / layer_frame
@@ -201,7 +254,7 @@ static func _blit_layer(out: Image, layer: Image, sheet: CharacterSheet) -> void
 			var index := row * per_direction + col
 			if index >= count:
 				continue
-			var src := Rect2i(index * layer_frame, 0, layer_frame, layer_frame)
+			var src := Rect2i(index * layer_frame, 0, layer_frame, layer.get_height())
 			out.blend_rect(layer, src, Vector2i(col * frame_size, row * frame_size) + offset)
 @warning_ignore_restore("integer_division")
 
@@ -224,7 +277,7 @@ static func _load_image(path: String) -> Image:
 
 ## Mencari file layer. Toleran terhadap beda huruf besar/kecil ("Santa hat.png"),
 ## folder "Hair" vs "Hair's", dan animasi mata tertutup yang hanya punya satu warna.
-static func _resolve_file(folder: String, relative: String) -> String:
+static func _resolve_file(folder: String, relative: String, warn_missing: bool = true) -> String:
 	var direct := folder.path_join(relative)
 	if ResourceLoader.exists(direct):
 		return direct
@@ -241,7 +294,7 @@ static func _resolve_file(folder: String, relative: String) -> String:
 					return current.path_join(any_eye)
 			# Folder layer utama tidak ada = animasi ini memang tanpa layer itu
 			# (mis. Sleep tanpa Clothers). Hanya file yang hilang yang diperingatkan.
-			if i > 0:
+			if i > 0 and warn_missing:
 				_warn_once(direct, "CharacterSpriteBuilder: layer tidak ada, dilewati: %s" % direct)
 			return ""
 		current = current.path_join(match_name)
@@ -254,6 +307,8 @@ static func _match_entry(dir: String, wanted: String, is_dir: bool) -> String:
 		aliases.append("hair")
 	elif wanted_lower == "hair":
 		aliases.append("hair's")
+	elif wanted_lower == "acc":
+		aliases.append("acessories")
 	for entry in _list_dir(dir):
 		var entry_is_dir := entry.ends_with("/")
 		if entry_is_dir != is_dir:

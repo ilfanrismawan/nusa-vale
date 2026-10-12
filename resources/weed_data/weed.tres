@@ -1,19 +1,14 @@
-[gd_resource type="Resource" script_class="WeedData" format=3]
+[gd_resource type="Resource" script_class="WeedData" format=3 uid="uid://bh7svbpj83qg"]
 
-[ext_resource type="Script" path="res://scripts/data/weed_data.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://assets/farm_rpg/tileset/ext/ALL props seasons.png" id="2_tex"]
+[ext_resource type="Script" uid="uid://yfew43j6kghu" path="res://scripts/data/weed_data.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://qbavso8tlt0g" path="res://assets/farm_rpg/tileset/ext/ALL props seasons.png" id="2_tex"]
 [ext_resource type="Resource" path="res://resources/item_data/fiber.tres" id="3_item"]
 
 [resource]
 script = ExtResource("1_script")
-id = "weed"
 texture = ExtResource("2_tex")
-regions_spring = Array[Rect2]([Rect2(160, 0, 16, 16), Rect2(144, 128, 16, 16), Rect2(192, 128, 16, 16), Rect2(160, 16, 16, 16)])
-regions_summer = Array[Rect2]([Rect2(160, 0, 16, 16), Rect2(144, 128, 16, 16), Rect2(160, 16, 16, 16)])
+regions_spring = Array[Rect2]([Rect2(160, 0, 16, 16), Rect2(192, 128, 16, 16), Rect2(160, 16, 16, 16)])
+regions_summer = Array[Rect2]([Rect2(160, 0, 16, 16), Rect2(160, 16, 16, 16)])
 regions_fall = Array[Rect2]([Rect2(160, 32, 16, 16), Rect2(192, 128, 16, 16)])
 regions_winter = Array[Rect2]([Rect2(112, 48, 16, 16)])
-locations = PackedStringArray("farm", "forest")
-weight = 1.0
 drop_item = ExtResource("3_item")
-drop_chance = 0.6
-drop_count = 1

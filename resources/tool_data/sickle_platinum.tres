@@ -4,13 +4,19 @@
 
 [resource]
 script = ExtResource("1_td")
+dig_bonus_chance = 0
+water_capacity = 0
+reach_tiles = 2.2
+area_depth = 3
+area_width = 2
+area_size = 6
 tool_id = "sickle_platinum"
 display_name = "Sabit Platinum"
 tool_type = 5
 tier = 4
 damage = 5
-stamina_cost = 4
-action_speed = 1.6
+stamina_cost = 2
+action_speed = 1.4
 upgrade_cost_money = 3500
 required_items = {
 "platinum_bar": 5

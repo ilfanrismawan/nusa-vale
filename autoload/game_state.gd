@@ -24,6 +24,8 @@ const MAX_PLAYERS := 4
 var money: int = 100
 var chopped_trees: Array[String] = []
 var mined_rocks: Array[String] = []
+## Persistent community projects share the lifetime of GameState, without another autoload.
+var balai_nadi: BalaiNadiManager
 
 ## Index 0 = P1. Pemain lain dibuat saat bergabung di co-op dan ikut tersimpan di save.
 var players: Array[PlayerData] = [PlayerData.new(0)]
@@ -64,6 +66,9 @@ const SHOP_PRICES := {
 }
 
 func _ready() -> void:
+	balai_nadi = BalaiNadiManager.new()
+	balai_nadi.name = "BalaiNadi"
+	add_child(balai_nadi)
 	players[0].stamina_changed.connect(func(value: int, maximum: int): stamina_changed.emit(value, maximum))
 	players[0].appearance_changed.connect(func(look: CharacterAppearance): appearance_changed.emit(look))
 
@@ -96,6 +101,8 @@ func p1() -> PlayerData:
 # ── Game baru ───────────────────────────────────────────────────────
 
 func new_game() -> void:
+	balai_nadi.reset()
+	StructureManager.reset()
 	money = 100
 	chopped_trees.clear()
 	mined_rocks.clear()
@@ -223,6 +230,8 @@ func add_money(amount: int) -> void:
 	money_changed.emit(money)
 
 func spend_money(amount: int) -> bool:
+	if amount < 0:
+		return false
 	if money >= amount:
 		money -= amount
 		money_changed.emit(money)

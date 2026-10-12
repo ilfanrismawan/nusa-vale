@@ -99,6 +99,35 @@ func _ready() -> void:
 	check(SaveManager.load_game(), "unreadable primary path recovers backup")
 	check(not SaveManager.save_game() and FileAccess.get_file_as_string(SaveManager.BACKUP_PATH) == backup_text, "rename failure keeps recoverable backup")
 	DirAccess.remove_absolute(SaveManager.SAVE_PATH)
+	# Slot save (v7): tiap slot berdiri sendiri, ringkasan, hapus per slot.
+	SaveManager.select_slot(1)
+	GameState.money = 111
+	check(SaveManager.save_game(), "save to slot 1")
+	SaveManager.select_slot(2)
+	GameState.money = 222
+	GameState.p1().player_name = "Ayu"
+	check(SaveManager.save_game() and SaveManager.SAVE_PATH.ends_with("slot_2.json"), "save to slot 2 uses its own file")
+	SaveManager.select_slot(1)
+	check(SaveManager.load_game() and GameState.money == 111, "slot 1 is independent of slot 2")
+	var summary := SaveManager.get_slot_summary(2)
+	check(summary.get("name") == "Ayu" and summary.get("money") == 222 and int(summary.get("saved_at", 0)) > 0, "slot summary reads name, money and save time")
+	check(SaveManager.get_slot_summary(3).is_empty() and not SaveManager.has_save(3), "unused slot is empty")
+	check(SaveManager.delete_slot(2) and not SaveManager.has_save(2) and SaveManager.has_save(1), "deleting a slot leaves other slots")
+	# Save lama satu-file (v6) dipindah ke slot 1.
+	check(SaveManager.delete_slot(1) and not SaveManager.has_any_save(), "all slots cleared before migration")
+	var v6 := original.duplicate(true)
+	v6.version = 6
+	v6.erase("saved_at")
+	v6.player.erase("name")
+	write_save(SaveManager.LEGACY_SAVE_PATH, v6)
+	check(SaveManager._migrate_legacy_save() and SaveManager.has_save(1), "legacy single-file save migrates to slot 1")
+	check(not FileAccess.file_exists(SaveManager.LEGACY_SAVE_PATH) and FileAccess.file_exists(SaveManager.LEGACY_SAVE_PATH + ".migrated"), "legacy file is renamed, not deleted")
+	check(not SaveManager._migrate_legacy_save(), "migration runs only once")
+	SaveManager.select_slot(1)
+	GameState.p1().player_name = "Lama"
+	check(SaveManager.load_game() and GameState.p1().player_name == "" and GameState.money == 987, "v6 save loads with empty name default")
+	check(SaveManager.get_slot_summary(1).get("name") == SaveManager.DEFAULT_PLAYER_NAME, "summary falls back to default name")
+	DirAccess.remove_absolute(SaveManager.LEGACY_SAVE_PATH + ".migrated")
 	check(SaveManager.delete_save() and not SaveManager.has_save(), "new game clears primary and backup")
 	print("SAVE AUDIT COMPLETE: failures=%d" % failures)
 	get_tree().quit(1 if failures else 0)

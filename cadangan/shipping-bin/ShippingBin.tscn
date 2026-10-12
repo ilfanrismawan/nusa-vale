@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://cita5dfs3657t"]
+
+[ext_resource type="Script" uid="uid://bj6kplkthgc86" path="res://scripts/object/shipping_bin.gd" id="1_plga2"]
+[ext_resource type="Texture2D" uid="uid://bi3hfsiexrnqr" path="res://assets/farm_rpg/objects/exterior/shipping box.png" id="2_icus8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ovsut"]
+size = Vector2(14, 13)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ajcru"]
+
+[node name="ShippingBin" type="Area2D" unique_id=1342505141]
+y_sort_enabled = true
+script = ExtResource("1_plga2")
+
+[node name="ShippingBinClose" type="Sprite2D" parent="." unique_id=1973431771]
+visible = false
+texture = ExtResource("2_icus8")
+region_enabled = true
+region_rect = Rect2(0, 16, 16, 16)
+
+[node name="ShippingBinOpen" type="Sprite2D" parent="." unique_id=1845098835]
+position = Vector2(0, -2)
+texture = ExtResource("2_icus8")
+region_enabled = true
+region_rect = Rect2(0, 45, 16.664932, 19)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=968021486]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1647253379]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_ovsut")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1918566008]
+visible = false
+shape = SubResource("RectangleShape2D_ajcru")

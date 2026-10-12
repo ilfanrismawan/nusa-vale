@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_helmet_copper.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+category = 7
+item_id = "helmet_copper"
+display_name = "Helm Tembaga"
+icon = ExtResource("2")
+description = "Helm Tembaga. Melindungi kepala."
+stackable = false
+max_stack = 1
+equipment_slot = 3
+defense_bonus = 2
+equipment_tier = 1
+buy_price = 250
+sell_price = 100

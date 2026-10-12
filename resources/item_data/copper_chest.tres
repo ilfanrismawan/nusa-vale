@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://cc1qdq2tgdtby"]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_copper_chest.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+placeable = true
+storage_slots = 36
+chest_tier = 1
+category = 8
+item_id = "copper_chest"
+display_name = "Peti Tembaga"
+icon = ExtResource("2")
+description = "Peti tier 2 dengan 36 slot bersama. Pasang di farm; interaksi untuk menyimpan barang atau meningkatkan tier tanpa memindahkan isi."
+rarity = 1

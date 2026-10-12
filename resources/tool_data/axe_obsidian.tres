@@ -4,13 +4,19 @@
 
 [resource]
 script = ExtResource("1_td")
+dig_bonus_chance = 0
+water_capacity = 0
+reach_tiles = 3.2
+area_depth = 1
+area_width = 1
+area_size = 1
 tool_id = "axe_obsidian"
 display_name = "Kapak Obsidian"
 tool_type = 0
 tier = 9
-damage = 10
+damage = 20
 stamina_cost = 2
-action_speed = 2.3
+action_speed = 2.2
 upgrade_cost_money = 18000
 required_items = {
 "obsidian_bar": 5

@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1_a2ypi"]
 [ext_resource type="Texture2D" uid="uid://c7f1fl8ga28uw" path="res://assets/farm_rpg/icons/Weapons and Armor/2. Cooper/Axe.png" id="1_mie0r"]
 
+[ext_resource type="Resource" path="res://resources/action_data/axe_copper.tres" id="99_action"]
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_vpbfi"]
 atlas = ExtResource("1_mie0r")
 region = Rect2(0, 0, 16, 16)
@@ -16,3 +18,5 @@ icon = SubResource("AtlasTexture_vpbfi")
 stackable = false
 max_stack = 1
 metadata/_custom_type_script = "uid://cm1okc20ussp3"
+
+action_data = ExtResource("99_action")

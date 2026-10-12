@@ -14,6 +14,11 @@ Jalankan dari PowerShell 7 di root proyek:
 Runner memakai APPDATA sementara agar save asli tidak dibaca/ditimpa.
 Menguji editor/parser, main menu, enam scene area, serta co-op 2–4 pemain
 (spawn, tas terpisah, P2 masuk rumah dan kembali ke farm).
+Tes gameplay memeriksa transaksi negatif/nol, penjualan slot tas aktif,
+layer rambut/baju default, pertumbuhan pohon selama area tidak dikunjungi,
+dan pemisahan pemeriksaan jarak spawn antar-world co-op.
+Tes crop memeriksa 39 tanaman: sprite tiap tahap, pertumbuhan hingga matang,
+serta pemulihan tile setelah save/load (lihat `CROP_VISUALS.md`).
 Tes save dipertahankan di tests/save_regression.tscn. Error I/O yang sengaja
 dipicu tes save hanya diterima jika audit selesai dengan failures=0.
 Ini pemeriksaan runtime headless; kualitas visual dan kenyamanan kontrol

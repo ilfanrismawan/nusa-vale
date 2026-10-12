@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="WeedData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/weed_data.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/tileset/ext/ALL props seasons.png" id="2_tex"]
+[ext_resource type="Resource" path="res://resources/item_data/wood.tres" id="3_item"]
+
+[resource]
+script = ExtResource("1_script")
+id = "weed_bramble"
+texture = ExtResource("2_tex")
+regions_spring = Array[Rect2]([Rect2(160, 80, 16, 16), Rect2(176, 80, 16, 16)])
+regions_summer = Array[Rect2]([Rect2(160, 80, 16, 16), Rect2(176, 80, 16, 16)])
+regions_fall = Array[Rect2]([Rect2(160, 80, 16, 16), Rect2(176, 80, 16, 16)])
+regions_winter = Array[Rect2]([Rect2(160, 80, 16, 16), Rect2(176, 80, 16, 16)])
+locations = PackedStringArray("forest")
+seasons = PackedStringArray("fall", "winter")
+weight = 0.5
+drop_item = ExtResource("3_item")
+drop_chance = 0.6
+drop_count = 1

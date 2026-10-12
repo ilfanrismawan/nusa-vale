@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_bow_iron.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+category = 7
+item_id = "bow_iron"
+display_name = "Busur Besi"
+icon = ExtResource("2")
+description = "Busur Besi. Menyerang dari jauh, butuh anak panah."
+stackable = false
+max_stack = 1
+equipment_slot = 1
+attack_bonus = 9
+weapon_type = 2
+equipment_tier = 2
+buy_price = 900
+sell_price = 360
+rarity = 1

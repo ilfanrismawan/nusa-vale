@@ -30,6 +30,7 @@ const ENABLED := true   # Ganti ke false untuk matikan semua tanpa hapus kode
 var _panel: PanelContainer
 var _god_mode: bool = false
 var _speed_boost: bool = false
+var _equipment_tier: int = 0
 
 ## ── Lifecycle ─────────────────────────────────────────────────────────────────
 func _ready() -> void:
@@ -191,6 +192,7 @@ func _build_panel() -> void:
 	_add_cheat_row(box, "", "Toggle Speed Boost (2.5x)", _cheat_toggle_speed_boost)
 	_add_cheat_row(box, "F6", "Upgrade Tas (+12 Slot)", _cheat_upgrade_bag)
 	_add_cheat_row(box, "F11", "Upgrade Semua Tool ke Obsidian", _cheat_upgrade_tools)
+	_add_cheat_row(box, "", "Set Senjata & Armor (tier berikutnya)", _cheat_add_equipment_set)
 
 	# ── Kategori: Waktu & Musim ──
 	_add_category_header(box, "⏰  WAKTU & MUSIM")
@@ -344,6 +346,16 @@ func _cheat_upgrade_tools() -> void:
 		_notify("⚒ Tidak ada tool di inventory untuk di-upgrade.")
 
 # --- Waktu & Musim ---
+## Tiap klik: 1 set tier berikutnya (Wood -> Obsidian, lalu ulang).
+func _cheat_add_equipment_set() -> void:
+	var tiers := ["wood", "copper", "iron", "gold", "platinum", "crimson", "frost", "shadow", "fairy", "obsidian"]
+	var tier: String = tiers[_equipment_tier]
+	_equipment_tier = (_equipment_tier + 1) % tiers.size()
+	for kind in ["sword", "bow", "staff", "helmet", "armor", "leggings", "boots"]:
+		GameState.add_item("%s_%s" % [kind, tier], 1)
+	GameState.add_item("arrow_%s" % tier, 20)
+	_notify("⚔  Set senjata & armor tier %s masuk tas" % tier.capitalize())
+
 func _cheat_next_day() -> void:
 	DayCycle.advance_day()
 	_notify("📅 Hari %d dimulai (%s)" % [DayCycle.current_day, DayCycle.get_season_display_name() if DayCycle.has_method("get_season_display_name") else ""])
@@ -501,7 +513,7 @@ func _cheat_print_inventory() -> void:
 
 func _cheat_delete_save() -> void:
 	SaveManager.delete_save() if SaveManager.has_method("delete_save") else _delete_save_fallback()
-	_notify("🗑  Save file dihapus. Restart game untuk new game.")
+	_notify("🗑  Save slot %d dihapus. Restart game untuk new game." % SaveManager.current_slot)
 
 func _delete_save_fallback() -> void:
 	var path := "user://nusa_vale_save.json"

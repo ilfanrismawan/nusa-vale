@@ -1,33 +1,163 @@
 extends Node
 
-const SAVE_PATH := "user://nusa_vale_save.json"
-const BACKUP_PATH := "user://nusa_vale_save.json.bak"
-const TEMP_PATH := "user://nusa_vale_save.json.tmp"
+## Save game dalam SLOT_COUNT slot: user://saves/slot_<n>.json (+ .bak dan .tmp per slot).
+## Slot aktif (current_slot) dipakai save_game()/load_game() dan auto-save saat tidur/pingsan.
+## Save lama satu-file (user://nusa_vale_save.json) dipindah otomatis ke slot 1 saat game dibuka.
 
-const SAVE_VERSION := 6
+const SLOT_COUNT := 3
+const SAVE_DIR := "user://saves"
+const SLOT_META_PATH := "user://saves/slots.cfg"
+const LEGACY_SAVE_PATH := "user://nusa_vale_save.json"
+const LEGACY_BACKUP_PATH := "user://nusa_vale_save.json.bak"
+const SEASON_NAMES: Array[String] = ["Musim Semi", "Musim Panas", "Musim Gugur", "Musim Dingin"]
+## Dipakai ringkasan slot bila save belum punya nama pemain (save versi 6 ke bawah).
+const DEFAULT_PLAYER_NAME := "Petani"
+
+const SAVE_VERSION := 9
 
 signal game_saved
 signal game_loaded
 signal save_failed(reason: String)
 signal load_failed(reason: String)
+signal slot_changed(slot: int)
+
+## Slot aktif, 1..SLOT_COUNT. Diingat di SLOT_META_PATH supaya auto-load memilih slot terakhir.
+var current_slot: int = 1
+
+## Path file slot aktif. Nama huruf besar dipertahankan dari versi satu-file (dipakai tes).
+var SAVE_PATH: String:
+	get: return slot_path(current_slot)
+var BACKUP_PATH: String:
+	get: return slot_path(current_slot) + ".bak"
+var TEMP_PATH: String:
+	get: return slot_path(current_slot) + ".tmp"
 
 
 func _ready() -> void:
+	DirAccess.make_dir_recursive_absolute(SAVE_DIR)
+	_migrate_legacy_save()
+	current_slot = _read_last_slot()
 	call_deferred("_load_on_startup")
 
 func _load_on_startup() -> void:
 	load_game()
 
-func has_save() -> bool:
-	return not _read_save(SAVE_PATH).is_empty() or not _read_save(BACKUP_PATH).is_empty()
+# ── Slot ────────────────────────────────────────────────────────────
 
+func slot_path(slot: int) -> String:
+	return "%s/slot_%d.json" % [SAVE_DIR, clampi(slot, 1, SLOT_COUNT)]
+
+func _slot_files(slot: int) -> Array[String]:
+	var base := slot_path(slot)
+	return [base, base + ".bak", base + ".tmp", base + ".bak.tmp"]
+
+## Jadikan slot ini tujuan save_game()/load_game() berikutnya.
+func select_slot(slot: int) -> void:
+	current_slot = clampi(slot, 1, SLOT_COUNT)
+	_write_last_slot(current_slot)
+	slot_changed.emit(current_slot)
+
+## Tanpa argumen: slot aktif.
+func has_save(slot: int = -1) -> bool:
+	var base := slot_path(current_slot if slot < 1 else slot)
+	return not _read_save(base).is_empty() or not _read_save(base + ".bak").is_empty()
+
+func has_any_save() -> bool:
+	for slot in range(1, SLOT_COUNT + 1):
+		if has_save(slot):
+			return true
+	return false
+
+## Ringkasan untuk menu slot. Kosong = slot belum dipakai (atau save rusak tanpa backup).
+func get_slot_summary(slot: int) -> Dictionary:
+	var base := slot_path(slot)
+	var source := base
+	var data := _read_save(base)
+	if data.is_empty():
+		source = base + ".bak"
+		data = _read_save(source)
+	if data.is_empty():
+		return {}
+	var day := maxi(1, int(data.day_cycle.get("day", 1)))
+	var player: Dictionary = data.player
+	var player_name: Variant = player.get("name", "")
+	if not player_name is String or (player_name as String).strip_edges().is_empty():
+		player_name = DEFAULT_PLAYER_NAME
+	# Save versi 6 ke bawah belum punya saved_at: pakai waktu ubah file.
+	var saved_at: int = int(data.get("saved_at", 0))
+	if saved_at <= 0:
+		saved_at = int(FileAccess.get_modified_time(source))
+	@warning_ignore("integer_division")
+	var season := ((day - 1) / DayCycle.DAYS_PER_SEASON) % SEASON_NAMES.size()
+	@warning_ignore("integer_division")
+	var year := ((day - 1) / (DayCycle.DAYS_PER_SEASON * SEASON_NAMES.size())) + 1
+	return {
+		"name": player_name,
+		"day": day,
+		"day_of_season": ((day - 1) % DayCycle.DAYS_PER_SEASON) + 1,
+		"season": season,
+		"season_name": SEASON_NAMES[season],
+		"year": year,
+		"money": maxi(0, int(player.get("money", 0))),
+		"saved_at": saved_at,
+		"from_backup": source != base,
+	}
+
+## Slot aktif (dipakai Game Baru dan tes).
 func delete_save() -> bool:
-	for save_path in [SAVE_PATH, BACKUP_PATH, TEMP_PATH, BACKUP_PATH + ".tmp"]:
+	return delete_slot(current_slot)
+
+func delete_slot(slot: int) -> bool:
+	for save_path in _slot_files(slot):
 		if FileAccess.file_exists(save_path):
 			var error := DirAccess.remove_absolute(save_path)
 			if error != OK:
-				return _save_error("Gagal menghapus save lama: %s" % error)
+				return _save_error("Gagal menghapus save slot %d: %s" % [slot, error])
 	return true
+
+func _read_last_slot() -> int:
+	var config := ConfigFile.new()
+	if config.load(SLOT_META_PATH) != OK:
+		return 1
+	return clampi(int(config.get_value("slots", "last_slot", 1)), 1, SLOT_COUNT)
+
+func _write_last_slot(slot: int) -> void:
+	var config := ConfigFile.new()
+	config.set_value("slots", "last_slot", slot)
+	config.save(SLOT_META_PATH)
+
+## Save satu-file dari sebelum ada slot: salin ke slot 1 (atau slot kosong pertama bila slot 1
+## sudah terisi), lalu file lama dinamai *.migrated (tidak dihapus) supaya tidak dipindah dua kali.
+func _migrate_legacy_save() -> bool:
+	if not FileAccess.file_exists(LEGACY_SAVE_PATH) and not FileAccess.file_exists(LEGACY_BACKUP_PATH):
+		return false
+	var target_slot := -1
+	for slot in range(1, SLOT_COUNT + 1):
+		var occupied := false
+		for save_path in _slot_files(slot).slice(0, 2):
+			occupied = occupied or FileAccess.file_exists(save_path)
+		if not occupied:
+			target_slot = slot
+			break
+	if target_slot < 0:
+		push_warning("Save lama tidak dipindah: semua slot sudah terisi.")
+		return false
+	var base := slot_path(target_slot)
+	for pair in [[LEGACY_SAVE_PATH, base], [LEGACY_BACKUP_PATH, base + ".bak"]]:
+		if not FileAccess.file_exists(pair[0]):
+			continue
+		var error := DirAccess.copy_absolute(pair[0], pair[1])
+		if error != OK:
+			push_error("Gagal memindah save lama ke slot %d: %s" % [target_slot, error])
+			return false
+	for legacy_path in [LEGACY_SAVE_PATH, LEGACY_BACKUP_PATH]:
+		if FileAccess.file_exists(legacy_path):
+			DirAccess.rename_absolute(legacy_path, legacy_path + ".migrated")
+	_write_last_slot(target_slot)
+	print("Save lama dipindah ke slot %d." % target_slot)
+	return true
+
+# ── Simpan / muat ───────────────────────────────────────────────────
 
 func _save_error(reason: String) -> bool:
 	push_error(reason)
@@ -60,7 +190,8 @@ func save_game() -> bool:
 	var rename_error := DirAccess.rename_absolute(TEMP_PATH, SAVE_PATH)
 	if rename_error != OK:
 		return _save_error("Gagal mengganti temporary save: %s" % rename_error)
-	print("Game tersimpan | Hari %d" % DayCycle.current_day)
+	_write_last_slot(current_slot)
+	print("Game tersimpan | Slot %d | Hari %d" % [current_slot, DayCycle.current_day])
 	game_saved.emit()
 	return true
 
@@ -77,7 +208,8 @@ func load_game() -> bool:
 			print("Belum ada save file. Memulai game baru.")
 		return false
 	_apply_save(data)
-	print("Loading save version: %d (hari %d)" % [int(data.get("version", 1)), DayCycle.current_day])
+	_write_last_slot(current_slot)
+	print("Loading save version: %d (slot %d, hari %d)" % [int(data.get("version", 1)), current_slot, DayCycle.current_day])
 	game_loaded.emit()
 	return true
 
@@ -116,31 +248,35 @@ func _valid_inventory(entries: Variant) -> bool:
 func _valid_player(player: Variant) -> bool:
 	if not player is Dictionary or not _valid_numbers(player, ["money", "stamina", "bag_level"]):
 		return false
+	if not player.get("name", "") is String:
+		return false
 	return player.get("appearance", {}) is Dictionary and _valid_inventory(player.get("inventory", []))
 
 func _is_valid_save(data: Dictionary) -> bool:
 	# An empty/unrelated JSON object is not a save.
 	if not data.has("player") or not data.has("day_cycle") or not data.has("inventory"):
 		return false
-	if not _valid_numbers(data, ["version"]):
+	if not _valid_numbers(data, ["version", "saved_at"]):
 		return false
 	var version := int(data.get("version", 1))
 	if version < 1 or version > SAVE_VERSION:
 		return false
-	for key in ["day_cycle", "world_state", "unlocks", "discoveries", "resources", "forage"]:
+	for key in ["day_cycle", "world_state", "unlocks", "discoveries", "resources", "forage", "balai_nadi"]:
 		if data.has(key) and not data[key] is Dictionary:
 			return false
 	if not _valid_numbers(data.day_cycle, ["day", "hour", "minute"]) or not _valid_player(data.player):
 		return false
 	if not _valid_inventory(data.inventory):
 		return false
-	for key in ["farm", "coop_players"]:
+	for key in ["farm", "coop_players", "structures"]:
 		if data.has(key) and not data[key] is Array:
 			return false
 	for player in data.get("coop_players", []):
 		if not _valid_player(player):
 			return false
 	for entry in data.get("farm", []):
+		if entry is Dictionary and not entry.get("area", "farm") is String:
+			return false
 		if not entry is Dictionary or not _valid_numbers(entry, ["stage", "days_in_stage"]):
 			return false
 		var cell: Variant = entry.get("cell", [])
@@ -163,6 +299,9 @@ func _build_save_data() -> Dictionary:
 	return {
 		"version": SAVE_VERSION,
 
+		## Versi 7: waktu simpan (unix, UTC) untuk ringkasan slot.
+		"saved_at": int(Time.get_unix_time_from_system()),
+
 		"day_cycle": {
 			"day": DayCycle.current_day,
 			"hour": DayCycle.hour,
@@ -170,10 +309,13 @@ func _build_save_data() -> Dictionary:
 		},
 
 		"player": {
+			"name": GameState.p1().player_name,
 			"money": max(0, GameState.money),
 			"stamina": clampi(GameState.p1().stamina, 0, GameState.MAX_STAMINA),
 			"bag_level": GameState.p1().bag_level,
+			"watering_water": GameState.p1().watering_water,
 			"appearance": GameState.p1().appearance.to_dict(),
+			"equipment": GameState.p1().serialize_equipment(),
 		},
 
 		"inventory": _serialize_inventory(),
@@ -192,6 +334,9 @@ func _build_save_data() -> Dictionary:
 		},
 
 		"forage": ForageManager.to_save(),
+		"structures": StructureManager.to_save(),
+		# Version 8: shared contributions and one-time completion state.
+		"balai_nadi": GameState.balai_nadi.to_save(),
 
 		"coop_players": _serialize_coop_players(),
 	}
@@ -203,11 +348,13 @@ func _apply_save(data: Dictionary) -> void:
 	_load_inventory(data)
 	_load_farm(data)
 	_load_world_state(data)
+	GameState.balai_nadi.load_save(data.get("balai_nadi", {}))
 	_load_unlocks(data)
 	_load_discoveries(data)
 	_load_resources(data)
 	_load_appearance(data)
 	_load_forage(data)
+	StructureManager.load_save(data.get("structures", []))
 	_load_coop_players(data)
 
 ## Versi 6: tas/stamina/penampilan P2-P4 dari co-op lokal (uang tetap satu, milik bersama).
@@ -299,6 +446,11 @@ func _load_player(data: Variant) -> void:
 		int(player_data.get("stamina",GameState.MAX_STAMINA)), 0, GameState.MAX_STAMINA
 	)
 	
+	# Versi 7: nama pemain. Save lama tanpa key ini = kosong (ringkasan slot memakai "Petani").
+	var player_name: Variant = player_data.get("name", "")
+	GameState.p1().player_name = player_name if player_name is String else ""
+
+	GameState.p1().watering_water = clampi(int(player_data.get("watering_water", 20)), 0, 350)
 	GameState.hotbar_page = 0
 	GameState.bag_level = clampi(
 		int(player_data.get("bag_level", 0)),
@@ -320,6 +472,7 @@ func _serialize_inventory() -> Array:
 
 func _load_inventory(data: Dictionary) -> void:
 	GameState.p1().load_inventory(data.get("inventory", []))
+	GameState.p1().load_equipment(data.get("player", {}).get("equipment", {}))
 
 func _serialize_farm() -> Array:
 	var farm_data: Array = []
@@ -332,6 +485,7 @@ func _serialize_farm() -> Array:
 		var crop: CropData = d.get("crop")
 		
 		farm_data.append({
+			"area": str(d.get("area", "farm")),
 			"cell": [cell.x, cell.y],
 			"state": str(d.get("state", "")),
 			"crop": (
@@ -390,6 +544,7 @@ func _load_farm(data: Dictionary) -> void:
 		if crop != null and crop.get_total_stages() == 0:
 			crop = null
 		FarmManager.farm_data[cell] = {
+			"area": str(entry.get("area", "farm")),
 			"state": "planted" if crop != null else "tilled",
 			"crop": crop,
 			"stage": clampi(int(entry.get("stage", 0)), 0, maxi(0, crop.get_total_stages() - 1)) if crop != null else 0,
@@ -459,6 +614,7 @@ func _try_load_backup() -> bool:
 	if data.is_empty():
 		return false
 	_apply_save(data)
-	print("Backup save berhasil dipulihkan.")
+	_write_last_slot(current_slot)
+	print("Backup save slot %d berhasil dipulihkan." % current_slot)
 	game_loaded.emit()
 	return true

@@ -15,6 +15,13 @@ extends Resource
 ## Jumlah arah di sheet layer (4 = down, up, right, left; 1 = satu arah saja).
 @export var directions: int = 4
 
+## Animasi tambahan dibuat langsung dari layer, tanpa template Josh.
+@export var animation_name: StringName
+@export var animation_fps: float = 8.0
+@export var animation_loop: bool = true
+## Layer tunggangan digambar di belakang tubuh karakter.
+@export var background_layers: PackedStringArray = []
+
 @export_group("Tool")
 ## Jenis alat yang terlihat di animasi ini (nilai ToolData.ToolType), -1 = tanpa alat.
 @export var tool_type: int = -1

@@ -37,18 +37,19 @@ func _load_data() -> void:
 			_all.append(data)
 
 
-func candidates(location_id: String) -> Array[ForageData]:
+## dig = false: barang di permukaan tanah. dig = true: isi titik gali.
+func candidates(location_id: String, dig: bool = false) -> Array[ForageData]:
 	var season := DayCycle.get_current_season()
 	var result: Array[ForageData] = []
 	for data in _all:
-		if data.is_available(location_id, season):
+		if data.dig == dig and data.is_available(location_id, season):
 			result.append(data)
 	return result
 
 
 ## Pilih satu barang acak sesuai bobot. null jika area/musim ini tidak punya forage.
-func pick(location_id: String) -> ForageData:
-	var pool := candidates(location_id)
+func pick(location_id: String, dig: bool = false) -> ForageData:
+	var pool := candidates(location_id, dig)
 	var total := 0.0
 	for data in pool:
 		total += data.weight

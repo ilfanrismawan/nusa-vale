@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_boots_platinum.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+category = 7
+item_id = "boots_platinum"
+display_name = "Sepatu Bot Platinum"
+icon = ExtResource("2")
+description = "Sepatu bot Platinum. Pijakan kokoh di medan berat."
+stackable = false
+max_stack = 1
+equipment_slot = 5
+defense_bonus = 7
+equipment_tier = 4
+buy_price = 1620
+sell_price = 648
+rarity = 2

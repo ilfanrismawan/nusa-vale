@@ -9,6 +9,8 @@ func _ready() -> void:
 	_on_time_tick(DayCycle.hour, DayCycle.minute)
 	ForageSpawner.attach(self, "forest")
 	WeedSpawner.attach_weeds(self, "forest", ^"YSortEntities", 3, 15)
+	TreeSpawner.attach_trees(self, "forest", ^"YSortEntities", 2, 12)
+	DigSpotSpawner.attach_dig_spots(self, "forest", ^"YSortEntities", 2, 5)
 
 	Notify.say("Hutan: Tebang pohon dengan Kapak | Tambang batu/bijih dengan Beliung")
 

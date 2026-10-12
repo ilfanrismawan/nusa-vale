@@ -1,0 +1,94 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/balai_nadi_area.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="2"]
+[ext_resource type="Script" path="res://scripts/world/balai_nadi_interactable.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/world/balai_nadi_visual.gd" id="4"]
+
+[sub_resource type="RectangleShape2D" id="building"]
+size = Vector2(130, 68)
+[sub_resource type="RectangleShape2D" id="door"]
+size = Vector2(30, 24)
+[sub_resource type="RectangleShape2D" id="horizontal"]
+size = Vector2(320, 8)
+[sub_resource type="RectangleShape2D" id="vertical"]
+size = Vector2(8, 238)
+[node name="BalaiNadiExterior" type="Node2D"]
+texture_filter = 1
+script = ExtResource("1")
+
+[node name="Building" type="StaticBody2D" parent="."]
+position = Vector2(427, 185)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Building"]
+shape = SubResource("building")
+
+[node name="Entrance" type="Area2D" parent="."]
+position = Vector2(427, 225)
+collision_layer = 1
+collision_mask = 1
+script = ExtResource("3")
+interaction_type = 1
+target_scene = "res://scenes/world/balai_nadi/interior.tscn"
+spawn_position = Vector2(427, 296)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Entrance"]
+shape = SubResource("door")
+
+[node name="RestorationVisual" type="Node2D" parent="."]
+script = ExtResource("4")
+[node name="Unrestored" type="Node2D" parent="RestorationVisual"]
+[node name="BrokenPlanks" type="Polygon2D" parent="RestorationVisual/Unrestored"]
+polygon = PackedVector2Array(369, 188, 399, 177, 401, 182, 371, 193)
+color = Color(0.34, 0.25, 0.18, 1)
+[node name="RoofGap" type="Polygon2D" parent="RestorationVisual/Unrestored"]
+polygon = PackedVector2Array(459, 132, 478, 132, 474, 145, 462, 143)
+color = Color(0.22, 0.22, 0.19, 1)
+[node name="Restored" type="Node2D" parent="RestorationVisual"]
+visible = false
+[node name="Flowerbed" type="Polygon2D" parent="RestorationVisual/Restored"]
+polygon = PackedVector2Array(362, 225, 399, 225, 399, 234, 362, 234)
+color = Color(0.8, 0.5, 0.4, 1)
+[node name="Flowerbed2" type="Polygon2D" parent="RestorationVisual/Restored"]
+polygon = PackedVector2Array(455, 225, 492, 225, 492, 234, 455, 234)
+color = Color(0.85, 0.67, 0.34, 1)
+
+[node name="Bounds" type="StaticBody2D" parent="."]
+[node name="Top" type="CollisionShape2D" parent="Bounds"]
+position = Vector2(427, 126)
+shape = SubResource("horizontal")
+[node name="Bottom" type="CollisionShape2D" parent="Bounds"]
+position = Vector2(427, 364)
+shape = SubResource("horizontal")
+[node name="Left" type="CollisionShape2D" parent="Bounds"]
+position = Vector2(266, 245)
+shape = SubResource("vertical")
+[node name="Right" type="CollisionShape2D" parent="Bounds"]
+position = Vector2(589, 245)
+shape = SubResource("vertical")
+
+[node name="Player" parent="." instance=ExtResource("2")]
+position = Vector2(427, 277)
+
+[node name="EntryHint" type="Label" parent="."]
+offset_left = 367.0
+offset_top = 315.0
+offset_right = 492.0
+offset_bottom = 335.0
+theme_override_font_sizes/font_size = 10
+text = "E — Masuk Balai Nadi"
+
+[node name="spawn" type="Marker2D" parent="."]
+position = Vector2(427, 277)
+
+[node name="ReturnFarm" type="Area2D" parent="."]
+position = Vector2(427, 349)
+script = ExtResource("3")
+interaction_type = 1
+target_scene = "res://scenes/world/farm.tscn"
+spawn_position = Vector2(636, 143)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ReturnFarm"]
+shape = SubResource("door")
+[node name="ReturnHint" type="Label" parent="."]
+offset_left = 387.0
+offset_top = 340.0
+theme_override_font_sizes/font_size = 9
+text = "Kembali ke Farm (E)"

@@ -10,7 +10,7 @@ metadata/_custom_type_script = "uid://b3552q380fai0"
 [resource]
 script = ExtResource("2_action")
 display_name = "Tangan"
-animation_name = &"throw"
+animation_name = &"pick_up"
 hit_frame = 3
 effect = SubResource("Resource_hand")
 metadata/_custom_type_script = "uid://babxwm68vuqeh"

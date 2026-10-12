@@ -3,6 +3,8 @@ extends Node
 signal flag_changed(flag_id: String, value: bool)
 
 const DEFAULT_FLAGS := {
+	"balai_nadi_restored": false,
+	"greenhouse_unlocked": false,
 	"bridge_repaired": false,
 	#"forest_unlocked": false,
 	#"cave_unlocked": false,

@@ -7,5 +7,8 @@
 script = ExtResource("1_script")
 item = ExtResource("2_item")
 seasons = PackedStringArray("spring", "summer", "fall")
-locations = PackedStringArray("forest")
-weight = 0.12
+locations = PackedStringArray("forest", "farm")
+weight = 0.15
+dig = true
+amount_min = 1
+amount_max = 1

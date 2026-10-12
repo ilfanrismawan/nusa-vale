@@ -4,6 +4,8 @@ class_name InventorySlotUI
 signal slot_clicked(slot_index: int, button_index: int)
 signal slot_hovered(slot_index: int, slot_ui: InventorySlotUI)
 signal slot_unhovered(slot_index: int, slot_ui: InventorySlotUI)
+## Item dari slot lain ditarik ke slot ini dan sudah ditukar.
+signal slot_swapped(from_index: int, to_index: int)
 
 ## Preloaded textures for slot states
 const TEX_NORMAL := preload("res://resources/ui/slot_normal.tres")
@@ -53,6 +55,8 @@ func set_item(item_data: ItemData, amount: int) -> void:
 		count_label.text = str(amount) if amount > 1 else ""
 		count_label.visible = amount > 1
 		tooltip_text = item_data.display_name
+		if item_data.action_data != null and item_data.action_data.tool_data != null:
+			tooltip_text += "\n" + item_data.action_data.tool_data.ability_text()
 	else:
 		clear()
 
@@ -168,6 +172,10 @@ func _get_drag_data(_at_position: Vector2) -> Variant:
 		preview_root.add_child(lbl)
 
 	set_drag_preview(preview_root)
+	# Menekan slot untuk mulai menarik juga memilihnya di tas; batalkan supaya klik
+	# berikutnya tidak menukar slot asal secara tidak sengaja.
+	if is_instance_valid(owner_ui) and owner_ui.has_method("_clear_item_detail"):
+		owner_ui._clear_item_detail()
 
 	return {
 		"type": "inventory_slot",
@@ -177,14 +185,16 @@ func _get_drag_data(_at_position: Vector2) -> Variant:
 	}
 
 
-func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
-	return data is Dictionary and data.get("type") == "inventory_slot"
+func _can_drop_data(_at_position: Vector2, drag: Variant) -> bool:
+	return drag is Dictionary and drag.get("type") == "inventory_slot"
 
 
-func _drop_data(_at_position: Vector2, data: Variant) -> void:
-	if not _can_drop_data(_at_position, data):
+func _drop_data(_at_position: Vector2, drag: Variant) -> void:
+	if not _can_drop_data(_at_position, drag):
 		return
-	var from_idx: int = data.get("from_index", -1)
+	var from_idx: int = drag.get("from_index", -1)
 	var to_idx: int = slot_index
-	if from_idx != -1 and from_idx != to_idx:
-		data.swap_slots(from_idx, to_idx)
+	# Dulu parameter ini bernama `data` dan menutupi properti `data` (PlayerData),
+	# sehingga swap_slots dipanggil pada Dictionary dan tarik-lepas gagal.
+	if from_idx != -1 and from_idx != to_idx and data.swap_slots(from_idx, to_idx):
+		slot_swapped.emit(from_idx, to_idx)

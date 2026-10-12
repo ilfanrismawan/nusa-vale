@@ -4,13 +4,19 @@
 
 [resource]
 script = ExtResource("1_td")
+dig_bonus_chance = 0
+water_capacity = 0
+reach_tiles = 2.4
+area_depth = 3
+area_width = 3
+area_size = 9
 tool_id = "sickle_crimson"
 display_name = "Sabit Crimson"
 tool_type = 5
 tier = 5
-damage = 6
-stamina_cost = 4
-action_speed = 1.75
+damage = 7
+stamina_cost = 2
+action_speed = 1.55
 upgrade_cost_money = 5000
 required_items = {
 "crimson_bar": 5

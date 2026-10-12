@@ -1,6 +1,7 @@
 shader_type canvas_item;
 
 #include "res://scripts/effects/water_detail.gdshaderinc"
+#include "res://scripts/effects/soil_detail.gdshaderinc"
 
 // World coordinates keep the pattern continuous across tiles and camera movement.
 varying vec2 ground_position;
@@ -42,5 +43,6 @@ void fragment() {
 	float detail = variation + fleck + tuft * (tips * 0.13 - roots * 0.085);
 	vec3 grass = clamp(base.rgb + vec3(0.65, 1.0, 0.45) * detail * detail_strength, vec3(0.0), vec3(1.0));
 	vec4 ground = vec4(mix(base.rgb, grass, mask), base.a);
+	ground = detail_soil(ground, ground_position);
 	COLOR = detail_water(ground, ground_position, TIME) * vertex_tint;
 }

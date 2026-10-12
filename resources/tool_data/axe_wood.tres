@@ -4,6 +4,15 @@
 
 [resource]
 script = ExtResource("1_dyg2o")
+dig_bonus_chance = 0
+water_capacity = 0
+reach_tiles = 1.5
+area_depth = 1
+area_width = 1
+area_size = 1
+action_speed = 1
+stamina_cost = 6
+damage = 1
 tool_id = "axe_wood"
 display_name = "Wood Axe"
 metadata/_custom_type_script = "uid://ce87yxxpq5y37"

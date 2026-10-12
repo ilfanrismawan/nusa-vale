@@ -4,7 +4,7 @@ extends ActionEffect
 @export var target_group: StringName = &"choppable"
 
 func apply(player: Player, cell: Vector2i) -> void:
-	var action: ActionData = player.tool_controller.current_tool
+	var action: ActionData = player.tool_controller.action_state.action
 	
 	if action == null:
 		return

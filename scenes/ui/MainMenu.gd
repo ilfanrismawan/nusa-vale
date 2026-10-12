@@ -25,10 +25,13 @@ func _ready() -> void:
 	btn_continue.pressed.connect(_on_continue_pressed)
 	btn_settings.pressed.connect(_on_settings_pressed)
 	btn_quit.pressed.connect(_on_quit_pressed)
-	confirm_dialog.confirmed.connect(_start_new_game)
+	# Konfirmasi timpa save sekarang ada di SaveSlotMenu; ConfirmDialog tidak dipakai lagi.
 
-	# Aktifkan tombol Lanjutkan hanya jika ada save
-	btn_continue.disabled = not SaveManager.has_save()
+	# Tombol Lanjutkan membuka daftar slot; aktif jika ada minimal satu slot terisi.
+	btn_continue.text = "Muat Game"
+	btn_continue.disabled = not SaveManager.has_any_save()
+	if settings_menu and settings_menu.has_method("set_save_buttons_visible"):
+		settings_menu.set_save_buttons_visible(false)
 
 	# Animasi masuk
 	_play_intro_animation()
@@ -71,14 +74,19 @@ func _add_coop_button() -> void:
 	btn_coop.pressed.connect(_on_coop_pressed)
 
 
+## Co-op: pilih slot dulu (kosong = game baru, terisi = lanjutkan), lalu lobby.
 func _on_coop_pressed() -> void:
+	_open_slot_menu(SaveSlotMenu.Mode.PLAY, func(_slot: int): _open_coop_lobby())
+
+
+func _open_coop_lobby() -> void:
 	var lobby := CoopLobby.new()
 	lobby.start_requested.connect(_start_coop)
 	add_child(lobby)
 
 
-## Co-op memakai save yang ada (P1 = pemilik save). Tanpa save: game baru, penampilan bawaan
-## (bisa diganti di lemari rumah).
+## Co-op memakai save di slot terpilih (P1 = pemilik save). Slot kosong: game baru, penampilan
+## bawaan (bisa diganti di lemari rumah) dan langsung disimpan supaya slot terisi.
 func _start_coop(devices: Array[int]) -> void:
 	if SaveManager.has_save():
 		if not SaveManager.load_game():
@@ -86,23 +94,46 @@ func _start_coop(devices: Array[int]) -> void:
 			return
 	else:
 		_reset_world()
+		SaveManager.save_game()
 	var fade_tween := create_tween()
 	fade_tween.tween_property(self, "modulate:a", 0.0, 0.4)
 	fade_tween.tween_callback(func(): Coop.start(devices))
 
 
 func _on_new_game_pressed() -> void:
-	if SaveManager.has_save():
-		confirm_dialog.popup_centered()
-	else:
-		_start_new_game()
+	_open_slot_menu(SaveSlotMenu.Mode.NEW_GAME, func(_slot: int): _start_new_game())
 
 
 func _on_continue_pressed() -> void:
-	if SaveManager.load_game():
-		_transition_to_game()
-	else:
+	_open_slot_menu(SaveSlotMenu.Mode.LOAD, func(_slot: int): _continue_game())
+
+
+func _open_slot_menu(slot_mode: SaveSlotMenu.Mode, on_chosen: Callable) -> void:
+	var menu := SaveSlotMenu.new()
+	menu.mode = slot_mode
+	menu.slot_chosen.connect(on_chosen)
+	# Slot bisa dihapus dari menu ini: perbarui tombol Muat Game setelah ditutup.
+	menu.closed.connect(func(): btn_continue.disabled = not SaveManager.has_any_save())
+	add_child(menu)
+
+
+## Slot sudah dipilih lewat SaveSlotMenu (SaveManager.current_slot).
+func _continue_game() -> void:
+	if not SaveManager.load_game():
 		Notify.say("Gagal memuat save.")
+		return
+
+	GameState.next_spawn_position = Vector2(304.0, 147.0)
+	GameState.has_spawn_point = true
+	DayCycle.is_running = true
+
+	var fade_tween := create_tween()
+	fade_tween.tween_property(self, "modulate:a", 0.0, 0.4)
+	fade_tween.tween_callback(func():
+		get_tree().change_scene_to_file(
+			"res://scenes/world/interior/interior_house.tscn"
+		)
+	)
 
 
 func _on_settings_pressed() -> void:
@@ -118,7 +149,9 @@ func _start_new_game() -> void:
 	if not SaveManager.delete_save():
 		Notify.say("Gagal menghapus save lama.")
 		return
-
+	
+	GameState.next_spawn_position = Vector2(1114.0, 290.0)
+	GameState.has_spawn_point = true
 	_reset_world()
 	_open_character_creator()
 
@@ -133,6 +166,7 @@ func _reset_world() -> void:
 	DayCycle.current_day = 1
 	DayCycle.hour = 6
 	DayCycle.minute = 0
+	GameState.p1().player_name = ""
 
 	FarmManager.farm_data.clear()
 	ForageManager.reset()
@@ -143,7 +177,11 @@ func _open_character_creator() -> void:
 	var creator := CharacterCreatorUI.new()
 	creator.allow_cancel = false
 	creator.pause_game = false
-	creator.finished.connect(func(_appearance: CharacterAppearance): _transition_to_game())
+	creator.ask_name = true
+	creator.finished.connect(func(_appearance: CharacterAppearance):
+		# Simpan langsung supaya slot yang dipilih terisi (nama + hari 1) sebelum masuk Farm.
+		SaveManager.save_game()
+		_transition_to_game())
 	add_child(creator)
 
 

@@ -4,11 +4,18 @@
 
 [resource]
 script = ExtResource("1_tdrgq")
+dig_bonus_chance = 0
+water_capacity = 0
+reach_tiles = 1.6
+area_depth = 1
+area_width = 1
+area_size = 1
+stamina_cost = 6
 tool_id = "axe_copper"
 display_name = "Copper Axe"
 tier = 1
 damage = 2
-action_speed = 1.15
+action_speed = 1.1
 upgrade_cost_money = 500
 required_items = {
 "copper_bar": 5,

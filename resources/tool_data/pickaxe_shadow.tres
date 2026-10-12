@@ -4,13 +4,19 @@
 
 [resource]
 script = ExtResource("1_td")
+dig_bonus_chance = 0
+water_capacity = 0
+reach_tiles = 2.8
+area_depth = 1
+area_width = 1
+area_size = 1
 tool_id = "pickaxe_shadow"
 display_name = "Pickaxe Shadow"
 tool_type = 2
 tier = 7
-damage = 8
+damage = 12
 stamina_cost = 3
-action_speed = 2
+action_speed = 1.85
 upgrade_cost_money = 9000
 required_items = {
 "shadow_bar": 5
