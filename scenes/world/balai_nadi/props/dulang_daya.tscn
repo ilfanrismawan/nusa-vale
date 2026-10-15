@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/balai_nadi/v3/sacred_props.png" id="1_kiyka"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m5msy"]
+atlas = ExtResource("1_kiyka")
+region = Rect2(1152, 704, 264, 280)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s3msw"]
+size = Vector2(8, 6)
+
+[node name="DulangDaya" type="Node2D" unique_id=1214845849]
+texture_filter = 1
+
+[node name="Art" type="Sprite2D" parent="." unique_id=2129052611]
+position = Vector2(0, -8)
+scale = Vector2(0.060606062, 0.057142857)
+texture = SubResource("AtlasTexture_m5msy")
+
+[node name="BaseCollision" type="StaticBody2D" parent="." unique_id=1220539963]
+position = Vector2(0, -3)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BaseCollision" unique_id=1395034825]
+shape = SubResource("RectangleShape2D_s3msw")

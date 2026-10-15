@@ -6,7 +6,7 @@ extends PanelContainer
 signal confirmed(amount: int)
 signal cancelled
 
-const FONT := preload("res://assets/fonts/m5x7.ttf")
+const FONT := preload("res://resources/ui/readable_font.tres")
 const HUD = preload("res://scenes/ui/hud.gd")
 const COLOR_TEXT := Color(0.95, 0.85, 0.55, 1.0)
 const COLOR_DIM := Color(0.85, 0.75, 0.6, 1.0)

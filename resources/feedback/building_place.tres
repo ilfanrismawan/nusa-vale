@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ActionFeedback" load_steps=3 format=3]
+[ext_resource type="Script" path="res://scripts/data/action_feedback.gd" id="1"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/soil_pat.wav" id="2"]
+[resource]
+script = ExtResource("1")
+sound = ExtResource("2")
+volume_db = -4.0
+pitch_variation = 0.04
+particle_count = 20
+particle_color = Color(0.78, 0.58, 0.32, 1)
+particle_color_alt = Color(1, 0.87, 0.58, 1)
+particle_speed = 38.0
+particle_gravity = 110.0
+particle_lifetime = 0.5
+particle_spread = 130.0
+particle_size = 2
+shake = 0.7
+shake_duration = 0.12

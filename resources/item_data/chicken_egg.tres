@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/icons/Food Icons/Chicken Egg.png" id="2"]
+[resource]
+script = ExtResource("1")
+category = 4
+item_id = "chicken_egg"
+display_name = "Telur Ayam"
+icon = ExtResource("2")
+description = "Hasil perawatan ayam setiap hari. Jual di toko atau kirim melalui Shipping Bin."
+sell_price = 50

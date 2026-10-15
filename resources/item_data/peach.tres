@@ -13,6 +13,6 @@ description = "Hasil panen Persik segar berkualitas."
 stackable = true
 max_stack = 99
 buy_price = 0
-sell_price = 100
+sell_price = 165
 season = "summer"
 metadata/_custom_type_script = "uid://cm1okc20ussp3"

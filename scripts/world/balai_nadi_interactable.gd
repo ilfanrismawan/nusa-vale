@@ -5,8 +5,16 @@ extends Area2D
 @export var spawn_position := Vector2.ZERO
 var _menus: Dictionary = {}
 
-func interact() -> void:
-	var player: Player = Coop.current_player()
+func _ready() -> void:
+	if interaction_type == 1 and (name in ["Exit", "ReturnFarm", "ReturnTown"] or not "/interior/" in target_scene and not target_scene.ends_with("/interior.tscn")):
+		body_entered.connect(func(body: Node2D):
+			if body is Player:
+				RoomDoor.travel(body, target_scene, spawn_position))
+	elif interaction_type == 1:
+		add_to_group("scene_door")
+
+func interact(actor: Player = null) -> void:
+	var player: Player = actor if actor != null else Coop.current_player()
 	if player == null:
 		for candidate in get_tree().get_nodes_in_group("player"):
 			if candidate is Player and candidate.data == GameState.current:

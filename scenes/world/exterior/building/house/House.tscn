@@ -4,7 +4,10 @@
 [ext_resource type="Script" uid="uid://bfg43kx57o018" path="res://scripts/world/enter_door_house.gd" id="2_coavl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_okwql"]
-size = Vector2(12, 16)
+size = Vector2(11, 18)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ovsut"]
+size = Vector2(17, 23)
 
 [node name="House" type="Node2D" unique_id=285203614]
 y_sort_enabled = true
@@ -22,5 +25,11 @@ script = ExtResource("2_coavl")
 target_spawn_pos = Vector2(310, 190)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Door" unique_id=675798593]
-position = Vector2(0, 28)
+position = Vector2(-0.5, 30)
 shape = SubResource("RectangleShape2D_okwql")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1925907292]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1166603745]
+position = Vector2(-0.5, 27.5)
+shape = SubResource("RectangleShape2D_ovsut")

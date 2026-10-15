@@ -7,7 +7,7 @@ signal slot_selected(index: int)
 const HOTBAR_SLOTS := 8
 const SLOT_SCENE = preload("res://scenes/ui/inventory_slot.tscn")
 const SKIN_SELECTED: Texture2D = preload("res://resources/ui/hotbar_slot_selected.tres")
-const FONT: Font = preload("res://assets/fonts/m5x7.ttf")
+const FONT: Font = preload("res://resources/ui/readable_font.tres")
 const NUMBER_COLOR := Color8(249, 230, 207)
 const OUTLINE_COLOR := Color8(28, 10, 24)
 const NAME_HOLD := 1.4 # detik nama item tampil di atas hotbar
@@ -65,7 +65,7 @@ func _make_number_label(number: int) -> Label:
 	label.add_theme_font_size_override("font_size", 16)
 	label.add_theme_color_override("font_color", NUMBER_COLOR)
 	label.add_theme_color_override("font_outline_color", OUTLINE_COLOR)
-	label.add_theme_constant_override("outline_size", 4)
+	label.add_theme_constant_override("outline_size", 1)
 	label.position = Vector2(3, -4)
 	label.modulate.a = 0.85
 	return label
@@ -77,15 +77,15 @@ func _build_name_label() -> void:
 	_name_label.add_theme_font_size_override("font_size", 16)
 	_name_label.add_theme_color_override("font_color", NUMBER_COLOR)
 	_name_label.add_theme_color_override("font_outline_color", OUTLINE_COLOR)
-	_name_label.add_theme_constant_override("outline_size", 4)
+	_name_label.add_theme_constant_override("outline_size", 1)
 	_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_name_label.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
 	_name_label.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	_name_label.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	_name_label.offset_left = -100.0
 	_name_label.offset_right = 100.0
-	_name_label.offset_top = -78.0
-	_name_label.offset_bottom = -62.0
+	_name_label.offset_top = -98.0
+	_name_label.offset_bottom = -76.0
 	_name_label.modulate.a = 0.0
 	add_child(_name_label)
 

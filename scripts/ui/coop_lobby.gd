@@ -8,7 +8,7 @@ extends CanvasLayer
 signal start_requested(devices: Array[int])
 signal closed
 
-const FONT: Font = preload("res://assets/fonts/m5x7.ttf")
+const FONT: Font = preload("res://resources/ui/readable_font.tres")
 const COLOR_TEXT := Color8(249, 230, 207)
 const COLOR_DIM := Color(0.97, 0.88, 0.78, 0.45)
 const COLOR_JOINED := Color8(140, 214, 120)
@@ -118,7 +118,7 @@ func _refresh() -> void:
 	var slot := SaveManager.current_slot
 	var save_text := ("Slot %d: melanjutkan save." % slot) if SaveManager.has_save() else ("Slot %d kosong: mulai game baru." % slot)
 	var hint := "%s\nB di gamepad = keluar dari lobby." % save_text
-	if OS.is_debug_build():
+	if OS.has_feature("editor"):
 		hint += "\nUji tanpa gamepad: F2 tambah pemain numpad (8456 jalan, 0 alat, 1 interaksi)."
 	if Input.get_connected_joypads().is_empty():
 		hint += "\nBelum ada gamepad tersambung."
@@ -148,7 +148,7 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		match event.physical_keycode:
 			KEY_F2:
-				if OS.is_debug_build():
+				if OS.has_feature("editor"):
 					if _devices.has(PlayerInput.DEVICE_NUMPAD):
 						_leave(PlayerInput.DEVICE_NUMPAD)
 					else:

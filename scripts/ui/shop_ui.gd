@@ -1,12 +1,14 @@
 class_name ShopUI
 extends CanvasLayer
 
+const ServiceTheme = preload("res://scripts/ui/farm_service_theme.gd")
+
 ## UI toko gaya Stardew Valley, dibangun lewat kode (tanpa .tscn).
 ## Kiri: potret penjaga, kotak dialog/deskripsi, uang.
 ## Kanan: daftar barang (scroll) + grid tas pemain untuk menjual.
 
 const DEFAULT_SHOP := "res://resources/shop/general_store.tres"
-const FONT := preload("res://assets/fonts/m5x7.ttf")
+const FONT := preload("res://resources/ui/readable_font.tres")
 const TEX_INVENTORY := preload("res://assets/farm_rpg/ui/inventory/inventory.png")
 const TEX_BANNER := preload("res://assets/farm_rpg/ui/inventory/Banner.png")
 const TEX_CLOSE := preload("res://resources/ui/btn_close_x.tres")
@@ -47,9 +49,14 @@ var _rows: Array[Dictionary] = []
 var _hovered_row: PanelContainer
 var current_season_filter: String = "all"
 var _filter_buttons: Dictionary = {}
+var _quantity: SpinBox
+var _purchase_button: Button
+var _purchase_summary: Label
+var _selected_item: ItemData
+var _closed := false
 
 func _ready() -> void:
-	layer = 20
+	layer = ServiceTheme.LAYER
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	if shop_data == null:
 		shop_data = load(DEFAULT_SHOP) as ShopData
@@ -70,10 +77,7 @@ func _ready() -> void:
 # ── Membangun UI ────────────────────────────────────────────────────
 
 func _build_ui() -> void:
-	var ui_theme := Theme.new()
-	ui_theme.default_font = FONT
-	ui_theme.default_font_size = 16
-	ui_theme.set_color("font_color", "Label", COLOR_TEXT)
+	var ui_theme := ServiceTheme.make_theme()
 
 	var dim := ColorRect.new()
 	dim.color = Color(0, 0, 0, 0.6)
@@ -91,6 +95,7 @@ func _build_ui() -> void:
 
 	main.add_child(_build_left_column())
 	main.add_child(_build_right_column())
+	ServiceTheme.mount(self, main, Vector2(720, 410))
 
 func _build_left_column() -> VBoxContainer:
 	var left := VBoxContainer.new()
@@ -105,7 +110,7 @@ func _build_left_column() -> VBoxContainer:
 	portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	if shop_data.portrait != null:
-		portrait.texture = shop_data.portrait
+		portrait.texture = ServiceTheme.portrait(shop_data.portrait)
 	else:
 		# Siluet sementara sampai ada potret NPC
 		var atlas := AtlasTexture.new()
@@ -151,6 +156,7 @@ func _build_left_column() -> VBoxContainer:
 
 func _build_right_column() -> VBoxContainer:
 	var right := VBoxContainer.new()
+	right.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	right.add_theme_constant_override("separation", 6)
 
 	# Panel daftar barang
@@ -204,6 +210,25 @@ func _build_right_column() -> VBoxContainer:
 	_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_list.add_theme_constant_override("separation", 3)
 	scroll.add_child(_list)
+	var purchase := HBoxContainer.new()
+	shop_box.add_child(purchase)
+	_quantity = SpinBox.new()
+	_quantity.min_value = 1
+	_quantity.max_value = 99
+	_quantity.value = 1
+	_quantity.custom_minimum_size.x = 68
+	_quantity.value_changed.connect(func(_value: float): _refresh_purchase())
+	purchase.add_child(_quantity)
+	_purchase_summary = Label.new()
+	_purchase_summary.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_purchase_summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	purchase.add_child(_purchase_summary)
+	_purchase_button = Button.new()
+	_purchase_button.text = "Beli barang"
+	_purchase_button.disabled = true
+	_purchase_button.pressed.connect(_purchase_selected)
+	purchase.add_child(_purchase_button)
+	_refresh_purchase()
 
 	right.add_child(shop_panel)
 
@@ -270,10 +295,13 @@ func _refresh() -> void:
 	_money_label.text = "%s G" % _format_money(GameState.money)
 	_refresh_rows()
 	_refresh_inventory()
+	_refresh_purchase()
 
 func _on_season_tab_pressed(season_id: String) -> void:
 	current_season_filter = season_id
+	_selected_item = null
 	_refresh_rows()
+	_refresh_purchase()
 
 func _update_season_tab_styles() -> void:
 	for id in _filter_buttons:
@@ -302,6 +330,9 @@ func _refresh_rows() -> void:
 		var price_label: Label = row["price"]
 		var status := _bag_status(item)
 		var hovered: bool = row["panel"] == _hovered_row
+		hovered = hovered or item == _selected_item
+		row["panel"].add_theme_stylebox_override("panel", _row_style(hovered))
+		row["name"].add_theme_color_override("font_color", COLOR_TEXT_LIGHT if hovered else COLOR_TEXT)
 		if status == "owned":
 			price_label.text = "Sudah dimiliki"
 			price_label.add_theme_color_override("font_color", COLOR_OWNED)
@@ -368,9 +399,37 @@ func _make_slot(index: int) -> PanelContainer:
 func _on_row_input(event: InputEvent, item: ItemData) -> void:
 	var mb := event as InputEventMouseButton
 	if mb != null and mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT:
-		var amount := BUY_SHIFT_AMOUNT if mb.shift_pressed else 1
-		_buy(item, amount)
+		_selected_item = item
+		_quantity.value = BUY_SHIFT_AMOUNT if mb.shift_pressed and not BAG_UPGRADES.has(item.item_id) else 1
+		_refresh_purchase()
+		_refresh_rows()
+		_show_greeting()
 		get_viewport().set_input_as_handled()
+
+func _refresh_purchase() -> void:
+	if _purchase_button == null: return
+	if _selected_item == null:
+		_purchase_summary.text = "Pilih barang, lalu tentukan jumlah."
+		_purchase_button.disabled = true
+		return
+	var item := _selected_item
+	var bag_upgrade := BAG_UPGRADES.has(item.item_id)
+	_quantity.editable = not bag_upgrade
+	if bag_upgrade: _quantity.value = 1
+	var count := int(_quantity.value)
+	var total := item.buy_price * count
+	var available := _bag_status(item).is_empty() and GameState.money >= total and (bag_upgrade or _can_fit(item, count))
+	_purchase_summary.text = "%s ×%d\nTotal %s G" % [item.display_name, count, _format_money(total)]
+	if not available:
+		_purchase_summary.text += " · " + ("Sudah dimiliki / terkunci" if not _bag_status(item).is_empty() else "Uang kurang" if GameState.money < total else "Tas penuh")
+	_purchase_button.text = "Beli · %s G" % _format_money(total)
+	_purchase_button.disabled = not available
+	_purchase_button.tooltip_text = "Konfirmasi pembelian jumlah yang tertera."
+
+func _purchase_selected() -> void:
+	if _selected_item == null or _purchase_button.disabled: return
+	_buy(_selected_item, int(_quantity.value))
+	_refresh_purchase()
 
 func _on_row_hover(panel: PanelContainer, item: ItemData) -> void:
 	_hovered_row = panel
@@ -386,7 +445,7 @@ func _on_row_hover(panel: PanelContainer, item: ItemData) -> void:
 		"winter": season_tag = " (Musim Dingin)"
 	var text := "%s%s\n%s" % [item.display_name, season_tag, item.description]
 	if not BAG_UPGRADES.has(item.item_id):
-		text += "\n\nShift+klik: beli %d" % BUY_SHIFT_AMOUNT
+		text += "\n\nKlik untuk memilih. Atur jumlah, lalu tekan Beli."
 	_dialog_label.text = text
 
 func _on_row_unhover(panel: PanelContainer) -> void:
@@ -397,6 +456,7 @@ func _on_row_unhover(panel: PanelContainer) -> void:
 		if row["panel"] == panel:
 			row["name"].remove_theme_color_override("font_color")
 	_refresh_rows()
+	_refresh_purchase()
 	_show_greeting()
 
 func _on_slot_input(event: InputEvent, index: int) -> void:
@@ -422,7 +482,7 @@ func _on_slot_hover(index: int) -> void:
 	_dialog_label.text = text
 
 func _show_greeting() -> void:
-	_dialog_label.text = shop_data.greeting
+	_dialog_label.text = "%s\n%s" % [_selected_item.display_name, _selected_item.description] if _selected_item != null else shop_data.greeting
 
 # ── Transaksi ───────────────────────────────────────────────────────
 
@@ -501,10 +561,12 @@ func _can_fit(item: ItemData, amount: int) -> bool:
 func _on_money_changed(_amount: int) -> void:
 	_money_label.text = "%s G" % _format_money(GameState.money)
 	_refresh_rows()
+	_refresh_purchase()
 
 func _on_inventory_changed() -> void:
 	_refresh_rows()
 	_refresh_inventory()
+	_refresh_purchase()
 
 # ── Helper gaya ─────────────────────────────────────────────────────
 
@@ -544,7 +606,12 @@ func _input(event: InputEvent) -> void:
 	elif not input.uses_mouse() and (input.is_event(event, &"ui_accept") or input.is_event(event, &"use_tool")):
 		var row := _pad_row()
 		if not row.is_empty():
-			_buy(row["item"], 1)
+			if _selected_item == row["item"]:
+				_purchase_selected()
+			else:
+				_selected_item = row["item"]
+				_quantity.value = 1
+				_refresh_purchase()
 		get_viewport().set_input_as_handled()
 
 ## Atas/bawah memilih barang untuk pemain tanpa mouse (A = beli 1, B = tutup).
@@ -556,6 +623,10 @@ func _process(_delta: float) -> void:
 		_move_pad_cursor(1)
 	elif input.just_pressed(&"move_up"):
 		_move_pad_cursor(-1)
+	elif input.just_pressed(&"move_right") and _quantity.editable:
+		_quantity.value += 1
+	elif input.just_pressed(&"move_left") and _quantity.editable:
+		_quantity.value -= 1
 
 func _owner_input() -> PlayerInput:
 	return player.input if is_instance_valid(player) else PlayerInput.solo()
@@ -579,10 +650,21 @@ func _move_pad_cursor(step: int) -> void:
 	_pad_index = index
 	var row := _pad_row()
 	_on_row_hover(row["panel"], row["item"])
+	_selected_item = row["item"]
+	_quantity.value = 1
+	_refresh_purchase()
+	_refresh_rows()
 	var scroll := row["panel"].get_parent().get_parent() as ScrollContainer
 	if scroll != null:
 		scroll.ensure_control_visible(row["panel"])
 
 func close_shop() -> void:
+	if _closed: return
+	_closed = true
+	hide()
+	set_process_input(false)
 	Coop.set_menu_open(player, false)
 	queue_free()
+
+func _exit_tree() -> void:
+	if not _closed: Coop.set_menu_open(player, false)

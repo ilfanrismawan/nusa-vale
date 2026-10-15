@@ -1,12 +1,14 @@
 class_name ToolUpgradeUI
 extends CanvasLayer
 
+const ServiceTheme = preload("res://scripts/ui/farm_service_theme.gd")
+
 ## UI Dialog Interaksi Upgrade Alat dengan NPC Pandai Besi (Blacksmith).
 ## Memungkinkan pemain melihat daftar alat di tas, biaya perakitan, dan material yang dibutuhkan.
 
 signal finished
 
-const FONT := preload("res://assets/fonts/m5x7.ttf")
+const FONT := preload("res://resources/ui/readable_font.tres")
 const TEX_INVENTORY := preload("res://assets/farm_rpg/ui/inventory/inventory.png")
 const TEX_BANNER := preload("res://assets/farm_rpg/ui/inventory/Banner.png")
 const TEX_PORTRAIT := preload("res://assets/farm_rpg/Character/PNG/Portrait.png")
@@ -30,13 +32,21 @@ var _detail_cost: Label
 var _detail_materials: VBoxContainer
 var _upgrade_btn: Button
 var _selected_tool_entry: Dictionary = {}
+var _result_icon: TextureRect
+var _benefits: Label
+var _order_progress: ProgressBar
+var _closed := false
 
 func _ready() -> void:
-	layer = 30
+	layer = ServiceTheme.LAYER
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build_ui()
 	_refresh_tools()
 	Coop.set_menu_open(player, true)
+	GameState.money_changed.connect(func(_money: int):
+		_update_money_label()
+		if not _selected_tool_entry.is_empty(): _select_tool(_selected_tool_entry))
+	DayCycle.day_passed.connect(func(_day: int): _refresh_tools())
 
 func _input(event: InputEvent) -> void:
 	var input := player.input if is_instance_valid(player) else PlayerInput.solo()
@@ -45,15 +55,19 @@ func _input(event: InputEvent) -> void:
 		_close()
 
 func _close() -> void:
+	if _closed: return
+	_closed = true
+	hide()
+	set_process_input(false)
 	Coop.set_menu_open(player, false)
 	finished.emit()
 	queue_free()
 
+func _exit_tree() -> void:
+	if not _closed and is_instance_valid(player): Coop.set_menu_open(player, false)
+
 func _build_ui() -> void:
-	var ui_theme := Theme.new()
-	ui_theme.default_font = FONT
-	ui_theme.default_font_size = 16
-	ui_theme.set_color("font_color", "Label", COLOR_TEXT)
+	var ui_theme := ServiceTheme.make_theme()
 
 	var dim := ColorRect.new()
 	dim.color = Color(0, 0, 0, 0.6)
@@ -98,6 +112,7 @@ func _build_ui() -> void:
 
 	body_hbox.add_child(_build_npc_column())
 	body_hbox.add_child(_build_tools_column())
+	ServiceTheme.mount(self, panel, Vector2(750, 420))
 
 func _build_npc_column() -> VBoxContainer:
 	var col := VBoxContainer.new()
@@ -108,12 +123,7 @@ func _build_npc_column() -> VBoxContainer:
 	portrait_panel.add_theme_stylebox_override("panel", _style(TEX_INVENTORY, Rect2(7, 9, 18, 18), 4, 4))
 	col.add_child(portrait_panel)
 
-	var portrait := TextureRect.new()
-	portrait.custom_minimum_size = Vector2(64, 64)
-	portrait.texture = TEX_PORTRAIT
-	portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	portrait.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	var portrait := ServiceTheme.blacksmith_portrait()
 	portrait_panel.add_child(portrait)
 
 	var name_panel := PanelContainer.new()
@@ -184,14 +194,34 @@ func _build_tools_column() -> HBoxContainer:
 	var detail_vbox := VBoxContainer.new()
 	detail_vbox.add_theme_constant_override("separation", 6)
 	detail_panel.add_child(detail_vbox)
+	_result_icon = TextureRect.new()
+	_result_icon.custom_minimum_size = Vector2(48, 48)
+	_result_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_result_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	detail_vbox.add_child(_result_icon)
 
 	_detail_title = Label.new()
+	_detail_title.custom_minimum_size.x = 180
+	_detail_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_detail_title.text = "Pilih alat untuk ditempa"
 	detail_vbox.add_child(_detail_title)
 
 	_detail_cost = Label.new()
+	_detail_cost.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_detail_cost.text = ""
 	detail_vbox.add_child(_detail_cost)
+	_benefits = Label.new()
+	_benefits.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_benefits.add_theme_font_size_override("font_size", 14)
+	detail_vbox.add_child(_benefits)
+	_order_progress = ProgressBar.new()
+	_order_progress.max_value = ToolUpgradeManager.WORK_DAYS
+	_order_progress.show_percentage = false
+	_order_progress.custom_minimum_size.y = 12
+	_order_progress.add_theme_stylebox_override("background", ServiceTheme.ribbon())
+	_order_progress.add_theme_stylebox_override("fill", ServiceTheme.ribbon(true))
+	_order_progress.hide()
+	detail_vbox.add_child(_order_progress)
 
 	var mat_label := Label.new()
 	mat_label.text = "Material Dibutuhkan:"
@@ -206,7 +236,7 @@ func _build_tools_column() -> HBoxContainer:
 	mat_scroll.add_child(_detail_materials)
 
 	_upgrade_btn = Button.new()
-	_upgrade_btn.text = "Tempa Alat"
+	_upgrade_btn.text = "Pesan upgrade · %d hari" % ToolUpgradeManager.WORK_DAYS
 	_upgrade_btn.disabled = true
 	_upgrade_btn.pressed.connect(_on_upgrade_pressed)
 	detail_vbox.add_child(_upgrade_btn)
@@ -229,11 +259,36 @@ func _refresh_tools() -> void:
 		if slot == null or slot.get("item") == null:
 			continue
 		var item: ItemData = slot["item"]
-		if item.is_tool():
+		if item.category == ItemData.Category.TOOL and item.is_tool():
 			tools_found.append({
 				"slot_idx": slot_idx,
 				"item": item
 			})
+
+	if not data.tool_order.is_empty():
+		var waiting := ToolUpgradeManager.days_remaining(data)
+		_upgrade_btn.text = "Ambil alat" if waiting == 0 else "Sedang dikerjakan"
+		_upgrade_btn.disabled = waiting > 0
+		var item := GameState._resolve_item(str(data.tool_order["next"]))
+		_result_icon.texture = item.icon
+		_order_progress.show()
+		_order_progress.value = ToolUpgradeManager.WORK_DAYS - waiting
+		_benefits.text = "Siap pada hari %d · ambil di bengkel ini" % int(data.tool_order.ready_day)
+		var order_button := Button.new()
+		order_button.text = "Ambil %s" % item.display_name if waiting == 0 else "%s — %d hari lagi" % [item.display_name, waiting]
+		order_button.disabled = waiting > 0
+		order_button.pressed.connect(func():
+			if ToolUpgradeManager.collect_tool(data):
+				_refresh_tools())
+		_tool_list_box.add_child(order_button)
+		_dialog_label.text = "Pesananmu siap. Ambil alat di daftar sebelah." if waiting == 0 else "Alatmu sedang kutempa. Selesai dalam %d hari lagi." % waiting
+		_detail_title.text = item.display_name
+		_detail_cost.text = "Siap diambil!" if waiting == 0 else "Sedang ditempa · %d hari lagi" % waiting
+		var hint := Label.new()
+		hint.text = "Alat ditahan di bengkel.\nSediakan satu slot kosong saat mengambil."
+		hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_detail_materials.add_child(hint)
+		return
 
 	if tools_found.is_empty():
 		var empty_lbl := Label.new()
@@ -246,6 +301,8 @@ func _refresh_tools() -> void:
 		var item: ItemData = entry["item"]
 		var btn := Button.new()
 		btn.text = item.display_name
+		btn.toggle_mode = true
+		btn.set_meta("tool_id", item.item_id)
 		btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		btn.icon = item.icon
 		btn.expand_icon = true
@@ -260,6 +317,11 @@ func _refresh_tools() -> void:
 func _select_tool(entry: Dictionary) -> void:
 	_selected_tool_entry = entry
 	var item: ItemData = entry["item"]
+	for button in _tool_list_box.get_children():
+		if button is Button and button.has_meta("tool_id"):
+			button.set_pressed_no_signal(button.get_meta("tool_id") == item.item_id)
+	_result_icon.texture = item.icon
+	_benefits.text = ""
 
 	for child in _detail_materials.get_children():
 		child.queue_free()
@@ -274,11 +336,21 @@ func _select_tool(entry: Dictionary) -> void:
 	var up_data: Dictionary = ToolUpgradeManager.get_upgrade_data(item.item_id)
 	var next_id: String = up_data.get("next", "")
 	var next_res := GameState._resolve_item(next_id)
+	if next_res != null:
+		_result_icon.texture = next_res.icon
+		var before: ToolData = item.action_data.tool_data
+		var after: ToolData = next_res.action_data.tool_data
+		_benefits.text = "Stamina %s → %s · Area %d → %d petak" % [str(before.stamina_cost), str(after.stamina_cost), before.area_size, after.area_size]
+		if after.tool_type in [ToolData.ToolType.AXE, ToolData.ToolType.PICKAXE]:
+			var access := "kecil/normal" if after.tier == ToolData.ToolTier.COPPER else "kecil/normal/besar"
+			_benefits.text += "\nKekuatan %d → %d · Objek %s" % [before.damage, after.damage, access]
 	var next_name: String = next_res.display_name if next_res != null else next_id
 	var cost: int = int(up_data.get("cost", 0))
 
 	_detail_title.text = "Upgrade ke: %s" % next_name
-	_detail_cost.text = "Biaya Tempa: %d G" % cost
+	_detail_cost.text = "Biaya: %d G · Waktu: %d hari\nAlat ditahan sampai diambil." % [cost, ToolUpgradeManager.WORK_DAYS]
+	if GameState.money >= cost:
+		_detail_cost.text += "\nSisa saldo: %d G" % (GameState.money - cost)
 	if GameState.money >= cost:
 		_detail_cost.add_theme_color_override("font_color", COLOR_MONEY_OK)
 	else:
@@ -289,7 +361,7 @@ func _select_tool(entry: Dictionary) -> void:
 
 	for mat_id in materials:
 		var req_count: int = int(materials[mat_id])
-		var current_count: int = GameState.get_item_count(mat_id)
+		var current_count: int = data.get_item_count(mat_id)
 		var mat_res := GameState._resolve_item(mat_id)
 		var mat_name: String = mat_res.display_name if mat_res != null else mat_id
 
@@ -313,7 +385,7 @@ func _select_tool(entry: Dictionary) -> void:
 		_detail_materials.add_child(mat_row)
 
 	var can_afford := (GameState.money >= cost) and has_all_materials
-	_upgrade_btn.disabled = not can_afford
+	_upgrade_btn.disabled = not can_afford or not data.tool_order.is_empty()
 	if can_afford:
 		_dialog_label.text = "Bahan dan biaya sudah lengkap! Serahkan padaku untuk kutempa."
 	else:
@@ -323,6 +395,10 @@ func _clear_detail() -> void:
 	_detail_title.text = "Pilih alat untuk ditempa"
 	_detail_cost.text = ""
 	_upgrade_btn.disabled = true
+	_upgrade_btn.text = "Pesan upgrade · %d hari" % ToolUpgradeManager.WORK_DAYS
+	_order_progress.hide()
+	_result_icon.texture = null
+	_benefits.text = ""
 	for child in _detail_materials.get_children():
 		child.queue_free()
 
@@ -331,6 +407,9 @@ func _update_money_label() -> void:
 		_money_label.text = "%d G" % GameState.money
 
 func _on_upgrade_pressed() -> void:
+	if not data.tool_order.is_empty():
+		if ToolUpgradeManager.collect_tool(data): _refresh_tools()
+		return
 	if _selected_tool_entry.is_empty():
 		return
 	var item: ItemData = _selected_tool_entry["item"]
@@ -340,15 +419,14 @@ func _on_upgrade_pressed() -> void:
 	if success:
 		if is_instance_valid(player) and player.tool_controller != null:
 			player.tool_controller.select_tool(player.tool_controller.current_index)
-		_dialog_label.text = "Selesai! Lihat kilauan alat barumu ini. Selamat menggunakannya!"
+		_dialog_label.text = "Alatmu sedang ditempa. Kembali setelah dua hari."
 		_refresh_tools()
 
 func _panel_style() -> StyleBoxTexture:
-	return _style(TEX_INVENTORY, Rect2(0, 0, 48, 48), 6, 8)
+	return ServiceTheme.frame()
 
 func _row_style(dark: bool) -> StyleBoxTexture:
-	var region := Rect2(5, 145, 38, 15) if dark else Rect2(0, 48, 48, 16)
-	return _style(TEX_BANNER, region, 5, 4)
+	return ServiceTheme.ribbon(dark)
 
 func _style(tex: Texture2D, region: Rect2, tex_margin: int, content_margin: int) -> StyleBoxTexture:
 	var sb := StyleBoxTexture.new()

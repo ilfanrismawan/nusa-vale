@@ -6,4 +6,4 @@
 [resource]
 script = ExtResource("2_51vwm")
 item = ExtResource("1_urpnu")
-locations = PackedStringArray("beach_sea")
+locations = PackedStringArray("town_river", "beach_sea")

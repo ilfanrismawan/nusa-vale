@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="DehydratorRecipe" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/dehydrator_recipe.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+recipe_id = "dried_fruit"
+input_item_id = "apple"
+input_amount = 1
+output_item_id = "dried_fruit"
+output_amount = 1
+process_time = 5.0

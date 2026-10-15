@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_goat_milk.tres" id="2"]
+[resource]
+script = ExtResource("1")
+item_id = "goat_milk_silver"
+display_name = "Susu Kambing Perak"
+icon = ExtResource("2")
+buy_price = 0
+sell_price = 212
+description = "Hasil ternak. Kualitas ditentukan saat produksi berdasarkan perawatan dan kasih sayang."
+

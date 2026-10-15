@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/balai_nadi/v3/sacred_props.png" id="1_7c5w1"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_etams"]
+atlas = ExtResource("1_7c5w1")
+region = Rect2(592, 656, 432, 316)
+
+[node name="TerataiNadi" type="Node2D" unique_id=704870213]
+texture_filter = 1
+
+[node name="Art" type="Sprite2D" parent="." unique_id=2068394655]
+position = Vector2(0, -12)
+scale = Vector2(0.074074075, 0.07594936)
+texture = SubResource("AtlasTexture_etams")

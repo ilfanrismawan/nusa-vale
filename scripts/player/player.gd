@@ -1,7 +1,8 @@
 class_name Player
 extends CharacterBody2D
+signal sleep_ended
 
-@export var speed: float = 30.0
+@export var speed: float = 25.0
 
 @onready var animation_controller: AnimationController = $AnimationController
 @onready var state_machine: StateMachine = $StateMachine
@@ -42,6 +43,8 @@ var _carried_item_id := ""
 var _preview_item_id := ""
 var _pickup_visual: Sprite2D
 var _pickup_visual_tween: Tween
+var _footsteps := FootstepAudio.new()
+var food_speed_remaining := 0.0
 
 const INTERACTION_DISTANCE := 32.0
 
@@ -50,6 +53,10 @@ const ACTION_DISTANCE := 16.0
 const MAX_ACTION_DISTANCE := 28.0
 
 func _ready() -> void:
+	add_to_group("night_players")
+	if DayCycle._is_passing_out:
+		set_input_locked(&"pass_out", true)
+	GameState.weather.attach_player.call_deferred(self)
 	# UI masih belum _ready (saudara setelah body), jadi pemiliknya bisa diisi lebih dulu.
 	for ui in [hotbar_ui, hud_ui, ui_inventory]:
 		if ui != null and "player" in ui:
@@ -80,16 +87,30 @@ func _process(delta: float) -> void:
 	_sync_carried_item()
 	_flush_item_gesture()
 	_update_held_item_position()
-	if not is_input_locked() and input.just_pressed(&"interact"):
-		_try_interact()
 	_update_tile_cursor()
+
+func _input(event: InputEvent) -> void:
+	# HUD controls cover the viewport; handle world right-clicks before GUI routing.
+	if event is InputEventMouseButton:
+		_unhandled_input(event)
+
+func _unhandled_input(event: InputEvent) -> void:
+	if is_input_locked() or not input.is_event(event, &"interact"):
+		return
+	bind_context()
+	if _try_interact():
+		get_viewport().set_input_as_handled()
 	
 func _physics_process(delta: float) -> void:
+	food_speed_remaining = maxf(0.0, food_speed_remaining - delta)
 	bind_context()
 	if _input_locks.has(&"sleep") or animation_controller.item_gesture_playing:
 		velocity = Vector2.ZERO
 		return
+	var previous_position := global_position
 	state_machine.physics_update(delta)
+	var moving := state_machine.current_state is MoveState
+	_footsteps.update(self, global_position.distance_to(previous_position) if moving else 0.0, state_machine.current_state is RunState)
 
 ## Arahkan GameState (tas/stamina) dan FarmManager (tile) ke pemain dan area ini
 ## sebelum aksi diproses. Solo: GameState.current selalu P1, jadi tidak ada yang berubah.
@@ -110,6 +131,7 @@ func world_root() -> Node:
 
 ## Dipanggil CoopRoot setelah pemain pindah area.
 func refresh_world() -> void:
+	GameState.weather.attach_player.call_deferred(self)
 	base_layer_ground = get_node_or_null("../../BaseLayerGround")
 	if base_layer_ground == null:
 		base_layer_ground = world_root().get_node_or_null("BaseLayerGround") as TileMapLayer
@@ -122,6 +144,8 @@ func set_input_locked(reason: StringName, locked: bool) -> void:
 		_input_locks.erase(reason)
 	if reason == &"sleep":
 		animation_controller.set_visual_override(&"sleep" if locked else &"")
+		if not locked:
+			sleep_ended.emit()
 
 func is_input_locked() -> bool:
 	return not _input_locks.is_empty() or animation_controller.item_gesture_playing
@@ -156,6 +180,12 @@ func _flush_item_gesture() -> void:
 	if animation_controller.play_item_gesture(_pending_item_gesture):
 		_clear_pickup_visual()
 		if _pending_item_gesture == &"pick_up" and _pending_pickup_icon != null:
+			var held := tool_controller.current_item
+			if held != null and held.is_tool():
+				_pending_item_gesture = &""
+				_pending_pickup_icon = null
+				_pending_pickup_id = ""
+				return
 			for slot in data.bag_size:
 				if data.inventory[slot] != null and data.inventory[slot]["item"].item_id == _pending_pickup_id:
 					@warning_ignore("integer_division")
@@ -220,7 +250,7 @@ func _update_held_item_position() -> void:
 func _clear_pickup_visual() -> void:
 	_carried_item_id = ""
 	_preview_item_id = ""
-	animation_controller.set_carrying_item(false)
+	animation_controller.set_carrying_item(has_meta("carried_animal"))
 	_dispose_item_visual()
 
 func _dispose_item_visual() -> void:
@@ -234,15 +264,51 @@ func _dispose_item_visual() -> void:
 		_pickup_visual.queue_free()
 	_pickup_visual = null
 	
-func _try_interact() -> void:
+func _try_interact() -> bool:
+	var carried := get_meta("carried_animal") as Node if has_meta("carried_animal") else null
+	if is_instance_valid(carried):
+		carried.place_from_player(self)
+		return true
+	for bed in get_tree().get_nodes_in_group("beds"):
+		if bed.get_world_2d() == get_world_2d() and bed.overlaps_body(self):
+			if not Coop.has_root():
+				if not bed._sleeping:
+					bed._sleep()
+				return true
+	# Entrances remain interactable; interior exit triggers also travel on contact.
+	var nearest_door: Area2D
+	var door_distance := 40.0
+	for candidate in get_tree().get_nodes_in_group("scene_door"):
+		if not candidate is Area2D or candidate.get_world_2d() != get_world_2d():
+			continue
+		var shape := candidate.get_node_or_null("CollisionShape2D") as Node2D
+		var center: Vector2 = shape.global_position if shape != null else candidate.global_position
+		var offset := center - (global_position + FEET_OFFSET)
+		if candidate.overlaps_body(self) or (offset.length() < door_distance and offset.dot(facing_direction) >= -1):
+			nearest_door = candidate
+			door_distance = offset.length()
+	if nearest_door != null:
+		nearest_door.interact(self)
+		return true
 	if StructureManager.interact_near(self):
-		return
+		return true
 	var target := _find_interactable()
 	if target == null:
-		return
+		return false
 		
 	if target.has_method("interact")		:
-		target.interact()
+		if target is VillageNPC or target is BlacksmithNPC or target.has_meta("player_interaction"):
+			target.interact(self)
+		else:
+			target.interact()
+		return true
+	return false
+
+func release_carried_animal() -> void:
+	var carried := get_meta("carried_animal") as Node if has_meta("carried_animal") else null
+	if is_instance_valid(carried):
+		carried.place_from_player(self)
+	set_meta("carried_animal", null)
 
 func _find_interactable() -> Node:
 	var space_state := get_world_2d().direct_space_state

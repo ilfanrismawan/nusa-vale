@@ -1,0 +1,316 @@
+[gd_scene load_steps=37 format=3 uid="uid://cvriannpc001"]
+
+[ext_resource type="Script" path="res://scripts/world/livestock_vendor.gd" id="1_npc"]
+[ext_resource type="Texture2D" uid="uid://dt781inlr4f3o" path="res://assets/farm_rpg/Character/NPC'S/Alex/Idle.png" id="2_idle"]
+[ext_resource type="Texture2D" uid="uid://vuo2qm2ieby6" path="res://assets/farm_rpg/Character/NPC'S/Alex/Walk.png" id="3_walk"]
+[ext_resource type="Texture2D" uid="uid://bi87crb2vwrn1" path="res://assets/farm_rpg/Character/NPC'S/Alex/Portrait Alex.png" id="4_portrait"]
+
+[sub_resource type="AtlasTexture" id="Atlas_id0"]
+atlas = ExtResource("2_idle")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_id1"]
+atlas = ExtResource("2_idle")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_id2"]
+atlas = ExtResource("2_idle")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_id3"]
+atlas = ExtResource("2_idle")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_iu0"]
+atlas = ExtResource("2_idle")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_iu1"]
+atlas = ExtResource("2_idle")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_iu2"]
+atlas = ExtResource("2_idle")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_iu3"]
+atlas = ExtResource("2_idle")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_is0"]
+atlas = ExtResource("2_idle")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_is1"]
+atlas = ExtResource("2_idle")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_is2"]
+atlas = ExtResource("2_idle")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_is3"]
+atlas = ExtResource("2_idle")
+region = Rect2(96, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_wd0"]
+atlas = ExtResource("3_walk")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_wd1"]
+atlas = ExtResource("3_walk")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_wd2"]
+atlas = ExtResource("3_walk")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_wd3"]
+atlas = ExtResource("3_walk")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_wd4"]
+atlas = ExtResource("3_walk")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_wd5"]
+atlas = ExtResource("3_walk")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_wu0"]
+atlas = ExtResource("3_walk")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_wu1"]
+atlas = ExtResource("3_walk")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_wu2"]
+atlas = ExtResource("3_walk")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_wu3"]
+atlas = ExtResource("3_walk")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_wu4"]
+atlas = ExtResource("3_walk")
+region = Rect2(128, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_wu5"]
+atlas = ExtResource("3_walk")
+region = Rect2(160, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_ws0"]
+atlas = ExtResource("3_walk")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_ws1"]
+atlas = ExtResource("3_walk")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_ws2"]
+atlas = ExtResource("3_walk")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_ws3"]
+atlas = ExtResource("3_walk")
+region = Rect2(96, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_ws4"]
+atlas = ExtResource("3_walk")
+region = Rect2(128, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_ws5"]
+atlas = ExtResource("3_walk")
+region = Rect2(160, 64, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rian"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_id0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_id1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_id2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_id3")
+}],
+"loop": true,
+"name": &"idle_down",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_is0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_is1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_is2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_is3")
+}],
+"loop": true,
+"name": &"idle_side",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_iu0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_iu1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_iu2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_iu3")
+}],
+"loop": true,
+"name": &"idle_up",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_wd0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_wd1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_wd2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_wd3")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_wd4")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_wd5")
+}],
+"loop": true,
+"name": &"walk_down",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_ws0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_ws1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_ws2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_ws3")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_ws4")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_ws5")
+}],
+"loop": true,
+"name": &"walk_side",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_wu0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_wu1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_wu2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_wu3")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_wu4")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_wu5")
+}],
+"loop": true,
+"name": &"walk_up",
+"speed": 6.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(16, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_area"]
+size = Vector2(36, 36)
+
+[node name="RianNPC" type="CharacterBody2D"]
+y_sort_enabled = true
+collision_layer = 1
+collision_mask = 1
+script = ExtResource("1_npc")
+npc_id = "rian"
+npc_name = "Rian"
+role_title = "Penjual Ternak"
+portrait = ExtResource("4_portrait")
+walk_speed = 36.0
+dialog_lines = PackedStringArray("Mulai dengan kandang dari Pak Damar. Unggas memberi telur; sapi, kambing, dan domba memberi susu atau wol.", "Setiap pagi: panen, beri pakan, elus, sikat ternak besar, lalu bersihkan kandang. Peralatan tersedia di toko.")
+schedule = [{
+"activity": "Memberi makan hewan ternak di padang rumput",
+"dialog_lines": PackedStringArray("Satu hewan perlu satu pakan per hari. Buka pintu saat cerah agar mereka mencari rumput pakan dekat kandang.", "Jaga kandang bersih. Hewan yang kurang sehat pulih setelah sehari penuh makan di kandang bersih. Telaten merawat meningkatkan kualitas hasil!"),
+"facing": "down",
+"hour": 6,
+"minute": 0,
+"path": [],
+"target_pos": Vector2(450, 490)
+}, {
+"activity": "Berjalan makan siang ke Warung Makan Pak Joko",
+"dialog_lines": PackedStringArray("Waktunya istirahat siang! Soto ayam hangat buatan Pak Joko adalah menu favoritku."),
+"facing": "side_right",
+"hour": 11,
+"minute": 30,
+"path": [Vector2(520, 450), Vector2(740, 430), Vector2(880, 420)],
+"target_pos": Vector2(880, 420)
+}, {
+"activity": "Duduk santai di taman dekat air mancur",
+"dialog_lines": PackedStringArray("Suara gemercik air mancur di alun-alun ini sangat menenangkan.", "Kadang-kadang burung-burung liar hinggap di dekat sini mencari biji-bijian."),
+"facing": "side_left",
+"hour": 14,
+"minute": 0,
+"path": [Vector2(740, 430), Vector2(560, 430)],
+"target_pos": Vector2(560, 430)
+}, {
+"activity": "Pulang ke rumah barat",
+"dialog_lines": PackedStringArray("Hewan kembali ke kandang pukul enam sore. Periksa cadangan jerami sebelum tidur; saat hujan mereka perlu pakan di dalam."),
+"facing": "down",
+"hour": 18,
+"minute": 30,
+"path": [Vector2(500, 460), Vector2(450, 490)],
+"target_pos": Vector2(450, 490)
+}]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_rian")
+animation = &"idle_down"
+autoplay = "idle_down"
+offset = Vector2(0, -10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -2)
+shape = SubResource("RectangleShape2D_body")
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(0, -2)
+shape = SubResource("RectangleShape2D_area")

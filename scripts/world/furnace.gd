@@ -157,6 +157,8 @@ func finish_furnace() -> void:
 		ItemPickup.spawn(parent, origin + offset, current_recipe.output_item_id, 1)
 
 	Notify.say("Peleburan selesai! %s x%d siap diambil." % [out_name, current_recipe.output_amount])
+	Juice.sfx(load("res://assets/audio/sfx/machines/machine_ready.wav"), -4.0)
+	Juice.play(&"sparkle", global_position)
 
 	current_recipe = null
 
@@ -170,9 +172,17 @@ func _update_visuals() -> void:
 			point_light.enabled = true
 		if particles != null:
 			particles.emitting = true
+		if audio_stream != null and not audio_stream.playing:
+			var stream: AudioStream = load("res://assets/audio/sfx/machines/machine_furnace_loop.wav")
+			if stream is AudioStreamWAV:
+				(stream as AudioStreamWAV).loop_mode = AudioStreamWAV.LOOP_FORWARD
+			audio_stream.stream = stream
+			audio_stream.play()
 	else:
 		animated_sprite.play("idle")
 		if point_light != null:
 			point_light.enabled = false
 		if particles != null:
 			particles.emitting = false
+		if audio_stream != null and audio_stream.playing:
+			audio_stream.stop()

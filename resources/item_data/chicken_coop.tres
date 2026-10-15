@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_chicken_coop.tres" id="2"]
+[resource]
+script = ExtResource("1")
+placeable = true
+placement_size = Vector2i(5, 3)
+category = 8
+item_id = "chicken_coop"
+display_name = "Kandang Ayam"
+icon = ExtResource("2")
+description = "Kandang 4 ayam/bebek. Rawat setiap hari untuk telur; upgrade hingga 12 unggas dengan auto-feeder. Interaksi dari sisi depan."
+stackable = false
+max_stack = 1

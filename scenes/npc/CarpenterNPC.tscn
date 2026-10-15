@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3]
+[ext_resource type="PackedScene" path="res://scenes/npc/ToriNPC.tscn" id="1"]
+[ext_resource type="Script" path="res://scripts/world/carpenter_npc.gd" id="2"]
+[node name="CarpenterNPC" instance=ExtResource("1")]
+script = ExtResource("2")
+npc_id = "damar"
+npc_name = "Pak Damar"
+role_title = "Tukang Bangunan"
+schedule = []
+[node name="AnimatedSprite2D" parent="." index="0"]
+modulate = Color(0.92, 0.8, 0.65, 1)

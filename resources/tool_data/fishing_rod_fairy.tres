@@ -9,7 +9,7 @@ display_name = "Pancing Fairy"
 tool_type = 6
 tier = 8
 stamina_cost = 3
-upgrade_cost_money = 12000
+upgrade_cost_money = 20000
 required_items = {
 "fairy_bar": 5
 }

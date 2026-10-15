@@ -16,6 +16,7 @@ func _ready() -> void:
 	await get_tree().process_frame
 	DayCycle.is_running = false
 	GameState.new_game()
+	FarmManager.farm_data.clear()
 	for kind in ToolUpgradeManager.TOOL_TYPES:
 		var previous: ToolData
 		for tier in ToolUpgradeManager.TIERS:
@@ -75,7 +76,8 @@ func _ready() -> void:
 	for cell in cells:
 		FarmManager.farm_data[cell].watered = true
 	action.effect.apply(player, Vector2i.ZERO)
-	check(player.data.stamina == 99 and player.data.watering_water == 50, "already watered tiles spend nothing")
+	check(player.data.stamina == 98 and player.data.watering_water == 25, "pouring on wet soil charges once and uses water per tile")
+	player.data.stamina = 99
 	player.tool_controller.action_state.start(GameState._resolve_item("shovel_iron").action_data, Vector2i.ZERO)
 	player.tool_controller.action_state.action.effect.apply(player, Vector2i.ZERO)
 	check(FarmManager.farm_data.size() == 22 and player.data.stamina == 95, "shovel removes three empty plots for one stamina charge")
@@ -85,7 +87,7 @@ func _ready() -> void:
 	for cell in sickle.tool_data.get_cells(Vector2i.ZERO, player.facing_direction):
 		FarmManager.farm_data[cell] = {"state": "planted", "crop": crop, "stage": crop.get_total_stages() - 1, "days_in_stage": 0, "watered": false}
 	sickle.effect.apply(player, Vector2i.ZERO)
-	check(player.data.stamina == 93 and not FarmManager.can_harvest(Vector2i.ZERO), "sickle harvests three mature crops for one charge")
+	check(player.data.stamina == 95 and not FarmManager.can_harvest(Vector2i.ZERO), "sickle harvests three mature crops without stamina cost")
 	var spot := FishingSpot.new()
 	spot.position = ground.map_to_local(Vector2i(10, 10))
 	var shape := CollisionShape2D.new()
@@ -95,21 +97,46 @@ func _ready() -> void:
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 	var water := action.effect as WaterEffect
-	check(water.try_refill(player, Vector2i(10, 10), action.tool_data) and player.data.watering_water == 350 and player.data.stamina == 93, "water source refills to tier capacity without stamina")
+	check(water.try_refill(player, Vector2i(10, 10), action.tool_data) and player.data.watering_water == 350 and player.data.stamina == 94, "water source refills to tier capacity and charges stamina once")
+	player.data.watering_water = 0
+	player.data.stamina = 100
+	player.tool_controller.action_state.start(action, Vector2i(10, 10))
+	player.state_machine.change_state(player.tool_controller.action_state)
+	check(player.data.watering_water == 0 and str(player.animation_controller.sprite.animation).begins_with("refill") and player.animation_controller.sprite.get_playing_speed() > 0, "refill starts a separate non-pouring dipping animation before changing water")
+	player.tool_controller.action_state._perform()
+	check(player.data.watering_water == 350 and player.data.stamina == 99, "refill completes at animation hit and charges once")
+	player.tool_controller.action_state._perform()
+	check(player.data.stamina == 99, "animation completion cannot double charge refill")
+	player.state_machine.change_state(player.tool_controller.action_state.idle_state)
 	spot.queue_free()
 	GameState.money = 1000
 	player.data.add_item_silent("copper_bar", 5)
 	player.data.add_item_silent("wood", 10)
-	check(ToolUpgradeManager.upgrade_tool("axe_wood") and player.data.has_item("axe_copper") and GameState.money == 500, "upgrade produces usable copper axe and charges cost")
+	check(ToolUpgradeManager.upgrade_tool("axe_wood") and not player.data.has_item("axe_copper") and not player.data.has_item("axe_wood") and GameState.money == 500, "upgrade holds tool and charges materials/money")
+	check(not ToolUpgradeManager.upgrade_tool("hoe_wood") and GameState.money == 500, "one order per player, no repeated charges")
+	check(not ToolUpgradeManager.collect_tool(player.data), "tool cannot be collected immediately")
 	player.data.watering_water = 47
 	check(SaveManager.save_game(), "tool state saves")
 	player.data.watering_water = 0
 	check(SaveManager.load_game() and player.data.watering_water == 47, "water survives solo save/load")
+	check(not player.data.tool_order.is_empty() and not player.data.has_item("axe_wood"), "pending order and tool absence survive save/load")
+	DayCycle.current_day += 1
+	check(not ToolUpgradeManager.collect_tool(player.data), "one day is too early")
+	DayCycle.current_day += 1
+	for slot in player.data.bag_size:
+		if player.data.inventory[slot] == null:
+			player.data.inventory[slot] = {"item": GameState._resolve_item("wood"), "count": 999}
+	check(not ToolUpgradeManager.collect_tool(player.data) and not player.data.tool_order.is_empty(), "full bag keeps finished tool safely at blacksmith")
+	player.data.inventory[0] = null
+	check(ToolUpgradeManager.collect_tool(player.data) and player.data.has_item("axe_copper") and player.data.tool_order.is_empty(), "finished order collected after two days")
+	check(not ToolUpgradeManager.collect_tool(player.data), "finished tool cannot be claimed twice")
 	var second := PlayerData.new(1)
 	second.watering_water = 88
+	second.tool_order = {"old": "hoe_wood", "next": "hoe_copper", "ready_day": DayCycle.current_day + 2}
 	var restored := PlayerData.new(1)
 	restored.load_dict(second.to_dict())
 	check(restored.watering_water == 88 and player.data.watering_water == 47, "co-op water serializes independently")
+	check(restored.tool_order == second.tool_order and player.data.tool_order.is_empty(), "co-op upgrade orders serialize independently")
 	# Biarkan feedback/drop selesai sebelum menghentikan scene uji.
 	await get_tree().create_timer(2.0).timeout
 	FarmManager.clear_references()

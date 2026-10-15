@@ -1,0 +1,115 @@
+[gd_scene format=4 uid="uid://dj5xddd0epm21"]
+
+[ext_resource type="Texture2D" uid="uid://ncqoc1p3duym" path="res://assets/farm_rpg/tileset/ext/Tileset Grass Spring.png" id="1_54okv"]
+[ext_resource type="Texture2D" uid="uid://b1ryhfpvb6kx0" path="res://assets/farm_rpg/tileset/ext/Path tiles.png" id="2_0h0mm"]
+[ext_resource type="Texture2D" uid="uid://1fclomcktd6f" path="res://assets/farm_rpg/objects/interior/hospital wing.png" id="5_0h0mm"]
+[ext_resource type="Texture2D" uid="uid://bi6e8sg4fs5yh" path="res://assets/farm_rpg/objects/interior/Part 1 copiar.png" id="7_j5qrq"]
+[ext_resource type="Texture2D" uid="uid://bgsc3yl2pss6j" path="res://assets/farm_rpg/objects/exterior/Base houses.png" id="9_twn"]
+[ext_resource type="PackedScene" path="res://scenes/objects/building_sign.tscn" id="BuildingSign"]
+[ext_resource type="Script" uid="uid://xi8t0k3337vc" path="res://scripts/world/town_building_door.gd" id="TownDoor"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_j5qrq"]
+texture = ExtResource("1_54okv")
+9:15/0 = 0
+11:15/0 = 0
+11:13/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_d43uj"]
+texture = ExtResource("2_0h0mm")
+9:0/0 = 0
+8:1/0 = 0
+8:1/0/z_index = -1
+5:1/0 = 0
+6:1/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_ovsut"]
+sources/0 = SubResource("TileSetAtlasSource_j5qrq")
+sources/1 = SubResource("TileSetAtlasSource_d43uj")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tw054"]
+atlas = ExtResource("9_twn")
+region = Rect2(544, 201, 126, 131)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tw055"]
+size = Vector2(118, 87)
+
+[sub_resource type="RectangleShape2D" id="DoorShape"]
+size = Vector2(16, 22)
+
+[node name="Clinic" type="StaticBody2D" unique_id=1726089757]
+y_sort_enabled = true
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=88765159]
+position = Vector2(-6, -2)
+tile_map_data = PackedByteArray("AAAAAP//AAAJAA8AAAABAP//AAAJAA8AAAACAP//AAAJAA8AAAADAP//AAALAA8AAAADAP7/AAALAA0AAAABAAAAAQAJAAAAAAACAAAAAQAJAAAAAAADAAAAAQAJAAAAAAAEAP//AQAIAAEAAAAEAP7/AQAIAAEAAAAEAAAAAQAFAAEAAAAAAAAAAQAGAAEAAAA=")
+tile_set = SubResource("TileSet_ovsut")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1772458137]
+texture_filter = 1
+texture = SubResource("AtlasTexture_tw054")
+offset = Vector2(0, -65.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=141040209]
+position = Vector2(-1, -45.5)
+shape = SubResource("RectangleShape2D_tw055")
+
+[node name="Door" type="Area2D" parent="." unique_id=221726254]
+position = Vector2(0, 4)
+script = ExtResource("TownDoor")
+target_scene = "res://scenes/world/interior/town/clinic.tscn"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Door" unique_id=1017314796]
+position = Vector2(-37, -26)
+shape = SubResource("DoorShape")
+
+[node name="ReturnSpawn" type="Marker2D" parent="." unique_id=1844211808]
+position = Vector2(-37, 1)
+
+[node name="Sign" parent="." unique_id=761648468 instance=ExtResource("BuildingSign")]
+position = Vector2(-24, -41)
+caption = "Klinik"
+minimum_width = 32
+minimum_height = 16
+
+[node name="HospitalWing" type="Sprite2D" parent="." unique_id=1446801033]
+z_index = 1
+y_sort_enabled = true
+texture_filter = 1
+position = Vector2(21, -23)
+texture = ExtResource("5_0h0mm")
+region_enabled = true
+region_rect = Rect2(1, 40, 15, 23)
+
+[node name="HospitalWing2" type="Sprite2D" parent="." unique_id=1787238646]
+z_index = 1
+y_sort_enabled = true
+position = Vector2(37, -25)
+texture = ExtResource("5_0h0mm")
+region_enabled = true
+region_rect = Rect2(2, 2, 29, 23)
+
+[node name="Part1Copiar" type="Sprite2D" parent="." unique_id=2052494036]
+z_index = 1
+y_sort_enabled = true
+position = Vector2(36, -8.75)
+texture = ExtResource("7_j5qrq")
+region_enabled = true
+region_rect = Rect2(183, 100, 18, 12)
+
+[node name="Part1Copiar2" type="Sprite2D" parent="." unique_id=613065649]
+z_index = 2
+y_sort_enabled = true
+position = Vector2(36, -13.75)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("7_j5qrq")
+region_enabled = true
+region_rect = Rect2(65, 158, 30, 17)
+
+[node name="Part1Copiar3" type="Sprite2D" parent="." unique_id=912497956]
+z_index = 1
+y_sort_enabled = true
+texture_filter = 1
+position = Vector2(54, -16)
+texture = ExtResource("7_j5qrq")
+region_enabled = true
+region_rect = Rect2(96, 154, 17.091003, 21)

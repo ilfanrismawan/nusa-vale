@@ -15,9 +15,9 @@ display_name = "Sabit Platinum"
 tool_type = 5
 tier = 4
 damage = 5
-stamina_cost = 2
+stamina_cost = 0
 action_speed = 1.4
-upgrade_cost_money = 3500
+upgrade_cost_money = 4500
 required_items = {
 "platinum_bar": 5
 }

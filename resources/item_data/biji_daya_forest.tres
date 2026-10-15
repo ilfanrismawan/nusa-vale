@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/ui/biji_daya.svg" id="2"]
+[resource]
+script = ExtResource("1")
+category = 6
+item_id = "biji_daya_forest"
+display_name = "Biji Daya"
+icon = ExtResource("2")
+description = "Biji langka yang menyimpan energi kehidupan pulau. Stamina maksimum +10 permanen dan memulihkan 10 stamina. Tempat keramat hutan setelah jembatan diperbaiki. Konsumsi dari tas."
+stackable = false
+max_stack = 1
+rarity = 4

@@ -3,7 +3,9 @@
 [resource]
 script = ExtResource("1")
 project_id = "greenhouse_restoration"
-display_name = "Pemulihan Greenhouse"
+display_name = "Sayap Alam — Kebun Sepanjang Musim"
+wing_id = "alam"
+unlock_id = "greenhouse"
 description = "Kaca retak dan rangka berkarat membuat rumah kaca terbengkalai. Titipkan bahan di Balai Nadi agar warga memulihkannya menjadi kebun terlindung sepanjang musim."
 requirements = Dictionary[String, int]({"wood": 150, "stone": 75, "copper_bar": 5})
 completion_flag = "greenhouse_unlocked"

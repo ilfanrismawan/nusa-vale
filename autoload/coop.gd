@@ -103,7 +103,7 @@ func juice_layer_of(player: Player) -> CanvasLayer:
 ## Co-op: hanya pemain itu yang berhenti; waktu dan pemain lain tetap jalan.
 func set_menu_open(player: Player, open: bool) -> void:
 	if not active:
-		get_tree().paused = open
+		PauseManager.set_requested(open)
 		return
 	if player != null:
 		player.set_input_locked(&"menu", open)
@@ -144,13 +144,16 @@ func bind_farm() -> void:
 	else:
 		FarmManager.clear_references()
 
-## Pingsan jam 2 malam: semua pemain bangun di rumah.
+## Lewat 05.00: pemain terjaga pingsan; yang sudah tidur pulih penuh.
 func pass_out_all(spawn: Vector2, house_scene: String) -> void:
 	if not has_root():
 		return
+	for i in player_count():
+		var p := GameState.get_player(i)
+		var body: Player = root.body_of(i)
+		p.stamina = p.max_stamina if is_sleeping(body) else int(p.max_stamina * 0.5)
+		p.stamina_changed.emit(p.stamina, p.max_stamina)
 	clear_sleeping()
-	for p in GameState.players.slice(0, player_count()):
-		p.stamina = int(PlayerData.MAX_STAMINA * 0.5)
 	root.move_all(house_scene, spawn)
 
 ## Pemain berbaring/bangun di kasur. Mengembalikan jumlah pemain yang sedang tidur.

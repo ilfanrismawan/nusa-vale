@@ -9,7 +9,7 @@ display_name = "Pancing Besi"
 tool_type = 6
 tier = 2
 stamina_cost = 3
-upgrade_cost_money = 1000
+upgrade_cost_money = 1200
 required_items = {
 "iron_bar": 5,
 "wood": 15

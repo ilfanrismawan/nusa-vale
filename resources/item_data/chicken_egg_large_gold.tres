@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://bv6ky62ci5i1s"]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://byqf8jbr1nsf" path="res://assets/farm_rpg/icons/Food Icons/Chicken Egg.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_id = "chicken_egg_large_gold"
+display_name = "Telur Ayam Besar Emas"
+icon = ExtResource("2")
+description = "Hasil ternak. Kualitas ditentukan saat produksi berdasarkan perawatan dan kasih sayang."
+sell_price = 93

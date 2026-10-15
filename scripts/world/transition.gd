@@ -17,6 +17,8 @@ func _ready() -> void:
 func scene_transition(path: String, body: Node = null) -> void:
 	if path.is_empty():
 		return
+	if body is Player:
+		body.release_carried_animal()
 	if Coop.request_transition(body, path):
 		return
 	if on_transition:
@@ -24,7 +26,7 @@ func scene_transition(path: String, body: Node = null) -> void:
 	on_transition = true
 
 	_stop_player()
-	get_tree().paused = true
+	PauseManager.set_requested(true)
 
 	rect.mouse_filter = Control.MOUSE_FILTER_STOP
 
@@ -41,7 +43,7 @@ func scene_transition(path: String, body: Node = null) -> void:
 	await tween.finished
 
 	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	get_tree().paused = false
+	PauseManager.set_requested(false)
 	on_transition = false
 
 func fade_action(action: Callable, hold: float = 0.3) -> void:
@@ -51,7 +53,7 @@ func fade_action(action: Callable, hold: float = 0.3) -> void:
 	on_transition = true
 	
 	_stop_player()
-	get_tree().paused = true
+	PauseManager.set_requested(true)
 	rect.mouse_filter = Control.MOUSE_FILTER_STOP
 	
 	var tween := _transition_tween()
@@ -66,7 +68,7 @@ func fade_action(action: Callable, hold: float = 0.3) -> void:
 	await tween.finished
 	
 	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	get_tree().paused = false
+	PauseManager.set_requested(false)
 	on_transition = false
 	
 	

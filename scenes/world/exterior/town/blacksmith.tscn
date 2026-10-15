@@ -1,0 +1,49 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" uid="uid://bgsc3yl2pss6j" path="res://assets/farm_rpg/objects/exterior/Base houses.png" id="9_twn"]
+
+[ext_resource type="Script" path="res://scripts/world/town_building_door.gd" id="TownDoor"]
+[ext_resource type="PackedScene" path="res://scenes/objects/building_sign.tscn" id="BuildingSign"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tw053"]
+size = Vector2(89, 86)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tw052"]
+atlas = ExtResource("9_twn")
+region = Rect2(672, 57, 95, 104)
+
+[sub_resource type="RectangleShape2D" id="DoorShape"]
+size = Vector2(28, 20)
+
+[node name="Blacksmith" type="StaticBody2D"]
+y_sort_enabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = SubResource("AtlasTexture_tw052")
+offset = Vector2(0, -52)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -45)
+shape = SubResource("RectangleShape2D_tw053")
+
+[node name="Door" type="Area2D" parent="."]
+position = Vector2(0, 4)
+script = ExtResource("TownDoor")
+target_scene = "res://scenes/world/interior/town/blacksmith.tscn"
+spawn_position = Vector2(240, 256)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Door"]
+shape = SubResource("DoorShape")
+
+[node name="ReturnSpawn" type="Marker2D" parent="."]
+position = Vector2(0, 36)
+
+[node name="Sign" parent="." instance=ExtResource("BuildingSign")]
+scale = Vector2(1.000, 1.000)
+position = Vector2(0, -24)
+caption = "Pandai Besi"
+font_size = 8
+minimum_width = 32
+minimum_height = 16
+mount = 0

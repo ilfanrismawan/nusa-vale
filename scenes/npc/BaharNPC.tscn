@@ -1,0 +1,316 @@
+[gd_scene load_steps=37 format=3 uid="uid://cvbaharnpc001"]
+
+[ext_resource type="Script" path="res://scripts/world/village_npc.gd" id="1_npc"]
+[ext_resource type="Texture2D" uid="uid://cv1ang1utekrm" path="res://assets/farm_rpg/Character/NPC'S/Pirate/Premade/OLD/Idle.png" id="2_idle"]
+[ext_resource type="Texture2D" uid="uid://bf5q1kerq8y4t" path="res://assets/farm_rpg/Character/NPC'S/Pirate/Premade/OLD/Walk.png" id="3_walk"]
+[ext_resource type="Texture2D" uid="uid://hv440f3aiv2p" path="res://assets/farm_rpg/Character/NPC'S/Pirate/Premade/Jack/Pirate Portrait.png" id="4_portrait"]
+
+[sub_resource type="AtlasTexture" id="Atlas_bid0"]
+atlas = ExtResource("2_idle")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_bid1"]
+atlas = ExtResource("2_idle")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_bid2"]
+atlas = ExtResource("2_idle")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_bid3"]
+atlas = ExtResource("2_idle")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_biu0"]
+atlas = ExtResource("2_idle")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_biu1"]
+atlas = ExtResource("2_idle")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_biu2"]
+atlas = ExtResource("2_idle")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_biu3"]
+atlas = ExtResource("2_idle")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_bis0"]
+atlas = ExtResource("2_idle")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_bis1"]
+atlas = ExtResource("2_idle")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_bis2"]
+atlas = ExtResource("2_idle")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_bis3"]
+atlas = ExtResource("2_idle")
+region = Rect2(96, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_bwd0"]
+atlas = ExtResource("3_walk")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_bwd1"]
+atlas = ExtResource("3_walk")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_bwd2"]
+atlas = ExtResource("3_walk")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_bwd3"]
+atlas = ExtResource("3_walk")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_bwd4"]
+atlas = ExtResource("3_walk")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_bwd5"]
+atlas = ExtResource("3_walk")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_bwu0"]
+atlas = ExtResource("3_walk")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_bwu1"]
+atlas = ExtResource("3_walk")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_bwu2"]
+atlas = ExtResource("3_walk")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_bwu3"]
+atlas = ExtResource("3_walk")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_bwu4"]
+atlas = ExtResource("3_walk")
+region = Rect2(128, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_bwu5"]
+atlas = ExtResource("3_walk")
+region = Rect2(160, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_bws0"]
+atlas = ExtResource("3_walk")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_bws1"]
+atlas = ExtResource("3_walk")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_bws2"]
+atlas = ExtResource("3_walk")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_bws3"]
+atlas = ExtResource("3_walk")
+region = Rect2(96, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_bws4"]
+atlas = ExtResource("3_walk")
+region = Rect2(128, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_bws5"]
+atlas = ExtResource("3_walk")
+region = Rect2(160, 64, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bahar"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_bid0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_bid1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_bid2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_bid3")
+}],
+"loop": true,
+"name": &"idle_down",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_bis0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_bis1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_bis2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_bis3")
+}],
+"loop": true,
+"name": &"idle_side",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_biu0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_biu1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_biu2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_biu3")
+}],
+"loop": true,
+"name": &"idle_up",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_bwd0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_bwd1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_bwd2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_bwd3")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_bwd4")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_bwd5")
+}],
+"loop": true,
+"name": &"walk_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_bws0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_bws1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_bws2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_bws3")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_bws4")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_bws5")
+}],
+"loop": true,
+"name": &"walk_side",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_bwu0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_bwu1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_bwu2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_bwu3")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_bwu4")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_bwu5")
+}],
+"loop": true,
+"name": &"walk_up",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(16, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_area"]
+size = Vector2(36, 36)
+
+[node name="BaharNPC" type="CharacterBody2D"]
+y_sort_enabled = true
+collision_layer = 1
+collision_mask = 1
+script = ExtResource("1_npc")
+npc_id = "bahar"
+npc_name = "Pak Bahar"
+role_title = "Nelayan Sepuh"
+portrait = ExtResource("4_portrait")
+walk_speed = 32.0
+dialog_lines = PackedStringArray("Ah, anak muda! Laut dan sungai di Nusa Vale ini penuh misteri.", "Setiap jenis ikan punya waktu favoritnya sendiri. Ada yang hanya keluar saat hujan lebat, dan ada yang baru berenang ke permukaan saat malam purnama.")
+schedule = [{
+"activity": "Memancing di dermaga jembatan selatan",
+"dialog_lines": PackedStringArray("Angin fajar bertiup kencang dari arah timur. Ini pertanda baik untuk memancing ikan kakap!", "Gunakan umpan yang tepat dan perhatikan getaran pelampung pancingmu."),
+"facing": "down",
+"hour": 5,
+"minute": 0,
+"path": [],
+"target_pos": Vector2(680, 770)
+}, {
+"activity": "Berjalan ke alun-alun kota",
+"dialog_lines": PackedStringArray("Kaki tuaku butuh sedikit peregangan. Senang melihat suasana alun-alun yang selalu ramai."),
+"facing": "side_right",
+"hour": 12,
+"minute": 0,
+"path": [Vector2(680, 600), Vector2(560, 450), Vector2(520, 430)],
+"target_pos": Vector2(520, 430)
+}, {
+"activity": "Memeriksa jala dan perahu di dermaga",
+"dialog_lines": PackedStringArray("Air laut mulai pasang. Waktunya menambatkan perahu dengan kokoh agar tidak terbawa arus malam."),
+"facing": "up",
+"hour": 16,
+"minute": 0,
+"path": [Vector2(560, 450), Vector2(680, 600), Vector2(680, 770)],
+"target_pos": Vector2(680, 770)
+}, {
+"activity": "Menikmati teh jahe di Warung Makan",
+"dialog_lines": PackedStringArray("Secangkir wedang jahe buatan Pak Joko sangat mujarab menghangatkan tulang sepuhku dari dinginnya angin laut."),
+"facing": "down",
+"hour": 19,
+"minute": 30,
+"path": [Vector2(680, 600), Vector2(800, 440), Vector2(870, 410)],
+"target_pos": Vector2(870, 410)
+}]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_bahar")
+animation = &"idle_down"
+autoplay = "idle_down"
+offset = Vector2(0, -10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -2)
+shape = SubResource("RectangleShape2D_body")
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(0, -2)
+shape = SubResource("RectangleShape2D_area")

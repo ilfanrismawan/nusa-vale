@@ -6,5 +6,7 @@ extends Resource
 @export var display_name: String = ""
 @export_multiline var description: String = ""
 @export var requirements: Dictionary[String, int] = {}
+@export var wing_id: String = ""
+@export var unlock_id: String = ""
 @export var completion_flag: String = ""
 @export_multiline var completion_message: String = "Proyek pemulihan selesai."

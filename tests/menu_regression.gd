@@ -23,6 +23,13 @@ func _ready() -> void:
 	settings = load("res://scenes/ui/settings_menu.tscn").instantiate()
 	settings.name = "SettingsMenu"
 	add_child(settings)
+	var display_config := ConfigFile.new()
+	display_config.set_value("display", "window_mode", 0)
+	display_config.set_value("display", "res_x", 1366)
+	display_config.set_value("display", "res_y", 768)
+	display_config.save(SettingsMenu.CONFIG_PATH)
+	settings.load_settings()
+	check(settings.RESOLUTIONS[settings.resolution_option.selected] == Vector2i(1366, 768), "saved resolution survives settings load instead of old dropdown overriding it")
 	ui = load("res://scenes/ui/ui_inventory.tscn").instantiate()
 	ui.name = "UIInventory"
 	add_child(ui)
@@ -64,7 +71,7 @@ func _ready() -> void:
 	check(data.get_item_count("arrow_wood") == 20, "Batch crafting from the menu produces the displayed quantity")
 	var building_filter: Button = ui._crafting_panel._filters[3]
 	await click_control(building_filter, building_filter.get_global_rect().get_center())
-	check(ui._crafting_panel._recipe_buttons.size() == 9 and ui._crafting_panel._selected.recipe_id == "furnace", "Building filter offers basic structures and all chest tiers")
+	check(ui._crafting_panel._recipe_buttons.size() >= 13 and ui._crafting_panel._selected.recipe_id == "furnace", "Building filter offers structures, farm buildings, machines and all chest tiers")
 	data.bag_level = 1
 	ui._crafting_panel._quantity.value = 1
 	data.add_item("stone", 25)

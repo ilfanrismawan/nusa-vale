@@ -80,6 +80,8 @@ func _ready() -> void:
 	check(manager.contribute(donor, ID, "wood") == 65 and donor.get_item_count("wood") == 25 and manager.contributed(ID, "wood") == 100, "Excess inventory is clamped to remaining wood")
 	check(manager.contribute(donor, ID, "stone", -1) == 0 and manager.contribute(donor, "unknown", "stone") == 0 and manager.contribute(donor, ID, "fiber") == 0, "Invalid requests and items are rejected")
 	check(manager.contribute(donor, ID, "stone", 20) == 20 and manager.contributed(ID, "stone") == 20, "Explicit smaller quantity is accepted")
+	GameState.money = 500
+	check(manager.contribute(donor, ID, "money") == 500 and GameState.money == 0, "Restoration requires shared funding")
 	check(manager.contribute(donor, ID, "stone") == 30 and donor.get_item_count("stone") == 20 and manager.completed(ID) and WorldState.has_flag("balai_nadi_restored") and completions == 1, "Completion sets flag and emits exactly one restoration event")
 	check(manager.contribute(donor, ID, "wood") == 0 and manager.contribute(donor, ID, "stone") == 0, "Completed project refuses further resources")
 	check(SaveManager.load_game() and manager.completed(ID) and WorldState.has_flag("balai_nadi_restored") and completions == 1 and donor.get_item_count("stone") == 20, "Completed disk reload preserves state without duplicate rewards/events")
@@ -126,7 +128,7 @@ func _ready() -> void:
 	Coop.stop()
 	manager.load_save({"projects": {ID: {"contributions": {"wood": -50, "stone": {}}, "completed": false}}})
 	check(manager.contributed(ID, "wood") == 0 and manager.contributed(ID, "stone") == 0, "Malformed and negative project amounts initialize safely")
-	manager.load_save({"projects": {ID: {"contributions": {"wood": 999, "stone": 999}}}})
+	manager.load_save({"projects": {ID: {"contributions": {"wood": 999, "stone": 999, "money": 999}}}})
 	check(manager.completed(ID) and completions == 1, "Load clamps amounts and reconciles completion without emitting reward")
 	# P2 can donate while the ambient active inventory belongs to P1.
 	GameState.new_game()

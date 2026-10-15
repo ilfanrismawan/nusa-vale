@@ -199,6 +199,61 @@ ingredients = {
 }
 group = "Bangunan"
 
+[sub_resource type="Resource" id="Recipe_preserves_jar"]
+script = ExtResource("2")
+recipe_id = "preserves_jar"
+output_item_id = "preserves_jar"
+ingredients = {
+"coal": 8,
+"stone": 40,
+"wood": 50
+}
+group = "Bangunan"
+
+[sub_resource type="Resource" id="Recipe_dehydrator"]
+script = ExtResource("2")
+recipe_id = "dehydrator"
+output_item_id = "dehydrator"
+ingredients = {
+"fiber": 15,
+"stone": 30,
+"wood": 40
+}
+group = "Bangunan"
+
+[sub_resource type="Resource" id="Recipe_mayonnaise_maker"]
+script = ExtResource("2")
+recipe_id = "mayonnaise_maker"
+output_item_id = "mayonnaise_maker"
+ingredients = {
+"copper_bar": 2,
+"stone": 30,
+"wood": 40
+}
+group = "Bangunan"
+
+[sub_resource type="Resource" id="Recipe_cheese_press"]
+script = ExtResource("2")
+recipe_id = "cheese_press"
+output_item_id = "cheese_press"
+ingredients = {
+"copper_bar": 3,
+"stone": 40,
+"wood": 50
+}
+group = "Bangunan"
+
+[sub_resource type="Resource" id="Recipe_loom"]
+script = ExtResource("2")
+recipe_id = "loom"
+output_item_id = "loom"
+ingredients = {
+"copper_bar": 2,
+"fiber": 30,
+"wood": 60
+}
+group = "Bangunan"
+
 [resource]
 script = ExtResource("1")
-recipes = Array[ExtResource("2")]([SubResource("Recipe_sword_wood"), SubResource("Recipe_bow_wood"), SubResource("Recipe_staff_wood"), SubResource("Recipe_helmet_wood"), SubResource("Recipe_armor_wood"), SubResource("Recipe_leggings_wood"), SubResource("Recipe_boots_wood"), SubResource("Recipe_arrow_wood"), SubResource("Recipe_sword_copper"), SubResource("Recipe_armor_copper"), SubResource("Recipe_sword_iron"), SubResource("Recipe_armor_iron"), SubResource("Recipe_furnace"), SubResource("Recipe_wooden_chest"), SubResource("Recipe_wooden_fence"), SubResource("Recipe_crafting_workbench"), SubResource("Recipe_stone_fence"), SubResource("Recipe_wooden_gate"), SubResource("Recipe_copper_chest"), SubResource("Recipe_iron_chest"), SubResource("Recipe_gold_chest")])
+recipes = Array[ExtResource("2")]([SubResource("Recipe_sword_wood"), SubResource("Recipe_bow_wood"), SubResource("Recipe_staff_wood"), SubResource("Recipe_helmet_wood"), SubResource("Recipe_armor_wood"), SubResource("Recipe_leggings_wood"), SubResource("Recipe_boots_wood"), SubResource("Recipe_arrow_wood"), SubResource("Recipe_sword_copper"), SubResource("Recipe_armor_copper"), SubResource("Recipe_sword_iron"), SubResource("Recipe_armor_iron"), SubResource("Recipe_furnace"), SubResource("Recipe_wooden_chest"), SubResource("Recipe_wooden_fence"), SubResource("Recipe_crafting_workbench"), SubResource("Recipe_stone_fence"), SubResource("Recipe_wooden_gate"), SubResource("Recipe_copper_chest"), SubResource("Recipe_iron_chest"), SubResource("Recipe_gold_chest"), SubResource("Recipe_preserves_jar"), SubResource("Recipe_dehydrator"), SubResource("Recipe_mayonnaise_maker"), SubResource("Recipe_cheese_press"), SubResource("Recipe_loom")])

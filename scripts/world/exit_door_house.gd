@@ -5,13 +5,16 @@ extends Area2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	add_to_group("scene_door")
 	body_entered.connect(_on_body_entered)
 
+func interact(actor: Player = null) -> void:
+	_on_body_entered(actor if actor != null else RoomDoor.player())
 
 func _on_body_entered(body):
 	if Transition.on_transition:
 		return
-	if body is Player or body.is_in_group("player"):
+	if body is Player:
 		# Posisi pintu rumah di map Farm (1159, 275)
 		GameState.next_spawn_position = target_spawn_pos
 		GameState.has_spawn_point = true

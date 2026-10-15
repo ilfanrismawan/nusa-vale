@@ -9,7 +9,7 @@ display_name = "Pancing Obsidian"
 tool_type = 6
 tier = 9
 stamina_cost = 3
-upgrade_cost_money = 18000
+upgrade_cost_money = 28000
 required_items = {
 "obsidian_bar": 5
 }

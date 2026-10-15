@@ -55,6 +55,8 @@ radius = 10.0
 [node name="RockGold" type="StaticBody2D"]
 y_sort_enabled = true
 script = ExtResource("1_7c88i")
+resource_size = 2
+minimum_tool_tier = 3
 health = 5
 drop_item_id = "gold_ore"
 drop_count = 4

@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/balai_nadi/v3/sacred_props.png" id="1_hoq06"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_giyn6"]
+atlas = ExtResource("1_hoq06")
+region = Rect2(56, 60, 480, 472)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4oc3r"]
+size = Vector2(44, 16)
+
+[node name="BaleIstirahat" type="Node2D" unique_id=236900737]
+texture_filter = 1
+
+[node name="Art" type="Sprite2D" parent="." unique_id=180209611]
+position = Vector2(0, -32)
+scale = Vector2(0.13333334, 0.13559322)
+texture = SubResource("AtlasTexture_giyn6")
+
+[node name="BaseCollision" type="StaticBody2D" parent="." unique_id=673572311]
+position = Vector2(0, -8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BaseCollision" unique_id=50174148]
+shape = SubResource("RectangleShape2D_4oc3r")

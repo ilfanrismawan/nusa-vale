@@ -15,7 +15,7 @@ display_name = "Sabit Kayu"
 tool_type = 5
 tier = 0
 damage = 1
-stamina_cost = 2
+stamina_cost = 0
 action_speed = 1
 upgrade_cost_money = 0
 

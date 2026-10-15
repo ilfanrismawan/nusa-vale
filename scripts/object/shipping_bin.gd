@@ -30,6 +30,7 @@ var _quiet_until_ms := 0
 var _lid_tween: Tween
 
 func _ready() -> void:
+	add_to_group("shipping_bin")
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 	_quiet_until_ms = Time.get_ticks_msec() + QUIET_AFTER_READY_MS
@@ -112,6 +113,43 @@ func is_facing(player: Player) -> bool:
 		return true
 	return player.facing_direction.dot(to_bin.normalized()) >= FACING_DOT
 
+func deposit_selected(player: Player) -> bool:
+	if not _players.has(player) or not is_facing(player) or player.is_input_locked():
+		return false
+	var slot_index: int = player.data.hotbar_page * 8 + player.tool_controller.current_index
+	var slot: Variant = player.data.inventory[slot_index]
+	if slot == null:
+		return false
+	var item: ItemData = slot.item
+	if item.sell_price <= 0 or item.is_tool():
+		return false
+	# Consume the exact selected stack, preserving other stacks and co-op ownership.
+	slot.count -= 1
+	if slot.count <= 0:
+		player.data.inventory[slot_index] = null
+	GameState.shipping.deposit(item, 1)
+	GameState.inventory_changed.emit()
+	player.play_item_gesture(false)
+	Juice.play_sound(&"bin_close")
+	if item.icon != null:
+		var flying := Sprite2D.new()
+		flying.texture = item.icon
+		flying.scale = Vector2.ONE * 0.65
+		flying.z_index = 30
+		add_child(flying)
+		flying.global_position = player.global_position + Vector2(0, -16)
+		var tween := create_tween()
+		tween.tween_property(flying, "global_position", global_position + Vector2(0, -12), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		tween.tween_property(flying, "scale", Vector2.ZERO, 0.12)
+		tween.tween_callback(flying.queue_free)
+	if sprite != null:
+		if _lid_tween != null and _lid_tween.is_valid():
+			_lid_tween.kill()
+		sprite.scale = Vector2(1.15, 0.85)
+		_lid_tween = create_tween()
+		_lid_tween.tween_property(sprite, "scale", Vector2.ONE, 0.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	return true
+
 ## Pemain pertama yang bisa membuka kotak sekarang (dekat, menghadap, tidak sedang di menu).
 func _ready_player() -> Player:
 	for p in _players:
@@ -159,7 +197,7 @@ func sell_harvested_items() -> void:
 			continue
 			
 		var item: ItemData = slot["item"]
-		if item.sell_price <= 0:
+		if item.sell_price <= 0 or item.is_tool():
 			continue
 		items[item.item_id] = item
 		totals[item.item_id] = totals.get(item.item_id, 0) + slot["count"]
@@ -167,10 +205,10 @@ func sell_harvested_items() -> void:
 	var earned := 0
 	for id in totals:
 		if GameState.remove_item(id, totals[id]):
+			GameState.shipping.deposit(items[id], totals[id])
 			earned += items[id].sell_price * totals[id]
 		
 	if earned > 0:
-		GameState.add_money(earned)
-		Notify.say("Terjual +%d G" % earned)
+		Notify.say("Dititipkan senilai %d G. Dibayar setelah tidur." % earned)
 	else:
 		Notify.say("Tidak ada yang bisa dijual")

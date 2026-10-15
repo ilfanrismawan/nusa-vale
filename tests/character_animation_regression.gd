@@ -12,6 +12,10 @@ func _ready() -> void:
 	var look := catalog.sanitize(CharacterAppearance.new())
 	var frames: SpriteFrames = CharacterSpriteBuilder.build(catalog, look)["frames"]
 	var template := CharacterSpriteBuilder.get_template(catalog)
+	for animation in frames.get_animation_names():
+		for i in frames.get_frame_count(animation):
+			var texture := frames.get_frame_texture(animation, i) as AtlasTexture
+			check(texture != null and texture.atlas is ImageTexture, "composed character atlas for %s/%d" % [animation, i])
 	for anim in template.get_animation_names():
 		check(frames.get_frame_count(anim) == template.get_frame_count(anim), "existing frame count " + anim)
 		check(frames.get_animation_speed(anim) == template.get_animation_speed(anim), "existing speed " + anim)

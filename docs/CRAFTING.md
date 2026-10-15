@@ -19,5 +19,3 @@ Definisi resep ada di `resources/crafting/catalog.tres` sebagai `CraftingRecipe`
 `CraftingSystem.preview` hanya memeriksa; `CraftingSystem.craft` memeriksa ulang dan menerapkan hasil sekaligus. Tidak ada yield di antara pemeriksaan dan perubahan tas. Menu memperbarui bahan dan tombol Buat saat inventory berubah.
 
 Verifikasi: `tests/crafting_regression.tscn` memeriksa semua resep, batch, stack, tas penuh, bahan pada beberapa stack, slot terkunci, penolakan resep invalid, data co-op, dan serialisasi. `tests/menu_regression.tscn` memeriksa tab, klik Buat, jumlah, avatar/equipment, serta save/load hasil crafting. Keduanya termasuk dalam `tools/verify_mvp.ps1` dan dijalankan dengan data save terisolasi.
-
-

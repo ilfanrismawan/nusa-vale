@@ -1,8 +1,9 @@
-[gd_scene format=3 uid="uid://f3dt440t1jlg"]
+[gd_scene load_steps=38 format=3 uid="uid://cvchefgaston01"]
 
 [ext_resource type="Script" path="res://scripts/world/village_npc.gd" id="1_village_npc"]
 [ext_resource type="Texture2D" uid="uid://g1kofq84aqny" path="res://assets/farm_rpg/Character/NPC'S/Chef/Premade/Gaston/Chef Sprites Idle.png" id="2_chef_idle"]
 [ext_resource type="Texture2D" uid="uid://lqo3up1cdrc2" path="res://assets/farm_rpg/Character/NPC'S/Chef/Premade/Gaston/Chef Portrait.png" id="3_chef_portrait"]
+[ext_resource type="Texture2D" uid="uid://b57ms5f4q4c62" path="res://assets/farm_rpg/Character/NPC'S/Chef/Premade/Gaston/Chef Sprites Walk.png" id="4_chef_walk"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_down_0"]
 atlas = ExtResource("2_chef_idle")
@@ -51,6 +52,78 @@ region = Rect2(320, 0, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_side_3"]
 atlas = ExtResource("2_chef_idle")
 region = Rect2(352, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_cwd0"]
+atlas = ExtResource("4_chef_walk")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_cwd1"]
+atlas = ExtResource("4_chef_walk")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_cwd2"]
+atlas = ExtResource("4_chef_walk")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_cwd3"]
+atlas = ExtResource("4_chef_walk")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_cwd4"]
+atlas = ExtResource("4_chef_walk")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_cwd5"]
+atlas = ExtResource("4_chef_walk")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_cwu0"]
+atlas = ExtResource("4_chef_walk")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_cwu1"]
+atlas = ExtResource("4_chef_walk")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_cwu2"]
+atlas = ExtResource("4_chef_walk")
+region = Rect2(256, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_cwu3"]
+atlas = ExtResource("4_chef_walk")
+region = Rect2(288, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_cwu4"]
+atlas = ExtResource("4_chef_walk")
+region = Rect2(320, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_cwu5"]
+atlas = ExtResource("4_chef_walk")
+region = Rect2(352, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_cws0"]
+atlas = ExtResource("4_chef_walk")
+region = Rect2(384, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_cws1"]
+atlas = ExtResource("4_chef_walk")
+region = Rect2(416, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_cws2"]
+atlas = ExtResource("4_chef_walk")
+region = Rect2(448, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_cws3"]
+atlas = ExtResource("4_chef_walk")
+region = Rect2(480, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_cws4"]
+atlas = ExtResource("4_chef_walk")
+region = Rect2(512, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_cws5"]
+atlas = ExtResource("4_chef_walk")
+region = Rect2(544, 0, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_gaston"]
 animations = [{
@@ -104,6 +177,75 @@ animations = [{
 "loop": true,
 "name": &"idle_up",
 "speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_cwd0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_cwd1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_cwd2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_cwd3")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_cwd4")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_cwd5")
+}],
+"loop": true,
+"name": &"walk_down",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_cws0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_cws1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_cws2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_cws3")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_cws4")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_cws5")
+}],
+"loop": true,
+"name": &"walk_side",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_cwu0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_cwu1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_cwu2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_cwu3")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_cwu4")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_cwu5")
+}],
+"loop": true,
+"name": &"walk_up",
+"speed": 6.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
@@ -112,14 +254,58 @@ size = Vector2(16, 10)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_area"]
 size = Vector2(36, 36)
 
-[node name="ChefNPC" type="StaticBody2D"]
+[node name="ChefNPC" type="CharacterBody2D"]
 y_sort_enabled = true
+collision_layer = 1
+collision_mask = 1
 script = ExtResource("1_village_npc")
 npc_id = "joko"
 npc_name = "Pak Joko"
 role_title = "Koki Warung Nusa"
 portrait = ExtResource("3_chef_portrait")
-dialog_lines = PackedStringArray("Halo kawan! Selamat datang di Warung Rasa Nusa.", "Aroma racikan rempah seperti serai, kunyit, dan daun salam selalu segar setiap pagi di dapurku.", "Hasil panen sayur dan ikan segar dari kebunmu adalah bahan terbaik untuk santapan lezat pemulih tenaga!", "Saat festival desa tiba nanti, singgahlah ke mari. Aku akan memasak tumpeng dan rawon istimewa untuk seluruh warga pulau!")
+walk_speed = 36.0
+dialog_lines = PackedStringArray("Halo kawan! Selamat datang di Warung Rasa Nusa.", "Aroma racikan rempah seperti serai, kunyit, dan daun salam selalu segar setiap pagi di dapurku.", "Hasil panen sayur dan ikan segar dari kebunmu adalah bahan terbaik untuk santapan lezat pemulih tenaga!")
+schedule = [{
+"activity": "Menyiapkan bumbu di dapur warung",
+"dialog_lines": PackedStringArray("Panci besar sudah kupanaskan. Hari ini aku akan merebus kaldu iga rempah."),
+"facing": "down",
+"hour": 6,
+"minute": 0,
+"path": [],
+"target_pos": Vector2(895, 388)
+}, {
+"activity": "Melayani santap siang di etalase warung",
+"dialog_lines": PackedStringArray("Selamat siang! Mau pesan nasi liwet atau pindang patin hangat hari ini?"),
+"facing": "side_left",
+"hour": 11,
+"minute": 30,
+"path": [Vector2(750, 380), Vector2(650, 360)],
+"target_pos": Vector2(650, 360)
+}, {
+"activity": "Kembali memasak di dapur warung",
+"dialog_lines": PackedStringArray("Waktu makan siang selesai, sekarang aku meracik adonan kue serabi untuk cemilan sore."),
+"facing": "down",
+"hour": 14,
+"minute": 30,
+"path": [Vector2(750, 380), Vector2(895, 388)],
+"target_pos": Vector2(895, 388)
+}, {
+"activity": "Menghidangkan santap malam di meja warung",
+"dialog_lines": PackedStringArray("Malam yang dingin paling nikmat ditemani semangkuk wedang ronde hangat."),
+"facing": "side_right",
+"hour": 18,
+"minute": 0,
+"path": [Vector2(895, 400), Vector2(870, 410)],
+"target_pos": Vector2(870, 410)
+}, {
+"activity": "Membereskan dapur warung",
+"dialog_lines": PackedStringArray("Dapur sudah kubersihkan. Istirahatlah yang cukup, esok hari kita mulai lagi dengan semangat baru!"),
+"facing": "down",
+"hour": 21,
+"minute": 0,
+"path": [Vector2(895, 388)],
+"target_pos": Vector2(895, 388)
+}]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_gaston")

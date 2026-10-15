@@ -3,7 +3,9 @@ extends Node
 signal unlock_changed(unlock_id: String, unlocked: bool)
 
 const DEFAULT_UNLOCKS: Dictionary = {
+	"greenhouse": false,
 	"forest": false,
+	"deep_forest": false,
 	"cave": false,
 	"school": false,
 	"mountain": false,
@@ -11,6 +13,28 @@ const DEFAULT_UNLOCKS: Dictionary = {
 }
 
 var unlocks: Dictionary = {}
+
+const DEEP_FOREST_COST := 3000
+const DEEP_FOREST_MATERIALS := {"wood": 150, "stone": 75}
+
+
+func deep_forest_requirements_met() -> bool:
+	if not is_unlocked("forest") or GameState.money < DEEP_FOREST_COST:
+		return false
+	for id in DEEP_FOREST_MATERIALS:
+		if not GameState.has_item(id, DEEP_FOREST_MATERIALS[id]):
+			return false
+	return true
+
+
+func purchase_deep_forest() -> bool:
+	if is_unlocked("deep_forest") or not deep_forest_requirements_met():
+		return false
+	# All requirements are checked before the synchronous transaction.
+	for id in DEEP_FOREST_MATERIALS:
+		GameState.remove_item(id, DEEP_FOREST_MATERIALS[id])
+	GameState.spend_money(DEEP_FOREST_COST)
+	return unlock("deep_forest")
 
 
 func _ready() -> void:
@@ -61,7 +85,7 @@ func set_unlock(unlock_id: String, value: bool) -> bool:
 		push_warning("UnlockManager: Unknown unlock ID: %s" % unlock_id)
 		return false
 
-	if bool(unlocks[unlock_id]) == value:
+	if bool(unlocks.get(unlock_id, false)) == value:
 		return false
 
 	unlocks[unlock_id] = value

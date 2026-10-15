@@ -19,6 +19,13 @@ func _record(item: String, cell: Vector2i) -> Dictionary:
 	return record
 
 func click(button: Button) -> void:
+	await get_tree().process_frame
+	var ancestor: Node = button.get_parent()
+	while ancestor != null:
+		if ancestor is ScrollContainer:
+			ancestor.ensure_control_visible(button)
+		ancestor = ancestor.get_parent()
+	await get_tree().process_frame
 	var point := button.get_global_rect().get_center()
 	var motion := InputEventMouseMotion.new()
 	motion.position = point
@@ -189,6 +196,21 @@ func _ready() -> void:
 	check(player.ui_inventory.visible and player.ui_inventory._crafting_panel.visible, "Workbench opens the inventory crafting page")
 	player.ui_inventory._close()
 	check(StructureManager.pack(player.data, bench.uid).ok and player.data.has_item("crafting_workbench"), "Workbench can be returned to the bag")
+	var jar := await install("preserves_jar")
+	check(not jar.is_empty(), "Two-by-two preserves jar can be installed on farm")
+	var strawberry_recipe: PreservesJarRecipe = load("res://resources/preserves_jar/preserves_strawberry.tres")
+	player.data.add_item("strawberry", strawberry_recipe.input_amount)
+	check(StructureManager.preserve(player.data, jar.uid, strawberry_recipe).ok and not player.data.has_item("strawberry"), "Preserves jar consumes crop and starts processing job")
+	check(not StructureManager.pack(player.data, jar.uid).ok, "Working preserves jar cannot be packed")
+	DayCycle.is_running = true
+	StructureManager._process(strawberry_recipe.process_time + 1)
+	DayCycle.is_running = false
+	check(jar.job.is_empty() and jar.ready.id == "strawberry_jam", "Preserves jar completes into artisan jam")
+	check(StructureManager.collect(player.data, jar.uid).ok and player.data.has_item("strawberry_jam") and jar.ready.is_empty(), "Player collects artisan jam from preserves jar")
+	var jam_item := GameState._resolve_item("strawberry_jam")
+	var strawberry_item := GameState._resolve_item("strawberry")
+	check(jam_item != null and jam_item.sell_price > strawberry_item.sell_price, "Artisan product has higher sell value than raw crop for expanded economy")
+	check(StructureManager.pack(player.data, jar.uid).ok and player.data.has_item("preserves_jar"), "Empty preserves jar can be packed back to inventory")
 	await test_chest_tiers()
 	await test_item_gestures()
 	StructureManager.reset()

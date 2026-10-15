@@ -24,6 +24,8 @@ static var _dir_cache: Dictionary = {}
 static var _warned: Dictionary = {}
 static var _clothing_cache: Dictionary = {}
 static var _hair_cache: Dictionary = {}
+static var _composed_cache: Dictionary = {}
+const MAX_COMPOSED_SHEETS := 64
 
 ## Hasil: {"frames": SpriteFrames, "textures": {source_sheet: ImageTexture}}.
 ## `tool_tiers`: {ToolData.ToolType: ToolData.ToolTier}. Tipe yang tidak ada = WOOD.
@@ -106,6 +108,11 @@ static func compose_sheet(
 		tool_tier: int,
 		size: Vector2i
 ) -> Image:
+	# Simpan hasil bake antar perpindahan area; tiap pemain tetap memiliki
+	# ImageTexture sendiri sehingga upgrade tool tidak mengubah pemain lain.
+	var cache_key := "%s|%s|%s|%d|%s" % [catalog.get_instance_id(), sheet.get_instance_id(), appearance.get_key(), tool_tier, size]
+	if _composed_cache.has(cache_key):
+		return _composed_cache[cache_key]
 	var out := Image.create_empty(size.x, size.y, false, Image.FORMAT_RGBA8)
 	for relative in sheet.background_layers:
 		var path := _resolve_file(sheet.part_folder, relative)
@@ -132,6 +139,9 @@ static func compose_sheet(
 					_clothing_cache[key] = CharacterClothingStyler.apply(layer, style, appearance.pants == "pants_baggy_jeans", reference)
 				layer = _clothing_cache[key]
 			_blit_layer(out, layer, sheet)
+	if _composed_cache.size() >= MAX_COMPOSED_SHEETS:
+		_composed_cache.erase(_composed_cache.keys()[0])
+	_composed_cache[cache_key] = out
 	return out
 
 ## SpriteFrames asli dari scene template, dibaca lewat SceneState (tanpa instance).

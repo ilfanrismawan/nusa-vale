@@ -81,6 +81,8 @@ func take_hit(_damage: int = 1) -> void:
 	collision_mask = 0
 	var pos := global_position - SORT_SHIFT
 	Juice.play(&"cut_break", pos)
+	if area_key.begins_with("farm"):
+		StructureManager.harvest_hay()
 	if data and data.drop_item and randf() < data.drop_chance:
 		ItemPickup.spawn(get_parent(), pos, data.drop_item.item_id, data.drop_count)
 	ForageManager.remove_item(area_key, cell)

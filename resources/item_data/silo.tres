@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_silo.tres" id="2"]
+[resource]
+script = ExtResource("1")
+item_id = "silo"
+display_name = "Silo Jerami"
+icon = ExtResource("2")
+buy_price = 0
+sell_price = 0
+description = "Menyimpan 240 jerami. Rumput liar ladang yang ditebas mengisi silo; kandang Deluxe mengambil pakan otomatis."
+placeable = true
+placement_size = Vector2i(3, 2)
+category = 8
+stackable = false
+max_stack = 1

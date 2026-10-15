@@ -70,6 +70,10 @@ var _hovered_slot_index: int = -1
 ## Buang item: kotak pilihan jumlah + tombol "Buang" di panel kanan (dibuat lewat kode).
 var _drop_dialog: DropItemDialogScript
 var _drop_slot_index: int = -1
+var _consume_button: Button
+var _consume_dialog: ConfirmationDialog
+var _consume_slot := -1
+var _consume_id := ""
 var _btn_drop: Button
 var _tip_label: Label
 ## Mode jual (dibuka dari Shipping Bin): kotak jumlah menjual, bukan membuang.
@@ -123,6 +127,7 @@ func _ready() -> void:
 	_setup_close_button()
 	_create_slots()
 	_setup_drop_ui()
+	_setup_daya_ui()
 	_setup_rpg_menus()
 
 	if GameState:
@@ -204,20 +209,20 @@ func _setup_rpg_menus() -> void:
 	_collection_panel = preload("res://scripts/ui/inventory_collection.gd").new()
 	_collection_panel.position = Vector2(28, 20)
 	_collection_panel.size = Vector2(420, 248)
-	book_root.add_child(_collection_panel)
 	_collection_panel.hide()
+	book_root.add_child(_collection_panel)
 	_equipment_panel = preload("res://scripts/ui/inventory_equipment.gd").new()
 	_equipment_panel.inventory_ui = self
 	_equipment_panel.position = Vector2(28, 20)
 	_equipment_panel.size = Vector2(420, 248)
-	book_root.add_child(_equipment_panel)
 	_equipment_panel.hide()
+	book_root.add_child(_equipment_panel)
 	_crafting_panel = preload("res://scripts/ui/inventory_crafting.gd").new()
 	_crafting_panel.inventory_ui = self
 	_crafting_panel.position = Vector2(28, 20)
 	_crafting_panel.size = Vector2(420, 248)
-	book_root.add_child(_crafting_panel)
 	_crafting_panel.hide()
+	book_root.add_child(_crafting_panel)
 
 	var action_row := HBoxContainer.new()
 	_btn_drop.get_parent().add_child(action_row)
@@ -322,7 +327,7 @@ func _update_status() -> void:
 			if item.category != ItemData.Category.TOOL:
 				value += item.sell_price * int(data.inventory[i].get("count", 1))
 	var name_text := data.player_name if not data.player_name.is_empty() else "Petani P%d" % (data.index + 1)
-	_status_text.text = "STATUS PETANI\n%s\n\nStamina: %d / %d\nTas: %d / %d slot\nUang: %s G\nNilai jual isi tas: %s G\n\nHari %d - %s" % [name_text, data.stamina, PlayerData.MAX_STAMINA, used, data.bag_size, HUD.format_money(GameState.money), HUD.format_money(value), DayCycle.current_day, DayCycle.get_season_display_name()]
+	_status_text.text = "STATUS PETANI\n%s\n\nStamina: %d / %d\nTas: %d / %d slot\nUang: %s G\nNilai jual isi tas: %s G\n\nHari %d - %s" % [name_text, data.stamina, data.max_stamina, used, data.bag_size, HUD.format_money(GameState.money), HUD.format_money(value), DayCycle.current_day, DayCycle.get_season_display_name()]
 
 
 func _update_menu_highlight() -> void:
@@ -644,6 +649,11 @@ func _input(event: InputEvent) -> void:
 	if settings and settings.visible:
 		return
 	var input := _owner_input()
+	if is_instance_valid(_consume_dialog) and _consume_dialog.visible:
+		if input.is_event(event, &"ui_cancel") or input.is_event(event, &"inventory"):
+			_consume_dialog.hide()
+			get_viewport().set_input_as_handled()
+		return
 	# Esc menutup dialog buang lebih dulu sebelum menutup tas.
 	if visible and _drop_dialog_open() and input.is_event(event, &"ui_cancel"):
 		_close_drop_dialog()
@@ -698,6 +708,8 @@ func open_sell_mode() -> void:
 
 
 func _close() -> void:
+	if is_instance_valid(_consume_dialog):
+		_consume_dialog.hide()
 	_close_drop_dialog()
 	_sell_mode = false
 	_hide_tooltip()
@@ -995,7 +1007,7 @@ func _clear_item_detail() -> void:
 		detail_sub.text = "Arahkan kursor ke slot"
 	if detail_desc:
 		if _sell_mode:
-			detail_desc.text = "Shipping Bin: klik kanan item untuk memilih jumlah yang dijual."
+			detail_desc.text = "Shipping Bin: klik kanan untuk menitipkan barang. Uang diterima setelah tidur."
 		else:
 			detail_desc.text = "Nama, fungsi, dan harga jual item tampil di sini."
 	if price_label:
@@ -1066,6 +1078,7 @@ func refresh_inventory() -> void:
 	if is_instance_valid(gold_label) and GameState:
 		gold_label.text = "Uang: %s G" % HUD.format_money(GameState.money)
 
+	_update_drop_button()
 	# Update detail slot jika ada yang sedang dipilih
 	if _selected_slot_index >= 0 and _selected_slot_index < data.inventory.size():
 		var sel = data.inventory[_selected_slot_index]
@@ -1142,6 +1155,8 @@ func _drop_button_style(bg: Color) -> StyleBoxFlat:
 
 ## Alat tidak bisa dibuang/dijual (supaya alat awal tidak hilang). Mode jual: harus punya sell_price.
 func _can_drop(item: ItemData) -> bool:
+	if item != null and item.item_id.begins_with("biji_daya_"):
+		return false
 	if item == null or item.category == ItemData.Category.TOOL or item.is_tool():
 		return false
 	return item.sell_price > 0 if _sell_mode else true
@@ -1159,8 +1174,11 @@ func _slot_item(global_idx: int) -> ItemData:
 func _update_drop_button() -> void:
 	if not is_instance_valid(_btn_drop):
 		return
+	if is_instance_valid(_consume_button):
+		var selected := _slot_item(_selected_slot_index)
+		_consume_button.visible = not _sell_mode and selected != null and selected.item_id.begins_with("biji_daya_")
 	var show_drop := _can_drop(_slot_item(_selected_slot_index))
-	_btn_drop.text = "Jual" if _sell_mode else "Buang"
+	_btn_drop.text = "Titip" if _sell_mode else "Buang"
 	_btn_drop.visible = show_drop
 	if is_instance_valid(_tip_label):
 		_tip_label.visible = not show_drop
@@ -1184,7 +1202,7 @@ func _open_drop_dialog(global_idx: int) -> void:
 	_drop_slot_index = global_idx
 	var count := int(data.inventory[global_idx].get("count", 1))
 	if _sell_mode:
-		_drop_dialog.open_for(item, count, "Jual", item.sell_price)
+		_drop_dialog.open_for(item, count, "Titip", item.sell_price)
 	else:
 		_drop_dialog.open_for(item, count)
 	# Tengah layar pemain ini, setelah ukuran kotak dihitung.
@@ -1226,7 +1244,7 @@ func drop_from_slot(global_idx: int, amount: int) -> bool:
 	return true
 
 
-## Jual sebagian tumpukan lewat Shipping Bin; uang masuk ke uang bersama.
+## Titip sebagian tumpukan; pembayaran masuk ke uang bersama pada hari berikutnya.
 func sell_from_slot(global_idx: int, amount: int) -> bool:
 	var item := _slot_item(global_idx)
 	if item == null or item.sell_price <= 0 or item.is_tool():
@@ -1236,7 +1254,74 @@ func sell_from_slot(global_idx: int, amount: int) -> bool:
 	if not data.remove_item_at(global_idx, take):
 		return false
 	var earned := item.sell_price * take
-	GameState.add_money(earned)
+	GameState.shipping.deposit(item, take)
 	var item_name: String = item.display_name if item.display_name != "" else item.item_id
-	Notify.say("Terjual %s x%d +%s G" % [item_name, take, HUD.format_money(earned)])
+	Notify.say("Dititipkan %s x%d (%s G). Dibayar setelah tidur." % [item_name, take, HUD.format_money(earned)])
 	return true
+
+
+func _setup_daya_ui() -> void:
+	_consume_dialog = ConfirmationDialog.new()
+	var daya_theme := Theme.new()
+	daya_theme.default_font = DropItemDialogScript.FONT
+	daya_theme.default_font_size = 18
+	daya_theme.set_color("font_color", "Label", DropItemDialogScript.COLOR_TEXT)
+	daya_theme.set_color("title_color", "Window", Color("3b2825"))
+	var panel := _drop_button_style(Color("3b2825"))
+	panel.set_content_margin_all(14)
+	daya_theme.set_stylebox("panel", "AcceptDialog", panel)
+	daya_theme.set_stylebox("embedded_border", "Window", panel)
+	for state in ["normal", "hover", "pressed"]:
+		daya_theme.set_stylebox(state, "Button", _drop_button_style(Color("65432d") if state == "normal" else Color("906331")))
+	daya_theme.set_color("font_color", "Button", DropItemDialogScript.COLOR_TEXT)
+	_consume_dialog.theme = daya_theme
+	_consume_dialog.title = "Konsumsi Biji Daya?"
+	_consume_dialog.dialog_text = "Stamina maksimum +10 permanen.
+Memulihkan 10 stamina. Biji hanya dapat dikonsumsi sekali."
+	_consume_dialog.ok_button_text = "Konsumsi"
+	_consume_dialog.cancel_button_text = "Batal"
+	_consume_dialog.confirmed.connect(_consume_daya)
+	add_child(_consume_dialog)
+	_consume_button = Button.new()
+	_consume_button.text = "Konsumsi Biji Daya"
+	_consume_button.add_theme_font_override("font", DropItemDialogScript.FONT)
+	_consume_button.add_theme_font_size_override("font_size", 16)
+	_consume_button.add_theme_stylebox_override("normal", _drop_button_style(Color("65432d")))
+	_consume_button.pressed.connect(func():
+		var item := _slot_item(_selected_slot_index)
+		if item == null or not item.item_id.begins_with("biji_daya_"):
+			return
+		_consume_slot = _selected_slot_index
+		_consume_id = item.item_id.trim_prefix("biji_daya_")
+		_consume_dialog.popup_centered())
+	_consume_button.hide()
+	_tip_label.get_parent().add_child(_consume_button)
+
+func _consume_daya() -> void:
+	if not visible or _sell_mode or not GameState.daya.consume(data, _consume_slot, _consume_id):
+		return
+	var icon := load("res://assets/ui/biji_daya.svg") as Texture2D
+	_close()
+	if is_instance_valid(player):
+		var glow := Node2D.new()
+		glow.scale = Vector2(0.6, 0.6)
+		player.add_child(glow)
+		player.set_input_locked(&"daya", true)
+		var seed := Sprite2D.new()
+		seed.texture = icon
+		seed.position = Vector2(0, -18)
+		seed.scale = Vector2(0.65, 0.65)
+		glow.add_child(seed)
+		for direction in [-1, 1]:
+			var root := Line2D.new()
+			root.width = 2.0
+			root.default_color = Color("ffe6a0")
+			root.points = PackedVector2Array([Vector2(0, -10), Vector2(direction * 6, -17), Vector2(direction * 3, -24), Vector2(direction * 10, -30)])
+			glow.add_child(root)
+		var tween := glow.create_tween()
+		tween.tween_property(glow, "scale", Vector2.ONE, 0.65)
+		tween.parallel().tween_property(glow, "modulate:a", 0.0, 0.85)
+		tween.tween_callback(func():
+			if is_instance_valid(player):
+				player.set_input_locked(&"daya", false)
+			glow.queue_free())

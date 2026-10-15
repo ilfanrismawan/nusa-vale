@@ -64,7 +64,8 @@ func _process(_delta: float) -> void:
 		if p == null or p.is_input_locked() or p.input == null:
 			continue
 		# Co-op: tiap area punya spawner sendiri; hanya tangani pemain di area ini.
-		if not p.world_root().is_ancestor_of(self):
+		var world := p.world_root()
+		if not is_instance_valid(world) or not world.is_ancestor_of(self):
 			continue
 		if not p.input.just_pressed(&"interact"):
 			continue
@@ -200,6 +201,9 @@ func _on_spawned(_count: int) -> void:
 
 
 func _random_cell() -> Vector2i:
+	var world := _ground.get_parent()
+	if world.has_method("random_resource_cell"):
+		return world.random_resource_cell()
 	var rect := _ground.get_used_rect().grow(-margin_tiles)
 	if rect.size.x <= 0 or rect.size.y <= 0:
 		rect = _ground.get_used_rect()
@@ -211,6 +215,10 @@ func _random_cell() -> Vector2i:
 
 func _is_free(cell: Vector2i) -> bool:
 	if _ground.get_cell_source_id(cell) == -1:
+		return false
+	# Authored worlds can reserve paths and restrict resources to reachable glades.
+	var world := _ground.get_parent()
+	if world.has_method("is_resource_cell") and not world.is_resource_cell(cell):
 		return false
 	if ForageManager.has_item_at(_area_key(), cell):
 		return false

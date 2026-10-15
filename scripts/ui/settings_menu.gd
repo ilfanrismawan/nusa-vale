@@ -21,6 +21,7 @@ var _initializing := true
 
 const RESOLUTIONS: Array[Vector2i] = [
 	Vector2i(640, 360),
+	Vector2i(960, 540),
 	Vector2i(1280, 720),
 	Vector2i(1366, 768),
 	Vector2i(1600, 900),
@@ -167,7 +168,7 @@ func _load_slot(_slot: int, previous_slot: int) -> void:
 		Notify.say("Gagal memuat save.")
 		return
 	hide()
-	get_tree().paused = false
+	PauseManager.set_requested(false)
 	GameState.next_spawn_position = LOAD_SPAWN
 	GameState.has_spawn_point = true
 	DayCycle.is_running = true
@@ -200,8 +201,11 @@ func load_settings() -> void:
 		return
 	
 	var mode: int = config.get_value("display", "window_mode", 0)
-	var res_x: int = config.get_value("display", "res_x", 1280)
-	var res_y: int = config.get_value("display", "res_y", 720)
+	var res_x: int = int(config.get_value("display", "res_x", 1280))
+	var res_y: int = int(config.get_value("display", "res_y", 720))
+	var requested_size := Vector2i(res_x, res_y)
+	if requested_size.x < 640 or requested_size.y < 360 or requested_size.x > 3840 or requested_size.y > 2160:
+		requested_size = Vector2i(1280, 720)
 	var vsync: bool = config.get_value("display", "vsync", true)
 	var volume: float = config.get_value("audio", "master_volume", 1.0)
 	
@@ -219,18 +223,21 @@ func load_settings() -> void:
 	_on_vsync_toggled(vsync)
 	
 	# Mode & Resolution
+	for i in RESOLUTIONS.size():
+		if RESOLUTIONS[i] == requested_size:
+			resolution_option.select(i)
+			break
 	if mode == 1 or mode == 2:
 		_on_window_mode_selected(mode)
 	else:
-		_apply_resolution(Vector2i(res_x, res_y))
-		_on_window_mode_selected(0)
+		_apply_resolution(requested_size)
 
 func _sync_current_settings() -> void:
 	var win = get_window()
-	if win.mode == Window.MODE_FULLSCREEN:
+	if win.mode == Window.MODE_EXCLUSIVE_FULLSCREEN:
 		window_mode_option.select(1)
 		resolution_option.disabled = true
-	elif win.mode == Window.MODE_EXCLUSIVE_FULLSCREEN:
+	elif win.mode == Window.MODE_FULLSCREEN:
 		window_mode_option.select(2)
 		resolution_option.disabled = true
 	else:
@@ -260,12 +267,10 @@ func _on_window_mode_selected(index: int) -> void:
 			else:
 				_apply_resolution(Vector2i(640, 360))
 		1: # Fullscreen
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
-			win.mode = Window.MODE_FULLSCREEN
+			win.mode = Window.MODE_EXCLUSIVE_FULLSCREEN
 			resolution_option.disabled = true
 		2: # Borderless Fullscreen
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
-			win.mode = Window.MODE_EXCLUSIVE_FULLSCREEN
+			win.mode = Window.MODE_FULLSCREEN
 			resolution_option.disabled = true
 	window_mode_option.select(index)
 	save_settings()
@@ -276,16 +281,22 @@ func _on_resolution_selected(index: int) -> void:
 	save_settings()
 
 func _apply_resolution(new_size: Vector2i) -> void:
+	new_size.x = clampi(new_size.x, 640, 3840)
+	new_size.y = clampi(new_size.y, 360, 2160)
 	print("[Settings] Mengubah resolusi ke: ", new_size)
-	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-	DisplayServer.window_set_size(new_size)
-	var screen_size = DisplayServer.screen_get_size()
-	var center_pos: Vector2i = (screen_size - new_size) / 2
-	DisplayServer.window_set_position(center_pos)
-	
-	var win = get_window()
-	win.mode = Window.MODE_WINDOWED
+	var win := get_window()
+	if win.mode != Window.MODE_WINDOWED:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		win.mode = Window.MODE_WINDOWED
+	# Apply once through the Window API; mixing DisplayServer and Window writes
+	# caused the old resolution choice to be overwritten on some displays.
 	win.size = new_size
+	for i in RESOLUTIONS.size():
+		if RESOLUTIONS[i] == new_size:
+			resolution_option.select(i)
+			break
+	var screen_size := DisplayServer.screen_get_size()
+	var center_pos := Vector2i(maxi(0, (screen_size.x - new_size.x) / 2), maxi(0, (screen_size.y - new_size.y) / 2))
 	win.position = center_pos
 	window_mode_option.select(0)
 	resolution_option.disabled = false
@@ -348,7 +359,7 @@ func _confirm_exit(to_desktop: bool) -> void:
 func _perform_exit() -> void:
 	save_settings()
 	DayCycle.is_running = false
-	get_tree().paused = false
+	PauseManager.set_requested(false)
 	if _exit_to_desktop:
 		get_tree().quit()
 	else:
@@ -374,7 +385,7 @@ func _open() -> void:
 	_select_page(0)
 	var inventory_node := get_parent().get_node_or_null("UIInventory")
 	btn_close.text = "Kembali ke Tas" if inventory_node != null and inventory_node.visible else "Kembali"
-	get_tree().paused = not Coop.active
+	PauseManager.set_requested(not Coop.active)
 	if Coop.active and inventory_node != null:
 		Coop.set_menu_open(inventory_node.player, true)
 
@@ -383,7 +394,7 @@ func _close() -> void:
 	hide()
 	# Kembali ke buku inventory tetap menjeda permainan solo.
 	var inventory_node := get_parent().get_node_or_null("UIInventory")
-	get_tree().paused = not Coop.active and inventory_node != null and inventory_node.visible
+	PauseManager.set_requested(not Coop.active and inventory_node != null and inventory_node.visible)
 	if Coop.active and inventory_node != null:
 		Coop.set_menu_open(inventory_node.player, inventory_node.visible)
 

@@ -1,0 +1,316 @@
+[gd_scene load_steps=37 format=3 uid="uid://cvratihnpc001"]
+
+[ext_resource type="Script" path="res://scripts/world/village_npc.gd" id="1_npc"]
+[ext_resource type="Texture2D" uid="uid://cpr66rph1fjg7" path="res://assets/farm_rpg/Character/NPC'S/Lyria/Idle.png" id="2_idle"]
+[ext_resource type="Texture2D" uid="uid://jj5ivhffm87e" path="res://assets/farm_rpg/Character/NPC'S/Lyria/Walk.png" id="3_walk"]
+[ext_resource type="Texture2D" uid="uid://dmvnce6xs1etp" path="res://assets/farm_rpg/Character/NPC'S/Portrait (1).png" id="4_portrait"]
+
+[sub_resource type="AtlasTexture" id="Atlas_rid0"]
+atlas = ExtResource("2_idle")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_rid1"]
+atlas = ExtResource("2_idle")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_rid2"]
+atlas = ExtResource("2_idle")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_rid3"]
+atlas = ExtResource("2_idle")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_riu0"]
+atlas = ExtResource("2_idle")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_riu1"]
+atlas = ExtResource("2_idle")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_riu2"]
+atlas = ExtResource("2_idle")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_riu3"]
+atlas = ExtResource("2_idle")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_ris0"]
+atlas = ExtResource("2_idle")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_ris1"]
+atlas = ExtResource("2_idle")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_ris2"]
+atlas = ExtResource("2_idle")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_ris3"]
+atlas = ExtResource("2_idle")
+region = Rect2(96, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_rwd0"]
+atlas = ExtResource("3_walk")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_rwd1"]
+atlas = ExtResource("3_walk")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_rwd2"]
+atlas = ExtResource("3_walk")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_rwd3"]
+atlas = ExtResource("3_walk")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_rwd4"]
+atlas = ExtResource("3_walk")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_rwd5"]
+atlas = ExtResource("3_walk")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_rwu0"]
+atlas = ExtResource("3_walk")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_rwu1"]
+atlas = ExtResource("3_walk")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_rwu2"]
+atlas = ExtResource("3_walk")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_rwu3"]
+atlas = ExtResource("3_walk")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_rwu4"]
+atlas = ExtResource("3_walk")
+region = Rect2(128, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_rwu5"]
+atlas = ExtResource("3_walk")
+region = Rect2(160, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_rws0"]
+atlas = ExtResource("3_walk")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_rws1"]
+atlas = ExtResource("3_walk")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_rws2"]
+atlas = ExtResource("3_walk")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_rws3"]
+atlas = ExtResource("3_walk")
+region = Rect2(96, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_rws4"]
+atlas = ExtResource("3_walk")
+region = Rect2(128, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_rws5"]
+atlas = ExtResource("3_walk")
+region = Rect2(160, 64, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ratih"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_rid0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_rid1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_rid2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_rid3")
+}],
+"loop": true,
+"name": &"idle_down",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_ris0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_ris1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_ris2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_ris3")
+}],
+"loop": true,
+"name": &"idle_side",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_riu0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_riu1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_riu2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_riu3")
+}],
+"loop": true,
+"name": &"idle_up",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_rwd0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_rwd1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_rwd2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_rwd3")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_rwd4")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_rwd5")
+}],
+"loop": true,
+"name": &"walk_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_rws0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_rws1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_rws2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_rws3")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_rws4")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_rws5")
+}],
+"loop": true,
+"name": &"walk_side",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_rwu0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_rwu1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_rwu2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_rwu3")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_rwu4")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_rwu5")
+}],
+"loop": true,
+"name": &"walk_up",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(16, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_area"]
+size = Vector2(36, 36)
+
+[node name="RatihNPC" type="CharacterBody2D"]
+y_sort_enabled = true
+collision_layer = 1
+collision_mask = 1
+script = ExtResource("1_npc")
+npc_id = "ratih"
+npc_name = "dr. Ratih"
+role_title = "Tabib & Herbalis Desa"
+portrait = ExtResource("4_portrait")
+walk_speed = 34.0
+dialog_lines = PackedStringArray("Halo! Jangan paksakan bekerja di ladang sampai kehabisan tenaga.", "Tanaman herbal liar yang tumbuh di sekitar hutan bisa diolah menjadi ramuan penambah stamina alami.")
+schedule = [{
+"activity": "Membuka Klinik Desa",
+"dialog_lines": PackedStringArray("Selamat pagi. Apotek klinik sudah buka.", "Jika tubuhmu terasa lelah atau terluka karena menjelajah tambang, segera periksakan ke mari ya."),
+"facing": "down",
+"hour": 7,
+"minute": 0,
+"path": [],
+"target_pos": Vector2(519, 340)
+}, {
+"activity": "Menghirup udara segar di taman bunga",
+"dialog_lines": PackedStringArray("Bunga-bunga di sekitar air mancur ini bermekaran sangat indah hari ini.", "Udara segar di luar ruangan adalah obat terbaik untuk menjernihkan pikiran."),
+"facing": "side_left",
+"hour": 12,
+"minute": 30,
+"path": [Vector2(519, 380), Vector2(510, 415)],
+"target_pos": Vector2(510, 415)
+}, {
+"activity": "Meracik obat herbal di klinik",
+"dialog_lines": PackedStringArray("Aku sedang menumbuk daun pegagan dan jahe merah untuk membuat salep pemulih memar."),
+"facing": "down",
+"hour": 14,
+"minute": 30,
+"path": [Vector2(519, 380), Vector2(519, 340)],
+"target_pos": Vector2(519, 340)
+}, {
+"activity": "Istirahat malam di klinik",
+"dialog_lines": PackedStringArray("Klinik sudah tutup untuk hari ini. Pastikan kamu tidur cukup malam ini agar esok bangun dengan bugar!"),
+"facing": "side_right",
+"hour": 18,
+"minute": 30,
+"path": [Vector2(535, 335)],
+"target_pos": Vector2(535, 335)
+}]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_ratih")
+animation = &"idle_down"
+autoplay = "idle_down"
+offset = Vector2(0, -10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -2)
+shape = SubResource("RectangleShape2D_body")
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(0, -2)
+shape = SubResource("RectangleShape2D_area")

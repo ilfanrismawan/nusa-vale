@@ -48,7 +48,29 @@ func _unhandled_input(event: InputEvent) -> void:
 	var input := player.input
 	if input.is_event(event, &"use_tool"):
 		player.bind_context()
+		if player.has_meta("carried_animal") and is_instance_valid(player.get_meta("carried_animal")):
+			player.release_carried_animal()
+			get_viewport().set_input_as_handled()
+			return
+		if current_item == null:
+			for animal in get_tree().get_nodes_in_group("ranch_animal"):
+				if animal.visible and animal.get_world_2d() == player.get_world_2d() and (player.global_position + Player.FEET_OFFSET).distance_to(animal.global_position) < 22:
+					animal.lift_with(player)
+					get_viewport().set_input_as_handled()
+					return
+		if current_item != null and current_item.category == ItemData.Category.FOOD:
+			Notify.say(CookingManager.eat(player, player.data.hotbar_page * 8 + current_index).message)
+			get_viewport().set_input_as_handled()
+			return
+		for bin in get_tree().get_nodes_in_group("shipping_bin"):
+			if bin.get_world_2d() == player.get_world_2d() and bin.deposit_selected(player):
+				get_viewport().set_input_as_handled()
+				return
 		if current_item != null and current_item.placeable:
+			if current_item.item_id in StructureManager.CONSTRUCTION:
+				BuildingPlacement.begin(player, current_item.item_id, true)
+				get_viewport().set_input_as_handled()
+				return
 			var result := StructureManager.place(player, player.data.hotbar_page * 8 + current_index, player.get_target_cell())
 			Notify.say(result["message"])
 			get_viewport().set_input_as_handled()
@@ -111,15 +133,14 @@ func use_action(action: ActionData) -> void:
 		Notify.say("Tidak bisa pakai alat di sini")
 		return
 	
-	if action.effect is WaterEffect and action.effect.try_refill(player, player.get_target_cell(), action.tool_data):
-		return
+	# Refill uses the same timed watering gesture; water changes at the hit frame.
 	var stamina_cost: int = _get_stamina_cost(action)
 	
 	if action.effect:
 		if action.tool_data != null:
-			stamina_cost = action.tool_data.stamina_cost
+			stamina_cost = _get_stamina_cost(action)
 		else:
-			stamina_cost = action.effect.stamina_cost
+			stamina_cost = _get_stamina_cost(action)
 			
 		if player.data.stamina < stamina_cost:
 			Notify.say("Terlalu lelah! Istirahatlah.")
@@ -142,6 +163,8 @@ func _start_fishing(action: ActionData) -> void:
 func _get_stamina_cost(action: ActionData) -> int:
 	if action == null:
 		return 0
+	if action.effect is WaterEffect:
+		return maxi(action.tool_data.stamina_cost if action.tool_data != null else action.effect.stamina_cost, 1)
 	if action.tool_data != null:
 		return maxi(action.tool_data.stamina_cost, 0)
 		
@@ -167,6 +190,8 @@ func _on_action_performed(action: ActionData, cell: Vector2i) -> void:
 	
 # DEBUGGING
 func debug_current_tool() -> void:
+	if not OS.has_feature("editor"):
+		return
 	print("")
 	print("========== TOOL DEBUG ==========")
 

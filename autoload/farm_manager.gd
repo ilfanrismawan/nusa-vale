@@ -31,6 +31,8 @@ func initialize(world: Node) -> void:
 		DayCycle.day_passed.connect(_on_day_passed)
 	
 	_restore_tiles()
+	if GameState.weather != null and GameState.weather.is_raining():
+		apply_rain()
 
 ## Pakai layer dari world ini tanpa memulihkan tile (sudah dipulihkan saat area dimuat).
 func bind_world(world: Node) -> void:
@@ -121,6 +123,8 @@ func hoe(cell: Vector2i) -> bool:
 		"watered": false
 	}
 	print("Tanah dicangkul: ", cell)
+	if GameState.weather.is_raining():
+		apply_rain()
 	return true
 	
 ## Tanaman tanpa season (kosong) boleh ditanam kapan saja.
@@ -147,9 +151,14 @@ func plant(cell: Vector2i, crop: CropData) -> bool:
 	data["watered"] = false
 	
 	_update_crop_tile(cell, crop, 0)
+	if GameState.weather.is_raining():
+		apply_rain()
 	crop_planted.emit(cell, crop)
 	print("Ditanam: %s di %s" % [crop.display_name, cell])
 	return true
+
+func can_water(cell: Vector2i) -> bool:
+	return is_instance_valid(watered_layer) and farm_data.has(cell) and _can_access_plot(farm_data[cell])
 
 func water(cell: Vector2i) -> bool:
 	if not is_instance_valid(watered_layer):
@@ -167,6 +176,23 @@ func water(cell: Vector2i) -> bool:
 	
 	_set_ground_tile(watered_layer, cell)
 	return true
+
+func apply_rain() -> void:
+	# Update saved plots even if nobody is visiting the farm. Greenhouse stays dry.
+	var rain_layer: TileMapLayer = watered_layer if area_id() != "greenhouse" else null
+	if Coop.has_root():
+		var outside: Node = Coop.root.world_of(Coop.root.START_AREA)
+		if outside != null:
+			rain_layer = outside.get_node_or_null("WateredLayer") as TileMapLayer
+	for cell in farm_data:
+		var plot: Dictionary = farm_data[cell]
+		if str(plot.get("area", "farm")) == "greenhouse":
+			continue
+		if plot.get("watered", false):
+			continue
+		plot.watered = true
+		if is_instance_valid(rain_layer):
+			rain_layer.set_cells_terrain_connect([cell], TERRAIN_SET_SOIL, 0)
 	
 func can_harvest(cell: Vector2i) -> bool:
 	if not farm_data.has(cell):
@@ -218,7 +244,7 @@ func _spawn_harvest_drop(cell: Vector2i, item_id: String, count: int) -> void:
 func _on_day_passed(_day: int) -> void:
 	var layers_valid := is_instance_valid(crop_layer) and is_instance_valid(watered_layer)
 	
-	for cell in farm_data:
+	for cell in farm_data.keys():
 		var data: Dictionary = farm_data[cell]
 		
 		if data["crop"] != null and data["watered"]:
@@ -236,10 +262,32 @@ func _on_day_passed(_day: int) -> void:
 			else:
 				print("%s sudah siap panen di %s" % [crop.display_name, cell])
 		
+		if data.get("crop") == null:
+			_erase_empty_plot_visuals(cell, str(data.get("area", "farm")))
+			farm_data.erase(cell)
+			continue
 		data["watered"] = false
 		
 		if layers_valid and _visible_plot(data):
 			watered_layer.erase_cell(cell)
+
+func _erase_empty_plot_visuals(cell: Vector2i, plot_area: String) -> void:
+	# Loaded co-op worlds have independent layers; clear both without rebinding context.
+	var worlds: Array[Node] = []
+	if is_instance_valid(_bound_world):
+		worlds.append(_bound_world)
+	if Coop.has_root():
+		for path in ["res://scenes/world/farm.tscn", "res://scenes/world/interior/greenhouse.tscn"]:
+			var world: Node = Coop.root.world_of(path)
+			if is_instance_valid(world) and not worlds.has(world):
+				worlds.append(world)
+	for world in worlds:
+		if str(world.get_meta("farm_area", "farm")) != plot_area:
+			continue
+		for layer_name in ["SoilLayer", "WateredLayer", "Crop"]:
+			var layer := world.get_node_or_null(NodePath(layer_name)) as TileMapLayer
+			if layer != null:
+				layer.erase_cell(cell)
 			
 ## Tanaman di luar musimnya layu saat musim berganti; tanahnya tetap tercangkul.
 func _on_season_changed(_season: int) -> void:
@@ -342,7 +390,15 @@ func hit_world(player: Player, cell: Vector2i, target_group: StringName, damage:
 			continue
 		var hit_pos := _hit_origin(node)
 		if player.world_to_cell(hit_pos) == cell or hit_pos.distance_to(target_pos) <= REACH:
-			node.take_hit(damage)
+			if node is Choppable:
+				var action: ActionData = player.tool_controller.action_state.action
+				var tool: ToolData = action.tool_data if action != null else null
+				if not node.accepts_tool(tool):
+					Notify.say(node.requirement_text())
+					return false
+				node.take_hit(damage, int(tool.tier))
+			else:
+				node.take_hit(damage)
 			return true
 	return false
 

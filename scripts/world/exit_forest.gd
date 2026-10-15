@@ -5,13 +5,12 @@ const FARM_SCENE := "res://scenes/world/farm.tscn"
 const SPAWN_POSITION := Vector2(51, 878.0)
 
 func _ready() -> void:
-	if not body_entered.is_connected(_on_body_entered):
-		body_entered.connect(_on_body_entered)
+	body_entered.connect(_on_body_entered)
 
 func _on_body_entered(body: Node2D) -> void:
 	if Transition.on_transition:
 		return
-	if not (body is Player or body.is_in_group("player")):
+	if not body is Player:
 		return
 	GameState.next_spawn_position = SPAWN_POSITION
 	GameState.has_spawn_point = true

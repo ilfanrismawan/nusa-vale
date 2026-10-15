@@ -1,6 +1,6 @@
 # Nusa Vale — Game Design Document (GDD)
 
-Versi dokumen: 1.9 (12 Oktober 2026).
+Versi dokumen: 2.7 (15 Oktober 2026).
 Dokumen ini adalah **sumber kebenaran desain** proyek `E:\nusa-vale` (Game Design Document resmi).
 Pada versi 1.9, ditambahkan 4 pilar fundamental Life-Sim / Farming RPG: **Sistem Peternakan & Satwa** (kandang Barn/Coop, sapi, kambing, domba, ayam, bebek, kuda, pakan & affection), **Mesin Pengolah Pasca-Panen (Artisan Goods)** (mayones, keju, selai, fermentasi keg, tenun, pengasap ikan), **Sistem Cuaca Harian Dinamis** (cerah, hujan penyiram otomatis, badai petir penangkal baterai, salju), serta **Sistem Sosial, Persahabatan, & Jadwal Harian NPC** (hati 0-10, sistem hadiah loved/hated, rutinitas harian, heart events, dan romansa/teman sekamar).
 
@@ -14,13 +14,63 @@ Setiap angka atau aturan desain diberi label:
 
 ---
 
+## Status implementasi hasil audit — 15 Oktober 2026
+
+Proyek berada pada **alpha dengan banyak sistem inti terpasang**, berdasarkan inspeksi kode dan cakupan tes, belum berarti siap rilis. Lihat [audit](AUDIT_2026-10-15.md) dan [laporan progres](PROJECT_PROGRESS_2026-10-15.md). Catatan ini mengoreksi status historis di bawah tanpa membatalkan keputusan desain.
+
+Verifikasi 15 Oktober: full suite berhenti gagal pada tes transisi Balai (referensi `ReturnFarm` di tes, `ReturnWorld` di scene). Sebelas kelompok regresi sebelumnya lulus; tes berikutnya belum dijalankan. Status ini tidak membatalkan bukti historis, tetapi proyek belum dapat dinyatakan lulus full suite terkini.
+
+Kelanjutan sesi 15 Oktober: referensi lama pada dua tes Balai telah diperbaiki, menu kandang diberi guard ID invalid dan fixture carpenter diperkuat. Aturan penyiraman, tanah kosong dan syarat tier objek di bawah sudah diimplementasikan serta lulus tes. Seluruh cakupan runner selesai melalui gabungan run, dengan run terakhir feedback hingga save lulus. Ini bukan klaim satu full run baru tanpa interupsi. Bukti ada pada [laporan perubahan gameplay](GAMEPLAY_RULES_2026-10-15.md).
+
+**Aturan gameplay terbaru [terpasang]:**
+
+- Penyiraman pada tanah cangkul memakai stamina sekali per aksi sesuai tier (minimum 1) dan satu air per petak yang dituangi, termasuk petak yang sudah basah karena hujan/penyiraman sebelumnya. Tangki kosong, tanah tidak valid, atau stamina tidak cukup tidak menghabiskan air/stamina. Refill memakai biaya tersendiri sekali pada impact animasi.
+- Tanah cangkul tanpa crop kembali menjadi ground pada pergantian hari berikutnya, baik basah maupun kering. Tanah dengan crop tetap ada meskipun belum disiram. Data di area yang tidak sedang dikunjungi juga dibersihkan; hasil tersimpan setelah save. Tanah bekas tanaman yang baru layu saat pergantian musim mengikuti pembersihan pada pergantian hari berikutnya.
+- Kapak/Beliung Kayu hanya untuk kategori objek kecil; Tembaga membuka normal; Besi membuka besar. `Resource Size` dan `Minimum Tool Tier` dapat diatur di Inspector root objek. Syarat tier langka dapat lebih tinggi: batu emas minimal Emas. Menolak alat lemah tidak merusak objek atau memakai stamina.
+- Pine/Birch/Maple dewasa memakai kategori normal; Mahogany/Deep Forest dewasa besar. Pohon muda dan serpihan kayu tetap dapat dipanen alat Kayu. Batu kecil/normal/besar tersedia dalam scene tersendiri; layout cleanup memakai ketiganya dengan ID save yang sama. Batu tembaga tetap dapat ditambang dengan Kayu, batu besi memerlukan Besi.
+
+Panduan editor resep, karakter, animasi dan syarat objek: [EDITOR_GUIDE.md](EDITOR_GUIDE.md).
+
+**Progres awal (2.7) [terpasang]:** Forest memiliki sumber bijih yang pulih 2 node/hari, kapasitas 10, enam node pada kunjungan pertama. Tembaga dapat ditambang dengan Kayu; endapan besi kecil memerlukan Tembaga dan membuka jalan menuju alat Besi. Spawn bijih dibatasi ke patch yang terhubung dari pintu masuk dengan alat awal. Tiga batu dekat rumah menjadi kecil untuk mencukupi akses bahan jembatan + Furnace; ID save dipertahankan. UI upgrade menampilkan kekuatan, kategori objek, dan sisa saldo. Harga serta biaya proyek tidak berubah. Audit cashflow, metode rute dan batas verifikasi ada di [EARLY_PROGRESSION_AUDIT_2026-10-15.md](EARLY_PROGRESSION_AUDIT_2026-10-15.md).
+
+| Sistem | Terpasang | Batas implementasi |
+|---|---|---|
+| Loop inti | Farming, inventory, toko, shipping esok hari, crafting, alat, save | Playtest alur panjang dan balancing tetap diperlukan |
+| Peternakan | Ayam, bebek, sapi, kambing, domba; perawatan, kualitas, merumput, interior, upgrade | Kuda, pembiakan, satwa tambahan belum selesai |
+| Pengolahan | Furnace, Mayonnaise Maker, Cheese Press, Loom, Preserves Jar, Dehydrator | Keg, Oil Maker, Fish Smoker masih target |
+| Dunia | Farm, rumah, Forest, Deep Forest, Town, Balai Nadi, Greenhouse | Gunung, dungeon, pantai, Modern City masih target |
+| Town/NPC | 14 bangunan child scene, interior, dialog, jadwal, layanan | Klinik/rumah dasar; hati, hadiah, romansa belum selesai |
+| Cuaca | Cerah/hujan; hujan menyiram outdoor | Badai, salju, petir/baterai, prakiraan masih target |
+| Cooking | Lima resep, buku per pemain, stamina, buff laju | Dapur rumah, HP/combat, resep TV/sosial masih target |
+| Biji Daya | Tiga sumber unik, kapasitas stamina 100–130 | Target 200 membutuhkan tujuh sumber tambahan |
+| Fishing | Minigame, lokasi dan jam | `FishData` belum memiliki field musim; pembekuan air masih target |
+| Co-op | Lokal split-screen 2–4 pemain | Gamepad fisik dan kenyamanan perlu playtest |
+| Konten lanjutan | Data equipment dan spesifikasi desain | HP/combat/enemy/dungeon, role EXP, bazaar, festival, ekonomi dinamis belum dinyatakan terpasang |
+
+Koreksi acuan implementasi:
+
+- Viewport aktif `project.godot`: **1280 × 720**, window awal 1280 × 720; angka 960 × 540 di tabel lama sudah kedaluwarsa.
+- `SAVE_VERSION = 13`; angka versi save pada bagian keputusan lanjutan bukan versi aktif.
+- Stamina awal 100, maksimum pemain dapat naik melalui Biji Daya. Detail transaksi dan persistensi: [BIJI_DAYA.md](BIJI_DAYA.md).
+- Pingsan batas waktu pada 05:10 memulangkan pemain, bangun 08:00 dengan 50% kapasitas stamina; pemain co-op yang sudah tidur pulih penuh. **Tidak memotong uang atau item**. Denda medis/combat pada bagian 4.2 dan rekap keputusan tetap target terpisah, belum terpasang.
+- Shipping dibayar saat pergantian hari melalui `ShippingManager.settle`, ke saldo bersama dan ringkasan pendapatan. Kurir sore masih rancangan.
+- Restorasi Balai Nadi membutuhkan **100 kayu + 50 batu + 500 G**; Greenhouse 150 kayu + 75 batu + 5 copper_bar. Akses Balai dari town sudah terpasang.
+- `DailyWeather`: hari pertama cerah; berikutnya peluang hujan 30% berdasarkan seed tersimpan. Desain lima cuaca di bagian 4.1 belum seluruhnya tersedia.
+- Deep Forest sudah terpasang di `scenes/world/DeepForest.tscn`: akses Forest + 3.000 G + 150 kayu + 75 batu untuk unlock permanen. Area gathering ini bukan dungeon combat. Lihat [DEEP_FOREST.md](DEEP_FOREST.md).
+- Durasi mesin menggunakan detik aktif, pause menghentikan proses, tidur/offline tidak memberikan catch-up. Lihat [PROCESSING_AUDIT.md](PROCESSING_AUDIT.md).
+- Usulan peternakan pada bagian 4.10 yang telah diwujudkan mengacu pada aturan aktual [LIVESTOCK_CORE_LOOP.md](LIVESTOCK_CORE_LOOP.md); angka historis bukan spesifikasi kedua.
+
+Prioritas rekomendasi audit: stabilisasi dan playtest loop lengkap → selaraskan kriteria MVP terhadap target combat → HP/combat dasar dan satu area dungeon → perluasan sosial/konten. Urutan ini rekomendasi, bukan perubahan keputusan fitur pemilik proyek.
+
+---
+
 ## 1. Ringkasan
 
 | Hal | Nilai | Status |
 |---|---|---|
 | Genre | Farming RPG 2D pixel art, tampak atas (top-down) | [terpasang] |
 | Engine | Godot 4.7, renderer GL Compatibility, GDScript | [terpasang] `project.godot` |
-| Viewport | 854 x 480, stretch `canvas_items`, skala integer | [terpasang] |
+| Viewport | 1280 x 720, window awal 1280 x 720, stretch `canvas_items`, skala fractional | [terpasang] |
 | Ukuran tile | 16 px | [terpasang] |
 | Filter tekstur | Nearest (pixel art tajam) | [terpasang] |
 | Bahasa | Default teks UI, dialog, notifikasi, dan `display_name` item berbahasa **Indonesia**; ke depannya mendukung opsi pilihan bahasa (Indonesia & Inggris) di Pengaturan; `item_id` tetap snake_case Inggris | [keputusan] |
@@ -44,7 +94,7 @@ Setiap angka atau aturan desain diberi label:
 3. Kumpulkan sumber daya alam: tebang pohon (kayu), tambang batu/bijih di Hutan & Gua, pungut tanaman forage, gali titik cacing, atau memancing.
 4. Jual hasil di **Shipping Bin** (barang diambil oleh NPC kurir di sore hari atau pembukuan uang diterima keesokan paginya saat tidur) atau langsung di toko.
 5. Manfaatkan bengkel & crafting: lebur bijih di Furnace, rakit peralatan/bangunan di meja crafting, atau bawa alat ke Blacksmith kota untuk di-upgrade (ditinggal 1–2 hari pengerjaan).
-6. Tidur di kasur sebelum jam 02:00 (hari baru + simpan otomatis). Jika masih terjaga jam 02:00 atau kehabisan HP, pemain **pingsan** dan dikenai denda potongan uang dan/atau kehilangan item.
+6. Eksplorasi malam diperbolehkan sampai 05:00 dengan kabut, ambience horror, dan siluet setelah tengah malam di luar ruangan. Tidur di kasur paling lambat 05:00 (hari baru + simpan otomatis). Pada tick 05:10 pemain terjaga **pingsan**, dipulangkan, dan bangun 08:00 dengan stamina 50%; pemain co-op yang sudah berbaring pulih penuh. Tidak ada kehilangan item akibat batas waktu.
 
 ### Loop Jangka Menengah [terpasang + keputusan]
 - Memperbaiki jembatan rusak (100 kayu + 50 batu) untuk membuka Hutan.
@@ -52,6 +102,18 @@ Setiap angka atau aturan desain diberi label:
 - Menanam dan merawat pohon buah permanen lintas musim.
 - Meningkatkan tier perlengkapan kerja (Kayu $\rightarrow$ Tembaga $\rightarrow$ Besi $\rightarrow$ Emas dst.).
 - Membuka akses Gunung dan lantai Gua untuk menambang mineral langka.
+
+### Core Loop Peternakan [terpasang + keputusan + usulan]
+
+**Cek kebutuhan → sediakan pakan → rawat hewan dan kandang → kumpulkan hasil → jual/olah/sumbangkan → tambah cadangan dan tingkatkan kandang → ulangi esok hari.**
+
+- **Pagi**: kunjungi kandang, ambil hasil perawatan kemarin, cek hewan yang belum makan atau belum dielus. Pakan dan mengelus ayam melalui menu kandang sudah [terpasang].
+- **Sepanjang hari**: penuhi satu jatah pakan per hewan dan bangun kasih sayang [keputusan]; merumput, menyikat, membersihkan kandang, serta menangani kondisi kurang sehat menjadi rincian lanjutan [usulan] pada bagian 4.10.
+- **Sore**: tentukan hasil untuk penjualan, bahan masakan, atau mesin pengolah [keputusan]; periksa cadangan pakan untuk hari berikutnya [usulan].
+- **Pergantian hari**: evaluasi perawatan hari yang selesai, hasilkan produk sesuai spesies dan kondisi, lalu buka kembali kebutuhan harian. Ayam kenyang menghasilkan telur; ayam lapar tidak menghasilkan telur [terpasang].
+- **Tujuan jangka menengah**: punya kawanan kecil yang terawat dan pemasukan rutin sebelum memperbesar kapasitas; upgrade membantu pekerjaan berulang sekaligus membuka spesies baru [usulan].
+
+Spesifikasi terperinci dan batas antara fitur terpasang dengan rancangan lanjutan ada di **bagian 4.10.1–4.10.8**.
 
 ### Loop Jangka Panjang & Endgame [keputusan]
 - Memasak makanan berbuff di dapur rumah atau Warung Makan.
@@ -89,9 +151,9 @@ Setiap angka atau aturan desain diberi label:
 
 | Aturan | Nilai | Status |
 |---|---|---|
-| Kecepatan waktu | 10 menit game = 5 detik nyata (1 hari = 10 menit nyata) | [terpasang] |
+| Kecepatan waktu | 10 menit game = 6 detik nyata (06:00–05:00 = 13 menit 48 detik aktif) | [terpasang] |
 | Mulai hari | 06:00 | [terpasang] |
-| Waktu pingsan | 02:00: pemain jatuh pingsan, hari berganti, bangun jam 08:00 | [terpasang] |
+| Waktu pingsan | 05:10: pemain terjaga pingsan, hari berganti, bangun 08:00 dengan energi 50% | [terpasang] |
 | Musim | Semi (Spring), Panas (Summer), Gugur (Fall), Dingin (Winter); 28 hari per musim; 1 tahun = 112 hari | [terpasang] |
 | Tanaman Musim Dingin | Ladang luar ruangan di musim dingin **memiliki tanaman khusus musim dingin** (mis. Snow Yam, Winter Root, Kubis Salju) | [keputusan] |
 | Memancing di Musim Dingin | Permukaan air luar ruangan (kolam & sungai ladang/hutan) membeku sehingga **memancing diblokir**, KECUALI di spot khusus (seperti sumber air panas atau danau gua es) yang harus di-unlock terlebih dahulu | [keputusan] |
@@ -108,12 +170,13 @@ Setiap angka atau aturan desain diberi label:
 
 ### 4.2 Stamina, Tidur, dan Denda Pingsan [terpasang + keputusan]
 
-- Stamina maksimum 100 per pemain (`PlayerData.MAX_STAMINA`).
+- Stamina awal 100 per pemain; kapasitas aktual dapat naik sampai 130 melalui tiga Biji Daya yang sudah tersedia.
 - Biaya stamina alat sekali per ayunan (berkurang drastis pada tier tinggi, lihat tabel 4.5).
 - Memungut forage dan menebas rumput liar tidak menggunakan stamina (stamina cost = 0) [keputusan].
 - Tidur di kasur rumah memulihkan stamina 100%, memicu pergantian hari, dan menyimpan game otomatis.
-- **Denda Pingsan [keputusan]**:
-  - Jika pingsan jam 02:00 karena kelelahan atau kehabisan HP di dungeon: pemain bangun jam 08:00 di klinik/rumah dengan stamina 50%.
+- **Pingsan batas waktu [terpasang]**: 05:10, bangun 08:00 di rumah dengan 50% kapasitas stamina; tanpa kehilangan uang/item. Pemain co-op yang sudah tidur pulih penuh.
+- **Denda medis/dungeon [keputusan, belum terpasang]**:
+  - Jika kehabisan HP di dungeon: target pemain bangun jam 08:00 di klinik/rumah dengan stamina 50%.
   - Dikenakan sanksi **potongan uang** (biaya perawatan medis) dan/atau **kehilangan sebagian item secara acak** di inventory tas.
 
 ### 4.3 Inventory, Equipment, dan Lokalisasi Bahasa [terpasang + keputusan]
@@ -163,14 +226,17 @@ Setiap angka atau aturan desain diberi label:
 - **Waktu Pengerjaan 1–2 Hari**: Alat yang di-upgrade diserahkan ke NPC Blacksmith beserta batangan logam dan biaya uang, ditinggal selama 1–2 hari kerja, lalu diambil kembali dari NPC setelah selesai.
 - Resep upgrade tier:
   - Copper: 500 G + 5 copper_bar + 10 wood
-  - Iron: 1.000 G + 5 iron_bar + 15 wood
-  - Gold: 2.000 G + 5 gold_bar
-  - Platinum: 3.500 G + 5 platinum_bar
-  - Crimson: 5.000 G + 5 crimson_bar
-  - Frost: 7.000 G + 5 frost_bar
-  - Shadow: 9.000 G + 5 shadow_bar
-  - Fairy: 12.000 G + 5 fairy_bar
-  - Obsidian: 18.000 G + 5 obsidian_bar
+  - Iron: 1.200 G + 5 iron_bar + 15 wood
+  - Gold: 2.500 G + 5 gold_bar
+  - Platinum: 4.500 G + 5 platinum_bar
+  - Crimson: 7.000 G + 5 crimson_bar
+  - Frost: 10.000 G + 5 frost_bar
+  - Shadow: 14.000 G + 5 shadow_bar
+  - Fairy: 20.000 G + 5 fairy_bar
+  - Obsidian: 28.000 G + 5 obsidian_bar
+
+Balancing demo saat ini tercatat pada `ECONOMY_BALANCE.md`: margin 39 tanaman,
+jumlah panen, stamina, pakan, produk ternak, olahan, serta target progres awal.
 
 ### 4.6 Tebang, Tambang, Furnace, dan Nilai Logam [terpasang + keputusan]
 
@@ -211,11 +277,13 @@ Setiap angka atau aturan desain diberi label:
 
 - Balai Nadi memiliki **gedung dan pintu permanen di Kota** [keputusan].
 - Menggunakan sistem kontribusi proyek restorasi berbasis Resource `RestorationProject`:
-  - Proyek 1: Restorasi Balai Nadi (100 kayu + 50 batu).
+  - Proyek 1: Restorasi Balai Nadi (100 kayu + 50 batu + 500 G).
   - Proyek 2: Pemulihan Greenhouse (150 kayu + 75 batu + 5 batangan tembaga).
   - Proyek Berikutnya [keputusan]: Renovasi bengkel Blacksmith, Warung Makan, jembatan pegunungan, dan fasilitas desa lainnya menggunakan sistem kontribusi komunitas Balai Nadi yang sama.
 
-### 4.10 Sistem Peternakan & Satwa (Animal Husbandry & Ranching) [keputusan]
+### 4.10 Sistem Peternakan & Satwa (Animal Husbandry & Ranching) [terpasang + keputusan + usulan]
+
+**Implementasi core loop (13 Oktober 2026) [terpasang]**: ayam, bebek, sapi, kambing, domba; pakan dan jerami; elusan +3 dan sikat +1 sehari; kebersihan, kesehatan/pemulihan; telur, susu, wol dengan ukuran/kualitas; petak rumput pakan dan hewan berjalan di ladang; silo 240 jatah; upgrade kandang 4/8/12 dan auto-feeder; Mesin Mayones, Mesin Keju, Alat Tenun; save/load dan perawatan bersama co-op. Panduan aturan aktual dan harga ada di **[LIVESTOCK_CORE_LOOP.md](LIVESTOCK_CORE_LOOP.md)**. Angka usulan di bawah yang sesuai panduan tersebut kini sudah terpasang. Kuda, kerbau, kapibara, inkubasi/pembiakan, bulu bebek, serta festival masih rancangan lanjutan.
 
 - **Bangunan Kandang (Coop & Barn)**:
   - Dibangun melalui meja Crafting / pertukangan desa dan dipasang di ladang:
@@ -230,6 +298,105 @@ Setiap angka atau aturan desain diberi label:
   - *Interaksi Kasih Sayang (Petting)*: Mengelus hewan setiap hari memunculkan balon hati (`♥`) dan menaikkan tingkat persahabatan hewan (1–5 bintang hati).
   - *Peralatan Peternakan*: Kaleng Pemeras Susu (*Milk Pail*), Gunting Cukur Wol (*Shears*), dan Sikat Bulu (*Animal Brush*).
   - *Kualitas Hasil Ternak*: Hewan berhati tinggi menghasilkan produk ukuran besar (*Large Egg, Large Milk*) dan kualitas Bintang Emas bernilai jual tinggi.
+
+#### 4.10.1 Fondasi yang Sudah Terpasang [terpasang]
+
+Rujukan implementasi: `scripts/system/chicken_husbandry.gd`, menu kandang, dan `docs/FARM_BUILDINGS_WEATHER.md`.
+
+- Kandang ayam memuat 4 ayam dewasa putih/cokelat, masing-masing berharga 800 G; pemain dapat memberi nama.
+- Satu ayam membutuhkan satu `animal_feed` per hari (harga beli 10 G). Aksi individual atau **Beri pakan semua** menggunakan tas pemain yang berinteraksi.
+- Mengelus memberi kasih sayang sekali per ayam per hari. Nilai internal kasih sayang berada pada rentang 0–100.
+- Saat hari berganti, ayam yang sudah makan menghasilkan satu `chicken_egg` (harga jual 50 G); makan menambah kasih sayang 2 poin, hari lapar mengurangi 3 poin, dengan batas 0–100.
+- Telur terkumpul sebagai stok kandang. Tas penuh tidak menghapus telur; pengambilan sebagian tetap aman. Batas stok saat ini 999 telur.
+- Data ayam, pakan, kasih sayang, dan produksi tersimpan; kandang serta hasilnya dipakai bersama oleh pemain co-op.
+- Catatan fondasi sebelum versi 2.2: Barn awalnya hanya bangunan. Ternak besar, hewan berjalan, jerami, kualitas, kebersihan, dan kesehatan kini terpasang melalui perluasan core loop; interior Barn/Coop kini terpasang dengan UID stabil dan dukungan co-op.
+
+#### 4.10.2 Pengalaman dan Rutinitas Pemain [usulan]
+
+Target rutinitas untuk 4 hewan adalah **45–90 detik nyata per hari**, termasuk perjalanan dekat kandang. Target ini perlu diuji lewat playtest; kebutuhan ternak tidak boleh menghabiskan sebagian besar hari yang berdurasi sekitar 10 menit nyata.
+
+| Tahap | Aksi pemain | Umpan balik | Manfaat/keputusan |
+|---|---|---|---|
+| Cek pagi | Buka ringkasan kandang atau dekati hewan | Nama, kenyang/lapar, sudah/belum dielus, kondisi, hasil siap | Tahu prioritas tanpa membuka banyak panel |
+| Pakan | Isi palung atau buka akses padang rumput yang aman | Ikon pakan dan jumlah hewan yang sudah makan | Pakai stok untuk kepastian atau rumput untuk menghemat |
+| Kedekatan | Elus; sikat ternak berbulu sesuai kebutuhan | Balon hati dan perubahan kasih sayang | Perawatan konsisten meningkatkan kualitas hasil |
+| Kebersihan | Bersihkan satu titik kotor kandang bila ada | Lantai kembali bersih dan indikator kondisi membaik | Menjaga kenyamanan dengan pekerjaan singkat |
+| Panen | Ambil telur; gunakan pemeras susu atau gunting wol saat siap | Animasi, bunyi, jumlah dan kualitas produk | Hasil jelas berhubungan dengan perawatan sebelumnya |
+| Alokasi hasil | Jual, simpan untuk masakan/kontribusi, atau olah | Nilai produk dan kebutuhan mesin terlihat | Uang cepat atau nilai lebih tinggi setelah pengolahan |
+| Persiapan | Cek cadangan, prakiraan cuaca, dan pintu kandang | Ringkasan kebutuhan besok | Membatasi jumlah hewan sesuai kemampuan merawat |
+
+Pakan dan elusan tidak menguras stamina. Memeras, mencukur, dan membersihkan masing-masing diusulkan memakai 1 stamina per aksi berhasil; aksi pada hewan yang belum siap tidak memakai stamina. Semua angka biaya ini masih [usulan].
+
+#### 4.10.3 Pakan, Merumput, dan Cuaca [keputusan + usulan]
+
+**Satu jatah pakan per hewan per hari** dan pilihan jerami/merumput mengikuti keputusan dasar bagian 4.10. Rincian berikut [usulan]:
+
+- Pakan Ayam yang sudah ada tetap sah untuk unggas. Jerami menjadi pakan bersama untuk unggas dan ternak penghasil susu/wol; jangan menghapus stok pakan lama ketika sistem diperluas.
+- Palung memiliki satu tempat per kapasitas kandang. Setiap jatah hanya dapat dikonsumsi satu hewan; status kenyang mencegah konsumsi ganda antara palung dan merumput.
+- Merumput hanya aktif saat cerah, di luar musim dingin, dengan rumput pakan yang dapat dicapai. Pintu terbuka saja tidak membuat hewan kenyang; satu petak rumput pakan menyediakan satu jatah dan kemudian habis.
+- Rumput pakan dibedakan dari rumput liar yang menjatuhkan Serat. Memanen jerami tidak mengganti aturan drop Serat yang sudah ada; peluang konversi jerami perlu ditentukan terpisah.
+- Bila rumput tidak cukup, palung menjadi cadangan. Hewan yang belum kenyang saat kembali masuk masih dapat memakan jatah yang tersedia.
+- Hujan, badai, dan salju membuat hewan tetap di dalam. Hewan di luar kembali otomatis pukul 18:00 atau saat cuaca berbahaya; menutup pintu tidak boleh menjebak hewan di luar atau menghilangkannya.
+- Auto-feeder Deluxe mengambil jerami dari silo pada awal hari untuk mengisi tempat palung yang kosong, sebatas stok. Pakan yang sudah tersedia tidak ditimpa; kekurangan stok ditampilkan pada ringkasan pagi.
+- Ringkasan menampilkan stok dan perkiraan **hari cadangan = floor(jatah tersedia / jumlah hewan pemakan pakan)**; bila tidak ada hewan, tampilkan “Belum ada hewan”. Jangan mengasumsikan rumput besok pasti mencukupi.
+
+#### 4.10.4 Kasih Sayang, Kebersihan, dan Kesehatan [usulan]
+
+- Gunakan nilai kasih sayang 0–100 yang sudah ada. Tampilan 0–5 hati: satu hati penuh per 20 poin. Mengelus memberi +3 sekali sehari; makan tetap +2, lapar tetap −3 agar selaras dengan fondasi ayam.
+- Menyikat sapi, kambing, domba, dan kuda memberi +1 sekali sehari. Mengulang elusan/sikatan menampilkan “Sudah dirawat hari ini” tanpa bonus tambahan, termasuk jika dilakukan pemain lain.
+- Kasih sayang adalah hubungan jangka panjang; kondisi **Nyaman / Kurang nyaman / Kurang sehat** menjelaskan kebutuhan saat ini. Jangan menyembunyikan kebutuhan lewat satu angka suasana hati.
+- Satu kandang berisi hewan memunculkan paling banyak satu titik kotor pada awal hari, sampai maksimum 3 titik. Satu interaksi membersihkan satu titik. Kandang kosong tidak menghasilkan kotoran.
+- Kondisi Nyaman membutuhkan makan hari itu dan kurang dari 3 titik kotor. Kandang dengan 3 titik kotor membuat hewan Kurang nyaman; dua evaluasi harian berturut-turut tanpa makan atau dengan kandang penuh kotoran membuat hewan Kurang sehat.
+- Kurang sehat menghentikan produksi. Setelah satu hari penuh mendapat pakan dan kandang bersih, kondisi pulih pada pergantian hari; kasih sayang tidak langsung kembali. Obat/perawatan Rian dapat menjadi layanan lanjutan dengan harga tersendiri, bukan syarat wajib untuk pulih.
+- Hewan tidak mati atau hilang karena perawatan terlewat. Konsekuensi berupa kehilangan hasil, penurunan kasih sayang, dan waktu pemulihan; UI menyebutkan penyebab dan tindakan pemulihan.
+
+#### 4.10.5 Produksi dan Kualitas Hasil [keputusan + usulan]
+
+Interval sapi harian, kambing dua hari, dan domba tiga hari mengikuti arah desain spesies [keputusan]. Rincian penjadwalan dan kualitas berikut [usulan], kecuali produksi ayam dasar yang sudah terpasang.
+
+| Hewan | Hasil | Interval hari terawat | Pengambilan |
+|---|---|---:|---|
+| Ayam petelur | Telur | 1 | Ambil stok kandang; fondasi sudah terpasang |
+| Sapi | Susu sapi | 1 | Pemeras susu pada hewan yang siap |
+| Kambing | Susu kambing | 2 | Pemeras susu pada hewan yang siap |
+| Domba | Wol | 3 | Gunting wol pada hewan yang siap |
+| Bebek | Telur bebek | 2 | Ambil stok kandang; bulu sebagai hasil lanjutan |
+| Kuda, ayam jago, kapibara | Mobilitas/festival/kedekatan | Tidak memproduksi komoditas harian | Perawatan mengikuti kebutuhan spesies |
+
+- Hari terawat untuk produksi adalah hari kenyang dan tidak Kurang sehat pada evaluasi malam. Hari gagal tidak menambah penghitung, tidak mereset kemajuan sebelumnya, dan tidak membuat utang hasil.
+- Produk pagi berasal dari evaluasi hari sebelumnya. Memberi makan hari ini tidak langsung membuat produk baru. Sapi/kambing/domba menyimpan maksimum satu hasil siap per hewan; selama belum dipanen, penghitung produksi berhenti.
+- Untuk ayam/bebek, telur masuk stok kandang sesuai kapasitas penyimpanan yang ditampilkan. Saat penuh, produksi tambahan berhenti dengan peringatan; tidak menumpuk hasil tersembunyi untuk dicairkan setelah panen.
+- Kualitas ditetapkan saat produk dibuat: Normal pada kasih sayang 0–39, Perak 40–79, Emas 80–100, dengan pengali harga dasar 1,0× / 1,25× / 1,5×, dibulatkan ke bawah. Kondisi Kurang nyaman membatasi hasil ke Normal.
+- Ukuran Besar terbuka pada kasih sayang minimal 60 dan kondisi Nyaman, dengan pengali tambahan 1,25×. Kualitas dan ukuran disimpan pada produk; mengelus setelah produk siap tidak mengubah hasil tersebut.
+- Harga beli hewan baru, harga susu/wol, usia dewasa, inkubasi, dan pembiakan memerlukan tabel balancing tersendiri. Tahap awal mempertahankan pembelian hewan dewasa agar loop perawatan dapat diuji lebih dahulu.
+
+#### 4.10.6 Progresi dan Ekonomi [usulan]
+
+1. **Mulai kecil**: bangun Coop dan beli 1–2 ayam; tutorial menunjukkan pakan, elusan, tidur, lalu telur pertama. Rian memberi panduan perawatan; Pak Damar tetap melayani pembangunan kandang.
+2. **Stabilkan cadangan**: tambah sampai 4 ayam setelah mampu menyediakan pakan beberapa hari. Pada harga yang terpasang, 4 ayam menghasilkan 200 G bruto dan membutuhkan 40 G pakan per hari; margin 160 G belum menghitung modal, waktu, dan pengolahan.
+3. **Diversifikasi**: bangun Barn untuk sapi, lalu kambing/domba. Jadwal panen berbeda memberi variasi dan kebutuhan alat tanpa mewajibkan semua spesies.
+4. **Tambah nilai**: olah telur menjadi mayones, susu menjadi keju, dan wol menjadi kain sesuai mesin bagian 4.11; modal dan waktu mesin perlu diperhitungkan saat menyeimbangkan harga.
+5. **Perluas dan otomatisasi**: kapasitas 4 → 8 → 12 serta auto-feeder mengikuti [keputusan] kandang. Otomatisasi pakan tidak menggantikan kedekatan, panen manual, atau pemeriksaan kesehatan.
+
+#### 4.10.7 UI, Co-op, dan Penyimpanan [usulan]
+
+- Ringkasan per kandang: **kenyang X/Y**, **dielus X/Y**, hasil siap, titik kotor, hewan perlu pemulihan, serta cadangan pakan. Detail hewan menampilkan nama, spesies, hati, dan alasan belum berproduksi.
+- Saat aksi berhasil, tampilkan perubahan yang nyata. Saat gagal, jelaskan “Pakan habis”, “Tas penuh”, “Belum siap diperah”, atau “Sudah dielus hari ini”.
+- Co-op berbagi hewan, palung, stok, dan penanda aksi harian; biaya pakan/alat dan hasil panen memakai tas pemain pelaku. Dua pemain dapat membagi tugas tanpa menggandakan bonus atau produk.
+- Simpan ID hewan stabil, kandang asal, nama, spesies/varian, kasih sayang, tanggal makan/elus/sikat, kondisi, penghitung produksi, hasil siap beserta kualitas, kotoran, stok pakan, dan hari evaluasi terakhir.
+- Pergantian hari dievaluasi sekali sebelum reset penanda harian dan auto-save. Reload, perpindahan scene, pingsan, serta menu pemain lain tidak boleh mengulang produksi. Lompatan beberapa hari dievaluasi per hari dengan konsumsi stok nyata; tidak menganggap satu jatah cukup untuk semua hari.
+- Migrasi save ayam mempertahankan nama, kasih sayang, tanggal perawatan, dan stok telur yang ada. Telur lama menjadi Normal; jangan menghapus hewan atau menghadiahkan produksi tambahan.
+
+#### 4.10.8 Urutan Implementasi dan Kriteria Penerimaan [usulan]
+
+| Tahap | Cakupan | Bukti penerimaan |
+|---|---|---|
+| A — Perjelas fondasi ayam | Ringkasan kebutuhan, tutorial, peringatan stok | Ayam kenyang memberi 1 telur esok hari; lapar 0; tas penuh mempertahankan hasil; reload/co-op tidak menggandakan aksi |
+| B — Hewan hidup di ladang | Interior, elusan langsung, palung, jerami/silo, merumput dan pintu | Pakan dikonsumsi tepat satu jatah per hewan; rumput habis memicu kebutuhan cadangan; hujan/dingin mencegah merumput; hewan kembali dengan aman |
+| C — Perawatan dan produk | Kebersihan, kondisi, sapi/kambing/domba, alat dan kualitas | Interval 1/2/3 hari terawat benar; sakit berhenti produksi dan dapat pulih; hasil siap tidak ditimpa; kualitas tercatat sebelum panen |
+| D — Perluasan | Upgrade kandang, auto-feeder, bebek dan integrasi mesin | Kapasitas sesuai tier; stok silo berkurang sesuai konsumsi; kehabisan pakan terlihat; migrasi save mempertahankan ternak |
+
+Playtest memeriksa durasi rutinitas 4 hewan, keterbacaan penyebab produksi gagal, manfaat memilih merumput/pakan, dan kemampuan meninggalkan ladang setelah kebutuhan utama selesai. Kerbau, pembiakan, festival, dan layanan kesehatan lanjutan dikerjakan setelah loop dasar stabil.
 
 ### 4.11 Mesin Pengolah Pasca-Panen (Artisan Goods & Processing) [keputusan]
 
@@ -256,7 +423,12 @@ Mesin pengolah yang dapat dirakit melalui Crafting dan ditempatkan di ladang ata
 
 ---
 
-## 6. Sistem Memasak (Cooking) [keputusan]
+## 6. Sistem Memasak (Cooking) [terpasang sebagian + keputusan]
+
+Tahap dasar (14 Oktober 2026) [terpasang]: panci Dapur Warung di town,
+lima resep, pembelian buku per pemain, makanan pemulih stamina, buff laju
+sementara, dan save/load resep. Lihat `COOKING.md`. Dapur rumah setelah
+upgrade, HP/combat serta resep dari TV/hadiah sosial masih [keputusan].
 
 - **Status**: Disetujui untuk diimplementasikan [keputusan].
 - **Fasilitas**: Dapur di interior rumah (setelah upgrade rumah) serta kompor/panci di Warung Makan kota.
@@ -434,10 +606,19 @@ Setiap wilayah kunci di Gua/Dungeon dijaga oleh **Boss Guardian** unik dengan me
 ### 12.2 Jadwal Harian & Rutinitas Warga (Dynamic NPC Schedules)
 Warga desa memiliki rutinitas realistis:
 1. **Siklus Jam Harian**:
-   - Bangun pagi di rumah masing-masing pukul 06:30–08:00.
-   - Pergi ke tempat kerja/aktivitas luar ruangan (Empu Bima bekerja di bengkel tempa, Pak Joko meracik hidangan di Warung Rasa Nusa, Bayu berpatroli di alun-alun dan pinggiran hutan, Prof. Baskoro mengajar di Universitas/Sekolah, dsb.).
-   - Istirahat siang berkumpul di Warung Makan atau duduk santai di bangku taman alun-alun.
-   - Pulang ke rumah menjelang malam (pukul 19:00–21:00) dan tidur.
+   - Bangun pagi di rumah masing-masing pukul 05:30–08:00.
+   - Pergi ke tempat kerja/aktivitas luar ruangan:
+     - **Empu Bima**: Bekerja menempa alat di bengkel tempa kota.
+     - **Pak Joko**: Meracik hidangan dan melayani pengunjung di Warung Rasa Nusa.
+     - **Wira**: Berpatroli di alun-alun, mengecek jalan setapak hutan, dan berlatih fisik.
+     - **Rian**: Menggembala dan memberi makan hewan ternak di padang rumput kota.
+     - **Pak Bahar**: Berlayar dan memancing fajar di dermaga jembatan selatan.
+     - **dr. Ratih**: Membuka Klinik Desa dan meracik salep tanaman obat herbal.
+     - **Ubay**: Berjalan santai pagi di alun-alun, nongkrong di taman air mancur, dan menikmati senja di jembatan.
+     - **Prof. Baskoro**: Mengajar dan meneliti flora di Universitas desa.
+     - **Pak Damar**: Merancang konstruksi dan renovasi bangunan pulau.
+   - Istirahat siang berkumpul di Warung Makan Pak Joko atau duduk santai di bangku taman alun-alun.
+   - Pulang ke rumah menjelang malam (pukul 19:00–21:30) dan tidur.
 2. **Reaksi Adaptif Cuaca & Musim**:
    - *Saat Hujan / Badai*: Warga berteduh di dalam ruangan, membuka payung jika harus melintas, atau menghabiskan sore di Warung Makan.
    - *Saat Musim Dingin*: Warga mengenakan pakaian musim dingin tebal dan lebih sering berada di dekat perapian.
@@ -487,7 +668,7 @@ Warga desa memiliki rutinitas realistis:
      - *Santap Malam Bersama di Co-op (Family Knowledge Exchange)*: Saat seluruh anggota keluarga/teman di sesi co-op makan bersama hidangan masakan dapur di meja makan rumah sebelum tidur, terpicu buff *Knowledge Exchange* yang mentransfer sedikit limpahan EXP silang antar pemain.
 - **Solo Friendly, Co-op Empowered**:
   - **Solo**: Pemain dapat memainkan seluruh peran secara mandiri dan bertahap menjadi ahli serba bisa seiring perkembangan permainan.
-  - **Co-op (Split-Screen bersama Teman / Keluarga)**: Siklus waktu harian yang terbatas (06:00–02:00) mendorong pemain untuk **berbagi tugas secara alami (*division of labor*)**. Tim yang membagi peran (misal: satu pemain fokus menambang & bertarung di gua, satu pemain mengurus ladang & memasak, satu pemain mengumpulkan hasil hutan, dan satu pemain memaksimalkan perdagangan) akan merasakan efisiensi dan kepuasan bermain yang berlipat ganda dibanding bermain sendiri.
+  - **Co-op (Split-Screen bersama Teman / Keluarga)**: Siklus waktu harian yang terbatas (06:00–05:00) mendorong pemain untuk **berbagi tugas secara alami (*division of labor*)**. Tim yang membagi peran (misal: satu pemain fokus menambang & bertarung di gua, satu pemain mengurus ladang & memasak, satu pemain mengumpulkan hasil hutan, dan satu pemain memaksimalkan perdagangan) akan merasakan efisiensi dan kepuasan bermain yang berlipat ganda dibanding bermain sendiri.
 
 ---
 
@@ -870,7 +1051,7 @@ Seluruh 18 poin keputusan yang sebelumnya terbuka kini telah berstatus **[keputu
 5. **Musim Dingin**: Ladang luar ruangan memiliki varietas tanaman khusus musim dingin.
 6. **Pohon Buah**: Pohon permanen bertahap yang menghasilkan buah musiman berulang kali tanpa perlu tanam ulang.
 7. **Shipping Bin**: Uang dibayarkan saat tidur malam atau dijemput NPC kurir di sore hari (bukan langsung bayar instan).
-8. **Denda Pingsan**: Sanksi potongan uang tunai dan/atau kehilangan beberapa item secara acak di ransel.
+8. **Denda Pingsan**: jalur batas waktu hanya menerapkan bangun 08:00/stamina 50%, tanpa potongan uang/item [terpasang]. Potongan uang atau kehilangan item pada jalur medis/dungeon masih target [keputusan].
 9. **Ikan Musiman**: Menambahkan atribut daftar musim (`seasons`) pada `FishData`.
 10. **Air Beku Musim Dingin**: Memancing luar ruangan diblokir saat musim dingin, kecuali di spot khusus yang di-unlock.
 11. **Parameter Forage & Biaya Stamina 0**: Disetujui dan disahkan.
@@ -895,9 +1076,9 @@ Seluruh 18 poin keputusan yang sebelumnya terbuka kini telah berstatus **[keputu
 Dengan disahkannya keputusan utama di atas, butir keputusan teknis turunan yang dapat disempurnakan pada sesi berikutnya:
 1. **Nama & Jadwal NPC Kurir**: Menentukan nama karakter kurir logistik (misal: "Pak Pos Joko" atau "Budi") dan jam pasti penjemputan kotak Shipping Bin.
 2. **Pilihan Tanaman Musim Dingin**: Menentukan daftar 3–4 varietas tanaman dingin awal beserta durasi panennya (misal: Snow Yam 6 hari, Winter Radish 4 hari, Snow Cabbage 8 hari).
-3. **Layout Pintu Balai Nadi di Town**: Menentukan koordinat tile pasti untuk menempatkan gedung Balai Nadi di scene `scenes/world/town.tscn`.
+3. **Layout Balai Nadi di Town**: akses sudah terpasang; penyempurnaan posisi bangunan berikutnya mengikuti layout kota, bukan blocker implementasi pintu.
 4. **Behavior Tree Framework Godot**: Memilih implementasi Behavior Tree di GDScript (library plugin Beehave / LimboAI / custom node-based GDScript).
-5. **Format Penyimpanan EXP & Skill Tree di Save Game**: Menentukan struktur dictionary `skills` pada `SaveManager` (`SAVE_VERSION = 10`).
+5. **Format Penyimpanan EXP & Skill Tree di Save Game**: Menentukan struktur dictionary `skills` pada `SaveManager` (SAVE_VERSION aktif = 13).
 6. **Layout Alun-Alun Pekan Bazaar**: Menentukan posisi deretan stan pemain dan rute jalan NPC pembeli di alun-alun kota pada scene `town.tscn`.
 7. **Tanggal Pasti Kalender Hari Raya**: Menetapkan tanggal kalender (1–28) per musim untuk Hari Raya Idul Fitri, Natal (25 Dingin), dan Malam Tahun Baru (28 Dingin).
 8. **Formula Numerik Fluktuasi Pasar**: Menentukan batas ambang kuantitas penjualan harian (misal: threshold > 50 item) sebelum harga pasar mengalami penurunan 10%.
@@ -906,15 +1087,39 @@ Dengan disahkannya keputusan utama di atas, butir keputusan teknis turunan yang 
 
 ## 19. Changelog
 
-- **2026-10-12 (Versi 2.0)**:
-  - **Penambahan Sistem NPC & Warga Desa Nusantara (Indonesian NPCs)** [terpasang]:
-    - Framework reusable `VillageNPC` (`scripts/world/village_npc.gd`) dan dialog interaktif berpotret `NPCDialogUI` (`scripts/ui/npc_dialog_ui.gd`).
-    - Standardisasi nama-nama warga desa dengan identitas dan budaya Indonesia:
-      - **Empu Bima**: Pandai Besi legendaris di samping bengkel tempa kota (`BlacksmithNPC.tscn`).
-      - **Pak Joko**: Koki ramah pengelola Warung Rasa Nusa (`ChefNPC.tscn`).
-      - **Bayu**: Penjelajah rimba berjiwa petualang di alun-alun kota (`ToriNPC.tscn`).
-      - **Prof. Baskoro**: Dosen peneliti botani & sains di Universitas desa (`university.tscn`).
-    - Penempatan di scene dunia `town.tscn` lengkap dengan arah hadap dinamis, teks dialog multi-tahap bertema lokal, dan kompatibilitas sistem co-op.
+- **2026-10-15 (Versi 2.7)**: audit dependensi dan cashflow progres awal; sumber bijih Forest yang pulih dan terhubung ke entrance; endapan besi kecil untuk jalur Tembaga → Besi; margin batu awal; informasi manfaat/sisa uang di UI upgrade; perbaikan callback pickup setelah HUD dibebaskan.
+
+- **2026-10-15 (Versi 2.6)**: penyiraman menghabiskan stamina/air juga pada tanah basah; tanah kosong reset setiap pergantian hari; pembatas ukuran/tier pohon dan batu, variasi batu serta feedback kebutuhan alat; perbaikan regresi transisi Balai; panduan editor crafting dan animasi karakter.
+
+- **2026-10-15 (Versi 2.5)**: audit status implementasi; koreksi viewport, stamina/Biji Daya, biaya Balai Nadi, versi save, dan pemisahan pingsan waktu dari target denda dungeon. Tambahkan matriks fitur aktual, batas implementasi dan laporan progres.
+
+- **2026-10-13 (Versi 2.3)**:
+    - Interior Barn/Coop memakai aset milik proyek, palung, sarang, papan pengelolaan, lorong tengah, dan kapasitas 4/8/12.
+    - Pintu bangunan/ruangan menggunakan klik kanan; pembelian semua hewan dipindah ke layanan Toko Ternak Rian.
+    - Mesin memakai VFX dan loop SFX spasial selama berjalan; placement berhasil menampilkan debu/sparkle. Audit durasi dan perbaikan persistensi dijelaskan dalam [PROCESSING_AUDIT.md](PROCESSING_AUDIT.md).
+
+- **2026-10-13 (Versi 2.2)**:
+  - Implementasi core loop peternakan untuk ayam/bebek dan sapi/kambing/domba, termasuk kualitas produk, kebersihan, kesehatan, merumput, jerami/silo, upgrade/auto-feeder, serta pengolahan mayones/keju/kain.
+  - Menggunakan aset hewan dan bangunan milik pengguna; melengkapi ikon alat, rumput pakan, dan sprite Mesin Mayones. Menambahkan regresi data dan interaksi di ladang; panduan aktual ada di `LIVESTOCK_CORE_LOOP.md`.
+
+- **2026-10-13 (Versi 2.1)**:
+  - Menjabarkan core loop peternakan dari cek kebutuhan, pakan, perawatan, panen, alokasi hasil, hingga persiapan hari berikutnya.
+  - Memisahkan fondasi ayam yang terpasang dari usulan merumput, kebersihan, kesehatan, kualitas produk, progresi, serta aturan co-op/save dan kriteria penerimaan (bagian 4.10.1–4.10.8).
+
+- **2026-10-13 (Versi 2.0)**:
+  - **Sistem NPC Dinamis, Jadwal Harian & Waypoint Pathing (Full NPC Ecosystem)** [terpasang]:
+    - Framework terpadu `VillageNPC` (`scripts/world/village_npc.gd`) mendukung siklus jadwal waktu `DayCycle`, waypoint navigation, animasi 4-arah (Idle down/up/side dan Walk down/up/side), anti-stuck protection, serta kotak dialog berpotret (`NPCDialogUI`).
+    - Penambahan warga desa baru dan standardisasi nama Indonesia:
+      - **Ubay (`UbayNPC.tscn`)**: Pemuda ceria Nusa Vale yang gemar bersantai di alun-alun, nongkrong di taman air mancur, dan menikmati senja di jembatan.
+      - **Rian (`RianNPC.tscn`)**: Peternak muda yang telaten merawat hewan ternak dan satwa padang rumput.
+      - **Pak Bahar (`BaharNPC.tscn`)**: Nelayan sepuh di dermaga jembatan selatan yang menguasai seni memancing dan ramalan pasang surut.
+      - **dr. Ratih (`RatihNPC.tscn`)**: Tabib klinik desa yang meracik obat herbal dari tanaman liar berkhasiat.
+      - **Pak Joko (`ChefNPC.tscn`)**: Koki Warung Rasa Nusa yang ramah menyajikan kuliner hangat.
+      - **Wira (`ToriNPC.tscn`)**: Penjelajah rimba berjiwa petualang.
+      - **Empu Bima (`BlacksmithNPC.tscn`)**: Ahli tempa perkakas dan peningkatan alat kebun.
+      - **Prof. Baskoro (`university.tscn`)**: Dosen peneliti ekologi dan botani pulau.
+      - **Pak Damar (`CarpenterNPC.tscn`)**: Tukang kayu dan arsitek konstruksi desa.
+    - Integrasi penuh di scene `town.tscn` dengan rute jalan yang hidup, interaksi dialog kontekstual waktu, dan suite tes regresi otomatis (`tests/npc_regression.tscn`).
 - **2026-10-12 (Versi 1.9)**:
   - **Penyelesaian Eksekusi Tahap 0 (Technical Debt)** [terpasang]:
     - **NPC Pandai Besi Interaktif (`BlacksmithNPC.tscn`)**: Pemain kini harus berinteraksi langsung dengan NPC Pandai Besi Empu Bima di samping landasan tempa (`town.tscn`) untuk membuka antarmuka upgrade alat (`tool_upgrade_ui.gd`), bukan melalui stasiun kosong.
@@ -978,8 +1183,3 @@ Dengan disahkannya keputusan utama di atas, butir keputusan teknis turunan yang 
     - Status Cooking, Gathering Expansion, Combat, Cave/Dungeon, dan Kendaraan dinaikkan menjadi `[keputusan]`.
 - **2026-10-11 (Versi 1.0)**:
   - GDD 1.0 disusun ulang dari isi proyek (crafting, bangunan, 80 equipment, tier alat, Balai Nadi save 8, Greenhouse save 9, fishing minigame, split-screen co-op).
-
-
-
-
-

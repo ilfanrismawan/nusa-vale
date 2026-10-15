@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://bfpk35bvvadqr"]
+
+[ext_resource type="Texture2D" uid="uid://jlo2ddjtsgf7" path="res://assets/balai_nadi/v3/bale_agung.png" id="1_247p6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4oc3r"]
+size = Vector2(44, 16)
+
+[node name="BaleIstirahat" type="Node2D" unique_id=236900737]
+texture_filter = 1
+
+[node name="Art" type="Sprite2D" parent="." unique_id=180209611]
+scale = Vector2(0.10563726, 0.107427716)
+texture = ExtResource("1_247p6")
+
+[node name="BaseCollision" type="StaticBody2D" parent="." unique_id=673572311]
+position = Vector2(2, 49)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BaseCollision" unique_id=50174148]
+shape = SubResource("RectangleShape2D_4oc3r")

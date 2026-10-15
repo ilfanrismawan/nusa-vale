@@ -19,12 +19,34 @@ const STARTER_TOOLS := ["axe_wood", "hoe_wood", "shovel_wood", "watering_can_woo
 ## 0 = P1. Sama dengan index di GameState.players.
 var index: int = 0
 
+const DAYA_IDS := ["harvest", "forest", "balai"]
+var consumed_daya: Array[String] = []
+var max_stamina: int:
+	get: return MAX_STAMINA + consumed_daya.size() * 10
+
+func load_daya(value: Variant) -> void:
+	consumed_daya.clear()
+	if value is Array:
+		for id in value:
+			if id is String and id in DAYA_IDS and not consumed_daya.has(id):
+				consumed_daya.append(id)
+
 var stamina: int = MAX_STAMINA:
 	set(value):
-		stamina = value
-		stamina_changed.emit(stamina, MAX_STAMINA)
+		stamina = clampi(value, 0, max_stamina)
+		stamina_changed.emit(stamina, max_stamina)
 
 var watering_water: int = 20
+## One order per player, held by the blacksmith until explicitly collected.
+var tool_order: Dictionary = {}
+var learned_recipes: Array[String] = []
+
+func load_recipes(value: Variant) -> void:
+	learned_recipes.clear()
+	if value is Array:
+		for id in value:
+			if id is String and id in ["vegetable_soup", "fried_egg", "grilled_catfish", "fruit_salad", "mushroom_saute"] and not learned_recipes.has(id):
+				learned_recipes.append(id)
 
 var bag_level: int = 0
 ## Only temporary chest inventories use this override; player bags keep BAG_SIZES.
@@ -56,6 +78,9 @@ func _init(p_index: int = 0) -> void:
 
 ## Isi awal pemain baru: tas kosong + alat kayu + bibit.
 func reset_to_starter() -> void:
+	consumed_daya.clear()
+	tool_order.clear()
+	learned_recipes.clear()
 	equipment = empty_equipment()
 	equipment["weapon"] = GameState._resolve_item("sword_wood")
 	equipment["armor"] = GameState._resolve_item("armor_wood")
@@ -84,8 +109,8 @@ func spend_stamina(amount: int) -> bool:
 	stamina -= amount
 	return true
 
-func restore_stamina(amount: int = MAX_STAMINA) -> void:
-	stamina = mini(MAX_STAMINA, stamina + amount)
+func restore_stamina(amount: int = -1) -> void:
+	stamina = mini(max_stamina, stamina + (max_stamina if amount < 0 else amount))
 
 
 # ── Alat awal ───────────────────────────────────────────────────────
@@ -102,6 +127,10 @@ func setup_tools() -> void:
 func ensure_starter_tools() -> void:
 	var changed := false
 	for tid in STARTER_TOOLS:
+		var kind: String = tid.trim_suffix("_wood")
+		var held: String = str(tool_order.get("old", ""))
+		if not tool_order.is_empty() and (held == kind or held.begins_with(kind + "_")):
+			continue
 		if not has_item(tid, 1):
 			var item: ItemData = GameState._resolve_item(tid)
 			if item != null:
@@ -475,22 +504,50 @@ func load_inventory(entries: Variant) -> void:
 func to_dict() -> Dictionary:
 	return {
 		"name": player_name,
-		"stamina": clampi(stamina, 0, MAX_STAMINA),
+		"stamina": clampi(stamina, 0, max_stamina),
+		"consumed_daya": consumed_daya.duplicate(),
 		"bag_level": bag_level,
 		"watering_water": watering_water,
+		"tool_order": tool_order.duplicate(true),
+		"learned_recipes": learned_recipes.duplicate(),
 		"appearance": appearance.to_dict(),
 		"inventory": serialize_inventory(),
 		"equipment": serialize_equipment(),
 	}
 
 func load_dict(data: Dictionary) -> void:
+	load_recipes(data.get("learned_recipes", []))
+	load_tool_order(data.get("tool_order", {}))
 	var saved_name: Variant = data.get("name", "")
 	player_name = saved_name if saved_name is String else ""
 	watering_water = clampi(int(data.get("watering_water", 20)), 0, 350)
-	stamina = clampi(int(data.get("stamina", MAX_STAMINA)), 0, MAX_STAMINA)
+	load_daya(data.get("consumed_daya", []))
+	stamina = clampi(int(data.get("stamina", MAX_STAMINA)), 0, max_stamina)
 	bag_level = clampi(int(data.get("bag_level", 0)), 0, BAG_SIZES.size() - 1)
 	hotbar_page = 0
 	var look: Variant = data.get("appearance", {})
 	set_appearance(CharacterAppearance.from_dict(look if look is Dictionary else {}))
 	load_inventory(data.get("inventory", []))
 	load_equipment(data.get("equipment", {}))
+
+func load_tool_order(value: Variant) -> void:
+	tool_order.clear()
+	if not value is Dictionary or value.is_empty():
+		return
+	var old: Variant = value.get("old", "")
+	var next: Variant = value.get("next", "")
+	var ready: Variant = value.get("ready_day", 0)
+	if not old is String or not next is String or not (ready is int or ready is float):
+		return
+	if not is_finite(float(ready)) or ready < 1 or ready > 1000000:
+		return
+	var tiers: Array = ToolData.ToolTier.keys()
+	for starter in STARTER_TOOLS:
+		var kind: String = starter.trim_suffix("_wood")
+		var normalized: String = old + "_wood" if old == kind else old
+		if not normalized.begins_with(kind + "_"):
+			continue
+		var tier := tiers.find(normalized.trim_prefix(kind + "_").to_upper())
+		if tier >= 0 and tier + 1 < tiers.size() and next == kind + "_" + str(tiers[tier + 1]).to_lower():
+			tool_order = {"old": old, "next": next, "ready_day": int(ready)}
+			return

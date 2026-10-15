@@ -1,0 +1,48 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/world/balai_nadi/exterior.tscn" id="1"]
+[ext_resource type="Script" path="res://scripts/world/balai_courtyard_preview.gd" id="2"]
+[ext_resource type="FontFile" path="res://assets/fonts/m5x7.ttf" id="3"]
+
+[node name="CourtyardPreview" type="Node"]
+
+[node name="Background" type="ColorRect" parent="."]
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+color = Color(0.065, 0.11, 0.1, 1)
+
+[node name="Title" type="Label" parent="."]
+offset_left = 170.0
+offset_top = 4.0
+theme_override_colors/font_color = Color(0.89, 0.82, 0.66, 1)
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 24
+text = "BALAI NADI  /  BALE DI TELAGA"
+
+[node name="Container" type="SubViewportContainer" parent="."]
+offset_left = 170.0
+offset_top = 40.0
+offset_right = 1110.0
+offset_bottom = 680.0
+stretch = true
+
+[node name="Viewport" type="SubViewport" parent="Container"]
+handle_input_locally = false
+size = Vector2i(940, 640)
+render_target_update_mode = 4
+
+[node name="World" parent="Container/Viewport" instance=ExtResource("1")]
+script = ExtResource("2")
+
+[node name="OverviewCamera" type="Camera2D" parent="Container/Viewport/World"]
+position = Vector2(432, 384)
+zoom = Vector2(0.625, 0.625)
+
+[node name="Hint" type="Label" parent="."]
+offset_left = 170.0
+offset_top = 684.0
+theme_override_colors/font_color = Color(0.7, 0.78, 0.7, 1)
+theme_override_fonts/font = ExtResource("3")
+theme_override_font_sizes/font_size = 18
+text = "SPACE: TERBENGKALAI / PULIH    •    Preview visual tanpa mengubah progres"

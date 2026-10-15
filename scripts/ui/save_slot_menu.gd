@@ -15,7 +15,7 @@ signal closed
 
 enum Mode { NEW_GAME, LOAD, SAVE, PLAY }
 
-const FONT := preload("res://assets/fonts/m5x7.ttf")
+const FONT := preload("res://resources/ui/readable_font.tres")
 const TEX_INVENTORY := preload("res://assets/farm_rpg/ui/inventory/inventory.png")
 const TEX_BANNER := preload("res://assets/farm_rpg/ui/inventory/Banner.png")
 

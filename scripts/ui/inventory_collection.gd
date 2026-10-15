@@ -1,7 +1,7 @@
 extends PanelContainer
 ## Penemuan disimpan DiscoveryManager, tetap terbuka setelah item dijual/dibuang.
 
-const FONT = preload("res://assets/fonts/m5x7.ttf")
+const FONT = preload("res://resources/ui/readable_font.tres")
 const CATEGORIES := [ItemData.Category.FISH, ItemData.Category.FORAGE, ItemData.Category.CROP, ItemData.Category.MATERIAL]
 var category: ItemData.Category = ItemData.Category.FISH
 var catalog: Array[ItemData] = []
@@ -10,6 +10,7 @@ var _list: GridContainer
 var _detail: Label
 var _filters: Array[Button] = []
 var _metadata: Dictionary = {}
+var _catalog_loaded := false
 
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -58,7 +59,6 @@ func _ready() -> void:
 	_detail.max_lines_visible = 2
 	_detail.clip_text = true
 	content.add_child(_detail)
-	_load_catalog()
 	DiscoveryManager.discovered.connect(_on_discovered)
 	refresh()
 
@@ -91,8 +91,11 @@ func _set_category(value: ItemData.Category) -> void:
 	refresh()
 
 func refresh() -> void:
-	if not is_instance_valid(_list):
+	if not visible or not is_instance_valid(_list):
 		return
+	if not _catalog_loaded:
+		_load_catalog()
+		_catalog_loaded = true
 	# Migrasi save lama: item yang masih dimiliki semua pemain ikut dicatat.
 	for data in GameState.players:
 		for slot in data.inventory:

@@ -14,10 +14,10 @@ display_name = "Iron Hoe"
 tool_type = 1
 tier = 2
 damage = 3
-stamina_cost = 4
+stamina_cost = 2
 action_speed = 1.2
 area_size = 3
-upgrade_cost_money = 1000
+upgrade_cost_money = 1200
 required_items = {
 "iron_bar": 5,
 "wood": 15

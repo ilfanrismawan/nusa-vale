@@ -11,6 +11,9 @@ vec4 detail_soil(vec4 base, vec2 world_position) {
 	float earth = smoothstep(-0.01, 0.04, base.r - base.g);
 	float lit = smoothstep(0.16, 0.32, base.r);
 	float mask = warm * earth * lit * base.a;
+	if (mask <= 0.0) {
+		return base;
+	}
 	vec2 pixel = floor(world_position);
 	float grain = soil_hash(pixel + 83.0);
 	float grit = step(0.90, grain) * 0.045 - step(grain, 0.10) * 0.045;

@@ -7,26 +7,91 @@ const ItemPickupScript = preload("res://scripts/world/item_pickup.gd")
 @export var drop_item_id: String = "wood"
 @export var drop_count: int = 3
 @export var object_group: StringName = &"choppable"
-## Jika false, node tidak disimpan ke save saat dihancurkan (selalu respawn tiap hari baru).
+## Jika false, progresnya dikelola spawner sendiri, bukan daftar cleanup permanen.
 @export var persistent: bool = true
+## ID data untuk objek farm; objek scene lama tetap memakai path node.
+@export var persistence_id: String = ""
 
-@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
+enum ResourceSize { SMALL, NORMAL, LARGE }
+@export_group("Tool requirement")
+## Small = Wood, Normal = Copper, Large = Iron. Minimum tier may raise this for rare ore.
+@export var resource_size: ResourceSize = ResourceSize.SMALL
+@export var minimum_tool_tier: ToolData.ToolTier = ToolData.ToolTier.WOOD
+
+func required_tool_tier() -> int:
+	return maxi(int(resource_size), int(minimum_tool_tier))
+
+func accepts_tool(tool: ToolData) -> bool:
+	var kind := ToolData.ToolType.PICKAXE if object_group == &"mineable" else ToolData.ToolType.AXE
+	return tool != null and tool.tool_type == kind and int(tool.tier) >= required_tool_tier()
+
+func requirement_text() -> String:
+	var kind := "Beliung" if object_group == &"mineable" else "Kapak"
+	var tiers := ["Kayu", "Tembaga", "Besi", "Emas", "Platinum", "Crimson", "Frost", "Shadow", "Fairy", "Obsidian"]
+	return "Butuh %s %s atau lebih tinggi." % [kind, tiers[required_tool_tier()]]
+
+@export var animated_sprite_path: NodePath = ^"AnimatedSprite2D"
+@onready var animated_sprite: AnimatedSprite2D = get_node(animated_sprite_path)
 
 var is_chopping: bool = false
 var is_destroyed: bool = false
+var _canopy: AnimatedSprite2D
+const TREE_SPLIT_SHADER := "shader_type canvas_item; uniform bool canopy = false; uniform float split_y = -12.0; varying float local_y; void vertex() { local_y = VERTEX.y; } void fragment() { if ((canopy && local_y >= split_y) || (!canopy && local_y < split_y)) { discard; } }"
+
+func _setup_tree_layers() -> void:
+	# Rocks share this script; only trees use the canopy/trunk split.
+	if object_group != &"choppable":
+		return
+	var shader := Shader.new()
+	shader.code = TREE_SPLIT_SHADER
+	var trunk_material := ShaderMaterial.new()
+	trunk_material.shader = shader
+	animated_sprite.material = trunk_material
+	animated_sprite.z_as_relative = false
+	animated_sprite.z_index = -1
+	_canopy = AnimatedSprite2D.new()
+	_canopy.name = "Canopy"
+	_canopy.sprite_frames = animated_sprite.sprite_frames
+	var canopy_material := ShaderMaterial.new()
+	canopy_material.shader = shader
+	canopy_material.set_shader_parameter("canopy", true)
+	_canopy.material = canopy_material
+	_canopy.z_as_relative = false
+	_canopy.z_index = 1
+	add_child(_canopy)
+	_sync_tree_layers()
+
+func _process(_delta: float) -> void:
+	_sync_tree_layers()
+
+func _sync_tree_layers() -> void:
+	if _canopy == null:
+		return
+	_canopy.transform = animated_sprite.transform
+	_canopy.offset = animated_sprite.offset
+	_canopy.centered = animated_sprite.centered
+	_canopy.flip_h = animated_sprite.flip_h
+	_canopy.flip_v = animated_sprite.flip_v
+	_canopy.modulate = animated_sprite.modulate
+	_canopy.visible = animated_sprite.visible
+	_canopy.animation = animated_sprite.animation
+	_canopy.set_frame_and_progress(animated_sprite.frame, animated_sprite.frame_progress)
 
 
 func _ready() -> void:
-	if persistent and _removed_ids().has(str(get_path())):
+	if persistent and _removed_ids().has(_persistence_key()):
 		queue_free()
 		return
 	add_to_group(object_group)
+	_setup_tree_layers()
 	DayCycle.season_changed.connect(_apply_season)
 	_apply_season(DayCycle.get_season())
 	_play(&"idle")
 
 
-func take_hit(damage: int) -> void:
+func take_hit(damage: int, tool_tier: int = ToolData.ToolTier.WOOD) -> void:
+	if tool_tier < required_tool_tier():
+		return
 	if is_destroyed or is_chopping:
 		return
 	health -= damage
@@ -66,7 +131,7 @@ func _destroy_tree() -> void:
 	Juice.play(StringName(String(_feedback_key()) + "_break"), _impact_point())
 	_spawn_wood_drop()
 	if persistent:
-		var path_id := str(get_path())
+		var path_id := _persistence_key()
 		var removed := _removed_ids()
 		if not removed.has(path_id):
 			removed.append(path_id)
@@ -96,7 +161,9 @@ func _play(anim: StringName) -> void:
 	animated_sprite.stop()
 	animated_sprite.animation = anim
 	animated_sprite.set_frame_and_progress(0, 0.0)
-	animated_sprite.play(anim)
+	# Objek diam dengan satu frame tidak perlu ticker animasi idle.
+	if animated_sprite.sprite_frames.get_frame_count(anim) > 1:
+		animated_sprite.play(anim)
 
 
 ## chop / mine / cut, sesuai jenis objek. Paket ada di resources/feedback/.
@@ -131,6 +198,9 @@ func _removed_ids() -> Array[String]:
 	if object_group == &"mineable":
 		return GameState.mined_rocks
 	return GameState.chopped_trees
+
+func _persistence_key() -> String:
+	return persistence_id if not persistence_id.is_empty() else str(get_path())
 
 
 func _chop_duration() -> float:

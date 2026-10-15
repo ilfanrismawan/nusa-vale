@@ -103,9 +103,9 @@ func _process(_delta: float) -> void:
 
 	# God Mode: stamina selalu penuh
 	if _god_mode and GameState:
-		if GameState.stamina < GameState.MAX_STAMINA:
-			GameState.stamina = GameState.MAX_STAMINA
-			GameState.stamina_changed.emit(GameState.stamina, GameState.MAX_STAMINA)
+		if GameState.stamina < GameState.current.max_stamina:
+			GameState.stamina = GameState.current.max_stamina
+			GameState.stamina_changed.emit(GameState.stamina, GameState.current.max_stamina)
 
 	# Speed Boost: jaga kecepatan player
 	if _speed_boost:
@@ -280,8 +280,8 @@ func _cheat_add_gold(amount: int) -> void:
 	_notify("💰 +%s Gold  (Total: %s G)" % [_format_money(amount), _format_money(GameState.money)])
 
 func _cheat_fill_stamina() -> void:
-	GameState.stamina = GameState.MAX_STAMINA
-	GameState.stamina_changed.emit(GameState.stamina, GameState.MAX_STAMINA)
+	GameState.stamina = GameState.current.max_stamina
+	GameState.stamina_changed.emit(GameState.stamina, GameState.current.max_stamina)
 	_notify("⚡ Stamina penuh!")
 
 func _cheat_toggle_god_mode() -> void:
@@ -494,7 +494,7 @@ func _cheat_print_inventory() -> void:
 	print("\n══════════════ INVENTORY DEBUG ══════════════")
 	print("Bag Level : %d  |  Bag Size : %d" % [GameState.bag_level, GameState.bag_size])
 	print("Money     : %d G" % GameState.money)
-	print("Stamina   : %d / %d" % [GameState.stamina, GameState.MAX_STAMINA])
+	print("Stamina   : %d / %d" % [GameState.stamina, GameState.current.max_stamina])
 	print("Day       : %d (%s)  |  Time : %02d:%02d" % [
 		DayCycle.current_day,
 		DayCycle.get_season_display_name() if DayCycle.has_method("get_season_display_name") else "",

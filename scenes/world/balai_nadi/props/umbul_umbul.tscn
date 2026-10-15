@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/balai_nadi/v3/sacred_props.png" id="1_qhfuc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yc0b8"]
+atlas = ExtResource("1_qhfuc")
+region = Rect2(1144, 16, 292, 528)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_et1x8"]
+size = Vector2(6, 6)
+
+[node name="UmbulUmbul" type="Node2D" unique_id=112949720]
+texture_filter = 1
+
+[node name="Art" type="Sprite2D" parent="." unique_id=1930188776]
+position = Vector2(0, -24)
+scale = Vector2(0.08219178, 0.09090909)
+texture = SubResource("AtlasTexture_yc0b8")
+
+[node name="BaseCollision" type="StaticBody2D" parent="." unique_id=1510733775]
+position = Vector2(0, -3)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BaseCollision" unique_id=1134500041]
+shape = SubResource("RectangleShape2D_et1x8")

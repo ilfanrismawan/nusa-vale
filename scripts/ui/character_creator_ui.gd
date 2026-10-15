@@ -9,7 +9,7 @@ signal finished(appearance: CharacterAppearance)
 signal cancelled
 
 const CATALOG: CharacterCatalog = preload("res://resources/character/character_catalog.tres")
-const FONT := preload("res://assets/fonts/m5x7.ttf")
+const FONT := preload("res://resources/ui/readable_font.tres")
 const TEX_INVENTORY := preload("res://assets/farm_rpg/ui/inventory/inventory.png")
 const TEX_BANNER := preload("res://assets/farm_rpg/ui/inventory/Banner.png")
 
@@ -67,7 +67,6 @@ var _direction_index := 0
 var _value_labels: Dictionary = {}
 var _row_nodes: Dictionary = {}
 var _name_edit: LineEdit
-var _animation_picker: OptionButton
 var _preview_action := "walk"
 
 func _ready() -> void:
@@ -169,10 +168,6 @@ func _build_preview_column() -> VBoxContainer:
 	turn.add_child(turn_label)
 	turn.add_child(_make_button(">", _turn.bind(1)))
 	column.add_child(turn)
-	_animation_picker = OptionButton.new()
-	_animation_picker.custom_minimum_size.x = 128
-	_animation_picker.add_item("Animasi: walk")
-	_animation_picker.set_item_metadata(0, "walk")
 	var actions: PackedStringArray = ["walk"]
 	var template := CharacterSpriteBuilder.get_template(CATALOG)
 	for anim in template.get_animation_names():
@@ -182,13 +177,7 @@ func _build_preview_column() -> VBoxContainer:
 	for sheet in CATALOG.sheets:
 		if not sheet.animation_name.is_empty() and not actions.has(String(sheet.animation_name)):
 			actions.append(String(sheet.animation_name))
-	for i in range(1, actions.size()):
-		_animation_picker.add_item("Animasi: " + actions[i])
-		_animation_picker.set_item_metadata(i, actions[i])
-	_animation_picker.item_selected.connect(func(index: int):
-		_preview_action = _animation_picker.get_item_metadata(index)
-		_refresh_preview())
-	column.add_child(_animation_picker)
+	
 	# Preview aksi sekali putar diulang hanya di layar kustomisasi.
 	_preview.animation_finished.connect(func(): _preview.play())
 	return column

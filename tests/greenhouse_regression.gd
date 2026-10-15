@@ -42,16 +42,26 @@ func _ready() -> void:
 	check(player._find_interactable() == greenhouse, "Farm greenhouse door uses existing interaction query")
 	player._try_interact()
 	await get_tree().process_frame
-	check(get_tree().current_scene == farm and not manager.completed(ID) and greenhouse.get_node("Damage").visible and greenhouse.get_node("Sprite2D").region_rect.position.y == 7, "New Game keeps greenhouse damaged and refuses entry")
+	check(get_tree().current_scene == farm and not manager.completed(ID) and greenhouse.get_node("Sprite2D").region_rect.position.y == 7, "New Game keeps greenhouse damaged and refuses entry")
 	await capture("greenhouse-locked.png")
-	# The nearby sign provides a playable route to the contribution table.
-	player.global_position = Vector2(636, 142)
+	# Outdoor travel is automatic; the Balai Nadi is now located in town.
+	player.global_position = farm.get_node("EnterTown/CollisionShape2D").global_position - Player.FEET_OFFSET
+	await get_tree().physics_frame
+	await get_tree().create_timer(1.5, true).timeout
+	check(get_tree().current_scene.scene_file_path.ends_with("town.tscn"), "Farm boundary automatically reaches town")
+	var town := get_tree().current_scene
+	player = town.get_node("Player/CharacterBody2D")
+	player.global_position = town.get_node("BalaiNadiAccess").global_position
+	await get_tree().physics_frame
+	await get_tree().create_timer(1.5, true).timeout
+	check(get_tree().current_scene.scene_file_path.ends_with("balai_nadi/exterior.tscn"), "Farm sign transitions to separate Balai Nadi exterior")
+	player = get_tree().current_scene.get_node("Player/CharacterBody2D")
+	player.global_position = Vector2(427, 244)
 	player.facing_direction = Vector2.UP
 	await get_tree().physics_frame
-	check(player._find_interactable() == greenhouse.get_node("BalaiNadiSign"), "Balai Nadi sign is interactable from the farm")
+	# Masuk ke gedung Balai tetap memakai interaksi klik kanan.
 	player._try_interact()
 	await get_tree().create_timer(1.2, true).timeout
-	check(get_tree().current_scene.scene_file_path.ends_with("balai_nadi/interior.tscn"), "Farm sign transitions to Balai Nadi")
 	var balai := get_tree().current_scene
 	player = balai.get_node("Player/CharacterBody2D")
 	player.global_position = Vector2(427, 260)
@@ -89,7 +99,7 @@ func _ready() -> void:
 	farm = get_tree().current_scene
 	player = farm.get_node("Player/CharacterBody2D")
 	greenhouse = farm.get_node("Greenhouse")
-	check(not greenhouse.get_node("Damage").visible and greenhouse.get_node("Sprite2D").region_rect.position.y == 103 and greenhouse.get_node("Sprite2D2").visible, "Farm greenhouse swaps to clean restored sprite and repaired door")
+	check(greenhouse.get_node("Sprite2D").region_rect.position.y == 103 and greenhouse.get_node("Sprite2D2").visible, "Farm greenhouse swaps to clean restored sprite and repaired door")
 	var sprite := greenhouse.get_node("Sprite2D") as Sprite2D
 	check(sprite.texture.get_image().get_region(Rect2i(sprite.region_rect)).get_used_rect().has_area(), "Restored atlas region contains visible greenhouse artwork")
 	await capture("greenhouse-restored.png")
@@ -117,11 +127,10 @@ func _ready() -> void:
 	check(FarmManager.can_harvest(CELL), "Greenhouse crops grow to harvest with normal day progression")
 	await capture("greenhouse-interior.png")
 	check(FarmManager.harvest(CELL) and FarmManager.farm_data[CELL].crop == null and not room.get_node("Crop").get_used_cells().has(CELL), "Existing harvest produces drops and clears greenhouse crop")
-	player.global_position = Vector2(427, 292)
+	player.global_position = room.get_node("Exit/CollisionShape2D").global_position - Player.FEET_OFFSET
 	player.facing_direction = Vector2.DOWN
 	await get_tree().physics_frame
-	player._try_interact()
-	await get_tree().create_timer(1.2, true).timeout
+	await get_tree().create_timer(1.5, true).timeout
 	check(get_tree().current_scene.scene_file_path.ends_with("world/farm.tscn"), "Greenhouse exit returns to farm")
 	check(FarmManager.area_id() == "farm" and not FarmManager.is_crop_in_season(crop) and not FarmManager.soil_layer.get_used_cells().has(CELL), "Returning to farm restores seasonal restrictions and hides greenhouse plots")
 	check(manager.contribute(GameState.p1(), ID, "wood") == 0, "Completed greenhouse refuses duplicate contributions")

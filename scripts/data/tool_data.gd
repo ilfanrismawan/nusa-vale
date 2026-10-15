@@ -59,10 +59,11 @@ func ability_text() -> String:
 	match tool_type:
 		ToolType.AXE, ToolType.PICKAXE:
 			text += "\nKekuatan %d: lebih sedikit pukulan." % damage
+			text += "\nObjek: " + ("kecil" if tier == ToolTier.WOOD else "kecil/normal" if tier == ToolTier.COPPER else "kecil/normal/besar")
 		ToolType.HOE:
 			text += "\nCangkul hingga %d petak sekaligus." % area_size
 		ToolType.WATERING_CAN:
-			text += "\nKapasitas %d air; 1 air/petak.\nGunakan di sungai/kolam untuk isi ulang gratis." % water_capacity
+			text += "\nKapasitas %d air; 1 air/petak.\nIsi ulang di sungai/kolam: %d stamina." % [water_capacity, maxi(stamina_cost, 1)]
 		ToolType.SHOVEL:
 			text += "\nGali hingga %d petak; peluang +1 hasil %d%%." % [area_size, roundi(dig_bonus_chance * 100)]
 		ToolType.SICKLE:

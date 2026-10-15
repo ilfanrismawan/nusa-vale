@@ -1,6 +1,6 @@
 extends PanelContainer
 
-const FONT = preload("res://assets/fonts/m5x7.ttf")
+const FONT = preload("res://resources/ui/readable_font.tres")
 const GROUPS := ["Semua", "Equipment", "Amunisi", "Bangunan"]
 const INK := Color("50321f")
 const GREEN := Color("356444")
@@ -155,7 +155,7 @@ func _select_recipe(recipe: CraftingRecipe) -> void:
 	_refresh_detail()
 
 func refresh() -> void:
-	if not is_instance_valid(_list):
+	if not visible or not is_instance_valid(_list):
 		return
 	for child in _list.get_children():
 		_list.remove_child(child)

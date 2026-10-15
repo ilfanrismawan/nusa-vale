@@ -103,6 +103,7 @@ func physics_update(_delta: float) -> void:
 				_splashed = true
 				_free_meter()
 				Juice.play(&"cast", _bobber_pos)
+				Juice.play_tool_tier(_rod)
 			if _splashed and (_anim_done or _timer >= CAST_MAX_TIME):
 				_set_phase(Phase.WAIT, ANIM_WAIT)
 				Juice.play(&"bobber", _bobber_pos)
@@ -197,7 +198,7 @@ func _release_cast() -> void:
 	_meter.launch(player.global_position + Vector2(0, -10))
 
 	#DEBUG FISHING
-	_wait_target = 0.1 if FishingManager.debug_instant_bite else randf_range(WAIT_MIN, WAIT_MAX)
+	_wait_target = 0.1 if OS.has_feature("editor") and FishingManager.debug_instant_bite else randf_range(WAIT_MIN, WAIT_MAX)
 	#_wait_target = randf_range(WAIT_MIN, WAIT_MAX) <--- code asli
 	_wait_target *= _rod.bite_time_mult * (PERFECT_BITE_MULT if _perfect else 1.0)
 

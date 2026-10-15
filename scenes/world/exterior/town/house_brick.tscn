@@ -1,0 +1,49 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" uid="uid://dhqjgeh55xwa" path="res://assets/farm_rpg/objects/exterior/Houses/11.png" id="12_twn"]
+
+[ext_resource type="Script" path="res://scripts/world/town_building_door.gd" id="TownDoor"]
+[ext_resource type="PackedScene" path="res://scenes/objects/building_sign.tscn" id="BuildingSign"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tw065"]
+size = Vector2(122, 94)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tw064"]
+atlas = ExtResource("12_twn")
+region = Rect2(0, 0, 128, 112)
+
+[sub_resource type="RectangleShape2D" id="DoorShape"]
+size = Vector2(28, 20)
+
+[node name="HouseBrick" type="StaticBody2D"]
+y_sort_enabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = SubResource("AtlasTexture_tw064")
+offset = Vector2(0, -56)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -49)
+shape = SubResource("RectangleShape2D_tw065")
+
+[node name="Door" type="Area2D" parent="."]
+position = Vector2(0, 4)
+script = ExtResource("TownDoor")
+target_scene = "res://scenes/world/interior/town/house_brick.tscn"
+spawn_position = Vector2(240, 256)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Door"]
+shape = SubResource("DoorShape")
+
+[node name="ReturnSpawn" type="Marker2D" parent="."]
+position = Vector2(0, 36)
+
+[node name="Sign" parent="." instance=ExtResource("BuildingSign")]
+scale = Vector2(1.000, 1.000)
+position = Vector2(0, -24)
+caption = "Rumah Bata"
+font_size = 8
+minimum_width = 32
+minimum_height = 16
+mount = 0

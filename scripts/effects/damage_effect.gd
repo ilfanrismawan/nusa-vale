@@ -18,7 +18,7 @@ func apply(player: Player, cell: Vector2i) -> void:
 	var stamina_cost := tool_data.stamina_cost
 	var damage := tool_data.damage
 	
-	if GameState.stamina < stamina_cost:
+	if player.data.stamina < stamina_cost:
 		Notify.say("Terlalu lelah! Istirahatlah.")
 		return
 		
@@ -32,4 +32,4 @@ func apply(player: Player, cell: Vector2i) -> void:
 		_:
 			hit = FarmManager.hit_world(player, cell, target_group, damage)
 	if hit:
-		GameState.spend_stamina(stamina_cost)
+		player.data.spend_stamina(stamina_cost)

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/ranch/pasture_grass.svg" id="2"]
+[resource]
+script = ExtResource("1")
+item_id = "pasture_grass"
+display_name = "Bibit Rumput Pakan"
+icon = ExtResource("2")
+buy_price = 50
+sell_price = 0
+description = "Tanam di tanah kosong dekat kandang. Satu petak memberi satu jatah merumput; tumbuh kembali dalam 2 hari di luar musim dingin."
+placeable = true
+category = 8

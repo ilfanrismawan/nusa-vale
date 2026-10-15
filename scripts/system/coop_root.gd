@@ -13,7 +13,7 @@ extends Control
 const PLAYER_SCENE := preload("res://scenes/player/Player.tscn")
 const START_AREA := "res://scenes/world/farm.tscn"
 const PLAYER_ROOT_SCRIPT := preload("res://scripts/player/player_root.gd")
-const FONT: Font = preload("res://assets/fonts/m5x7.ttf")
+const FONT: Font = preload("res://resources/ui/readable_font.tres")
 
 ## Garis pemisah antar layar (piksel layar).
 const GAP := 2
@@ -235,11 +235,15 @@ func _area(path: String) -> Area:
 	if _areas.has(key):
 		return _areas[key]
 
-	var packed := load(path) as PackedScene
+	# Building-instance suffix keeps each constructed ranch in its own shared world.
+	var scene_path := path.get_slice("#ranch=", 0)
+	var packed := load(scene_path) as PackedScene
 	if packed == null:
 		push_error("CoopRoot: area tidak bisa dimuat: %s" % path)
 		return null
 	var world := packed.instantiate()
+	if path.contains("#ranch=") and world.has_method("configure_ranch"):
+		world.configure_ranch(int(path.get_slice("#ranch=", 1)))
 	var area := Area.new()
 	area.path = path
 	area.world = world
@@ -257,6 +261,8 @@ func _area(path: String) -> Area:
 
 ## Player bawaan scene dibuang; posisi dan batas kameranya dipakai untuk pemain co-op.
 func _take_embedded_player(world: Node, area: Area) -> void:
+	if world.has_method("update_camera_limits"):
+		world.update_camera_limits()
 	var embedded := _find_player_root(world)
 	if embedded == null:
 		return

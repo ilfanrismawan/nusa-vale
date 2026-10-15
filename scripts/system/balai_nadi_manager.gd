@@ -11,6 +11,25 @@ var definitions: Array[RestorationProject] = [RESTORATION, GREENHOUSE]
 var _projects: Dictionary = {}
 var _busy := false
 
+const WINGS := {
+	"alam": {"name": "Sayap Alam", "description": "Kebun komunitas, tanaman, hasil panen, dan sumber daya alam."},
+	"karya": {"name": "Sayap Karya", "description": "Bengkel, resep crafting, perbaikan fasilitas, dan upgrade tool."},
+	"niaga": {"name": "Sayap Niaga", "description": "Pasar, merchant, jaringan perdagangan, dan peluang ekonomi."},
+	"pengetahuan": {"name": "Sayap Pengetahuan", "description": "Perpustakaan, mineral, artefak, spesimen, dan pengetahuan dunia."},
+}
+
+func restoration_stage() -> String:
+	if completed(RESTORATION.project_id) and completed(GREENHOUSE.project_id):
+		return "Kehidupan Kembali"
+	for project in definitions:
+		for item_id in project.requirements:
+			if contributed(project.project_id, item_id) > 0:
+				return "Pemulihan"
+	return "Terbengkalai"
+
+func available_amount(donor: PlayerData, item_id: String) -> int:
+	return GameState.money if item_id == "money" else donor.get_item_count(item_id)
+
 func _ready() -> void:
 	reset()
 
@@ -38,24 +57,36 @@ func contribute(donor: PlayerData, project_id: String, item_id: String, requeste
 	var project := definition(project_id)
 	if _busy or donor == null or not GameState.players.has(donor) or project == null or requested <= 0:
 		return 0
-	var accepted := mini(requested, mini(remaining(project_id, item_id), donor.get_item_count(item_id)))
+	var accepted := mini(requested, mini(remaining(project_id, item_id), available_amount(donor, item_id)))
 	if accepted <= 0:
 		return 0
 	_busy = true
 	var old_inventory := donor.inventory.duplicate(true)
+	var old_money := GameState.money
+	var old_unlock := UnlockManager.is_unlocked(project.unlock_id)
 	var old_state: Dictionary = _projects[project_id].duplicate(true)
 	var old_flag := WorldState.has_flag(project.completion_flag)
-	if not donor.remove_item(item_id, accepted):
+	if item_id == "money":
+		GameState.money -= accepted
+	elif not donor.remove_item(item_id, accepted):
 		_busy = false
 		return 0
 	_projects[project_id].contributions[item_id] = contributed(project_id, item_id) + accepted
 	var finished := _requirements_met(project)
 	_projects[project_id].completed = finished
+	if not project.unlock_id.is_empty():
+		UnlockManager.unlocks[project.unlock_id] = finished
 	# Save the flag in the same snapshot, but publish world/completion events only on success.
 	if not project.completion_flag.is_empty():
 		WorldState.flags[project.completion_flag] = finished
+	var staged_daya := finished and GameState.daya.stage_reward("balai", donor)
 	if not SaveManager.save_game():
+		if staged_daya:
+			GameState.daya.pending.erase("balai")
 		donor.inventory = old_inventory
+		GameState.money = old_money
+		if not project.unlock_id.is_empty():
+			UnlockManager.unlocks[project.unlock_id] = old_unlock
 		_projects[project_id] = old_state
 		if not project.completion_flag.is_empty():
 			WorldState.flags[project.completion_flag] = old_flag
@@ -64,13 +95,17 @@ func contribute(donor: PlayerData, project_id: String, item_id: String, requeste
 		Notify.say("Kontribusi belum tersimpan. Bahan dikembalikan; coba lagi.")
 		_busy = false
 		return 0
+	GameState.money_changed.emit(GameState.money)
 	state_changed.emit()
 	contribution_added.emit(project_id, item_id, accepted)
-	var item := GameState._resolve_item(item_id)
-	Notify.say("Terima kasih! %s x%d ditambahkan ke balai." % [item.display_name, accepted])
+	var name_text: String = "Dana" if item_id == "money" else GameState._resolve_item(item_id).display_name
+	Notify.say("Terima kasih! %s x%d ditambahkan ke balai." % [name_text, accepted])
 	if finished:
+		if not project.unlock_id.is_empty() and not old_unlock:
+			UnlockManager.unlock_changed.emit(project.unlock_id, true)
 		if not project.completion_flag.is_empty() and not old_flag:
 			WorldState.flag_changed.emit(project.completion_flag, true)
+		GameState.daya.deliver()
 		project_completed.emit(project_id)
 		Notify.say(project.completion_message)
 	_busy = false
@@ -111,4 +146,6 @@ func load_save(saved: Variant) -> void:
 				progress[item_id] = project.requirements[item_id]
 		if not project.completion_flag.is_empty():
 			WorldState.set_flag(project.completion_flag, finished)
+		if not project.unlock_id.is_empty():
+			UnlockManager.set_unlock(project.unlock_id, finished)
 	state_changed.emit()

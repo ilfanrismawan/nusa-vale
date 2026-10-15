@@ -1,0 +1,59 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://dju8cus5jr7g" path="res://scripts/world/school_notice.gd" id="11_twn"]
+[ext_resource type="Texture2D" uid="uid://bgsc3yl2pss6j" path="res://assets/farm_rpg/objects/exterior/Base houses.png" id="9_twn"]
+
+[ext_resource type="Script" path="res://scripts/world/town_building_door.gd" id="TownDoor"]
+[ext_resource type="PackedScene" path="res://scenes/objects/building_sign.tscn" id="BuildingSign"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tw009"]
+size = Vector2(16, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tw049"]
+size = Vector2(234, 127)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tw048"]
+atlas = ExtResource("9_twn")
+region = Rect2(288, 185, 240, 147)
+
+[node name="University" type="StaticBody2D"]
+y_sort_enabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = SubResource("AtlasTexture_tw048")
+offset = Vector2(0, -73.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+position = Vector2(0, -67.5)
+shape = SubResource("RectangleShape2D_tw049")
+
+[node name="Door" type="Area2D" parent="."]
+position = Vector2(-71, -4)
+script = ExtResource("TownDoor")
+target_scene = "res://scenes/world/interior/university.tscn"
+spawn_position = Vector2(480, 816)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="./Door"]
+shape = SubResource("RectangleShape2D_tw009")
+
+[node name="SideDoorSign" type="StaticBody2D" parent="."]
+position = Vector2(88, -8)
+script = ExtResource("11_twn")
+message = "Pintu samping Universitas terkunci. Masuk lewat pintu kiri."
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="./SideDoorSign"]
+shape = SubResource("RectangleShape2D_tw009")
+
+[node name="ReturnSpawn" type="Marker2D" parent="."]
+position = Vector2(-71, 28)
+
+[node name="Sign" parent="." instance=ExtResource("BuildingSign")]
+scale = Vector2(1.000, 1.000)
+position = Vector2(-71, -32)
+caption = "Universitas"
+font_size = 8
+minimum_width = 32
+minimum_height = 16
+mount = 0

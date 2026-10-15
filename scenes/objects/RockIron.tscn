@@ -55,6 +55,7 @@ radius = 10.0
 [node name="RockIron" type="StaticBody2D"]
 y_sort_enabled = true
 script = ExtResource("1_7c88i")
+resource_size = 2
 health = 4
 drop_item_id = "iron_ore"
 drop_count = 4

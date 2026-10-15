@@ -15,7 +15,7 @@ func say(text: String) -> void:
 	var label := Label.new()
 	label.text = text
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	label.add_theme_font_override("font", preload("res://assets/fonts/m5x7.ttf"))
+	label.add_theme_font_override("font", preload("res://resources/ui/readable_font.tres"))
 	label.add_theme_font_size_override("font_size", 16)
 	label.add_theme_color_override("font_outline_color", Color.BLACK)
 	label.add_theme_constant_override("outline_size", 4)

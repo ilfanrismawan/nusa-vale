@@ -1,7 +1,10 @@
 class_name ItemData
 extends Resource
 
-enum Category { ALL, SEED, CROP, TOOL, MATERIAL, FISH, FORAGE, EQUIPMENT, BUILDING }
+enum Category { ALL, SEED, CROP, TOOL, MATERIAL, FISH, FORAGE, EQUIPMENT, BUILDING, FOOD }
+@export_category("Food")
+@export_range(0, 200) var stamina_restore: int = 0
+@export_range(0, 120) var speed_buff_seconds: float = 0.0
 @export_category("Placement")
 @export var placeable: bool = false
 @export var placement_size: Vector2i = Vector2i.ONE

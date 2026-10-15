@@ -17,6 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+PauseManager="*res://autoload/pause_manager.gd"
 DayCycle="*uid://bj4mh1d37l0ax"
 GameState="*uid://cvamfx176g3r7"
 FarmManager="*uid://j3hi3toxtjtn"
@@ -27,12 +28,12 @@ SaveManager="*uid://y3jxkvhdn3xw"
 WorldState="*uid://d3yetf3bmmrm6"
 DiscoveryManager="*uid://bu2cui5xw7dw7"
 UnlockManager="*uid://d2o7nqhie38h0"
-DebugManager="*res://autoload/debug_manager.gd"
 FishingManager="*uid://c2xnqbwdoyb7p"
 Juice="*res://autoload/juice.gd"
 ForageManager="*res://autoload/forage_manager.gd"
 Coop="*res://autoload/coop.gd"
 StructureManager="*res://autoload/structure_manager.gd"
+BuildingPlacement="*res://autoload/building_placement.gd"
 
 [debug]
 
@@ -41,10 +42,11 @@ shapes/collision/contact_color=Color(1, 0.84313726, 0.101960786, 0.8)
 
 [display]
 
-window/size/viewport_width=854
-window/size/viewport_height=480
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/size/window_width_override=1280
+window/size/window_height_override=720
 window/stretch/mode="canvas_items"
-window/stretch/scale_mode="integer"
 
 [input]
 

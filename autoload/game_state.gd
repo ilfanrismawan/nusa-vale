@@ -26,6 +26,9 @@ var chopped_trees: Array[String] = []
 var mined_rocks: Array[String] = []
 ## Persistent community projects share the lifetime of GameState, without another autoload.
 var balai_nadi: BalaiNadiManager
+var shipping: ShippingManager
+var daya: DayaManager
+var weather: DailyWeather
 
 ## Index 0 = P1. Pemain lain dibuat saat bergabung di co-op dan ikut tersimpan di save.
 var players: Array[PlayerData] = [PlayerData.new(0)]
@@ -66,9 +69,17 @@ const SHOP_PRICES := {
 }
 
 func _ready() -> void:
+	weather = DailyWeather.new()
+	weather.name = "Weather"
+	add_child(weather)
+	shipping = ShippingManager.new()
+	shipping.name = "Shipping"
+	add_child(shipping)
 	balai_nadi = BalaiNadiManager.new()
 	balai_nadi.name = "BalaiNadi"
 	add_child(balai_nadi)
+	daya = DayaManager.new()
+	add_child(daya)
 	players[0].stamina_changed.connect(func(value: int, maximum: int): stamina_changed.emit(value, maximum))
 	players[0].appearance_changed.connect(func(look: CharacterAppearance): appearance_changed.emit(look))
 
@@ -101,6 +112,9 @@ func p1() -> PlayerData:
 # ── Game baru ───────────────────────────────────────────────────────
 
 func new_game() -> void:
+	daya.reset()
+	weather.reset()
+	shipping.reset()
 	balai_nadi.reset()
 	StructureManager.reset()
 	money = 100
@@ -129,7 +143,7 @@ func set_appearance(new_appearance: CharacterAppearance) -> void:
 func spend_stamina(amount: int) -> bool:
 	return current.spend_stamina(amount)
 
-func restore_stamina(amount: int = MAX_STAMINA) -> void:
+func restore_stamina(amount: int = -1) -> void:
 	current.restore_stamina(amount)
 
 func _setup_tools() -> void:

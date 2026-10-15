@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cab2h1fjiseq0"]
+
+[ext_resource type="PackedScene" path="res://scenes/objects/building_sign.tscn" id="1"]
+
+[node name="WarungSign" unique_id=714698648 instance=ExtResource("1")]
+caption = "Warung Makan"

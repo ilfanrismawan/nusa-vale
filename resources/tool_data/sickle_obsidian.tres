@@ -15,9 +15,9 @@ display_name = "Sabit Obsidian"
 tool_type = 5
 tier = 9
 damage = 20
-stamina_cost = 1
+stamina_cost = 0
 action_speed = 2.2
-upgrade_cost_money = 18000
+upgrade_cost_money = 28000
 required_items = {
 "obsidian_bar": 5
 }

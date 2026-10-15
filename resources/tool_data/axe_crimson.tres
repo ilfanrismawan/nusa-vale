@@ -14,9 +14,9 @@ tool_id = "axe_crimson"
 display_name = "Kapak Crimson"
 tier = 5
 damage = 7
-stamina_cost = 4
+stamina_cost = 2
 action_speed = 1.55
-upgrade_cost_money = 5000
+upgrade_cost_money = 7000
 required_items = {
 "crimson_bar": 5
 }

@@ -9,7 +9,7 @@ display_name = "Pancing Frost"
 tool_type = 6
 tier = 6
 stamina_cost = 3
-upgrade_cost_money = 7000
+upgrade_cost_money = 10000
 required_items = {
 "frost_bar": 5
 }

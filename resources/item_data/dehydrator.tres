@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_dehydrator.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+category = 8
+item_id = "dehydrator"
+display_name = "Dehydrator"
+icon = ExtResource("2")
+description = "Mesin pengering hasil panen. Mengeringkan buah dan sayur menjadi makanan ringan bernilai jual tinggi."
+placeable = true
+placement_size = Vector2i(2, 2)
+max_stack = 99

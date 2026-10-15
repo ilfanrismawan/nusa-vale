@@ -2484,6 +2484,10 @@ size = Vector2(65, 49)
 size = Vector2(15, 59)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ovsut"]
+size = Vector2(17, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_w5a0g"]
+size = Vector2(25, 16)
 
 [node name="InteriorHouse" type="Node2D" unique_id=792953455]
 script = ExtResource("1_wsrm2")
@@ -2552,17 +2556,23 @@ position = Vector2(105, 22)
 shape = SubResource("RectangleShape2D_r2eyg")
 
 [node name="ExitDoor" type="Area2D" parent="." unique_id=1117652326]
-position = Vector2(267, 121)
+position = Vector2(267, 117)
 script = ExtResource("4_5n7fl")
 target_scene = "uid://bpk7kk0a4ctut"
 target_spawn_pos = Vector2(1113, 290)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ExitDoor" unique_id=1169761824]
-position = Vector2(43, 102)
+position = Vector2(43.5, 97)
 shape = SubResource("RectangleShape2D_ovsut")
 
 [node name="BedSpawn" type="Marker2D" parent="." unique_id=413548139]
 position = Vector2(304, 147)
 
-[node name="Wardrobe" parent="." instance=ExtResource("8_wardrobe")]
+[node name="Wardrobe" parent="." unique_id=2083687509 instance=ExtResource("8_wardrobe")]
 position = Vector2(336, 126)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=776678647]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1103239699]
+position = Vector2(311, 221)
+shape = SubResource("RectangleShape2D_w5a0g")

@@ -1,0 +1,49 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" uid="uid://bgsc3yl2pss6j" path="res://assets/farm_rpg/objects/exterior/Base houses.png" id="9_twn"]
+
+[ext_resource type="Script" path="res://scripts/world/town_building_door.gd" id="TownDoor"]
+[ext_resource type="PackedScene" path="res://scenes/objects/building_sign.tscn" id="BuildingSign"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tw009"]
+size = Vector2(16, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tw047"]
+size = Vector2(168, 105)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tw046"]
+atlas = ExtResource("9_twn")
+region = Rect2(17, 48, 174, 123)
+
+[node name="School" type="StaticBody2D"]
+y_sort_enabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = SubResource("AtlasTexture_tw046")
+offset = Vector2(0, -61.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -54.5)
+shape = SubResource("RectangleShape2D_tw047")
+
+[node name="Door" type="Area2D" parent="."]
+position = Vector2(-48, -4)
+script = ExtResource("TownDoor")
+target_scene = "res://scenes/world/interior/school_v2.tscn"
+spawn_position = Vector2(96, 206)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="./Door"]
+shape = SubResource("RectangleShape2D_tw009")
+
+[node name="ReturnSpawn" type="Marker2D" parent="."]
+position = Vector2(-48, 28)
+
+[node name="Sign" parent="." instance=ExtResource("BuildingSign")]
+scale = Vector2(1.000, 1.000)
+position = Vector2(-48, -32)
+caption = "Sekolah"
+font_size = 8
+minimum_width = 32
+minimum_height = 16
+mount = 0

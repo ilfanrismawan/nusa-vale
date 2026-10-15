@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://dkcxjgwawdprt"]
+
+[ext_resource type="Texture2D" uid="uid://c53ejb8dlrhyp" path="res://assets/balai_nadi/v2/bale_agung.png" id="1_f0c7p"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ovsut"]
+size = Vector2(143.5, 125)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ywce2"]
+size = Vector2(8, 18.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ajcru"]
+size = Vector2(20, 22)
+
+[node name="BaleAgung" type="Node2D" unique_id=1873435796]
+texture_filter = 1
+
+[node name="Polygon2D" type="Polygon2D" parent="." unique_id=962361575]
+
+[node name="Art" type="Sprite2D" parent="Polygon2D" unique_id=828730722]
+scale = Vector2(0.13852814, 0.13805631)
+texture = ExtResource("1_f0c7p")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Polygon2D" unique_id=1859250971]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Polygon2D/StaticBody2D" unique_id=269219927]
+position = Vector2(3.25, 6.5)
+shape = SubResource("RectangleShape2D_ovsut")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Polygon2D/StaticBody2D" unique_id=285684030]
+position = Vector2(-20, 65)
+shape = SubResource("RectangleShape2D_ywce2")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Polygon2D/StaticBody2D" unique_id=540759518]
+position = Vector2(20, 65.25)
+shape = SubResource("RectangleShape2D_ywce2")
+
+[node name="Polygon2D2" type="Polygon2D" parent="." unique_id=505571894]
+clip_children = 1
+polygon = PackedVector2Array(-16, 75, -16, 69, -16, 64, -16, 58, -16, 56, -17.666668, 54.333336, -19.666668, 52.333336, -19.666668, 47.333336, -9, 43, 9, 43, 21, 45, 22, 47, 22, 51, 21, 53, 20, 53, 18, 53, 17, 56, 16, 57, 16, 61, 16, 67, 16, 70, 16, 74)
+uv = PackedVector2Array(-17.913801, 40.677994, -10.239807, 41.60257, -17.728886, 45.39334, -17.617702, 40.41234)
+
+[node name="Art" type="Sprite2D" parent="Polygon2D2" unique_id=457031185]
+scale = Vector2(0.13852814, 0.13805631)
+texture = ExtResource("1_f0c7p")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=419747015]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=773626079]
+position = Vector2(0, 35)
+shape = SubResource("RectangleShape2D_ajcru")

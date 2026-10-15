@@ -20,6 +20,10 @@ vec4 detail_water(vec4 base, vec2 world_position, float clock_time) {
 	// Saturated blue water only: preserve banks, foam, transparency and winter ice.
 	float blue = smoothstep(0.06, 0.18, base.b - max(base.r, base.g));
 	float mask = blue * (1.0 - smoothstep(0.35, 0.55, base.r)) * base.a;
+	// Grass/soil pixels need no riverbed, caustics or ripple calculations.
+	if (mask <= 0.0) {
+		return base;
+	}
 	vec2 pixel = floor(world_position);
 	// Slow, stepped animation retains the original pixel-art cadence.
 	float tick = floor(clock_time * water_speed * 6.0) / 6.0;

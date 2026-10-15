@@ -1,6 +1,6 @@
 extends PanelContainer
 
-const FONT = preload("res://assets/fonts/m5x7.ttf")
+const FONT = preload("res://resources/ui/readable_font.tres")
 const CATALOG = preload("res://resources/character/character_catalog.tres")
 ## Slot yang bisa dipakai + ikon samar saat kosong (kunci = PlayerData.EQUIPMENT_KEYS).
 const EMPTY_ICONS := {
@@ -184,7 +184,7 @@ func _slot(parent: Control, key: String, title: String, pos: Vector2, icon: Text
 		_label(button, "x", Vector2(27, 22), Vector2(8, 12), 14, true)
 
 func refresh() -> void:
-	if not is_instance_valid(_available):
+	if not visible or not is_instance_valid(_available):
 		return
 	var data: PlayerData = inventory_ui.data
 	for child in _available.get_children():

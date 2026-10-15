@@ -49,7 +49,7 @@ func roll_catch(location_id: String, rare_mult: float = 1.0, legendary_mult: flo
 	var total := 0.0
 	
 	for f in _fish:
-		if debug_force_tier >= 0 and int(f.item.rarity) != debug_force_tier:
+		if OS.has_feature("editor") and debug_force_tier >= 0 and int(f.item.rarity) != debug_force_tier:
 			continue
 			
 		if f.get_weight() <= 0.0:

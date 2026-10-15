@@ -9,7 +9,7 @@ display_name = "Pancing Shadow"
 tool_type = 6
 tier = 7
 stamina_cost = 3
-upgrade_cost_money = 9000
+upgrade_cost_money = 14000
 required_items = {
 "shadow_bar": 5
 }

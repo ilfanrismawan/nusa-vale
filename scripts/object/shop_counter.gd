@@ -11,6 +11,7 @@ var _players: Array[Player] = []
 var _shop: ShopUI
 
 func _ready() -> void:
+	set_meta("player_interaction", true)
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 
@@ -25,11 +26,18 @@ func _on_body_exited(body: Node2D) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if is_instance_valid(_shop):
 		return
-	var player := PlayerInput.find_presser(event, _players, [&"ui_accept"])
+	var player := PlayerInput.find_presser(event, _players, [&"ui_accept", &"interact"])
 	if player == null:
+		return
+	interact(player)
+	get_viewport().set_input_as_handled()
+
+func interact(player: Player = null) -> void:
+	if player == null:
+		player = RoomDoor.player()
+	if player == null or player.is_input_locked() or is_instance_valid(_shop):
 		return
 	_shop = ShopUI.new()
 	_shop.player = player
 	_shop.shop_data = shop_data if shop_data != null else load(DEFAULT_SHOP) as ShopData
 	Coop.ui_parent(player).add_child(_shop)
-	get_viewport().set_input_as_handled()

@@ -1,6 +1,10 @@
 extends CanvasLayer
 
-const FONT = preload("res://assets/fonts/m5x7.ttf")
+const ServiceTheme = preload("res://scripts/ui/farm_service_theme.gd")
+
+const FONT = preload("res://resources/ui/readable_font.tres")
+const PreservesJarRecipe = preload("res://scripts/resources/preserves_jar_recipe.gd")
+const DehydratorRecipe = preload("res://scripts/resources/dehydrator_recipe.gd")
 var player: Player
 var uid := 0
 var _panel: PanelContainer
@@ -8,10 +12,11 @@ var _content: VBoxContainer
 var _status: Label
 var _title: Label
 var _opened := false
+var _progress_label: Label
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	layer = 45
+	layer = ServiceTheme.LAYER
 	_panel = PanelContainer.new()
 	_panel.size = Vector2(520, 330)
 	var vp := get_viewport().get_visible_rect().size
@@ -19,17 +24,9 @@ func _ready() -> void:
 	_panel.scale = Vector2.ONE * zoom
 	_panel.position = ((vp - _panel.size * zoom) / 2).floor()
 	_panel.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	var theme := Theme.new()
-	theme.default_font = FONT
-	theme.default_font_size = 18
-	theme.set_color("font_color", "Label", Color("50321f"))
+	var theme := ServiceTheme.make_theme()
 	_panel.theme = theme
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color("efd9b2")
-	style.border_color = Color("997039")
-	style.set_border_width_all(3)
-	style.set_corner_radius_all(4)
-	style.set_content_margin_all(12)
+	var style := ServiceTheme.frame()
 	_panel.add_theme_stylebox_override("panel", style)
 	add_child(_panel)
 	var rows := VBoxContainer.new()
@@ -56,6 +53,9 @@ func _ready() -> void:
 	_status.custom_minimum_size.y = 28
 	_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	rows.add_child(_status)
+	_progress_label = Label.new()
+	_progress_label.add_theme_font_size_override("font_size", 16)
+	rows.add_child(_progress_label)
 	var pack := _button("Kemas kembali ke tas", _pack)
 	rows.add_child(pack)
 	StructureManager.changed.connect(_refresh)
@@ -65,9 +65,19 @@ func _ready() -> void:
 	_refresh()
 
 func _button(text: String, callback: Callable) -> Button:
-	var button: Button = player.ui_inventory._make_menu_button(text)
+	var button := Button.new()
+	button.text = text
+	button.custom_minimum_size.y = 28
 	button.pressed.connect(callback)
 	return button
+
+func _process(_delta: float) -> void:
+	if _progress_label == null:
+		return
+	var record := StructureManager.record_for(uid)
+	_progress_label.visible = not record.is_empty() and not record.job.is_empty()
+	if _progress_label.visible:
+		_progress_label.text = "Sisa %.1f detik aktif%s" % [maxf(0, float(record.job.seconds)), " · Dijeda" if get_tree().paused or not DayCycle.is_running else ""]
 
 func _label(parent: Node, text: String) -> Label:
 	var label := Label.new()
@@ -88,6 +98,26 @@ func _refresh() -> void:
 		_content.remove_child(child)
 		child.queue_free()
 	match record.item:
+		"mayonnaise_maker", "cheese_press", "loom":
+			if not record.job.is_empty():
+				_label(_content, "Sedang mengolah. Hasil siap setelah 20 detik permainan aktif.")
+			elif not record.ready.is_empty():
+				_content.add_child(_button("Ambil " + GameState._resolve_item(record.ready.id).display_name, _collect))
+			else:
+				var options := StructureManager.artisan_options(player.data, str(record.item))
+				_label(_content, "Pilih hasil ternak dari tas:" if not options.is_empty() else "Bawa telur, susu, atau wol yang sesuai untuk mesin ini.")
+				for id in options:
+					var output := StructureManager.artisan_output(str(record.item), id)
+					_content.add_child(_button("%s → %s" % [GameState._resolve_item(id).display_name, GameState._resolve_item(output).display_name], _artisan.bind(id)))
+			_status.text = "Satu bahan menjadi satu olahan; ukuran dan kualitas dipertahankan."
+		"silo":
+			_label(_content, "Cadangan jerami: %d/240" % int(record.get("hay", 0)))
+			_content.add_child(_button("Simpan 10 jerami dari tas", _hay.bind(true)))
+			_content.add_child(_button("Ambil 10 jerami ke tas", _hay.bind(false)))
+			_status.text = "Menebas rumput liar di ladang mengisi silo. Kandang Deluxe mengambil pakan setiap pagi."
+		"pasture_grass":
+			_label(_content, "Rumput siap dimakan" if int(record.get("regrow_day", 0)) <= DayCycle.current_day else "Tumbuh kembali pada hari %d" % int(record.regrow_day))
+			_status.text = "Buka pintu kandang saat cerah. Satu petak untuk satu hewan; tumbuh kembali 2 hari."
 		"wooden_chest", "copper_chest", "iron_chest", "gold_chest":
 			var columns := HBoxContainer.new()
 			columns.add_theme_constant_override("separation", 14)
@@ -145,9 +175,42 @@ func _refresh() -> void:
 					button.disabled = not player.data.has_item(recipe.input_item_id, recipe.input_amount)
 					_content.add_child(button)
 			_status.text = "Proses dan hasil furnace ikut tersimpan saat save."
+		"preserves_jar":
+			if not record.job.is_empty():
+				_label(_content, "Sedang mengolah hasil panen. Hasil tetap tersimpan sampai diambil.")
+			elif not record.ready.is_empty():
+				var item := GameState._resolve_item(record.ready.id)
+				_content.add_child(_button("Ambil %s x%d" % [item.display_name, record.ready.count], _collect))
+			else:
+				_label(_content, "Pilih hasil panen dari tas untuk diolah:")
+				for recipe in StructureManager.preserves_jar_recipes():
+					var input := GameState._resolve_item(recipe.input_item_id)
+					var output := GameState._resolve_item(recipe.output_item_id)
+					var button := _button("%s x%d → %s x%d" % [input.display_name, recipe.input_amount, output.display_name, recipe.output_amount], _preserve.bind(recipe))
+					button.disabled = not player.data.has_item(recipe.input_item_id, recipe.input_amount)
+					_content.add_child(button)
+			_status.text = "Olahan hasil panen bernilai jual lebih tinggi. Proses tersimpan saat save."
+		"dehydrator":
+			if not record.job.is_empty():
+				_label(_content, "Sedang mengeringkan hasil panen. Hasil tetap tersimpan sampai diambil.")
+			elif not record.ready.is_empty():
+				var item := GameState._resolve_item(record.ready.id)
+				_content.add_child(_button("Ambil %s x%d" % [item.display_name, record.ready.count], _collect))
+			else:
+				_label(_content, "Pilih hasil panen dari tas untuk dikeringkan:")
+				for recipe in StructureManager.dehydrator_recipes():
+					var input := GameState._resolve_item(recipe.input_item_id)
+					var output := GameState._resolve_item(recipe.output_item_id)
+					var button := _button("%s x%d → %s x%d" % [input.display_name, recipe.input_amount, output.display_name, recipe.output_amount], _dehydrate.bind(recipe))
+					button.disabled = not player.data.has_item(recipe.input_item_id, recipe.input_amount)
+					_content.add_child(button)
+			_status.text = "Hasil pengeringan bernilai jual tinggi. Proses tersimpan saat save."
 		"wooden_gate":
 			_content.add_child(_button("Tutup gerbang" if record.open else "Buka gerbang", _toggle))
 			_status.text = "Gerbang terbuka bisa dilewati pemain."
+		"barn":
+			_label(_content, "Kandang untuk ternak besar.")
+			_status.text = "Belum ada hewan di kandang ini. Kandang kosong bisa dikemas dan dipindahkan."
 		"crafting_workbench":
 			_content.add_child(_button("Buka Crafting", _open_crafting))
 			_status.text = "Meja kerja untuk membuat perlengkapan dan bangunan."
@@ -157,6 +220,11 @@ func _refresh() -> void:
 
 func _transfer(slot: int, deposit: bool) -> void:
 	var result := StructureManager.transfer(player.data, uid, slot, deposit)
+	_refresh()
+	_status.text = result.message
+
+func _hay(deposit: bool) -> void:
+	var result := StructureManager.store_hay(player.data, uid) if deposit else StructureManager.take_hay(player.data, uid)
 	_refresh()
 	_status.text = result.message
 
@@ -170,8 +238,23 @@ func _smelt(recipe: FurnaceRecipe) -> void:
 	_refresh()
 	_status.text = result.message
 
+func _preserve(recipe: PreservesJarRecipe) -> void:
+	var result := StructureManager.preserve(player.data, uid, recipe)
+	_refresh()
+	_status.text = result.message
+
+func _dehydrate(recipe: DehydratorRecipe) -> void:
+	var result := StructureManager.dehydrate(player.data, uid, recipe)
+	_refresh()
+	_status.text = result.message
+
 func _collect() -> void:
 	var result := StructureManager.collect(player.data, uid)
+	_refresh()
+	_status.text = result.message
+
+func _artisan(input: String) -> void:
+	var result := StructureManager.process_animal_product(player.data, uid, input)
 	_refresh()
 	_status.text = result.message
 

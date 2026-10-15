@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_raisins.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+category = 4
+item_id = "raisins"
+display_name = "Kismis"
+icon = ExtResource("2")
+description = "Kismis manis berkualitas tinggi dari anggur pilihan hasil dehydrator."
+stackable = true
+max_stack = 99
+buy_price = 0
+sell_price = 70

@@ -7,6 +7,53 @@ const FEEDBACK_DIR := "res://resources/feedback"
 const SFX_BUS := &"SFX"
 const VOICES := 12
 const FONT: Font = preload("res://assets/fonts/m5x7.ttf")
+const IMPACT_DIR := "res://assets/audio/sfx/kenney_impact/"
+## Different timbres, not just louder versions of the same tool sound.
+const TIER_TIMBRES := ["impactWood_light_000", "impactTin_medium_001", "impactMetal_light_002", "impactBell_heavy_000", "impactPlate_light_001", "impactMetal_heavy_003", "impactGlass_light_002", "impactSoft_heavy_003", "impactGlass_medium_004", "impactPlate_heavy_004"]
+var _audio_cache: Dictionary = {}
+
+func impact_stream(name: String) -> AudioStream:
+	if not _audio_cache.has(name):
+		_audio_cache[name] = load(IMPACT_DIR + name + ".ogg") as AudioStream
+	return _audio_cache[name]
+
+func play_tool_tier(tool: ToolData) -> void:
+	var tier := clampi(tool.tier, 0, TIER_TIMBRES.size() - 1)
+	# Keep the original action sound/particles, with a distinct material accent.
+	sfx(impact_stream(TIER_TIMBRES[tier]), -14.0, 0.03, float(tool.tool_type) - 3.0)
+
+func play_upgrade_reward(tier: int) -> void:
+	tier = clampi(tier, 0, TIER_TIMBRES.size() - 1)
+	sfx(impact_stream(TIER_TIMBRES[tier]), -8.0, 0.0, 0.0)
+	for note in [0, 4, 7, 12]:
+		sfx(impact_stream("impactBell_heavy_000"), -19.0, 0.0, float(note + tier))
+
+const FOOTSTEP_DIR := "res://assets/audio/sfx/footsteps/"
+const FOOTSTEP_SURFACES := ["grass", "dirt"]
+var _footstep_cache: Dictionary = {}
+
+func _footstep_stream(surface: String, running: bool, variation: int) -> AudioStream:
+	var mode := "run" if running else "walk"
+	var key  := "%s_%s_%03d" % [surface, mode, posmod(variation, 5)]
+	if _footstep_cache.has(key):
+		return _footstep_cache[key]
+	var path   := FOOTSTEP_DIR + "footstep_%s.wav" % key
+	var stream : AudioStream = null
+	if ResourceLoader.exists(path):
+		stream = load(path) as AudioStream
+	_footstep_cache[key] = stream
+	return stream
+
+func play_footstep(surface: String, running: bool, variation: int) -> void:
+	if surface in FOOTSTEP_SURFACES:
+		var stream := _footstep_stream(surface, running, variation)
+		if stream:
+			var vol := -12.0 if running else -16.0
+			sfx(stream, vol, 0.04, 0.0)
+			return
+	# Fallback for wood, concrete, carpet, snow → kenney_impact
+	var name := "footstep_%s_%03d" % [surface, posmod(variation, 5)]
+	sfx(impact_stream(name), -16.0 if running else -21.0, 0.045, 1.0 if running else 0.0)
 
 ## Nada naik saat memungut item beruntun (skala mayor, dalam semitone).
 const COMBO_STEPS: Array[int] = [0, 2, 4, 5, 7, 9, 11, 12]
@@ -324,7 +371,9 @@ func fly_to_hotbar(icon: Texture2D, world_pos: Vector2, item_id: String) -> void
 	tw.tween_property(sprite, "scale", Vector2.ONE * zoom * 1.3, 0.08)
 	tw.tween_method(_fly_step.bind(sprite, start, control, target, zoom), 0.0, 1.0, 0.38) \
 		.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD)
-	tw.tween_callback(_fly_done.bind(sprite, hotbar, item_id))
+	# Travel may free the old HUD before the flying icon reaches it.
+	var hotbar_ref: WeakRef = weakref(hotbar) if is_instance_valid(hotbar) else null
+	tw.tween_callback(_fly_done.bind(sprite, hotbar_ref, item_id))
 
 
 func _fly_step(t: float, sprite: Sprite2D, start: Vector2, control: Vector2, target: Vector2, zoom: float) -> void:
@@ -334,8 +383,9 @@ func _fly_step(t: float, sprite: Sprite2D, start: Vector2, control: Vector2, tar
 	sprite.scale = Vector2.ONE * lerpf(zoom * 1.3, zoom * 0.8, t)
 
 
-func _fly_done(sprite: Sprite2D, hotbar: Node, item_id: String) -> void:
+func _fly_done(sprite: Sprite2D, hotbar_ref: WeakRef, item_id: String) -> void:
 	sprite.queue_free()
+	var hotbar: Variant = hotbar_ref.get_ref() if hotbar_ref != null else null
 	if is_instance_valid(hotbar) and hotbar.has_method("pulse_item"):
 		hotbar.pulse_item(item_id)
 

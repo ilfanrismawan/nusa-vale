@@ -13,7 +13,7 @@ const SEASON_NAMES: Array[String] = ["Musim Semi", "Musim Panas", "Musim Gugur",
 ## Dipakai ringkasan slot bila save belum punya nama pemain (save versi 6 ke bawah).
 const DEFAULT_PLAYER_NAME := "Petani"
 
-const SAVE_VERSION := 9
+const SAVE_VERSION := 13
 
 signal game_saved
 signal game_loaded
@@ -250,6 +250,15 @@ func _valid_player(player: Variant) -> bool:
 		return false
 	if not player.get("name", "") is String:
 		return false
+	var order: Variant = player.get("tool_order", {})
+	if not order is Dictionary:
+		return false
+	if not order.is_empty():
+		if not order.get("old", "") is String or not order.get("next", "") is String or not _valid_numbers(order, ["ready_day"]):
+			return false
+		var upgrade := ToolUpgradeManager.get_upgrade_data(str(order.get("old", "")))
+		if upgrade.is_empty() or str(upgrade["next"]) != str(order.get("next", "")) or int(order.get("ready_day", 0)) < 1 or int(order.get("ready_day", 0)) > 1000000:
+			return false
 	return player.get("appearance", {}) is Dictionary and _valid_inventory(player.get("inventory", []))
 
 func _is_valid_save(data: Dictionary) -> bool:
@@ -259,6 +268,10 @@ func _is_valid_save(data: Dictionary) -> bool:
 	if not _valid_numbers(data, ["version", "saved_at"]):
 		return false
 	var version := int(data.get("version", 1))
+	if not ShippingManager.valid_save(data.get("shipping", {})):
+		return false
+	if not DailyWeather.valid_save(data.get("weather", {})):
+		return false
 	if version < 1 or version > SAVE_VERSION:
 		return false
 	for key in ["day_cycle", "world_state", "unlocks", "discoveries", "resources", "forage", "balai_nadi"]:
@@ -274,6 +287,18 @@ func _is_valid_save(data: Dictionary) -> bool:
 	for player in data.get("coop_players", []):
 		if not _valid_player(player):
 			return false
+	for structure in data.get("structures", []):
+		if structure is Dictionary and structure.get("item") in ["silo", "pasture_grass"]:
+			var key := "hay" if structure.item == "silo" else "regrow_day"
+			var amount: Variant = structure.get(key, 0)
+			if not RanchHusbandry.integer(amount) or amount < 0 or amount > (240 if key == "hay" else 1000000):
+				return false
+		if structure is Dictionary and structure.get("item") in StructureManager.RANCHES:
+			var animals: Variant = structure.get("livestock", {})
+			if not RanchHusbandry.valid(animals, str(structure.item)):
+				return false
+			if not animals.is_empty() and int(animals.last_day) > int(data.day_cycle.get("day", 1)):
+				return false
 	for entry in data.get("farm", []):
 		if entry is Dictionary and not entry.get("area", "farm") is String:
 			return false
@@ -311,9 +336,12 @@ func _build_save_data() -> Dictionary:
 		"player": {
 			"name": GameState.p1().player_name,
 			"money": max(0, GameState.money),
-			"stamina": clampi(GameState.p1().stamina, 0, GameState.MAX_STAMINA),
+			"stamina": clampi(GameState.p1().stamina, 0, GameState.p1().max_stamina),
+			"consumed_daya": GameState.p1().consumed_daya.duplicate(),
 			"bag_level": GameState.p1().bag_level,
 			"watering_water": GameState.p1().watering_water,
+			"tool_order": GameState.p1().tool_order.duplicate(true),
+			"learned_recipes": GameState.p1().learned_recipes.duplicate(),
 			"appearance": GameState.p1().appearance.to_dict(),
 			"equipment": GameState.p1().serialize_equipment(),
 		},
@@ -335,8 +363,11 @@ func _build_save_data() -> Dictionary:
 
 		"forage": ForageManager.to_save(),
 		"structures": StructureManager.to_save(),
+		"shipping": GameState.shipping.to_save(),
+		"weather": GameState.weather.to_save(),
 		# Version 8: shared contributions and one-time completion state.
 		"balai_nadi": GameState.balai_nadi.to_save(),
+		"daya": GameState.daya.to_save(),
 
 		"coop_players": _serialize_coop_players(),
 	}
@@ -344,18 +375,24 @@ func _build_save_data() -> Dictionary:
 func _apply_save(data: Dictionary) -> void:
 	GameState.use_player(GameState.p1())
 	_load_day_cycle(data)
+	GameState.weather.load_save(data.get("weather", {}))
 	_load_player(data)
+	GameState.shipping.load_save(data.get("shipping", {}))
+	ToolUpgradeManager.load_order(GameState.p1(), data.get("player", {}).get("tool_order", {}))
 	_load_inventory(data)
 	_load_farm(data)
 	_load_world_state(data)
-	GameState.balai_nadi.load_save(data.get("balai_nadi", {}))
 	_load_unlocks(data)
+	GameState.balai_nadi.load_save(data.get("balai_nadi", {}))
 	_load_discoveries(data)
 	_load_resources(data)
 	_load_appearance(data)
 	_load_forage(data)
 	StructureManager.load_save(data.get("structures", []))
 	_load_coop_players(data)
+	GameState.daya.load_save(data.get("daya", {}))
+	if GameState.weather.is_raining():
+		FarmManager.apply_rain()
 
 ## Versi 6: tas/stamina/penampilan P2-P4 dari co-op lokal (uang tetap satu, milik bersama).
 func _serialize_coop_players() -> Array:
@@ -442,8 +479,10 @@ func _load_player(data: Variant) -> void:
 		int(player_data.get("money", 100))
 	)
 	
+	GameState.p1().load_daya(player_data.get("consumed_daya", []))
+	GameState.p1().load_recipes(player_data.get("learned_recipes", []))
 	GameState.stamina = clampi(
-		int(player_data.get("stamina",GameState.MAX_STAMINA)), 0, GameState.MAX_STAMINA
+		int(player_data.get("stamina",GameState.MAX_STAMINA)), 0, GameState.p1().max_stamina
 	)
 	
 	# Versi 7: nama pemain. Save lama tanpa key ini = kosong (ringkasan slot memakai "Petani").
@@ -460,7 +499,7 @@ func _load_player(data: Variant) -> void:
 	
 	GameState.stamina_changed.emit(
 		GameState.stamina,
-		GameState.MAX_STAMINA
+		GameState.p1().max_stamina
 	)
 	
 	GameState.money_changed.emit(

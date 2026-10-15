@@ -14,9 +14,9 @@ tool_id = "axe_fairy"
 display_name = "Kapak Fairy"
 tier = 8
 damage = 15
-stamina_cost = 2
+stamina_cost = 1
 action_speed = 2
-upgrade_cost_money = 12000
+upgrade_cost_money = 20000
 required_items = {
 "fairy_bar": 5
 }

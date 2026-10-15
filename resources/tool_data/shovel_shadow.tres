@@ -17,7 +17,7 @@ tier = 7
 damage = 12
 stamina_cost = 2
 action_speed = 1.85
-upgrade_cost_money = 9000
+upgrade_cost_money = 14000
 required_items = {
 "shadow_bar": 5
 }

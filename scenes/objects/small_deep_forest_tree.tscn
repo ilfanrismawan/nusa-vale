@@ -1,0 +1,59 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/choppable.gd" id="1_ooi8g"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/tileset/ext/Tree Deep Forest.png" id="2_kr1bv"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8x8o6"]
+atlas = ExtResource("2_kr1bv")
+region = Rect2(32, 16, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_llgbu"]
+atlas = ExtResource("2_kr1bv")
+region = Rect2(32, 16, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oam1g"]
+atlas = ExtResource("2_kr1bv")
+region = Rect2(0, 32, 32, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_anmjk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8x8o6")
+}],
+"loop": 0,
+"name": &"chopping",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_llgbu")
+}],
+"loop": 0,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oam1g")
+}],
+"loop": 0,
+"name": &"stump",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_myw64"]
+radius = 4.0
+
+[node name="SmallDeepForestTree" type="StaticBody2D" unique_id=1510537584]
+script = ExtResource("1_ooi8g")
+health = 2
+drop_count = 2
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2097111916]
+sprite_frames = SubResource("SpriteFrames_anmjk")
+animation = &"idle"
+offset = Vector2(0, -12)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=737381440]
+shape = SubResource("CircleShape2D_myw64")

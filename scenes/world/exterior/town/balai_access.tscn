@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://c343nassx8n7o"]
+
+[ext_resource type="Script" uid="uid://djpcv63tepcru" path="res://scripts/world/balai_nadi_interactable.gd" id="1"]
+
+[sub_resource type="RectangleShape2D" id="Entry"]
+size = Vector2(42, 45)
+
+[node name="BalaiNadiAccess" type="Area2D" unique_id=963677985]
+script = ExtResource("1")
+interaction_type = 1
+target_scene = "res://scenes/world/balai_nadi/exterior.tscn"
+spawn_position = Vector2(427, 277)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1750198245]
+position = Vector2(0, 6.5)
+shape = SubResource("Entry")
+
+[node name="Marker2D" type="Marker2D" parent="." unique_id=1694162825]
+position = Vector2(0, 36)

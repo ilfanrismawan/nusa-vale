@@ -15,9 +15,9 @@ display_name = "Pickaxe Frost"
 tool_type = 2
 tier = 6
 damage = 9
-stamina_cost = 3
+stamina_cost = 2
 action_speed = 1.7
-upgrade_cost_money = 7000
+upgrade_cost_money = 10000
 required_items = {
 "frost_bar": 5
 }

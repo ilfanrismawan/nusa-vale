@@ -14,9 +14,9 @@ tool_id = "axe_iron"
 display_name = "Iron Axe"
 tier = 2
 damage = 3
-stamina_cost = 5
+stamina_cost = 3
 action_speed = 1.2
-upgrade_cost_money = 1000
+upgrade_cost_money = 1200
 required_items = {
 "iron_bar": 5,
 "wood": 15

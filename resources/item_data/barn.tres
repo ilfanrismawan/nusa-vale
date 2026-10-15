@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_barn.tres" id="2"]
+[resource]
+script = ExtResource("1")
+placeable = true
+placement_size = Vector2i(6, 4)
+category = 8
+item_id = "barn"
+display_name = "Kandang Ternak"
+icon = ExtResource("2")
+description = "Kandang 4 sapi/kambing/domba. Rawat, perah susu, dan cukur wol. Dapat ditingkatkan sampai 12 ternak dengan auto-feeder."
+stackable = false
+max_stack = 1

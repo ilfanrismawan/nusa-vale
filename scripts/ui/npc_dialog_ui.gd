@@ -1,13 +1,15 @@
 class_name NPCDialogUI
 extends CanvasLayer
 
+const ServiceTheme = preload("res://scripts/ui/farm_service_theme.gd")
+
 ## UI Kotak Dialog Interaktif untuk NPC Desa Nusa Vale.
 ## Menampilkan potret NPC, nama, peran/gelar, dan teks dialog bertahap.
 ## Mendukung navigasi tombol (E / Spasi / Enter / Klik) dan pembatalan (Esc).
 
 signal finished
 
-const FONT := preload("res://assets/fonts/m5x7.ttf")
+const FONT := preload("res://resources/ui/readable_font.tres")
 const TEX_INVENTORY := preload("res://assets/farm_rpg/ui/inventory/inventory.png")
 const TEX_BANNER := preload("res://assets/farm_rpg/ui/inventory/Banner.png")
 const TEX_CLOSE := preload("res://resources/ui/btn_close_x.tres")
@@ -30,16 +32,22 @@ var _name_label: Label
 var _role_label: Label
 var _page_hint_label: Label
 var _portrait_rect: TextureRect
+var _next_button: Button
+var _closed := false
+var _menu_open := false
 
 func _ready() -> void:
-	layer = 35
+	layer = ServiceTheme.LAYER
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build_ui()
 	_show_current_line()
-	if is_instance_valid(player):
+	if not _closed and is_instance_valid(player):
 		Coop.set_menu_open(player, true)
+		_menu_open = true
 
 func _input(event: InputEvent) -> void:
+	if _closed:
+		return
 	var input := player.input if is_instance_valid(player) else PlayerInput.solo()
 	
 	if input.is_event(event, &"ui_cancel"):
@@ -53,6 +61,8 @@ func _input(event: InputEvent) -> void:
 			_advance_dialog()
 
 func _advance_dialog() -> void:
+	if _closed:
+		return
 	_current_line_idx += 1
 	if _current_line_idx >= lines.size():
 		_close()
@@ -66,6 +76,8 @@ func _show_current_line() -> void:
 
 	if _text_label != null:
 		_text_label.text = lines[_current_line_idx]
+	if _next_button != null:
+		_next_button.text = "Selesai" if _current_line_idx == lines.size() - 1 else "Lanjut ›"
 
 	if _page_hint_label != null:
 		if lines.size() > 1:
@@ -74,15 +86,24 @@ func _show_current_line() -> void:
 			_page_hint_label.text = "[E / Spasi / Esc] Selesai"
 
 func _close() -> void:
-	if is_instance_valid(player):
+	if _closed:
+		return
+	_closed = true
+	set_process_input(false)
+	hide()
+	if _menu_open and is_instance_valid(player):
 		Coop.set_menu_open(player, false)
+	_menu_open = false
 	finished.emit()
 	queue_free()
 
+func _exit_tree() -> void:
+	if _menu_open and is_instance_valid(player):
+		Coop.set_menu_open(player, false)
+	_menu_open = false
+
 func _build_ui() -> void:
-	var ui_theme := Theme.new()
-	ui_theme.default_font = FONT
-	ui_theme.default_font_size = 16
+	var ui_theme := ServiceTheme.make_theme()
 
 	var root_control := Control.new()
 	root_control.theme = ui_theme
@@ -92,15 +113,18 @@ func _build_ui() -> void:
 
 	# Dialog box container diletakkan di bagian bawah layar
 	var margin_container := MarginContainer.new()
+	root_control.add_child(margin_container)
 	margin_container.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
+	margin_container.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	margin_container.offset_bottom = -18
 	margin_container.add_theme_constant_override("margin_left", 36)
 	margin_container.add_theme_constant_override("margin_right", 36)
 	margin_container.add_theme_constant_override("margin_bottom", 18)
-	root_control.add_child(margin_container)
 
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(520, 120)
-	panel.add_theme_stylebox_override("panel", _style(TEX_INVENTORY, Rect2(0, 64, 48, 48), 8, 12))
+	panel.custom_minimum_size = Vector2(minf(520, get_viewport().get_visible_rect().size.x - 72), 120)
+	panel.add_theme_stylebox_override("panel", ServiceTheme.dialogue())
+	panel.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	margin_container.add_child(panel)
 
 	var hbox := HBoxContainer.new()
@@ -120,7 +144,7 @@ func _build_ui() -> void:
 	_portrait_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	_portrait_rect.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	if portrait_texture != null:
-		_portrait_rect.texture = portrait_texture
+		_portrait_rect.texture = ServiceTheme.portrait(portrait_texture)
 	portrait_panel.add_child(_portrait_rect)
 
 	# Kolom Kanan: Nama, Title, Dialog Text, Navigasi
@@ -135,7 +159,7 @@ func _build_ui() -> void:
 	header_hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	content_vbox.add_child(header_hbox)
 
-	var name_vbox := HBoxContainer.new()
+	var name_vbox := VBoxContainer.new()
 	name_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	name_vbox.add_theme_constant_override("separation", 8)
 	header_hbox.add_child(name_vbox)
@@ -148,7 +172,7 @@ func _build_ui() -> void:
 
 	if not role_title.is_empty():
 		_role_label = Label.new()
-		_role_label.text = "• " + role_title
+		_role_label.text = role_title
 		_role_label.add_theme_color_override("font_color", COLOR_ROLE)
 		_role_label.add_theme_font_size_override("font_size", 14)
 		name_vbox.add_child(_role_label)
@@ -163,7 +187,7 @@ func _build_ui() -> void:
 	var body_panel := PanelContainer.new()
 	body_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	body_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	body_panel.add_theme_stylebox_override("panel", _style(TEX_BANNER, Rect2(0, 0, 48, 48), 6, 8))
+	body_panel.add_theme_stylebox_override("panel", ServiceTheme.texture_style(ServiceTheme.DIALOG, Rect2(0, 48, 48, 48), 3, 8))
 	content_vbox.add_child(body_panel)
 
 	_text_label = Label.new()
@@ -185,6 +209,7 @@ func _build_ui() -> void:
 	footer_hbox.add_child(_page_hint_label)
 
 	var next_btn := Button.new()
+	_next_button = next_btn
 	next_btn.text = " Lanjut > "
 	next_btn.focus_mode = Control.FOCUS_NONE
 	next_btn.pressed.connect(_advance_dialog)

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://nl1l1bhh5soy" path="res://scripts/ui/inventory_slot.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://buaio0hwlbw0i" path="res://resources/ui/slot_normal.tres" id="2_slot_tex"]
-[ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="3_font"]
+[ext_resource type="Font" path="res://resources/ui/readable_font.tres" id="3_font"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hover"]
 bg_color = Color(1, 0.92, 0.55, 0.22)
@@ -19,7 +19,7 @@ corner_radius_bottom_left = 4
 [sub_resource type="LabelSettings" id="LabelSettings_count"]
 font = ExtResource("3_font")
 font_color = Color(1, 0.98, 0.9, 1)
-outline_size = 3
+outline_size = 1
 outline_color = Color(0.18, 0.08, 0.04, 1)
 shadow_size = 2
 shadow_color = Color(0, 0, 0, 0.7)

@@ -74,14 +74,14 @@ func get_upgrade_data(tool_id: String) -> Dictionary:
 func _get_fallback_upgrade_data(_tool_type: String, next_tier: String, next_tool_id: String) -> Dictionary:
 	var costs := {
 		"copper": 500,
-		"iron": 1000,
-		"gold": 2000,
-		"platinum": 3500,
-		"crimson": 5000,
-		"frost": 7000,
-		"shadow": 9000,
-		"fairy": 12000,
-		"obsidian": 18000
+		"iron": 1200,
+		"gold": 2500,
+		"platinum": 4500,
+		"crimson": 7000,
+		"frost": 10000,
+		"shadow": 14000,
+		"fairy": 20000,
+		"obsidian": 28000
 	}
 	var materials := {
 		"copper": {"copper_bar": 5, "wood": 10},
@@ -101,53 +101,59 @@ func _get_fallback_upgrade_data(_tool_type: String, next_tier: String, next_tool
 		"materials": materials.get(next_tier, {})
 	}
 
+## Two day boundaries must pass. Orders belong to PlayerData, including P2-P4.
+const WORK_DAYS := 2
+
 func upgrade_tool(tool_id: String) -> bool:
-	if not can_upgrade(tool_id):
-		Notify.say("Alat ini sudah di tingkat maksimal.")
+	var owner := GameState.current
+	if not owner.tool_order.is_empty():
+		Notify.say("Masih ada pesanan di bengkel. Ambil alatmu dahulu.")
 		return false
-
-	var data: Dictionary = get_upgrade_data(tool_id)
-	var money_cost: int = int(data.get("cost", 0))
-
-	if GameState.money < money_cost:
-		Notify.say("Uang tidak cukup (Butuh %d G)." % money_cost)
+	var upgrade := get_upgrade_data(tool_id)
+	if upgrade.is_empty():
 		return false
-
-	var materials: Dictionary = data.get("materials", {})
-	for item_id in materials:
-		var required: int = int(materials[item_id])
-		if not GameState.has_item(item_id, required):
-			var mat_item := GameState._resolve_item(item_id)
-			var mat_name: String = mat_item.display_name if mat_item != null else item_id
-			Notify.say("Material tidak cukup (%s butuh %d)." % [mat_name, required])
+	var actual_id := tool_id
+	if not owner.has_item(actual_id):
+		actual_id = _normalize_tool_id(tool_id)
+		if not owner.has_item(actual_id) and tool_id.ends_with("_wood"):
+			actual_id = tool_id.trim_suffix("_wood")
+	if not owner.has_item(actual_id):
+		Notify.say("Alat tidak ditemukan di tas.")
+		return false
+	var cost := int(upgrade.get("cost", 0))
+	var materials: Dictionary = upgrade.get("materials", {})
+	if GameState.money < cost:
+		Notify.say("Uang tidak cukup.")
+		return false
+	for id in materials:
+		if not owner.has_item(id, int(materials[id])):
+			Notify.say("Bahan tempa belum lengkap.")
 			return false
-
-	var new_tool_id: String = str(data["next"])
-
-	var replaced: bool = GameState.replace_tool(tool_id, new_tool_id)
-	if not replaced:
-		var norm: String = _normalize_tool_id(tool_id)
-		if norm != tool_id:
-			replaced = GameState.replace_tool(norm, new_tool_id)
-		elif tool_id.ends_with("_wood"):
-			var base_id: String = tool_id.replace("_wood", "")
-			replaced = GameState.replace_tool(base_id, new_tool_id)
-
-	if not replaced:
-		Notify.say("Alat tidak ditemukan di inventory.")
-		return false
-
-	if money_cost > 0:
-		GameState.spend_money(money_cost)
-
-	for item_id in materials:
-		var required: int = int(materials[item_id])
-		GameState.remove_item(item_id, required)
-
-	tool_upgraded.emit(tool_id, new_tool_id)
-
-	var new_res := GameState._resolve_item(new_tool_id)
-	var display_name: String = new_res.display_name if new_res != null else new_tool_id
-	Notify.say("Berhasil meningkatkan ke %s!" % display_name)
-
+	owner.tool_order = {"old": actual_id, "next": str(upgrade["next"]), "ready_day": DayCycle.current_day + WORK_DAYS}
+	owner.remove_item(actual_id, 1)
+	GameState.spend_money(cost)
+	for id in materials:
+		owner.remove_item(id, int(materials[id]))
+	Notify.say("Alat dititipkan ke Empu Bima. Kembali setelah %d hari." % WORK_DAYS)
 	return true
+
+func days_remaining(owner: PlayerData) -> int:
+	return maxi(0, int(owner.tool_order.get("ready_day", DayCycle.current_day)) - DayCycle.current_day)
+
+func collect_tool(owner: PlayerData) -> bool:
+	if owner.tool_order.is_empty() or days_remaining(owner) > 0:
+		return false
+	var order := owner.tool_order.duplicate()
+	var id := str(order["next"])
+	if owner.add_item(id, 1) != 0:
+		Notify.say("Tas penuh. Kosongkan satu slot untuk mengambil alat.")
+		return false
+	owner.tool_order.clear()
+	tool_upgraded.emit(str(order["old"]), id)
+	var tool := GameState._resolve_item(id).action_data.tool_data
+	Juice.play_upgrade_reward(tool.tier)
+	Notify.say("%s selesai ditempa!" % tool.display_name)
+	return true
+
+func load_order(owner: PlayerData, value: Variant) -> void:
+	owner.load_tool_order(value)

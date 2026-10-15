@@ -9,7 +9,7 @@ display_name = "Pancing Crimson"
 tool_type = 6
 tier = 5
 stamina_cost = 3
-upgrade_cost_money = 5000
+upgrade_cost_money = 7000
 required_items = {
 "crimson_bar": 5
 }

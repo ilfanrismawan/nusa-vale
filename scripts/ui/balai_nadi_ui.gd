@@ -1,7 +1,7 @@
 class_name BalaiNadiUI
 extends CanvasLayer
 
-const FONT = preload("res://assets/fonts/m5x7.ttf")
+const FONT = preload("res://resources/ui/readable_font.tres")
 var player: Player
 var project_id := "balai_nadi_restoration"
 var _opened := false
@@ -39,6 +39,8 @@ func _ready() -> void:
 	content.add_theme_constant_override("separation", 8)
 	panel.add_child(content)
 	_label(content, "BALAI NADI", 28).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var wings := _label(content, "Sayap Alam: permintaan aktif\nSayap Karya • Sayap Niaga • Sayap Pengetahuan: direncanakan")
+	wings.add_theme_font_size_override("font_size", 18)
 	_selector = OptionButton.new()
 	content.add_child(_selector)
 	for project in GameState.balai_nadi.definitions:
@@ -66,6 +68,7 @@ func _ready() -> void:
 	close.pressed.connect(close_menu)
 	content.add_child(close)
 	GameState.inventory_changed.connect(_refresh)
+	GameState.money_changed.connect(func(_amount): _refresh())
 	GameState.balai_nadi.state_changed.connect(_refresh)
 	_opened = true
 	Coop.set_menu_open(player, true)
@@ -92,7 +95,7 @@ func _build_rows(parent: Node) -> void:
 	_rows.clear()
 	var project := GameState.balai_nadi.definition(project_id)
 	for item_id in project.requirements:
-		var item := GameState._resolve_item(item_id)
+		var item := GameState._resolve_item(item_id) if item_id != "money" else null
 		var row := VBoxContainer.new()
 		parent.add_child(row)
 		var heading := HBoxContainer.new()
@@ -100,7 +103,8 @@ func _build_rows(parent: Node) -> void:
 		var label := _label(heading, "")
 		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		var button := player.ui_inventory._make_menu_button("Kontribusi") as Button
-		button.icon = item.icon
+		if item != null:
+			button.icon = item.icon
 		button.expand_icon = true
 		button.add_theme_constant_override("icon_max_width", 18)
 		button.pressed.connect(_contribute.bind(item_id))
@@ -122,12 +126,13 @@ func _refresh() -> void:
 		var row: Dictionary = _rows[item_id]
 		var amount := manager.contributed(project_id, item_id)
 		var left := manager.remaining(project_id, item_id)
-		var available := player.data.get_item_count(item_id)
-		row.label.text = "%s  %d / %d\nSisa: %d   •   Di tas: %d" % [GameState._resolve_item(item_id).display_name, amount, project.requirements[item_id], left, available]
+		var available := manager.available_amount(player.data, item_id)
+		var name_text: String = "Dana bersama" if item_id == "money" else GameState._resolve_item(item_id).display_name
+		row.label.text = "%s  %d / %d\nSisa: %d   •   Tersedia: %d" % [name_text, amount, project.requirements[item_id], left, available]
 		row.bar.value = amount
 		row.button.disabled = left <= 0 or available <= 0 or manager.completed(project_id)
 		row.button.text = "Terpenuhi" if left <= 0 else "Kontribusi %d" % mini(left, available)
-	_status.text = project.completion_message if manager.completed(project_id) else "Bawa bahan kapan saja. Setiap kontribusi ikut tersimpan."
+	_status.text = "Tahap: %s\n%s" % [manager.restoration_stage(), project.completion_message if manager.completed(project_id) else "Kontribusi bertahap; bahan dan dana tersimpan otomatis."]
 
 func _contribute(item_id: String) -> void:
 	if _opened:

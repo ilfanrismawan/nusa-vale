@@ -1,8 +1,9 @@
-[gd_scene format=3 uid="uid://xbqwx73e0plg"]
+[gd_scene load_steps=38 format=3 uid="uid://cvtoriadvent01"]
 
 [ext_resource type="Script" path="res://scripts/world/village_npc.gd" id="1_village_npc"]
 [ext_resource type="Texture2D" uid="uid://by1ny181grgyf" path="res://assets/farm_rpg/Character/NPC'S/Tori/Idle.png" id="2_tori_idle"]
 [ext_resource type="Texture2D" uid="uid://dtctc0ghdokls" path="res://assets/farm_rpg/Character/NPC'S/Tori/Portrait Tori.png" id="3_tori_portrait"]
+[ext_resource type="Texture2D" uid="uid://b3tvodewa3qmm" path="res://assets/farm_rpg/Character/NPC'S/Tori/Walk.png" id="4_tori_walk"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tori_down_0"]
 atlas = ExtResource("2_tori_idle")
@@ -22,35 +23,107 @@ region = Rect2(96, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tori_up_0"]
 atlas = ExtResource("2_tori_idle")
-region = Rect2(128, 0, 32, 32)
+region = Rect2(0, 32, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tori_up_1"]
 atlas = ExtResource("2_tori_idle")
-region = Rect2(160, 0, 32, 32)
+region = Rect2(32, 32, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tori_up_2"]
 atlas = ExtResource("2_tori_idle")
-region = Rect2(192, 0, 32, 32)
+region = Rect2(64, 32, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tori_up_3"]
 atlas = ExtResource("2_tori_idle")
-region = Rect2(224, 0, 32, 32)
+region = Rect2(96, 32, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tori_side_0"]
 atlas = ExtResource("2_tori_idle")
-region = Rect2(256, 0, 32, 32)
+region = Rect2(0, 64, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tori_side_1"]
 atlas = ExtResource("2_tori_idle")
-region = Rect2(288, 0, 32, 32)
+region = Rect2(32, 64, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tori_side_2"]
 atlas = ExtResource("2_tori_idle")
-region = Rect2(320, 0, 32, 32)
+region = Rect2(64, 64, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tori_side_3"]
 atlas = ExtResource("2_tori_idle")
-region = Rect2(352, 0, 32, 32)
+region = Rect2(96, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tori_wd0"]
+atlas = ExtResource("4_tori_walk")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tori_wd1"]
+atlas = ExtResource("4_tori_walk")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tori_wd2"]
+atlas = ExtResource("4_tori_walk")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tori_wd3"]
+atlas = ExtResource("4_tori_walk")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tori_wd4"]
+atlas = ExtResource("4_tori_walk")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tori_wd5"]
+atlas = ExtResource("4_tori_walk")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tori_wu0"]
+atlas = ExtResource("4_tori_walk")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tori_wu1"]
+atlas = ExtResource("4_tori_walk")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_tori_wu2"]
+atlas = ExtResource("4_tori_walk")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_tori_wu3"]
+atlas = ExtResource("4_tori_walk")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_tori_wu4"]
+atlas = ExtResource("4_tori_walk")
+region = Rect2(128, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_tori_wu5"]
+atlas = ExtResource("4_tori_walk")
+region = Rect2(160, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_tori_ws0"]
+atlas = ExtResource("4_tori_walk")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_tori_ws1"]
+atlas = ExtResource("4_tori_walk")
+region = Rect2(32, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_tori_ws2"]
+atlas = ExtResource("4_tori_walk")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_tori_ws3"]
+atlas = ExtResource("4_tori_walk")
+region = Rect2(96, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_tori_ws4"]
+atlas = ExtResource("4_tori_walk")
+region = Rect2(128, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Atlas_tori_ws5"]
+atlas = ExtResource("4_tori_walk")
+region = Rect2(160, 64, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_tori"]
 animations = [{
@@ -104,6 +177,75 @@ animations = [{
 "loop": true,
 "name": &"idle_up",
 "speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tori_wd0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tori_wd1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tori_wd2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tori_wd3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tori_wd4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tori_wd5")
+}],
+"loop": true,
+"name": &"walk_down",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Atlas_tori_ws0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_tori_ws1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_tori_ws2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_tori_ws3")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_tori_ws4")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_tori_ws5")
+}],
+"loop": true,
+"name": &"walk_side",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tori_wu0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tori_wu1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_tori_wu2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_tori_wu3")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_tori_wu4")
+}, {
+"duration": 1.0,
+"texture": SubResource("Atlas_tori_wu5")
+}],
+"loop": true,
+"name": &"walk_up",
+"speed": 6.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
@@ -112,14 +254,58 @@ size = Vector2(16, 10)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_area"]
 size = Vector2(36, 36)
 
-[node name="ToriNPC" type="StaticBody2D"]
+[node name="ToriNPC" type="CharacterBody2D"]
 y_sort_enabled = true
+collision_layer = 1
+collision_mask = 1
 script = ExtResource("1_village_npc")
-npc_id = "bayu"
-npc_name = "Bayu"
+npc_id = "wira"
+npc_name = "Wira"
 role_title = "Penjelajah Rimba"
 portrait = ExtResource("3_tori_portrait")
-dialog_lines = PackedStringArray("Hai! Hari yang cerah untuk menjelajahi alam Nusa Vale, bukan?", "Hutan belantara di barat menyimpan kayu jati kokoh dan aneka tanaman liar berkhasiat.", "Selalu perhatikan energimu saat menebang pohon dan menambang batu agar tidak tumbang sebelum petang!", "Kudengar kepala desa sedang menyiapkan festival lomba balap karung dan adu tangkas di alun-alun kota. Aku tak sabar untuk ikut bertanding!")
+walk_speed = 40.0
+dialog_lines = PackedStringArray("Hai! Aku Wira, penjelajah rimba Nusa Vale. Hari yang cerah untuk bertualang, bukan?", "Hutan belantara di barat menyimpan kayu jati kokoh dan aneka tanaman liar berkhasiat.", "Selalu perhatikan energimu saat menebang pohon dan menambang batu agar tidak tumbang sebelum petang!")
+schedule = [{
+"activity": "Patroli pagi di alun-alun kota",
+"dialog_lines": PackedStringArray("Selamat pagi! Udara alun-alun pagi ini sangat segar.", "Aku sedang bersiap untuk mengecek jalur setapak menuju perbukitan."),
+"facing": "down",
+"hour": 6,
+"minute": 0,
+"path": [],
+"target_pos": Vector2(748, 436)
+}, {
+"activity": "Memantau jalan masuk hutan",
+"dialog_lines": PackedStringArray("Pintu masuk hutan terlihat tenang hari ini.", "Pastikan kapak dan beliungmu dalam kondisi tajam jika ingin mencari kayu keras ke dalam sana!"),
+"facing": "side_left",
+"hour": 10,
+"minute": 0,
+"path": [Vector2(650, 436), Vector2(520, 420), Vector2(460, 420)],
+"target_pos": Vector2(460, 420)
+}, {
+"activity": "Makan siang di warung makan",
+"dialog_lines": PackedStringArray("Menjelajah hutan menguras banyak tenaga. Waktunya mengisi perut di Warung Pak Joko!"),
+"facing": "side_right",
+"hour": 13,
+"minute": 0,
+"path": [Vector2(520, 420), Vector2(740, 436), Vector2(890, 420)],
+"target_pos": Vector2(890, 420)
+}, {
+"activity": "Duduk di dekat taman air mancur",
+"dialog_lines": PackedStringArray("Matahari sore terasa hangat di sini.", "Kudengar festival balap karung dan lomba lari akan diadakan sebentar lagi. Aku giat berlatih setiap hari!"),
+"facing": "side_left",
+"hour": 16,
+"minute": 30,
+"path": [Vector2(740, 436), Vector2(550, 420)],
+"target_pos": Vector2(550, 420)
+}, {
+"activity": "Kembali ke alun-alun kota",
+"dialog_lines": PackedStringArray("Malam mulai larut. Saatnya pulang dan beristirahat."),
+"facing": "down",
+"hour": 20,
+"minute": 0,
+"path": [Vector2(650, 436), Vector2(748, 436)],
+"target_pos": Vector2(748, 436)
+}]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_tori")

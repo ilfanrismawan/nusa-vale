@@ -41,13 +41,15 @@ func _test_economy() -> void:
 	add_child(bin)
 	money = GameState.money
 	bin.sell_harvested_items()
-	check(data.inventory[0] == null and data.inventory[20].count == 3 and GameState.money == money + 2 * crop.sell_price, "shipping sells active slots and preserves locked slots")
+	check(data.inventory[0] == null and data.inventory[20].count == 3 and GameState.money == money and int(GameState.shipping.pending[0].count) == 2, "shipping queues active slots and preserves locked slots without immediate payment")
 	money = GameState.money
 	bin.sell_harvested_items()
-	check(GameState.money == money and data.inventory[20].count == 3, "repeated shipping cannot pay for locked items")
+	check(GameState.money == money and data.inventory[20].count == 3 and int(GameState.shipping.pending[0].count) == 2, "repeated shipping cannot queue locked items or duplicate deposits")
 	data.bag_level = 1
 	bin.sell_harvested_items()
-	check(data.inventory[20] == null and GameState.money == money + 3 * crop.sell_price, "unlocked items sell exactly once")
+	check(data.inventory[20] == null and GameState.money == money and int(GameState.shipping.pending[0].count) == 5, "unlocked items are deposited exactly once")
+	DayCycle.advance_day()
+	check(GameState.money == money + 5 * crop.sell_price and GameState.shipping.pending.is_empty(), "next dawn pays for all deposited items exactly once")
 	bin.queue_free()
 
 func _test_character() -> void:

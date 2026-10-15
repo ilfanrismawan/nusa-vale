@@ -1,0 +1,3520 @@
+[gd_resource type="Resource" format=3 uid="uid://cc1okf0q7rpue"]
+
+[resource]
+metadata/cleanup_objects = [{
+"group": "choppable",
+"id": "farm:cleanup:PineTree18",
+"name": "PineTree18",
+"position": Vector2(1131, 838),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree21",
+"name": "PineTree21",
+"position": Vector2(1094, 910),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree22",
+"name": "PineTree22",
+"position": Vector2(1141, 903),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree23",
+"name": "PineTree23",
+"position": Vector2(1117, 874),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree24",
+"name": "PineTree24",
+"position": Vector2(923, 962),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree25",
+"name": "PineTree25",
+"position": Vector2(814, 924),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree26",
+"name": "PineTree26",
+"position": Vector2(895, 802),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MahoganyTree",
+"name": "MahoganyTree",
+"position": Vector2(1041, 845),
+"scene": "res://scenes/objects/mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MahoganyTree2",
+"name": "MahoganyTree2",
+"position": Vector2(829, 959),
+"scene": "res://scenes/objects/mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MahoganyTree3",
+"name": "MahoganyTree3",
+"position": Vector2(1158, 876),
+"scene": "res://scenes/objects/mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree12",
+"name": "BirchTree12",
+"position": Vector2(928, 1024),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree13",
+"name": "BirchTree13",
+"position": Vector2(1090, 924),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree11",
+"name": "MapleTree11",
+"position": Vector2(1024, 915),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree19",
+"name": "PineTree19",
+"position": Vector2(320, 318),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree36",
+"name": "PineTree36",
+"position": Vector2(245, 232),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree37",
+"name": "PineTree37",
+"position": Vector2(280, 318),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree38",
+"name": "PineTree38",
+"position": Vector2(337, 430),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree39",
+"name": "PineTree39",
+"position": Vector2(413, 408),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MahoganyTree7",
+"name": "MahoganyTree7",
+"position": Vector2(278, 273),
+"scene": "res://scenes/objects/mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MahoganyTree8",
+"name": "MahoganyTree8",
+"position": Vector2(240, 256),
+"scene": "res://scenes/objects/mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MahoganyTree9",
+"name": "MahoganyTree9",
+"position": Vector2(307, 337),
+"scene": "res://scenes/objects/mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MahoganyTree10",
+"name": "MahoganyTree10",
+"position": Vector2(328, 382),
+"scene": "res://scenes/objects/mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MahoganyTree11",
+"name": "MahoganyTree11",
+"position": Vector2(387, 421),
+"scene": "res://scenes/objects/mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree20",
+"name": "BirchTree20",
+"position": Vector2(291, 369),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree21",
+"name": "BirchTree21",
+"position": Vector2(298, 274),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree22",
+"name": "BirchTree22",
+"position": Vector2(431, 452),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree23",
+"name": "BirchTree23",
+"position": Vector2(431, 452),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree24",
+"name": "BirchTree24",
+"position": Vector2(365, 445),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree25",
+"name": "BirchTree25",
+"position": Vector2(268, 345),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree26",
+"name": "BirchTree26",
+"position": Vector2(327, 340),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree51",
+"name": "BirchTree51",
+"position": Vector2(351, 259),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree52",
+"name": "BirchTree52",
+"position": Vector2(408, 363),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree53",
+"name": "BirchTree53",
+"position": Vector2(480, 410),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree54",
+"name": "BirchTree54",
+"position": Vector2(494, 545),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree55",
+"name": "BirchTree55",
+"position": Vector2(670, 559),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree27",
+"name": "BirchTree27",
+"position": Vector2(300, 293),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree19",
+"name": "MapleTree19",
+"position": Vector2(257, 290),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree20",
+"name": "MapleTree20",
+"position": Vector2(309, 399),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree21",
+"name": "MapleTree21",
+"position": Vector2(351, 347),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree22",
+"name": "MapleTree22",
+"position": Vector2(357, 390),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree23",
+"name": "MapleTree23",
+"position": Vector2(395, 463),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree24",
+"name": "MapleTree24",
+"position": Vector2(363, 423),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree15",
+"name": "MapleTree15",
+"position": Vector2(1058, 180),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree40",
+"name": "PineTree40",
+"position": Vector2(1091, 199),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree41",
+"name": "PineTree41",
+"position": Vector2(1051, 238),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree42",
+"name": "PineTree42",
+"position": Vector2(1049, 307),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree43",
+"name": "PineTree43",
+"position": Vector2(1002, 272),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree44",
+"name": "PineTree44",
+"position": Vector2(1076, 411),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree70",
+"name": "PineTree70",
+"position": Vector2(1062, 388),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree45",
+"name": "PineTree45",
+"position": Vector2(1160, 450),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree46",
+"name": "PineTree46",
+"position": Vector2(1071, 451),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree47",
+"name": "PineTree47",
+"position": Vector2(818, 333),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree48",
+"name": "PineTree48",
+"position": Vector2(817, 407),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree49",
+"name": "PineTree49",
+"position": Vector2(847, 384),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree50",
+"name": "PineTree50",
+"position": Vector2(842, 173),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree51",
+"name": "PineTree51",
+"position": Vector2(903, 140),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree52",
+"name": "PineTree52",
+"position": Vector2(1178, 280),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree53",
+"name": "PineTree53",
+"position": Vector2(1228, 297),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree54",
+"name": "PineTree54",
+"position": Vector2(1197, 177),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree55",
+"name": "PineTree55",
+"position": Vector2(1105, 503),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree56",
+"name": "PineTree56",
+"position": Vector2(1162, 610),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree57",
+"name": "PineTree57",
+"position": Vector2(949, 585),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree58",
+"name": "PineTree58",
+"position": Vector2(837, 617),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree59",
+"name": "PineTree59",
+"position": Vector2(859, 542),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree60",
+"name": "PineTree60",
+"position": Vector2(891, 607),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree61",
+"name": "PineTree61",
+"position": Vector2(919, 537),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree62",
+"name": "PineTree62",
+"position": Vector2(995, 647),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree63",
+"name": "PineTree63",
+"position": Vector2(896, 667),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree64",
+"name": "PineTree64",
+"position": Vector2(955, 632),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree65",
+"name": "PineTree65",
+"position": Vector2(803, 655),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree66",
+"name": "PineTree66",
+"position": Vector2(822, 532),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree67",
+"name": "PineTree67",
+"position": Vector2(818, 453),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree28",
+"name": "BirchTree28",
+"position": Vector2(1136, 326),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree25",
+"name": "MapleTree25",
+"position": Vector2(1142, 199),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree16",
+"name": "MapleTree16",
+"position": Vector2(1037, 380),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree17",
+"name": "MapleTree17",
+"position": Vector2(992, 804),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree18",
+"name": "MapleTree18",
+"position": Vector2(1216, 262),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree20",
+"name": "PineTree20",
+"position": Vector2(1193, 593),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood",
+"name": "Wood",
+"position": Vector2(1193, 292),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood2",
+"name": "Wood2",
+"position": Vector2(1020, 237),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood3",
+"name": "Wood3",
+"position": Vector2(1099, 373),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood4",
+"name": "Wood4",
+"position": Vector2(1189, 245),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood5",
+"name": "Wood5",
+"position": Vector2(1173, 395),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood6",
+"name": "Wood6",
+"position": Vector2(1156, 462),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood7",
+"name": "Wood7",
+"position": Vector2(1215, 461),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood8",
+"name": "Wood8",
+"position": Vector2(1203, 430),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood9",
+"name": "Wood9",
+"position": Vector2(984, 331),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood10",
+"name": "Wood10",
+"position": Vector2(1022, 174),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood11",
+"name": "Wood11",
+"position": Vector2(1056, 192),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood12",
+"name": "Wood12",
+"position": Vector2(1064, 236),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood13",
+"name": "Wood13",
+"position": Vector2(829, 341),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood14",
+"name": "Wood14",
+"position": Vector2(859, 135),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood15",
+"name": "Wood15",
+"position": Vector2(912, 115),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood16",
+"name": "Wood16",
+"position": Vector2(815, 355),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood33",
+"name": "Wood33",
+"position": Vector2(463, 677),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood34",
+"name": "Wood34",
+"position": Vector2(516, 657),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood35",
+"name": "Wood35",
+"position": Vector2(419, 897),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood17",
+"name": "Wood17",
+"position": Vector2(834, 436),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood27",
+"name": "Wood27",
+"position": Vector2(1082, 682),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood28",
+"name": "Wood28",
+"position": Vector2(852, 763),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood29",
+"name": "Wood29",
+"position": Vector2(877, 581),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood30",
+"name": "Wood30",
+"position": Vector2(930, 561),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood31",
+"name": "Wood31",
+"position": Vector2(833, 801),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood32",
+"name": "Wood32",
+"position": Vector2(852, 882),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood18",
+"name": "Wood18",
+"position": Vector2(860, 407),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood19",
+"name": "Wood19",
+"position": Vector2(800, 391),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood20",
+"name": "Wood20",
+"position": Vector2(804, 498),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood21",
+"name": "Wood21",
+"position": Vector2(879, 503),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood22",
+"name": "Wood22",
+"position": Vector2(919, 478),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood23",
+"name": "Wood23",
+"position": Vector2(948, 499),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood24",
+"name": "Wood24",
+"position": Vector2(951, 470),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood25",
+"name": "Wood25",
+"position": Vector2(847, 471),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood26",
+"name": "Wood26",
+"position": Vector2(1030, 432),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock",
+"name": "Rock",
+"position": Vector2(1071, 303),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock2",
+"name": "Rock2",
+"position": Vector2(1158, 420),
+"scene": "res://scenes/objects/rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock3",
+"name": "Rock3",
+"position": Vector2(1206, 382),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock4",
+"name": "Rock4",
+"position": Vector2(1048, 407),
+"scene": "res://scenes/objects/rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock5",
+"name": "Rock5",
+"position": Vector2(1029, 294),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock11",
+"name": "Rock11",
+"position": Vector2(652, 804),
+"scene": "res://scenes/objects/large_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock12",
+"name": "Rock12",
+"position": Vector2(739, 921),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock13",
+"name": "Rock13",
+"position": Vector2(787, 883),
+"scene": "res://scenes/objects/rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock14",
+"name": "Rock14",
+"position": Vector2(629, 908),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock15",
+"name": "Rock15",
+"position": Vector2(610, 795),
+"scene": "res://scenes/objects/rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock16",
+"name": "Rock16",
+"position": Vector2(389, 792),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock17",
+"name": "Rock17",
+"position": Vector2(476, 909),
+"scene": "res://scenes/objects/large_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock18",
+"name": "Rock18",
+"position": Vector2(524, 871),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock31",
+"name": "Rock31",
+"position": Vector2(343, 840),
+"scene": "res://scenes/objects/rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock32",
+"name": "Rock32",
+"position": Vector2(583, 832),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock33",
+"name": "Rock33",
+"position": Vector2(583, 688),
+"scene": "res://scenes/objects/rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock34",
+"name": "Rock34",
+"position": Vector2(809, 774),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock35",
+"name": "Rock35",
+"position": Vector2(700, 928),
+"scene": "res://scenes/objects/large_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock19",
+"name": "Rock19",
+"position": Vector2(366, 896),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock20",
+"name": "Rock20",
+"position": Vector2(347, 783),
+"scene": "res://scenes/objects/rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock21",
+"name": "Rock21",
+"position": Vector2(307, 313),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MahoganyTree29",
+"name": "MahoganyTree29",
+"position": Vector2(668, 288),
+"scene": "res://scenes/objects/mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree49",
+"name": "BirchTree49",
+"position": Vector2(631, 275),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree50",
+"name": "BirchTree50",
+"position": Vector2(608, 251),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock86",
+"name": "Rock86",
+"position": Vector2(647, 219),
+"scene": "res://scenes/objects/rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock22",
+"name": "Rock22",
+"position": Vector2(394, 430),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock23",
+"name": "Rock23",
+"position": Vector2(442, 392),
+"scene": "res://scenes/objects/large_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock24",
+"name": "Rock24",
+"position": Vector2(284, 417),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock25",
+"name": "Rock25",
+"position": Vector2(265, 304),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock26",
+"name": "Rock26",
+"position": Vector2(574, 54),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock27",
+"name": "Rock27",
+"position": Vector2(661, 171),
+"scene": "res://scenes/objects/rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock28",
+"name": "Rock28",
+"position": Vector2(670, 126),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock29",
+"name": "Rock29",
+"position": Vector2(551, 158),
+"scene": "res://scenes/objects/large_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock30",
+"name": "Rock30",
+"position": Vector2(505, 73),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock6",
+"name": "Rock6",
+"position": Vector2(1155, 208),
+"scene": "res://scenes/objects/rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock7",
+"name": "Rock7",
+"position": Vector2(1043, 170),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock8",
+"name": "Rock8",
+"position": Vector2(846, 337),
+"scene": "res://scenes/objects/rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock9",
+"name": "Rock9",
+"position": Vector2(1208, 490),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock10",
+"name": "Rock10",
+"position": Vector2(1171, 238),
+"scene": "res://scenes/objects/large_rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallPineTree",
+"name": "SmallPineTree",
+"position": Vector2(1159, 244),
+"scene": "res://scenes/objects/small_pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree",
+"name": "SmallBirchTree",
+"position": Vector2(931, 497),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree2",
+"name": "SmallBirchTree2",
+"position": Vector2(618, 767),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree3",
+"name": "SmallBirchTree3",
+"position": Vector2(518, 780),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree4",
+"name": "SmallBirchTree4",
+"position": Vector2(538, 700),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree5",
+"name": "SmallBirchTree5",
+"position": Vector2(573, 805),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree6",
+"name": "SmallBirchTree6",
+"position": Vector2(660, 777),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree7",
+"name": "SmallBirchTree7",
+"position": Vector2(392, 705),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree8",
+"name": "SmallBirchTree8",
+"position": Vector2(413, 760),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree9",
+"name": "SmallBirchTree9",
+"position": Vector2(491, 783),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree10",
+"name": "SmallBirchTree10",
+"position": Vector2(950, 934),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree",
+"name": "SmallMapleTree",
+"position": Vector2(1066, 638),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree2",
+"name": "SmallMapleTree2",
+"position": Vector2(948, 750),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree3",
+"name": "SmallMapleTree3",
+"position": Vector2(842, 688),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree4",
+"name": "SmallMapleTree4",
+"position": Vector2(929, 644),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree172",
+"name": "PineTree172",
+"position": Vector2(624, 197),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree173",
+"name": "PineTree173",
+"position": Vector2(601, 215),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree174",
+"name": "PineTree174",
+"position": Vector2(566, 219),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree175",
+"name": "PineTree175",
+"position": Vector2(670, 259),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree176",
+"name": "PineTree176",
+"position": Vector2(630, 244),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree52",
+"name": "SmallMapleTree52",
+"position": Vector2(604, 256),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree5",
+"name": "SmallMapleTree5",
+"position": Vector2(864, 562),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree6",
+"name": "SmallMapleTree6",
+"position": Vector2(758, 742),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree7",
+"name": "SmallMapleTree7",
+"position": Vector2(814, 716),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree8",
+"name": "SmallMapleTree8",
+"position": Vector2(706, 753),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood39",
+"name": "Wood39",
+"position": Vector2(1046, 700),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree10",
+"name": "SmallMapleTree10",
+"position": Vector2(1036, 625),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree11",
+"name": "SmallMapleTree11",
+"position": Vector2(952, 679),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree12",
+"name": "SmallMapleTree12",
+"position": Vector2(1008, 653),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree13",
+"name": "SmallMapleTree13",
+"position": Vector2(900, 690),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree",
+"name": "SmallMahoganyTree",
+"position": Vector2(993, 572),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree2",
+"name": "SmallMahoganyTree2",
+"position": Vector2(819, 570),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree71",
+"name": "PineTree71",
+"position": Vector2(499, 784),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree72",
+"name": "PineTree72",
+"position": Vector2(387, 816),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree73",
+"name": "PineTree73",
+"position": Vector2(409, 741),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree74",
+"name": "PineTree74",
+"position": Vector2(441, 806),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree75",
+"name": "PineTree75",
+"position": Vector2(469, 736),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree76",
+"name": "PineTree76",
+"position": Vector2(505, 831),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree77",
+"name": "PineTree77",
+"position": Vector2(372, 731),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood40",
+"name": "Wood40",
+"position": Vector2(427, 780),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood41",
+"name": "Wood41",
+"position": Vector2(480, 760),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree14",
+"name": "SmallMapleTree14",
+"position": Vector2(414, 761),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree8",
+"name": "SmallMahoganyTree8",
+"position": Vector2(543, 771),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree9",
+"name": "SmallMahoganyTree9",
+"position": Vector2(369, 769),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree27",
+"name": "MapleTree27",
+"position": Vector2(710, 793),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree78",
+"name": "PineTree78",
+"position": Vector2(703, 851),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood42",
+"name": "Wood42",
+"position": Vector2(672, 850),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood43",
+"name": "Wood43",
+"position": Vector2(674, 787),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood44",
+"name": "Wood44",
+"position": Vector2(708, 805),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood45",
+"name": "Wood45",
+"position": Vector2(716, 849),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock39",
+"name": "Rock39",
+"position": Vector2(681, 907),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock40",
+"name": "Rock40",
+"position": Vector2(695, 783),
+"scene": "res://scenes/objects/rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree79",
+"name": "PineTree79",
+"position": Vector2(636, 875),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree80",
+"name": "PineTree80",
+"position": Vector2(524, 907),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree81",
+"name": "PineTree81",
+"position": Vector2(546, 832),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree82",
+"name": "PineTree82",
+"position": Vector2(578, 897),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree83",
+"name": "PineTree83",
+"position": Vector2(606, 827),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree84",
+"name": "PineTree84",
+"position": Vector2(642, 922),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree85",
+"name": "PineTree85",
+"position": Vector2(509, 822),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood46",
+"name": "Wood46",
+"position": Vector2(564, 871),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood47",
+"name": "Wood47",
+"position": Vector2(617, 851),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree15",
+"name": "SmallMapleTree15",
+"position": Vector2(551, 852),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree10",
+"name": "SmallMahoganyTree10",
+"position": Vector2(680, 862),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree11",
+"name": "SmallMahoganyTree11",
+"position": Vector2(506, 860),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree86",
+"name": "PineTree86",
+"position": Vector2(828, 770),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree87",
+"name": "PineTree87",
+"position": Vector2(788, 770),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MahoganyTree13",
+"name": "MahoganyTree13",
+"position": Vector2(815, 789),
+"scene": "res://scenes/objects/mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MahoganyTree14",
+"name": "MahoganyTree14",
+"position": Vector2(836, 834),
+"scene": "res://scenes/objects/mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree30",
+"name": "BirchTree30",
+"position": Vector2(799, 821),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree31",
+"name": "BirchTree31",
+"position": Vector2(776, 797),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree32",
+"name": "BirchTree32",
+"position": Vector2(835, 792),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree28",
+"name": "MapleTree28",
+"position": Vector2(817, 851),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree29",
+"name": "MapleTree29",
+"position": Vector2(859, 799),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree30",
+"name": "MapleTree30",
+"position": Vector2(865, 842),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree31",
+"name": "MapleTree31",
+"position": Vector2(921, 735),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree88",
+"name": "PineTree88",
+"position": Vector2(914, 793),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood48",
+"name": "Wood48",
+"position": Vector2(883, 792),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MahoganyTree18",
+"name": "MahoganyTree18",
+"position": Vector2(990, 967),
+"scene": "res://scenes/objects/mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree37",
+"name": "BirchTree37",
+"position": Vector2(953, 954),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree38",
+"name": "BirchTree38",
+"position": Vector2(930, 930),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree38",
+"name": "MapleTree38",
+"position": Vector2(971, 984),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree39",
+"name": "MapleTree39",
+"position": Vector2(1019, 975),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree108",
+"name": "PineTree108",
+"position": Vector2(1068, 926),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood66",
+"name": "Wood66",
+"position": Vector2(1037, 925),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood49",
+"name": "Wood49",
+"position": Vector2(885, 729),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood50",
+"name": "Wood50",
+"position": Vector2(919, 747),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood51",
+"name": "Wood51",
+"position": Vector2(927, 791),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree23",
+"name": "SmallMapleTree23",
+"position": Vector2(939, 854),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree106",
+"name": "PineTree106",
+"position": Vector2(1009, 882),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree107",
+"name": "PineTree107",
+"position": Vector2(969, 882),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MahoganyTree17",
+"name": "MahoganyTree17",
+"position": Vector2(1017, 946),
+"scene": "res://scenes/objects/mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree37",
+"name": "MapleTree37",
+"position": Vector2(1046, 954),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood64",
+"name": "Wood64",
+"position": Vector2(1100, 859),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood65",
+"name": "Wood65",
+"position": Vector2(1108, 903),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock41",
+"name": "Rock41",
+"position": Vector2(892, 849),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood62",
+"name": "Wood62",
+"position": Vector2(1013, 961),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock50",
+"name": "Rock50",
+"position": Vector2(948, 962),
+"scene": "res://scenes/objects/rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree22",
+"name": "SmallMapleTree22",
+"position": Vector2(1109, 829),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree105",
+"name": "PineTree105",
+"position": Vector2(949, 849),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree36",
+"name": "BirchTree36",
+"position": Vector2(937, 876),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree35",
+"name": "MapleTree35",
+"position": Vector2(1026, 921),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree36",
+"name": "MapleTree36",
+"position": Vector2(1082, 814),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood63",
+"name": "Wood63",
+"position": Vector2(1088, 870),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock51",
+"name": "Rock51",
+"position": Vector2(1053, 928),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock42",
+"name": "Rock42",
+"position": Vector2(906, 725),
+"scene": "res://scenes/objects/large_rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree96",
+"name": "PineTree96",
+"position": Vector2(666, 493),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood54",
+"name": "Wood54",
+"position": Vector2(623, 454),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood55",
+"name": "Wood55",
+"position": Vector2(604, 492),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock43",
+"name": "Rock43",
+"position": Vector2(423, 495),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock44",
+"name": "Rock44",
+"position": Vector2(381, 486),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock45",
+"name": "Rock45",
+"position": Vector2(347, 511),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock46",
+"name": "Rock46",
+"position": Vector2(354, 379),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock47",
+"name": "Rock47",
+"position": Vector2(580, 465),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree12",
+"name": "SmallBirchTree12",
+"position": Vector2(389, 458),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree13",
+"name": "SmallBirchTree13",
+"position": Vector2(289, 471),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree14",
+"name": "SmallBirchTree14",
+"position": Vector2(309, 391),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree15",
+"name": "SmallBirchTree15",
+"position": Vector2(344, 496),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree16",
+"name": "SmallBirchTree16",
+"position": Vector2(431, 468),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree17",
+"name": "SmallMapleTree17",
+"position": Vector2(640, 393),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree18",
+"name": "SmallMapleTree18",
+"position": Vector2(529, 433),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree19",
+"name": "SmallMapleTree19",
+"position": Vector2(508, 484),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree20",
+"name": "SmallMapleTree20",
+"position": Vector2(477, 444),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree21",
+"name": "SmallMapleTree21",
+"position": Vector2(671, 381),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree97",
+"name": "PineTree97",
+"position": Vector2(270, 475),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree98",
+"name": "PineTree98",
+"position": Vector2(276, 522),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree14",
+"name": "SmallMahoganyTree14",
+"position": Vector2(314, 462),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree30",
+"name": "SmallMahoganyTree30",
+"position": Vector2(388, 326),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree31",
+"name": "SmallMahoganyTree31",
+"position": Vector2(231, 323),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree32",
+"name": "MapleTree32",
+"position": Vector2(481, 484),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood56",
+"name": "Wood56",
+"position": Vector2(445, 478),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood57",
+"name": "Wood57",
+"position": Vector2(479, 496),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock48",
+"name": "Rock48",
+"position": Vector2(466, 474),
+"scene": "res://scenes/objects/large_rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree137",
+"name": "PineTree137",
+"position": Vector2(93, 527),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MahoganyTree28",
+"name": "MahoganyTree28",
+"position": Vector2(143, 518),
+"scene": "res://scenes/objects/mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree46",
+"name": "BirchTree46",
+"position": Vector2(187, 549),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree47",
+"name": "BirchTree47",
+"position": Vector2(187, 549),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree48",
+"name": "BirchTree48",
+"position": Vector2(121, 542),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree56",
+"name": "MapleTree56",
+"position": Vector2(151, 560),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree57",
+"name": "MapleTree57",
+"position": Vector2(119, 520),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock62",
+"name": "Rock62",
+"position": Vector2(150, 527),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock63",
+"name": "Rock63",
+"position": Vector2(179, 592),
+"scene": "res://scenes/objects/rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock64",
+"name": "Rock64",
+"position": Vector2(137, 583),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock65",
+"name": "Rock65",
+"position": Vector2(98, 547),
+"scene": "res://scenes/objects/rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree25",
+"name": "SmallBirchTree25",
+"position": Vector2(145, 555),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree26",
+"name": "SmallBirchTree26",
+"position": Vector2(45, 568),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree27",
+"name": "SmallBirchTree27",
+"position": Vector2(100, 593),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree28",
+"name": "SmallBirchTree28",
+"position": Vector2(187, 565),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree43",
+"name": "SmallMapleTree43",
+"position": Vector2(167, 618),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree44",
+"name": "SmallMapleTree44",
+"position": Vector2(47, 604),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree23",
+"name": "SmallMahoganyTree23",
+"position": Vector2(70, 559),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree58",
+"name": "MapleTree58",
+"position": Vector2(172, 578),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood89",
+"name": "Wood89",
+"position": Vector2(130, 563),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood90",
+"name": "Wood90",
+"position": Vector2(213, 630),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock66",
+"name": "Rock66",
+"position": Vector2(179, 650),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree99",
+"name": "PineTree99",
+"position": Vector2(317, 523),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree100",
+"name": "PineTree100",
+"position": Vector2(377, 518),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree101",
+"name": "PineTree101",
+"position": Vector2(280, 513),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree102",
+"name": "PineTree102",
+"position": Vector2(599, 461),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree103",
+"name": "PineTree103",
+"position": Vector2(559, 461),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MahoganyTree15",
+"name": "MahoganyTree15",
+"position": Vector2(586, 480),
+"scene": "res://scenes/objects/mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MahoganyTree16",
+"name": "MahoganyTree16",
+"position": Vector2(607, 525),
+"scene": "res://scenes/objects/mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree33",
+"name": "BirchTree33",
+"position": Vector2(570, 512),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree56",
+"name": "BirchTree56",
+"position": Vector2(651, 524),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree34",
+"name": "BirchTree34",
+"position": Vector2(547, 488),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree35",
+"name": "BirchTree35",
+"position": Vector2(606, 483),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree33",
+"name": "MapleTree33",
+"position": Vector2(630, 490),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree34",
+"name": "MapleTree34",
+"position": Vector2(692, 426),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree104",
+"name": "PineTree104",
+"position": Vector2(685, 484),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood58",
+"name": "Wood58",
+"position": Vector2(654, 483),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood59",
+"name": "Wood59",
+"position": Vector2(656, 420),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood60",
+"name": "Wood60",
+"position": Vector2(690, 438),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood61",
+"name": "Wood61",
+"position": Vector2(698, 482),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock49",
+"name": "Rock49",
+"position": Vector2(677, 416),
+"scene": "res://scenes/objects/large_rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree89",
+"name": "PineTree89",
+"position": Vector2(446, 876),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree90",
+"name": "PineTree90",
+"position": Vector2(334, 908),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree91",
+"name": "PineTree91",
+"position": Vector2(356, 833),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree92",
+"name": "PineTree92",
+"position": Vector2(388, 898),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree93",
+"name": "PineTree93",
+"position": Vector2(416, 828),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree94",
+"name": "PineTree94",
+"position": Vector2(452, 923),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree95",
+"name": "PineTree95",
+"position": Vector2(319, 823),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood52",
+"name": "Wood52",
+"position": Vector2(374, 872),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood53",
+"name": "Wood53",
+"position": Vector2(427, 852),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree16",
+"name": "SmallMapleTree16",
+"position": Vector2(361, 853),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree12",
+"name": "SmallMahoganyTree12",
+"position": Vector2(490, 863),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree13",
+"name": "SmallMahoganyTree13",
+"position": Vector2(316, 861),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree3",
+"name": "SmallMahoganyTree3",
+"position": Vector2(1039, 416),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree4",
+"name": "SmallMahoganyTree4",
+"position": Vector2(1159, 671),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree5",
+"name": "SmallMahoganyTree5",
+"position": Vector2(1203, 653),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree6",
+"name": "SmallMahoganyTree6",
+"position": Vector2(1039, 759),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree68",
+"name": "PineTree68",
+"position": Vector2(1062, 37),
+"scene": "res://scenes/objects/small_pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree11",
+"name": "SmallBirchTree11",
+"position": Vector2(1042, 65),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree9",
+"name": "SmallMapleTree9",
+"position": Vector2(1135, 29),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree7",
+"name": "SmallMahoganyTree7",
+"position": Vector2(1216, 81),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree69",
+"name": "PineTree69",
+"position": Vector2(1041, 34),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree29",
+"name": "BirchTree29",
+"position": Vector2(1237, 34),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree26",
+"name": "MapleTree26",
+"position": Vector2(1240, 97),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MahoganyTree12",
+"name": "MahoganyTree12",
+"position": Vector2(1105, 32),
+"scene": "res://scenes/objects/mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood36",
+"name": "Wood36",
+"position": Vector2(1068, 58),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood37",
+"name": "Wood37",
+"position": Vector2(1090, 40),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock36",
+"name": "Rock36",
+"position": Vector2(1183, 87),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock37",
+"name": "Rock37",
+"position": Vector2(1176, 40),
+"scene": "res://scenes/objects/rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock38",
+"name": "Rock38",
+"position": Vector2(1199, 70),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood38",
+"name": "Wood38",
+"position": Vector2(1214, 90),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree109",
+"name": "PineTree109",
+"position": Vector2(977, 715),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood67",
+"name": "Wood67",
+"position": Vector2(637, 737),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood68",
+"name": "Wood68",
+"position": Vector2(690, 717),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock52",
+"name": "Rock52",
+"position": Vector2(826, 864),
+"scene": "res://scenes/objects/rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock53",
+"name": "Rock53",
+"position": Vector2(784, 855),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock54",
+"name": "Rock54",
+"position": Vector2(563, 852),
+"scene": "res://scenes/objects/large_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock55",
+"name": "Rock55",
+"position": Vector2(517, 900),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock56",
+"name": "Rock56",
+"position": Vector2(757, 892),
+"scene": "res://scenes/objects/rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock57",
+"name": "Rock57",
+"position": Vector2(757, 748),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock58",
+"name": "Rock58",
+"position": Vector2(521, 843),
+"scene": "res://scenes/objects/rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree17",
+"name": "SmallBirchTree17",
+"position": Vector2(792, 827),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree18",
+"name": "SmallBirchTree18",
+"position": Vector2(692, 840),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree19",
+"name": "SmallBirchTree19",
+"position": Vector2(712, 760),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree20",
+"name": "SmallBirchTree20",
+"position": Vector2(747, 865),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree21",
+"name": "SmallBirchTree21",
+"position": Vector2(834, 837),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree22",
+"name": "SmallBirchTree22",
+"position": Vector2(566, 765),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree23",
+"name": "SmallBirchTree23",
+"position": Vector2(587, 820),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree24",
+"name": "SmallBirchTree24",
+"position": Vector2(665, 843),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree24",
+"name": "SmallMapleTree24",
+"position": Vector2(932, 802),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree25",
+"name": "SmallMapleTree25",
+"position": Vector2(880, 813),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree123",
+"name": "PineTree123",
+"position": Vector2(192, 267),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree124",
+"name": "PineTree124",
+"position": Vector2(292, 112),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree125",
+"name": "PineTree125",
+"position": Vector2(193, 132),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree126",
+"name": "PineTree126",
+"position": Vector2(252, 97),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree41",
+"name": "MapleTree41",
+"position": Vector2(289, 269),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood73",
+"name": "Wood73",
+"position": Vector2(379, 147),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood74",
+"name": "Wood74",
+"position": Vector2(149, 228),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree27",
+"name": "SmallMapleTree27",
+"position": Vector2(363, 103),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree28",
+"name": "SmallMapleTree28",
+"position": Vector2(245, 215),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree29",
+"name": "SmallMapleTree29",
+"position": Vector2(226, 109),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood75",
+"name": "Wood75",
+"position": Vector2(343, 165),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree30",
+"name": "SmallMapleTree30",
+"position": Vector2(249, 144),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree31",
+"name": "SmallMapleTree31",
+"position": Vector2(305, 118),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree32",
+"name": "SmallMapleTree32",
+"position": Vector2(197, 155),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree42",
+"name": "MapleTree42",
+"position": Vector2(156, 264),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree43",
+"name": "MapleTree43",
+"position": Vector2(218, 200),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree127",
+"name": "PineTree127",
+"position": Vector2(211, 258),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree177",
+"name": "PineTree177",
+"position": Vector2(209, 306),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree178",
+"name": "PineTree178",
+"position": Vector2(242, 383),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood76",
+"name": "Wood76",
+"position": Vector2(180, 257),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood77",
+"name": "Wood77",
+"position": Vector2(182, 194),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood78",
+"name": "Wood78",
+"position": Vector2(216, 212),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood79",
+"name": "Wood79",
+"position": Vector2(224, 256),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree44",
+"name": "MapleTree44",
+"position": Vector2(379, 279),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock60",
+"name": "Rock60",
+"position": Vector2(203, 190),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree17",
+"name": "SmallMahoganyTree17",
+"position": Vector2(336, 224),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree128",
+"name": "PineTree128",
+"position": Vector2(274, 180),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree33",
+"name": "SmallMapleTree33",
+"position": Vector2(229, 267),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree129",
+"name": "PineTree129",
+"position": Vector2(118, 81),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MahoganyTree19",
+"name": "MahoganyTree19",
+"position": Vector2(151, 122),
+"scene": "res://scenes/objects/mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MahoganyTree20",
+"name": "MahoganyTree20",
+"position": Vector2(113, 105),
+"scene": "res://scenes/objects/mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree41",
+"name": "BirchTree41",
+"position": Vector2(171, 123),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree45",
+"name": "MapleTree45",
+"position": Vector2(130, 139),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree46",
+"name": "MapleTree46",
+"position": Vector2(162, 118),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood80",
+"name": "Wood80",
+"position": Vector2(97, 105),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree18",
+"name": "SmallMahoganyTree18",
+"position": Vector2(209, 73),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree35",
+"name": "SmallMapleTree35",
+"position": Vector2(102, 116),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree130",
+"name": "PineTree130",
+"position": Vector2(71, 456),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MahoganyTree21",
+"name": "MahoganyTree21",
+"position": Vector2(104, 497),
+"scene": "res://scenes/objects/mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MahoganyTree22",
+"name": "MahoganyTree22",
+"position": Vector2(66, 480),
+"scene": "res://scenes/objects/mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree42",
+"name": "BirchTree42",
+"position": Vector2(124, 498),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree47",
+"name": "MapleTree47",
+"position": Vector2(83, 514),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree48",
+"name": "MapleTree48",
+"position": Vector2(115, 493),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood81",
+"name": "Wood81",
+"position": Vector2(50, 480),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree19",
+"name": "SmallMahoganyTree19",
+"position": Vector2(162, 448),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree36",
+"name": "SmallMapleTree36",
+"position": Vector2(55, 491),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree131",
+"name": "PineTree131",
+"position": Vector2(56, 683),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MahoganyTree23",
+"name": "MahoganyTree23",
+"position": Vector2(89, 724),
+"scene": "res://scenes/objects/mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MahoganyTree24",
+"name": "MahoganyTree24",
+"position": Vector2(51, 707),
+"scene": "res://scenes/objects/mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree43",
+"name": "BirchTree43",
+"position": Vector2(109, 725),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree49",
+"name": "MapleTree49",
+"position": Vector2(68, 741),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree50",
+"name": "MapleTree50",
+"position": Vector2(100, 720),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood82",
+"name": "Wood82",
+"position": Vector2(35, 707),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree20",
+"name": "SmallMahoganyTree20",
+"position": Vector2(147, 675),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree37",
+"name": "SmallMapleTree37",
+"position": Vector2(40, 718),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree34",
+"name": "SmallMapleTree34",
+"position": Vector2(177, 278),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree110",
+"name": "PineTree110",
+"position": Vector2(673, 844),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree111",
+"name": "PineTree111",
+"position": Vector2(561, 876),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree112",
+"name": "PineTree112",
+"position": Vector2(583, 801),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree113",
+"name": "PineTree113",
+"position": Vector2(615, 866),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree114",
+"name": "PineTree114",
+"position": Vector2(643, 796),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree115",
+"name": "PineTree115",
+"position": Vector2(679, 891),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree116",
+"name": "PineTree116",
+"position": Vector2(546, 791),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood69",
+"name": "Wood69",
+"position": Vector2(601, 840),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood70",
+"name": "Wood70",
+"position": Vector2(654, 820),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree26",
+"name": "SmallMapleTree26",
+"position": Vector2(588, 821),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree15",
+"name": "SmallMahoganyTree15",
+"position": Vector2(717, 831),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree16",
+"name": "SmallMahoganyTree16",
+"position": Vector2(543, 829),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock69",
+"name": "Rock69",
+"position": Vector2(627, 1016),
+"scene": "res://scenes/objects/large_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock70",
+"name": "Rock70",
+"position": Vector2(686, 977),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree37",
+"name": "SmallBirchTree37",
+"position": Vector2(676, 950),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree147",
+"name": "PineTree147",
+"position": Vector2(608, 976),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree148",
+"name": "PineTree148",
+"position": Vector2(649, 977),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree149",
+"name": "PineTree149",
+"position": Vector2(709, 972),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree150",
+"name": "PineTree150",
+"position": Vector2(612, 967),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood95",
+"name": "Wood95",
+"position": Vector2(667, 1016),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood96",
+"name": "Wood96",
+"position": Vector2(720, 996),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree47",
+"name": "SmallMapleTree47",
+"position": Vector2(654, 997),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree26",
+"name": "SmallMahoganyTree26",
+"position": Vector2(609, 1005),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree27",
+"name": "SmallMahoganyTree27",
+"position": Vector2(593, 1008),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock71",
+"name": "Rock71",
+"position": Vector2(666, 997),
+"scene": "res://scenes/objects/rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock72",
+"name": "Rock72",
+"position": Vector2(624, 988),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree38",
+"name": "SmallBirchTree38",
+"position": Vector2(690, 965),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree151",
+"name": "PineTree151",
+"position": Vector2(718, 1011),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood97",
+"name": "Wood97",
+"position": Vector2(704, 985),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree48",
+"name": "SmallMapleTree48",
+"position": Vector2(691, 966),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree28",
+"name": "SmallMahoganyTree28",
+"position": Vector2(646, 974),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree40",
+"name": "MapleTree40",
+"position": Vector2(884, 853),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood71",
+"name": "Wood71",
+"position": Vector2(848, 847),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood72",
+"name": "Wood72",
+"position": Vector2(882, 865),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock59",
+"name": "Rock59",
+"position": Vector2(869, 843),
+"scene": "res://scenes/objects/rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree117",
+"name": "PineTree117",
+"position": Vector2(720, 892),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree118",
+"name": "PineTree118",
+"position": Vector2(780, 887),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock73",
+"name": "Rock73",
+"position": Vector2(711, 1041),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock74",
+"name": "Rock74",
+"position": Vector2(759, 1003),
+"scene": "res://scenes/objects/large_rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood98",
+"name": "Wood98",
+"position": Vector2(680, 925),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood99",
+"name": "Wood99",
+"position": Vector2(688, 969),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock75",
+"name": "Rock75",
+"position": Vector2(756, 975),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock76",
+"name": "Rock76",
+"position": Vector2(729, 1012),
+"scene": "res://scenes/objects/rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree39",
+"name": "SmallBirchTree39",
+"position": Vector2(719, 985),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree29",
+"name": "SmallMahoganyTree29",
+"position": Vector2(689, 951),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree152",
+"name": "PineTree152",
+"position": Vector2(692, 1012),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree153",
+"name": "PineTree153",
+"position": Vector2(752, 1007),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree119",
+"name": "PineTree119",
+"position": Vector2(683, 882),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree120",
+"name": "PineTree120",
+"position": Vector2(962, 830),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree132",
+"name": "PineTree132",
+"position": Vector2(407, 695),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree51",
+"name": "MapleTree51",
+"position": Vector2(504, 697),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood83",
+"name": "Wood83",
+"position": Vector2(364, 656),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood84",
+"name": "Wood84",
+"position": Vector2(345, 694),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock61",
+"name": "Rock61",
+"position": Vector2(321, 667),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree38",
+"name": "SmallMapleTree38",
+"position": Vector2(460, 643),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree133",
+"name": "PineTree133",
+"position": Vector2(340, 663),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MahoganyTree25",
+"name": "MahoganyTree25",
+"position": Vector2(327, 682),
+"scene": "res://scenes/objects/mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree44",
+"name": "BirchTree44",
+"position": Vector2(347, 685),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree52",
+"name": "MapleTree52",
+"position": Vector2(371, 692),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree134",
+"name": "PineTree134",
+"position": Vector2(426, 686),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood85",
+"name": "Wood85",
+"position": Vector2(395, 685),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood86",
+"name": "Wood86",
+"position": Vector2(431, 640),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood87",
+"name": "Wood87",
+"position": Vector2(439, 684),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree39",
+"name": "SmallMapleTree39",
+"position": Vector2(621, 722),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree53",
+"name": "MapleTree53",
+"position": Vector2(594, 707),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree21",
+"name": "SmallMahoganyTree21",
+"position": Vector2(551, 652),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree40",
+"name": "SmallMapleTree40",
+"position": Vector2(444, 695),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree41",
+"name": "SmallMapleTree41",
+"position": Vector2(392, 706),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree135",
+"name": "PineTree135",
+"position": Vector2(1054, 667),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MahoganyTree26",
+"name": "MahoganyTree26",
+"position": Vector2(1087, 708),
+"scene": "res://scenes/objects/mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MahoganyTree27",
+"name": "MahoganyTree27",
+"position": Vector2(1049, 691),
+"scene": "res://scenes/objects/mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree45",
+"name": "BirchTree45",
+"position": Vector2(1107, 709),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree54",
+"name": "MapleTree54",
+"position": Vector2(1066, 725),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree55",
+"name": "MapleTree55",
+"position": Vector2(1098, 704),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood88",
+"name": "Wood88",
+"position": Vector2(1033, 691),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree22",
+"name": "SmallMahoganyTree22",
+"position": Vector2(1145, 659),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree42",
+"name": "SmallMapleTree42",
+"position": Vector2(1038, 702),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree136",
+"name": "PineTree136",
+"position": Vector2(474, 723),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree31",
+"name": "SmallBirchTree31",
+"position": Vector2(536, 996),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree32",
+"name": "SmallBirchTree32",
+"position": Vector2(556, 916),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree33",
+"name": "SmallBirchTree33",
+"position": Vector2(591, 1021),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree34",
+"name": "SmallBirchTree34",
+"position": Vector2(509, 999),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree142",
+"name": "PineTree142",
+"position": Vector2(517, 1000),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood94",
+"name": "Wood94",
+"position": Vector2(498, 976),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree25",
+"name": "SmallMahoganyTree25",
+"position": Vector2(561, 987),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree143",
+"name": "PineTree143",
+"position": Vector2(527, 1038),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree35",
+"name": "SmallBirchTree35",
+"position": Vector2(584, 981),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree36",
+"name": "SmallBirchTree36",
+"position": Vector2(605, 1036),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree144",
+"name": "PineTree144",
+"position": Vector2(601, 1017),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree145",
+"name": "PineTree145",
+"position": Vector2(564, 1007),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree46",
+"name": "SmallMapleTree46",
+"position": Vector2(606, 1037),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree59",
+"name": "MapleTree59",
+"position": Vector2(612, 923),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree146",
+"name": "PineTree146",
+"position": Vector2(492, 939),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock67",
+"name": "Rock67",
+"position": Vector2(116, 774),
+"scene": "res://scenes/objects/rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock68",
+"name": "Rock68",
+"position": Vector2(74, 765),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree29",
+"name": "SmallBirchTree29",
+"position": Vector2(140, 742),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree30",
+"name": "SmallBirchTree30",
+"position": Vector2(114, 772),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree138",
+"name": "PineTree138",
+"position": Vector2(136, 723),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree139",
+"name": "PineTree139",
+"position": Vector2(196, 718),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree140",
+"name": "PineTree140",
+"position": Vector2(99, 713),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood91",
+"name": "Wood91",
+"position": Vector2(154, 762),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood92",
+"name": "Wood92",
+"position": Vector2(88, 777),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree45",
+"name": "SmallMapleTree45",
+"position": Vector2(141, 743),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMahoganyTree24",
+"name": "SmallMahoganyTree24",
+"position": Vector2(96, 751),
+"scene": "res://scenes/objects/small_mahogany_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood93",
+"name": "Wood93",
+"position": Vector2(-60, 612),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree141",
+"name": "PineTree141",
+"position": Vector2(165, 732),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree39",
+"name": "BirchTree39",
+"position": Vector2(973, 881),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:BirchTree40",
+"name": "BirchTree40",
+"position": Vector2(950, 857),
+"scene": "res://scenes/objects/birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree121",
+"name": "PineTree121",
+"position": Vector2(530, 893),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree122",
+"name": "PineTree122",
+"position": Vector2(590, 888),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock77",
+"name": "Rock77",
+"position": Vector2(621, 986),
+"scene": "res://scenes/objects/large_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock78",
+"name": "Rock78",
+"position": Vector2(575, 910),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree154",
+"name": "PineTree154",
+"position": Vector2(628, 953),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree155",
+"name": "PineTree155",
+"position": Vector2(570, 975),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree156",
+"name": "PineTree156",
+"position": Vector2(634, 1000),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood100",
+"name": "Wood100",
+"position": Vector2(556, 949),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood101",
+"name": "Wood101",
+"position": Vector2(609, 929),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree49",
+"name": "SmallMapleTree49",
+"position": Vector2(543, 930),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock79",
+"name": "Rock79",
+"position": Vector2(555, 930),
+"scene": "res://scenes/objects/rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree157",
+"name": "PineTree157",
+"position": Vector2(553, 954),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree158",
+"name": "PineTree158",
+"position": Vector2(607, 944),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood102",
+"name": "Wood102",
+"position": Vector2(593, 918),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree40",
+"name": "SmallBirchTree40",
+"position": Vector2(548, 994),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree60",
+"name": "MapleTree60",
+"position": Vector2(604, 1001),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree159",
+"name": "PineTree159",
+"position": Vector2(582, 966),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock80",
+"name": "Rock80",
+"position": Vector2(814, 969),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock81",
+"name": "Rock81",
+"position": Vector2(768, 893),
+"scene": "res://scenes/objects/rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree160",
+"name": "PineTree160",
+"position": Vector2(821, 936),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree161",
+"name": "PineTree161",
+"position": Vector2(763, 958),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree162",
+"name": "PineTree162",
+"position": Vector2(827, 983),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood103",
+"name": "Wood103",
+"position": Vector2(749, 932),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood104",
+"name": "Wood104",
+"position": Vector2(802, 912),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree50",
+"name": "SmallMapleTree50",
+"position": Vector2(736, 913),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock82",
+"name": "Rock82",
+"position": Vector2(748, 913),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree163",
+"name": "PineTree163",
+"position": Vector2(746, 937),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree164",
+"name": "PineTree164",
+"position": Vector2(800, 927),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood105",
+"name": "Wood105",
+"position": Vector2(786, 901),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree41",
+"name": "SmallBirchTree41",
+"position": Vector2(741, 977),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree61",
+"name": "MapleTree61",
+"position": Vector2(797, 984),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree165",
+"name": "PineTree165",
+"position": Vector2(775, 949),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock83",
+"name": "Rock83",
+"position": Vector2(906, 934),
+"scene": "res://scenes/objects/large_rock.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock84",
+"name": "Rock84",
+"position": Vector2(860, 858),
+"scene": "res://scenes/objects/small_rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree166",
+"name": "PineTree166",
+"position": Vector2(913, 901),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree167",
+"name": "PineTree167",
+"position": Vector2(855, 923),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree168",
+"name": "PineTree168",
+"position": Vector2(919, 948),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood106",
+"name": "Wood106",
+"position": Vector2(841, 897),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood107",
+"name": "Wood107",
+"position": Vector2(894, 877),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallMapleTree51",
+"name": "SmallMapleTree51",
+"position": Vector2(828, 878),
+"scene": "res://scenes/objects/small_maple_tree.tscn"
+}, {
+"group": "mineable",
+"id": "farm:cleanup:Rock85",
+"name": "Rock85",
+"position": Vector2(840, 878),
+"scene": "res://scenes/objects/rock.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree169",
+"name": "PineTree169",
+"position": Vector2(838, 902),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree170",
+"name": "PineTree170",
+"position": Vector2(892, 892),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:Wood108",
+"name": "Wood108",
+"position": Vector2(878, 866),
+"scene": "res://scenes/objects/wood.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:SmallBirchTree42",
+"name": "SmallBirchTree42",
+"position": Vector2(833, 942),
+"scene": "res://scenes/objects/small_birch_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:MapleTree62",
+"name": "MapleTree62",
+"position": Vector2(889, 949),
+"scene": "res://scenes/objects/maple_tree.tscn"
+}, {
+"group": "choppable",
+"id": "farm:cleanup:PineTree171",
+"name": "PineTree171",
+"position": Vector2(867, 914),
+"scene": "res://scenes/objects/pine_tree.tscn"
+}]

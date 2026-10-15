@@ -9,7 +9,7 @@ display_name = "Pancing Platinum"
 tool_type = 6
 tier = 4
 stamina_cost = 3
-upgrade_cost_money = 3500
+upgrade_cost_money = 4500
 required_items = {
 "platinum_bar": 5
 }

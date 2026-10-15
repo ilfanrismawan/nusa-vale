@@ -95,6 +95,15 @@ func _min_zoom_for_limits() -> float:
 func _on_viewport_size_changed() -> void:
 	_set_zoom(_target_zoom)
 
+## Scene limits may be applied after this camera's _ready(). Snap to a safe
+## zoom instead of tweening through a view wider than the new map bounds.
+func refresh_limits() -> void:
+	if _tween != null and _tween.is_valid():
+		_tween.kill()
+	_target_zoom = _clamp_zoom(_target_zoom)
+	zoom = Vector2.ONE * _target_zoom
+	reset_smoothing()
+
 # Daftarkan action default bila belum ada di Project Settings > Input Map.
 # Jika action dibuat sendiri di Input Map, binding dari sana yang dipakai.
 func _ensure_input_actions() -> void:
