@@ -13,7 +13,7 @@ const DEVICE_NUMPAD := -2
 
 const ACTIONS: Array[StringName] = [
 	&"move_left", &"move_right", &"move_up", &"move_down", &"run",
-	&"use_tool", &"interact", &"tool_next", &"tool_prev",
+	&"use_tool", &"interact", &"aim", &"tool_next", &"tool_prev",
 	&"slot_1", &"slot_2", &"slot_3", &"slot_4", &"slot_5", &"slot_6", &"slot_7", &"slot_8",
 	&"inventory", &"cycle_hotbar", &"sort_inventory", &"ui_accept", &"ui_cancel",
 ]

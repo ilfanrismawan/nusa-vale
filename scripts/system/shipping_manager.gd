@@ -3,6 +3,7 @@ extends Node
 
 var pending: Array = []
 var last_report: Dictionary = {}
+var _report_ui: CanvasLayer
 
 func deposit(item: ItemData, amount: int) -> void:
 	if item == null or amount <= 0 or item.sell_price <= 0 or item.is_tool():
@@ -23,30 +24,16 @@ func settle(day: int) -> void:
 		GameState.add_money(total)
 
 func show_report() -> void:
-	if last_report.is_empty():
+	if last_report.is_empty() or is_instance_valid(_report_ui):
 		return
-	var text := "Penjualan hari %d\n\n" % int(last_report.day)
-	for row in last_report.rows:
-		text += "%s x%d: %d G\n" % [row.name, int(row.count), int(row.price) * int(row.count)]
-	if last_report.rows.is_empty():
-		text += "Tidak ada barang yang dikirim.\n"
-	text += "\nTotal dibayar: %d G\nUang sudah masuk ke saldo bersama." % int(last_report.total)
-	var dialog := AcceptDialog.new()
-	dialog.title = "Ringkasan Shipping Bin"
-	dialog.dialog_text = text
-	dialog.ok_button_text = "Lanjutkan"
-	dialog.process_mode = Node.PROCESS_MODE_ALWAYS
-	add_child(dialog)
-	var was_paused := PauseManager.requested
-	PauseManager.set_requested(true)
-	var close := func():
-		PauseManager.set_requested(was_paused)
-		dialog.queue_free()
-	dialog.confirmed.connect(close)
-	dialog.canceled.connect(close)
-	dialog.popup_centered(Vector2i(460, 320))
+	_report_ui = load("res://scenes/ui/shipping_report_ui.tscn").instantiate()
+	_report_ui.report = last_report.duplicate(true)
+	add_child(_report_ui)
 
 func reset() -> void:
+	if is_instance_valid(_report_ui):
+		_report_ui.queue_free()
+	_report_ui = null
 	pending.clear()
 	last_report.clear()
 

@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://xsan77bt3kkq"]
+
+[ext_resource type="Script" uid="uid://bnpeapwbqqymu" path="res://scripts/npc/npc.gd" id="1_pcwmf"]
+[ext_resource type="SpriteFrames" uid="uid://c37yjnanbrsnm" path="res://resources/npc_data/npc_animation/empu_bima_frame.tres" id="2_dpyoa"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ovsut"]
+radius = 5.0
+height = 10.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ywce2"]
+radius = 28.0
+
+[node name="NPC" type="CharacterBody2D" unique_id=1298459142]
+script = ExtResource("1_pcwmf")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1426626299]
+sprite_frames = ExtResource("2_dpyoa")
+animation = &"walk_up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2122611797]
+position = Vector2(0, 4)
+shape = SubResource("CapsuleShape2D_ovsut")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=359843839]
+path_desired_distance = 4.0
+target_desired_distance = 4.0
+
+[node name="InteractionArea" type="Area2D" parent="." unique_id=1449125578]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=255742625]
+shape = SubResource("CircleShape2D_ywce2")
+
+[node name="DialogueLabel" type="Label" parent="." unique_id=242045936]
+visible = false
+offset_right = 40.0
+offset_bottom = 23.0

@@ -22,6 +22,7 @@ const BAG_SIZES := PlayerData.BAG_SIZES
 const MAX_PLAYERS := 4
 
 var money: int = 100
+var farm_name: String = ""
 var chopped_trees: Array[String] = []
 var mined_rocks: Array[String] = []
 ## Persistent community projects share the lifetime of GameState, without another autoload.
@@ -112,12 +113,19 @@ func p1() -> PlayerData:
 # ── Game baru ───────────────────────────────────────────────────────
 
 func new_game() -> void:
+	WorldState.reset()
 	daya.reset()
 	weather.reset()
 	shipping.reset()
 	balai_nadi.reset()
 	StructureManager.reset()
 	money = 100
+	farm_name = ""
+	players[0].player_name = ""
+	players[0].birthday_season = ""
+	players[0].birthday_day = 0
+	players[0].pet_id = ""
+	players[0].pet_name = ""
 	chopped_trees.clear()
 	mined_rocks.clear()
 	has_spawn_point = false

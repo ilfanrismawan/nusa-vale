@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ActionFeedback" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/action_feedback.gd" id="1_fb"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/kenney_impact/impactPunch_heavy_001.ogg" id="2_sfx"]
+
+[resource]
+script = ExtResource("1_fb")
+sound = ExtResource("2_sfx")
+volume_db = 1.0
+pitch_variation = 0.1
+particle_count = 10
+particle_color = Color(1, 0.92, 0.6, 1)
+particle_color_alt = Color(1, 0.7, 0.3, 1)
+particle_speed = 70.0
+particle_gravity = 80.0
+particle_spread = 180.0
+shake = 2.0
+hitstop_ms = 0

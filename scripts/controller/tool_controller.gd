@@ -10,7 +10,15 @@ signal tool_changed(action: ActionData)
 
 const HAND_HARVEST: ActionData = preload("res://resources/action_data/hand_harvest.tres")
 
+## Dibuat di _ready (sebelum Player memanggil state_machine.initialize).
+var combat_state: CombatState
+## Combo senjata: pukulan berikutnya, jenis senjata, dan batas waktu menyambung (msec).
+var combo_step := 0
+var _combo_weapon := -1
+var _combo_until := 0
+
 var current_index: int = 0
+var furniture_preview: Node2D
 
 
 var current_tool: ActionData:
@@ -34,6 +42,13 @@ var current_item: ItemData:
 
 
 func _ready() -> void:
+	combat_state = CombatState.new()
+	combat_state.name = "CombatState"
+	combat_state.idle_state = state_machine.get_node("IdleState")
+	state_machine.add_child(combat_state)
+	furniture_preview = load("res://scripts/player/furniture_preview.gd").new()
+	furniture_preview.player = player
+	player.add_child.call_deferred(furniture_preview)
 	action_state.action_performed.connect(_on_action_performed)
 	GameState.inventory_changed.connect(func(): tool_changed.emit(current_tool))
 	tool_changed.emit(current_tool)
@@ -43,9 +58,15 @@ func _unhandled_input(event: InputEvent) -> void:
 	# Co-op: setiap pemain hanya bereaksi pada perangkatnya sendiri (PlayerInput).
 	if player.is_input_locked():
 		return
-	if state_machine.current_state == action_state or state_machine.current_state == fishing_state:
-		return
 	var input := player.input
+	if state_machine.current_state == combat_state:
+		# Klik saat menyerang disimpan untuk pukulan combo berikutnya.
+		if input.is_event(event, &"use_tool") and Combat.is_weapon(current_item):
+			combat_state.combo_queued = true
+			get_viewport().set_input_as_handled()
+		return
+	if state_machine.current_state in [action_state, fishing_state]:
+		return
 	if input.is_event(event, &"use_tool"):
 		player.bind_context()
 		if player.has_meta("carried_animal") and is_instance_valid(player.get_meta("carried_animal")):
@@ -58,6 +79,10 @@ func _unhandled_input(event: InputEvent) -> void:
 					animal.lift_with(player)
 					get_viewport().set_input_as_handled()
 					return
+		if Combat.is_weapon(current_item):
+			attack()
+			get_viewport().set_input_as_handled()
+			return
 		if current_item != null and current_item.category == ItemData.Category.FOOD:
 			Notify.say(CookingManager.eat(player, player.data.hotbar_page * 8 + current_index).message)
 			get_viewport().set_input_as_handled()
@@ -67,11 +92,17 @@ func _unhandled_input(event: InputEvent) -> void:
 				get_viewport().set_input_as_handled()
 				return
 		if current_item != null and current_item.placeable:
+			if current_item.seat_definition != null and not furniture_preview.can_place():
+				get_viewport().set_input_as_handled()
+				return
 			if current_item.item_id in StructureManager.CONSTRUCTION:
 				BuildingPlacement.begin(player, current_item.item_id, true)
 				get_viewport().set_input_as_handled()
 				return
-			var result := StructureManager.place(player, player.data.hotbar_page * 8 + current_index, player.get_target_cell())
+			var facing: int = furniture_preview.facing if current_item.seat_definition != null else 1
+			var result := StructureManager.place(player, player.data.hotbar_page * 8 + current_index, player.get_target_cell(), facing)
+			if result.ok and current_item != null and current_item.seat_definition != null:
+				furniture_preview.finish_placement()
 			Notify.say(result["message"])
 			get_viewport().set_input_as_handled()
 		elif current_tool != null:
@@ -107,6 +138,8 @@ func select_tool(index: int, preview: bool = true) -> void:
 	if index < 0 or index >= 8:
 		return
 	current_index = index
+	if furniture_preview != null:
+		furniture_preview.restart_placement()
 	player._sync_carried_item()
 	var item: ItemData = current_item
 	tool_changed.emit(current_tool)
@@ -119,12 +152,54 @@ func select_tool(index: int, preview: bool = true) -> void:
 	debug_current_tool()
 
 
+## Serang dengan senjata di slot terpilih (klik kiri). Busur memakai satu anak panah
+## terkuat di tas; tongkat sihir memakai stamina (WeaponStyle).
+func attack() -> bool:
+	var weapon := current_item
+	var style := Combat.style_for(weapon)
+	if style == null or player.is_defeated:
+		return false
+	if state_machine.current_state in [action_state, fishing_state, combat_state]:
+		return false
+	var data := player.data
+	var arrow: ItemData
+	if style.uses_ammo:
+		var slot := Combat.best_arrow_slot(data)
+		if slot < 0:
+			Notify.say("Tidak ada anak panah!")
+			return false
+		arrow = data.inventory[slot]["item"]
+		data.remove_item_at(slot, 1)
+	if style.stamina_cost > 0 and not data.spend_stamina(style.stamina_cost):
+		if arrow != null:
+			data.add_item(arrow, 1)
+		Notify.say("Terlalu lelah! Istirahatlah.")
+		return false
+	player._clear_pickup_visual()
+	var step := 0
+	if weapon.weapon_type == _combo_weapon and Time.get_ticks_msec() <= _combo_until:
+		step = combo_step
+	combat_state.start(weapon, style, player.aim_vector(), arrow, step)
+	combo_step = (step + 1) % style.combo_length()
+	_combo_weapon = weapon.weapon_type
+	_combo_until = 0
+	state_machine.change_state(combat_state)
+	return true
+
+## Dipanggil CombatState saat animasi serangan selesai. chain = klik kiri ditekan selama serangan.
+func on_attack_finished(chain: bool) -> void:
+	var style := combat_state.style
+	if style == null or combat_state.is_finisher() or style.combo_length() <= 1:
+		combo_step = 0
+		return
+	_combo_until = Time.get_ticks_msec() + int(style.combo_window * 1000.0)
+	if chain:
+		attack.call_deferred()
+
 func use_action(action: ActionData) -> void:
 	if action == null:
 		return
-	if state_machine.current_state == action_state:
-		return
-	if state_machine.current_state == fishing_state:
+	if state_machine.current_state in [action_state, fishing_state, combat_state]:
 		return
 	if action.effect is FishingEffect:
 		_start_fishing(action)
@@ -143,6 +218,7 @@ func use_action(action: ActionData) -> void:
 			stamina_cost = _get_stamina_cost(action)
 			
 		if player.data.stamina < stamina_cost:
+			player.data.stamina_exhausted.emit()
 			Notify.say("Terlalu lelah! Istirahatlah.")
 			return
 			
@@ -154,6 +230,7 @@ func _start_fishing(action: ActionData) -> void:
 	# Stamina dicek di sini, tetapi baru dipotong saat kail jatuh di air (FishingState).
 	var stamina_cost: int = _get_stamina_cost(action)
 	if player.data.stamina < stamina_cost:
+		player.data.stamina_exhausted.emit()
 		Notify.say("Terlalu lelah! Istirahatlah.")
 		return
 	fishing_state.start(action.tool_data as RodData, stamina_cost)

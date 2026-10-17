@@ -12,10 +12,10 @@ Ditambahkan 2026-10-11. Combat belum ada (Phase 4B-1); item ini baru berupa data
 - `EquipmentSlot`: + `HELMET`, `LEGGINGS`, `BOOTS` (ARMOR = pelindung badan).
 - `WeaponType { NONE, SWORD, BOW, STAFF, ARROW }` dan `weapon_type`.
 - `equipment_tier: ToolData.ToolTier`.
-- Stat tetap `attack_bonus` / `defense_bonus` (angka sementara, untuk combat nanti).
+- Stat tetap `attack_bonus` / `defense_bonus` (dipakai combat: damage = max(1, ATK - DEF)).
 
 ## Slot Equipment
-PlayerData.EQUIPMENT_KEYS = weapon, helmet, armor, leggings, boots. Save lama (hanya weapon/armor) tetap termuat; slot baru kosong. Format save tidak berubah, jadi SAVE_VERSION tetap 7.
+PlayerData.EQUIPMENT_KEYS = helmet, armor, leggings, boots (sejak Phase 4B-1, 17 Oktober 2026). Senjata (pedang, busur, tongkat sihir) dipegang dari hotbar dan dipakai dengan klik kiri; slot Weapon di menu hanya menampilkan senjata yang sedang dipegang. Save lama yang memasang senjata di slot weapon memindahkannya ke tas saat dimuat. Pemain baru mulai dengan Pedang Kayu di tas dan Armor Kayu terpasang. Gaya serangan tiap jenis senjata ada di `resources/combat/<jenis>.tres` (lihat GDD 8.1).
 Di menu Equipment: kiri = Helm, Armor, Celana Zirah; kanan atas = Sepatu (menggantikan slot Sarung tangan yang terkunci, karena aset sarung tangan tidak punya tier).
 
 ## Harga & stat

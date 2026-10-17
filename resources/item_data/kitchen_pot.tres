@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://baq7b84lwlqag"]
+
+[ext_resource type="Script" uid="uid://vbwn6cjjdlc0" path="res://scripts/resources/food_effect_data.gd" id="1_d4fdk"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1_item"]
+[ext_resource type="Texture2D" path="res://resources/cooking/icons/cookware_kitchen_pot.tres" id="2_texture"]
+
+[resource]
+script = ExtResource("1_item")
+category = 8
+item_id = "kitchen_pot"
+display_name = "Panci"
+icon = ExtResource("2_texture")
+description = "Peralatan memasak. Tempatkan scene kitchen_pot.tscn di editor."
+stackable = false
+max_stack = 1

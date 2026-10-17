@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://c77an48a6re2q"]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1_item"]
+[ext_resource type="Texture2D" uid="uid://bygsr60f3g5v3" path="res://assets/farm_rpg/icons/Food Icons/Bread .png" id="2_icon"]
+[ext_resource type="Resource" path="res://resources/cooking/effects/bread_energy.tres" id="food_effect_profile"]
+[ext_resource type="Script" uid="uid://vbwn6cjjdlc0" path="res://scripts/resources/food_effect_data.gd" id="food_effect_type"]
+
+[sub_resource type="AtlasTexture" id="Icon"]
+atlas = ExtResource("2_icon")
+region = Rect2(0, 0, 16, 16)
+filter_clip = true
+
+[resource]
+script = ExtResource("1_item")
+stamina_restore = 18
+food_effects = Array[ExtResource("food_effect_type")]([ExtResource("food_effect_profile")])
+category = 9
+item_id = "bread"
+display_name = "Roti"
+icon = SubResource("Icon")
+description = "Masakan dari dapur. Pilih di hotbar untuk dimakan."
+sell_price = 35

@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://gtyekqb6b4sd"]
+
+[ext_resource type="Script" uid="uid://cfvkvytcvj2q1" path="res://scripts/ui/cooking_equipment_badge.gd" id="1_script"]
+
+[node name="CookingEquipmentBadge" type="VBoxContainer" unique_id=1847426775]
+texture_filter = 1
+custom_minimum_size = Vector2(104, 0)
+script = ExtResource("1_script")
+
+[node name="EquipmentIcon" type="TextureRect" parent="." unique_id=284183268]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="EquipmentName" type="Label" parent="." unique_id=16720339]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="EquipmentStatus" type="Label" parent="." unique_id=1180004481]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_alignment = 1
+

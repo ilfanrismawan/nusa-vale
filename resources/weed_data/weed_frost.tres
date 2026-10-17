@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="WeedData" format=3]
+[gd_resource type="Resource" script_class="WeedData" format=3 uid="uid://c0gxhkwfq3c6b"]
 
-[ext_resource type="Script" path="res://scripts/data/weed_data.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://assets/farm_rpg/tileset/ext/ALL props seasons.png" id="2_tex"]
+[ext_resource type="Script" uid="uid://yfew43j6kghu" path="res://scripts/data/weed_data.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://qbavso8tlt0g" path="res://assets/farm_rpg/tileset/ext/ALL props seasons.png" id="2_tex"]
 [ext_resource type="Resource" path="res://resources/item_data/fiber.tres" id="3_item"]
 
 [resource]
@@ -12,9 +12,5 @@ regions_spring = Array[Rect2]([Rect2(96, 64, 16, 16), Rect2(112, 64, 16, 16), Re
 regions_summer = Array[Rect2]([Rect2(96, 64, 16, 16), Rect2(112, 64, 16, 16), Rect2(224, 64, 16, 16)])
 regions_fall = Array[Rect2]([Rect2(96, 64, 16, 16), Rect2(112, 64, 16, 16), Rect2(224, 64, 16, 16)])
 regions_winter = Array[Rect2]([Rect2(96, 64, 16, 16), Rect2(112, 64, 16, 16), Rect2(224, 64, 16, 16)])
-locations = PackedStringArray("farm", "forest")
-seasons = PackedStringArray("winter")
 weight = 0.8
 drop_item = ExtResource("3_item")
-drop_chance = 0.6
-drop_count = 1

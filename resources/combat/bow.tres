@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="WeaponStyle" format=3 uid="uid://dr1h4dkxcvcid"]
+
+[ext_resource type="Script" uid="uid://bpgswpatsto5r" path="res://scripts/data/weapon_style.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_arrow_wood.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+animation_name = &"archer"
+hit_frame_ratio = 0.6
+speed_scale = 1.5
+aim_pose_frame = 2
+projectile_speed = 220.0
+projectile_texture = ExtResource("2")
+projectile_texture_rotation_deg = 45.0
+uses_ammo = true
+knockback = 8.0
+hit_feedback = &""
+combo_damage = PackedFloat32Array(1, 1, 1)
+combo_speed = null
+finisher_knockback_scale = 1.5
+finisher_projectiles = 2
+finisher_spread_deg = 8.0
+finisher_feedback = &"combo_finisher"

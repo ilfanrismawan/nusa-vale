@@ -1,0 +1,264 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://scripts/ui/carpenter_menu.gd" id="script"]
+[ext_resource type="Theme" path="res://resources/ui/cooking_theme.tres" id="theme"]
+[ext_resource type="Shader" path="res://resources/ui/cooking_backdrop.gdshader" id="shader"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/Character/NPC'S/Tori/Portrait Tori.png" id="portrait"]
+[sub_resource type="AtlasTexture" id="Portrait"]
+atlas = ExtResource("portrait")
+region = Rect2(0, 0, 64, 64)
+[sub_resource type="StyleBoxFlat" id="Paper"]
+bg_color = Color(0.969, 0.953, 0.914, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_left = 18
+corner_radius_bottom_right = 18
+[sub_resource type="StyleBoxFlat" id="Name"]
+bg_color = Color(0.97, 0.81, 0.59, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_left = 18
+corner_radius_bottom_right = 18
+[sub_resource type="ShaderMaterial" id="Backdrop"]
+shader = ExtResource("shader")
+shader_parameter/blur_amount = 3.5
+shader_parameter/top_tint = Color(0.03, 0.04, 0.02, 0.54)
+shader_parameter/bottom_tint = Color(0.24, 0.34, 0.24, 0.72)
+
+[node name="UI" type="CanvasLayer"]
+process_mode = 3
+layer = 70
+script = ExtResource("script")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+material = SubResource("Backdrop")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Design" type="Control" parent="."]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 1600.0
+offset_bottom = 900.0
+mouse_filter = 2
+theme = ExtResource("theme")
+
+[node name="Heading" type="Label" parent="Design"]
+unique_name_in_owner = true
+offset_left = 32.0
+offset_top = 20.0
+offset_right = 532.0
+offset_bottom = 62.0
+theme_override_font_sizes/font_size = 24
+text = "Pertukangan"
+autowrap_mode = 3
+theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
+
+
+[node name="Money" type="Label" parent="Design"]
+unique_name_in_owner = true
+offset_left = 1240.0
+offset_top = 20.0
+offset_right = 1560.0
+offset_bottom = 62.0
+theme_override_font_sizes/font_size = 22
+text = "● 0 G"
+autowrap_mode = 3
+theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
+
+
+[node name="Portrait" type="TextureRect" parent="Design"]
+unique_name_in_owner = true
+offset_left = -25.0
+offset_top = 110.0
+offset_right = 445.0
+offset_bottom = 740.0
+mouse_filter = 2
+texture_filter = 1
+texture = SubResource("Portrait")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Speech" type="Panel" parent="Design"]
+offset_left = 65.0
+offset_top = 728.0
+offset_right = 425.0
+offset_bottom = 840.0
+theme_override_styles/panel = SubResource("Paper")
+
+[node name="Dialog" type="Label" parent="Design/Speech"]
+unique_name_in_owner = true
+offset_left = 22.0
+offset_top = 24.0
+offset_right = 338.0
+offset_bottom = 104.0
+theme_override_font_sizes/font_size = 17
+text = "Mau membangun sesuatu?"
+autowrap_mode = 3
+
+
+[node name="VendorName" type="Label" parent="Design"]
+unique_name_in_owner = true
+offset_left = 90.0
+offset_top = 700.0
+offset_right = 320.0
+offset_bottom = 742.0
+theme_override_font_sizes/font_size = 21
+text = "Pak Damar"
+autowrap_mode = 3
+
+theme_override_styles/normal = SubResource("Name")
+horizontal_alignment = 1
+
+[node name="CatalogTitle" type="Label" parent="Design"]
+unique_name_in_owner = true
+offset_left = 485.0
+offset_top = 110.0
+offset_right = 965.0
+offset_bottom = 152.0
+theme_override_font_sizes/font_size = 26
+text = "Bangunan Ladang"
+autowrap_mode = 3
+theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
+
+
+[node name="CatalogScroll" type="ScrollContainer" parent="Design"]
+offset_left = 485.0
+offset_top = 175.0
+offset_right = 995.0
+offset_bottom = 715.0
+horizontal_scroll_mode = 0
+follow_focus = true
+
+[node name="Buildings" type="GridContainer" parent="Design/CatalogScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 2
+theme_override_constants/h_separation = 14
+theme_override_constants/v_separation = 14
+
+[node name="Detail" type="Panel" parent="Design"]
+offset_left = 1030.0
+offset_top = 130.0
+offset_right = 1530.0
+offset_bottom = 720.0
+theme_override_styles/panel = SubResource("Paper")
+
+[node name="ResultIcon" type="TextureRect" parent="Design/Detail"]
+unique_name_in_owner = true
+offset_left = 160.0
+offset_top = 22.0
+offset_right = 340.0
+offset_bottom = 177.0
+texture_filter = 1
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DetailTitle" type="Label" parent="Design/Detail"]
+unique_name_in_owner = true
+offset_left = 36.0
+offset_top = 190.0
+offset_right = 461.0
+offset_bottom = 232.0
+theme_override_font_sizes/font_size = 25
+text = "Bangunan"
+autowrap_mode = 3
+
+
+[node name="Footprint" type="Label" parent="Design/Detail"]
+unique_name_in_owner = true
+offset_left = 36.0
+offset_top = 237.0
+offset_right = 461.0
+offset_bottom = 267.0
+theme_override_font_sizes/font_size = 17
+text = "Ukuran · 0 × 0 petak"
+autowrap_mode = 3
+
+
+[node name="Description" type="Label" parent="Design/Detail"]
+unique_name_in_owner = true
+offset_left = 36.0
+offset_top = 277.0
+offset_right = 461.0
+offset_bottom = 362.0
+theme_override_font_sizes/font_size = 17
+text = "Deskripsi"
+autowrap_mode = 3
+
+
+[node name="Cost" type="Label" parent="Design/Detail"]
+unique_name_in_owner = true
+offset_left = 36.0
+offset_top = 367.0
+offset_right = 461.0
+offset_bottom = 402.0
+theme_override_font_sizes/font_size = 22
+text = "● 0 G"
+autowrap_mode = 3
+
+
+[node name="MaterialScroll" type="ScrollContainer" parent="Design/Detail"]
+offset_left = 36.0
+offset_top = 420.0
+offset_right = 466.0
+offset_bottom = 555.0
+horizontal_scroll_mode = 0
+
+[node name="Materials" type="VBoxContainer" parent="Design/Detail/MaterialScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Owner" type="Label" parent="Design"]
+unique_name_in_owner = true
+offset_left = 1030.0
+offset_top = 733.0
+offset_right = 1530.0
+offset_bottom = 763.0
+theme_override_font_sizes/font_size = 15
+text = "Bahan dari tas pemain"
+autowrap_mode = 3
+theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
+
+
+[node name="Availability" type="Label" parent="Design"]
+unique_name_in_owner = true
+offset_left = 1030.0
+offset_top = 772.0
+offset_right = 1530.0
+offset_bottom = 804.0
+theme_override_font_sizes/font_size = 17
+text = ""
+autowrap_mode = 3
+theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
+
+
+[node name="ChooseButton" type="Button" parent="Design"]
+unique_name_in_owner = true
+offset_left = 1030.0
+offset_top = 825.0
+offset_right = 1360.0
+offset_bottom = 873.0
+text = "Pilih lokasi"
+focus_mode = 0
+
+[node name="CloseButton" type="Button" parent="Design"]
+unique_name_in_owner = true
+offset_left = 1372.0
+offset_top = 825.0
+offset_right = 1557.0
+offset_bottom = 873.0
+text = "Esc  Kembali"
+focus_mode = 0
+
+[node name="Hint" type="Label" parent="Design"]
+unique_name_in_owner = true
+offset_left = 485.0
+offset_top = 742.0
+offset_right = 985.0
+offset_bottom = 850.0
+theme_override_font_sizes/font_size = 17
+text = "Biaya dan bahan diambil setelah konfirmasi lokasi.\nBatal memilih lokasi tidak dikenakan biaya."
+autowrap_mode = 3
+theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)

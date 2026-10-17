@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://iwxnkwqq702h" path="res://assets/farm_rpg/Character/PNG/Portrait.png" id="1_q5123"]
 [ext_resource type="Script" uid="uid://bosipocdasjvg" path="res://scripts/resources/shop_data.gd" id="1_shop"]
-[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="2_item"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://autoload/data/item_data.gd" id="2_item"]
 [ext_resource type="Resource" path="res://resources/item_data/seed_cherry.tres" id="3_seed_cherry"]
 [ext_resource type="Resource" path="res://resources/item_data/seed_apricot.tres" id="4_seed_apricot"]
 [ext_resource type="Resource" uid="uid://d15i51w7u6xbx" path="res://resources/item_data/seed_strawberry.tres" id="5_seed_strawberry"]
@@ -44,14 +44,50 @@
 [ext_resource type="Resource" path="res://resources/item_data/seed_zucchini.tres" id="41_seed_zucchini"]
 [ext_resource type="Resource" path="res://resources/item_data/backpack_medium.tres" id="42_bag_m"]
 [ext_resource type="Resource" path="res://resources/item_data/backpack_large.tres" id="43_bag_l"]
-
 [ext_resource type="Resource" path="res://resources/item_data/animal_feed.tres" id="44_animal_feed"]
-
 [ext_resource type="Resource" path="res://resources/item_data/hay.tres" id="ranch_hay"]
 [ext_resource type="Resource" path="res://resources/item_data/milk_pail.tres" id="ranch_milk_pail"]
 [ext_resource type="Resource" path="res://resources/item_data/shears.tres" id="ranch_shears"]
 [ext_resource type="Resource" path="res://resources/item_data/animal_brush.tres" id="ranch_animal_brush"]
 [ext_resource type="Resource" path="res://resources/item_data/pasture_grass.tres" id="ranch_pasture_grass"]
+
+
+[ext_resource type="Resource" path="res://resources/item_data/sugar.tres" id="pantry_sugar"]
+[ext_resource type="Resource" path="res://resources/item_data/salt.tres" id="pantry_salt"]
+[ext_resource type="Resource" path="res://resources/item_data/oil.tres" id="pantry_oil"]
+[ext_resource type="Resource" path="res://resources/item_data/pepper.tres" id="pantry_pepper"]
+[ext_resource type="Resource" path="res://resources/item_data/nutmeg.tres" id="pantry_nutmeg"]
+[ext_resource type="Resource" path="res://resources/item_data/honey.tres" id="pantry_honey"]
+[ext_resource type="Resource" path="res://resources/item_data/chocolate.tres" id="pantry_chocolate"]
+[ext_resource type="Resource" path="res://resources/item_data/beef.tres" id="pantry_beef"]
+[ext_resource type="Resource" path="res://resources/item_data/bacon.tres" id="pantry_bacon"]
+[ext_resource type="Resource" path="res://resources/item_data/chicken_drumstick.tres" id="pantry_chicken_drumstick"]
+[ext_resource type="Resource" path="res://resources/item_data/ostrich_drumstick.tres" id="pantry_ostrich_drumstick"]
+[ext_resource type="Resource" path="res://resources/item_data/ostrich_egg.tres" id="pantry_ostrich_egg"]
+[ext_resource type="Resource" path="res://resources/item_data/adzuki_bean.tres" id="pantry_adzuki_bean"]
+[ext_resource type="Resource" path="res://resources/item_data/asparagus.tres" id="pantry_asparagus"]
+[ext_resource type="Resource" path="res://resources/item_data/green_pepper.tres" id="pantry_green_pepper"]
+[ext_resource type="Resource" path="res://resources/item_data/coconut.tres" id="pantry_coconut"]
+[ext_resource type="Resource" path="res://resources/item_data/green_coconut.tres" id="pantry_green_coconut"]
+[ext_resource type="Resource" path="res://resources/item_data/aloe.tres" id="pantry_aloe"]
+[ext_resource type="Resource" path="res://resources/item_data/artichoke.tres" id="pantry_artichoke"]
+[ext_resource type="Resource" path="res://resources/item_data/avocado.tres" id="pantry_avocado"]
+[ext_resource type="Resource" path="res://resources/item_data/sweet_potato.tres" id="pantry_sweet_potato"]
+[ext_resource type="Resource" path="res://resources/item_data/cassava.tres" id="pantry_cassava"]
+[ext_resource type="Resource" path="res://resources/item_data/taro.tres" id="pantry_taro"]
+[ext_resource type="Resource" path="res://resources/item_data/cranberry.tres" id="pantry_cranberry"]
+[ext_resource type="Resource" path="res://resources/item_data/fiddlehead.tres" id="pantry_fiddlehead"]
+[ext_resource type="Resource" path="res://resources/item_data/peanut.tres" id="pantry_peanut"]
+[ext_resource type="Resource" path="res://resources/item_data/maple_syrup.tres" id="pantry_maple_syrup"]
+[ext_resource type="Resource" path="res://resources/item_data/tea_leaves.tres" id="pantry_tea_leaves"]
+[ext_resource type="Resource" path="res://resources/item_data/coffee_beans.tres" id="pantry_coffee_beans"]
+[ext_resource type="Resource" path="res://resources/item_data/chamomile.tres" id="pantry_chamomile"]
+[ext_resource type="Resource" path="res://resources/item_data/jasmine.tres" id="pantry_jasmine"]
+[ext_resource type="Resource" path="res://resources/item_data/lavender.tres" id="pantry_lavender"]
+[ext_resource type="Resource" path="res://resources/item_data/lemon.tres" id="pantry_lemon"]
+[ext_resource type="Resource" path="res://resources/item_data/mustard_seed.tres" id="pantry_mustard_seed"]
+[ext_resource type="Resource" path="res://resources/item_data/vanilla.tres" id="pantry_vanilla"]
+[ext_resource type="Resource" path="res://resources/item_data/tapioca.tres" id="pantry_tapioca"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tv5lx"]
 atlas = ExtResource("1_q5123")
@@ -62,4 +98,4 @@ script = ExtResource("1_shop")
 shop_id = "general_store"
 portrait = SubResource("AtlasTexture_tv5lx")
 greeting = "Selamat datang! Mau cari benih apa hari ini?"
-stock = Array[ExtResource("2_item")]([ExtResource("3_seed_cherry"), ExtResource("4_seed_apricot"), ExtResource("5_seed_strawberry"), ExtResource("6_seed_leek"), ExtResource("7_seed_potato"), ExtResource("8_seed_onion"), ExtResource("9_seed_carrot"), ExtResource("10_seed_blueberry"), ExtResource("11_seed_parsnip"), ExtResource("12_seed_cabbage"), ExtResource("13_seed_cauliflower"), ExtResource("14_seed_rice"), ExtResource("15_seed_broccoli"), ExtResource("16_seed_rhubarb"), ExtResource("17_seed_banana"), ExtResource("18_seed_orange"), ExtResource("19_seed_mango"), ExtResource("20_seed_peach"), ExtResource("21_seed_tomato"), ExtResource("22_seed_sunflower"), ExtResource("23_seed_chili"), ExtResource("24_seed_green_apple"), ExtResource("25_seed_red_pepper"), ExtResource("26_seed_yellow_pepper"), ExtResource("27_seed_melon"), ExtResource("28_seed_watermelon"), ExtResource("29_seed_cucumber"), ExtResource("30_seed_pineapple"), ExtResource("31_seed_pea"), ExtResource("32_seed_garlic"), ExtResource("33_seed_blackberry"), ExtResource("34_seed_wheat"), ExtResource("35_seed_apple"), ExtResource("36_seed_beet"), ExtResource("37_seed_pumpkin"), ExtResource("38_seed_grape"), ExtResource("39_seed_corn"), ExtResource("40_seed_eggplant"), ExtResource("41_seed_zucchini"), ExtResource("42_bag_m"), ExtResource("43_bag_l"), ExtResource("44_animal_feed"), ExtResource("ranch_hay"), ExtResource("ranch_milk_pail"), ExtResource("ranch_shears"), ExtResource("ranch_animal_brush"), ExtResource("ranch_pasture_grass")])
+stock = Array[ExtResource("2_item")]([ExtResource("3_seed_cherry"), ExtResource("4_seed_apricot"), ExtResource("5_seed_strawberry"), ExtResource("6_seed_leek"), ExtResource("7_seed_potato"), ExtResource("8_seed_onion"), ExtResource("9_seed_carrot"), ExtResource("10_seed_blueberry"), ExtResource("11_seed_parsnip"), ExtResource("12_seed_cabbage"), ExtResource("13_seed_cauliflower"), ExtResource("14_seed_rice"), ExtResource("15_seed_broccoli"), ExtResource("16_seed_rhubarb"), ExtResource("17_seed_banana"), ExtResource("18_seed_orange"), ExtResource("19_seed_mango"), ExtResource("20_seed_peach"), ExtResource("21_seed_tomato"), ExtResource("22_seed_sunflower"), ExtResource("23_seed_chili"), ExtResource("24_seed_green_apple"), ExtResource("25_seed_red_pepper"), ExtResource("26_seed_yellow_pepper"), ExtResource("27_seed_melon"), ExtResource("28_seed_watermelon"), ExtResource("29_seed_cucumber"), ExtResource("30_seed_pineapple"), ExtResource("31_seed_pea"), ExtResource("32_seed_garlic"), ExtResource("33_seed_blackberry"), ExtResource("34_seed_wheat"), ExtResource("35_seed_apple"), ExtResource("36_seed_beet"), ExtResource("37_seed_pumpkin"), ExtResource("38_seed_grape"), ExtResource("39_seed_corn"), ExtResource("40_seed_eggplant"), ExtResource("41_seed_zucchini"), ExtResource("42_bag_m"), ExtResource("43_bag_l"), ExtResource("44_animal_feed"), ExtResource("ranch_hay"), ExtResource("ranch_milk_pail"), ExtResource("ranch_shears"), ExtResource("ranch_animal_brush"), ExtResource("ranch_pasture_grass"), ExtResource("pantry_sugar"), ExtResource("pantry_salt"), ExtResource("pantry_oil"), ExtResource("pantry_pepper"), ExtResource("pantry_nutmeg"), ExtResource("pantry_honey"), ExtResource("pantry_chocolate"), ExtResource("pantry_beef"), ExtResource("pantry_bacon"), ExtResource("pantry_chicken_drumstick"), ExtResource("pantry_ostrich_drumstick"), ExtResource("pantry_ostrich_egg"), ExtResource("pantry_adzuki_bean"), ExtResource("pantry_asparagus"), ExtResource("pantry_green_pepper"), ExtResource("pantry_coconut"), ExtResource("pantry_green_coconut"), ExtResource("pantry_aloe"), ExtResource("pantry_artichoke"), ExtResource("pantry_avocado"), ExtResource("pantry_sweet_potato"), ExtResource("pantry_cassava"), ExtResource("pantry_taro"), ExtResource("pantry_cranberry"), ExtResource("pantry_fiddlehead"), ExtResource("pantry_peanut"), ExtResource("pantry_maple_syrup"), ExtResource("pantry_tea_leaves"), ExtResource("pantry_coffee_beans"), ExtResource("pantry_chamomile"), ExtResource("pantry_jasmine"), ExtResource("pantry_lavender"), ExtResource("pantry_lemon"), ExtResource("pantry_mustard_seed"), ExtResource("pantry_vanilla"), ExtResource("pantry_tapioca")])

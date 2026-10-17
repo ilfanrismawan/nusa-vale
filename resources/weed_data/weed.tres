@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="WeedData" format=3 uid="uid://bh7svbpj83qg"]
 
-[ext_resource type="Script" uid="uid://yfew43j6kghu" path="res://scripts/data/weed_data.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://yfew43j6kghu" path="res://autoload/data/weed_data.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://qbavso8tlt0g" path="res://assets/farm_rpg/tileset/ext/ALL props seasons.png" id="2_tex"]
 [ext_resource type="Resource" path="res://resources/item_data/fiber.tres" id="3_item"]
 

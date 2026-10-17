@@ -7,7 +7,7 @@ func interact(player: Player = null) -> void:
 	if player == null or is_instance_valid(_shops.get(player.data.index)):
 		return
 	_face_player(player)
-	var shop = load("res://scripts/ui/livestock_shop_ui.gd").new()
+	var shop = load("res://scenes/ui/livestock_shop_ui.tscn").instantiate()
 	shop.player = player
 	shop.portrait = portrait
 	_shops[player.data.index] = shop

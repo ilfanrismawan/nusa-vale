@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/chairs.gd" id="1"]
+[ext_resource type="Resource" path="res://resources/furniture/wooden_chair.tres" id="2"]
+
+[sub_resource type="RectangleShape2D" id="solid"]
+resource_local_to_scene = true
+size = Vector2(8, 5)
+
+[sub_resource type="RectangleShape2D" id="interaction"]
+size = Vector2(32, 40)
+
+[node name="Seat" type="Sprite2D"]
+texture_filter = 1
+script = ExtResource("1")
+definition = ExtResource("2")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("solid")
+
+[node name="SeatPoint" type="Marker2D" parent="."]
+
+[node name="InteractionArea" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(0, -4)
+shape = SubResource("interaction")
+

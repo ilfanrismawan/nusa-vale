@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://cqkq7gwaw06ki"]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1_item"]
+[ext_resource type="Texture2D" uid="uid://cc2lg0b5bnqlw" path="res://assets/farm_rpg/icons/Food Icons/Juices.png" id="2_icon"]
+[ext_resource type="Resource" path="res://resources/cooking/effects/refreshing.tres" id="food_effect_profile"]
+[ext_resource type="Script" uid="uid://vbwn6cjjdlc0" path="res://scripts/resources/food_effect_data.gd" id="food_effect_type"]
+
+[sub_resource type="AtlasTexture" id="Icon"]
+atlas = ExtResource("2_icon")
+region = Rect2(0, 0, 16, 16)
+filter_clip = true
+
+[resource]
+script = ExtResource("1_item")
+stamina_restore = 26
+food_effects = Array[ExtResource("food_effect_type")]([ExtResource("food_effect_profile")])
+category = 9
+item_id = "juice"
+display_name = "Jus Buah"
+icon = SubResource("Icon")
+description = "Masakan dari dapur. Pilih di hotbar untuk dimakan."
+sell_price = 55

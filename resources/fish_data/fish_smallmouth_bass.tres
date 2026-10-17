@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="FishData" format=3 uid="uid://bvpyqnv8yn8au"]
 
 [ext_resource type="Resource" uid="uid://cc3n3m6d1nhff" path="res://resources/item_data/fish_smallmouth_bass.tres" id="1_3wymd"]
-[ext_resource type="Script" uid="uid://chacbmvpw52cc" path="res://scripts/data/fish_data.gd" id="2_kkbp0"]
+[ext_resource type="Script" uid="uid://chacbmvpw52cc" path="res://autoload/data/fish_data.gd" id="2_kkbp0"]
 
 [resource]
 script = ExtResource("2_kkbp0")

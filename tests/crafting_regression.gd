@@ -38,7 +38,7 @@ func _ready() -> void:
 	var before := data.serialize_inventory()
 	check(CraftingSystem.preview(data, sword)["ok"] and data.serialize_inventory() == before, "Preview does not mutate inventory")
 	check(CraftingSystem.craft(data, sword)["ok"] and data.get_item_count("wood") == 0 and data.get_item_count("sword_wood") == 1, "Craft consumes split material stacks once")
-	check(data.equipment["weapon"] == null, "Crafted equipment enters the bag without auto-equipping")
+	check(not data.equipment.has("weapon") and data.has_item("sword_wood"), "Crafted weapons enter the bag without auto-equipping")
 	before = data.serialize_inventory()
 	check(not CraftingSystem.craft(data, sword)["ok"] and data.serialize_inventory() == before, "Insufficient materials cannot consume items")
 	check(not CraftingSystem.craft(data, sword, 0)["ok"] and not CraftingSystem.craft(data, sword, 100)["ok"], "Invalid batch quantities are rejected")

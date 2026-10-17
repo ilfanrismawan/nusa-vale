@@ -1,220 +1,91 @@
 class_name SaveSlotMenu
 extends CanvasLayer
 
-## Menu slot save, dibangun lewat kode (pola sama dengan CharacterCreatorUI).
-## Menampilkan SaveManager.SLOT_COUNT slot dengan ringkasan (nama, musim/hari, uang, waktu simpan)
-## dan aksi sesuai `mode`. Setiap slot terisi punya tombol Hapus (pakai konfirmasi).
-##   NEW_GAME : pilih slot untuk game baru; slot terisi minta konfirmasi timpa.
-##   LOAD     : pilih slot terisi untuk dimuat.
-##   SAVE     : simpan game ke slot (dikerjakan menu ini sendiri); slot lain yang terisi minta konfirmasi.
-##   PLAY     : co-op; slot kosong = game baru, slot terisi = lanjutkan.
-## Untuk NEW_GAME/LOAD/PLAY pemanggil yang memuat/memulai game lewat sinyal slot_chosen.
-
 signal slot_chosen(slot: int)
 signal closed
-
 enum Mode { NEW_GAME, LOAD, SAVE, PLAY }
 
-const FONT := preload("res://resources/ui/readable_font.tres")
-const TEX_INVENTORY := preload("res://assets/farm_rpg/ui/inventory/inventory.png")
-const TEX_BANNER := preload("res://assets/farm_rpg/ui/inventory/Banner.png")
-
-const COLOR_TEXT := Color(0.36, 0.2, 0.15)
-const COLOR_TEXT_LIGHT := Color(0.97, 0.88, 0.78)
-const COLOR_DIM := Color(0.97, 0.88, 0.78, 0.55)
-
-const TITLES := {
-	Mode.NEW_GAME: "Game Baru: Pilih Slot",
-	Mode.LOAD: "Muat Game",
-	Mode.SAVE: "Simpan Game",
-	Mode.PLAY: "Co-op: Pilih Slot",
-}
-
+@export var design_size := Vector2(1280, 720)
+@export var card_scene: PackedScene = preload("res://scenes/ui/save_slot_card.tscn")
+@export var titles := PackedStringArray(["Game Baru · Pilih Slot", "Muat Permainan", "Simpan Permainan", "Co-op · Pilih Slot"])
 var mode: Mode = Mode.LOAD
-## Minta konfirmasi sebelum memuat (dari menu pause: progres yang belum disimpan hilang).
-var confirm_load: bool = false
-## Tandai slot aktif dengan "(aktif)" (dipakai saat di dalam game).
-var show_active: bool = false
-
-var _theme: Theme
-var _list: VBoxContainer
-var _confirm_layer: Control
-var _confirm_label: Label
-var _confirm_yes: Button
-var _confirm_no: Button
+var confirm_load := false
+var show_active := false
 var _confirm_action: Callable
-
+var _closed := false
+@onready var _list: GridContainer = %Slots
+@onready var _confirm_layer: Control = %Confirmation
+@onready var _confirm_label: Label = %ConfirmText
+@onready var _confirm_yes: Button = %ConfirmYes
+@onready var _confirm_no: Button = %ConfirmNo
 
 func _ready() -> void:
-	layer = 30
+	layer = 90
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	_build_ui()
+	%Title.text = titles[int(mode)] if int(mode) < titles.size() else "Slot Save"
+	%Close.pressed.connect(_close)
+	_confirm_yes.pressed.connect(_on_confirm_yes)
+	_confirm_no.pressed.connect(_hide_confirm)
+	get_viewport().size_changed.connect(_resize)
+	_resize()
 	_refresh()
 
-
-# ── Membangun UI ────────────────────────────────────────────────────
-
-func _build_ui() -> void:
-	_theme = Theme.new()
-	_theme.default_font = FONT
-	_theme.default_font_size = 16
-	_theme.set_color("font_color", "Label", COLOR_TEXT)
-
-	var dim := ColorRect.new()
-	dim.color = Color(0, 0, 0, 0.6)
-	dim.theme = _theme
-	add_child(dim)
-	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-
-	var center := CenterContainer.new()
-	dim.add_child(center)
-	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-
-	var panel := PanelContainer.new()
-	panel.add_theme_stylebox_override("panel", _style(TEX_INVENTORY, Rect2(0, 64, 48, 48), 8, 12))
-	center.add_child(panel)
-
-	var box := VBoxContainer.new()
-	box.add_theme_constant_override("separation", 6)
-	panel.add_child(box)
-
-	var title := Label.new()
-	title.text = TITLES.get(mode, "Slot Save")
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	box.add_child(title)
-
-	_list = VBoxContainer.new()
-	_list.add_theme_constant_override("separation", 4)
-	box.add_child(_list)
-
-	var buttons := HBoxContainer.new()
-	buttons.alignment = BoxContainer.ALIGNMENT_END
-	box.add_child(buttons)
-	buttons.add_child(_make_button("Kembali", _close))
-
-	_build_confirm(dim)
-
-func _build_confirm(parent: Control) -> void:
-	_confirm_layer = ColorRect.new()
-	(_confirm_layer as ColorRect).color = Color(0, 0, 0, 0.45)
-	parent.add_child(_confirm_layer)
-	_confirm_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_confirm_layer.hide()
-
-	var center := CenterContainer.new()
-	_confirm_layer.add_child(center)
-	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-
-	var panel := PanelContainer.new()
-	panel.add_theme_stylebox_override("panel", _style(TEX_INVENTORY, Rect2(0, 64, 48, 48), 8, 12))
-	center.add_child(panel)
-
-	var box := VBoxContainer.new()
-	box.add_theme_constant_override("separation", 8)
-	panel.add_child(box)
-
-	_confirm_label = Label.new()
-	_confirm_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_confirm_label.custom_minimum_size = Vector2(260, 0)
-	_confirm_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	box.add_child(_confirm_label)
-
-	var buttons := HBoxContainer.new()
-	buttons.alignment = BoxContainer.ALIGNMENT_CENTER
-	buttons.add_theme_constant_override("separation", 10)
-	box.add_child(buttons)
-	_confirm_no = _make_button("Batal", _hide_confirm)
-	_confirm_yes = _make_button("Ya", _on_confirm_yes)
-	buttons.add_child(_confirm_no)
-	buttons.add_child(_confirm_yes)
-
-func _make_button(text: String, callback: Callable) -> Button:
-	var button := Button.new()
-	button.text = text
-	button.pressed.connect(callback)
-	return button
-
-func _style(tex: Texture2D, region: Rect2, tex_margin: int, content_margin: int) -> StyleBoxTexture:
-	var sb := StyleBoxTexture.new()
-	sb.texture = tex
-	sb.region_rect = region
-	sb.set_texture_margin_all(tex_margin)
-	sb.set_content_margin_all(content_margin)
-	return sb
-
-
-# ── Daftar slot ─────────────────────────────────────────────────────
+func _resize() -> void:
+	var view := get_viewport().get_visible_rect().size
+	var fit := minf(view.x / design_size.x, view.y / design_size.y)
+	$Design.scale = Vector2.ONE * fit
+	$Design.position = (view - design_size * fit) * 0.5
 
 func _refresh() -> void:
+	if _closed:
+		return
 	for child in _list.get_children():
+		_list.remove_child(child)
 		child.queue_free()
-	var first_focus: Button = null
+	var first: Button
 	for slot in range(1, SaveManager.SLOT_COUNT + 1):
-		var action := _build_slot_row(slot)
-		if first_focus == null and not action.disabled:
-			first_focus = action
-	if first_focus != null:
-		first_focus.call_deferred("grab_focus")
+		var summary := SaveManager.get_slot_summary(slot)
+		var filled := not summary.is_empty()
+		var card := card_scene.instantiate()
+		_list.add_child(card)
+		card.get_node("Header").text = "SLOT %02d" % slot
+		card.get_node("Active").visible = show_active and slot == SaveManager.current_slot
+		card.get_node("PlayerName").text = str(summary.get("name", "Cerita baru"))
+		card.get_node("FarmName").text = str(summary.get("farm_name", "")) if filled else "Mulai kehidupan di Nusa Vale"
+		if filled:
+			card.get_node("Date").text = "%s · Hari %d\nTahun %d" % [summary.season_name, summary.day_of_season, summary.year]
+			card.get_node("Money").text = "%s G" % _format_money(int(summary.money))
+			card.get_node("Saved").text = "Disimpan %s%s" % [_format_time(int(summary.saved_at)), "\nDipulihkan dari cadangan" if summary.from_backup else ""]
+		else:
+			card.get_node("Date").text = "Slot kosong"
+			card.get_node("Money").text = "Petualangan menantimu"
+			card.get_node("Saved").text = "Belum ada data tersimpan"
+		var action: Button = card.get_node("Action")
+		action.text = _action_text(filled)
+		action.disabled = mode == Mode.LOAD and not filled
+		action.set_meta("available", not action.disabled)
+		action.pressed.connect(_on_slot_pressed.bind(slot, filled))
+		var remove: Button = card.get_node("Delete")
+		remove.visible = filled
+		remove.set_meta("available", filled)
+		remove.pressed.connect(_on_delete_pressed.bind(slot))
+		if first == null and not action.disabled:
+			first = action
+	if first != null:
+		_focus_action.call_deferred(first)
 
-## Mengembalikan tombol aksi slot (untuk fokus keyboard/gamepad).
-func _build_slot_row(slot: int) -> Button:
-	var summary := SaveManager.get_slot_summary(slot)
-	var filled := not summary.is_empty()
+func _focus_action(button: Button) -> void:
+	if _closed or _confirm_layer.visible or not is_instance_valid(button):
+		return
+	if button.is_inside_tree() and not button.disabled:
+		button.grab_focus()
 
-	var row_panel := PanelContainer.new()
-	row_panel.add_theme_stylebox_override("panel", _style(TEX_INVENTORY, Rect2(7, 9, 18, 18), 4, 6))
-	_list.add_child(row_panel)
-
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 8)
-	row_panel.add_child(row)
-
-	var info := VBoxContainer.new()
-	info.custom_minimum_size = Vector2(300, 0)
-	# Teks terang di atas kotak slot yang gelap.
-	info.theme = Theme.new()
-	info.theme.set_color("font_color", "Label", COLOR_TEXT_LIGHT)
-	info.add_theme_constant_override("separation", 0)
-	row.add_child(info)
-
-	var header := Label.new()
-	header.text = "Slot %d" % slot
-	if show_active and slot == SaveManager.current_slot:
-		header.text += " (aktif)"
-	info.add_child(header)
-
-	if filled:
-		info.add_child(_line("%s  ·  %s hari %d, Tahun %d" % [
-			summary["name"], summary["season_name"], summary["day_of_season"], summary["year"]]))
-		var saved := "Disimpan %s" % _format_time(int(summary["saved_at"]))
-		if summary["from_backup"]:
-			saved += " (cadangan)"
-		info.add_child(_line("%s G  ·  %s" % [_format_money(int(summary["money"])), saved]))
-	else:
-		var empty := _line("Kosong")
-		empty.add_theme_color_override("font_color", COLOR_DIM)
-		info.add_child(empty)
-
-	var buttons := VBoxContainer.new()
-	buttons.alignment = BoxContainer.ALIGNMENT_CENTER
-	buttons.add_theme_constant_override("separation", 2)
-	row.add_child(buttons)
-
-	var action := _make_button(_action_text(filled), _on_slot_pressed.bind(slot, filled))
-	action.custom_minimum_size = Vector2(64, 0)
-	action.disabled = mode == Mode.LOAD and not filled
-	buttons.add_child(action)
-
-	if filled:
-		var delete_button := _make_button("Hapus", _on_delete_pressed.bind(slot))
-		delete_button.custom_minimum_size = Vector2(64, 0)
-		buttons.add_child(delete_button)
-	return action
-
-func _line(text: String) -> Label:
-	var label := Label.new()
-	label.text = text
-	return label
+func _set_card_actions_disabled(value: bool) -> void:
+	%Close.disabled = value
+	for card in _list.get_children():
+		for button_name in ["Action", "Delete"]:
+			var button: Button = card.get_node(button_name)
+			button.disabled = value or not button.get_meta("available", false)
 
 func _action_text(filled: bool) -> String:
 	match mode:
@@ -229,7 +100,12 @@ func _action_text(filled: bool) -> String:
 
 # ── Aksi ────────────────────────────────────────────────────────────
 
-func _on_slot_pressed(slot: int, filled: bool) -> void:
+func _on_slot_pressed(slot: int, _filled: bool) -> void:
+	if _closed or _confirm_layer.visible or slot < 1 or slot > SaveManager.SLOT_COUNT:
+		return
+	var filled := SaveManager.has_save(slot)
+	if mode == Mode.LOAD and not filled:
+		return
 	match mode:
 		Mode.NEW_GAME:
 			if filled:
@@ -283,17 +159,20 @@ func _ask(text: String, action: Callable) -> void:
 	_confirm_label.text = text
 	_confirm_action = action
 	_confirm_layer.show()
+	_set_card_actions_disabled(true)
 	_confirm_no.grab_focus()
 
 func _hide_confirm() -> void:
 	_confirm_layer.hide()
 	_confirm_action = Callable()
+	%Close.disabled = false
 	_refresh()
 
 func _on_confirm_yes() -> void:
 	var action := _confirm_action
 	_confirm_layer.hide()
 	_confirm_action = Callable()
+	_set_card_actions_disabled(false)
 	if action.is_valid():
 		action.call()
 
@@ -311,6 +190,10 @@ func _input(event: InputEvent) -> void:
 			_close()
 
 func _close() -> void:
+	if _closed:
+		return
+	_closed = true
+	hide()
 	closed.emit()
 	queue_free()
 

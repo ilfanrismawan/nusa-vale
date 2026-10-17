@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://besoqgnyhuj6v"]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1_item"]
+[ext_resource type="Script" uid="uid://vbwn6cjjdlc0" path="res://scripts/resources/food_effect_data.gd" id="1_ywtrh"]
+[ext_resource type="Texture2D" uid="uid://djke4tccx1auk" path="res://assets/farm_rpg/icons/Food Icons/Dough.png" id="2_icon"]
+
+[sub_resource type="AtlasTexture" id="Icon"]
+atlas = ExtResource("2_icon")
+region = Rect2(0, 0, 16, 16)
+filter_clip = true
+
+[resource]
+script = ExtResource("1_item")
+item_id = "dough"
+display_name = "Adonan"
+icon = SubResource("Icon")
+description = "Bahan olahan untuk resep lanjutan."
+sell_price = 75

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://k2f34wwiv0sm"]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1_item"]
+[ext_resource type="Script" uid="uid://vbwn6cjjdlc0" path="res://scripts/resources/food_effect_data.gd" id="1_x24tq"]
+[ext_resource type="Texture2D" path="res://resources/cooking/icons/cookware_cooking_stove.tres" id="2_texture"]
+
+[resource]
+script = ExtResource("1_item")
+category = 8
+item_id = "cooking_stove"
+display_name = "Kompor"
+icon = ExtResource("2_texture")
+description = "Peralatan memasak. Tempatkan scene cooking_stove.tscn di editor."
+stackable = false
+max_stack = 1

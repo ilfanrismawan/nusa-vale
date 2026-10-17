@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CookingShopOffer" format=3]
+[ext_resource type="Script" path="res://scripts/resources/cooking_shop_offer.gd" id="script"]
+[ext_resource type="Texture2D" path="res://resources/cooking/shop/art/WoodKitchenDisplay.tres" id="icon"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/kitchen_set_wood.tscn" id="scene"]
+[resource]
+script = ExtResource("script")
+id = &"kitchen_set_wood"
+display_name = "Kitchen Set Kayu"
+description = "Kitchen set kayu untuk ruang dapur rumah. Termasuk kabinet, kompor, wastafel dan lemari es sebagai furniture; alat resep dibeli terpisah. Setelah dimiliki, pasang kembali tanpa biaya."
+icon = ExtResource("icon")
+price = 7500
+required_flags = PackedStringArray("house_kitchen_upgraded")
+owned_flag = "owned_kitchen_set_wood"
+grants_flags = PackedStringArray("home_kitchen_installed", "owned_cookware_cooking_stove")
+kitchen_scene = ExtResource("scene")
+selection_group = &"home_kitchen"

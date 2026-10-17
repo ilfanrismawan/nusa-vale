@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="CookingShopOffer" format=3]
+[ext_resource type="Script" path="res://scripts/resources/cooking_shop_offer.gd" id="script"]
+[ext_resource type="Resource" path="res://resources/cooking/equipment/cooking_oven.tres" id="equipment"]
+[resource]
+script = ExtResource("script")
+id = &"cooking_oven"
+display_name = "Oven"
+description = "Oven dipasang permanen di dapur rumah dan tersedia untuk semua penghuni. Alat tidak habis saat memasak. Membutuhkan renovasi ruang dapur rumah."
+price = 1000
+required_flags = PackedStringArray("house_kitchen_upgraded")
+owned_flag = "owned_cookware_cooking_oven"
+equipment = ExtResource("equipment")

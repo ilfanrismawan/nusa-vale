@@ -1,0 +1,532 @@
+[gd_scene format=3 uid="uid://c1hnptvxdbkxd"]
+
+[ext_resource type="Texture2D" uid="uid://b3ofd4jcvwodc" path="res://assets/cooking/tileset toko jual peralatan masak.png" id="8_4uqbj"]
+[ext_resource type="Texture2D" uid="uid://blpl2rf1hvddp" path="res://resources/cooking/shop/art/BlackKitchenDisplay.tres" id="BlackKitchenDisplay"]
+[ext_resource type="Texture2D" path="res://resources/cooking/shop/art/BottomWallLeft.tres" id="BottomWallLeft"]
+[ext_resource type="Texture2D" path="res://resources/cooking/shop/art/BottomWallRight.tres" id="BottomWallRight"]
+[ext_resource type="Texture2D" uid="uid://bxysg1aphjjbp" path="res://resources/cooking/shop/art/CenterLeftShelf.tres" id="CenterLeftShelf"]
+[ext_resource type="Texture2D" uid="uid://t340x3ahp1x7" path="res://resources/cooking/shop/art/CenterRightShelf.tres" id="CenterRightShelf"]
+[ext_resource type="Script" uid="uid://brhrpari866nc" path="res://scripts/world/cooking_shop_counter.gd" id="counter"]
+[ext_resource type="Texture2D" path="res://resources/cooking/shop/art/EntrancePostLeft.tres" id="EntrancePostLeft"]
+[ext_resource type="Texture2D" path="res://resources/cooking/shop/art/EntrancePostRight.tres" id="EntrancePostRight"]
+[ext_resource type="Texture2D" path="res://resources/cooking/shop/art/EntranceRug.tres" id="EntranceRug"]
+[ext_resource type="Texture2D" path="res://resources/cooking/shop/art/EntranceSteps.tres" id="EntranceSteps"]
+[ext_resource type="Script" uid="uid://cwvn2t55kd6ey" path="res://scripts/world/exit_door_school.gd" id="exit"]
+[ext_resource type="Texture2D" path="res://resources/cooking/shop/art/Floor.tres" id="floor"]
+[ext_resource type="Texture2D" path="res://resources/cooking/shop/art/LeftBaskets.tres" id="LeftBaskets"]
+[ext_resource type="Texture2D" path="res://resources/cooking/shop/art/LeftKitchenShelf.tres" id="LeftKitchenShelf"]
+[ext_resource type="Texture2D" path="res://resources/cooking/shop/art/LeftLantern.tres" id="LeftLantern"]
+[ext_resource type="Texture2D" path="res://resources/cooking/shop/art/LeftPlants.tres" id="LeftPlants"]
+[ext_resource type="Texture2D" uid="uid://cm1w78nifdhxy" path="res://resources/cooking/shop/art/LeftSpiceShelf.tres" id="LeftSpiceShelf"]
+[ext_resource type="Texture2D" path="res://resources/cooking/shop/art/LeftWall.tres" id="LeftWall"]
+[ext_resource type="Texture2D" path="res://resources/cooking/shop/art/LeftWindow.tres" id="LeftWindow"]
+[ext_resource type="Texture2D" path="res://resources/cooking/shop/art/PinkKitchenDisplay.tres" id="PinkKitchenDisplay"]
+[ext_resource type="PackedScene" uid="uid://bye3dnnqckqj5" path="res://scenes/player/Player.tscn" id="player"]
+[ext_resource type="Texture2D" path="res://resources/cooking/shop/art/RightApplianceShelf.tres" id="RightApplianceShelf"]
+[ext_resource type="Texture2D" path="res://resources/cooking/shop/art/RightLantern.tres" id="RightLantern"]
+[ext_resource type="Texture2D" path="res://resources/cooking/shop/art/RightPlant.tres" id="RightPlant"]
+[ext_resource type="Texture2D" path="res://resources/cooking/shop/art/RightWall.tres" id="RightWall"]
+[ext_resource type="Texture2D" path="res://resources/cooking/shop/art/RightWallDecor.tres" id="RightWallDecor"]
+[ext_resource type="Texture2D" path="res://resources/cooking/shop/art/RightWindow.tres" id="RightWindow"]
+[ext_resource type="Script" uid="uid://b871xi0r1l8sb" path="res://scripts/world/cooking_shop_room.gd" id="room"]
+[ext_resource type="Texture2D" uid="uid://de0vk2fe3c46a" path="res://resources/cooking/shop/art/SalesCounter.tres" id="SalesCounter"]
+[ext_resource type="Resource" path="res://resources/cooking/shop/cooking_shop.tres" id="store"]
+[ext_resource type="Texture2D" uid="uid://ccn4bmtqnb2jy" path="res://resources/cooking/shop/art/TopBeam.tres" id="TopBeam"]
+[ext_resource type="Texture2D" path="res://resources/cooking/shop/art/WhiteKitchenDisplay.tres" id="WhiteKitchenDisplay"]
+[ext_resource type="Texture2D" uid="uid://do04o4yyi0qao" path="res://resources/cooking/shop/art/WoodKitchenDisplay.tres" id="WoodKitchenDisplay"]
+
+[sub_resource type="RectangleShape2D" id="BackWallShape"]
+size = Vector2(1498, 280)
+
+[sub_resource type="RectangleShape2D" id="LeftBoundaryShape"]
+size = Vector2(28, 552)
+
+[sub_resource type="RectangleShape2D" id="RightBoundaryShape"]
+size = Vector2(28, 552)
+
+[sub_resource type="RectangleShape2D" id="BottomLeftShape"]
+size = Vector2(604, 33.68811)
+
+[sub_resource type="RectangleShape2D" id="BottomRightShape"]
+size = Vector2(603, 32)
+
+[sub_resource type="RectangleShape2D" id="LeftShelfShape"]
+size = Vector2(95, 461.80273)
+
+[sub_resource type="RectangleShape2D" id="LeftKitchenShape"]
+size = Vector2(203, 333)
+
+[sub_resource type="RectangleShape2D" id="MiddleLeftShape"]
+size = Vector2(247, 259)
+
+[sub_resource type="RectangleShape2D" id="MiddleRightShape"]
+size = Vector2(248, 259)
+
+[sub_resource type="RectangleShape2D" id="AppliancesShape"]
+size = Vector2(119, 421)
+
+[sub_resource type="RectangleShape2D" id="CounterShape"]
+size = Vector2(231.02551, 91)
+
+[sub_resource type="RectangleShape2D" id="LeftPostShape"]
+size = Vector2(40, 101)
+
+[sub_resource type="RectangleShape2D" id="RightPostShape"]
+size = Vector2(40, 101)
+
+[sub_resource type="RectangleShape2D" id="CounterTrigger"]
+size = Vector2(280, 80)
+
+[sub_resource type="RectangleShape2D" id="ExitShape"]
+size = Vector2(55, 8.7612915)
+
+[node name="CookwareShop" type="Node2D" unique_id=663341408]
+y_sort_enabled = true
+script = ExtResource("room")
+default_zoom = 2.7
+
+[node name="Showroom" type="Node2D" parent="." unique_id=262097631]
+y_sort_enabled = true
+texture_filter = 1
+position = Vector2(45, 24)
+scale = Vector2(0.21002813, 0.21002813)
+
+[node name="WallBacking" type="Polygon2D" parent="Showroom" unique_id=1222228219]
+z_index = -30
+color = Color(0.94, 0.8, 0.58, 1)
+polygon = PackedVector2Array(43, 112, 1493, 112, 1493, 365, 43, 365)
+
+[node name="Floor" type="Node2D" parent="Showroom" unique_id=1150167473]
+z_index = -20
+
+[node name="Planks0" type="Sprite2D" parent="Showroom/Floor" unique_id=1316006586]
+position = Vector2(44, 360)
+texture = ExtResource("floor")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 830, 85)
+
+[node name="Planks14" type="Sprite2D" parent="Showroom/Floor" unique_id=1928316429]
+position = Vector2(48, 284)
+texture = ExtResource("floor")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 830, 85)
+
+[node name="Planks1" type="Sprite2D" parent="Showroom/Floor" unique_id=2109724918]
+position = Vector2(874, 360)
+texture = ExtResource("floor")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 616, 85)
+
+[node name="Planks15" type="Sprite2D" parent="Showroom/Floor" unique_id=1493674857]
+position = Vector2(874, 276)
+texture = ExtResource("floor")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 616, 85)
+
+[node name="Planks2" type="Sprite2D" parent="Showroom/Floor" unique_id=528738659]
+position = Vector2(44, 445)
+texture = ExtResource("floor")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 830, 85)
+
+[node name="Planks3" type="Sprite2D" parent="Showroom/Floor" unique_id=1529517973]
+position = Vector2(874, 445)
+texture = ExtResource("floor")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 616, 85)
+
+[node name="Planks4" type="Sprite2D" parent="Showroom/Floor" unique_id=1374121470]
+position = Vector2(44, 530)
+texture = ExtResource("floor")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 830, 85)
+
+[node name="Planks5" type="Sprite2D" parent="Showroom/Floor" unique_id=2007200357]
+position = Vector2(874, 530)
+texture = ExtResource("floor")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 616, 85)
+
+[node name="Planks6" type="Sprite2D" parent="Showroom/Floor" unique_id=1916512290]
+position = Vector2(44, 615)
+texture = ExtResource("floor")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 830, 85)
+
+[node name="Planks7" type="Sprite2D" parent="Showroom/Floor" unique_id=613979519]
+position = Vector2(874, 615)
+texture = ExtResource("floor")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 616, 85)
+
+[node name="Planks8" type="Sprite2D" parent="Showroom/Floor" unique_id=2133930449]
+position = Vector2(44, 700)
+texture = ExtResource("floor")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 830, 85)
+
+[node name="Planks9" type="Sprite2D" parent="Showroom/Floor" unique_id=1695599926]
+position = Vector2(874, 700)
+texture = ExtResource("floor")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 616, 85)
+
+[node name="Planks10" type="Sprite2D" parent="Showroom/Floor" unique_id=137890227]
+position = Vector2(44, 785)
+texture = ExtResource("floor")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 830, 85)
+
+[node name="Polygon2D" type="Polygon2D" parent="Showroom/Floor" unique_id=475281532]
+clip_children = 1
+position = Vector2(44, 844)
+polygon = PackedVector2Array(604, 88, 596, -8, 884, 0, 872, 92)
+
+[node name="Planks14" type="Sprite2D" parent="Showroom/Floor/Polygon2D" unique_id=1965583890]
+texture = ExtResource("floor")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 830, 85)
+
+[node name="Planks11" type="Sprite2D" parent="Showroom/Floor" unique_id=406299579]
+position = Vector2(874, 785)
+texture = ExtResource("floor")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 616, 85)
+
+[node name="Planks12" type="Sprite2D" parent="Showroom/Floor" unique_id=366966370]
+position = Vector2(44, 870)
+texture = ExtResource("floor")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 830, 3)
+
+[node name="Planks13" type="Sprite2D" parent="Showroom/Floor" unique_id=338114431]
+position = Vector2(874, 870)
+texture = ExtResource("floor")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 616, 3)
+
+[node name="Fixtures" type="Node2D" parent="Showroom" unique_id=1334838085]
+y_sort_enabled = true
+
+[node name="TopBeam" type="Sprite2D" parent="Showroom/Fixtures" unique_id=1096158544]
+z_index = -10
+position = Vector2(20, 115)
+texture = ExtResource("TopBeam")
+centered = false
+offset = Vector2(0, -35)
+
+[node name="LeftWall" type="Sprite2D" parent="Showroom/Fixtures" unique_id=365224147]
+z_index = -10
+position = Vector2(20, 905)
+texture = ExtResource("LeftWall")
+centered = false
+offset = Vector2(0, -791)
+
+[node name="RightWall" type="Sprite2D" parent="Showroom/Fixtures" unique_id=201415644]
+z_index = -10
+position = Vector2(1490, 905)
+texture = ExtResource("RightWall")
+centered = false
+offset = Vector2(0, -791)
+
+[node name="BottomWallLeft" type="Sprite2D" parent="Showroom/Fixtures" unique_id=840108106]
+z_index = -10
+position = Vector2(20, 905)
+texture = ExtResource("BottomWallLeft")
+centered = false
+offset = Vector2(0, -32)
+
+[node name="BottomWallRight" type="Sprite2D" parent="Showroom/Fixtures" unique_id=1143549893]
+z_index = -10
+position = Vector2(915, 905)
+texture = ExtResource("BottomWallRight")
+centered = false
+offset = Vector2(0, -32)
+
+[node name="Sprite2D" type="Sprite2D" parent="Showroom/Fixtures" unique_id=1303607725]
+z_index = 1
+position = Vector2(144.00002, 252)
+scale = Vector2(0.80418247, 0.8041825)
+texture = ExtResource("8_4uqbj")
+region_enabled = true
+region_rect = Rect2(977, 891, 64, 103)
+
+[node name="Sprite2D2" type="Sprite2D" parent="Showroom/Fixtures" unique_id=2011388730]
+z_index = 1
+position = Vector2(744, 268)
+scale = Vector2(0.80418235, 0.8041825)
+texture = ExtResource("8_4uqbj")
+region_enabled = true
+region_rect = Rect2(413, 894, 72, 95)
+
+[node name="Sprite2D3" type="Sprite2D" parent="Showroom/Fixtures" unique_id=985957523]
+z_index = 1
+position = Vector2(1032, 256)
+scale = Vector2(0.80418247, 0.8041825)
+texture = ExtResource("8_4uqbj")
+region_enabled = true
+region_rect = Rect2(494, 869, 87, 122)
+
+[node name="Sprite2D4" type="Sprite2D" parent="Showroom/Fixtures" unique_id=811385710]
+z_index = 1
+position = Vector2(444, 260)
+scale = Vector2(0.80418247, 0.8041825)
+texture = ExtResource("8_4uqbj")
+region_enabled = true
+region_rect = Rect2(413, 894, 72, 95)
+
+[node name="WoodKitchenDisplay" type="Sprite2D" parent="Showroom/Fixtures" unique_id=1295200943]
+z_index = -1
+position = Vector2(148, 362)
+texture = ExtResource("WoodKitchenDisplay")
+centered = false
+offset = Vector2(0, -222)
+
+[node name="WhiteKitchenDisplay" type="Sprite2D" parent="Showroom/Fixtures" unique_id=1128176433]
+z_index = -1
+position = Vector2(457, 362)
+texture = ExtResource("WhiteKitchenDisplay")
+centered = false
+offset = Vector2(0, -222)
+
+[node name="BlackKitchenDisplay" type="Sprite2D" parent="Showroom/Fixtures" unique_id=1975581454]
+z_index = -1
+position = Vector2(756.00006, 364.00003)
+texture = ExtResource("BlackKitchenDisplay")
+centered = false
+offset = Vector2(0, -222)
+
+[node name="PinkKitchenDisplay" type="Sprite2D" parent="Showroom/Fixtures" unique_id=379636368]
+z_index = -1
+position = Vector2(1056, 362)
+texture = ExtResource("PinkKitchenDisplay")
+centered = false
+offset = Vector2(0, -222)
+
+[node name="LeftSpiceShelf" type="Sprite2D" parent="Showroom/Fixtures" unique_id=821182478]
+position = Vector2(48, 759)
+texture = ExtResource("LeftSpiceShelf")
+centered = false
+offset = Vector2(0, -508)
+
+[node name="LeftKitchenShelf" type="Sprite2D" parent="Showroom/Fixtures" unique_id=932235802]
+position = Vector2(139, 759)
+texture = ExtResource("LeftKitchenShelf")
+centered = false
+offset = Vector2(0, -365)
+
+[node name="LeftPlants" type="Sprite2D" parent="Showroom/Fixtures" unique_id=342325800]
+position = Vector2(44, 289)
+texture = ExtResource("LeftPlants")
+centered = false
+offset = Vector2(0, -112)
+
+[node name="LeftBaskets" type="Sprite2D" parent="Showroom/Fixtures" unique_id=72968157]
+z_index = -1
+y_sort_enabled = true
+position = Vector2(47, 873)
+texture = ExtResource("LeftBaskets")
+centered = false
+offset = Vector2(0, -114)
+
+[node name="LeftWindow" type="Sprite2D" parent="Showroom/Fixtures" unique_id=2017937737]
+z_index = -10
+position = Vector2(70, 189)
+scale = Vector2(0.923077, 0.961538)
+texture = ExtResource("LeftWindow")
+centered = false
+offset = Vector2(0, -52)
+
+[node name="LeftLantern" type="Sprite2D" parent="Showroom/Fixtures" unique_id=763663053]
+z_index = -10
+position = Vector2(126, 175)
+texture = ExtResource("LeftLantern")
+centered = false
+offset = Vector2(0, -67)
+
+[node name="RightWindow" type="Sprite2D" parent="Showroom/Fixtures" unique_id=1169360812]
+z_index = -10
+position = Vector2(1328, 191)
+scale = Vector2(1.038462, 1)
+texture = ExtResource("RightWindow")
+centered = false
+offset = Vector2(0, -52)
+
+[node name="RightLantern" type="Sprite2D" parent="Showroom/Fixtures" unique_id=1398149356]
+z_index = -10
+position = Vector2(1402, 176)
+texture = ExtResource("RightLantern")
+centered = false
+offset = Vector2(0, -70)
+
+[node name="RightWallDecor" type="Sprite2D" parent="Showroom/Fixtures" unique_id=1520735531]
+z_index = -10
+position = Vector2(1308, 252)
+texture = ExtResource("RightWallDecor")
+centered = false
+offset = Vector2(0, -76)
+
+[node name="RightPlant" type="Sprite2D" parent="Showroom/Fixtures" unique_id=697279614]
+position = Vector2(1450, 334)
+texture = ExtResource("RightPlant")
+centered = false
+offset = Vector2(0, -94)
+
+[node name="SalesCounter" type="Sprite2D" parent="Showroom/Fixtures" unique_id=1931517678]
+position = Vector2(1265, 432)
+texture = ExtResource("SalesCounter")
+centered = false
+offset = Vector2(0, -180)
+
+[node name="CenterLeftShelf" type="Sprite2D" parent="Showroom/Fixtures" unique_id=338929340]
+position = Vector2(440, 741)
+texture = ExtResource("CenterLeftShelf")
+centered = false
+offset = Vector2(0, -282)
+
+[node name="CenterRightShelf" type="Sprite2D" parent="Showroom/Fixtures" unique_id=140010601]
+position = Vector2(840, 741)
+texture = ExtResource("CenterRightShelf")
+centered = false
+offset = Vector2(0, -282)
+
+[node name="RightApplianceShelf" type="Sprite2D" parent="Showroom/Fixtures" unique_id=2022595292]
+position = Vector2(1365, 852)
+texture = ExtResource("RightApplianceShelf")
+centered = false
+offset = Vector2(0, -448)
+
+[node name="EntranceRug" type="Sprite2D" parent="Showroom/Fixtures" unique_id=68175497]
+z_index = -10
+position = Vector2(678, 895)
+scale = Vector2(0.86256, 0.76699)
+texture = ExtResource("EntranceRug")
+centered = false
+offset = Vector2(0, -103)
+
+[node name="EntranceSteps" type="Sprite2D" parent="Showroom/Fixtures" unique_id=703350755]
+z_index = -10
+position = Vector2(622, 974)
+texture = ExtResource("EntranceSteps")
+centered = false
+offset = Vector2(0, -79)
+
+[node name="EntrancePostLeft" type="Sprite2D" parent="Showroom/Fixtures" unique_id=1900380050]
+z_index = -10
+position = Vector2(622, 897)
+texture = ExtResource("EntrancePostLeft")
+centered = false
+offset = Vector2(0, -43)
+
+[node name="EntrancePostRight" type="Sprite2D" parent="Showroom/Fixtures" unique_id=794719382]
+z_index = -10
+position = Vector2(873, 897)
+texture = ExtResource("EntrancePostRight")
+centered = false
+offset = Vector2(0, -43)
+
+[node name="Obstacles" type="StaticBody2D" parent="Showroom" unique_id=1200786413]
+visible = false
+
+[node name="BackWall" type="CollisionShape2D" parent="Showroom/Obstacles" unique_id=1185737907]
+position = Vector2(769, 220)
+shape = SubResource("BackWallShape")
+
+[node name="LeftBoundary" type="CollisionShape2D" parent="Showroom/Obstacles" unique_id=783308039]
+position = Vector2(34, 626)
+shape = SubResource("LeftBoundaryShape")
+
+[node name="RightBoundary" type="CollisionShape2D" parent="Showroom/Obstacles" unique_id=127220019]
+position = Vector2(1504, 626)
+shape = SubResource("RightBoundaryShape")
+
+[node name="BottomLeft" type="CollisionShape2D" parent="Showroom/Obstacles" unique_id=1506110881]
+position = Vector2(322, 888.156)
+shape = SubResource("BottomLeftShape")
+
+[node name="BottomRight" type="CollisionShape2D" parent="Showroom/Obstacles" unique_id=1538684726]
+position = Vector2(1216.5, 889)
+shape = SubResource("BottomRightShape")
+
+[node name="LeftShelf" type="CollisionShape2D" parent="Showroom/Obstacles" unique_id=606030305]
+position = Vector2(95.5, 530.90137)
+shape = SubResource("LeftShelfShape")
+
+[node name="LeftKitchen" type="CollisionShape2D" parent="Showroom/Obstacles" unique_id=1137067075]
+position = Vector2(241.5, 588.5)
+shape = SubResource("LeftKitchenShape")
+
+[node name="MiddleLeft" type="CollisionShape2D" parent="Showroom/Obstacles" unique_id=213990621]
+position = Vector2(566.5, 609.5)
+shape = SubResource("MiddleLeftShape")
+
+[node name="MiddleRight" type="CollisionShape2D" parent="Showroom/Obstacles" unique_id=494381809]
+position = Vector2(967, 609.5)
+shape = SubResource("MiddleRightShape")
+
+[node name="Appliances" type="CollisionShape2D" parent="Showroom/Obstacles" unique_id=1449378923]
+position = Vector2(1428.5, 640.5)
+shape = SubResource("AppliancesShape")
+
+[node name="Counter" type="CollisionShape2D" parent="Showroom/Obstacles" unique_id=147887965]
+position = Vector2(1372.4873, 382.50003)
+shape = SubResource("CounterShape")
+
+[node name="LeftPost" type="CollisionShape2D" parent="Showroom/Obstacles" unique_id=524386509]
+position = Vector2(644, 905.5)
+shape = SubResource("LeftPostShape")
+
+[node name="RightPost" type="CollisionShape2D" parent="Showroom/Obstacles" unique_id=305425205]
+position = Vector2(894, 905.5)
+shape = SubResource("RightPostShape")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Showroom/Obstacles" unique_id=687550435]
+polygon = PackedVector2Array(119.03168, 747.5189, 142.83801, 780.8478, 171.40561, 761.80273, 176.1669, 771.3253, 209.49576, 780.8478, 209.49576, 799.89294, 185.68942, 804.6542, 204.7345, 823.6992, 199.97324, 837.98303, 180.92816, 833.2218, 190.45068, 861.7893, 166.64435, 904.64075, 23.806335, 890.35693, 38.09015, 714.19006)
+
+[node name="SalesCounterInteraction" type="Area2D" parent="Showroom" unique_id=1769177568]
+position = Vector2(1347, 430)
+script = ExtResource("counter")
+store = ExtResource("store")
+
+[node name="Trigger" type="CollisionShape2D" parent="Showroom/SalesCounterInteraction" unique_id=742545083]
+shape = SubResource("CounterTrigger")
+
+[node name="ExitDoor" type="Area2D" parent="." unique_id=210792476]
+position = Vector2(237, 262)
+scale = Vector2(0.8401125, 0.8401125)
+script = ExtResource("exit")
+target_scene = "res://scenes/world/town.tscn"
+spawn_position = Vector2(273, 570)
+
+[node name="Shape" type="CollisionShape2D" parent="ExitDoor" unique_id=1086879879]
+position = Vector2(-34.51918, -45.232033)
+shape = SubResource("ExitShape")
+
+[node name="SpawnPoint" type="Marker2D" parent="." unique_id=501473182]
+position = Vector2(209, 211)
+
+[node name="Player" parent="." unique_id=1136641994 instance=ExtResource("player")]
+position = Vector2(208, 196.00002)
+scale = Vector2(1.2, 1.2)
+
+[node name="ShowroomCamera" type="Camera2D" parent="." unique_id=473771052]
+position = Vector2(237, 152)
+scale = Vector2(0.8401125, 0.8401125)
+zoom = Vector2(2.7, 2.7)

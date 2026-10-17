@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="WeaponStyle" format=3 uid="uid://cm60lsy8m5scn"]
+
+[ext_resource type="Script" uid="uid://bpgswpatsto5r" path="res://scripts/data/weapon_style.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+hit_frame_ratio = 0.45
+speed_scale = 1.4
+melee_radius = 14.0
+knockback = 12.0
+hit_feedback = &""
+combo_damage = PackedFloat32Array(1, 1, 1.5)
+combo_speed = PackedFloat32Array(1, 1.15, 0.9)
+finisher_knockback_scale = 2.5
+finisher_radius_scale = 1.3
+finisher_feedback = &"combo_finisher"

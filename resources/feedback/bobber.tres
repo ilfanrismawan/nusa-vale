@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ActionFeedback" format=3 uid="uid://lxj2u6fqc3ph"]
 
-[ext_resource type="Script" uid="uid://bkypsghuif7rw" path="res://scripts/data/action_feedback.gd" id="1_fb"]
+[ext_resource type="Script" uid="uid://bkypsghuif7rw" path="res://autoload/data/action_feedback.gd" id="1_fb"]
 [ext_resource type="AudioStream" uid="uid://cfrihy02bcqbe" path="res://assets/audio/sfx/splash_small.wav" id="2_sfx"]
 
 [resource]

@@ -1,0 +1,144 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://scripts/ui/npc_dialog_ui.gd" id="script"]
+[ext_resource type="Theme" path="res://resources/ui/cooking_theme.tres" id="theme"]
+[ext_resource type="Shader" path="res://resources/ui/cooking_backdrop.gdshader" id="shader"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/Character/NPC'S/Tori/Portrait Tori.png" id="portrait"]
+[sub_resource type="AtlasTexture" id="Portrait"]
+atlas = ExtResource("portrait")
+region = Rect2(0, 0, 64, 64)
+[sub_resource type="StyleBoxFlat" id="Paper"]
+bg_color = Color(0.969, 0.953, 0.914, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_left = 18
+corner_radius_bottom_right = 18
+[sub_resource type="StyleBoxFlat" id="Name"]
+bg_color = Color(0.97, 0.81, 0.59, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_left = 18
+corner_radius_bottom_right = 18
+[sub_resource type="ShaderMaterial" id="Backdrop"]
+shader = ExtResource("shader")
+shader_parameter/blur_amount = 0.8
+shader_parameter/top_tint = Color(0.03, 0.04, 0.02, 0.03)
+shader_parameter/bottom_tint = Color(0.24, 0.34, 0.24, 0.42)
+
+[node name="UI" type="CanvasLayer"]
+process_mode = 3
+layer = 70
+script = ExtResource("script")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+material = SubResource("Backdrop")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Design" type="Control" parent="."]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+theme = ExtResource("theme")
+
+[node name="Portrait" type="TextureRect" parent="Design"]
+unique_name_in_owner = true
+offset_left = 0.0
+offset_top = 230.0
+offset_right = 330.0
+offset_bottom = 680.0
+mouse_filter = 2
+texture_filter = 1
+texture = SubResource("Portrait")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Dialogue" type="Panel" parent="Design"]
+offset_left = 285.0
+offset_top = 430.0
+offset_right = 1220.0
+offset_bottom = 665.0
+theme_override_styles/panel = SubResource("Paper")
+
+[node name="Speaker" type="Label" parent="Design"]
+unique_name_in_owner = true
+offset_left = 325.0
+offset_top = 408.0
+offset_right = 595.0
+offset_bottom = 452.0
+theme_override_font_sizes/font_size = 23
+text = "Warga Desa"
+autowrap_mode = 3
+
+theme_override_styles/normal = SubResource("Name")
+horizontal_alignment = 1
+
+[node name="Role" type="Label" parent="Design/Dialogue"]
+unique_name_in_owner = true
+offset_left = 36.0
+offset_top = 32.0
+offset_right = 766.0
+offset_bottom = 60.0
+theme_override_font_sizes/font_size = 16
+text = "Warga Nusa Vale"
+autowrap_mode = 3
+
+
+[node name="TextScroll" type="ScrollContainer" parent="Design/Dialogue"]
+unique_name_in_owner = true
+offset_left = 36.0
+offset_top = 70.0
+offset_right = 889.0
+offset_bottom = 170.0
+horizontal_scroll_mode = 0
+
+[node name="Text" type="Label" parent="Design/Dialogue/TextScroll"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(820, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+text = "Selamat datang di Nusa Vale!"
+autowrap_mode = 3
+
+[node name="Page" type="Label" parent="Design/Dialogue"]
+unique_name_in_owner = true
+offset_left = 36.0
+offset_top = 180.0
+offset_right = 136.0
+offset_bottom = 215.0
+theme_override_font_sizes/font_size = 16
+text = "1 / 1"
+autowrap_mode = 3
+
+
+[node name="Next" type="Button" parent="Design/Dialogue"]
+unique_name_in_owner = true
+offset_left = 717.0
+offset_top = 180.0
+offset_right = 892.0
+offset_bottom = 220.0
+text = "Lanjut ›"
+focus_mode = 0
+
+[node name="Close" type="Button" parent="Design/Dialogue"]
+unique_name_in_owner = true
+offset_left = 834.0
+offset_top = 18.0
+offset_right = 894.0
+offset_bottom = 56.0
+text = "×"
+focus_mode = 0
+
+[node name="Hint" type="Label" parent="Design"]
+unique_name_in_owner = true
+offset_left = 680.0
+offset_top = 675.0
+offset_right = 1220.0
+offset_bottom = 705.0
+theme_override_font_sizes/font_size = 16
+text = "E / Enter · Lanjut    Esc · Tutup"
+autowrap_mode = 3
+theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)

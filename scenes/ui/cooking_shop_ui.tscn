@@ -1,0 +1,81 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://scripts/ui/cooking_shop_ui.gd" id="script"]
+[ext_resource type="Theme" path="res://resources/ui/cooking_theme.tres" id="theme"]
+[node name="CookingShopUi" type="CanvasLayer"]
+process_mode = 3
+script = ExtResource("script")
+[node name="Dim" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.65)
+[node name="Panel" type="PanelContainer" parent="."]
+theme = ExtResource("theme")
+offset_right = 800.0
+offset_bottom = 570.0
+[node name="Layout" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+[node name="Header" type="HBoxContainer" parent="Panel/Layout"]
+layout_mode = 2
+[node name="Title" type="Label" parent="Panel/Layout/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Dapur Nusantara"
+[node name="Money" type="Label" parent="Panel/Layout/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+[node name="Close" type="Button" parent="Panel/Layout/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Tutup"
+[node name="Greeting" type="Label" parent="Panel/Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+autowrap_mode = 3
+[node name="Body" type="HBoxContainer" parent="Panel/Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+[node name="Scroll" type="ScrollContainer" parent="Panel/Layout/Body"]
+custom_minimum_size = Vector2(310, 370)
+layout_mode = 2
+horizontal_scroll_mode = 0
+follow_focus = true
+[node name="Offers" type="VBoxContainer" parent="Panel/Layout/Body/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+[node name="Detail" type="VBoxContainer" parent="Panel/Layout/Body"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+[node name="Preview" type="TextureRect" parent="Panel/Layout/Body/Detail"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 155)
+layout_mode = 2
+texture_filter = 1
+expand_mode = 1
+stretch_mode = 5
+[node name="Details" type="Label" parent="Panel/Layout/Body/Detail"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+autowrap_mode = 3
+[node name="Requirements" type="Label" parent="Panel/Layout/Body/Detail"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+size_flags_vertical = 3
+autowrap_mode = 3
+[node name="Purchase" type="Button" parent="Panel/Layout/Body/Detail"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Beli"
+[node name="Status" type="Label" parent="Panel/Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+autowrap_mode = 3

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1_item"]
+
+[resource]
+script = ExtResource("1_item")
+item_id = "coffee_beans"
+display_name = "Biji Kopi"
+category = 4
+description = "Bahan dapur. Harga dan ikon dapat diubah melalui Inspector."
+buy_price = 25
+sell_price = 12
+

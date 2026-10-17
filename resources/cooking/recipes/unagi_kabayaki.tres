@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://d32uh8nk25nvn"]
+
+[ext_resource type="Script" uid="uid://diwd3euw7gusn" path="res://scripts/resources/recipe_data.gd" id="1_recipe"]
+[ext_resource type="Resource" uid="uid://cih1otfsbhbwp" path="res://resources/item_data/unagi_kabayaki.tres" id="2_output"]
+[ext_resource type="Script" uid="uid://dulgeb3gtitad" path="res://scripts/resources/cooking_equipment_data.gd" id="required_type"]
+
+[ext_resource type="Resource" path="res://resources/cooking/equipment/cooking_grill.tres" id="cookware_required_0"]
+[ext_resource type="Resource" path="res://resources/cooking/equipment/chef_knife.tres" id="cookware_required_1"]
+[ext_resource type="Resource" path="res://resources/cooking/equipment/cutting_board.tres" id="cookware_required_2"]
+[ext_resource type="Resource" path="res://resources/cooking/equipment/seasoning_set.tres" id="cookware_required_3"]
+
+[resource]
+script = ExtResource("1_recipe")
+id = "unagi_kabayaki"
+display_name = "Unagi Kabayaki"
+ingredients = Dictionary[String, int]({
+"fish_eel": 1,
+"shoyu": 1,
+"sugar": 1
+})
+book_price = 125
+output_item = ExtResource("2_output")
+required_equipment = Array[ExtResource("required_type")]([ExtResource("cookware_required_0"), ExtResource("cookware_required_1"), ExtResource("cookware_required_2"), ExtResource("cookware_required_3")])

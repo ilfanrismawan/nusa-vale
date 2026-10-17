@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1_item"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/interior/Part 9 copiar.png" id="2_texture"]
+
+[sub_resource type="AtlasTexture" id="Icon"]
+atlas = ExtResource("2_texture")
+region = Rect2(48, 80, 32, 32)
+filter_clip = true
+
+[resource]
+script = ExtResource("1_item")
+item_id = "kitchen_sink"
+display_name = "Bak Cuci Dapur"
+category = 8
+icon = SubResource("Icon")
+description = "Dekorasi dapur. Tempatkan scene kitchen_sink.tscn di editor."
+stackable = false
+max_stack = 1
+placeable = false
+

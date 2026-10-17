@@ -47,8 +47,8 @@ func _setup_tree_layers() -> void:
 	var trunk_material := ShaderMaterial.new()
 	trunk_material.shader = shader
 	animated_sprite.material = trunk_material
-	animated_sprite.z_as_relative = false
-	animated_sprite.z_index = -1
+	animated_sprite.z_as_relative = true
+	animated_sprite.z_index = 0
 	_canopy = AnimatedSprite2D.new()
 	_canopy.name = "Canopy"
 	_canopy.sprite_frames = animated_sprite.sprite_frames
@@ -56,8 +56,8 @@ func _setup_tree_layers() -> void:
 	canopy_material.shader = shader
 	canopy_material.set_shader_parameter("canopy", true)
 	_canopy.material = canopy_material
-	_canopy.z_as_relative = false
-	_canopy.z_index = 1
+	_canopy.z_as_relative = true
+	_canopy.z_index = 0
 	add_child(_canopy)
 	_sync_tree_layers()
 

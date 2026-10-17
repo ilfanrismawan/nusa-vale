@@ -46,6 +46,7 @@ animations = [{
 radius = 4.0
 
 [node name="SmallDeepForestTree" type="StaticBody2D" unique_id=1510537584]
+scale = Vector2(0.65, 0.65)
 script = ExtResource("1_ooi8g")
 health = 2
 drop_count = 2

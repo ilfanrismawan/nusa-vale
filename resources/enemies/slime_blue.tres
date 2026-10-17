@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"slime_blue"
+display_name = "Slime Biru"
+sprite_folder = "res://assets/farm_rpg/Enemy/Slimes/Blue/Slime"
+max_hp = 30
+attack = 8
+defense = 2
+body_radius = 6.0
+drop_item_id = "slime_gel"
+drop_chance = 0.8
+drop_min = 1
+drop_max = 3
+hit_feedback = &"slime_hit"

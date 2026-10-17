@@ -240,7 +240,7 @@ func interact(player: Player = null) -> void:
 	if lines_to_use.is_empty():
 		return
 
-	_dialog_ui = NPCDialogUI.new()
+	_dialog_ui = load("res://scenes/ui/npc_dialog_ui.tscn").instantiate() as NPCDialogUI
 	_dialog_ui.player = player
 	_dialog_ui.npc_name = npc_name
 	_dialog_ui.role_title = role_title

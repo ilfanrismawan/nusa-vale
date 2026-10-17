@@ -1,0 +1,164 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://scripts/ui/birthday_calendar.gd" id="script"]
+[ext_resource type="Theme" path="res://resources/ui/cooking_theme.tres" id="theme"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/ui/weather icons.png" id="weather"]
+
+[sub_resource type="AtlasTexture" id="Spring"]
+atlas = ExtResource("weather")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Summer"]
+atlas = ExtResource("weather")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Fall"]
+atlas = ExtResource("weather")
+region = Rect2(32, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Winter"]
+atlas = ExtResource("weather")
+region = Rect2(48, 16, 16, 16)
+[sub_resource type="StyleBoxFlat" id="Paper"]
+bg_color = Color(0.969, 0.953, 0.914, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_left = 20
+corner_radius_bottom_right = 20
+
+
+[node name="BirthdayCalendar" type="Control"]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 1280.0
+offset_bottom = 720.0
+visible = false
+theme = ExtResource("theme")
+script = ExtResource("script")
+season_icons = Array[Texture2D]([SubResource("Spring"), SubResource("Summer"), SubResource("Fall"), SubResource("Winter")])
+
+[node name="Dim" type="ColorRect" parent="."]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0, 0, 0, 0.6)
+
+[node name="Paper" type="Panel" parent="."]
+offset_left = 365.0
+offset_top = 90.0
+offset_right = 915.0
+offset_bottom = 650.0
+theme_override_styles/panel = SubResource("Paper")
+
+[node name="Heading" type="Label" parent="Paper"]
+unique_name_in_owner = true
+offset_left = 92.0
+offset_top = 25.0
+offset_right = 515.0
+offset_bottom = 65.0
+text = "Pilih Ulang Tahun"
+theme_override_font_sizes/font_size = 28
+autowrap_mode = 3
+
+
+[node name="PreviousSeason" type="Button" parent="Paper"]
+unique_name_in_owner = true
+offset_left = 35.0
+offset_top = 90.0
+offset_right = 83.0
+offset_bottom = 132.0
+text = "‹"
+theme_override_font_sizes/font_size = 18
+
+[node name="SeasonTitle" type="Label" parent="Paper"]
+unique_name_in_owner = true
+offset_left = 156.0
+offset_top = 90.0
+offset_right = 447.0
+offset_bottom = 132.0
+text = "Musim Semi"
+theme_override_font_sizes/font_size = 24
+autowrap_mode = 3
+
+
+[node name="NextSeason" type="Button" parent="Paper"]
+unique_name_in_owner = true
+offset_left = 467.0
+offset_top = 90.0
+offset_right = 515.0
+offset_bottom = 132.0
+text = "›"
+theme_override_font_sizes/font_size = 18
+
+[node name="CalendarHint" type="Label" parent="Paper"]
+unique_name_in_owner = true
+offset_left = 35.0
+offset_top = 150.0
+offset_right = 515.0
+offset_bottom = 180.0
+text = "Pilih musim, lalu klik tanggal lahirmu."
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 3
+
+
+[node name="Days" type="GridContainer" parent="Paper"]
+unique_name_in_owner = true
+offset_left = 35.0
+offset_top = 202.0
+offset_right = 515.0
+offset_bottom = 478.0
+columns = 7
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 12
+
+[node name="CancelCalendar" type="Button" parent="Paper"]
+unique_name_in_owner = true
+offset_left = 327.0
+offset_top = 503.0
+offset_right = 515.0
+offset_bottom = 543.0
+text = "Esc  Batal"
+theme_override_font_sizes/font_size = 18
+
+[node name="BirthdayIcon" type="TextureRect" parent="Paper"]
+unique_name_in_owner = true
+offset_left = 35.0
+offset_top = 22.0
+offset_right = 78.0
+offset_bottom = 65.0
+texture_filter = 1
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SeasonIcon" type="TextureRect" parent="Paper"]
+unique_name_in_owner = true
+offset_left = 104.0
+offset_top = 89.0
+offset_right = 146.0
+offset_bottom = 131.0
+texture_filter = 1
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LegendIcon" type="TextureRect" parent="Paper"]
+unique_name_in_owner = true
+offset_left = 35.0
+offset_top = 510.0
+offset_right = 62.0
+offset_bottom = 537.0
+texture_filter = 1
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Legend" type="Label" parent="Paper"]
+unique_name_in_owner = true
+offset_left = 74.0
+offset_top = 504.0
+offset_right = 310.0
+offset_bottom = 546.0
+theme_override_font_sizes/font_size = 14
+text = "Ikon kue menandai ulang tahunmu."
+autowrap_mode = 3

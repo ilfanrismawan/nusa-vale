@@ -1,0 +1,147 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://scripts/world/cooking_shop_room.gd" id="room"]
+[ext_resource type="Script" path="res://scripts/world/world_flag_visibility.gd" id="visibility"]
+[ext_resource type="Script" path="res://scripts/world/household_kitchen_station.gd" id="kitchen"]
+[ext_resource type="Script" path="res://scripts/world/exit_door_school.gd" id="exit"]
+[ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="player"]
+[ext_resource type="Texture2D" path="res://resources/cooking/shop/art/Floor.tres" id="floor"]
+[ext_resource type="Font" path="res://resources/ui/readable_font.tres" id="font"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/kitchen_set_wood.tscn" id="wood"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/kitchen_set_white.tscn" id="white"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/kitchen_set_black.tscn" id="black"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/kitchen_set_pink.tscn" id="pink"]
+[sub_resource type="RectangleShape2D" id="Horizontal"]
+size = Vector2(384, 12)
+[sub_resource type="RectangleShape2D" id="Vertical"]
+size = Vector2(12, 256)
+[sub_resource type="RectangleShape2D" id="Cabinet"]
+size = Vector2(145, 108)
+[sub_resource type="RectangleShape2D" id="CookingTrigger"]
+size = Vector2(190, 40)
+[sub_resource type="RectangleShape2D" id="ExitShape"]
+size = Vector2(44, 16)
+[node name="HomeKitchen" type="Node2D"]
+script = ExtResource("room")
+default_zoom = 3.5
+[node name="RoomDesign" type="Node2D" parent="."]
+scale = Vector2(0.5, 0.5)
+[node name="Floor" type="Node2D" parent="RoomDesign"]
+[node name="Planks0" type="Sprite2D" parent="RoomDesign/Floor"]
+position = Vector2(0, 0)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("floor")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 768, 85)
+[node name="Planks1" type="Sprite2D" parent="RoomDesign/Floor"]
+position = Vector2(0, 42.5)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("floor")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 768, 85)
+[node name="Planks2" type="Sprite2D" parent="RoomDesign/Floor"]
+position = Vector2(0, 85)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("floor")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 768, 85)
+[node name="Planks3" type="Sprite2D" parent="RoomDesign/Floor"]
+position = Vector2(0, 127.5)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("floor")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 768, 85)
+[node name="Planks4" type="Sprite2D" parent="RoomDesign/Floor"]
+position = Vector2(0, 170)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("floor")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 768, 85)
+[node name="Planks5" type="Sprite2D" parent="RoomDesign/Floor"]
+position = Vector2(0, 212.5)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("floor")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 768, 85)
+[node name="Planks6" type="Sprite2D" parent="RoomDesign/Floor"]
+position = Vector2(0, 255)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("floor")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 768, 2)
+[node name="Wall" type="Polygon2D" parent="RoomDesign"]
+polygon = PackedVector2Array(0, 0, 384, 0, 384, 98, 0, 98)
+color = Color(0.94, 0.80, 0.58, 1)
+[node name="InstalledKitchenSets" type="Node2D" parent="RoomDesign"]
+position = Vector2(25, 10)
+scale = Vector2(0.5, 0.5)
+[node name="wood" type="Node2D" parent="RoomDesign/InstalledKitchenSets"]
+script = ExtResource("visibility")
+required_flag = "active_kitchen_set_wood"
+[node name="Furniture" parent="RoomDesign/InstalledKitchenSets/wood" instance=ExtResource("wood")]
+[node name="white" type="Node2D" parent="RoomDesign/InstalledKitchenSets"]
+script = ExtResource("visibility")
+required_flag = "active_kitchen_set_white"
+[node name="Furniture" parent="RoomDesign/InstalledKitchenSets/white" instance=ExtResource("white")]
+[node name="black" type="Node2D" parent="RoomDesign/InstalledKitchenSets"]
+script = ExtResource("visibility")
+required_flag = "active_kitchen_set_black"
+[node name="Furniture" parent="RoomDesign/InstalledKitchenSets/black" instance=ExtResource("black")]
+[node name="pink" type="Node2D" parent="RoomDesign/InstalledKitchenSets"]
+script = ExtResource("visibility")
+required_flag = "active_kitchen_set_pink"
+[node name="Furniture" parent="RoomDesign/InstalledKitchenSets/pink" instance=ExtResource("pink")]
+[node name="KitchenStation" type="Area2D" parent="RoomDesign"]
+position = Vector2(120, 164)
+script = ExtResource("kitchen")
+[node name="Shape" type="CollisionShape2D" parent="RoomDesign/KitchenStation"]
+shape = SubResource("CookingTrigger")
+[node name="Boundaries" type="StaticBody2D" parent="RoomDesign"]
+[node name="Top" type="CollisionShape2D" parent="RoomDesign/Boundaries"]
+position = Vector2(192, 0)
+shape = SubResource("Horizontal")
+[node name="Left" type="CollisionShape2D" parent="RoomDesign/Boundaries"]
+position = Vector2(0, 128)
+shape = SubResource("Vertical")
+[node name="Right" type="CollisionShape2D" parent="RoomDesign/Boundaries"]
+position = Vector2(384, 128)
+shape = SubResource("Vertical")
+[node name="Bottom" type="CollisionShape2D" parent="RoomDesign/Boundaries"]
+position = Vector2(192, 256)
+shape = SubResource("Horizontal")
+[node name="CabinetFootprint" type="CollisionShape2D" parent="RoomDesign/Boundaries"]
+position = Vector2(97.5, 64)
+shape = SubResource("Cabinet")
+[node name="ExitDoor" type="Area2D" parent="RoomDesign"]
+position = Vector2(192, 233)
+script = ExtResource("exit")
+target_scene = "res://scenes/world/interior/interior_house.tscn"
+spawn_position = Vector2(344, 159)
+[node name="Shape" type="CollisionShape2D" parent="RoomDesign/ExitDoor"]
+shape = SubResource("ExitShape")
+[node name="ExitLabel" type="Label" parent="RoomDesign"]
+offset_left = 166.0
+offset_top = 225.0
+offset_right = 225.0
+offset_bottom = 242.0
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "Rumah ↓"
+[node name="SpawnPoint" type="Marker2D" parent="RoomDesign"]
+position = Vector2(192, 210)
+[node name="Player" parent="." instance=ExtResource("player")]
+position = Vector2(96, 105)
+[node name="Camera2D" parent="Player/CharacterBody2D" index="2"]
+enabled = false
+limit_right = 192
+limit_bottom = 128
+
+[node name="KitchenCamera" type="Camera2D" parent="."]
+position = Vector2(96, 64)
+zoom = Vector2(3.5, 3.5)

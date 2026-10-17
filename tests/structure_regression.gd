@@ -129,13 +129,12 @@ func _ready() -> void:
 	if DisplayServer.get_name() != "headless":
 		await RenderingServer.frame_post_draw
 		get_viewport().get_texture().get_image().save_png("res://scratch/menu_wooden_chest.png")
-	var columns: HBoxContainer = menu._content.get_child(0)
-	var withdraw: Button = columns.get_child(1).get_child(1)
+	var withdraw: Button = menu.get_node("%ChestSlots").get_child(int(chest_record.storage[0].slot))
 	await click(withdraw)
 	check(player.data.get_item_count("wood") == 20, "Chest UI withdraw button moves the real stored stack")
-	columns = menu._content.get_child(0)
-	for button in columns.get_child(0).get_children():
-		if button is Button and button.text.begins_with("Kayu x"):
+	for button in menu.get_node("%BagSlots").get_children():
+		var entry: Variant = player.data.inventory[int(button.get_meta("slot"))]
+		if entry != null and entry.item.item_id == "wood":
 			await click(button)
 			break
 	check(player.data.get_item_count("wood") == 0 and StructureManager.storage(chest_record).get_item_count("wood") == 20, "Chest UI deposit button stores the real stack")
@@ -281,9 +280,9 @@ func test_chest_tiers() -> void:
 	check(StructureManager.interact_near(player), "Tier upgrade menu opens by interaction")
 	await get_tree().process_frame
 	var menu = StructureManager._menus[player.data.index]
-	var upgrade: Button = menu._content.get_child(2)
+	var upgrade: Button = menu.get_node("%Upgrade")
 	await click(upgrade)
-	check(record.item == "copper_chest" and menu._title.text.contains("36 slot") and StructureManager.storage(record).get_item_count("stone") == 4, "Upgrade button refreshes tier header and preserves contents")
+	check(record.item == "copper_chest" and menu.get_node("%ChestTitle").text.contains("36 slot") and StructureManager.storage(record).get_item_count("stone") == 4, "Upgrade button refreshes tier header and preserves contents")
 	if DisplayServer.get_name() != "headless":
 		await RenderingServer.frame_post_draw
 		get_viewport().get_texture().get_image().save_png("res://scratch/menu_copper_chest.png")

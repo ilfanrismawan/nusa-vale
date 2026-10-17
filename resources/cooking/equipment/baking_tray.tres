@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="CookingEquipmentData" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/cooking_equipment_data.gd" id="1_data"]
+[ext_resource type="Resource" path="res://resources/item_data/baking_tray.tres" id="2_item"]
+[ext_resource type="Texture2D" path="res://resources/cooking/icons/cookware_baking_tray.tres" id="3_icon"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"baking_tray"
+item = ExtResource("2_item")
+icon = ExtResource("3_icon")
+recipe_tags = PackedStringArray("bake")
+

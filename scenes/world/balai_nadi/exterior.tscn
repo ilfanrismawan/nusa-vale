@@ -23511,10 +23511,10 @@ initial_velocity_max = 3.0
 color = Color(0.5, 1, 0.86, 0.7)
 
 [node name="Player" parent="." unique_id=374434540 instance=ExtResource("27_qesvg")]
-position = Vector2(427, 277)
+position = Vector2(427, 795)
 
 [node name="spawn" type="Marker2D" parent="." unique_id=1407084509]
-position = Vector2(427, 277)
+position = Vector2(427, 795)
 
 [node name="ArahDesa" type="Label" parent="." unique_id=2122078116]
 offset_left = 397.0

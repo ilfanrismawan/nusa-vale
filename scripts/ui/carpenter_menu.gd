@@ -1,93 +1,156 @@
 extends CanvasLayer
 
-const ServiceTheme = preload("res://scripts/ui/farm_service_theme.gd")
-
+const Presentation = preload("res://scripts/resources/carpenter_presentation.gd")
 signal finished
+
+@export var presentation: Presentation = preload("res://resources/ui/carpenter_presentation.tres")
+@export var card_scene: PackedScene = preload("res://scenes/ui/carpenter_building_card.tscn")
+@export var material_scene: PackedScene = preload("res://scenes/ui/blacksmith_material_row.tscn")
+@export var design_size := Vector2(1600, 900)
+
 var player: Player
-var _content: VBoxContainer
+var vendor_name := ""
+var vendor_portrait: Texture2D
+var _selected_id := ""
 var _closed := false
+var _refresh_pending := false
+var _ids: PackedStringArray = []
+@onready var _content: GridContainer = %Buildings
 
 func _ready() -> void:
-	layer = ServiceTheme.LAYER
+	layer = FarmServiceTheme.LAYER
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	var background := ColorRect.new()
-	background.color = Color(0, 0, 0, 0.55)
-	add_child(background)
-	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	var center := CenterContainer.new()
-	add_child(center)
-	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(520, 240)
-	var style := ServiceTheme.frame()
-	panel.add_theme_stylebox_override("panel", style)
-	var theme := ServiceTheme.make_theme()
-	panel.theme = theme
-	center.add_child(panel)
-	_content = VBoxContainer.new()
-	_content.add_theme_constant_override("separation", 10)
-	panel.add_child(_content)
-	var title := Label.new()
-	title.text = "PERTUKANGAN — PAK DAMAR"
-	title.add_theme_font_size_override("font_size", 24)
-	_content.add_child(title)
-	var money := Label.new()
-	money.text = "Uang bersama: %d G · Bahan dari tas P%d" % [GameState.money, player.player_index + 1]
-	_content.add_child(money)
+	%VendorName.text = vendor_name if not vendor_name.is_empty() else presentation.vendor_name
+	%Dialog.text = presentation.greeting
+	var art := presentation.vendor_art if presentation.vendor_art != null else vendor_portrait
+	if art != null:
+		%Portrait.texture = FarmServiceTheme.portrait(art)
+	%ChooseButton.pressed.connect(_choose_selected)
+	%CloseButton.pressed.connect(_close)
+	get_viewport().size_changed.connect(_resize)
+	GameState.money_changed.connect(_money_changed)
+	GameState.inventory_changed.connect(_queue_refresh)
+	for id in presentation.building_order:
+		if StructureManager.CONSTRUCTION.has(id) and not _ids.has(id):
+			_ids.append(id)
 	for id in StructureManager.CONSTRUCTION:
+		if not _ids.has(id):
+			_ids.append(id)
+	for id in _ids:
 		var item := GameState._resolve_item(id)
-		var quote: Dictionary = StructureManager.CONSTRUCTION[id]
-		var card := PanelContainer.new()
-		card.add_theme_stylebox_override("panel", ServiceTheme.dialogue())
+		if item == null:
+			continue
+		var card := card_scene.instantiate() as Button
 		_content.add_child(card)
-		var row := HBoxContainer.new()
-		row.add_theme_constant_override("separation", 14)
-		card.add_child(row)
-		var picture := TextureRect.new()
-		picture.texture = item.icon
-		picture.custom_minimum_size = Vector2(64, 64)
-		picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		row.add_child(picture)
-		var detail := VBoxContainer.new()
-		detail.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		row.add_child(detail)
-		var name_label := Label.new()
-		name_label.text = "%s · %dx%d petak" % [item.display_name, item.placement_size.x, item.placement_size.y]
-		name_label.add_theme_font_size_override("font_size", 22)
-		detail.add_child(name_label)
-		var materials := Label.new()
-		materials.text = "%d G · Kayu %d/%d · Batu %d/%d" % [int(quote.money), player.data.get_item_count("wood"), int(quote.materials.wood), player.data.get_item_count("stone"), int(quote.materials.stone)]
-		detail.add_child(materials)
-		var capacity := Label.new()
-		capacity.text = item.description
-		capacity.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		capacity.add_theme_font_size_override("font_size", 14)
-		detail.add_child(capacity)
-		var button := Button.new()
-		button.text = "Pilih lokasi"
-		button.disabled = GameState.money < int(quote.money) or not player.data.has_item("wood", int(quote.materials.wood)) or not player.data.has_item("stone", int(quote.materials.stone))
-		button.tooltip_text = "Siapkan uang, kayu dan batu yang tertera." if button.disabled else "Pilih lokasi; biaya dibayar setelah konfirmasi."
-		button.pressed.connect(_choose.bind(str(id)))
-		row.add_child(button)
-	var hint := Label.new()
-	hint.text = "Biaya dan bahan diambil setelah kamu mengonfirmasi lokasi.\nBatal memilih lokasi tidak dikenakan biaya."
-	_content.add_child(hint)
-	var close := Button.new()
-	close.text = "Tutup (Esc)"
-	close.pressed.connect(_close)
-	_content.add_child(close)
-	ServiceTheme.mount(self, panel, Vector2(680, 380))
+		card.set_meta("id", id)
+		card.get_node("Icon").texture = item.icon
+		card.get_node("Name").text = item.display_name
+		card.get_node("Price").text = "%d G" % int(StructureManager.CONSTRUCTION[id].money)
+		card.pressed.connect(_select.bind(id))
+		card.focus_entered.connect(_select.bind(id))
+	if not _ids.is_empty():
+		_selected_id = _ids[0]
+	_refresh()
+	_resize()
 	Coop.set_menu_open(player, true)
 
+func _resize() -> void:
+	var view := get_viewport().get_visible_rect().size
+	var fit := minf(view.x / design_size.x, view.y / design_size.y)
+	$Design.scale = Vector2.ONE * fit
+	$Design.position = (view - design_size * fit) * 0.5
+
+func _select(id: String) -> void:
+	_selected_id = id
+	_refresh()
+
+func _money_changed(_amount: int) -> void:
+	_refresh()
+
+func _queue_refresh() -> void:
+	if _closed or _refresh_pending:
+		return
+	_refresh_pending = true
+	_refresh.call_deferred()
+
+func _affordable(id: String) -> bool:
+	if not is_instance_valid(player) or not StructureManager.CONSTRUCTION.has(id):
+		return false
+	var quote: Dictionary = StructureManager.CONSTRUCTION[id]
+	if GameState.money < int(quote.money):
+		return false
+	for material in quote.materials:
+		if not player.data.has_item(material, int(quote.materials[material])):
+			return false
+	return true
+
+func _refresh() -> void:
+	_refresh_pending = false
+	if _closed:
+		return
+	%Money.text = "● %d G" % GameState.money
+	%ChooseButton.disabled = true
+	if _selected_id.is_empty():
+		return
+	var item := GameState._resolve_item(_selected_id)
+	var quote: Dictionary = StructureManager.CONSTRUCTION[_selected_id]
+	%DetailTitle.text = item.display_name
+	%ResultIcon.texture = item.icon
+	%Description.text = item.description
+	%Footprint.text = "Ukuran · %d × %d petak" % [item.placement_size.x, item.placement_size.y]
+	%Cost.text = "● %d G" % int(quote.money)
+	%Owner.text = "Bahan dari tas P%d · Uang bersama" % (player.player_index + 1)
+	for child in %Materials.get_children():
+		%Materials.remove_child(child)
+		child.queue_free()
+	for id in quote.materials:
+		var material := GameState._resolve_item(id)
+		var required := int(quote.materials[id])
+		var count := player.data.get_item_count(id)
+		var row := material_scene.instantiate()
+		%Materials.add_child(row)
+		row.get_node("Layout/Icon").texture = material.icon if material != null else null
+		row.get_node("Layout/Name").text = material.display_name if material != null else str(id)
+		row.get_node("Layout/Count").text = "%d / %d" % [count, required]
+		row.get_node("Layout/Count").add_theme_color_override("font_color", presentation.enough_color if count >= required else presentation.missing_color)
+	%ChooseButton.disabled = not _affordable(_selected_id)
+	%Availability.text = presentation.ready_message if not %ChooseButton.disabled else presentation.missing_message
+	for card in _content.get_children():
+		card.set_pressed_no_signal(card.get_meta("id") == _selected_id)
+
+func _choose_selected() -> void:
+	if _affordable(_selected_id):
+		_choose(_selected_id)
+
 func _choose(id: String) -> void:
+	if _closed or not StructureManager.CONSTRUCTION.has(id):
+		return
 	_close()
 	BuildingPlacement.begin(player, id)
 
 func _input(event: InputEvent) -> void:
-	if player.input.is_event(event, &"ui_cancel"):
+	if _closed:
+		return
+	var input := player.input if is_instance_valid(player) else PlayerInput.solo()
+	if input.is_event(event, &"ui_cancel"):
 		get_viewport().set_input_as_handled()
 		_close()
+	elif input.is_event(event, &"ui_accept"):
+		get_viewport().set_input_as_handled()
+		_choose_selected()
+	elif not input.uses_mouse() and (input.is_event(event, &"move_left") or input.is_event(event, &"move_right") or input.is_event(event, &"move_up") or input.is_event(event, &"move_down")):
+		get_viewport().set_input_as_handled()
+
+func _process(_delta: float) -> void:
+	if _closed or not is_instance_valid(player) or player.input.uses_mouse() or _ids.is_empty():
+		return
+	var direction := 0
+	if player.input.just_pressed(&"move_right"): direction = 1
+	elif player.input.just_pressed(&"move_left"): direction = -1
+	elif player.input.just_pressed(&"move_down"): direction = _content.columns
+	elif player.input.just_pressed(&"move_up"): direction = -_content.columns
+	if direction != 0:
+		_select(_ids[posmod(_ids.find(_selected_id) + direction, _ids.size())])
 
 func _close() -> void:
 	if _closed:
@@ -97,3 +160,9 @@ func _close() -> void:
 	Coop.set_menu_open(player, false)
 	finished.emit()
 	queue_free()
+
+func _exit_tree() -> void:
+	if not _closed and is_instance_valid(player):
+		_closed = true
+		Coop.set_menu_open(player, false)
+		finished.emit()

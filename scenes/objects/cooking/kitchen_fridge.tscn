@@ -1,0 +1,38 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/interior/Part 9 copiar.png" id="2_texture"]
+[ext_resource type="FontFile" path="res://assets/fonts/m5x7.ttf" id="4_font"]
+
+[sub_resource type="AtlasTexture" id="Visual"]
+atlas = ExtResource("2_texture")
+region = Rect2(128, 16, 16, 48)
+filter_clip = true
+
+[sub_resource type="RectangleShape2D" id="InteractionShape"]
+size = Vector2(30, 24)
+
+[sub_resource type="RectangleShape2D" id="BodyShape"]
+size = Vector2(12, 10)
+
+[node name="kitchen_fridge" type="Node2D"]
+texture_filter = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -16)
+texture = SubResource("Visual")
+
+[node name="Body" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Body"]
+position = Vector2(0, 3)
+shape = SubResource("BodyShape")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -55.0
+offset_top = -60.0
+offset_right = 55.0
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 12
+text = "Lemari Es"
+horizontal_alignment = 1
+

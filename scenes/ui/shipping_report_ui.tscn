@@ -1,0 +1,234 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://scripts/ui/shipping_report_ui.gd" id="script"]
+[ext_resource type="Theme" path="res://resources/ui/cooking_theme.tres" id="theme"]
+[ext_resource type="Shader" path="res://resources/ui/cooking_backdrop.gdshader" id="shader"]
+[sub_resource type="StyleBoxFlat" id="Paper"]
+bg_color = Color(0.969, 0.953, 0.914, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_left = 20
+corner_radius_bottom_right = 20
+
+[sub_resource type="ShaderMaterial" id="Backdrop"]
+shader = ExtResource("shader")
+shader_parameter/blur_amount = 3.5
+shader_parameter/top_tint = Color(0.03, 0.04, 0.02, 0.65)
+shader_parameter/bottom_tint = Color(0.24, 0.34, 0.24, 0.8)
+
+[node name="ShippingReport" type="CanvasLayer"]
+process_mode = 3
+script = ExtResource("script")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+material = SubResource("Backdrop")
+
+[node name="Design" type="Control" parent="."]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 1280.0
+offset_bottom = 720.0
+theme = ExtResource("theme")
+mouse_filter = 2
+
+[node name="Title" type="Label" parent="Design"]
+unique_name_in_owner = true
+offset_left = 55.0
+offset_top = 35.0
+offset_right = 1105.0
+offset_bottom = 90.0
+text = "Hasil Kerja Hari Ini"
+theme_override_font_sizes/font_size = 36
+autowrap_mode = 3
+theme_override_colors/font_color = Color(1, 0.95, 0.86, 1)
+
+
+[node name="Date" type="Label" parent="Design"]
+unique_name_in_owner = true
+offset_left = 58.0
+offset_top = 99.0
+offset_right = 1058.0
+offset_bottom = 134.0
+text = "Musim Semi · Hari 1 · Tahun 1"
+theme_override_font_sizes/font_size = 20
+autowrap_mode = 3
+theme_override_colors/font_color = Color(1, 0.95, 0.86, 1)
+
+
+[node name="ListPanel" type="Panel" parent="Design"]
+offset_left = 55.0
+offset_top = 170.0
+offset_right = 845.0
+offset_bottom = 620.0
+theme_override_styles/panel = SubResource("Paper")
+
+[node name="ItemHeading" type="Label" parent="Design/ListPanel"]
+unique_name_in_owner = true
+offset_left = 30.0
+offset_top = 24.0
+offset_right = 380.0
+offset_bottom = 59.0
+text = "Barang Terjual"
+theme_override_font_sizes/font_size = 22
+autowrap_mode = 3
+
+
+[node name="PriceHeading" type="Label" parent="Design/ListPanel"]
+unique_name_in_owner = true
+offset_left = 420.0
+offset_top = 26.0
+offset_right = 525.0
+offset_bottom = 61.0
+text = "Harga/unit"
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 3
+
+
+[node name="QuantityHeading" type="Label" parent="Design/ListPanel"]
+unique_name_in_owner = true
+offset_left = 545.0
+offset_top = 26.0
+offset_right = 635.0
+offset_bottom = 61.0
+text = "Jumlah"
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 3
+
+
+[node name="SubtotalHeading" type="Label" parent="Design/ListPanel"]
+unique_name_in_owner = true
+offset_left = 650.0
+offset_top = 26.0
+offset_right = 760.0
+offset_bottom = 61.0
+text = "Subtotal"
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 3
+
+
+[node name="Divider" type="HSeparator" parent="Design/ListPanel"]
+offset_left = 30.0
+offset_top = 71.0
+offset_right = 760.0
+offset_bottom = 76.0
+
+
+[node name="ItemsScroll" type="ScrollContainer" parent="Design/ListPanel"]
+offset_left = 30.0
+offset_top = 90.0
+offset_right = 760.0
+offset_bottom = 420.0
+horizontal_scroll_mode = 0
+follow_focus = true
+
+[node name="Rows" type="VBoxContainer" parent="Design/ListPanel/ItemsScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="Empty" type="Label" parent="Design/ListPanel"]
+unique_name_in_owner = true
+offset_left = 35.0
+offset_top = 180.0
+offset_right = 745.0
+offset_bottom = 300.0
+text = "Belum ada barang yang dikirim.\nBesok masih ada kesempatan baru!"
+theme_override_font_sizes/font_size = 22
+autowrap_mode = 3
+
+
+[node name="TotalsPanel" type="Panel" parent="Design"]
+offset_left = 875.0
+offset_top = 170.0
+offset_right = 1225.0
+offset_bottom = 620.0
+theme_override_styles/panel = SubResource("Paper")
+
+[node name="TotalsHeading" type="Label" parent="Design/TotalsPanel"]
+unique_name_in_owner = true
+offset_left = 28.0
+offset_top = 25.0
+offset_right = 322.0
+offset_bottom = 60.0
+text = "Total Pendapatan"
+theme_override_font_sizes/font_size = 23
+autowrap_mode = 3
+
+
+[node name="Totals" type="Label" parent="Design/TotalsPanel"]
+unique_name_in_owner = true
+offset_left = 28.0
+offset_top = 80.0
+offset_right = 322.0
+offset_bottom = 148.0
+text = "0 G"
+theme_override_font_sizes/font_size = 38
+autowrap_mode = 3
+
+
+[node name="Stats" type="Label" parent="Design/TotalsPanel"]
+unique_name_in_owner = true
+offset_left = 28.0
+offset_top = 167.0
+offset_right = 322.0
+offset_bottom = 242.0
+text = "0 jenis barang"
+theme_override_font_sizes/font_size = 19
+autowrap_mode = 3
+
+
+[node name="PaidNotice" type="Label" parent="Design/TotalsPanel"]
+unique_name_in_owner = true
+offset_left = 28.0
+offset_top = 257.0
+offset_right = 322.0
+offset_bottom = 327.0
+text = "Sudah masuk ke saldo bersama."
+theme_override_font_sizes/font_size = 18
+autowrap_mode = 3
+
+
+[node name="BalanceLabel" type="Label" parent="Design/TotalsPanel"]
+unique_name_in_owner = true
+offset_left = 28.0
+offset_top = 347.0
+offset_right = 322.0
+offset_bottom = 374.0
+text = "Saldo sekarang"
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 3
+
+
+[node name="Balance" type="Label" parent="Design/TotalsPanel"]
+unique_name_in_owner = true
+offset_left = 28.0
+offset_top = 381.0
+offset_right = 322.0
+offset_bottom = 424.0
+text = "100 G"
+theme_override_font_sizes/font_size = 26
+autowrap_mode = 3
+
+
+[node name="Footer" type="Label" parent="Design"]
+unique_name_in_owner = true
+offset_left = 55.0
+offset_top = 651.0
+offset_right = 815.0
+offset_bottom = 691.0
+text = "Harga mengikuti nilai saat barang dititipkan."
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 3
+theme_override_colors/font_color = Color(1, 0.95, 0.86, 1)
+
+
+[node name="Continue" type="Button" parent="Design"]
+unique_name_in_owner = true
+offset_left = 875.0
+offset_top = 649.0
+offset_right = 1225.0
+offset_bottom = 697.0
+text = "Enter  Lanjutkan"

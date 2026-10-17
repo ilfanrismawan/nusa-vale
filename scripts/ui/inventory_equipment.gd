@@ -4,12 +4,13 @@ const FONT = preload("res://resources/ui/readable_font.tres")
 const CATALOG = preload("res://resources/character/character_catalog.tres")
 ## Slot yang bisa dipakai + ikon samar saat kosong (kunci = PlayerData.EQUIPMENT_KEYS).
 const EMPTY_ICONS := {
-	"weapon": preload("res://resources/icons/icon_sword_wood.tres"),
 	"helmet": preload("res://resources/icons/icon_helmet_wood.tres"),
 	"armor": preload("res://resources/icons/icon_armor_wood.tres"),
 	"leggings": preload("res://resources/icons/icon_leggings_wood.tres"),
 	"boots": preload("res://resources/icons/icon_boots_wood.tres"),
 }
+## Senjata tidak dipasang di sini: slot Weapon hanya menampilkan senjata yang dipegang di hotbar.
+const WEAPON_ICON: Texture2D = preload("res://resources/icons/icon_sword_wood.tres")
 const Glyph = preload("res://scripts/ui/equipment_slot_glyph.gd")
 var inventory_ui: CanvasLayer
 var _available: VBoxContainer
@@ -20,6 +21,7 @@ var _portrait: TextureRect
 var _preview_key := ""
 var _entries: Array[Button] = []
 var _remove_buttons: Dictionary = {}
+var _weapon_button: Button
 
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -82,7 +84,7 @@ func _ready() -> void:
 	_slot(canvas, "boots", "Sepatu", Vector2(180, 37), EMPTY_ICONS["boots"])
 	_slot(canvas, "necklace", "Kalung", Vector2(180, 82), null, "gem")
 	_slot(canvas, "accessory", "Aksesori", Vector2(180, 127), null, "ring")
-	_slot(canvas, "weapon", "Weapon", Vector2(30, 194), EMPTY_ICONS["weapon"])
+	_slot(canvas, "weapon", "Weapon", Vector2(30, 194), WEAPON_ICON)
 	_slot(canvas, "ring", "Cincin", Vector2(74, 194), null, "ring")
 	_slot(canvas, "shield", "Perisai", Vector2(118, 194), null, "shield")
 	_slot(canvas, "locked", "Slot tambahan", Vector2(162, 194), null, "lock")
@@ -175,7 +177,10 @@ func _slot(parent: Control, key: String, title: String, pos: Vector2, icon: Text
 		drawing.size = Vector2(24, 24)
 		drawing.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		button.add_child(drawing)
-	if usable:
+	if key == "weapon":
+		button.disabled = true
+		_weapon_button = button
+	elif usable:
 		button.pressed.connect(_unequip.bind(key))
 		_remove_buttons[key] = button
 	else:
@@ -192,7 +197,14 @@ func refresh() -> void:
 		child.queue_free()
 	_entries.clear()
 	var stats := data.equipment_stats()
-	_stats.text = "ATK +%d   DEF +%d" % [stats.x, stats.y]
+	var weapon := _held_weapon()
+	_stats.text = "ATK %d   DEF %d" % [stats.x + (weapon.attack_bonus if weapon != null else 0), stats.y]
+	if _weapon_button != null:
+		var weapon_icon: TextureRect = _weapon_button.get_node("Icon")
+		weapon_icon.texture = weapon.icon if weapon != null else WEAPON_ICON
+		weapon_icon.modulate.a = 1.0 if weapon != null else 0.25
+		var held_text := "%s (dipegang)\nATK +%d" % [weapon.display_name, weapon.attack_bonus] if weapon != null else "Tidak memegang senjata."
+		_weapon_button.tooltip_text = held_text + "\nSenjata dipegang dari hotbar, tidak dipasang di sini."
 	_name.text = data.player_name if not data.player_name.is_empty() else "Petani P%d" % (data.index + 1)
 	_name.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	var look_key := data.appearance.get_key()
@@ -231,7 +243,14 @@ func refresh() -> void:
 		var empty := Label.new()
 		empty.text = "Belum ada equipment\ndi dalam tas."
 		_available.add_child(empty)
-	_message.text = "Weapon, helm, armor, celana\n& sepatu aktif. Slot lain terkunci."
+	_message.text = "Helm, armor, celana & sepatu\naktif. Senjata dipegang di hotbar."
+
+func _held_weapon() -> ItemData:
+	var player: Player = inventory_ui.player
+	if not is_instance_valid(player) or player.tool_controller == null:
+		return null
+	var item := player.tool_controller.current_item
+	return item if Combat.is_weapon(item) else null
 
 func _equip(slot: int) -> void:
 	if not inventory_ui.data.equip_from_slot(slot):

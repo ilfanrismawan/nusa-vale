@@ -3,6 +3,8 @@ extends CharacterBody2D
 signal sleep_ended
 
 @export var speed: float = 25.0
+@export var sit_hop_duration: float = 0.30
+@export var sit_hop_height: float = 10.0
 
 @onready var animation_controller: AnimationController = $AnimationController
 @onready var state_machine: StateMachine = $StateMachine
@@ -45,10 +47,27 @@ var _pickup_visual: Sprite2D
 var _pickup_visual_tween: Tween
 var _footsteps := FootstepAudio.new()
 var food_speed_remaining := 0.0
+var food_speed_multiplier := 1.0
+
+var seated_chair: Node2D
+var _seated_sprite_home := Vector2.ZERO
+var _position_before_sitting := Vector2.ZERO
+var sit_transitioning := false
 
 const INTERACTION_DISTANCE := 32.0
 
 const FEET_OFFSET := Vector2(0, 8)
+## Kebal sesaat setelah terkena serangan (GDD 8.1, i-frames).
+const HIT_INVULNERABLE := 0.8
+const KNOCKBACK_DECAY := 12.0
+const DEBUG_ENEMY: EnemyData = preload("res://resources/enemies/slime_green.tres")
+
+## true dari HP 0 sampai bangun di rumah (DefeatSequence).
+var is_defeated := false
+var _invulnerable := 0.0
+var _knockback := Vector2.ZERO
+var _blink_tween: Tween
+var _aim_line: Line2D
 const ACTION_DISTANCE := 16.0
 const MAX_ACTION_DISTANCE := 28.0
 
@@ -88,6 +107,36 @@ func _process(delta: float) -> void:
 	_flush_item_gesture()
 	_update_held_item_position()
 	_update_tile_cursor()
+	_update_aim()
+	_update_sweat(delta)
+	_check_exhaustion()
+
+## Stamina hampir habis: keringat menetes dari kepala sesekali.
+const SWEAT_INTERVAL := 1.4
+var _sweat_timer := 0.0
+func _update_sweat(delta: float) -> void:
+	if data.max_stamina <= 0 or data.stamina > data.max_stamina * 0.15 or is_defeated or not visible:
+		_sweat_timer = 0.0
+		return
+	_sweat_timer -= delta
+	if _sweat_timer <= 0.0:
+		_sweat_timer = SWEAT_INTERVAL
+		CombatJuice.sweat(self)
+		# Karakter ikut berkedip pucat: tanda sebentar lagi pingsan.
+		var body_sprite := animation_controller.sprite
+		body_sprite.self_modulate = Color(1.5, 1.3, 1.0)
+		create_tween().tween_property(body_sprite, "self_modulate", Color.WHITE, 0.35)
+
+## Stamina habis sampai 0 = pingsan (keputusan 2026-10-17): animasi death, bangun di rumah.
+## Dicek saat input bebas, jadi pingsan menunggu aksi/menu yang sedang berjalan selesai.
+var _last_stamina := -1
+func _check_exhaustion() -> void:
+	if is_defeated or not _input_locks.is_empty() or DayCycle.is_sleep_transition or DayCycle._is_passing_out:
+		return
+	var now := data.stamina
+	if now <= 0 and _last_stamina > 0:
+		_die(true)
+	_last_stamina = now
 
 func _input(event: InputEvent) -> void:
 	# HUD controls cover the viewport; handle world right-clicks before GUI routing.
@@ -95,18 +144,47 @@ func _input(event: InputEvent) -> void:
 		_unhandled_input(event)
 
 func _unhandled_input(event: InputEvent) -> void:
+	if sit_transitioning:
+		if input.is_event(event, &"interact"):
+			get_viewport().set_input_as_handled()
+		return
+	
+	if is_instance_valid(seated_chair):
+		if input.is_event(event, &"interact"):
+			stand_up()
+			get_viewport().set_input_as_handled()
+		return
+
+	if OS.is_debug_build() and _debug_combat_key(event):
+		get_viewport().set_input_as_handled()
+		return
+
+	# Memegang senjata: klik kanan dipakai membidik, bukan interaksi.
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and holds_weapon() and input.uses_mouse():
+		return
+		
 	if is_input_locked() or not input.is_event(event, &"interact"):
 		return
+		
 	bind_context()
 	if _try_interact():
 		get_viewport().set_input_as_handled()
 	
 func _physics_process(delta: float) -> void:
 	food_speed_remaining = maxf(0.0, food_speed_remaining - delta)
+	data.advance_food_effects(delta)
 	bind_context()
-	if _input_locks.has(&"sleep") or animation_controller.item_gesture_playing:
-		velocity = Vector2.ZERO
-		return
+	_invulnerable = maxf(0.0, _invulnerable - delta)
+	_apply_knockback(delta)
+	
+	if (
+		_input_locks.has(&"sleep") 
+		or _input_locks.has(&"sit")
+		or animation_controller.item_gesture_playing
+		):
+			velocity = Vector2.ZERO
+			return
+		
 	var previous_position := global_position
 	state_machine.physics_update(delta)
 	var moving := state_machine.current_state is MoveState
@@ -174,7 +252,7 @@ func _flush_item_gesture() -> void:
 	if _pending_item_gesture.is_empty() or is_input_locked() or get_tree().paused:
 		return
 	# Pickups can arrive during a tool hit. Finish that action before showing the gesture.
-	if state_machine.current_state == tool_controller.action_state or state_machine.current_state == tool_controller.fishing_state:
+	if state_machine.current_state in [tool_controller.action_state, tool_controller.fishing_state, tool_controller.combat_state]:
 		return
 	animation_controller.set_direction(facing_direction)
 	if animation_controller.play_item_gesture(_pending_item_gesture):
@@ -346,8 +424,11 @@ func _find_interactable() -> Node:
 func _update_tile_cursor() -> void:
 	if not is_instance_valid(tile_cursor):
 		return
+	if is_input_locked():
+		tile_cursor.visible = false
+		return
 		
-	if base_layer_ground == null:
+	if base_layer_ground == null or holds_weapon():
 		tile_cursor.visible = false
 		return
 		
@@ -361,7 +442,9 @@ func get_input_vector() -> Vector2:
 		return Vector2.ZERO
 	return input.get_vector()
 
-func update_facing_direction(direction: Vector2) -> void:
+func update_facing_direction(direction: Vector2, force: bool = false) -> void:
+	if (is_input_locked() or is_aiming()) and not force:
+		return
 	if direction == Vector2.ZERO:
 		return
 	
@@ -433,3 +516,275 @@ func _mouse_world_position() -> Variant:
 	if view == null:
 		return null
 	return view.get_canvas_transform().affine_inverse() * view.get_mouse_position()
+
+func begin_sitting(
+	chair: Node2D,
+	seat_position: Vector2,
+	direction: Vector2
+) -> void:
+	if sit_transitioning or is_instance_valid(seated_chair):
+		return
+	
+	sit_transitioning = true
+	seated_chair = chair
+	_position_before_sitting = global_position
+	
+	set_input_locked(&"sit", true)
+	velocity = Vector2.ZERO
+	
+	add_collision_exception_with(chair.solid)
+	
+	state_machine.change_state(
+		state_machine.get_node("IdleState")
+	)
+	
+	
+	update_facing_direction(direction, true)
+	animation_controller.sprite.speed_scale = 1.0
+	
+	animation_controller.set_visual_override(&"idle")
+	
+	_seated_sprite_home = animation_controller.sprite.position
+	# Sort in front of the seat at ground level while aligning the artwork
+	# independently with the cushion. Keep the normal world Z index.
+	var ground_anchor := seat_position
+	ground_anchor.y = maxf(ground_anchor.y, chair.global_position.y + 1.0)
+	var visual_position: Vector2 = _seated_sprite_home + seat_position + chair.sit_visual_offset - ground_anchor
+	await _hop_to(ground_anchor, sit_hop_height, visual_position)
+	
+	if not is_instance_valid(seated_chair):
+		animation_controller.set_visual_override(&"")
+		animation_controller.sprite.position = _seated_sprite_home
+		set_input_locked(&"sit", false)
+		sit_transitioning = false
+		return
+	
+	animation_controller.set_visual_override(&"sit")
+	seated_chair.show_seated_backrest(self)
+	sit_transitioning = false
+	
+func stand_up() -> void:
+	if sit_transitioning or not is_instance_valid(seated_chair):
+		return
+	
+	sit_transitioning = true
+	var chair = seated_chair
+	chair.clear_seated_backrest()
+	
+	velocity = Vector2.ZERO
+	
+	animation_controller.set_visual_override(&"idle")
+	
+	await _hop_to(
+		_position_before_sitting,
+		sit_hop_height * 0.80,
+		_seated_sprite_home
+	)
+	
+	if is_instance_valid(chair):
+		if is_instance_valid(chair.solid):
+			remove_collision_exception_with(chair.solid)
+		chair.occupant = null
+	
+	seated_chair = null
+	
+	animation_controller.set_visual_override(&"")
+	animation_controller.play(&"Idle")
+	set_input_locked(&"sit", false)
+	
+	sit_transitioning = false
+
+func _hop_to(destination: Vector2, height: float, visual_destination: Vector2 = Vector2.INF) -> void:
+	var player_root := get_parent() as Node2D
+	var sprite := animation_controller.sprite
+	
+	var body_world_position := global_position
+	player_root.global_position = body_world_position
+	position = Vector2.ZERO
+	
+	var start_position := player_root.global_position
+	var sprite_home := sprite.position
+	var sprite_target := sprite_home if visual_destination == Vector2.INF else visual_destination
+	
+	var tween := create_tween()
+	tween.set_process_mode(tween.TWEEN_PROCESS_PHYSICS)
+	
+	tween.tween_method(
+		func(progress: float) -> void:
+			player_root.global_position = start_position.lerp(destination, progress)
+			
+			var lift := 4.0 * height * progress * (1.0 - progress)
+			sprite.position = sprite_home.lerp(sprite_target, progress) + Vector2(0, -lift), 0.0, 1.0, maxf(sit_hop_duration, 0.01)
+	)
+	
+	await tween.finished
+	
+	player_root.global_position = destination
+	sprite.position = sprite_target
+
+
+# ── Combat (Phase 4B-1) ─────────────────────────────────────────────
+
+## Senjata (pedang, busur, tongkat sihir) di slot hotbar yang dipilih.
+func holds_weapon() -> bool:
+	return tool_controller != null and Combat.is_weapon(tool_controller.current_item)
+
+## Klik kanan ditahan sambil memegang senjata (hanya pemain yang memakai mouse).
+func is_aiming() -> bool:
+	return holds_weapon() and input.uses_mouse() and input.pressed(&"aim") and _input_locks.is_empty() and not is_defeated
+
+## Arah serangan: ke mouse saat membidik, selain itu ke arah hadap.
+func aim_vector() -> Vector2:
+	if is_aiming():
+		var mouse: Variant = _mouse_world_position()
+		if mouse != null:
+			var offset: Vector2 = mouse - (global_position + FEET_OFFSET * 0.5)
+			if offset.length() > 2.0:
+				return offset.normalized()
+	return facing_direction
+
+func _update_aim() -> void:
+	if not is_aiming():
+		if is_instance_valid(_aim_line):
+			_aim_line.visible = false
+		animation_controller.release_pose()
+		return
+	var dir := aim_vector()
+	update_facing_direction(dir, true)
+	_update_aim_pose()
+	if not is_instance_valid(_aim_line):
+		_aim_line = Line2D.new()
+		_aim_line.name = "AimLine"
+		_aim_line.width = 1.0
+		_aim_line.default_color = Color(1, 1, 1, 0.45)
+		_aim_line.z_index = 9
+		add_child(_aim_line)
+	var style := Combat.style_for(tool_controller.current_item)
+	var length := style.melee_reach + style.melee_radius if style.melee_radius > 0.0 else style.projectile_range_tiles * 16.0
+	var origin := FEET_OFFSET * 0.5
+	_aim_line.points = PackedVector2Array([origin + dir * 6.0, origin + dir * length])
+	_aim_line.visible = true
+
+## Busur: selama membidik karakter menahan pose tali ditarik (WeaponStyle.aim_pose_frame).
+func _update_aim_pose() -> void:
+	var style := Combat.style_for(tool_controller.current_item)
+	var state := state_machine.current_state
+	if style == null or style.aim_pose_frame < 0 or not (state is IdleState or state is MoveState):
+		animation_controller.release_pose()
+		return
+	animation_controller.hold_pose(style.animation_name, style.aim_pose_frame)
+
+## Dipanggil musuh/proyektil. raw_attack dikurangi DEF perlengkapan. true = pukulan masuk.
+func take_hit(raw_attack: int, _source: Node = null, knockback: Vector2 = Vector2.ZERO) -> bool:
+	if is_defeated or _invulnerable > 0.0 or data.hp <= 0 or _input_locks.has(&"sleep"):
+		return false
+	bind_context()
+	var damage := Combat.damage_after_defense(raw_attack, Combat.player_defense(data))
+	data.damage_hp(damage)
+	_invulnerable = HIT_INVULNERABLE
+	_knockback = knockback * 6.0
+	CombatJuice.damage_number("-%d" % damage, global_position + Vector2(0, -18), CombatJuice.HURT_COLOR)
+	Juice.play(&"player_hurt", global_position)
+	CombatJuice.player_hurt(self)
+	CombatJuice.blood(global_position + Vector2(0, -6), knockback, clampi(damage, 6, 16))
+	_blink()
+	if data.hp <= 0:
+		_die()
+		return true
+	var state := state_machine.current_state
+	if (state is IdleState or state is MoveState) and _input_locks.is_empty():
+		animation_controller.set_direction(facing_direction)
+		animation_controller.play_item_gesture(&"damage")
+	return true
+
+func is_invulnerable() -> bool:
+	return _invulnerable > 0.0 or is_defeated
+
+func _apply_knockback(delta: float) -> void:
+	if _knockback.length() < 0.5 or is_defeated:
+		_knockback = Vector2.ZERO
+		return
+	var keep := velocity
+	velocity = _knockback
+	move_and_slide()
+	velocity = keep
+	_knockback = _knockback.lerp(Vector2.ZERO, minf(1.0, KNOCKBACK_DECAY * delta))
+
+func _blink() -> void:
+	if _blink_tween != null and _blink_tween.is_valid():
+		_blink_tween.kill()
+	_blink_tween = create_tween().set_loops(4)
+	_blink_tween.tween_property(self, "modulate:a", 0.35, HIT_INVULNERABLE / 8.0)
+	_blink_tween.tween_property(self, "modulate:a", 1.0, HIT_INVULNERABLE / 8.0)
+
+func _die(exhausted: bool = false) -> void:
+	is_defeated = true
+	_knockback = Vector2.ZERO
+	release_carried_animal()
+	_clear_pickup_visual()
+	state_machine.change_state(state_machine.get_node("IdleState"))
+	set_input_locked(DefeatSequence.LOCK, true)
+	animation_controller.set_visual_override(&"death")
+	DefeatSequence.start(self, null, exhausted)
+
+## Dipanggil DefeatSequence setelah pemain bangun di rumah.
+func finish_defeat() -> void:
+	is_defeated = false
+	_invulnerable = HIT_INVULNERABLE * 2.0
+	if _blink_tween != null and _blink_tween.is_valid():
+		_blink_tween.kill()
+	modulate.a = 1.0
+	set_input_locked(DefeatSequence.LOCK, false)
+	animation_controller.set_visual_override(&"")
+
+## Debug: pastikan senjata ada di tas lalu taruh di slot hotbar yang sedang dipilih dan pegang.
+func _debug_hold_weapon(item_id: String) -> void:
+	if not data.has_item(item_id):
+		data.add_item(item_id, 1)
+	var target := data.hotbar_page * 8 + tool_controller.current_index
+	for slot in data.bag_size:
+		var entry: Variant = data.inventory[slot]
+		if entry != null and entry["item"].item_id == item_id:
+			if slot != target:
+				var other: Variant = data.inventory[target]
+				data.inventory[target] = entry
+				data.inventory[slot] = other
+				GameState.inventory_changed.emit()
+			break
+	tool_controller.select_tool(tool_controller.current_index, false)
+
+## Tombol uji (build debug): Ctrl+F7 = munculkan slime di depan, Ctrl+F8 = terima 20 damage,
+## Ctrl+F9 = dapat pedang, busur, anak panah, dan tongkat sihir, Ctrl+F6 = pegang tongkat sihir
+## (stamina penuh), Ctrl+F10 = pegang busur + 30 anak panah.
+func _debug_combat_key(event: InputEvent) -> bool:
+	if not (event is InputEventKey and event.pressed and not event.echo and event.ctrl_pressed):
+		return false
+	if not input.uses_mouse():
+		return false
+	match event.keycode:
+		KEY_F7:
+			Enemy.spawn(DEBUG_ENEMY, world_root(), global_position + FEET_OFFSET + facing_direction * 32.0)
+			Notify.say("[Debug] Slime muncul di depanmu.")
+			return true
+		KEY_F8:
+			take_hit(20 + Combat.player_defense(data))
+			return true
+		KEY_F9:
+			bind_context()
+			for entry in [["sword_wood", 1], ["bow_wood", 1], ["arrow_wood", 30], ["staff_wood", 1]]:
+				data.add_item(entry[0], entry[1])
+			Notify.say("[Debug] Pedang, busur, 30 anak panah, dan tongkat sihir masuk ke tas.")
+			return true
+		KEY_F6:
+			bind_context()
+			_debug_hold_weapon("staff_wood")
+			data.stamina = data.max_stamina
+			Notify.say("[Debug] Tongkat sihir dipegang, stamina penuh. Tahan klik kanan untuk membidik.")
+			return true
+		KEY_F10:
+			bind_context()
+			_debug_hold_weapon("bow_wood")
+			data.add_item("arrow_wood", 30)
+			Notify.say("[Debug] Busur dipegang dan 30 anak panah masuk ke tas. Tahan klik kanan untuk membidik.")
+			return true
+	return false

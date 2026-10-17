@@ -127,7 +127,7 @@ func _sync(animate_existing: bool) -> void:
 			_nodes.erase(key)
 
 	# Pulihkan barang yang tersimpan.
-	for key in items:
+	for key in items.keys():
 		if not _nodes.has(key):
 			_place(ForageManager.cell_from_key(key), str(items[key]), animate_existing)
 	# id yang gagal dibuat (file-nya dihapus) dibuang dari data.
@@ -158,6 +158,29 @@ func _place(cell: Vector2i, id: String, animate: bool) -> void:
 	var node := _make_node(id, cell)
 	if node == null:
 		return
+	# Repair overlaps from older saves, including trees that have just grown.
+	if node is Choppable and _resource_space_blocked(_ground.to_global(_ground.map_to_local(cell))):
+		var replacement := cell
+		for radius in range(1, 9):
+			for x in range(-radius, radius + 1):
+				for y in range(-radius, radius + 1):
+					if maxi(absi(x), absi(y)) != radius:
+						continue
+					var candidate := cell + Vector2i(x, y)
+					if _is_free(candidate):
+						replacement = candidate
+						break
+				if replacement != cell:
+					break
+			if replacement != cell:
+				break
+		if replacement != cell:
+			# Recreate the node so its removal callback is bound to the new cell.
+			node.free()
+			node = _make_node(id, replacement)
+			ForageManager.remove_item(_area_key(), cell)
+			ForageManager.add_item(_area_key(), replacement, id)
+			cell = replacement
 	_holder.add_child(node)
 	node.global_position = _ground.to_global(_ground.map_to_local(cell))
 	if node.has_method("apply_sort_shift"):
@@ -225,9 +248,8 @@ func _is_free(cell: Vector2i) -> bool:
 	if not _cell_allowed(cell):
 		return false
 	var center := _ground.to_global(_ground.map_to_local(cell))
-	for rect in _covered:
-		if rect.has_point(center):
-			return false
+	if _resource_space_blocked(center):
+		return false
 	var space := get_world_2d().direct_space_state
 	if space == null:
 		return false
@@ -241,6 +263,23 @@ func _is_free(cell: Vector2i) -> bool:
 	query.collision_mask = 0xFFFFFFFF
 	# Apa pun yang kena (termasuk pemain, barang lain, pintu) = sel terpakai.
 	return space.intersect_shape(query, 1).is_empty()
+
+
+func _resource_space_blocked(center: Vector2) -> bool:
+	# Refresh visual occupancy: physics and the initial cover cache can lag
+	# behind nodes placed by another spawner in this same frame.
+	_covered.clear()
+	_collect_covered(_holder)
+	_collect_scene_covers(_ground.get_parent())
+	for group in [&"choppable", &"mineable", &"weed"]:
+		for other in get_tree().get_nodes_in_group(group):
+			if other is Node2D and other.get_world_2d() == get_world_2d() and not other.is_queued_for_deletion():
+				if other.global_position.distance_to(center) < 28.0:
+					return true
+	for rect in _covered:
+		if rect.has_point(center):
+			return true
+	return false
 
 
 ## Sprite besar di luar node entitas (jembatan, air terjun) juga menutup tanah di bawahnya.
@@ -263,6 +302,8 @@ func _collect_scene_covers(node: Node) -> void:
 ## Kumpulkan kotak gambar sprite besar (pohon, batu besar) di bawah node entitas.
 func _collect_covered(node: Node) -> void:
 	for child in node.get_children():
+		if child.is_queued_for_deletion():
+			continue
 		if child is Forageable or child is Weed:
 			continue
 		_collect_covered_one(child)

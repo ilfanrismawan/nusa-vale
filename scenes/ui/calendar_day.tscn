@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[node name="CalendarDay" type="Button"]
+custom_minimum_size = Vector2(54, 60)
+toggle_mode = true
+theme_type_variation = &"RecipeCard"
+theme_override_colors/font_color = Color(0.27, 0.19, 0.1, 1)
+theme_override_colors/font_hover_color = Color(0.27, 0.19, 0.1, 1)
+theme_override_colors/font_pressed_color = Color(0.27, 0.19, 0.1, 1)
+text = "1"
+
+[node name="BirthdayMarker" type="TextureRect" parent="."]
+visible = false
+offset_left = 34.0
+offset_top = 2.0
+offset_right = 52.0
+offset_bottom = 20.0
+mouse_filter = 2
+texture_filter = 1
+expand_mode = 1
+stretch_mode = 5

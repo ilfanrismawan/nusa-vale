@@ -327,7 +327,7 @@ func _update_status() -> void:
 			if item.category != ItemData.Category.TOOL:
 				value += item.sell_price * int(data.inventory[i].get("count", 1))
 	var name_text := data.player_name if not data.player_name.is_empty() else "Petani P%d" % (data.index + 1)
-	_status_text.text = "STATUS PETANI\n%s\n\nStamina: %d / %d\nTas: %d / %d slot\nUang: %s G\nNilai jual isi tas: %s G\n\nHari %d - %s" % [name_text, data.stamina, data.max_stamina, used, data.bag_size, HUD.format_money(GameState.money), HUD.format_money(value), DayCycle.current_day, DayCycle.get_season_display_name()]
+	_status_text.text = "STATUS PETANI\n%s\n\nHP: %d / %d\nStamina: %d / %d\nDEF: %d\nTas: %d / %d slot\nUang: %s G\nNilai jual isi tas: %s G\n\nHari %d - %s" % [name_text, data.hp, data.max_hp, data.stamina, data.max_stamina, Combat.player_defense(data), used, data.bag_size, HUD.format_money(GameState.money), HUD.format_money(value), DayCycle.current_day, DayCycle.get_season_display_name()]
 
 
 func _update_menu_highlight() -> void:
@@ -957,10 +957,13 @@ func _display_item_detail(item: ItemData, count: int, slot_idx: int = -1) -> voi
 			ItemData.Category.FORAGE: cat_name = "Hasil Hutan"
 			ItemData.Category.EQUIPMENT: cat_name = "Equipment"
 			ItemData.Category.BUILDING: cat_name = "Bangunan"
+			ItemData.Category.FOOD: cat_name = "Makanan"
 		detail_sub.text = "[%s]" % cat_name
 
 	if detail_desc:
 		var text := item.description
+		if item.category == ItemData.Category.FOOD:
+			text += "\n" + item.food_summary()
 		if text.is_empty():
 			if item.category == ItemData.Category.TOOL:
 				text = "Gunakan peralatan ini dengan klik kiri saat berada di dekat objek kerja."

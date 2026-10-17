@@ -1,6 +1,6 @@
 # Nusa Vale — Game Design Document (GDD)
 
-Versi dokumen: 2.7 (15 Oktober 2026).
+Versi dokumen: 2.8 (17 Oktober 2026).
 Dokumen ini adalah **sumber kebenaran desain** proyek `E:\nusa-vale` (Game Design Document resmi).
 Pada versi 1.9, ditambahkan 4 pilar fundamental Life-Sim / Farming RPG: **Sistem Peternakan & Satwa** (kandang Barn/Coop, sapi, kambing, domba, ayam, bebek, kuda, pakan & affection), **Mesin Pengolah Pasca-Panen (Artisan Goods)** (mayones, keju, selai, fermentasi keg, tenun, pengasap ikan), **Sistem Cuaca Harian Dinamis** (cerah, hujan penyiram otomatis, badai petir penangkal baterai, salju), serta **Sistem Sosial, Persahabatan, & Jadwal Harian NPC** (hati 0-10, sistem hadiah loved/hated, rutinitas harian, heart events, dan romansa/teman sekamar).
 
@@ -45,14 +45,14 @@ Panduan editor resep, karakter, animasi dan syarat objek: [EDITOR_GUIDE.md](EDIT
 | Biji Daya | Tiga sumber unik, kapasitas stamina 100–130 | Target 200 membutuhkan tujuh sumber tambahan |
 | Fishing | Minigame, lokasi dan jam | `FishData` belum memiliki field musim; pembekuan air masih target |
 | Co-op | Lokal split-screen 2–4 pemain | Gamepad fisik dan kenyamanan perlu playtest |
-| Konten lanjutan | Data equipment dan spesifikasi desain | HP/combat/enemy/dungeon, role EXP, bazaar, festival, ekonomi dinamis belum dinyatakan terpasang |
+| Konten lanjutan | Data equipment, HP per pemain, combat dasar (pedang/busur/tongkat), musuh target, denda tumbang lewat Klinik | AI musuh (4B-2), gua/dungeon (4B-3), role EXP, bazaar, festival, ekonomi dinamis belum terpasang |
 
 Koreksi acuan implementasi:
 
 - Viewport aktif `project.godot`: **1280 × 720**, window awal 1280 × 720; angka 960 × 540 di tabel lama sudah kedaluwarsa.
-- `SAVE_VERSION = 13`; angka versi save pada bagian keputusan lanjutan bukan versi aktif.
+- `SAVE_VERSION = 14` (versi 14 menambah HP per pemain); angka versi save pada bagian keputusan lanjutan bukan versi aktif.
 - Stamina awal 100, maksimum pemain dapat naik melalui Biji Daya. Detail transaksi dan persistensi: [BIJI_DAYA.md](BIJI_DAYA.md).
-- Pingsan batas waktu pada 05:10 memulangkan pemain, bangun 08:00 dengan 50% kapasitas stamina; pemain co-op yang sudah tidur pulih penuh. **Tidak memotong uang atau item**. Denda medis/combat pada bagian 4.2 dan rekap keputusan tetap target terpisah, belum terpasang.
+- Pingsan batas waktu pada 05:10 memulangkan pemain, bangun 08:00 dengan 50% kapasitas stamina; pemain co-op yang sudah tidur pulih penuh. **Tidak memotong uang atau item**. Denda medis karena HP habis (bagian 4.2 dan 8.1) terpasang terpisah sejak Phase 4B-1.
 - Shipping dibayar saat pergantian hari melalui `ShippingManager.settle`, ke saldo bersama dan ringkasan pendapatan. Kurir sore masih rancangan.
 - Restorasi Balai Nadi membutuhkan **100 kayu + 50 batu + 500 G**; Greenhouse 150 kayu + 75 batu + 5 copper_bar. Akses Balai dari town sudah terpasang.
 - `DailyWeather`: hari pertama cerah; berikutnya peluang hujan 30% berdasarkan seed tersimpan. Desain lima cuaca di bagian 4.1 belum seluruhnya tersedia.
@@ -175,16 +175,18 @@ Spesifikasi terperinci dan batas antara fitur terpasang dengan rancangan lanjuta
 - Memungut forage dan menebas rumput liar tidak menggunakan stamina (stamina cost = 0) [keputusan].
 - Tidur di kasur rumah memulihkan stamina 100%, memicu pergantian hari, dan menyimpan game otomatis.
 - **Pingsan batas waktu [terpasang]**: 05:10, bangun 08:00 di rumah dengan 50% kapasitas stamina; tanpa kehilangan uang/item. Pemain co-op yang sudah tidur pulih penuh.
-- **Denda medis/dungeon [keputusan, belum terpasang]**:
-  - Jika kehabisan HP di dungeon: target pemain bangun jam 08:00 di klinik/rumah dengan stamina 50%.
-  - Dikenakan sanksi **potongan uang** (biaya perawatan medis) dan/atau **kehilangan sebagian item secara acak** di inventory tas.
+- **Pingsan kelelahan [keputusan 2026-10-17, terpasang]**: stamina yang turun sampai 0 membuat karakter pingsan (animasi death), lalu bangun di rumah dengan 50% stamina tanpa denda uang/item. Solo: hari berganti, bangun 08:00, game disimpan. Co-op: hanya pemain itu yang dipulangkan. Tanda sebelumnya: bar stamina berdenyut di bawah 25%, karakter berkeringat dan berkedip pucat di bawah 15%; aksi yang ditolak karena lelah membuat bar bergetar dan berkedip merah.
+- **Denda medis karena HP habis [terpasang, Phase 4B-1]**:
+  - Pemain tumbang, layar pindah ke **Klinik Desa** (`clinic.tscn`) sebagai transisi, lalu bangun di rumah dengan HP 50% dan stamina maksimal 50%. Solo: hari berganti dan bangun 08:00, lalu game disimpan. Co-op: hanya pemain yang tumbang yang dipulangkan, waktu tetap berjalan untuk pemain lain.
+  - Sanksi: **biaya perawatan 10% uang** (maksimal 1.000 G) dan **2 tumpukan barang acak di tas berkurang separuh** (dibulatkan ke atas). Alat, senjata, perlengkapan, bangunan, barang taruh, dan Biji Daya tidak pernah hilang.
+  - Semua angka ada di `resources/combat/defeat_rules.tres` (DefeatRules).
 
 ### 4.3 Inventory, Equipment, dan Lokalisasi Bahasa [terpasang + keputusan]
 
 - Ransel 36 slot (aktif 12 / 24 / 36 sesuai `bag_level`). Upgrade ransel dibeli di toko (2.000 G dan 10.000 G).
 - Hotbar 8 slot dengan tombol geser halaman (Tab / Gamepad Back).
 - Sortir tas (R) otomatis menggabungkan stack dan merapikan alat di depan.
-- Equipment: 5 slot (`weapon`, `helmet`, `armor`, `leggings`, `boots`). 80 varian equipment tersedia dalam database.
+- Equipment: 4 slot terpasang (`helmet`, `armor`, `leggings`, `boots`). Senjata (pedang, busur, tongkat sihir) **dipegang dari hotbar**, bukan dipasang; slot Weapon di menu hanya menampilkan senjata yang sedang dipegang. Save lama yang memasang senjata memindahkannya ke tas. 80 varian equipment tersedia dalam database.
 - **Konvensi Bahasa & Lokalisasi [keputusan]**:
   - `display_name` item diseragamkan ke **Bahasa Indonesia** sebagai bahasa utama (misal: "Kapak Kayu", "Pedang Besi", "Wortel", "Ikan Lele").
   - Sistem disiapkan mendukung multi-bahasa dengan opsi beralih Bahasa Indonesia / Bahasa Inggris di menu Pengaturan.
@@ -450,9 +452,28 @@ upgrade, HP/combat serta resep dari TV/hadiah sosial masih [keputusan].
 
 ---
 
-## 8. Sistem Pertarungan (Combat) & Musuh [keputusan]
+## 8. Sistem Pertarungan (Combat) & Musuh [terpasang sebagian + keputusan]
 
-### 8.1 Cakupan Combat untuk Fase MVP [keputusan - Target MVP]
+### 8.1 Cakupan Combat untuk Fase MVP [terpasang sebagian - Phase 4B-1]
+
+**Implementasi Phase 4B-1 [terpasang, 17 Oktober 2026]:**
+- **HP**: 100 per pemain (`PlayerData.hp`), terpisah dari stamina, disimpan per pemain (save v14; save lama dimuat dengan HP penuh). Pulih penuh saat tidur. Makanan memulihkan HP sebesar `ItemData.hp_restore` (default setengah dari pemulihan stamina); efek makanan dapat memberi `hp_per_tick`. Bar HP merah di HUD, di kiri bar stamina.
+- **Kontrol**: pegang pedang/busur/tongkat di hotbar. **Klik kiri menyerang**, **tahan klik kanan untuk membidik** ke arah mouse (garis bidik menunjukkan jangkauan). Selama membidik, karakter berpose memegang senjatanya: busur ditarik, tongkat sihir terangkat (`WeaponStyle.aim_pose_frame`); klik kiri langsung melepas dari pose itu. Membidik sambil berjalan/berlari: badan tetap berpose bidik, kaki tetap melangkah (frame gabungan dibuat otomatis dari animasi jalan/lari).
+- **Combo** (`WeaponStyle` grup Combo): klik kiri lagi saat serangan berjalan atau dalam 0,45 detik setelahnya menyambung pukulan berikutnya; jeda lebih lama atau ganti senjata mengulang combo. Combo 3 pukulan untuk semua senjata, pukulan ketiga adalah finisher (suara dan partikel `combo_finisher`):
+  - Pedang: damage 100% / 100% / 150%, finisher tebasan lebih lebar (1,3x) dan knockback 2,5x.
+  - Busur: tembakan ketiga melepas 2 panah menyebar 8 derajat, tetap memakai 1 anak panah.
+  - Tongkat sihir: cast ketiga bola sihir 2x lebih besar, damage 150%, knockback 2x; stamina tetap 3 per cast.
+- **Juice combat** (`scripts/combat/combat_juice.gd`, hanya visual/suara): musuh berkedip putih dan memipih saat kena; hitstop dan getar kamera sebanding damage (finisher lebih berat); angka damage meloncat (finisher besar dengan "!"); busur tebasan pedang; ekor cahaya panah/bola sihir dan percikan saat pecah; musuh mati meledak jadi partikel dan cincin, jarahan berhamburan satu per butir; penghitung combo "x2"/"x3!" dan zoom kamera saat finisher.
+- **Pemain terluka**: percikan darah ke arah dorongan plus noda di tanah yang memudar, pinggir layar berkedip merah, dan saat HP di bawah 25% waktu melambat sesaat (solo). Bar HP bergetar, meneteskan darah, menyisakan bar putih yang menyusul turun, dan berdenyut merah saat HP rendah. Tanpa membidik, serangan mengarah ke arah hadap. Saat memegang senjata, klik kanan tidak dipakai interaksi (gunakan E/X). Gamepad menyerang ke arah hadap.
+- **Senjata** (`resources/combat/*.tres`, WeaponStyle): pedang tebasan sekitar 1,5 tile di depan tanpa stamina; busur proyektil 8 tile, memakai 1 anak panah terkuat di tas ("Tidak ada anak panah!" bila habis), tanpa stamina; tongkat sihir bola energi 6 tile tanpa amunisi, 3 stamina.
+- **Rumus**: damage = `max(1, ATK - DEF)`. ATK = ATK senjata (+ ATK anak panah); DEF pemain = total DEF helm, armor, celana, sepatu.
+- **Terkena serangan**: 0,8 detik kebal (berkedip), knockback, animasi damage, angka damage melayang.
+- **Musuh target** (`resources/enemies/*.tres`, EnemyData, art dari `assets/farm_rpg/Enemy`): Slime Hijau, Slime Biru, Myconid Merah. Diam di tempat, melukai bila disentuh, mati dengan animasi Dead dan menjatuhkan item (slime: Slime Gel, myconid: Common Mushroom). Suara kena/mati per musuh (`EnemyData.hit_feedback`, `death_feedback`). AI gerak menyusul di Phase 4B-2.
+- **Kalah**: lihat bagian 4.2 (Klinik sebagai transisi + denda, lalu bangun di rumah).
+- **Uji cepat (build debug)**: Ctrl+F7 memunculkan slime di depan pemain, Ctrl+F8 memberi 20 damage ke diri sendiri, Ctrl+F9 memberi pedang, busur, 30 anak panah, dan tongkat sihir kayu. Ctrl+F6 langsung memegang tongkat sihir kayu di slot hotbar aktif dan mengisi penuh stamina; Ctrl+F10 langsung memegang busur kayu dan menambah 30 anak panah kayu. Tes otomatis: `tests/combat_regression.tscn`.
+- Belum terpasang: AI musuh (4B-2), gua/dungeon dan toko combat di pintu gua (4B-3).
+
+**Rancangan awal (acuan):**
 Untuk fase MVP, sistem combat dirancang ringkas, fungsional, dan stabil untuk melengkapi alur dungeon:
 - **Bar Health Point (HP)**: Pemain memiliki bar HP terpisah dari Stamina (dasar 100 HP). HP pulih saat tidur atau makan makanan bergizi.
 - **Kondisi Kalah**: Jika HP habis (0), pemain pingsan dan terbangun di Klinik Desa dengan sanksi denda uang dan/atau kehilangan sebagian item ransel.
@@ -1051,7 +1072,7 @@ Seluruh 18 poin keputusan yang sebelumnya terbuka kini telah berstatus **[keputu
 5. **Musim Dingin**: Ladang luar ruangan memiliki varietas tanaman khusus musim dingin.
 6. **Pohon Buah**: Pohon permanen bertahap yang menghasilkan buah musiman berulang kali tanpa perlu tanam ulang.
 7. **Shipping Bin**: Uang dibayarkan saat tidur malam atau dijemput NPC kurir di sore hari (bukan langsung bayar instan).
-8. **Denda Pingsan**: jalur batas waktu hanya menerapkan bangun 08:00/stamina 50%, tanpa potongan uang/item [terpasang]. Potongan uang atau kehilangan item pada jalur medis/dungeon masih target [keputusan].
+8. **Denda Pingsan**: jalur batas waktu hanya menerapkan bangun 08:00/stamina 50%, tanpa potongan uang/item [terpasang]. Jalur HP habis: transisi Klinik, biaya 10% uang (maks 1.000 G), 2 tumpukan barang acak berkurang separuh, bangun di rumah [terpasang, Phase 4B-1].
 9. **Ikan Musiman**: Menambahkan atribut daftar musim (`seasons`) pada `FishData`.
 10. **Air Beku Musim Dingin**: Memancing luar ruangan diblokir saat musim dingin, kecuali di spot khusus yang di-unlock.
 11. **Parameter Forage & Biaya Stamina 0**: Disetujui dan disahkan.
@@ -1086,6 +1107,8 @@ Dengan disahkannya keputusan utama di atas, butir keputusan teknis turunan yang 
 ---
 
 ## 19. Changelog
+
+- **2026-10-17 (Versi 2.8)**: Phase 4B-1 Combat. HP 100 per pemain (save v14), bar HP di HUD, rumus `max(1, ATK - DEF)`, serangan pedang/busur/tongkat dari hotbar (klik kiri serang, tahan klik kanan bidik), anak panah sebagai amunisi, i-frames 0,8 detik + knockback, musuh target dari aset enemy, kalah lewat transisi Klinik dengan denda uang/barang lalu bangun di rumah. Slot equipment weapon diganti senjata di hotbar. Perbaikan: senjata kini tergambar di animasi serang (layer Sword/Bow per tier, Healer Staff), slime menjatuhkan Slime Gel, suara pukulan slime memakai impactSoft. Pose bidik busur dan tongkat sihir saat klik kanan ditahan. Combo 3 pukulan untuk pedang, busur, dan tongkat sihir. Juice combat, efek bar HP/stamina, dan pingsan saat stamina 0. Perbaikan posisi bar HP/stamina (sejajar di kanan bawah) dan kaki melangkah saat membidik sambil berjalan.
 
 - **2026-10-15 (Versi 2.7)**: audit dependensi dan cashflow progres awal; sumber bijih Forest yang pulih dan terhubung ke entrance; endapan besi kecil untuk jalur Tembaga → Besi; margin batu awal; informasi manfaat/sisa uang di UI upgrade; perbaikan callback pickup setelah HUD dibebaskan.
 

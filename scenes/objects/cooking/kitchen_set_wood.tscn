@@ -1,0 +1,7 @@
+[gd_scene format=3]
+[ext_resource type="Texture2D" path="res://resources/cooking/shop/art/kitchen_set_wood.tres" id="art"]
+[node name="KitchenSetwood" type="Node2D"]
+texture_filter = 1
+[node name="Cabinets" type="Sprite2D" parent="."]
+texture = ExtResource("art")
+centered = false

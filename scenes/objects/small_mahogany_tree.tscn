@@ -88,6 +88,7 @@ animations = [{
 radius = 4.5
 
 [node name="SmallMahoganyTree" type="StaticBody2D" unique_id=2046111868]
+scale = Vector2(0.65, 0.65)
 y_sort_enabled = true
 script = ExtResource("1_b2s7q")
 

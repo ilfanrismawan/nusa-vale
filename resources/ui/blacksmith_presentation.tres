@@ -1,0 +1,10 @@
+[gd_resource type="Resource" format=3]
+[ext_resource type="Script" path="res://scripts/resources/blacksmith_presentation.gd" id="script"]
+[resource]
+script = ExtResource("script")
+vendor_name = "Empu Bima"
+greeting = "Butuh upgrade? Bawa alat, batangan logam, dan koinmu kemari."
+tool_order = PackedStringArray("axe", "hoe", "pickaxe", "watering_can", "sickle", "shovel", "fishing_rod")
+tier_labels = Dictionary[String, String]({"copper": "Tembaga", "iron": "Besi", "gold": "Emas", "platinum": "Platinum", "crimson": "Crimson", "frost": "Frost", "shadow": "Shadow", "fairy": "Fairy", "obsidian": "Obsidian"})
+descriptions = Dictionary[String, String]({"axe": "Berguna untuk menebang pohon dan memecah kayu.", "hoe": "Berguna untuk menggemburkan tanah sebelum menanam.", "pickaxe": "Berguna untuk memecah batu dan menambang mineral.", "watering_can": "Berguna untuk menyiram tanaman.", "sickle": "Berguna untuk memanen tanaman dan memotong rumput.", "shovel": "Berguna untuk merapikan lahan dan menggali tanah.", "fishing_rod": "Berguna untuk memancing dengan jangkauan lebih jauh."})
+tiers_per_page = 4

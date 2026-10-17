@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="FoodEffectData" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/food_effect_data.gd" id="1_effect"]
+
+[resource]
+script = ExtResource("1_effect")
+id = &"protein"
+display_name = "Asupan Protein"
+description = "Menopang aktivitas dengan pemulihan stamina bertahap."
+duration_seconds = 100.0
+movement_multiplier = 1
+stamina_cost_multiplier = 0.85
+stamina_per_tick = 1
+tick_interval = 10.0
+stacking = 0
+max_stacks = 1
+

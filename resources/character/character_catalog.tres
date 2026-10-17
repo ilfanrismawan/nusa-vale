@@ -401,6 +401,8 @@ part_folder = "res://assets/farm_rpg/Character/PNG/8. SwordAttack"
 animation_name = &"sword"
 animation_fps = 12.0
 animation_loop = false
+tool_type = 101
+tool_asset = "Weapons/Sword/{tier}.png"
 
 [sub_resource type="Resource" id="sheet_extra_archer"]
 script = ExtResource("3_sheet")
@@ -408,6 +410,8 @@ part_folder = "res://assets/farm_rpg/Character/PNG/9. Archer"
 animation_name = &"archer"
 animation_fps = 10.0
 animation_loop = false
+tool_type = 102
+tool_asset = "Weapons/Bow and Arrow/{tier}.png"
 
 [sub_resource type="Resource" id="sheet_extra_catch_insect"]
 script = ExtResource("3_sheet")
@@ -567,7 +571,7 @@ animation_fps = 12.0
 
 [sub_resource type="Resource" id="sheet_extra_sit"]
 script = ExtResource("3_sheet")
-part_folder = "res://assets/farm_rpg/Character/PNG/18. Setting"
+part_folder = "res://assets/farm_rpg/Character/PNG/18. Sitting"
 animation_name = &"sit"
 animation_fps = 6.0
 

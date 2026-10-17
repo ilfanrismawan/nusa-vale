@@ -20,6 +20,8 @@ func _ready() -> void:
 	DiscoveryManager.reset()
 	var data := GameState.p1()
 	data.reset_to_starter()
+	# Pedang kayu awal ada di tas (Phase 4B-1); kosongkan supaya hitungan crafting tetap jelas.
+	data.remove_item("sword_wood", 1)
 	settings = load("res://scenes/ui/settings_menu.tscn").instantiate()
 	settings.name = "SettingsMenu"
 	add_child(settings)
@@ -83,13 +85,14 @@ func _ready() -> void:
 	await click_icon(ui._menu_buttons["Equipment"])
 	check(ui._equipment_panel.visible and not ui._collection_panel.visible, "Equipment icon opens a separate page")
 	check(ui._equipment_panel._portrait.texture != null and ui._equipment_panel._preview_key == data.appearance.get_key(), "Equipment portrait uses the owning player's appearance")
-	check(data.equipment_stats() == Vector2i(4, 3), "New players start with equipped wooden sword and armor")
-	var remove: Button = ui._equipment_panel._remove_buttons["weapon"]
+	check(data.equipment_stats() == Vector2i(0, 3) and data.has_item("sword_wood"), "New players start with wooden armor equipped and the wooden sword in the bag")
+	check(not ui._equipment_panel._remove_buttons.has("weapon") and not data.equipment.has("weapon"), "Weapons are held from the hotbar, not equipped")
+	var remove: Button = ui._equipment_panel._remove_buttons["armor"]
 	await click_control(remove, remove.get_global_rect().get_center())
-	check(data.equipment["weapon"] == null and data.has_item("sword_wood"), "Unequip button returns weapon to bag")
+	check(data.equipment["armor"] == null and data.has_item("armor_wood"), "Unequip button returns armor to bag")
 	var equip: Button = ui._equipment_panel._entries[0]
 	await click_control(equip, equip.get_global_rect().get_center())
-	check(data.equipment["weapon"] != null and not data.has_item("sword_wood"), "Equip button moves weapon out of bag without duplication")
+	check(data.equipment["armor"] != null and not data.has_item("armor_wood"), "Equip button moves armor out of bag without duplication")
 	await capture("menu_equipment")
 	var other := PlayerData.new(1)
 	other.reset_to_starter()
@@ -98,10 +101,15 @@ func _ready() -> void:
 	other.reset_to_starter()
 	other.load_dict(saved_other)
 	check(other.equipment["armor"] == null and other.has_item("armor_wood"), "Co-op equipment round-trips independently")
+	other.add_item_silent("helmet_wood", 1)
+	for slot in other.bag_size:
+		if other.inventory[slot] != null and other.inventory[slot]["item"].item_id == "helmet_wood":
+			other.equip_from_slot(slot)
+			break
 	for slot in other.bag_size:
 		if other.inventory[slot] == null:
 			other.inventory[slot] = {"item": GameState._resolve_item("stone"), "count": 1}
-	check(not other.unequip("weapon") and other.equipment["weapon"] != null, "Full bag cannot lose equipped gear")
+	check(not other.unequip("helmet") and other.equipment["helmet"] != null, "Full bag cannot lose equipped gear")
 	var armor_slot := -1
 	for slot in other.bag_size:
 		if other.inventory[slot]["item"].item_id == "armor_wood":
@@ -111,12 +119,12 @@ func _ready() -> void:
 	check(other.equip_from_slot(armor_slot) and other.inventory[armor_slot]["item"].item_id == "armor_wood", "Replacing gear swaps into its source slot")
 	check(not other.equip_from_slot(0), "Farm tools cannot enter equipment slots")
 	other.load_equipment({"weapon": "armor_wood", "armor": "stone"})
-	check(other.equipment["weapon"] == null and other.equipment["armor"] == null, "Invalid equipment save entries are rejected")
+	check(not other.equipment.has("weapon") and other.equipment["armor"] == null, "Invalid equipment save entries are rejected")
 	other.load_equipment({})
 	check(other.equipment_stats() == Vector2i.ZERO, "Older saves default to empty equipment slots")
 	check(SaveManager.save_game(), "Equipment saves using normal save slots")
-	data.equipment = {"weapon": null, "armor": null}
-	check(SaveManager.load_game() and data.equipment_stats() == Vector2i(4, 3), "P1 equipped items survive save and load")
+	data.equipment = {"armor": null}
+	check(SaveManager.load_game() and data.equipment_stats() == Vector2i(0, 3), "P1 equipped items survive save and load")
 	await click_icon(ui._menu_buttons["Status"])
 	check(ui._status_panel.visible, "Status icon opens character page")
 	await click_icon(ui.tab_book)

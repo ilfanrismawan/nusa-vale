@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://vg71ct7w0wf3"]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1_item"]
+[ext_resource type="Script" uid="uid://vbwn6cjjdlc0" path="res://scripts/resources/food_effect_data.gd" id="1_r0cv2"]
+[ext_resource type="Texture2D" uid="uid://ccmrfh2xp4pbk" path="res://assets/farm_rpg/objects/interior/Part 9 copiar.png" id="2_texture"]
+
+[sub_resource type="AtlasTexture" id="Icon"]
+atlas = ExtResource("2_texture")
+region = Rect2(16, 16, 32, 32)
+filter_clip = true
+
+[resource]
+script = ExtResource("1_item")
+category = 8
+item_id = "prep_counter"
+display_name = "Meja Persiapan"
+icon = SubResource("Icon")
+description = "Peralatan memasak. Tempatkan scene prep_counter.tscn di editor."
+stackable = false
+max_stack = 1

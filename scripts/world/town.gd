@@ -51,10 +51,6 @@ func _ready() -> void:
 	# causing the function to return without ever applying the limits.
 	update_camera_limits()
 
-	var kitchen := KitchenStation.new()
-	kitchen.name = "WarungKitchen"
-	kitchen.position = Vector2(936, 388)
-	add_child(kitchen)
 	DayCycle.is_running = true
 	FarmManager.initialize(self)
 

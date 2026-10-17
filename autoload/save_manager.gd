@@ -13,7 +13,7 @@ const SEASON_NAMES: Array[String] = ["Musim Semi", "Musim Panas", "Musim Gugur",
 ## Dipakai ringkasan slot bila save belum punya nama pemain (save versi 6 ke bawah).
 const DEFAULT_PLAYER_NAME := "Petani"
 
-const SAVE_VERSION := 13
+const SAVE_VERSION := 14
 
 signal game_saved
 signal game_loaded
@@ -93,6 +93,9 @@ func get_slot_summary(slot: int) -> Dictionary:
 	var year := ((day - 1) / (DayCycle.DAYS_PER_SEASON * SEASON_NAMES.size())) + 1
 	return {
 		"name": player_name,
+		"farm_name": data.get("farm_name", ""),
+		"birthday_season": player.get("birthday_season", ""),
+		"birthday_day": player.get("birthday_day", 0),
 		"day": day,
 		"day_of_season": ((day - 1) % DayCycle.DAYS_PER_SEASON) + 1,
 		"season": season,
@@ -250,6 +253,10 @@ func _valid_player(player: Variant) -> bool:
 		return false
 	if not player.get("name", "") is String:
 		return false
+	if not player.get("birthday_season", "") is String or not _valid_numbers(player, ["birthday_day"]):
+		return false
+	if not player.get("pet_id", "") is String or not player.get("pet_name", "") is String:
+		return false
 	var order: Variant = player.get("tool_order", {})
 	if not order is Dictionary:
 		return false
@@ -262,6 +269,8 @@ func _valid_player(player: Variant) -> bool:
 	return player.get("appearance", {}) is Dictionary and _valid_inventory(player.get("inventory", []))
 
 func _is_valid_save(data: Dictionary) -> bool:
+	if not data.get("farm_name", "") is String:
+		return false
 	# An empty/unrelated JSON object is not a save.
 	if not data.has("player") or not data.has("day_cycle") or not data.has("inventory"):
 		return false
@@ -323,6 +332,7 @@ func _is_valid_save(data: Dictionary) -> bool:
 func _build_save_data() -> Dictionary:
 	return {
 		"version": SAVE_VERSION,
+		"farm_name": GameState.farm_name,
 
 		## Versi 7: waktu simpan (unix, UTC) untuk ringkasan slot.
 		"saved_at": int(Time.get_unix_time_from_system()),
@@ -335,8 +345,13 @@ func _build_save_data() -> Dictionary:
 
 		"player": {
 			"name": GameState.p1().player_name,
+			"birthday_season": GameState.p1().birthday_season,
+			"birthday_day": GameState.p1().birthday_day,
+			"pet_id": GameState.p1().pet_id,
+			"pet_name": GameState.p1().pet_name,
 			"money": max(0, GameState.money),
 			"stamina": clampi(GameState.p1().stamina, 0, GameState.p1().max_stamina),
+			"hp": clampi(GameState.p1().hp, 1, GameState.p1().max_hp),
 			"consumed_daya": GameState.p1().consumed_daya.duplicate(),
 			"bag_level": GameState.p1().bag_level,
 			"watering_water": GameState.p1().watering_water,
@@ -373,6 +388,9 @@ func _build_save_data() -> Dictionary:
 	}
 
 func _apply_save(data: Dictionary) -> void:
+	var farm_name: Variant = data.get("farm_name", "")
+	GameState.farm_name = farm_name if farm_name is String else ""
+	GameState.p1().clear_food_effects()
 	GameState.use_player(GameState.p1())
 	_load_day_cycle(data)
 	GameState.weather.load_save(data.get("weather", {}))
@@ -485,9 +503,14 @@ func _load_player(data: Variant) -> void:
 		int(player_data.get("stamina",GameState.MAX_STAMINA)), 0, GameState.p1().max_stamina
 	)
 	
+	# Versi 14: HP per pemain. Save lama tanpa key ini = HP penuh.
+	GameState.p1().hp = clampi(int(player_data.get("hp", PlayerData.MAX_HP)), 1, GameState.p1().max_hp)
+
 	# Versi 7: nama pemain. Save lama tanpa key ini = kosong (ringkasan slot memakai "Petani").
 	var player_name: Variant = player_data.get("name", "")
 	GameState.p1().player_name = player_name if player_name is String else ""
+	GameState.p1().load_birthday(player_data)
+	GameState.p1().load_pet(player_data)
 
 	GameState.p1().watering_water = clampi(int(player_data.get("watering_water", 20)), 0, 350)
 	GameState.hotbar_page = 0

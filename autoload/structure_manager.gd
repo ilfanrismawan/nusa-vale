@@ -1,9 +1,10 @@
 extends Node
 ## Shared farm structures. JSON-only records include chest contents and furnace jobs.
 signal changed
+const FURNITURE := ["wooden_chair", "wooden_bench"]
 const PreservesJarRecipe = preload("res://scripts/resources/preserves_jar_recipe.gd")
 const DehydratorRecipe = preload("res://scripts/resources/dehydrator_recipe.gd")
-const IDS := ["furnace", "wooden_chest", "wooden_fence", "crafting_workbench", "stone_fence", "wooden_gate", "copper_chest", "iron_chest", "gold_chest", "chicken_coop", "preserves_jar", "barn", "dehydrator", "silo", "pasture_grass", "mayonnaise_maker", "cheese_press", "loom"]
+const IDS := ["furnace", "wooden_chest", "wooden_fence", "crafting_workbench", "stone_fence", "wooden_gate", "copper_chest", "iron_chest", "gold_chest", "chicken_coop", "preserves_jar", "barn", "dehydrator", "silo", "pasture_grass", "mayonnaise_maker", "cheese_press", "loom", "wooden_chair", "wooden_bench"]
 const CONSTRUCTION := {
 	"chicken_coop": {"money": 2000, "materials": {"wood": 100, "stone": 50}},
 	"barn": {"money": 3000, "materials": {"wood": 200, "stone": 100}},
@@ -349,9 +350,15 @@ func _sync_view(view: Node2D) -> void:
 		live[name] = true
 		var node := view.get_node_or_null(name)
 		if node == null:
-			node = load("res://scripts/world/placed_structure.gd").new()
+			if is_furniture(record.item):
+				node = load("res://scenes/world/exterior/object/seat.tscn").instantiate()
+				node.definition = GameState._resolve_item(record.item).seat_definition
+				node.facing = int(record.get("facing", 1))
+				node.placement_uid = record.uid
+			else:
+				node = load("res://scripts/world/placed_structure.gd").new()
+				node.uid = record.uid
 			node.name = name
-			node.uid = record.uid
 			view.add_child(node)
 		var item := GameState._resolve_item(record.item)
 		var cell := Vector2i(int(record.cell[0]), int(record.cell[1]))
@@ -462,14 +469,16 @@ func commit_construction(player: Player, item_id: String, cell: Vector2i, from_i
 	placement_feedback(player, record)
 	return _result(true, "%s dibangun!" % GameState._resolve_item(item_id).display_name)
 
-func place(player: Player, slot: int, cell: Vector2i) -> Dictionary:
+func place(player: Player, slot: int, cell: Vector2i, facing: int = 1) -> Dictionary:
 	if records.size() >= 512:
 		return _result(false, "Batas bangunan farm tercapai (512).")
 	if not is_instance_valid(player) or slot < 0 or slot >= player.data.bag_size:
 		return _result(false, "Slot tidak valid.")
 	var entry: Variant = player.data.inventory[slot]
-	if entry == null or not entry["item"].item_id in IDS:
+	if entry == null or not (entry["item"].item_id in IDS or is_furniture(entry["item"].item_id)):
 		return _result(false, "Pilih bangunan dari hotbar.")
+	if is_furniture(entry["item"].item_id):
+		return _place_furniture(player, slot, cell, facing)
 	var world := player.world_root()
 	if world.get_meta("structure_area", "") != "farm":
 		return _result(false, "Bangunan hanya dapat dipasang di farm.")
@@ -532,10 +541,16 @@ func interact_near(player: Player) -> bool:
 	var selected := closest_structure(player)
 	if selected.is_empty():
 		return false
+	if is_furniture(selected.item):
+		var seat := furniture_node(player.world_root(), int(selected.uid))
+		if seat != null:
+			seat.interact(player)
+			return true
+		return false
 	if selected.item in RANCHES:
 		enter_ranch(player, int(selected.uid))
 		return true
-	var menu = load("res://scripts/ui/chicken_coop_menu.gd" if selected.item in RANCHES else "res://scripts/ui/structure_menu.gd").new()
+	var menu = load("res://scenes/ui/chest_ui.tscn").instantiate() if selected.item in CHESTS else load("res://scripts/ui/structure_menu.gd").new()
 	menu.player = player
 	menu.uid = selected.uid
 	_menus[player.data.index] = menu
@@ -864,7 +879,9 @@ func load_save(saved: Variant) -> void:
 	_next_uid = 1
 	if saved is Array:
 		for entry in saved.slice(0, 512):
-			if not entry is Dictionary or not entry.get("item", "") in IDS:
+			if not entry is Dictionary or not entry.get("item", "") is String:
+				continue
+			if not (entry.item in IDS or is_furniture(entry.item)):
 				continue
 			var cell: Variant = entry.get("cell", [])
 			if not cell is Array or cell.size() != 2 or not _integer(cell[0]) or not _integer(cell[1]) or absi(int(cell[0])) > 4096 or absi(int(cell[1])) > 4096:
@@ -883,6 +900,14 @@ func load_save(saved: Variant) -> void:
 			if not record_for(saved_uid).is_empty():
 				continue
 			var record := {"uid": saved_uid, "item": entry.item, "cell": [int(cell[0]), int(cell[1])], "storage": [], "open": entry.get("open") == true, "job": {}, "ready": {}}
+			if is_furniture(entry.item):
+				var direction: Variant = entry.get("facing", 1)
+				if not _integer(direction) or int(direction) < 0 or int(direction) > 3:
+					continue
+				var definition: SeatDefinition = item.seat_definition
+				if definition.pose_for(int(direction)) == null:
+					continue
+				record.facing = int(direction)
 			if entry.item in RANCHES:
 				var animals: Variant = entry.get("livestock", {})
 				if not RanchHusbandry.valid(animals, str(entry.item)):
@@ -944,6 +969,82 @@ func load_save(saved: Variant) -> void:
 				record.job = {}
 			records.append(record)
 	_sync_all()
+
+func is_furniture(item_id: String) -> bool:
+	if not item_id.is_valid_identifier() or not ResourceLoader.exists("res://resources/item_data/%s.tres" % item_id):
+		return false
+	var item := GameState._resolve_item(item_id)
+	return item != null and item.placeable and item.seat_definition != null
+
+func furniture_node(world: Node, uid: int) -> Node2D:
+	for ref in _views:
+		var view: Node2D = ref.get_ref()
+		if is_instance_valid(view) and view.get_meta("world").get_ref() == world:
+			return view.get_node_or_null("Structure_%d" % uid)
+	return null
+
+func check_furniture_placement(player: Player, item: ItemData, cell: Vector2i) -> Dictionary:
+	if item == null or not is_furniture(item.item_id) or records.size() >= 512:
+		return _result(false, "Furnitur tidak tersedia atau batas objek tercapai.")
+	var world := player.world_root()
+	var ground := player.base_layer_ground
+	if world == null or world.get_meta("structure_area", "") != "farm" or ground == null:
+		return _result(false, "Furnitur dapat dipasang di farm.")
+	if (player.global_position + Player.FEET_OFFSET).distance_to(ground.to_global(ground.map_to_local(cell))) > 36:
+		return _result(false, "Lokasi terlalu jauh.")
+	var footprint := Rect2i(cell, item.placement_size)
+	for record in records:
+		var other := GameState._resolve_item(record.item)
+		if footprint.intersects(Rect2i(Vector2i(int(record.cell[0]), int(record.cell[1])), other.placement_size)):
+			return _result(false, "Lokasi sudah ditempati objek.")
+	for x in item.placement_size.x:
+		for y in item.placement_size.y:
+			var target := cell + Vector2i(x, y)
+			var tile := ground.get_cell_tile_data(target)
+			if tile == null or not tile.get_custom_data("farmable") or FarmManager.farm_data.has(target):
+				return _result(false, "Pilih tanah kosong, bukan air atau lahan yang dicangkul.")
+			var shape := RectangleShape2D.new()
+			shape.size = Vector2(14, 14)
+			var query := PhysicsShapeQueryParameters2D.new()
+			query.shape = shape
+			query.transform = Transform2D(0, ground.to_global(ground.map_to_local(target)))
+			query.collision_mask = 1
+			if not player.get_world_2d().direct_space_state.intersect_shape(query, 1).is_empty():
+				return _result(false, "Lokasi terhalang objek atau pemain.")
+	return _result(true, "Klik kiri: pasang · R: putar")
+
+func _place_furniture(player: Player, slot: int, cell: Vector2i, facing: int) -> Dictionary:
+	var item: ItemData = player.data.inventory[slot]["item"]
+	var definition: SeatDefinition = item.seat_definition
+	if definition.pose_for(facing) == null:
+		return _result(false, "Arah furnitur tidak tersedia.")
+	var result := check_furniture_placement(player, item, cell)
+	if not result.ok:
+		return result
+	if not player.data.remove_item_at(slot, 1):
+		return _result(false, "Item tidak tersedia.")
+	records.append({"uid": _next_uid, "item": item.item_id, "cell": [cell.x, cell.y], "facing": facing, "storage": [], "open": false, "job": {}, "ready": {}})
+	_next_uid += 1
+	_sync_all()
+	placement_feedback(player, records[-1])
+	if is_instance_valid(player.tool_controller.furniture_preview):
+		player.tool_controller.furniture_preview.finish_placement()
+	return _result(true, "%s dipasang. E/klik kanan: duduk · Shift + klik kanan: ambil." % item.display_name)
+
+func pickup_furniture(player: Player, uid: int) -> Dictionary:
+	var record := record_for(uid)
+	if not is_furniture(str(record.get("item", ""))) or player.is_input_locked():
+		return _result(false, "Furnitur tidak tersedia.")
+	var seat := furniture_node(player.world_root(), uid)
+	if seat == null or seat.get_world_2d() != player.get_world_2d() or player.global_position.distance_to(seat.global_position) > 48:
+		return _result(false, "Dekati furnitur terlebih dahulu.")
+	if is_instance_valid(seat.occupant):
+		return _result(false, "Kursi sedang digunakan.")
+	if player.data.add_item(str(record.item), 1) != 0:
+		return _result(false, "Tas penuh.")
+	records.erase(record)
+	_sync_all()
+	return _result(true, "Furnitur dikembalikan ke tas.")
 
 func _result(ok: bool, message: String) -> Dictionary:
 	return {"ok": ok, "message": message}

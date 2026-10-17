@@ -2,7 +2,7 @@ extends Area2D
 
 ## Batas lokasi luar: berpindah otomatis saat player masuk trigger.
 
-@export_file("*.tscn") var town_scene: String = ""
+@export_file("*.tscn") var scene_target: String = ""
 ## Posisi pemain di Kota (ujung barat jalan utama).
 @export var spawn_position: Vector2 = Vector2(40, 408)
 
@@ -14,4 +14,4 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 	if not body is Player:
 		return
-	RoomDoor.travel(body, town_scene, spawn_position)
+	RoomDoor.travel(body, scene_target, spawn_position)

@@ -16,8 +16,5 @@ func _ready() -> void:
 	WeedSpawner.attach_weeds(self, "farm", ^"YSort", 4, 30, true)
 	DigSpotSpawner.attach_dig_spots(self, "farm", ^"YSort", 1, 3, true)
 	
-	Notify.say("WASD JALAN | Klik pakai alat | 1-6 / Q E ganti alat")
-	Notify.say("Enter di dekat toko, bin, atau kasur | I tas | Esc menu")
-
 func _exit_tree() -> void:
 	FarmManager.clear_references()

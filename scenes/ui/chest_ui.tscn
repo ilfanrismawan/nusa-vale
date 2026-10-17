@@ -1,0 +1,185 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://scripts/ui/chest_ui.gd" id="script"]
+[ext_resource type="Theme" path="res://resources/ui/cooking_theme.tres" id="theme"]
+[ext_resource type="Shader" path="res://resources/ui/cooking_backdrop.gdshader" id="shader"]
+[sub_resource type="StyleBoxFlat" id="Paper"]
+bg_color = Color(0.969, 0.953, 0.914, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_left = 20
+corner_radius_bottom_right = 20
+
+[sub_resource type="ShaderMaterial" id="Backdrop"]
+shader = ExtResource("shader")
+shader_parameter/blur_amount = 3.5
+shader_parameter/top_tint = Color(0.03, 0.04, 0.02, 0.65)
+shader_parameter/bottom_tint = Color(0.24, 0.34, 0.24, 0.8)
+
+[node name="UI" type="CanvasLayer"]
+process_mode = 3
+script = ExtResource("script")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+material = SubResource("Backdrop")
+
+[node name="Design" type="Control" parent="."]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 1280.0
+offset_bottom = 720.0
+theme = ExtResource("theme")
+mouse_filter = 2
+
+[node name="ChestIcon" type="TextureRect" parent="Design"]
+unique_name_in_owner = true
+offset_left = 45.0
+offset_top = 32.0
+offset_right = 103.0
+offset_bottom = 90.0
+texture_filter = 1
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Title" type="Label" parent="Design"]
+unique_name_in_owner = true
+offset_left = 120.0
+offset_top = 35.0
+offset_right = 920.0
+offset_bottom = 85.0
+text = "Peti Bersama"
+theme_override_font_sizes/font_size = 32
+autowrap_mode = 3
+theme_override_colors/font_color = Color(1, 0.95, 0.86, 1)
+
+
+[node name="Close" type="Button" parent="Design"]
+unique_name_in_owner = true
+offset_left = 1055.0
+offset_top = 40.0
+offset_right = 1230.0
+offset_bottom = 85.0
+text = "Esc  Tutup"
+theme_override_font_sizes/font_size = 18
+
+[node name="Bag" type="Panel" parent="Design"]
+offset_left = 45.0
+offset_top = 120.0
+offset_right = 625.0
+offset_bottom = 505.0
+theme_override_styles/panel = SubResource("Paper")
+
+[node name="BagTitle" type="Label" parent="Design/Bag"]
+unique_name_in_owner = true
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 554.0
+offset_bottom = 60.0
+text = "Penyimpanan"
+theme_override_font_sizes/font_size = 23
+autowrap_mode = 3
+
+
+[node name="Scroll" type="ScrollContainer" parent="Design/Bag"]
+offset_left = 24.0
+offset_top = 82.0
+offset_right = 560.0
+offset_bottom = 362.0
+horizontal_scroll_mode = 0
+follow_focus = true
+
+[node name="BagSlots" type="GridContainer" parent="Design/Bag/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 7
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+
+[node name="Chest" type="Panel" parent="Design"]
+offset_left = 650.0
+offset_top = 120.0
+offset_right = 1230.0
+offset_bottom = 505.0
+theme_override_styles/panel = SubResource("Paper")
+
+[node name="ChestTitle" type="Label" parent="Design/Chest"]
+unique_name_in_owner = true
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 554.0
+offset_bottom = 60.0
+text = "Penyimpanan"
+theme_override_font_sizes/font_size = 23
+autowrap_mode = 3
+
+
+[node name="Scroll" type="ScrollContainer" parent="Design/Chest"]
+offset_left = 24.0
+offset_top = 82.0
+offset_right = 560.0
+offset_bottom = 362.0
+horizontal_scroll_mode = 0
+follow_focus = true
+
+[node name="ChestSlots" type="GridContainer" parent="Design/Chest/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 7
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+
+[node name="ItemDetail" type="Label" parent="Design"]
+unique_name_in_owner = true
+offset_left = 45.0
+offset_top = 520.0
+offset_right = 1225.0
+offset_bottom = 570.0
+text = "Pilih item untuk memindahkan satu tumpukan."
+theme_override_font_sizes/font_size = 17
+autowrap_mode = 3
+theme_override_colors/font_color = Color(1, 0.95, 0.86, 1)
+
+
+[node name="Status" type="Label" parent="Design"]
+unique_name_in_owner = true
+offset_left = 45.0
+offset_top = 574.0
+offset_right = 1225.0
+offset_bottom = 609.0
+text = "Peti digunakan bersama · Bahan upgrade diambil dari tasmu."
+theme_override_font_sizes/font_size = 17
+autowrap_mode = 3
+theme_override_colors/font_color = Color(1, 0.95, 0.86, 1)
+
+
+[node name="UpgradeCost" type="Label" parent="Design"]
+unique_name_in_owner = true
+offset_left = 45.0
+offset_top = 617.0
+offset_right = 1225.0
+offset_bottom = 652.0
+text = "Bahan upgrade"
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 3
+theme_override_colors/font_color = Color(1, 0.95, 0.86, 1)
+
+
+[node name="Pack" type="Button" parent="Design"]
+unique_name_in_owner = true
+offset_left = 45.0
+offset_top = 665.0
+offset_right = 310.0
+offset_bottom = 707.0
+text = "Kemas ke tas"
+theme_override_font_sizes/font_size = 18
+
+[node name="Upgrade" type="Button" parent="Design"]
+unique_name_in_owner = true
+offset_left = 650.0
+offset_top = 665.0
+offset_right = 1230.0
+offset_bottom = 707.0
+text = "Upgrade peti"
+theme_override_font_sizes/font_size = 18

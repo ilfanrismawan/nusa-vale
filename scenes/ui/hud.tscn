@@ -30,6 +30,19 @@ region = Rect2(132, 50, 10, 42)
 [node name="HUD" type="CanvasLayer" unique_id=1575410842]
 script = ExtResource("1_8qguk")
 
+[node name="FoodEffectsLabel" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = 12.0
+offset_top = 46.0
+offset_right = 312.0
+offset_bottom = 70.0
+mouse_filter = 2
+theme_override_fonts/font = ExtResource("3_136eg")
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_outline_color = Color(0.16, 0.17, 0.24, 1)
+theme_override_constants/outline_size = 3
+autowrap_mode = 3
+
 [node name="HUDAnchor" type="Control" parent="." unique_id=1583726190]
 layout_mode = 3
 anchors_preset = 1

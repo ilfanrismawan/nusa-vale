@@ -1,0 +1,4 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://tests/livestock_shop_ui_regression.gd" id="script"]
+[node name="LivestockShopUiRegression" type="Node"]
+script = ExtResource("script")

@@ -1,7 +1,9 @@
-[gd_resource type="Resource" script_class="ItemData" load_steps=4 format=3]
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://bkgqk3rrur7y4"]
 
-[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1"]
-[ext_resource type="Texture2D" path="res://assets/farm_rpg/icons/Food Icons/Fruit Salad.png" id="2"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://cxdx11m3s6e6l" path="res://assets/farm_rpg/icons/Food Icons/Fruit Salad.png" id="2"]
+[ext_resource type="Resource" path="res://resources/cooking/effects/refreshing.tres" id="food_effect_profile"]
+[ext_resource type="Script" uid="uid://vbwn6cjjdlc0" path="res://scripts/resources/food_effect_data.gd" id="food_effect_type"]
 
 [sub_resource type="AtlasTexture" id="FoodIcon"]
 atlas = ExtResource("2")
@@ -10,11 +12,12 @@ filter_clip = true
 
 [resource]
 script = ExtResource("1")
-item_id = "fruit_salad"
-display_name = "Salad Buah"
-category = 9
-icon = SubResource("FoodIcon")
-description = "Pulihkan 40 stamina. Pilih di hotbar lalu klik kiri untuk makan."
 stamina_restore = 40
 speed_buff_seconds = 60.0
+food_effects = Array[ExtResource("food_effect_type")]([ExtResource("food_effect_profile")])
+category = 9
+item_id = "fruit_salad"
+display_name = "Salad Buah"
+icon = SubResource("FoodIcon")
+description = "Pulihkan 40 stamina. Pilih di hotbar lalu klik kiri untuk makan."
 sell_price = 170

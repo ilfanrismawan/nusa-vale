@@ -1,0 +1,41 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/kitchen_station.gd" id="1_script"]
+[ext_resource type="Resource" path="res://resources/cooking/equipment/kitchen_utensils.tres" id="2_data"]
+[ext_resource type="Texture2D" path="res://resources/cooking/icons/cookware_kitchen_utensils.tres" id="3_visual"]
+[ext_resource type="FontFile" path="res://assets/fonts/m5x7.ttf" id="4_font"]
+
+[sub_resource type="RectangleShape2D" id="InteractionShape"]
+size = Vector2(30, 24)
+
+[sub_resource type="RectangleShape2D" id="BodyShape"]
+size = Vector2(22, 10)
+
+[node name="kitchen_utensils" type="Area2D"]
+texture_filter = 1
+script = ExtResource("1_script")
+equipment_data = ExtResource("2_data")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -8.000000)
+scale = Vector2(0.16753927, 0.16753927)
+texture = ExtResource("3_visual")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("InteractionShape")
+
+[node name="Body" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Body"]
+position = Vector2(0, 3)
+shape = SubResource("BodyShape")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -80.0
+offset_top = -44.0
+offset_right = 80.0
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 12
+text = "Set Spatula dan Sendok"
+horizontal_alignment = 1
+

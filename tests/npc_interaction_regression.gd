@@ -69,7 +69,7 @@ func _ready() -> void:
 	await settle()
 	check(not get_tree().paused and not player.is_input_locked(), "unexpected dialogue removal releases pause and player lock")
 	npc._dialog_ui = null
-	var empty := NPCDialogUI.new()
+	var empty := load("res://scenes/ui/npc_dialog_ui.tscn").instantiate() as NPCDialogUI
 	empty.player = player
 	add_child(empty)
 	check(not get_tree().paused and not player.is_input_locked(), "empty dialogue does not leave gameplay paused")

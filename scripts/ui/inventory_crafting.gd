@@ -1,7 +1,7 @@
 extends PanelContainer
 
 const FONT = preload("res://resources/ui/readable_font.tres")
-const GROUPS := ["Semua", "Equipment", "Amunisi", "Bangunan"]
+const GROUPS := ["Semua", "Equipment", "Amunisi", "Bangunan", "Furnitur"]
 const INK := Color("50321f")
 const GREEN := Color("356444")
 const RED := Color("983f30")
@@ -46,10 +46,11 @@ func _ready() -> void:
 		_place(catalog, button, Rect2(10 + (i % 2) * 88, 29 + (i / 2) * 24, 84, 22))
 		_filters.append(button)
 	_summary = _label("", 14)
-	_place(catalog, _summary, Rect2(10, 77, 174, 16))
+	var summary_y := 29 + ceili(GROUPS.size() / 2.0) * 24
+	_place(catalog, _summary, Rect2(10, summary_y, 174, 16))
 	var scroll := ScrollContainer.new()
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	_place(catalog, scroll, Rect2(10, 96, 174, 132))
+	_place(catalog, scroll, Rect2(10, summary_y + 19, 174, 228 - summary_y - 19))
 	_list = GridContainer.new()
 	_list.columns = 4
 	_list.add_theme_constant_override("h_separation", 4)

@@ -2,12 +2,6 @@
 
 [ext_resource type="Texture2D" uid="uid://c53ejb8dlrhyp" path="res://assets/balai_nadi/v2/bale_agung.png" id="1_f0c7p"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ovsut"]
-size = Vector2(143.5, 125)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ywce2"]
-size = Vector2(8, 18.5)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ajcru"]
 size = Vector2(20, 22)
 
@@ -22,17 +16,8 @@ texture = ExtResource("1_f0c7p")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Polygon2D" unique_id=1859250971]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Polygon2D/StaticBody2D" unique_id=269219927]
-position = Vector2(3.25, 6.5)
-shape = SubResource("RectangleShape2D_ovsut")
-
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="Polygon2D/StaticBody2D" unique_id=285684030]
-position = Vector2(-20, 65)
-shape = SubResource("RectangleShape2D_ywce2")
-
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="Polygon2D/StaticBody2D" unique_id=540759518]
-position = Vector2(20, 65.25)
-shape = SubResource("RectangleShape2D_ywce2")
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Polygon2D/StaticBody2D" unique_id=1681336146]
+polygon = PackedVector2Array(-16, 56, -16, 74, -24, 74, -24, 69, -64, 68, -64, 64, -68, 64, -71, 57, -70, 51, -68, 43, -67, 40, -65, 38, -63, 28, -63, 12, -61, 8, -64, 5, -47, -1, -1, -25, 63, 1, 72, 4, 71, 18, 69, 22, 62, 24, 65, 34, 68, 47, 70, 59, 67, 65, 63, 64, 60, 68, 25, 68, 25, 73, 17, 74, 15, 57, 17, 53, 20, 52, 22, 48, 21, 45, 12, 43, -10, 43, -19, 45, -19, 51)
 
 [node name="Polygon2D2" type="Polygon2D" parent="." unique_id=505571894]
 clip_children = 1
@@ -44,6 +29,7 @@ scale = Vector2(0.13852814, 0.13805631)
 texture = ExtResource("1_f0c7p")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=419747015]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=773626079]
 position = Vector2(0, 35)

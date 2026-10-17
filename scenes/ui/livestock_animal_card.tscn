@@ -1,0 +1,46 @@
+[gd_scene format=3]
+[sub_resource type="StyleBoxFlat" id="Locked"]
+bg_color = Color(1, 1, 1, 0.025)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.17)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_left = 8
+corner_radius_bottom_right = 8
+[node name="LivestockAnimalCard" type="Button"]
+custom_minimum_size = Vector2(94, 116)
+theme_type_variation = &"RecipeCard"
+toggle_mode = true
+theme_override_styles/disabled = SubResource("Locked")
+[node name="Icon" type="TextureRect" parent="."]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 82.0
+offset_bottom = 88.0
+mouse_filter = 2
+texture_filter = 1
+expand_mode = 1
+stretch_mode = 5
+[node name="Price" type="Label" parent="."]
+offset_left = 2.0
+offset_top = 88.0
+offset_right = 92.0
+offset_bottom = 113.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 14
+text = "● 800"
+horizontal_alignment = 1
+[node name="Lock" type="Label" parent="."]
+visible = false
+offset_left = 0.0
+offset_top = 38.0
+offset_right = 94.0
+offset_bottom = 78.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 0.94, 0.82, 1)
+theme_override_font_sizes/font_size = 25
+text = "▣"
+horizontal_alignment = 1

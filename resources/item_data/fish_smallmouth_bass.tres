@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://cc3n3m6d1nhff"]
 
 [ext_resource type="Texture2D" path="res://resources/icons/icon_fish_smallmouth_bass.tres" id="1_icon"]
-[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="2_hg0pn"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://autoload/data/item_data.gd" id="2_hg0pn"]
 
 [resource]
 script = ExtResource("2_hg0pn")

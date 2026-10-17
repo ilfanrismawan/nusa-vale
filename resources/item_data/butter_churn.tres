@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://cgj4rocl325ym"]
+
+[ext_resource type="Script" uid="uid://vbwn6cjjdlc0" path="res://scripts/resources/food_effect_data.gd" id="1_64tet"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1_item"]
+[ext_resource type="Texture2D" uid="uid://c8h2hx0c8365y" path="res://assets/farm_rpg/objects/Work Benches/Butter Churn.png" id="2_texture"]
+
+[sub_resource type="AtlasTexture" id="Icon"]
+atlas = ExtResource("2_texture")
+region = Rect2(0, 0, 32, 32)
+filter_clip = true
+
+[resource]
+script = ExtResource("1_item")
+category = 8
+item_id = "butter_churn"
+display_name = "Pengaduk Mentega"
+icon = SubResource("Icon")
+description = "Peralatan memasak. Tempatkan scene butter_churn.tscn di editor."
+stackable = false
+max_stack = 1

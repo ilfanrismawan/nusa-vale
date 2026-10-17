@@ -1,0 +1,138 @@
+[gd_scene format=3]
+
+[ext_resource type="Resource" path="res://resources/cooking/data/cooking_catalog.tres" id="catalog"]
+[ext_resource type="FontFile" path="res://assets/fonts/m5x7.ttf" id="font"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/chef_knife.tscn" id="chef_knife"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/seasoning_set.tscn" id="seasoning_set"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/kitchen_blender.tscn" id="kitchen_blender"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/cooking_grill.tscn" id="cooking_grill"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/ceramic_bowl.tscn" id="ceramic_bowl"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/kitchen_pot.tscn" id="kitchen_pot"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/frying_pan.tscn" id="frying_pan"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/cooking_wok.tscn" id="cooking_wok"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/cooking_oven.tscn" id="cooking_oven"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/rice_cooker.tscn" id="rice_cooker"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/kitchen_kettle.tscn" id="kitchen_kettle"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/kitchen_toaster.tscn" id="kitchen_toaster"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/mortar_pestle.tscn" id="mortar_pestle"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/cutting_board.tscn" id="cutting_board"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/kitchen_cleaver.tscn" id="kitchen_cleaver"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/kitchen_utensils.tscn" id="kitchen_utensils"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/kitchen_steamer.tscn" id="kitchen_steamer"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/baking_tray.tscn" id="baking_tray"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/dish_rack.tscn" id="dish_rack"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/cooking_stove.tscn" id="cooking_stove"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/prep_counter.tscn" id="prep_counter"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/butter_churn.tscn" id="butter_churn"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/fermentation_barrel.tscn" id="fermentation_barrel"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/kitchen_sink.tscn" id="kitchen_sink"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/kitchen_fridge.tscn" id="kitchen_fridge"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/kitchen_plate.tscn" id="kitchen_plate"]
+[ext_resource type="PackedScene" path="res://scenes/objects/cooking/honey_dipper.tscn" id="honey_dipper"]
+
+[node name="CookingEquipmentGallery" type="Node2D"]
+metadata/cooking_catalog = ExtResource("catalog")
+
+[node name="Background" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, 0, 1120, 0, 1120, 720, 0, 720)
+color = Color(0.13, 0.18, 0.15, 1)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(560, 360)
+zoom = Vector2(1, 1)
+
+[node name="Title" type="Label" parent="."]
+offset_left = 48.0
+offset_top = 20.0
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 24
+text = "KATALOG PERALATAN DAPUR"
+
+[node name="Hint" type="Label" parent="."]
+offset_left = 48.0
+offset_top = 48.0
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 12
+text = "20 gambar cookware baru + fasilitas lama. Edit AtlasTexture / Equipment Data di Inspector.\nRak piring, bak cuci, lemari es, piring dan sendok madu merupakan dekorasi."
+
+[node name="chef_knife" parent="." instance=ExtResource("chef_knife")]
+position = Vector2(100, 140)
+
+[node name="seasoning_set" parent="." instance=ExtResource("seasoning_set")]
+position = Vector2(280, 140)
+
+[node name="kitchen_blender" parent="." instance=ExtResource("kitchen_blender")]
+position = Vector2(460, 140)
+
+[node name="cooking_grill" parent="." instance=ExtResource("cooking_grill")]
+position = Vector2(640, 140)
+
+[node name="ceramic_bowl" parent="." instance=ExtResource("ceramic_bowl")]
+position = Vector2(820, 140)
+
+[node name="kitchen_pot" parent="." instance=ExtResource("kitchen_pot")]
+position = Vector2(1000, 140)
+
+[node name="frying_pan" parent="." instance=ExtResource("frying_pan")]
+position = Vector2(100, 260)
+
+[node name="cooking_wok" parent="." instance=ExtResource("cooking_wok")]
+position = Vector2(280, 260)
+
+[node name="cooking_oven" parent="." instance=ExtResource("cooking_oven")]
+position = Vector2(460, 260)
+
+[node name="rice_cooker" parent="." instance=ExtResource("rice_cooker")]
+position = Vector2(640, 260)
+
+[node name="kitchen_kettle" parent="." instance=ExtResource("kitchen_kettle")]
+position = Vector2(820, 260)
+
+[node name="kitchen_toaster" parent="." instance=ExtResource("kitchen_toaster")]
+position = Vector2(1000, 260)
+
+[node name="mortar_pestle" parent="." instance=ExtResource("mortar_pestle")]
+position = Vector2(100, 380)
+
+[node name="cutting_board" parent="." instance=ExtResource("cutting_board")]
+position = Vector2(280, 380)
+
+[node name="kitchen_cleaver" parent="." instance=ExtResource("kitchen_cleaver")]
+position = Vector2(460, 380)
+
+[node name="kitchen_utensils" parent="." instance=ExtResource("kitchen_utensils")]
+position = Vector2(640, 380)
+
+[node name="kitchen_steamer" parent="." instance=ExtResource("kitchen_steamer")]
+position = Vector2(820, 380)
+
+[node name="baking_tray" parent="." instance=ExtResource("baking_tray")]
+position = Vector2(1000, 380)
+
+[node name="dish_rack" parent="." instance=ExtResource("dish_rack")]
+position = Vector2(100, 500)
+
+[node name="cooking_stove" parent="." instance=ExtResource("cooking_stove")]
+position = Vector2(280, 500)
+
+[node name="prep_counter" parent="." instance=ExtResource("prep_counter")]
+position = Vector2(460, 500)
+
+[node name="butter_churn" parent="." instance=ExtResource("butter_churn")]
+position = Vector2(640, 500)
+
+[node name="fermentation_barrel" parent="." instance=ExtResource("fermentation_barrel")]
+position = Vector2(820, 500)
+
+[node name="kitchen_sink" parent="." instance=ExtResource("kitchen_sink")]
+position = Vector2(1000, 500)
+
+[node name="kitchen_fridge" parent="." instance=ExtResource("kitchen_fridge")]
+position = Vector2(100, 620)
+
+[node name="kitchen_plate" parent="." instance=ExtResource("kitchen_plate")]
+position = Vector2(280, 620)
+
+[node name="honey_dipper" parent="." instance=ExtResource("honey_dipper")]
+position = Vector2(460, 620)
+

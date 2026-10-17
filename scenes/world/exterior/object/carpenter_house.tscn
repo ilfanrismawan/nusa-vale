@@ -1,0 +1,129 @@
+[gd_scene format=3 uid="uid://dt213rsiiyoev"]
+
+[ext_resource type="Texture2D" uid="uid://s6ol6wavy2pj" path="res://assets/farm_rpg/objects/exterior/Houses/NPCS houses/Houses.png" id="1_vpfo2"]
+[ext_resource type="Texture2D" uid="uid://d3org04md24pd" path="res://assets/farm_rpg/objects/exterior/Houses/Door, windows, and chimney/Double doors.png" id="2_f4akd"]
+[ext_resource type="Texture2D" uid="uid://bqmxajx0objr0" path="res://assets/farm_rpg/objects/exterior/Houses/Door, windows, and chimney/Windows/Window4.png" id="3_2vdde"]
+[ext_resource type="Texture2D" uid="uid://gp7ke1gy8pg6" path="res://assets/farm_rpg/objects/exterior/Houses/Door, windows, and chimney/Windows/Window1.png" id="4_omqeh"]
+[ext_resource type="Texture2D" uid="uid://ctun3wso646qe" path="res://assets/farm_rpg/objects/exterior/Houses/Door, windows, and chimney/chimney1.png" id="5_u8y5i"]
+[ext_resource type="Texture2D" uid="uid://cgndvty7hg5p3" path="res://assets/farm_rpg/objects/exterior/Houses/Door, windows, and chimney/Windows/Window7.png" id="6_p3fw4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ovsut"]
+size = Vector2(25, 20)
+
+[node name="Node2D2" type="Node2D" unique_id=716367442]
+
+[node name="Sprite2D9" type="Sprite2D" parent="." unique_id=1767579990]
+position = Vector2(55.00001, 11.000008)
+scale = Vector2(1.1991154, 1.1991154)
+texture = ExtResource("1_vpfo2")
+region_enabled = true
+region_rect = Rect2(603, 567, 58, 25)
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2094220901]
+position = Vector2(0, -7.75)
+scale = Vector2(1, 1.1896552)
+texture = ExtResource("1_vpfo2")
+region_enabled = true
+region_rect = Rect2(603, 403, 58, 29)
+
+[node name="Sprite2D8" type="Sprite2D" parent="." unique_id=1239880568]
+position = Vector2(63.000004, 2.9999998)
+scale = Vector2(1.1991154, 1.1991154)
+texture = ExtResource("1_vpfo2")
+region_enabled = true
+region_rect = Rect2(481, 330, 46, 6)
+
+[node name="Sprite2D7" type="Sprite2D" parent="." unique_id=255971766]
+position = Vector2(65, -22.000002)
+scale = Vector2(1.1991154, 1.1991154)
+texture = ExtResource("1_vpfo2")
+region_enabled = true
+region_rect = Rect2(386, 144, 44, 39)
+
+[node name="Sprite2D2" type="Sprite2D" parent="." unique_id=1691327289]
+position = Vector2(-5.9604645e-08, 26.000002)
+scale = Vector2(1.02, 1.02)
+texture = ExtResource("1_vpfo2")
+region_enabled = true
+region_rect = Rect2(603, 439, 58, 25)
+
+[node name="Sprite2D3" type="Sprite2D" parent="." unique_id=1078302366]
+position = Vector2(-23, -31)
+texture = ExtResource("1_vpfo2")
+region_enabled = true
+region_rect = Rect2(288, 10, 36, 86)
+
+[node name="Sprite2D4" type="Sprite2D" parent="." unique_id=1381754151]
+position = Vector2(22, -31)
+texture = ExtResource("1_vpfo2")
+region_enabled = true
+region_rect = Rect2(332, 10, 36, 86)
+
+[node name="Sprite2D10" type="Sprite2D" parent="." unique_id=345789222]
+position = Vector2(0, -49)
+scale = Vector2(1.6666667, 1.9200002)
+texture = ExtResource("1_vpfo2")
+region_enabled = true
+region_rect = Rect2(405, 375, 6, 25)
+
+[node name="Sprite2D6" type="Sprite2D" parent="." unique_id=1289939502]
+position = Vector2(0, 7)
+texture = ExtResource("1_vpfo2")
+region_enabled = true
+region_rect = Rect2(192, 192, 80, 64)
+
+[node name="DoubleDoors" type="Sprite2D" parent="." unique_id=2060185041]
+position = Vector2(1, 28)
+texture = ExtResource("2_f4akd")
+region_enabled = true
+region_rect = Rect2(97, 3, 29, 23)
+
+[node name="Window5" type="Sprite2D" parent="." unique_id=1359916196]
+position = Vector2(0, -5)
+texture = ExtResource("3_2vdde")
+region_enabled = true
+region_rect = Rect2(1, 1, 14, 14)
+
+[node name="Window1" type="Sprite2D" parent="." unique_id=1289137706]
+position = Vector2(-20, 25.000002)
+scale = Vector2(0.78571427, 0.78571427)
+texture = ExtResource("4_omqeh")
+region_enabled = true
+region_rect = Rect2(1, 1, 14, 14)
+
+[node name="Window2" type="Sprite2D" parent="." unique_id=1123663427]
+position = Vector2(22, 25.000002)
+scale = Vector2(0.78571427, 0.78571427)
+texture = ExtResource("4_omqeh")
+region_enabled = true
+region_rect = Rect2(1, 1, 14, 14)
+
+[node name="Chimney1" type="Sprite2D" parent="." unique_id=697211552]
+position = Vector2(28, -35)
+texture = ExtResource("5_u8y5i")
+region_enabled = true
+region_rect = Rect2(37, 5, 15, 32)
+
+[node name="Window7" type="Sprite2D" parent="." unique_id=1289021005]
+position = Vector2(53, 14)
+texture = ExtResource("6_p3fw4")
+region_enabled = true
+region_rect = Rect2(1, 3, 15, 11)
+
+[node name="Window8" type="Sprite2D" parent="." unique_id=2107970719]
+position = Vector2(74, 14)
+texture = ExtResource("6_p3fw4")
+region_enabled = true
+region_rect = Rect2(1, 3, 15, 11)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=799017008]
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" unique_id=1304882213]
+polygon = PackedVector2Array(-35, 38, -35, 14, -37, 10, -28, 7, 19, 7, 33, 7, 36, 8, 39, 9, 40, 5, 89, 5, 90, 39, 35, 38, 35, 39)
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1328381898]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=2082419873]
+position = Vector2(0.5, 29)
+shape = SubResource("RectangleShape2D_ovsut")

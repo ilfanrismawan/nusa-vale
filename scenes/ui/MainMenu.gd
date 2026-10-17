@@ -1,5 +1,7 @@
 extends Control
 
+@export var design_size := Vector2(1280, 720)
+
 @onready var btn_new: Button = %BtnNew
 @onready var btn_continue: Button = %BtnContinue
 @onready var btn_settings: Button = %BtnSettings
@@ -13,7 +15,6 @@ const GAME_SCENE := "res://scenes/world/farm.tscn"
 const CoopLobby := preload("res://scripts/ui/coop_lobby.gd")
 
 var _tween: Tween
-## Tombol "Co-op Lokal" (dibuat dari BtnNew lewat kode supaya main_menu.tscn tidak diubah).
 var btn_coop: Button
 
 
@@ -21,6 +22,8 @@ func _ready() -> void:
 	DayCycle.is_running = false
 	Coop.stop()
 	_add_coop_button()
+	get_viewport().size_changed.connect(_resize)
+	_resize()
 	btn_new.pressed.connect(_on_new_game_pressed)
 	btn_continue.pressed.connect(_on_continue_pressed)
 	btn_settings.pressed.connect(_on_settings_pressed)
@@ -65,14 +68,14 @@ func _play_intro_animation() -> void:
 
 
 func _add_coop_button() -> void:
-	btn_coop = btn_new.duplicate() as Button
-	btn_coop.name = "BtnCoop"
-	btn_coop.unique_name_in_owner = false
-	btn_coop.text = "Co-op Lokal"
-	btn_new.get_parent().add_child(btn_coop)
-	btn_new.get_parent().move_child(btn_coop, btn_continue.get_index() + 1)
+	btn_coop = %BtnCoop
 	btn_coop.pressed.connect(_on_coop_pressed)
 
+func _resize() -> void:
+	var view := get_viewport().get_visible_rect().size
+	var fit := minf(view.x / design_size.x, view.y / design_size.y)
+	$Design.scale = Vector2.ONE * fit
+	$Design.position = (view - design_size * fit) * 0.5
 
 ## Co-op: pilih slot dulu (kosong = game baru, terisi = lanjutkan), lalu lobby.
 func _on_coop_pressed() -> void:
@@ -94,7 +97,11 @@ func _start_coop(devices: Array[int]) -> void:
 			return
 	else:
 		_reset_world()
-		SaveManager.save_game()
+		_open_character_creator(func(): _launch_coop(devices))
+		return
+	_launch_coop(devices)
+
+func _launch_coop(devices: Array[int]) -> void:
 	var fade_tween := create_tween()
 	fade_tween.tween_property(self, "modulate:a", 0.0, 0.4)
 	fade_tween.tween_callback(func(): Coop.start(devices))
@@ -109,7 +116,7 @@ func _on_continue_pressed() -> void:
 
 
 func _open_slot_menu(slot_mode: SaveSlotMenu.Mode, on_chosen: Callable) -> void:
-	var menu := SaveSlotMenu.new()
+	var menu := load("res://scenes/ui/save_slot_menu.tscn").instantiate() as SaveSlotMenu
 	menu.mode = slot_mode
 	menu.slot_chosen.connect(on_chosen)
 	# Slot bisa dihapus dari menu ini: perbarui tombol Muat Game setelah ditutup.
@@ -172,16 +179,22 @@ func _reset_world() -> void:
 	ForageManager.reset()
 
 
-func _open_character_creator() -> void:
+func _open_character_creator(on_completed: Callable = Callable()) -> void:
 	# Pemain memilih penampilan sebelum masuk ke Farm.
-	var creator := CharacterCreatorUI.new()
+	var creator := load("res://scenes/ui/character_creator_ui.tscn").instantiate() as CharacterCreatorUI
 	creator.allow_cancel = false
 	creator.pause_game = false
 	creator.ask_name = true
 	creator.finished.connect(func(_appearance: CharacterAppearance):
 		# Simpan langsung supaya slot yang dipilih terisi (nama + hari 1) sebelum masuk Farm.
-		SaveManager.save_game()
-		_transition_to_game())
+		if SaveManager.save_game():
+			if on_completed.is_valid():
+				on_completed.call()
+			else:
+				_transition_to_game()
+		else:
+			Notify.say("Gagal menyimpan profil. Silakan coba lagi.")
+			_open_character_creator(on_completed))
 	add_child(creator)
 
 

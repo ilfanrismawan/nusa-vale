@@ -1,0 +1,14 @@
+[gd_resource type="Resource" format=3 uid="uid://c3xjpbpxooict"]
+
+[ext_resource type="Script" uid="uid://bjxfn7uk6q6t8" path="res://scripts/resources/starter_pet_option.gd" id="script"]
+[ext_resource type="Texture2D" uid="uid://bpb8rdn8f7oyi" path="res://assets/farm_rpg/icons/Pets/dogs icons.png" id="sheet"]
+
+[sub_resource type="AtlasTexture" id="Icon"]
+atlas = ExtResource("sheet")
+region = Rect2(0, 0, 16, 16)
+
+[resource]
+script = ExtResource("script")
+pet_id = "dog"
+display_name = "Anjing Putih"
+icon = SubResource("Icon")

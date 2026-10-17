@@ -144,7 +144,7 @@ func set_save_buttons_visible(value: bool) -> void:
 		%GamePage.get_node("ExitHint").visible = value
 
 func _open_slot_menu(slot_mode: SaveSlotMenu.Mode) -> SaveSlotMenu:
-	var menu := SaveSlotMenu.new()
+	var menu := load("res://scenes/ui/save_slot_menu.tscn").instantiate() as SaveSlotMenu
 	menu.mode = slot_mode
 	menu.confirm_load = true
 	menu.show_active = true

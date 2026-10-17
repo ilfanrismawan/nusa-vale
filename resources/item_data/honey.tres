@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1_item"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/icons/Food Icons/Honey.png" id="2_icon"]
+
+[sub_resource type="AtlasTexture" id="Icon"]
+atlas = ExtResource("2_icon")
+region = Rect2(0, 0, 16, 16)
+filter_clip = true
+
+
+[resource]
+script = ExtResource("1_item")
+item_id = "honey"
+display_name = "Madu"
+category = 4
+icon = SubResource("Icon")
+description = "Bahan dapur. Harga dan ikon dapat diubah melalui Inspector."
+buy_price = 50
+sell_price = 25
+

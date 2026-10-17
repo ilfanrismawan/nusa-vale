@@ -89,11 +89,11 @@ func _ready() -> void:
 	check(custom.get_animation_names().size() == 2, "filtered preview builds only selected animations")
 	var harvest: ActionData = load("res://resources/action_data/hand_harvest.tres")
 	check(harvest.animation_name == &"pick_up" and harvest.hit_frame < frames.get_frame_count(&"pick_up_down"), "hand harvest uses valid pickup hit frame")
-	var creator := CharacterCreatorUI.new()
+	var creator := load("res://scenes/ui/character_creator_ui.tscn").instantiate() as CharacterCreatorUI
 	creator.pause_game = false
 	add_child(creator)
-	for i in creator._animation_picker.item_count:
-		creator._animation_picker.item_selected.emit(i)
+	for i in creator._preview_actions.size():
+		creator._change_action(i)
 		for direction in range(4):
 			creator._turn(1)
 			check(creator._preview.sprite_frames.has_animation(creator._preview.animation), "creator preview selects valid animation")

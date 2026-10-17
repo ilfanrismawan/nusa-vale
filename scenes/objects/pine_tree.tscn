@@ -97,8 +97,8 @@ animated_sprite_path = NodePath("TrunkMask/AnimatedSprite2D")
 
 [node name="TrunkMask" type="Polygon2D" parent="." unique_id=1087784138]
 clip_children = 1
-z_index = -1
-z_as_relative = false
+z_index = 0
+z_as_relative = true
 polygon = PackedVector2Array(-16, -11, -12, -11, -12, -10, -8, -10, -8, -8, -6, -8, -6, -9, -5, -9, -5, -10, -3, -10, -3, -7, -2, -7, -1, -7, -1, -8, 0, -8, 0, -10, 1, -10, 1, -11, 2, -11, 3, -11, 3, -10, 4, -10, 4, -9, 6, -9, 6, -10, 11, -10, 11, -11, 12, -11, 12, -12, 16, -12, 16, 0, -16, 0)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="TrunkMask" unique_id=1565149206]
@@ -109,8 +109,8 @@ offset = Vector2(0, -24)
 
 [node name="CanopyMask" type="Polygon2D" parent="." unique_id=1579588377]
 clip_children = 1
-z_index = 1
-z_as_relative = false
+z_index = 0
+z_as_relative = true
 polygon = PackedVector2Array(-16, -48, 16, -48, 16, -12, 12, -12, 12, -11, 11, -11, 11, -10, 6, -10, 6, -9, 4, -9, 4, -10, 3, -10, 3, -11, 1, -11, 1, -10, 0, -10, 0, -8, -1, -8, -1, -7, -2, -7, -3, -7, -3, -10, -5, -10, -5, -9, -6, -9, -6, -8, -8, -8, -8, -10, -12, -10, -12, -11, -14, -11, -16, -11)
 
 [node name="Canopy" type="AnimatedSprite2D" parent="CanopyMask" unique_id=1770133697]

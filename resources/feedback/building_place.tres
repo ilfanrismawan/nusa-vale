@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="ActionFeedback" load_steps=3 format=3]
-[ext_resource type="Script" path="res://scripts/data/action_feedback.gd" id="1"]
-[ext_resource type="AudioStream" path="res://assets/audio/sfx/soil_pat.wav" id="2"]
+[gd_resource type="Resource" script_class="ActionFeedback" format=3]
+
+[ext_resource type="Script" uid="uid://bkypsghuif7rw" path="res://autoload/data/action_feedback.gd" id="1"]
+[ext_resource type="AudioStream" uid="uid://7bshqg2jy6nk" path="res://assets/audio/sfx/soil_pat.wav" id="2"]
 [resource]
 script = ExtResource("1")
 sound = ExtResource("2")

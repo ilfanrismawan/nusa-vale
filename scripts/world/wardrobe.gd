@@ -33,7 +33,7 @@ func interact(player: Player = null) -> void:
 		return
 	if player == null:
 		player = Coop.current_player()
-	_ui = CharacterCreatorUI.new()
+	_ui = load("res://scenes/ui/character_creator_ui.tscn").instantiate() as CharacterCreatorUI
 	_ui.player = player
 	_ui.allow_cancel = true
 	_ui.pause_game = true

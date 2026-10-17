@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SeatDefinition" format=3 uid="uid://bhlx8lmisgq88"]
+
+[ext_resource type="Script" uid="uid://b8ofwko427qjc" path="res://scripts/data/seat_definition.gd" id="1"]
+[ext_resource type="Script" uid="uid://bx8bexbxcqpxb" path="res://scripts/data/seat_pose.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://djfapgdy27jtm" path="res://assets/farm_rpg/objects/interior/Temple.png" id="3"]
+
+[sub_resource type="Resource" id="up"]
+script = ExtResource("2")
+facing = 0
+region = Rect2(64, 12, 32, 18)
+sprite_offset = Vector2(0, -6)
+seat_position = Vector2(-6, -4)
+visual_offset = Vector2(0, -10)
+collision_size = Vector2(26, 6)
+backrest_height = 10.0
+
+[sub_resource type="Resource" id="down"]
+script = ExtResource("2")
+region = Rect2(32, 12, 32, 18)
+sprite_offset = Vector2(0, -6)
+seat_position = Vector2(-6, -4)
+collision_size = Vector2(26, 6)
+
+[resource]
+script = ExtResource("1")
+texture = ExtResource("3")
+poses = Array[ExtResource("2")]([SubResource("up"), SubResource("down")])

@@ -57,11 +57,11 @@ func _ready() -> void:
 	GameState.money = 10000
 	player.data.add_item_silent("wood", 300)
 	player.data.add_item_silent("stone", 150)
-	var carpenter = load("res://scripts/ui/carpenter_menu.gd").new()
+	var carpenter = load("res://scenes/ui/carpenter_menu.tscn").instantiate()
 	carpenter.player = player
 	add_child(carpenter)
 	await settle()
-	check(carpenter._content.get_child(2) is PanelContainer and carpenter._content.get_child(2).get_theme_stylebox("panel") is StyleBoxTexture, "building purchase cards use the existing asset frames")
+	check(carpenter._content.get_child_count() == StructureManager.CONSTRUCTION.size() and carpenter._content.get_child(0).get_theme_stylebox("normal") is StyleBoxFlat, "building catalog uses editable native cream-theme cards")
 	carpenter._close()
 	await settle()
 	var other := GameState.ensure_player(1)
@@ -71,7 +71,7 @@ func _ready() -> void:
 	rig.player_index = 1
 	Coop.active = true
 	GameState.use_player(GameState.p1())
-	var upgrade := ToolUpgradeUI.new()
+	var upgrade := load("res://scenes/ui/tool_upgrade_ui.tscn").instantiate() as ToolUpgradeUI
 	upgrade.player = player
 	add_child(upgrade)
 	await settle()

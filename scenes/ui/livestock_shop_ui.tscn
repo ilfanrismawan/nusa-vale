@@ -1,0 +1,356 @@
+[gd_scene format=3 uid="uid://batgbvkwje7l6"]
+
+[ext_resource type="Texture2D" path="res://resources/icons/icon_chicken_coop.tres" id="ranch"]
+[ext_resource type="Script" uid="uid://c30kkitxg3chw" path="res://scripts/ui/livestock_shop_ui.gd" id="script"]
+[ext_resource type="Shader" uid="uid://u3opbt5e1rcp" path="res://resources/ui/cooking_backdrop.gdshader" id="shader"]
+[ext_resource type="Theme" uid="uid://c1wj1ihbrjfm" path="res://resources/ui/cooking_theme.tres" id="theme"]
+
+[sub_resource type="ShaderMaterial" id="Backdrop"]
+shader = ExtResource("shader")
+shader_parameter/blur_amount = 3.5
+shader_parameter/top_tint = Color(0.09, 0.08, 0.045, 0.6)
+shader_parameter/bottom_tint = Color(0.42745098, 0.31764707, 0.105882354, 0.69411767)
+
+[sub_resource type="StyleBoxFlat" id="Paper"]
+bg_color = Color(0.969, 0.953, 0.914, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="NameTag"]
+bg_color = Color(0.97, 0.81, 0.59, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="ProductPaper"]
+bg_color = Color(0.92, 0.9, 0.83, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="LivestockShopUi" type="CanvasLayer" unique_id=152493970]
+process_mode = 3
+script = ExtResource("script")
+
+[node name="Backdrop" type="ColorRect" parent="." unique_id=1258716619]
+material = SubResource("Backdrop")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Design" type="Control" parent="." unique_id=1858810315]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1280.0
+offset_bottom = 960.0
+mouse_filter = 2
+theme = ExtResource("theme")
+
+[node name="Vendor" type="TextureRect" parent="Design" unique_id=1309461013]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = -130.0
+offset_top = 80.0
+offset_right = 470.0
+offset_bottom = 960.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="RanchIcon" type="TextureRect" parent="Design" unique_id=766479085]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 8.0
+offset_right = 52.0
+offset_bottom = 32.0
+mouse_filter = 2
+texture = ExtResource("ranch")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ShopTitle" type="Label" parent="Design" unique_id=795151921]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 58.0
+offset_top = 4.0
+offset_right = 258.0
+offset_bottom = 36.0
+theme_override_colors/font_color = Color(1, 0.94, 0.85, 1)
+theme_override_font_sizes/font_size = 21
+text = "Ranch"
+
+[node name="Money" type="Label" parent="Design" unique_id=1974551808]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1050.0
+offset_top = 5.0
+offset_right = 1265.0
+offset_bottom = 39.0
+theme_override_colors/font_color = Color(1, 0.94, 0.85, 1)
+theme_override_font_sizes/font_size = 18
+text = "● 0 G"
+
+[node name="DialogPanel" type="Panel" parent="Design" unique_id=1402120518]
+layout_mode = 0
+offset_left = 56.0
+offset_top = 830.0
+offset_right = 311.0
+offset_bottom = 898.0
+theme_override_styles/panel = SubResource("Paper")
+
+[node name="Dialog" type="Label" parent="Design/DialogPanel" unique_id=910409299]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 20.0
+offset_top = 15.0
+offset_right = 235.0
+offset_bottom = 59.0
+theme_override_font_sizes/font_size = 13
+text = "Halo! Kami menjual hewan terbaik untuk peternakanmu."
+autowrap_mode = 3
+
+[node name="VendorName" type="Label" parent="Design" unique_id=627973233]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 72.0
+offset_top = 803.0
+offset_right = 160.0
+offset_bottom = 838.0
+theme_override_font_sizes/font_size = 17
+theme_override_styles/normal = SubResource("NameTag")
+text = "Rian"
+horizontal_alignment = 1
+
+[node name="AnimalScroll" type="ScrollContainer" parent="Design" unique_id=1782252529]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 480.0
+offset_top = 192.0
+offset_right = 902.0
+offset_bottom = 692.0
+follow_focus = true
+horizontal_scroll_mode = 0
+
+[node name="Cards" type="GridContainer" parent="Design/AnimalScroll" unique_id=416398856]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 4
+
+[node name="Divider" type="ColorRect" parent="Design" unique_id=1360961249]
+layout_mode = 0
+offset_left = 900.0
+offset_top = 189.0
+offset_right = 903.0
+offset_bottom = 594.0
+mouse_filter = 2
+color = Color(0.83, 0.8, 0.64, 0.45)
+
+[node name="Detail" type="Panel" parent="Design" unique_id=820707762]
+layout_mode = 0
+offset_left = 935.0
+offset_top = 189.0
+offset_right = 1265.0
+offset_bottom = 584.0
+theme_override_styles/panel = SubResource("Paper")
+
+[node name="Preview" type="TextureRect" parent="Design/Detail" unique_id=451777323]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 68.0
+offset_top = 22.0
+offset_right = 262.0
+offset_bottom = 154.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AnimalTitle" type="Label" parent="Design/Detail" unique_id=797471673]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 40.0
+offset_top = 158.0
+offset_right = 290.0
+offset_bottom = 184.0
+theme_override_font_sizes/font_size = 19
+text = "Ayam"
+
+[node name="HomeType" type="Label" parent="Design/Detail" unique_id=1016082990]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 40.0
+offset_top = 187.0
+offset_right = 290.0
+offset_bottom = 209.0
+theme_override_colors/font_color = Color(0.8, 0.52, 0.17, 1)
+theme_override_font_sizes/font_size = 14
+text = "Hewan kandang unggas"
+
+[node name="Line" type="HSeparator" parent="Design/Detail" unique_id=662249709]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 218.0
+offset_right = 290.0
+offset_bottom = 221.0
+
+[node name="Description" type="Label" parent="Design/Detail" unique_id=1739580415]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 40.0
+offset_top = 232.0
+offset_right = 290.0
+offset_bottom = 288.0
+theme_override_font_sizes/font_size = 13
+autowrap_mode = 3
+max_lines_visible = 3
+
+[node name="Production" type="Label" parent="Design/Detail" unique_id=145923039]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 40.0
+offset_top = 292.0
+offset_right = 290.0
+offset_bottom = 316.0
+theme_override_font_sizes/font_size = 14
+text = "Panen setiap 1 hari"
+
+[node name="Products" type="Panel" parent="Design/Detail" unique_id=237976182]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 324.0
+offset_right = 298.0
+offset_bottom = 374.0
+theme_override_styles/panel = SubResource("ProductPaper")
+
+[node name="ProductIcon" type="TextureRect" parent="Design/Detail/Products" unique_id=1729918719]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = 40.0
+offset_bottom = 40.0
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ProductName" type="Label" parent="Design/Detail/Products" unique_id=1405279215]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 48.0
+offset_top = 11.0
+offset_right = 258.0
+offset_bottom = 43.0
+theme_override_font_sizes/font_size = 13
+text = "Menghasilkan telur"
+
+[node name="ToolHint" type="Label" parent="Design/Detail" unique_id=887239460]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 40.0
+offset_top = 377.0
+offset_right = 300.0
+offset_bottom = 393.0
+theme_override_font_sizes/font_size = 10
+
+[node name="ColorStrip" type="HBoxContainer" parent="Design" unique_id=909942086]
+layout_mode = 0
+offset_left = 935.0
+offset_top = 592.0
+offset_right = 1265.0
+offset_bottom = 630.0
+theme_override_constants/separation = 10
+
+[node name="ColorLabel" type="Label" parent="Design/ColorStrip" unique_id=1016495323]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.94, 0.85, 1)
+theme_override_font_sizes/font_size = 15
+text = "Warna"
+
+[node name="Swatches" type="HBoxContainer" parent="Design/ColorStrip" unique_id=814062854]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="LivestockHousing" type="OptionButton" parent="Design" unique_id=1218156433]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 935.0
+offset_top = 650.0
+offset_right = 1265.0
+offset_bottom = 690.0
+theme_override_font_sizes/font_size = 13
+
+[node name="AnimalName" type="LineEdit" parent="Design" unique_id=2068070190]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 935.0
+offset_top = 702.0
+offset_right = 1265.0
+offset_bottom = 742.0
+theme_override_font_sizes/font_size = 15
+placeholder_text = "Nama hewan (opsional)"
+max_length = 16
+
+[node name="Availability" type="Label" parent="Design" unique_id=1299837801]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 935.0
+offset_top = 756.0
+offset_right = 1265.0
+offset_bottom = 816.0
+theme_override_colors/font_color = Color(1, 0.9, 0.79, 1)
+theme_override_font_sizes/font_size = 14
+autowrap_mode = 3
+
+[node name="Status" type="Label" parent="Design" unique_id=123678877]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 480.0
+offset_top = 730.0
+offset_right = 880.0
+offset_bottom = 836.0
+theme_override_colors/font_color = Color(1, 0.94, 0.85, 1)
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 3
+
+[node name="GamepadHint" type="Label" parent="Design" unique_id=1306511498]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 480.0
+offset_top = 852.0
+offset_right = 880.0
+offset_bottom = 910.0
+theme_override_colors/font_color = Color(1, 0.94, 0.85, 1)
+theme_override_font_sizes/font_size = 15
+text = "LB/RB: kandang · Y: warna · A: beli"
+autowrap_mode = 3
+
+[node name="PurchaseLivestock" type="Button" parent="Design" unique_id=1188653635]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 935.0
+offset_top = 870.0
+offset_right = 1265.0
+offset_bottom = 914.0
+theme_override_font_sizes/font_size = 16
+text = "Enter  Beli"
+
+[node name="CloseButton" type="Button" parent="Design" unique_id=1768640087]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1125.0
+offset_top = 922.0
+offset_right = 1265.0
+offset_bottom = 954.0
+theme_override_font_sizes/font_size = 15
+text = "Esc  Kembali"

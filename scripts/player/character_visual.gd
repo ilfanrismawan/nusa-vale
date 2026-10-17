@@ -6,6 +6,9 @@ extends Node
 ## Dibuat dari player.gd, jadi Player.tscn tidak perlu diubah.
 
 const CATALOG: CharacterCatalog = preload("res://resources/character/character_catalog.tres")
+## Kunci tier senjata di _tool_tiers dan CharacterSheet.tool_type = 100 + ItemData.WeaponType
+## (pedang 101, busur 102), supaya tidak bentrok dengan ToolData.ToolType.
+const WEAPON_TIER_KEY_BASE := 100
 
 var sprite: AnimatedSprite2D
 ## {ToolData.ToolType: ToolData.ToolTier}
@@ -13,11 +16,14 @@ var _tool_tiers: Dictionary = {}
 ## {source_sheet: ImageTexture} hasil build terakhir; diperbarui di tempat saat tier alat berubah.
 var _textures: Dictionary = {}
 var _appearance: CharacterAppearance
+var _tool_controller: ToolController
 
 func setup(target: AnimatedSprite2D, tool_controller: ToolController) -> void:
 	sprite = target
+	_tool_controller = tool_controller
 	if tool_controller != null:
 		_read_tool_tier(tool_controller.current_tool)
+		_read_weapon_tier()
 		tool_controller.tool_changed.connect(_on_tool_changed)
 	# Co-op: setiap pemain memakai penampilannya sendiri.
 	var data: PlayerData = tool_controller.player.data if tool_controller != null and tool_controller.player != null else GameState.p1()
@@ -46,9 +52,23 @@ func apply_appearance(appearance: CharacterAppearance) -> void:
 			sprite.play(anim)
 
 func _on_tool_changed(action: ActionData) -> void:
-	if not _read_tool_tier(action):
-		return
-	_refresh_tool_sheets(action.tool_data.tool_type)
+	if _read_tool_tier(action):
+		_refresh_tool_sheets(action.tool_data.tool_type)
+	var weapon_key := _read_weapon_tier()
+	if weapon_key >= 0:
+		_refresh_tool_sheets(weapon_key)
+
+## Senjata yang dipegang di hotbar: catat tiernya. Mengembalikan kunci yang berubah, -1 = tetap.
+func _read_weapon_tier() -> int:
+	var item: ItemData = _tool_controller.current_item if _tool_controller != null else null
+	if item == null or item.weapon_type == ItemData.WeaponType.NONE or item.weapon_type == ItemData.WeaponType.ARROW:
+		return -1
+	var key := WEAPON_TIER_KEY_BASE + int(item.weapon_type)
+	var tier := int(item.equipment_tier)
+	if _tool_tiers.has(key) and int(_tool_tiers[key]) == tier:
+		return -1
+	_tool_tiers[key] = tier
+	return key
 
 ## true jika tier alat jenis ini berubah.
 func _read_tool_tier(action: ActionData) -> bool:

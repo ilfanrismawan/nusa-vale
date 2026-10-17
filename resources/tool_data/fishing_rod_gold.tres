@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="RodData" format=3]
 
-[ext_resource type="Script" path="res://scripts/data/rod_data.gd" id="1_rod"]
+[ext_resource type="Script" uid="uid://duv8fkbkfdhm3" path="res://autoload/data/rod_data.gd" id="1_rod"]
+
 
 [resource]
 script = ExtResource("1_rod")

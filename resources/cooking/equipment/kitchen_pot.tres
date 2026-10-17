@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="CookingEquipmentData" format=3 uid="uid://b3evbjytgctr4"]
+
+[ext_resource type="Script" uid="uid://dulgeb3gtitad" path="res://scripts/resources/cooking_equipment_data.gd" id="1_data"]
+[ext_resource type="Resource" uid="uid://baq7b84lwlqag" path="res://resources/item_data/kitchen_pot.tres" id="2_item"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"kitchen_pot"
+item = ExtResource("2_item")

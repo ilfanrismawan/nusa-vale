@@ -51,7 +51,7 @@ func interact(player: Player = null) -> void:
 	_face_player(player)
 
 	# Buka antarmuka upgrade alat
-	_ui = ToolUpgradeUI.new()
+	_ui = load("res://scenes/ui/tool_upgrade_ui.tscn").instantiate() as ToolUpgradeUI
 	_ui.player = player
 	_ui.finished.connect(func():
 		Notify.say("%s: Terima kasih sudah mampir!" % npc_name)

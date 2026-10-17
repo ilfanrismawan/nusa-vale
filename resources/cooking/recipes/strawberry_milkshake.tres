@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://bqeefyiisns4j"]
+
+[ext_resource type="Script" uid="uid://diwd3euw7gusn" path="res://scripts/resources/recipe_data.gd" id="1_recipe"]
+[ext_resource type="Resource" uid="uid://lsf08f86eiyk" path="res://resources/item_data/strawberry_milkshake.tres" id="2_output"]
+[ext_resource type="Script" uid="uid://dulgeb3gtitad" path="res://scripts/resources/cooking_equipment_data.gd" id="required_type"]
+
+[ext_resource type="Resource" path="res://resources/cooking/equipment/kitchen_blender.tres" id="cookware_required_0"]
+
+[resource]
+script = ExtResource("1_recipe")
+id = "strawberry_milkshake"
+display_name = "Milkshake Stroberi"
+ingredients = Dictionary[String, int]({
+"cow_milk": 1,
+"ice_cream": 1,
+"strawberry": 1
+})
+book_price = 125
+output_item = ExtResource("2_output")
+required_equipment = Array[ExtResource("required_type")]([ExtResource("cookware_required_0")])

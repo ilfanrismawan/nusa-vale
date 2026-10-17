@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="SeatDefinition" format=3 uid="uid://cwm4og8fjxtw4"]
+
+[ext_resource type="Script" uid="uid://b8ofwko427qjc" path="res://scripts/data/seat_definition.gd" id="1"]
+[ext_resource type="Script" uid="uid://bx8bexbxcqpxb" path="res://scripts/data/seat_pose.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://dkwhv2cnn4rma" path="res://assets/farm_rpg/objects/interior/Chairs.png" id="3"]
+
+[sub_resource type="Resource" id="up"]
+script = ExtResource("2")
+facing = 0
+region = Rect2(146, 15, 11, 16)
+backrest_height = 13.0
+
+[sub_resource type="Resource" id="down"]
+script = ExtResource("2")
+
+[sub_resource type="Resource" id="left"]
+script = ExtResource("2")
+facing = 2
+region = Rect2(178, 13, 12, 18)
+seat_position = Vector2(-2, -5)
+collision_size = Vector2(10, 5)
+
+[sub_resource type="Resource" id="right"]
+script = ExtResource("2")
+facing = 3
+region = Rect2(162, 13, 12, 18)
+seat_position = Vector2(2, -5)
+collision_size = Vector2(10, 5)
+
+[resource]
+script = ExtResource("1")
+texture = ExtResource("3")
+poses = Array[ExtResource("2")]([SubResource("up"), SubResource("down"), SubResource("left"), SubResource("right")])

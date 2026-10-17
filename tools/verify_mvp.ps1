@@ -70,6 +70,9 @@ function Invoke-GodotCheck([string]$Label, [string[]]$Arguments, [bool]$Expected
     if ($Arguments -contains 'tests/starter_routes_regression.tscn' -and -not ($output -match 'STARTER ROUTES COMPLETE: failures=0')) {
         throw 'Starter route regression tidak menyelesaikan semua pemeriksaan'
     }
+    if ($Arguments -contains 'tests/resource_spawner_regression.tscn' -and -not ($output -match 'RESOURCE SPAWNER COMPLETE: failures=0')) {
+        throw 'Resource spawner regression tidak menyelesaikan semua pemeriksaan'
+    }
     if ($Arguments -contains 'tests/forest_ore_coop_regression.tscn' -and -not ($output -match 'FOREST ORE COOP COMPLETE: failures=0')) {
         throw 'Forest ore co-op regression tidak menyelesaikan semua pemeriksaan'
     }
@@ -109,8 +112,14 @@ function Invoke-GodotCheck([string]$Label, [string[]]$Arguments, [bool]$Expected
     if ($Arguments -contains 'tests/crafting_regression.tscn' -and -not ($output -match 'CRAFTING REGRESSION COMPLETE: failures=0')) {
         throw 'Crafting regression tidak menyelesaikan semua pemeriksaan'
     }
+    if ($Arguments -contains 'tests/combat_regression.tscn' -and -not ($output -match 'COMBAT REGRESSION COMPLETE: failures=0')) {
+        throw 'Crafting regression tidak menyelesaikan semua pemeriksaan'
+    }
     if ($Arguments -contains 'tests/structure_regression.tscn' -and -not ($output -match 'STRUCTURE REGRESSION COMPLETE: failures=0')) {
         throw 'Structure regression tidak menyelesaikan semua pemeriksaan'
+    }
+    if ($Arguments -contains 'tests/furniture_regression.tscn' -and -not ($output -match 'FURNITURE REGRESSION COMPLETE: failures=0')) {
+        throw 'Furniture regression tidak menyelesaikan semua pemeriksaan'
     }
     if ($Arguments -contains 'tests/balai_nadi_regression.tscn' -and -not ($output -match 'BALAI NADI REGRESSION COMPLETE: failures=0')) {
         throw 'Balai Nadi regression tidak menyelesaikan semua pemeriksaan'
@@ -158,11 +167,14 @@ try {
     Invoke-GodotCheck 'Water stamina, overnight soil reset and resource tier gates' @('tests/farm_rules_regression.tscn')
     Invoke-GodotCheck 'Starter stock, renewable ore and Wood to Iron progression' @('tests/early_progression_regression.tscn')
     Invoke-GodotCheck 'Starter resource routes around locked mature obstacles' @('tests/starter_routes_regression.tscn')
+    Invoke-GodotCheck 'Resource spawn clearance, restored overlap and tree depth' @('tests/resource_spawner_regression.tscn')
     Invoke-GodotCheck 'Shared Forest ore, owner stamina and reentry in co-op' @('tests/forest_ore_coop_regression.tscn')
     Invoke-GodotCheck 'Co-op 2/3/4 players' @('tests/coop_smoke.tscn')
     Invoke-GodotCheck 'Inventory and settings menu' @('tests/menu_regression.tscn')
     Invoke-GodotCheck 'Crafting recipes and transactions' @('tests/crafting_regression.tscn')
+    Invoke-GodotCheck 'Combat HP, weapons, enemies and defeat' @('tests/combat_regression.tscn')
     Invoke-GodotCheck 'Farm structures and storage' @('tests/structure_regression.tscn')
+    Invoke-GodotCheck 'Furniture placement, rotation and seating' @('tests/furniture_regression.tscn')
     Invoke-GodotCheck 'Chicken coop, care, eggs and persistence' @('tests/chicken_regression.tscn')
     Invoke-GodotCheck 'Ranch care, production, grazing, upgrades and persistence' @('tests/ranch_regression.tscn')
     Invoke-GodotCheck 'Ranch walking animals, physical grazing and care UI' @('tests/ranch_world_regression.tscn')

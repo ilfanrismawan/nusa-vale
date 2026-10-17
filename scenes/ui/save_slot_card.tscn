@@ -1,0 +1,106 @@
+[gd_scene format=3]
+[sub_resource type="StyleBoxFlat" id="Paper"]
+bg_color = Color(0.969, 0.953, 0.914, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_left = 20
+corner_radius_bottom_right = 20
+
+[node name="SaveSlotCard" type="Panel"]
+custom_minimum_size = Vector2(350, 410)
+theme_override_styles/panel = SubResource("Paper")
+
+[node name="Header" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = 26.0
+offset_top = 25.0
+offset_right = 206.0
+offset_bottom = 55.0
+text = "SLOT 01"
+theme_override_font_sizes/font_size = 17
+autowrap_mode = 3
+
+
+[node name="Active" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = 222.0
+offset_top = 25.0
+offset_right = 324.0
+offset_bottom = 55.0
+text = "AKTIF"
+theme_override_font_sizes/font_size = 15
+autowrap_mode = 3
+
+
+[node name="PlayerName" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = 26.0
+offset_top = 80.0
+offset_right = 324.0
+offset_bottom = 132.0
+text = "Petani"
+theme_override_font_sizes/font_size = 30
+autowrap_mode = 3
+
+
+[node name="FarmName" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = 26.0
+offset_top = 137.0
+offset_right = 324.0
+offset_bottom = 187.0
+text = "Nama Farm"
+theme_override_font_sizes/font_size = 18
+autowrap_mode = 3
+
+
+[node name="Date" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = 26.0
+offset_top = 205.0
+offset_right = 324.0
+offset_bottom = 261.0
+text = "Musim Semi · Hari 1"
+theme_override_font_sizes/font_size = 18
+autowrap_mode = 3
+
+
+[node name="Money" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = 26.0
+offset_top = 270.0
+offset_right = 324.0
+offset_bottom = 298.0
+text = "100 G"
+theme_override_font_sizes/font_size = 18
+autowrap_mode = 3
+
+
+[node name="Saved" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = 26.0
+offset_top = 311.0
+offset_right = 324.0
+offset_bottom = 356.0
+text = "Belum disimpan"
+theme_override_font_sizes/font_size = 13
+autowrap_mode = 3
+
+
+[node name="Action" type="Button" parent="."]
+unique_name_in_owner = true
+offset_left = 26.0
+offset_top = 355.0
+offset_right = 218.0
+offset_bottom = 395.0
+text = "Muat"
+theme_override_font_sizes/font_size = 18
+
+[node name="Delete" type="Button" parent="."]
+unique_name_in_owner = true
+offset_left = 232.0
+offset_top = 355.0
+offset_right = 324.0
+offset_bottom = 395.0
+text = "Hapus"
+theme_override_font_sizes/font_size = 18

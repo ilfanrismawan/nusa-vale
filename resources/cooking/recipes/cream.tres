@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="RecipeData" format=3 uid="uid://cr33gvmqa4yx5"]
+
+[ext_resource type="Script" uid="uid://diwd3euw7gusn" path="res://scripts/resources/recipe_data.gd" id="1_recipe"]
+[ext_resource type="Resource" uid="uid://8e44c8y0axua" path="res://resources/item_data/cream.tres" id="2_output"]
+[ext_resource type="Script" uid="uid://dulgeb3gtitad" path="res://scripts/resources/cooking_equipment_data.gd" id="required_type"]
+
+[ext_resource type="Resource" path="res://resources/cooking/equipment/butter_churn.tres" id="cookware_required_0"]
+[ext_resource type="Resource" path="res://resources/cooking/equipment/ceramic_bowl.tres" id="cookware_required_1"]
+
+[resource]
+script = ExtResource("1_recipe")
+id = "cream"
+display_name = "Krim"
+ingredients = Dictionary[String, int]({
+"cow_milk": 2
+})
+book_price = 100
+output_item = ExtResource("2_output")
+required_equipment = Array[ExtResource("required_type")]([ExtResource("cookware_required_0"), ExtResource("cookware_required_1")])

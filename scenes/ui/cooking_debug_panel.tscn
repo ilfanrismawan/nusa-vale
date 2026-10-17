@@ -1,0 +1,138 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/cooking_debug_panel.gd" id="1_script"]
+
+[node name="CookingDebugPanel" type="VBoxContainer"]
+script = ExtResource("1_script")
+
+[node name="Scroll" type="ScrollContainer" parent="."]
+custom_minimum_size = Vector2(0, 270)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Controls" type="VBoxContainer" parent="Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Hint" type="Label" parent="Scroll/Controls"]
+layout_mode = 2
+autowrap_mode = 3
+text = "PLAYTEST / DEBUG BUILD\nPerubahan item/resep/uang bisa ikut tersimpan saat Anda menyimpan game. Alat hanya berubah untuk sesi menu ini."
+
+[node name="DebugRecipe" type="OptionButton" parent="Scroll/Controls"]
+unique_name_in_owner = true
+layout_mode = 2
+fit_to_longest_item = false
+
+[node name="BatchLabel" type="Label" parent="Scroll/Controls"]
+layout_mode = 2
+text = "Jumlah kali masak (untuk persiapan bahan)"
+
+[node name="DebugBatches" type="SpinBox" parent="Scroll/Controls"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 1.0
+max_value = 99.0
+value = 3.0
+
+[node name="RecipeActions" type="HFlowContainer" parent="Scroll/Controls"]
+layout_mode = 2
+
+[node name="DebugPrepare" type="Button" parent="Scroll/Controls/RecipeActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Siapkan bahan"
+
+[node name="DebugUnlock" type="Button" parent="Scroll/Controls/RecipeActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Buka resep ini"
+
+[node name="DebugUnlockAll" type="Button" parent="Scroll/Controls/RecipeActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Buka semua resep"
+
+[node name="DebugCook" type="Button" parent="Scroll/Controls/RecipeActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Masak uji"
+
+[node name="DebugGiveOutput" type="Button" parent="Scroll/Controls/RecipeActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Tambah hasil langsung"
+
+[node name="DebugEat" type="Button" parent="Scroll/Controls/RecipeActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Makan hasil"
+
+[node name="EquipmentActions" type="HFlowContainer" parent="Scroll/Controls"]
+layout_mode = 2
+
+[node name="DebugAllEquipment" type="Button" parent="Scroll/Controls/EquipmentActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Semua alat"
+
+[node name="DebugRequiredEquipment" type="Button" parent="Scroll/Controls/EquipmentActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Alat wajib resep ini"
+
+[node name="DebugNoEquipment" type="Button" parent="Scroll/Controls/EquipmentActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Tanpa alat"
+
+[node name="DebugRestoreEquipment" type="Button" parent="Scroll/Controls/EquipmentActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Pulihkan alat awal"
+
+[node name="StaminaLabel" type="Label" parent="Scroll/Controls"]
+layout_mode = 2
+text = "Target stamina (%)"
+
+[node name="DebugStamina" type="SpinBox" parent="Scroll/Controls"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 100.0
+value = 50.0
+suffix = "%"
+
+[node name="PlayerActions" type="HFlowContainer" parent="Scroll/Controls"]
+layout_mode = 2
+
+[node name="DebugSetStamina" type="Button" parent="Scroll/Controls/PlayerActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Atur stamina"
+
+[node name="DebugClearEffects" type="Button" parent="Scroll/Controls/PlayerActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Hapus buff/debuff"
+
+[node name="DebugExpandBag" type="Button" parent="Scroll/Controls/PlayerActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Tas maksimal"
+
+[node name="DebugGold" type="Button" parent="Scroll/Controls/PlayerActions"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Tambah uang"
+
+[node name="TimerHint" type="Label" parent="Scroll/Controls"]
+layout_mode = 2
+autowrap_mode = 3
+text = "Masak uji tetap memeriksa resep, bahan, alat dan kapasitas tas. Tutup dapur untuk mengamati timer buff/debuff berjalan."
+
+[node name="DebugStatus" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 3
+

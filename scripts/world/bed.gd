@@ -121,11 +121,13 @@ func _new_day() -> void:
 	if Coop.has_root():
 		for i in Coop.player_count():
 			GameState.get_player(i).restore_stamina()
+			GameState.get_player(i).restore_hp()
 	else:
 		GameState.restore_stamina()
+		GameState.p1().restore_hp()
 	DayCycle.advance_day()
 	SaveManager.save_game()
-	Notify.say("Hari %d dimulai (Energi Pulih)" % DayCycle.current_day)
+	Notify.say("Hari %d dimulai (Energi dan HP Pulih)" % DayCycle.current_day)
 	
 func _end_sleep(layer: CanvasLayer) -> void:
 	layer.queue_free()

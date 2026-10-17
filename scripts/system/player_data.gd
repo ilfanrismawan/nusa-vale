@@ -7,9 +7,14 @@ extends RefCounted
 ## Uang, ladang, dan flag dunia tetap bersama (lihat GameState).
 
 signal stamina_changed(current: int, maximum: int)
+signal hp_changed(current: int, maximum: int)
+## Aksi ditolak karena stamina tidak cukup (HUD: bar stamina berkedip dan bergetar).
+signal stamina_exhausted
 signal appearance_changed(appearance: CharacterAppearance)
 
 const MAX_STAMINA: int = 100
+## HP dasar per pemain (GDD 8.1). Terpisah dari stamina; pulih penuh saat tidur.
+const MAX_HP: int = 100
 ## Ukuran array inventory pemain; inventory peti sementara memakai configure_storage.
 const INVENTORY_SIZE := 36
 ## Level tas: 0=Tas Kecil(12), 1=Ransel(24), 2=Ransel Besar(36)
@@ -36,16 +41,26 @@ var stamina: int = MAX_STAMINA:
 		stamina = clampi(value, 0, max_stamina)
 		stamina_changed.emit(stamina, max_stamina)
 
+var max_hp: int:
+	get: return MAX_HP
+
+var hp: int = MAX_HP:
+	set(value):
+		hp = clampi(value, 0, max_hp)
+		hp_changed.emit(hp, max_hp)
+
 var watering_water: int = 20
 ## One order per player, held by the blacksmith until explicitly collected.
 var tool_order: Dictionary = {}
 var learned_recipes: Array[String] = []
+var active_food_effects: Array[Dictionary] = []
+var _food_cost_remainder := 0.0
 
 func load_recipes(value: Variant) -> void:
 	learned_recipes.clear()
 	if value is Array:
 		for id in value:
-			if id is String and id in ["vegetable_soup", "fried_egg", "grilled_catfish", "fruit_salad", "mushroom_saute"] and not learned_recipes.has(id):
+			if id is String and CookingManager.get_recipe(id) != null and not learned_recipes.has(id):
 				learned_recipes.append(id)
 
 var bag_level: int = 0
@@ -53,11 +68,16 @@ var bag_level: int = 0
 var _storage_capacity: int = 0
 var hotbar_page: int = 0
 var inventory: Array = []
-const EQUIPMENT_KEYS: Array[String] = ["weapon", "helmet", "armor", "leggings", "boots"]
+## Senjata tidak lagi dipakai di slot equipment: pemain memegangnya dari hotbar (Phase 4B-1).
+const EQUIPMENT_KEYS: Array[String] = ["helmet", "armor", "leggings", "boots"]
 var equipment: Dictionary = empty_equipment()
 var appearance: CharacterAppearance = CharacterAppearance.new()
 ## Nama yang diketik saat Game Baru (ditampilkan di menu slot save). Kosong = belum diberi nama.
 var player_name: String = ""
+var birthday_season: String = ""
+var birthday_day: int = 0
+var pet_id: String = ""
+var pet_name: String = ""
 
 ## Jumlah slot yang aktif/terlihat saat ini
 var bag_size: int:
@@ -78,19 +98,21 @@ func _init(p_index: int = 0) -> void:
 
 ## Isi awal pemain baru: tas kosong + alat kayu + bibit.
 func reset_to_starter() -> void:
+	clear_food_effects()
 	consumed_daya.clear()
 	tool_order.clear()
 	learned_recipes.clear()
 	equipment = empty_equipment()
-	equipment["weapon"] = GameState._resolve_item("sword_wood")
 	equipment["armor"] = GameState._resolve_item("armor_wood")
 	stamina = MAX_STAMINA
+	hp = MAX_HP
 	watering_water = 20
 	bag_level = 0
 	hotbar_page = 0
 	for i in INVENTORY_SIZE:
 		inventory[i] = null
 	setup_tools()
+	add_item_silent("sword_wood", 1)
 	add_item_silent("seed_strawberry", 5)
 	add_item_silent("seed_carrot", 3)
 	_changed()
@@ -104,13 +126,87 @@ func set_appearance(new_appearance: CharacterAppearance) -> void:
 # ── Stamina ─────────────────────────────────────────────────────────
 
 func spend_stamina(amount: int) -> bool:
-	if stamina < amount:
+	if amount < 0:
 		return false
-	stamina -= amount
+	var exact_cost := amount * food_stamina_cost_multiplier() + _food_cost_remainder
+	var cost := floori(exact_cost)
+	if stamina < cost:
+		stamina_exhausted.emit()
+		return false
+	stamina -= cost
+	_food_cost_remainder = exact_cost - cost
 	return true
+
+func clear_food_effects() -> void:
+	active_food_effects.clear()
+	_food_cost_remainder = 0.0
+
+func apply_food_effect(effect: FoodEffectData) -> void:
+	if effect == null or not effect.is_valid_effect():
+		return
+	for active in active_food_effects:
+		var previous: FoodEffectData = active.effect
+		if previous.id != effect.id:
+			continue
+		if effect.stacking == FoodEffectData.Stacking.REPLACE:
+			active.remaining = effect.duration_seconds
+			active.elapsed = 0.0
+			active.stacks = 1
+		else:
+			active.remaining = maxf(float(active.remaining), effect.duration_seconds)
+			active.stacks = mini(int(active.stacks) + 1, effect.max_stacks) if effect.stacking == FoodEffectData.Stacking.STACK else 1
+		active.effect = effect.duplicate()
+		return
+	active_food_effects.append({"effect": effect.duplicate(), "remaining": effect.duration_seconds, "elapsed": 0.0, "stacks": 1})
+
+func food_movement_multiplier() -> float:
+	var multiplier := 1.0
+	for active in active_food_effects:
+		var effect: FoodEffectData = active.effect
+		multiplier *= pow(effect.movement_multiplier, int(active.stacks))
+	return multiplier
+
+func food_stamina_cost_multiplier() -> float:
+	var multiplier := 1.0
+	for active in active_food_effects:
+		var effect: FoodEffectData = active.effect
+		multiplier *= pow(effect.stamina_cost_multiplier, int(active.stacks))
+	return multiplier
+
+func advance_food_effects(delta: float) -> void:
+	if not is_finite(delta) or delta <= 0.0:
+		return
+	for index in range(active_food_effects.size() - 1, -1, -1):
+		var active := active_food_effects[index]
+		var effect: FoodEffectData = active.effect
+		var elapsed := float(active.elapsed) + minf(delta, float(active.remaining))
+		var ticks := floori((elapsed + 0.000001) / effect.tick_interval)
+		active.elapsed = maxf(0.0, elapsed - ticks * effect.tick_interval)
+		if ticks > 0 and effect.stamina_per_tick != 0:
+			stamina += effect.stamina_per_tick * ticks * int(active.stacks)
+		if ticks > 0 and effect.hp_per_tick != 0 and hp > 0:
+			hp += effect.hp_per_tick * ticks * int(active.stacks)
+		active.remaining = maxf(0.0, float(active.remaining) - delta)
+		if active.remaining <= 0.0:
+			active_food_effects.remove_at(index)
 
 func restore_stamina(amount: int = -1) -> void:
 	stamina = mini(max_stamina, stamina + (max_stamina if amount < 0 else amount))
+
+
+# ── HP ──────────────────────────────────────────────────────────────
+
+## Kurangi HP; mengembalikan HP tersisa. amount sudah dikurangi DEF (lihat Combat).
+func damage_hp(amount: int) -> int:
+	hp -= maxi(0, amount)
+	return hp
+
+## amount < 0 = pulih penuh.
+func restore_hp(amount: int = -1) -> void:
+	hp = mini(max_hp, hp + (max_hp if amount < 0 else amount))
+
+func is_defeated() -> bool:
+	return hp <= 0
 
 
 # ── Alat awal ───────────────────────────────────────────────────────
@@ -425,7 +521,6 @@ static func equipment_key(item: ItemData) -> String:
 	if item == null or item.stackable or item.max_stack != 1:
 		return ""
 	match item.equipment_slot:
-		ItemData.EquipmentSlot.WEAPON: return "weapon"
 		ItemData.EquipmentSlot.ARMOR: return "armor"
 		ItemData.EquipmentSlot.HELMET: return "helmet"
 		ItemData.EquipmentSlot.LEGGINGS: return "leggings"
@@ -453,10 +548,16 @@ static func empty_equipment() -> Dictionary:
 	return result
 
 ## Save lama hanya punya weapon/armor; slot lain otomatis kosong.
+## Senjata yang dulu dipakai di slot "weapon" dipindah ke tas (save v13 ke bawah).
 func load_equipment(saved: Variant) -> void:
 	equipment = empty_equipment()
 	if not saved is Dictionary:
 		return
+	var old_weapon: Variant = saved.get("weapon", "")
+	if old_weapon is String and not old_weapon.is_empty() and ResourceLoader.exists("res://resources/item_data/%s.tres" % old_weapon):
+		var weapon := GameState._resolve_item(old_weapon)
+		if weapon != null and weapon.equipment_slot == ItemData.EquipmentSlot.WEAPON and not has_item(old_weapon):
+			add_item_silent(weapon, 1)
 	for key in equipment:
 		var id: Variant = saved.get(key, "")
 		if not id is String or id.is_empty() or not ResourceLoader.exists("res://resources/item_data/%s.tres" % id):
@@ -504,7 +605,12 @@ func load_inventory(entries: Variant) -> void:
 func to_dict() -> Dictionary:
 	return {
 		"name": player_name,
+		"birthday_season": birthday_season,
+		"birthday_day": birthday_day,
+		"pet_id": pet_id,
+		"pet_name": pet_name,
 		"stamina": clampi(stamina, 0, max_stamina),
+		"hp": clampi(hp, 1, max_hp),
 		"consumed_daya": consumed_daya.duplicate(),
 		"bag_level": bag_level,
 		"watering_water": watering_water,
@@ -516,19 +622,43 @@ func to_dict() -> Dictionary:
 	}
 
 func load_dict(data: Dictionary) -> void:
+	clear_food_effects()
 	load_recipes(data.get("learned_recipes", []))
 	load_tool_order(data.get("tool_order", {}))
 	var saved_name: Variant = data.get("name", "")
 	player_name = saved_name if saved_name is String else ""
+	load_birthday(data)
+	load_pet(data)
 	watering_water = clampi(int(data.get("watering_water", 20)), 0, 350)
 	load_daya(data.get("consumed_daya", []))
 	stamina = clampi(int(data.get("stamina", MAX_STAMINA)), 0, max_stamina)
+	hp = clampi(int(data.get("hp", MAX_HP)), 1, max_hp)
 	bag_level = clampi(int(data.get("bag_level", 0)), 0, BAG_SIZES.size() - 1)
 	hotbar_page = 0
 	var look: Variant = data.get("appearance", {})
 	set_appearance(CharacterAppearance.from_dict(look if look is Dictionary else {}))
 	load_inventory(data.get("inventory", []))
 	load_equipment(data.get("equipment", {}))
+
+func load_pet(data: Dictionary) -> void:
+	var saved_id: Variant = data.get("pet_id", "")
+	var saved_name: Variant = data.get("pet_name", "")
+	pet_id = saved_id.strip_edges() if saved_id is String else ""
+	pet_name = saved_name.strip_edges() if saved_name is String and not pet_id.is_empty() else ""
+
+func load_birthday(data: Dictionary) -> void:
+	birthday_season = ""
+	birthday_day = 0
+	var season: Variant = data.get("birthday_season", "")
+	var day: Variant = data.get("birthday_day", 0)
+	if not season is String or not DayCycle.SEASONS.has(season):
+		return
+	if not (day is int or day is float) or not is_finite(float(day)):
+		return
+	if float(day) != floorf(float(day)) or day < 1 or day > DayCycle.DAYS_PER_SEASON:
+		return
+	birthday_season = season
+	birthday_day = int(day)
 
 func load_tool_order(value: Variant) -> void:
 	tool_order.clear()

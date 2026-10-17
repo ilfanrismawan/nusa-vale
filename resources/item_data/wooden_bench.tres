@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/interior/Temple.png" id="2"]
+[ext_resource type="Resource" path="res://resources/furniture/wooden_bench.tres" id="3"]
+[sub_resource type="AtlasTexture" id="icon"]
+atlas = ExtResource("2")
+region = Rect2(64, 12, 32, 18)
+
+[resource]
+script = ExtResource("1")
+placeable = true
+seat_definition = ExtResource("3")
+placement_size = Vector2i(2, 1)
+category = 8
+item_id = "wooden_bench"
+display_name = "Bangku Kayu"
+icon = SubResource("icon")
+description = "Bangku dua tile. R untuk memilih arah atas/bawah; klik kiri untuk pasang di farm. Shift + klik kanan untuk ambil kembali."

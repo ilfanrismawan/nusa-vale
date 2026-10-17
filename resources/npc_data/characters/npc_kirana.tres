@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="NPCDefinition" format=3 uid="uid://db7hcokq7t8s0"]
+
+[ext_resource type="Script" uid="uid://b6f6jkjfa5a1i" path="res://scripts/npc/data/npc_schedule_entry.gd" id="1_o46uv"]
+[ext_resource type="Script" uid="uid://duw5oj4uod05f" path="res://scripts/npc/data/npc_definition.gd" id="2_154nc"]
+[ext_resource type="SpriteFrames" uid="uid://dj4o7i407wtft" path="res://resources/npc_data/npc_animation/kirana_frame.tres" id="3_5htio"]
+
+[resource]
+script = ExtResource("2_154nc")
+id = &"kirana"
+display_name = "Kirana"
+age = 29
+sprite_frames = ExtResource("3_5htio")
+metadata/_custom_type_script = "uid://duw5oj4uod05f"

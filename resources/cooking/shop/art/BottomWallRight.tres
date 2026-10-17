@@ -1,0 +1,6 @@
+[gd_resource type="AtlasTexture" format=3]
+[ext_resource type="Texture2D" path="res://assets/cooking/referensi toko jual peralatan masak.png" id="atlas"]
+[resource]
+atlas = ExtResource("atlas")
+region = Rect2(915, 873, 603, 32)
+filter_clip = true

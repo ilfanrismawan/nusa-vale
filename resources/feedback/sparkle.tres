@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ActionFeedback" format=3]
 
-[ext_resource type="Script" path="res://scripts/data/action_feedback.gd" id="1_fb"]
+[ext_resource type="Script" uid="uid://bkypsghuif7rw" path="res://autoload/data/action_feedback.gd" id="1_fb"]
 
 [resource]
 script = ExtResource("1_fb")

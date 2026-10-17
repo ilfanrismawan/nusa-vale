@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="WeaponStyle" format=3 uid="uid://draeagxae4kb4"]
+
+[ext_resource type="Script" uid="uid://bpgswpatsto5r" path="res://scripts/data/weapon_style.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+animation_name = &"mage"
+hit_frame_ratio = 0.6
+speed_scale = 1.5
+aim_pose_frame = 2
+projectile_speed = 160.0
+projectile_range_tiles = 6.0
+stamina_cost = 3
+knockback = 6.0
+swing_feedback = &"magic_cast"
+hit_feedback = &"magic_hit"
+combo_damage = PackedFloat32Array(1, 1, 1.5)
+combo_speed = null
+finisher_knockback_scale = 2.0
+finisher_projectile_scale = 2.0
+finisher_feedback = &"combo_finisher"

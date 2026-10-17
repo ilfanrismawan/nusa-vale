@@ -9,7 +9,19 @@ extends CanvasLayer
 @onready var stamina_bar: TextureProgressBar = %StaminaBar
 var _stamina_capacity_tween: Tween
 var _displayed_stamina_max := 0
-var food_buff_label: Label
+@onready var food_buff_label: Label = %FoodEffectsLabel
+## Bar HP merah (Bars.png), dibuat di kode di kiri bar stamina.
+const BARS: Texture2D = preload("res://assets/farm_rpg/ui/Bars.png")
+var hp_bar: TextureProgressBar
+var _hp_shown := -1
+## Bar putih di belakang bar HP yang turun menyusul (terlihat berapa HP yang baru hilang).
+var _hp_ghost: TextureProgressBar
+var _hp_ghost_tween: Tween
+var _hp_pulse: Tween
+var _stamina_pulse: Tween
+var _stamina_shown := -1
+## HP/stamina di bawah bagian ini membuat bar berdenyut.
+const LOW_RATIO := 0.25
 
 ## Pemain pemilik UI ini (diisi Player). Kosong = P1.
 var player: Player
@@ -31,6 +43,8 @@ func _ready() -> void:
 	DayCycle.season_changed.connect(_on_season_changed)
 	GameState.money_changed.connect(_on_money_changed)
 	data.stamina_changed.connect(_on_stamina_changed)
+	data.hp_changed.connect(_on_hp_changed)
+	data.stamina_exhausted.connect(_on_stamina_exhausted)
 	
 	if is_instance_valid(btn_settings):
 		btn_settings.pressed.connect(_on_settings_pressed)
@@ -40,16 +54,9 @@ func _ready() -> void:
 	_update_time(DayCycle.hour, DayCycle.minute)
 	_update_money(GameState.money)
 	_on_stamina_changed(data.stamina, data.max_stamina)
+	_build_hp_bar()
 	_build_water_meter()
 	_build_weather()
-	food_buff_label = Label.new()
-	food_buff_label.position = Vector2(12, 46)
-	food_buff_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	food_buff_label.add_theme_font_override("font", MONEY_FONT)
-	food_buff_label.add_theme_font_size_override("font_size", 16)
-	food_buff_label.add_theme_color_override("font_outline_color", Color("292b3d"))
-	food_buff_label.add_theme_constant_override("outline_size", 3)
-	add_child(food_buff_label)
 	_layout_hud()
 
 func _layout_hud() -> void:
@@ -57,9 +64,18 @@ func _layout_hud() -> void:
 		return
 	var view_size := get_viewport().get_visible_rect().size
 	var bar_size := stamina_bar.size * stamina_bar.scale
-	stamina_bar.position = Vector2(view_size.x - bar_size.x - 16.0, view_size.y - bar_size.y - 16.0).round()
+	var stamina_left := view_size.x - bar_size.x - 16.0
+	_place_bar(stamina_bar, Vector2(stamina_left, view_size.y - bar_size.y - 16.0))
+	if hp_bar != null:
+		var hp_size := hp_bar.size * hp_bar.scale
+		_place_bar(hp_bar, Vector2(stamina_left - hp_size.x - 8.0, view_size.y - hp_size.y - 16.0))
 	if water_panel != null:
 		water_panel.position = Vector2(16, view_size.y - water_panel.size.y - 88).round()
+
+## Menaruh bar supaya sudut kiri atas yang TERLIHAT ada di top_left.
+## Bar diskalakan dari pivot_offset (untuk goyang), jadi posisinya digeser sebesar pivot * (1 - scale).
+func _place_bar(bar: Control, top_left: Vector2) -> void:
+	bar.position = (top_left - bar.pivot_offset * (Vector2.ONE - bar.scale)).round()
 
 var weather_label: Label
 var weather_icon: TextureRect
@@ -137,9 +153,12 @@ func _process(_delta: float) -> void:
 	_layout_hud()
 	_update_water_meter()
 	if food_buff_label != null:
-		var remaining := player.food_speed_remaining if is_instance_valid(player) else 0.0
-		food_buff_label.visible = remaining > 0
-		food_buff_label.text = "Laju +15%% · %d dtk" % ceili(remaining)
+		var lines: PackedStringArray = []
+		for active in data.active_food_effects:
+			var effect: FoodEffectData = active.effect
+			lines.append("%s ×%d · %d dtk" % [effect.display_name, int(active.stacks), ceili(float(active.remaining))])
+		food_buff_label.visible = not lines.is_empty()
+		food_buff_label.text = "\n".join(lines)
 
 func _update_water_meter() -> void:
 	if water_panel == null:
@@ -176,7 +195,120 @@ func _on_stamina_changed(current: int, maximum: int) -> void:
 	stamina_bar.tooltip_text = "Stamina %d / %d" % [current, maximum]
 	stamina_bar.max_value = maximum
 	stamina_bar.value = current
+	if _stamina_shown >= 0 and current < _stamina_shown:
+		_wobble(stamina_bar, 2.0)
+	_stamina_shown = current
+	_stamina_pulse = _set_pulse(stamina_bar, _stamina_pulse, maximum > 0 and current <= maximum * LOW_RATIO, Color(1.6, 1.2, 0.5))
+
+## Aksi ditolak karena lelah: bar stamina bergetar keras dan berkedip merah.
+func _on_stamina_exhausted() -> void:
+	if not is_instance_valid(stamina_bar):
+		return
+	_wobble(stamina_bar, 7.0)
+	var tw := create_tween()
+	for i in 3:
+		tw.tween_property(stamina_bar, "self_modulate", Color(2.0, 0.5, 0.5), 0.06)
+		tw.tween_property(stamina_bar, "self_modulate", Color.WHITE, 0.08)
+	_spray(stamina_bar, Color(0.55, 0.8, 1.0), 6)
 		
+func _build_hp_bar() -> void:
+	if not is_instance_valid(stamina_bar):
+		return
+	hp_bar = TextureProgressBar.new()
+	hp_bar.name = "HpBar"
+	hp_bar.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	hp_bar.fill_mode = TextureProgressBar.FILL_BOTTOM_TO_TOP
+	var under := AtlasTexture.new()
+	under.atlas = BARS
+	under.region = Rect2(148, 3, 8, 42)
+	var progress := AtlasTexture.new()
+	progress.atlas = BARS
+	progress.region = Rect2(116, 50, 10, 42)
+	hp_bar.texture_progress = progress
+	hp_bar.size = Vector2(10, 42)
+	hp_bar.scale = Vector2(3, 3)
+	hp_bar.pivot_offset = hp_bar.size * Vector2(0.5, 1.0)
+	# Latar bar ada di bar bayangan (digambar di belakang) supaya sisa putihnya terlihat.
+	_hp_ghost = TextureProgressBar.new()
+	_hp_ghost.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_hp_ghost.fill_mode = TextureProgressBar.FILL_BOTTOM_TO_TOP
+	_hp_ghost.texture_under = under
+	_hp_ghost.texture_progress = progress
+	_hp_ghost.tint_progress = Color(4.0, 4.0, 4.0)
+	_hp_ghost.size = hp_bar.size
+	_hp_ghost.show_behind_parent = true
+	_hp_ghost.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hp_bar.add_child(_hp_ghost)
+	stamina_bar.get_parent().add_child(hp_bar)
+	stamina_bar.pivot_offset = stamina_bar.size * Vector2(0.5, 1.0)
+	_on_hp_changed(data.hp, data.max_hp)
+
+func _on_hp_changed(current: int, maximum: int) -> void:
+	if hp_bar == null:
+		return
+	hp_bar.tooltip_text = "HP %d / %d" % [current, maximum]
+	hp_bar.max_value = maximum
+	hp_bar.value = current
+	_hp_ghost.max_value = maximum
+	if _hp_ghost_tween != null and _hp_ghost_tween.is_valid():
+		_hp_ghost_tween.kill()
+	# HP turun: bar berkedip merah, bergetar, meneteskan darah, dan bar putih menyusul turun.
+	if _hp_shown >= 0 and current < _hp_shown:
+		hp_bar.self_modulate = Color(2.0, 0.6, 0.6)
+		create_tween().tween_property(hp_bar, "self_modulate", Color.WHITE, 0.3)
+		_wobble(hp_bar, 6.0)
+		_spray(hp_bar, Color(0.75, 0.05, 0.08), clampi(_hp_shown - current, 4, 14))
+		_hp_ghost_tween = create_tween()
+		_hp_ghost_tween.tween_interval(0.35)
+		_hp_ghost_tween.tween_property(_hp_ghost, "value", float(current), 0.4).set_ease(Tween.EASE_IN)
+	else:
+		_hp_ghost.value = current
+	_hp_shown = current
+	_hp_pulse = _set_pulse(hp_bar, _hp_pulse, current > 0 and current <= maximum * LOW_RATIO, Color(1.8, 0.5, 0.5))
+
+## Goyang singkat lewat rotasi (posisi bar diatur _layout_hud, jadi tidak disentuh).
+func _wobble(bar: Control, degrees: float) -> void:
+	var tw := create_tween()
+	for angle in [degrees, -degrees * 0.7, degrees * 0.4, 0.0]:
+		tw.tween_property(bar, "rotation_degrees", angle, 0.05)
+
+## Denyut warna terus-menerus selama kondisi rendah; berhenti dan pulih saat tidak lagi.
+func _set_pulse(bar: Control, pulse: Tween, active: bool, color: Color) -> Tween:
+	if active:
+		if pulse != null and pulse.is_valid():
+			return pulse
+		pulse = create_tween().set_loops()
+		pulse.tween_property(bar, "modulate", color, 0.35)
+		pulse.tween_property(bar, "modulate", Color.WHITE, 0.35)
+		return pulse
+	if pulse != null and pulse.is_valid():
+		pulse.kill()
+	bar.modulate = Color.WHITE
+	return null
+
+## Tetesan dari ujung isi bar (darah untuk HP, keringat untuk stamina).
+func _spray(bar: TextureProgressBar, color: Color, amount: int) -> void:
+	var ratio := bar.value / bar.max_value if bar.max_value > 0 else 0.0
+	var size := bar.size * bar.scale
+	var p := CPUParticles2D.new()
+	p.one_shot = true
+	p.amount = amount
+	p.lifetime = 0.6
+	p.explosiveness = 0.9
+	p.direction = Vector2.UP
+	p.spread = 60.0
+	p.initial_velocity_min = 40.0
+	p.initial_velocity_max = 110.0
+	p.gravity = Vector2(0, 420)
+	p.scale_amount_min = 3.0
+	p.scale_amount_max = 6.0
+	p.color = color
+	p.z_index = 5
+	add_child(p)
+	p.position = bar.position + Vector2(size.x * 0.5, size.y * (1.0 - ratio))
+	p.emitting = true
+	get_tree().create_timer(1.0).timeout.connect(p.queue_free)
+
 func _on_settings_pressed() -> void:
 	var settings = get_parent().get_node_or_null("SettingsMenu")
 	if settings:
