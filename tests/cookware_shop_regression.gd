@@ -18,7 +18,8 @@ func _ready() -> void:
 	var store := load("res://resources/cooking/shop/cooking_shop.tres") as CookingShopData
 	var catalog := load("res://resources/cooking/data/cooking_catalog.tres") as CookingCatalog
 	check(store != null, "editor stock resource loads")
-	var upgrade: CookingShopOffer
+	# Renovasi dapur kini Upgrade Rumah tingkat 1 di Wira (GDD 4.12), bukan stok toko.
+	var house := GameState.house
 	var sets: Array[CookingShopOffer] = []
 	var tools: Array[CookingShopOffer] = []
 	for offer in store.offers:
@@ -27,8 +28,7 @@ func _ready() -> void:
 			tools.append(offer)
 		elif offer.kitchen_scene != null:
 			sets.append(offer)
-		else:
-			upgrade = offer
+	check(not store.offers.any(func(offer: CookingShopOffer): return offer.owned_flag == HouseManager.LEGACY_KITCHEN_FLAG), "kitchen renovation is no longer sold in the shop")
 	check(tools.size() == catalog.equipment.size(), "all cooking equipment can be purchased")
 	check(sets.size() == 4, "four editable kitchen sets")
 	for equipment in catalog.equipment:
@@ -38,10 +38,14 @@ func _ready() -> void:
 	for offer in tools + sets:
 		check(not CookingShopService.purchase(store, offer, data).ok, "locked before house upgrade: " + str(offer.id))
 	check(GameState.money == money, "locked purchases do not charge")
-	check(CookingShopService.purchase(store, upgrade, data).ok, "house renovation can be purchased")
-	check(WorldState.has_flag(upgrade.owned_flag) and GameState.money == money - upgrade.price, "house upgrade charges exact resource price")
-	money = GameState.money
-	check(not CookingShopService.purchase(store, upgrade, data).ok and GameState.money == money, "house cannot be charged twice")
+	var kitchen := house.next_level()
+	data.bag_level = 2
+	for item_id in kitchen.materials:
+		data.add_item_silent(item_id, kitchen.materials[item_id])
+	check(house.order_upgrade(data), "house renovation can be ordered from Wira")
+	DayCycle.current_day += kitchen.build_days
+	DayCycle.day_passed.emit(DayCycle.current_day)
+	check(WorldState.has_flag(HouseManager.LEGACY_KITCHEN_FLAG) and GameState.money == money - kitchen.price, "house upgrade charges exact resource price")
 	check(CookingShopService.purchase(store, sets[0], data).ok, "kitchen set unlocks after renovation")
 	check(WorldState.has_flag("active_" + str(sets[0].id)), "purchased kitchen set becomes active")
 	check(CookingShopService.purchase(store, sets[1], data).ok, "another kitchen color can be purchased")
@@ -154,6 +158,6 @@ func _ready() -> void:
 	GameState.money = custom.price + 100
 	check(CookingShopService.purchase(custom_store, custom, data).ok and GameState.money == 100 and data.get_item_count(material_id) == 0, "editable material requirements and price are consumed exactly")
 	GameState.new_game()
-	check(not WorldState.has_flag(upgrade.owned_flag) and store.installed_equipment().is_empty(), "new game clears house and purchase progression")
+	check(not WorldState.has_flag(HouseManager.LEGACY_KITCHEN_FLAG) and house.level == 0 and store.installed_equipment().is_empty(), "new game clears house and purchase progression")
 	print("COOKWARE SHOP COMPLETE: failures=%d" % failures)
 	get_tree().quit(1 if failures else 0)

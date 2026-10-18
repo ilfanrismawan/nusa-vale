@@ -2,6 +2,10 @@
 
 [ext_resource type="Script" uid="uid://bpgswpatsto5r" path="res://scripts/data/weapon_style.gd" id="1"]
 [ext_resource type="Texture2D" path="res://resources/icons/icon_arrow_wood.tres" id="2"]
+[ext_resource type="Script" path="res://scripts/data/weapon_art.gd" id="art_script"]
+[ext_resource type="Resource" path="res://resources/combat/arts/bow_triple.tres" id="art_bow_triple"]
+[ext_resource type="Resource" path="res://resources/combat/arts/bow_rain.tres" id="art_bow_rain"]
+[ext_resource type="Resource" path="res://resources/combat/arts/bow_pierce.tres" id="art_bow_pierce"]
 
 [resource]
 script = ExtResource("1")
@@ -21,3 +25,18 @@ finisher_knockback_scale = 1.5
 finisher_projectiles = 2
 finisher_spread_deg = 8.0
 finisher_feedback = &"combo_finisher"
+stamina_cost = 8
+heavy_stamina_cost = 18
+active_end_ratio = 0.6
+recovery_cancel_ratio = 0.8
+heavy_damage = 1.8
+heavy_speed = 0.75
+heavy_projectile_scale = 1.4
+heavy_knockback_scale = 1.8
+sprint_damage = 1.15
+sprint_lunge = 0.0
+roll_damage = 1.25
+roll_speed = 1.4
+poise_damage = 6.0
+block_reduction = 0.4
+arts = Array[ExtResource("art_script")]([ExtResource("art_bow_triple"), ExtResource("art_bow_triple"), ExtResource("art_bow_triple"), ExtResource("art_bow_triple"), ExtResource("art_bow_rain"), ExtResource("art_bow_rain"), ExtResource("art_bow_rain"), ExtResource("art_bow_pierce"), ExtResource("art_bow_pierce"), ExtResource("art_bow_pierce")])

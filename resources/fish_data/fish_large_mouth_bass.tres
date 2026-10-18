@@ -7,3 +7,4 @@
 script = ExtResource("2_6ha5r")
 item = ExtResource("1_6w6nf")
 locations = PackedStringArray("farm_pond", "farm_river", "forest_river")
+seasons = PackedStringArray("spring", "summer")

@@ -16,35 +16,52 @@ const ACTIONS: Array[StringName] = [
 	&"use_tool", &"interact", &"aim", &"tool_next", &"tool_prev",
 	&"slot_1", &"slot_2", &"slot_3", &"slot_4", &"slot_5", &"slot_6", &"slot_7", &"slot_8",
 	&"inventory", &"cycle_hotbar", &"sort_inventory", &"ui_accept", &"ui_cancel",
+	&"dodge", &"guard", &"weapon_art", &"crafting_menu",
 ]
 
-## Tombol gamepad bawaan (A = interaksi, X = pakai alat, B = lari/batal, LB/RB = ganti slot,
-## Y = tas, Back = halaman hotbar, klik stik kanan = rapikan tas).
+## Aksi combat soulslike (GDD 8.2-A) yang belum ada di project.godot: dibuat saat runtime
+## dengan tombol keyboard bawaan ini (Spasi = roll, Q = block/parry, F = weapon art).
+const COMBAT_KEYS := {
+	&"dodge": [KEY_SPACE],
+	&"guard": [KEY_Q],
+	&"weapon_art": [KEY_F],
+	# Hanya gamepad (Y, seperti Stardew Valley); keyboard membuka tab Crafting lewat tas.
+	&"crafting_menu": [],
+}
+
+## Tombol gamepad bawaan, mengikuti tata letak Stardew Valley (Xbox) agar terasa akrab:
+## A = interaksi/konfirmasi, X = pakai alat/serang, B = tas/batal, Y = tas tab Crafting,
+## Start = tas, LB/RB = slot sebelumnya/berikutnya (di dalam tas: ganti tab).
+## Tombol yang tidak ada di Stardew (combat soulslike + lari tahan):
+## RT = tahan untuk lari (tekan singkat sambil memegang senjata = roll), LT = block/parry,
+## Back = halaman hotbar, klik stik kiri = weapon art, klik stik kanan = rapikan tas.
 const JOY_BUTTONS := {
 	&"move_left": [JOY_BUTTON_DPAD_LEFT],
 	&"move_right": [JOY_BUTTON_DPAD_RIGHT],
 	&"move_up": [JOY_BUTTON_DPAD_UP],
 	&"move_down": [JOY_BUTTON_DPAD_DOWN],
-	&"run": [JOY_BUTTON_B],
 	&"use_tool": [JOY_BUTTON_X],
 	&"interact": [JOY_BUTTON_A],
 	&"ui_accept": [JOY_BUTTON_A],
 	&"ui_cancel": [JOY_BUTTON_B],
 	&"tool_prev": [JOY_BUTTON_LEFT_SHOULDER],
 	&"tool_next": [JOY_BUTTON_RIGHT_SHOULDER],
-	&"inventory": [JOY_BUTTON_Y],
+	&"inventory": [JOY_BUTTON_B, JOY_BUTTON_START],
+	&"crafting_menu": [JOY_BUTTON_Y],
 	&"cycle_hotbar": [JOY_BUTTON_BACK],
 	&"sort_inventory": [JOY_BUTTON_RIGHT_STICK],
+	&"weapon_art": [JOY_BUTTON_LEFT_STICK],
 }
-## [sumbu, arah]
+
 const JOY_AXES := {
 	&"move_left": [JOY_AXIS_LEFT_X, -1.0],
 	&"move_right": [JOY_AXIS_LEFT_X, 1.0],
 	&"move_up": [JOY_AXIS_LEFT_Y, -1.0],
 	&"move_down": [JOY_AXIS_LEFT_Y, 1.0],
-	&"run": [JOY_AXIS_TRIGGER_LEFT, 1.0],
-	&"use_tool": [JOY_AXIS_TRIGGER_RIGHT, 1.0],
+	&"run": [JOY_AXIS_TRIGGER_RIGHT, 1.0],
+	&"guard": [JOY_AXIS_TRIGGER_LEFT, 1.0],
 }
+
 const NUMPAD_KEYS := {
 	&"move_left": [KEY_KP_4],
 	&"move_right": [KEY_KP_6],
@@ -73,12 +90,14 @@ static var _solo: PlayerInput
 ## Input P1 saat main sendiri.
 static func solo() -> PlayerInput:
 	if _solo == null:
+		ensure_combat_actions()
 		_solo = PlayerInput.new()
 		_solo._add_joy_defaults_to_base()
 	return _solo
 
 ## Input pemain co-op; membuat ulang aksi "p<n>_*" untuk perangkat ini.
 static func create(p_index: int, p_device: int) -> PlayerInput:
+	ensure_combat_actions()
 	var input := PlayerInput.new()
 	input.index = p_index
 	input.device = p_device
@@ -149,6 +168,17 @@ static func find_presser(event: InputEvent, players: Array, bases: Array = [&"in
 
 
 # ── Pembuatan aksi ──────────────────────────────────────────────────
+
+## Tambahkan aksi combat ke Input Map bila belum ada (tanpa mengubah project.godot).
+static func ensure_combat_actions() -> void:
+	for base in COMBAT_KEYS:
+		if InputMap.has_action(base):
+			continue
+		InputMap.add_action(base, 0.5)
+		for key in COMBAT_KEYS[base]:
+			var k := InputEventKey.new()
+			k.physical_keycode = key
+			InputMap.action_add_event(base, k)
 
 func _register_actions() -> void:
 	for base in ACTIONS:

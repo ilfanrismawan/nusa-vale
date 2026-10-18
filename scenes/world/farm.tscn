@@ -60,6 +60,8 @@
 [ext_resource type="Material" path="res://resources/soil_detail_material.tres" id="soil_detail"]
 [ext_resource type="Material" uid="uid://ci3yasder0uu3" path="res://resources/water_detail_material.tres" id="water_detail"]
 
+[ext_resource type="Script" path="res://scripts/npc/npc_map_presenter.gd" id="ResidentPresenter"]
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7od4w"]
 texture = ExtResource("2_x1w4o")
 0:0/0 = 0
@@ -18566,3 +18568,18 @@ tile_set = SubResource("TileSet_r2eyg")
 
 [node name="Marker2D" type="Marker2D" parent="." unique_id=1258445801]
 position = Vector2(1014, 8)
+
+[node name="NPCPoints" type="Node2D" parent="."]
+
+[node name="shipping_pickup" type="Marker2D" parent="NPCPoints"]
+position = Vector2(1153, 304)
+
+[node name="NPCActors" type="Node2D" parent="."]
+y_sort_enabled = true
+z_index = 1
+
+[node name="NPCMapPresenter" type="Node" parent="."]
+script = ExtResource("ResidentPresenter")
+map_id = "farm"
+actors_root = NodePath("../NPCActors")
+points_root = NodePath("../NPCPoints")

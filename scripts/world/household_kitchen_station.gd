@@ -5,7 +5,7 @@ extends KitchenStation
 
 func interact(player: Player) -> void:
 	if not WorldState.has_flag(required_flag):
-		Notify.say("Beli kitchen set di toko peralatan masak setelah renovasi rumah.")
+		Notify.say("Beli kitchen set di toko peralatan masak setelah ruang dapur dibangun Wira.")
 		return
 	var store := load(store_path) as CookingShopData
 	installed_equipment = store.installed_equipment() if store != null else []

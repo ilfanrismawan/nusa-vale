@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="WeaponArt" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/weapon_art.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"bow_triple"
+display_name = "Panah Beruntun"
+kind = 2
+stamina_cost = 24
+cooldown = 3.0
+damage_scale = 0.9
+poise_scale = 1.2
+count = 3
+spread_deg = 12.0
+color = Color(1.0, 0.95, 0.7, 1)

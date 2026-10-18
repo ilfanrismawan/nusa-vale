@@ -30,6 +30,10 @@ var balai_nadi: BalaiNadiManager
 var shipping: ShippingManager
 var daya: DayaManager
 var weather: DailyWeather
+## Progres Gua Tambang (lift checkpoint), GDD 9.
+var cave: CaveManager
+## Tingkat rumah + pesanan upgrade di Wira (GDD 4.12, save v17).
+var house: HouseManager
 
 ## Index 0 = P1. Pemain lain dibuat saat bergabung di co-op dan ikut tersimpan di save.
 var players: Array[PlayerData] = [PlayerData.new(0)]
@@ -81,6 +85,12 @@ func _ready() -> void:
 	add_child(balai_nadi)
 	daya = DayaManager.new()
 	add_child(daya)
+	cave = CaveManager.new()
+	cave.name = "Cave"
+	add_child(cave)
+	house = HouseManager.new()
+	house.name = "House"
+	add_child(house)
 	players[0].stamina_changed.connect(func(value: int, maximum: int): stamina_changed.emit(value, maximum))
 	players[0].appearance_changed.connect(func(look: CharacterAppearance): appearance_changed.emit(look))
 
@@ -118,6 +128,8 @@ func new_game() -> void:
 	weather.reset()
 	shipping.reset()
 	balai_nadi.reset()
+	cave.reset()
+	house.reset()
 	StructureManager.reset()
 	money = 100
 	farm_name = ""

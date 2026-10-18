@@ -12,6 +12,7 @@ const HAND_HARVEST: ActionData = preload("res://resources/action_data/hand_harve
 
 ## Dibuat di _ready (sebelum Player memanggil state_machine.initialize).
 var combat_state: CombatState
+var dodge_state: DodgeState
 ## Combo senjata: pukulan berikutnya, jenis senjata, dan batas waktu menyambung (msec).
 var combo_step := 0
 var _combo_weapon := -1
@@ -46,6 +47,10 @@ func _ready() -> void:
 	combat_state.name = "CombatState"
 	combat_state.idle_state = state_machine.get_node("IdleState")
 	state_machine.add_child(combat_state)
+	dodge_state = DodgeState.new()
+	dodge_state.name = "DodgeState"
+	dodge_state.idle_state = combat_state.idle_state
+	state_machine.add_child(dodge_state)
 	furniture_preview = load("res://scripts/player/furniture_preview.gd").new()
 	furniture_preview.player = player
 	player.add_child.call_deferred(furniture_preview)
@@ -65,7 +70,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			combat_state.combo_queued = true
 			get_viewport().set_input_as_handled()
 		return
-	if state_machine.current_state in [action_state, fishing_state]:
+	if state_machine.current_state in [action_state, fishing_state, dodge_state]:
 		return
 	if input.is_event(event, &"use_tool"):
 		player.bind_context()
@@ -80,7 +85,9 @@ func _unhandled_input(event: InputEvent) -> void:
 					get_viewport().set_input_as_handled()
 					return
 		if Combat.is_weapon(current_item):
-			attack()
+			# Serangan keluar saat tombol dilepas: singkat = ringan, ditahan = berat (PlayerCombat).
+			if not player.combat.is_exhausted():
+				player.combat.begin_charge()
 			get_viewport().set_input_as_handled()
 			return
 		if current_item != null and current_item.category == ItemData.Category.FOOD:
@@ -153,13 +160,90 @@ func select_tool(index: int, preview: bool = true) -> void:
 
 
 ## Serang dengan senjata di slot terpilih (klik kiri). Busur memakai satu anak panah
-## terkuat di tas; tongkat sihir memakai stamina (WeaponStyle).
-func attack() -> bool:
+## terkuat di tas. Semua serangan memakai stamina tempur (PlayerCombat, GDD 8.2-A1).
+## Serangan ringan otomatis menjadi riposte (musuh terhuyung di depan), roll attack
+## (sesaat setelah roll), atau sprint attack (sesaat setelah berlari).
+func attack(kind: CombatState.Kind = CombatState.Kind.LIGHT) -> bool:
 	var weapon := current_item
 	var style := Combat.style_for(weapon)
 	if style == null or player.is_defeated:
 		return false
-	if state_machine.current_state in [action_state, fishing_state, combat_state]:
+	if state_machine.current_state in [action_state, fishing_state, combat_state, dodge_state]:
+		return false
+	var combat := player.combat
+	if combat.is_exhausted():
+		combat.spend(1.0)
+		return false
+	var riposte := _riposte_target(style)
+	if riposte != null:
+		kind = CombatState.Kind.RIPOSTE
+	elif kind == CombatState.Kind.LIGHT and combat.rolled_recently():
+		kind = CombatState.Kind.ROLL
+	elif kind == CombatState.Kind.LIGHT and combat.ran_recently():
+		kind = CombatState.Kind.SPRINT
+	var data := player.data
+	var arrow: ItemData
+	if style.uses_ammo:
+		var slot := Combat.best_arrow_slot(data)
+		if slot < 0:
+			Notify.say("Tidak ada anak panah!")
+			return false
+		arrow = data.inventory[slot]["item"]
+		data.remove_item_at(slot, 1)
+	var cost := style.heavy_stamina_cost if kind == CombatState.Kind.HEAVY else style.stamina_cost
+	if not combat.spend(float(cost)):
+		if arrow != null:
+			data.add_item(arrow, 1)
+		return false
+	player._clear_pickup_visual()
+	var step := 0
+	if kind == CombatState.Kind.LIGHT and weapon.weapon_type == _combo_weapon and Time.get_ticks_msec() <= _combo_until:
+		step = combo_step
+	var aim := player.aim_vector()
+	if riposte != null:
+		aim = (riposte.global_position - (player.global_position + Player.FEET_OFFSET)).normalized()
+	combat_state.start(weapon, style, aim, arrow, step, kind)
+	combat_state.riposte_target = riposte
+	combo_step = (step + 1) % style.combo_length() if kind == CombatState.Kind.LIGHT else 0
+	_combo_weapon = weapon.weapon_type
+	_combo_until = 0
+	state_machine.change_state(combat_state)
+	return true
+
+## Musuh terhuyung terdekat di depan pemain, dalam jangkauan riposte (hanya senjata jarak dekat).
+func _riposte_target(style: WeaponStyle) -> Node2D:
+	if style.melee_radius <= 0.0:
+		return null
+	var feet := player.global_position + Player.FEET_OFFSET
+	var best: Node2D
+	var best_distance := Combat.RULES.riposte_range
+	for node in get_tree().get_nodes_in_group(Combat.DAMAGEABLE_GROUP):
+		if not node is Node2D or not node.has_method("is_staggered") or not node.is_staggered():
+			continue
+		var offset: Vector2 = (node as Node2D).global_position - feet
+		if offset.length() <= best_distance and offset.normalized().dot(player.aim_vector()) > 0.2:
+			best = node
+			best_distance = offset.length()
+	return best
+
+## Weapon art (tombol F): skill khusus per tier senjata (WeaponStyle.arts, GDD 8.2-A6).
+func weapon_art() -> bool:
+	var weapon := current_item
+	var style := Combat.style_for(weapon)
+	if style == null or player.is_defeated:
+		return false
+	var state := state_machine.current_state
+	if not (state is IdleState or state is MoveState):
+		return false
+	var art := style.art_for(int(weapon.equipment_tier))
+	if art == null:
+		return false
+	var combat := player.combat
+	if not combat.art_ready(art):
+		CombatJuice.float_text(player, "%s %.0f dtk" % [art.display_name, ceilf(combat.art_cooldown_left(art))], Color(0.75, 0.75, 0.8))
+		return false
+	if combat.is_exhausted():
+		combat.spend(1.0)
 		return false
 	var data := player.data
 	var arrow: ItemData
@@ -170,19 +254,15 @@ func attack() -> bool:
 			return false
 		arrow = data.inventory[slot]["item"]
 		data.remove_item_at(slot, 1)
-	if style.stamina_cost > 0 and not data.spend_stamina(style.stamina_cost):
+	if not combat.spend(float(art.stamina_cost)):
 		if arrow != null:
 			data.add_item(arrow, 1)
-		Notify.say("Terlalu lelah! Istirahatlah.")
 		return false
+	combat.start_art_cooldown(art)
+	combat.charging = false
 	player._clear_pickup_visual()
-	var step := 0
-	if weapon.weapon_type == _combo_weapon and Time.get_ticks_msec() <= _combo_until:
-		step = combo_step
-	combat_state.start(weapon, style, player.aim_vector(), arrow, step)
-	combo_step = (step + 1) % style.combo_length()
-	_combo_weapon = weapon.weapon_type
-	_combo_until = 0
+	combat_state.start(weapon, style, player.aim_vector(), arrow, 0, CombatState.Kind.ART, art)
+	combo_step = 0
 	state_machine.change_state(combat_state)
 	return true
 

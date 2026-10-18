@@ -1,18 +1,15 @@
 [gd_scene format=3 uid="uid://boq8rt48qwt4t"]
 
-[ext_resource type="Texture2D" uid="uid://bgsc3yl2pss6j" path="res://assets/farm_rpg/objects/exterior/Base houses.png" id="9_twn"]
-[ext_resource type="PackedScene" path="res://scenes/objects/building_sign.tscn" id="BuildingSign"]
-[ext_resource type="Script" uid="uid://xi8t0k3337vc" path="res://scripts/world/town_building_door.gd" id="TownDoor"]
+[ext_resource type="Texture2D" uid="uid://bgsc3yl2pss6j" path="res://assets/farm_rpg/objects/exterior/Base houses.png" id="1_ei3b4"]
+[ext_resource type="Script" uid="uid://xi8t0k3337vc" path="res://scripts/world/town_building_door.gd" id="2_wbx71"]
+[ext_resource type="PackedScene" path="res://scenes/objects/building_sign.tscn" id="3_250qg"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tw066"]
-atlas = ExtResource("9_twn")
+atlas = ExtResource("1_ei3b4")
 region = Rect2(545, 77, 106, 94)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_tw067"]
-size = Vector2(103, 42)
-
 [sub_resource type="RectangleShape2D" id="DoorShape"]
-size = Vector2(14, 22)
+size = Vector2(16, 23)
 
 [node name="HerbalHouse" type="StaticBody2D" unique_id=1929560147]
 
@@ -21,25 +18,25 @@ texture_filter = 1
 texture = SubResource("AtlasTexture_tw066")
 offset = Vector2(0, -47)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2038414783]
-position = Vector2(1.5, -23)
-shape = SubResource("RectangleShape2D_tw067")
-
 [node name="Door" type="Area2D" parent="." unique_id=1353296392]
 position = Vector2(-27, -15)
-script = ExtResource("TownDoor")
+script = ExtResource("2_wbx71")
 target_scene = "res://scenes/world/interior/town/house_teal.tscn"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Door" unique_id=1462359028]
-position = Vector2(-3, -7)
+position = Vector2(-3, -6.5)
 shape = SubResource("DoorShape")
 
 [node name="ReturnSpawn" type="Marker2D" parent="." unique_id=526306460]
 position = Vector2(0, 36)
 
-[node name="Sign" parent="." unique_id=983081646 instance=ExtResource("BuildingSign")]
+[node name="Sign" parent="." unique_id=983081646 instance=ExtResource("3_250qg")]
 position = Vector2(-30, -41)
 caption = "Rumah Herbal"
 minimum_width = 32
 font_size = 8
 minimum_height = 16
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=761860934]
+position = Vector2(-13.956951, -42.973717)
+polygon = PackedVector2Array(-35.04305, 42.973717, -34.04305, 9.973717, -34.04305, 6.9737167, 48.95695, 4.9737167, 62.95695, 1.9737167, 65.956955, 1.9737167, 65.956955, 13.973717, 65.956955, 22.973717, 65.956955, 24.973717, 65.956955, 41.973717, 50.95695, 41.973717, -7.043049, 43.973717, -9.043049, 10.973717, -23.043049, 10.973717, -24.043049, 42.973717)

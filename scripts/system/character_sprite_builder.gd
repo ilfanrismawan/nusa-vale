@@ -9,6 +9,11 @@ extends RefCounted
 ## dengan tata letak yang sama, lalu setiap AtlasTexture diarahkan ke Image itu.
 ## Nama animasi, kecepatan, loop, durasi frame, dan hit_frame tidak berubah.
 
+## Cadangan extra_layers per animasi bila data di katalog hilang (lihat _layer_paths).
+const FALLBACK_EXTRA_LAYERS := {
+	&"mage": ["Healer Staff.png", "Fx.png"],
+}
+
 const LAYER_ORDER: Array[CharacterPart.Layer] = [
 	CharacterPart.Layer.SKIN,
 	CharacterPart.Layer.EYES,
@@ -237,7 +242,13 @@ static func _layer_paths(
 		if not tool_path.is_empty():
 			paths.append(tool_path)
 
-	for extra in sheet.extra_layers:
+	var extras := sheet.extra_layers
+	if extras.is_empty() and FALLBACK_EXTRA_LAYERS.has(sheet.animation_name):
+		# Editor Godot yang terbuka pernah menyimpan ulang character_catalog.tres tanpa
+		# extra_layers (tongkat sihir hilang dari animasi mage). Pakai daftar cadangan.
+		push_warning("CharacterSheet %s tanpa extra_layers; memakai cadangan." % sheet.animation_name)
+		extras = PackedStringArray(FALLBACK_EXTRA_LAYERS[sheet.animation_name])
+	for extra in extras:
 		var extra_path := _resolve_file(sheet.part_folder, extra)
 		if not extra_path.is_empty():
 			paths.append(extra_path)

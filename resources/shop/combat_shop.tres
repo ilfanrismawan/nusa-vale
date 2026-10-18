@@ -1,0 +1,44 @@
+[gd_resource type="Resource" script_class="ShopData" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/shop_data.gd" id="1_shop"]
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="2_item"]
+[ext_resource type="Resource" path="res://resources/item_data/sword_wood.tres" id="sword_wood"]
+[ext_resource type="Resource" path="res://resources/item_data/bow_wood.tres" id="bow_wood"]
+[ext_resource type="Resource" path="res://resources/item_data/staff_wood.tres" id="staff_wood"]
+[ext_resource type="Resource" path="res://resources/item_data/arrow_wood.tres" id="arrow_wood"]
+[ext_resource type="Resource" path="res://resources/item_data/helmet_wood.tres" id="helmet_wood"]
+[ext_resource type="Resource" path="res://resources/item_data/armor_wood.tres" id="armor_wood"]
+[ext_resource type="Resource" path="res://resources/item_data/leggings_wood.tres" id="leggings_wood"]
+[ext_resource type="Resource" path="res://resources/item_data/boots_wood.tres" id="boots_wood"]
+[ext_resource type="Resource" path="res://resources/item_data/sword_copper.tres" id="sword_copper"]
+[ext_resource type="Resource" path="res://resources/item_data/bow_copper.tres" id="bow_copper"]
+[ext_resource type="Resource" path="res://resources/item_data/staff_copper.tres" id="staff_copper"]
+[ext_resource type="Resource" path="res://resources/item_data/arrow_copper.tres" id="arrow_copper"]
+[ext_resource type="Resource" path="res://resources/item_data/helmet_copper.tres" id="helmet_copper"]
+[ext_resource type="Resource" path="res://resources/item_data/armor_copper.tres" id="armor_copper"]
+[ext_resource type="Resource" path="res://resources/item_data/leggings_copper.tres" id="leggings_copper"]
+[ext_resource type="Resource" path="res://resources/item_data/boots_copper.tres" id="boots_copper"]
+[ext_resource type="Resource" path="res://resources/item_data/sword_iron.tres" id="sword_iron"]
+[ext_resource type="Resource" path="res://resources/item_data/bow_iron.tres" id="bow_iron"]
+[ext_resource type="Resource" path="res://resources/item_data/staff_iron.tres" id="staff_iron"]
+[ext_resource type="Resource" path="res://resources/item_data/arrow_iron.tres" id="arrow_iron"]
+[ext_resource type="Resource" path="res://resources/item_data/helmet_iron.tres" id="helmet_iron"]
+[ext_resource type="Resource" path="res://resources/item_data/armor_iron.tres" id="armor_iron"]
+[ext_resource type="Resource" path="res://resources/item_data/leggings_iron.tres" id="leggings_iron"]
+[ext_resource type="Resource" path="res://resources/item_data/boots_iron.tres" id="boots_iron"]
+[ext_resource type="Resource" path="res://resources/item_data/sword_gold.tres" id="sword_gold"]
+[ext_resource type="Resource" path="res://resources/item_data/bow_gold.tres" id="bow_gold"]
+[ext_resource type="Resource" path="res://resources/item_data/staff_gold.tres" id="staff_gold"]
+[ext_resource type="Resource" path="res://resources/item_data/arrow_gold.tres" id="arrow_gold"]
+[ext_resource type="Resource" path="res://resources/item_data/helmet_gold.tres" id="helmet_gold"]
+[ext_resource type="Resource" path="res://resources/item_data/armor_gold.tres" id="armor_gold"]
+[ext_resource type="Resource" path="res://resources/item_data/leggings_gold.tres" id="leggings_gold"]
+[ext_resource type="Resource" path="res://resources/item_data/boots_gold.tres" id="boots_gold"]
+
+[resource]
+script = ExtResource("1_shop")
+shop_id = "combat_shop"
+shop_name = "Toko Combat"
+keeper_name = "Penjaga Gua"
+greeting = "Mau turun ke gua? Bawa senjata yang layak dan anak panah yang cukup."
+stock = Array[ExtResource("2_item")]([ExtResource("sword_wood"), ExtResource("bow_wood"), ExtResource("staff_wood"), ExtResource("arrow_wood"), ExtResource("helmet_wood"), ExtResource("armor_wood"), ExtResource("leggings_wood"), ExtResource("boots_wood"), ExtResource("sword_copper"), ExtResource("bow_copper"), ExtResource("staff_copper"), ExtResource("arrow_copper"), ExtResource("helmet_copper"), ExtResource("armor_copper"), ExtResource("leggings_copper"), ExtResource("boots_copper"), ExtResource("sword_iron"), ExtResource("bow_iron"), ExtResource("staff_iron"), ExtResource("arrow_iron"), ExtResource("helmet_iron"), ExtResource("armor_iron"), ExtResource("leggings_iron"), ExtResource("boots_iron"), ExtResource("sword_gold"), ExtResource("bow_gold"), ExtResource("staff_gold"), ExtResource("arrow_gold"), ExtResource("helmet_gold"), ExtResource("armor_gold"), ExtResource("leggings_gold"), ExtResource("boots_gold")])

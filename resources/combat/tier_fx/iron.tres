@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="WeaponTierFx" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/weapon_tier_fx.gd" id="1_fx"]
+
+[resource]
+script = ExtResource("1_fx")
+display_name = "Besi"
+motif = 1
+color = Color(0.85, 0.9, 1, 1)
+color_alt = Color(1, 1, 1, 1)
+glow = Color(0.8, 0.9, 1, 0.3)
+trail_points = 8
+trail_width_scale = 1.1
+flight_particles = 8
+halo_radius = 1.5
+slash_width_scale = 1.1
+slash_echo = false
+slash_particles = 4
+hit_particles = 10
+hit_ring = 0.0
+shake_bonus = 0.2
+hitstop_bonus_ms = 5
+impact_layers = PackedStringArray("impactMetal_medium_001")
+impact_volume_db = -7.0
+impact_semitones = 0.0
+aim_motes = 2
+chime_notes = PackedInt32Array(0, 7)
+muzzle_scale = 1.1
+bass_boom = false

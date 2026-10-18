@@ -175,7 +175,8 @@ func _landing_position(power: float) -> Vector2:
 func _update_landing() -> void:
 	_bobber_pos = _landing_position(_power)
 	_meter.landing = _bobber_pos
-	_meter.landing_on_water = FishingManager.find_spot_at(player, _bobber_pos) != null
+	var spot := FishingManager.find_spot_at(player, _bobber_pos)
+	_meter.landing_on_water = spot != null and not spot.is_frozen()
 
 func _release_cast() -> void:
 	_perfect = _meter.is_perfect()
@@ -184,6 +185,12 @@ func _release_cast() -> void:
 	if _spot == null:
 		_free_meter()
 		Notify.say("Kail jatuh di darat.")
+		transitioned.emit(idle_state)
+		return
+	if _spot.is_frozen():
+		_free_meter()
+		_spot = null
+		Notify.say("Air membeku di musim dingin. Cari tempat memancing yang tidak beku.")
 		transitioned.emit(idle_state)
 		return
 	if not GameState.spend_stamina(_stamina_cost):

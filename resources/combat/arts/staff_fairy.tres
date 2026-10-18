@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="WeaponArt" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/weapon_art.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"staff_fairy"
+display_name = "Lingkaran Penyembuh Peri"
+kind = 5
+stamina_cost = 40
+cooldown = 8.0
+damage_scale = 1.2
+poise_scale = 1.5
+radius = 36.0
+heal_amount = 25
+ignore_defense = true
+color = Color(0.6, 1.0, 0.75, 1)
+feedback = &"magic_cast"

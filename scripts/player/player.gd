@@ -41,6 +41,8 @@ var _input_locks: Dictionary = {}
 var _pending_item_gesture: StringName
 var _pending_pickup_icon: Texture2D
 var _pending_pickup_id := ""
+## Gesture ambil item diputar lebih cepat (2x = setengah durasi) supaya tidak lama mengunci input.
+const PICKUP_GESTURE_SPEED := 2.0
 var _carried_item_id := ""
 var _preview_item_id := ""
 var _pickup_visual: Sprite2D
@@ -61,6 +63,8 @@ const FEET_OFFSET := Vector2(0, 8)
 const HIT_INVULNERABLE := 0.8
 const KNOCKBACK_DECAY := 12.0
 const DEBUG_ENEMY: EnemyData = preload("res://resources/enemies/slime_green.tres")
+const DEBUG_PACK_LEADER: EnemyData = preload("res://resources/enemies/myconid_red.tres")
+const DEBUG_PACK_MEMBER: EnemyData = preload("res://resources/enemies/slime_blue.tres")
 
 ## true dari HP 0 sampai bangun di rumah (DefeatSequence).
 var is_defeated := false
@@ -68,11 +72,16 @@ var _invulnerable := 0.0
 var _knockback := Vector2.ZERO
 var _blink_tween: Tween
 var _aim_line: Line2D
+## Efek membidik busur/tongkat (garis bertitik, lingkar bidik, tarikan penuh). Dibuat saat pertama dipakai.
+var aim_fx: AimFx
+## Stamina tempur, poise, block/parry, roll (GDD 8.2-A). Dibuat di _ready.
+var combat: PlayerCombat
 const ACTION_DISTANCE := 16.0
 const MAX_ACTION_DISTANCE := 28.0
 
 func _ready() -> void:
 	add_to_group("night_players")
+	add_to_group(Combat.PLAYER_GROUP)
 	if DayCycle._is_passing_out:
 		set_input_locked(&"pass_out", true)
 	GameState.weather.attach_player.call_deferred(self)
@@ -93,6 +102,11 @@ func _ready() -> void:
 	character_visual.name = "CharacterVisual"
 	add_child(character_visual)
 	character_visual.setup(animation_controller.sprite, tool_controller)
+
+	combat = PlayerCombat.new()
+	combat.name = "PlayerCombat"
+	combat.player = self
+	add_child(combat)
 	
 	state_machine.initialize(self, animation_controller)
 	
@@ -254,16 +268,18 @@ func _flush_item_gesture() -> void:
 	# Pickups can arrive during a tool hit. Finish that action before showing the gesture.
 	if state_machine.current_state in [tool_controller.action_state, tool_controller.fishing_state, tool_controller.combat_state]:
 		return
+	# Saat memegang alat/senjata, pickup tidak memutar gesture (tidak mengunci input) dan
+	# slot hotbar tidak pindah ke item yang diambil, supaya combat tidak terganggu.
+	if _pending_item_gesture == &"pick_up" and _holding_tool_or_weapon():
+		_pending_item_gesture = &""
+		_pending_pickup_icon = null
+		_pending_pickup_id = ""
+		return
 	animation_controller.set_direction(facing_direction)
-	if animation_controller.play_item_gesture(_pending_item_gesture):
+	var gesture_speed := PICKUP_GESTURE_SPEED if _pending_item_gesture == &"pick_up" else 1.0
+	if animation_controller.play_item_gesture(_pending_item_gesture, gesture_speed):
 		_clear_pickup_visual()
 		if _pending_item_gesture == &"pick_up" and _pending_pickup_icon != null:
-			var held := tool_controller.current_item
-			if held != null and held.is_tool():
-				_pending_item_gesture = &""
-				_pending_pickup_icon = null
-				_pending_pickup_id = ""
-				return
 			for slot in data.bag_size:
 				if data.inventory[slot] != null and data.inventory[slot]["item"].item_id == _pending_pickup_id:
 					@warning_ignore("integer_division")
@@ -277,6 +293,10 @@ func _flush_item_gesture() -> void:
 	_pending_item_gesture = &""
 	_pending_pickup_icon = null
 	_pending_pickup_id = ""
+
+func _holding_tool_or_weapon() -> bool:
+	var held := tool_controller.current_item
+	return held != null and (held.is_tool() or Combat.is_weapon(held))
 
 func _sync_carried_item() -> void:
 	var visible_id := _carried_item_id if not _carried_item_id.is_empty() else _preview_item_id
@@ -647,11 +667,32 @@ func _update_aim() -> void:
 	if not is_aiming():
 		if is_instance_valid(_aim_line):
 			_aim_line.visible = false
+		if is_instance_valid(aim_fx):
+			aim_fx.update(get_process_delta_time(), false, false, facing_direction, null, null, 0.0)
 		animation_controller.release_pose()
 		return
 	var dir := aim_vector()
 	update_facing_direction(dir, true)
 	_update_aim_pose()
+	var weapon_style := Combat.style_for(tool_controller.current_item)
+	if weapon_style != null and weapon_style.melee_radius <= 0.0:
+		# Busur/tongkat: AimFx menggambar garis bidik bertitik dan lingkar bidik sampai posisi mouse.
+		if is_instance_valid(_aim_line):
+			_aim_line.visible = false
+		if not is_instance_valid(aim_fx):
+			aim_fx = AimFx.new()
+			aim_fx.name = "AimFx"
+			add_child(aim_fx)
+		var range_px := weapon_style.projectile_range_tiles * 16.0
+		var mouse: Variant = _mouse_world_position()
+		var reach := range_px
+		if mouse != null:
+			reach = clampf((mouse as Vector2).distance_to(global_position + FEET_OFFSET * 0.5), 16.0, range_px)
+		var state := state_machine.current_state
+		aim_fx.update(get_process_delta_time(), true, state is IdleState or state is MoveState, dir, weapon_style, WeaponTierFx.for_item(tool_controller.current_item), reach)
+		return
+	if is_instance_valid(aim_fx):
+		aim_fx.update(get_process_delta_time(), false, false, dir, null, null, 0.0)
 	if not is_instance_valid(_aim_line):
 		_aim_line = Line2D.new()
 		_aim_line.name = "AimLine"
@@ -675,30 +716,64 @@ func _update_aim_pose() -> void:
 	animation_controller.hold_pose(style.animation_name, style.aim_pose_frame)
 
 ## Dipanggil musuh/proyektil. raw_attack dikurangi DEF perlengkapan. true = pukulan masuk.
-func take_hit(raw_attack: int, _source: Node = null, knockback: Vector2 = Vector2.ZERO) -> bool:
+## Soulslike (GDD 8.2-A): roll dengan i-frames menghindari, parry meniadakan, block mengurangi;
+## pukulan yang masuk mengikis poise; poise pecah = terhuyung dan serangan terputus.
+func take_hit(raw_attack: int, source: Node = null, knockback: Vector2 = Vector2.ZERO) -> bool:
 	if is_defeated or _invulnerable > 0.0 or data.hp <= 0 or _input_locks.has(&"sleep"):
 		return false
 	bind_context()
-	var damage := Combat.damage_after_defense(raw_attack, Combat.player_defense(data))
-	data.damage_hp(damage)
-	_invulnerable = HIT_INVULNERABLE
-	_knockback = knockback * 6.0
-	CombatJuice.damage_number("-%d" % damage, global_position + Vector2(0, -18), CombatJuice.HURT_COLOR)
-	Juice.play(&"player_hurt", global_position)
-	CombatJuice.player_hurt(self)
-	CombatJuice.blood(global_position + Vector2(0, -6), knockback, clampi(damage, 6, 16))
-	_blink()
+	var outcome: Array = combat.intercept(raw_attack, source) if combat != null else [PlayerCombat.HitOutcome.HIT, raw_attack]
+	if outcome[0] == PlayerCombat.HitOutcome.EVADED or outcome[0] == PlayerCombat.HitOutcome.PARRIED:
+		return false
+	var blocked: bool = outcome[0] == PlayerCombat.HitOutcome.BLOCKED
+	var raw: int = outcome[1]
+	var damage := Combat.damage_after_defense(raw, Combat.player_defense(data)) if raw > 0 else 0
+	if blocked:
+		damage = mini(damage, raw)
+	if damage > 0:
+		data.damage_hp(damage)
+	_invulnerable = HIT_INVULNERABLE * (0.4 if blocked else 1.0)
+	_knockback = knockback * (2.0 if blocked else 6.0)
+	if blocked:
+		CombatJuice.damage_number("-%d" % damage, global_position + Vector2(0, -18), Color(0.75, 0.85, 1.0))
+	else:
+		CombatJuice.damage_number("-%d" % damage, global_position + Vector2(0, -18), CombatJuice.HURT_COLOR)
+		Juice.play(&"player_hurt", global_position)
+		CombatJuice.player_hurt(self)
+		CombatJuice.blood(global_position + Vector2(0, -6), knockback, clampi(damage, 6, 16))
+		_blink()
 	if data.hp <= 0:
 		_die()
 		return true
+	var poise_hit: float = source.poise_damage_to_player() if source != null and source.has_method("poise_damage_to_player") else raw_attack * 1.5
+	var broken := combat != null and (combat.take_poise(poise_hit * (0.3 if blocked else 1.0)) or (blocked and combat.is_exhausted()))
 	var state := state_machine.current_state
-	if (state is IdleState or state is MoveState) and _input_locks.is_empty():
+	if broken:
+		_stagger()
+	elif not blocked and (state is IdleState or state is MoveState) and _input_locks.is_empty():
 		animation_controller.set_direction(facing_direction)
 		animation_controller.play_item_gesture(&"damage")
 	return true
 
+## Poise pecah: serangan/roll terputus, gesture terluka mengunci gerak sesaat.
+func _stagger() -> void:
+	var state := state_machine.current_state
+	if state == tool_controller.combat_state or state == tool_controller.dodge_state:
+		state_machine.change_state(state_machine.get_node("IdleState"))
+	if combat != null:
+		combat.guarding = false
+		combat.charging = false
+	CombatJuice.float_text(self, "Terhuyung!", CombatJuice.HURT_COLOR)
+	if _input_locks.is_empty():
+		animation_controller.set_direction(facing_direction)
+		animation_controller.play_item_gesture(&"damage")
+
+## Pengali kecepatan gerak dari combat (Exhausted, menahan block).
+func combat_speed_scale() -> float:
+	return combat.speed_scale() if combat != null else 1.0
+
 func is_invulnerable() -> bool:
-	return _invulnerable > 0.0 or is_defeated
+	return _invulnerable > 0.0 or is_defeated or (combat != null and combat.is_evading())
 
 func _apply_knockback(delta: float) -> void:
 	if _knockback.length() < 0.5 or is_defeated:
@@ -731,6 +806,8 @@ func _die(exhausted: bool = false) -> void:
 func finish_defeat() -> void:
 	is_defeated = false
 	_invulnerable = HIT_INVULNERABLE * 2.0
+	if combat != null:
+		combat.reset()
 	if _blink_tween != null and _blink_tween.is_valid():
 		_blink_tween.kill()
 	modulate.a = 1.0
@@ -755,7 +832,9 @@ func _debug_hold_weapon(item_id: String) -> void:
 
 ## Tombol uji (build debug): Ctrl+F7 = munculkan slime di depan, Ctrl+F8 = terima 20 damage,
 ## Ctrl+F9 = dapat pedang, busur, anak panah, dan tongkat sihir, Ctrl+F6 = pegang tongkat sihir
-## (stamina penuh), Ctrl+F10 = pegang busur + 30 anak panah.
+## (stamina penuh), Ctrl+F10 = pegang busur + 30 anak panah, Ctrl+F5 = masuk lobi Gua Tambang,
+## Ctrl+Shift+F7 = munculkan kawanan (myconid + 2 slime biru) di depan, Ctrl+F12 = tampilkan
+## kerucut pandang musuh (warna = status waspada).
 func _debug_combat_key(event: InputEvent) -> bool:
 	if not (event is InputEventKey and event.pressed and not event.echo and event.ctrl_pressed):
 		return false
@@ -763,8 +842,18 @@ func _debug_combat_key(event: InputEvent) -> bool:
 		return false
 	match event.keycode:
 		KEY_F7:
+			if event.shift_pressed:
+				var ahead := global_position + FEET_OFFSET + facing_direction * 72.0
+				for entry in [[DEBUG_PACK_LEADER, Vector2.ZERO], [DEBUG_PACK_MEMBER, Vector2(-18, 10)], [DEBUG_PACK_MEMBER, Vector2(18, 10)]]:
+					Enemy.spawn(entry[0], world_root(), ahead + entry[1])
+				Notify.say("[Debug] Kawanan musuh muncul di depanmu.")
+				return true
 			Enemy.spawn(DEBUG_ENEMY, world_root(), global_position + FEET_OFFSET + facing_direction * 32.0)
 			Notify.say("[Debug] Slime muncul di depanmu.")
+			return true
+		KEY_F12:
+			Perception.debug_draw = not Perception.debug_draw
+			Notify.say("[Debug] Kerucut pandang musuh %s." % ("tampil" if Perception.debug_draw else "disembunyikan"))
 			return true
 		KEY_F8:
 			take_hit(20 + Combat.player_defense(data))
@@ -780,6 +869,9 @@ func _debug_combat_key(event: InputEvent) -> bool:
 			_debug_hold_weapon("staff_wood")
 			data.stamina = data.max_stamina
 			Notify.say("[Debug] Tongkat sihir dipegang, stamina penuh. Tahan klik kanan untuk membidik.")
+			return true
+		KEY_F5:
+			CaveEntrance.enter(self)
 			return true
 		KEY_F10:
 			bind_context()

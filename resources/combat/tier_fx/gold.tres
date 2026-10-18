@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="WeaponTierFx" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/weapon_tier_fx.gd" id="1_fx"]
+
+[resource]
+script = ExtResource("1_fx")
+display_name = "Emas"
+motif = 2
+color = Color(1, 0.85, 0.3, 1)
+color_alt = Color(1, 1, 0.75, 1)
+glow = Color(1, 0.85, 0.35, 0.4)
+trail_points = 9
+trail_width_scale = 1.2
+flight_particles = 12
+halo_radius = 2.5
+slash_width_scale = 1.2
+slash_echo = false
+slash_particles = 6
+hit_particles = 12
+hit_ring = 8.0
+shake_bonus = 0.3
+hitstop_bonus_ms = 5
+impact_layers = PackedStringArray("impactMetal_light_002", "impactBell_heavy_002")
+impact_volume_db = -7.0
+impact_semitones = 2.0
+aim_motes = 3
+chime_notes = PackedInt32Array(0, 4, 7)
+muzzle_scale = 1.2
+bass_boom = false

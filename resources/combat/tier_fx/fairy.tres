@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="WeaponTierFx" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/weapon_tier_fx.gd" id="1_fx"]
+
+[resource]
+script = ExtResource("1_fx")
+display_name = "Fairy"
+motif = 6
+color = Color(1, 0.6, 0.9, 1)
+color_alt = Color(0.6, 1, 0.75, 1)
+glow = Color(1, 0.65, 0.95, 0.6)
+trail_points = 17
+trail_width_scale = 1.6
+flight_particles = 32
+halo_radius = 5.0
+slash_width_scale = 1.6
+slash_echo = true
+slash_particles = 14
+hit_particles = 26
+hit_ring = 18.0
+shake_bonus = 1.0
+hitstop_bonus_ms = 20
+impact_layers = PackedStringArray("impactGlass_light_002", "impactBell_heavy_001", "impactBell_heavy_004")
+impact_volume_db = -5.0
+impact_semitones = 4.0
+aim_motes = 9
+chime_notes = PackedInt32Array(0, 4, 7, 11, 14)
+muzzle_scale = 1.75
+bass_boom = false
+status = 4
+status_chance = 1.0
+stamina_gain = 6

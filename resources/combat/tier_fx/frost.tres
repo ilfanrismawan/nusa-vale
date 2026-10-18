@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="WeaponTierFx" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/weapon_tier_fx.gd" id="1_fx"]
+
+[resource]
+script = ExtResource("1_fx")
+display_name = "Frost"
+motif = 4
+color = Color(0.55, 0.85, 1, 1)
+color_alt = Color(0.9, 1, 1, 1)
+glow = Color(0.5, 0.85, 1, 0.5)
+trail_points = 13
+trail_width_scale = 1.4
+flight_particles = 22
+halo_radius = 4.0
+slash_width_scale = 1.4
+slash_echo = true
+slash_particles = 10
+hit_particles = 20
+hit_ring = 14.0
+shake_bonus = 0.7
+hitstop_bonus_ms = 15
+impact_layers = PackedStringArray("impactGlass_medium_004", "impactGlass_light_002")
+impact_volume_db = -5.0
+impact_semitones = 1.0
+aim_motes = 6
+chime_notes = PackedInt32Array(0, 7, 12)
+muzzle_scale = 1.5
+bass_boom = false
+status = 2
+status_chance = 0.35
+status_duration = 2.5
+slow_scale = 0.6

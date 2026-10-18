@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://gp7ke1gy8pg6" path="res://assets/farm_rpg/objects/exterior/Houses/Door, windows, and chimney/Windows/Window1.png" id="4_omqeh"]
 [ext_resource type="Texture2D" uid="uid://ctun3wso646qe" path="res://assets/farm_rpg/objects/exterior/Houses/Door, windows, and chimney/chimney1.png" id="5_u8y5i"]
 [ext_resource type="Texture2D" uid="uid://cgndvty7hg5p3" path="res://assets/farm_rpg/objects/exterior/Houses/Door, windows, and chimney/Windows/Window7.png" id="6_p3fw4"]
+[ext_resource type="Script" uid="uid://xi8t0k3337vc" path="res://scripts/world/town_building_door.gd" id="ResidentDoor"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ovsut"]
 size = Vector2(25, 20)
@@ -123,7 +124,12 @@ collision_mask = 0
 polygon = PackedVector2Array(-35, 38, -35, 14, -37, 10, -28, 7, 19, 7, 33, 7, 36, 8, 39, 9, 40, 5, 89, 5, 90, 39, 35, 38, 35, 39)
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1328381898]
+script = ExtResource("ResidentDoor")
+target_scene = "res://scenes/world/interior/wira_home.tscn"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=2082419873]
 position = Vector2(0.5, 29)
 shape = SubResource("RectangleShape2D_ovsut")
+
+[node name="ReturnSpawn" type="Marker2D" parent="." unique_id=1249876515]
+position = Vector2(0, 60)

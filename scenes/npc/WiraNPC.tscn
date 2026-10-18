@@ -1,0 +1,5 @@
+[gd_scene format=3]
+[ext_resource type="PackedScene" path="res://scenes/npc/ScheduledNPC.tscn" id="Actor"]
+[node name="WiraNPC" instance=ExtResource("Actor")]
+npc_id = "wira"
+schedule = [{"hour": 6, "activity": "breakfast", "target_pos": Vector2(0, 0)}]

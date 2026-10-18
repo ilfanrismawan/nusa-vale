@@ -47,6 +47,7 @@ func roll_catch(location_id: String, rare_mult: float = 1.0, legendary_mult: flo
 	var pool: Array[FishData] = []
 	var weights: Array[float] = []
 	var total := 0.0
+	var season := DayCycle.get_current_season()
 	
 	for f in _fish:
 		if OS.has_feature("editor") and debug_force_tier >= 0 and int(f.item.rarity) != debug_force_tier:
@@ -55,7 +56,7 @@ func roll_catch(location_id: String, rare_mult: float = 1.0, legendary_mult: flo
 		if f.get_weight() <= 0.0:
 			continue
 			
-		if f.is_available(location_id, DayCycle.hour):
+		if f.is_available(location_id, DayCycle.hour, season):
 			var w := f.get_weight()
 			var rarity := int(f.item.rarity)
 			if rarity >= ItemData.Rarity.RARE:

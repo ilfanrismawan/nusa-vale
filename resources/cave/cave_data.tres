@@ -1,0 +1,162 @@
+[gd_resource type="Resource" script_class="CaveData" format=3 uid="uid://coc5gg1bo7ddg"]
+
+[ext_resource type="Script" uid="uid://b55bd6sd02v4r" path="res://scripts/data/cave_data.gd" id="1_data"]
+[ext_resource type="Script" uid="uid://dc2me1q2qvfpx" path="res://scripts/data/cave_ore.gd" id="2_ore"]
+[ext_resource type="Script" uid="uid://b83ix8aqgilpf" path="res://scripts/data/cave_band.gd" id="3_band"]
+[ext_resource type="Script" uid="uid://cdshrao3ldkws" path="res://scripts/data/enemy_data.gd" id="4_enemy"]
+[ext_resource type="Resource" path="res://resources/shop/combat_shop.tres" id="5_shop"]
+[ext_resource type="PackedScene" path="res://scenes/objects/small_rock.tscn" id="6_small_rock"]
+[ext_resource type="Script" uid="uid://bikx6gr46awcm" path="res://scripts/data/boss_data.gd" id="7_boss"]
+[ext_resource type="Resource" path="res://resources/enemies/boss_slime_king.tres" id="boss_slime_king"]
+[ext_resource type="Resource" uid="uid://d0okra48wwdbj" path="res://resources/enemies/myconid_red.tres" id="myconid_red"]
+[ext_resource type="Resource" uid="uid://db3agp1lgviiw" path="res://resources/enemies/slime_blue.tres" id="slime_blue"]
+[ext_resource type="Resource" uid="uid://d0p2j2shqacfh" path="res://resources/enemies/slime_green.tres" id="slime_green"]
+
+[sub_resource type="Resource" id="band_0"]
+script = ExtResource("3_band")
+last_floor = 5
+rock_max = 24
+enemies = Array[ExtResource("4_enemy")]([ExtResource("slime_green")])
+enemy_max = 3
+
+[sub_resource type="Resource" id="band_1"]
+script = ExtResource("3_band")
+first_floor = 6
+last_floor = 10
+rock_min = 20
+enemies = Array[ExtResource("4_enemy")]([ExtResource("slime_green"), ExtResource("slime_blue")])
+
+[sub_resource type="Resource" id="band_2"]
+script = ExtResource("3_band")
+first_floor = 11
+rock_min = 20
+rock_max = 28
+enemies = Array[ExtResource("4_enemy")]([ExtResource("slime_blue"), ExtResource("myconid_red")])
+enemy_min = 3
+enemy_max = 5
+
+[sub_resource type="Resource" id="band_3"]
+script = ExtResource("3_band")
+first_floor = 21
+last_floor = 40
+rock_min = 22
+rock_max = 30
+enemies = Array[ExtResource("4_enemy")]([ExtResource("slime_blue"), ExtResource("myconid_red")])
+enemy_min = 3
+enemy_max = 5
+
+[sub_resource type="Resource" id="band_4"]
+script = ExtResource("3_band")
+first_floor = 41
+last_floor = 60
+rock_min = 22
+rock_max = 30
+enemies = Array[ExtResource("4_enemy")]([ExtResource("myconid_red"), ExtResource("slime_blue")])
+enemy_min = 4
+enemy_max = 6
+
+[sub_resource type="Resource" id="band_5"]
+script = ExtResource("3_band")
+first_floor = 61
+last_floor = 80
+rock_min = 22
+rock_max = 30
+enemies = Array[ExtResource("4_enemy")]([ExtResource("myconid_red"), ExtResource("slime_blue")])
+enemy_min = 4
+enemy_max = 6
+
+[sub_resource type="Resource" id="band_6"]
+script = ExtResource("3_band")
+first_floor = 81
+last_floor = 999
+rock_min = 24
+rock_max = 32
+enemies = Array[ExtResource("4_enemy")]([ExtResource("myconid_red"), ExtResource("slime_blue")])
+enemy_min = 5
+enemy_max = 7
+
+[sub_resource type="Resource" id="ore_stone"]
+script = ExtResource("2_ore")
+scene = ExtResource("6_small_rock")
+health = 2
+
+[sub_resource type="Resource" id="ore_coal"]
+script = ExtResource("2_ore")
+item_id = "coal"
+sprite_column = 8
+
+[sub_resource type="Resource" id="ore_copper_ore"]
+script = ExtResource("2_ore")
+item_id = "copper_ore"
+drop_max = 3
+
+[sub_resource type="Resource" id="ore_iron_ore"]
+script = ExtResource("2_ore")
+item_id = "iron_ore"
+sprite_column = 1
+minimum_tool_tier = 1
+health = 4
+drop_max = 3
+
+[sub_resource type="Resource" id="ore_gold_ore"]
+script = ExtResource("2_ore")
+item_id = "gold_ore"
+sprite_column = 2
+minimum_tool_tier = 2
+health = 5
+drop_max = 3
+
+[sub_resource type="Resource" id="ore_platinum_ore"]
+script = ExtResource("2_ore")
+item_id = "platinum_ore"
+sprite_column = 3
+minimum_tool_tier = 3
+health = 6
+drop_max = 3
+
+[sub_resource type="Resource" id="ore_crimson_ore"]
+script = ExtResource("2_ore")
+item_id = "crimson_ore"
+sprite_column = 5
+minimum_tool_tier = 4
+health = 7
+drop_max = 3
+
+[sub_resource type="Resource" id="ore_frost_ore"]
+script = ExtResource("2_ore")
+item_id = "frost_ore"
+sprite_column = 7
+minimum_tool_tier = 5
+health = 8
+drop_max = 3
+
+[sub_resource type="Resource" id="ore_shadow_ore"]
+script = ExtResource("2_ore")
+item_id = "shadow_ore"
+sprite_column = 4
+minimum_tool_tier = 6
+health = 9
+drop_max = 3
+
+[sub_resource type="Resource" id="ore_fairy_ore"]
+script = ExtResource("2_ore")
+item_id = "fairy_ore"
+sprite_column = 9
+minimum_tool_tier = 7
+health = 10
+drop_max = 3
+
+[sub_resource type="Resource" id="ore_obsidian_ore"]
+script = ExtResource("2_ore")
+item_id = "obsidian_ore"
+sprite_column = 8
+minimum_tool_tier = 8
+health = 11
+drop_max = 3
+
+[resource]
+script = ExtResource("1_data")
+ores = Array[ExtResource("2_ore")]([SubResource("ore_stone"), SubResource("ore_coal"), SubResource("ore_copper_ore"), SubResource("ore_iron_ore"), SubResource("ore_gold_ore"), SubResource("ore_platinum_ore"), SubResource("ore_crimson_ore"), SubResource("ore_frost_ore"), SubResource("ore_shadow_ore"), SubResource("ore_fairy_ore"), SubResource("ore_obsidian_ore")])
+bands = Array[ExtResource("3_band")]([SubResource("band_0"), SubResource("band_1"), SubResource("band_2"), SubResource("band_3"), SubResource("band_4"), SubResource("band_5"), SubResource("band_6")])
+bosses = Array[ExtResource("7_boss")]([ExtResource("boss_slime_king")])
+shop = ExtResource("5_shop")

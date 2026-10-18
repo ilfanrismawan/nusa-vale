@@ -1,6 +1,6 @@
-[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://d0okra48wwdbj"]
 
-[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://cdshrao3ldkws" path="res://scripts/data/enemy_data.gd" id="1"]
 
 [resource]
 script = ExtResource("1")
@@ -12,5 +12,18 @@ attack = 10
 defense = 3
 body_radius = 7.0
 knockback_resist = 0.3
+attack_style = 1
+patrol_speed = 14.0
+chase_speed = 30.0
+aggro_radius = 96.0
+attack_range = 20.0
+attack_windup = 0.35
+attack_cooldown = 1.5
+hurt_stun = 0.25
+poise = 45.0
+stagger_time = 1.6
+poise_damage = 20.0
+vision_angle_deg = 120.0
+memory_time = 4.0
+feint_chance = 0.25
 drop_item_id = "common_mushroom"
-drop_chance = 0.5

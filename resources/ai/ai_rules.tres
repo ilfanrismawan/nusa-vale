@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="AiRules" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/ai_rules.gd" id="1_rules"]
+
+[resource]
+script = ExtResource("1_rules")
+run_noise_radius = 64.0
+run_noise_interval = 0.4
+mine_noise_radius = 112.0
+clash_noise_radius = 96.0
+perception_interval = 0.1
+max_attackers = 2
+ticket_rest = 0.8
+flank_extra_distance = 22.0
+separation_radius = 18.0
+circle_speed = 1.4
+help_radius = 112.0

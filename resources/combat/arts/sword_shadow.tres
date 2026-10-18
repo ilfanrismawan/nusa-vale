@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="WeaponArt" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/weapon_art.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"sword_shadow"
+display_name = "Tebasan Bayangan"
+kind = 0
+stamina_cost = 36
+cooldown = 4.5
+damage_scale = 1.2
+poise_scale = 1.8
+count = 3
+interval = 0.1
+ignore_defense = true
+color = Color(0.6, 0.45, 0.9, 1)

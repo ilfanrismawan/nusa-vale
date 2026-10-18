@@ -1,0 +1,145 @@
+{
+  "id": "wira",
+  "name": "Wira",
+  "age": 36,
+  "role": "Tukang Kayu",
+  "home_map": "wira_home",
+  "romanceable": false,
+  "personality": [
+	"patient",
+	"meticulous",
+	"helpful",
+    "workaholic"
+  ],
+  "move_speed": 36.0,
+  "service": "carpenter",
+  "visual": {
+	"sprite_frames": "res://resources/npc_data/npc_animation/npc_wira_frame.tres",
+	"portrait": "res://assets/farm_rpg/Character/NPC'S/Wira/npc_wira_portrait.png"
+  },
+  "dialogue": {
+	"default": [
+      "Butuh sesuatu untuk kebunmu? Kita bisa mulai dari gambar sederhana."
+	],
+	"breakfast": [
+	  "Teh hangat dulu sebelum mulai bekerja.",
+      "Kalau kamu butuh bangunan baru, temui aku di bengkel setelah pukul delapan."
+	],
+	"checking_stock": [
+	  "Aku sedang memeriksa persediaan kayu.",
+      "Kayu yang sudah kering membuat bangunan lebih awet."
+	],
+	"working": [
+	  "Selamat datang. Ada bangunan atau furnitur yang ingin kamu buat?",
+      "Aku selalu mengukur dua kali sebelum memotong."
+	],
+	"lunch": [
+      "Mari istirahat sebentar. Serbuk kayunya sampai masuk ke kantong bajuku."
+	],
+	"delivering": [
+	  "Aku sedang memeriksa papan pesanan warga.",
+      "Mungkin suatu hari kita bisa membuat tempat berkumpul baru untuk desa."
+	],
+	"resting": [
+      "Dari bukit ini, atap rumah warga terlihat seperti potongan kecil sebuah cerita."
+	],
+	"sleeping": [
+      "Bengkelnya sudah tutup. Besok kita lanjutkan, ya."
+	]
+  },
+  "schedules": {
+	"default": [
+	  {
+		"time": "06:00",
+		"map": "wira_home",
+		"point": "wira_home",
+		"activity": "breakfast"
+	  },
+	  {
+		"time": "07:00",
+		"map": "hill",
+		"point": "wira_wood_storage",
+		"activity": "checking_stock"
+	  },
+	  {
+		"time": "08:00",
+		"map": "hill",
+		"point": "wira_workshop",
+		"activity": "working"
+	  },
+	  {
+		"time": "12:00",
+		"map": "hill",
+		"point": "wira_lunch",
+		"activity": "lunch"
+	  },
+	  {
+		"time": "13:00",
+		"map": "hill",
+		"point": "wira_workshop",
+		"activity": "working"
+	  },
+	  {
+		"time": "17:00",
+		"map": "town",
+		"point": "wira_orders",
+		"activity": "delivering"
+	  },
+	  {
+		"time": "18:30",
+		"map": "hill",
+		"point": "wira_overlook",
+		"activity": "resting"
+	  },
+	  {
+		"time": "21:00",
+		"map": "wira_home",
+		"point": "wira_home",
+		"activity": "sleeping"
+	  }
+	],
+	"rainy": [
+	  {
+		"time": "06:00",
+		"map": "wira_home",
+		"point": "wira_home",
+		"activity": "breakfast"
+	  },
+	  {
+		"time": "08:00",
+		"map": "hill",
+		"point": "wira_workshop",
+		"activity": "working"
+	  },
+	  {
+		"time": "12:00",
+		"map": "hill",
+		"point": "wira_lunch",
+		"activity": "lunch"
+	  },
+	  {
+		"time": "13:00",
+		"map": "hill",
+		"point": "wira_workshop",
+		"activity": "working"
+	  },
+	  {
+		"time": "18:00",
+		"map": "wira_home",
+		"point": "wira_home",
+		"activity": "resting"
+	  },
+	  {
+		"time": "21:00",
+		"map": "wira_home",
+		"point": "wira_home",
+		"activity": "sleeping"
+	  }
+	]
+  },
+  "likes": [
+	"quality_wood",
+	"warm_tea",
+    "home_cooking"
+  ]
+}

@@ -6,7 +6,11 @@ extends RefCounted
 
 ## Target serangan pemain: node di grup ini yang punya take_hit(attack, source, knockback).
 const DAMAGEABLE_GROUP := &"damageable"
+## Pemain yang bisa dikejar dan diserang AI musuh.
+const PLAYER_GROUP := &"combat_players"
 const DEFEAT_RULES: DefeatRules = preload("res://resources/combat/defeat_rules.tres")
+## Aturan soulslike (GDD 8.2-A): stamina tempur, roll, block/parry, poise.
+const RULES: CombatRules = preload("res://resources/combat/combat_rules.tres")
 const STYLES := {
 	ItemData.WeaponType.SWORD: preload("res://resources/combat/sword.tres"),
 	ItemData.WeaponType.BOW: preload("res://resources/combat/bow.tres"),
@@ -56,3 +60,60 @@ static func find_damageable(node: Node) -> Node:
 			return null
 		node = node.get_parent()
 	return null
+
+## Beban perlengkapan (GDD 8.2-A2): berat per slot x pengali tier bahan (CombatRules).
+static func equip_load(data: PlayerData) -> float:
+	var total := 0.0
+	for key in data.equipment:
+		var item: Variant = data.equipment[key]
+		if item is ItemData:
+			total += float(RULES.slot_weight.get(key, 0.0)) * CombatRules.pick(RULES.tier_weight, int(item.equipment_tier), 1.0)
+	return total
+
+static func equip_load_ratio(data: PlayerData) -> float:
+	return equip_load(data) / maxf(1.0, RULES.load_capacity)
+
+## 0 = Fast Roll, 1 = Medium Roll, 2 = Heavy Fat-Roll.
+static func roll_class(data: PlayerData) -> int:
+	return RULES.roll_class(equip_load_ratio(data))
+
+## Info tambahan pukulan pemain yang sedang diproses take_hit (pola sama dengan
+## CombatJuice.heavy_hit): kikisan poise, abaikan DEF (weapon art), dan kritis (riposte).
+static var hit_poise := -1.0
+static var hit_ignores_defense := false
+static var hit_critical := false
+
+## Pukul target memakai take_hit(attack, source, knockback) biasa, plus info soulslike di atas.
+static func hit(target: Node, attack: int, source: Node, knockback: Vector2, poise: float = -1.0, ignore_defense: bool = false, critical: bool = false, heavy: bool = false, fx: WeaponTierFx = null) -> bool:
+	hit_poise = poise
+	hit_ignores_defense = ignore_defense
+	hit_critical = critical
+	CombatJuice.heavy_hit = heavy or critical
+	CombatJuice.hit_fx = fx
+	var landed: bool = target.take_hit(attack, source, knockback)
+	if landed and fx != null and fx.has_status():
+		apply_tier_status(target, fx, attack, source)
+	hit_poise = -1.0
+	hit_ignores_defense = false
+	hit_critical = false
+	CombatJuice.heavy_hit = false
+	CombatJuice.hit_fx = null
+	return landed
+
+## Efek status tier senjata (GDD 8.2, v3.3) setelah pukulan masuk. Terbakar/dingin/api gelap
+## menempel di musuh (Enemy.apply_status); serap jiwa dan berkah peri memulihkan penyerangnya.
+static func apply_tier_status(target: Node, fx: WeaponTierFx, attack: int, source: Node) -> void:
+	match fx.status:
+		WeaponTierFx.Status.BURN, WeaponTierFx.Status.CHILL, WeaponTierFx.Status.DARK_FIRE:
+			if target.has_method("apply_status") and randf() < fx.status_chance:
+				target.apply_status(fx, attack)
+		WeaponTierFx.Status.LIFESTEAL:
+			var player := source as Player
+			if player != null and not player.is_defeated and player.data.hp < player.data.max_hp and randf() < fx.status_chance:
+				var heal := maxi(1, roundi(attack * fx.lifesteal_ratio))
+				player.data.restore_hp(heal)
+				CombatJuice.damage_number("+%d" % heal, player.global_position + Vector2(0, -18), fx.color_alt.lerp(Color(0.6, 1.0, 0.6), 0.5))
+		WeaponTierFx.Status.STAMINA:
+			var player := source as Player
+			if player != null and player.combat != null and randf() < fx.status_chance:
+				player.combat.restore(float(fx.stamina_gain))

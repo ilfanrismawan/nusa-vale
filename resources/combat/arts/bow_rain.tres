@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="WeaponArt" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/weapon_art.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"bow_rain"
+display_name = "Hujan Panah"
+kind = 2
+stamina_cost = 32
+cooldown = 4.0
+damage_scale = 0.9
+poise_scale = 1.2
+count = 5
+spread_deg = 28.0
+color = Color(0.75, 0.95, 1.0, 1)

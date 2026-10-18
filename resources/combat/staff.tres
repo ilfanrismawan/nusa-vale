@@ -1,6 +1,11 @@
 [gd_resource type="Resource" script_class="WeaponStyle" format=3 uid="uid://draeagxae4kb4"]
 
 [ext_resource type="Script" uid="uid://bpgswpatsto5r" path="res://scripts/data/weapon_style.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/weapon_art.gd" id="art_script"]
+[ext_resource type="Resource" path="res://resources/combat/arts/staff_burst.tres" id="art_staff_burst"]
+[ext_resource type="Resource" path="res://resources/combat/arts/staff_pierce.tres" id="art_staff_pierce"]
+[ext_resource type="Resource" path="res://resources/combat/arts/staff_fairy.tres" id="art_staff_fairy"]
+[ext_resource type="Resource" path="res://resources/combat/arts/staff_obsidian.tres" id="art_staff_obsidian"]
 
 [resource]
 script = ExtResource("1")
@@ -10,7 +15,6 @@ speed_scale = 1.5
 aim_pose_frame = 2
 projectile_speed = 160.0
 projectile_range_tiles = 6.0
-stamina_cost = 3
 knockback = 6.0
 swing_feedback = &"magic_cast"
 hit_feedback = &"magic_hit"
@@ -19,3 +23,18 @@ combo_speed = null
 finisher_knockback_scale = 2.0
 finisher_projectile_scale = 2.0
 finisher_feedback = &"combo_finisher"
+stamina_cost = 14
+heavy_stamina_cost = 28
+active_end_ratio = 0.6
+recovery_cancel_ratio = 0.8
+heavy_damage = 2.0
+heavy_speed = 0.75
+heavy_projectile_scale = 2.0
+heavy_knockback_scale = 2.0
+sprint_damage = 1.15
+sprint_lunge = 0.0
+roll_damage = 1.25
+roll_speed = 1.4
+poise_damage = 10.0
+block_reduction = 0.55
+arts = Array[ExtResource("art_script")]([ExtResource("art_staff_burst"), ExtResource("art_staff_burst"), ExtResource("art_staff_burst"), ExtResource("art_staff_burst"), ExtResource("art_staff_pierce"), ExtResource("art_staff_pierce"), ExtResource("art_staff_pierce"), ExtResource("art_staff_pierce"), ExtResource("art_staff_fairy"), ExtResource("art_staff_obsidian")])

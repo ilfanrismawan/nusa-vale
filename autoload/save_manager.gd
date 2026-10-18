@@ -13,7 +13,7 @@ const SEASON_NAMES: Array[String] = ["Musim Semi", "Musim Panas", "Musim Gugur",
 ## Dipakai ringkasan slot bila save belum punya nama pemain (save versi 6 ke bawah).
 const DEFAULT_PLAYER_NAME := "Petani"
 
-const SAVE_VERSION := 14
+const SAVE_VERSION := 17
 
 signal game_saved
 signal game_loaded
@@ -281,6 +281,10 @@ func _is_valid_save(data: Dictionary) -> bool:
 		return false
 	if not DailyWeather.valid_save(data.get("weather", {})):
 		return false
+	if not CaveManager.valid_save(data.get("cave", {})):
+		return false
+	if not HouseManager.valid_save(data.get("house", {})):
+		return false
 	if version < 1 or version > SAVE_VERSION:
 		return false
 	for key in ["day_cycle", "world_state", "unlocks", "discoveries", "resources", "forage", "balai_nadi"]:
@@ -383,6 +387,10 @@ func _build_save_data() -> Dictionary:
 		# Version 8: shared contributions and one-time completion state.
 		"balai_nadi": GameState.balai_nadi.to_save(),
 		"daya": GameState.daya.to_save(),
+		# Versi 15: lift checkpoint Gua Tambang (GDD 9). Versi 16: boss gua yang sudah kalah (GDD 8.2-C).
+		"cave": GameState.cave.to_save(),
+		# Versi 17: tingkat rumah + pesanan upgrade di Wira (GDD 4.12).
+		"house": GameState.house.to_save(),
 
 		"coop_players": _serialize_coop_players(),
 	}
@@ -393,6 +401,8 @@ func _apply_save(data: Dictionary) -> void:
 	GameState.p1().clear_food_effects()
 	GameState.use_player(GameState.p1())
 	_load_day_cycle(data)
+	# Sebelum pemain: stamina tersimpan bisa di atas 100 berkat bonus rumah.
+	GameState.house.load_save(data.get("house", {}))
 	GameState.weather.load_save(data.get("weather", {}))
 	_load_player(data)
 	GameState.shipping.load_save(data.get("shipping", {}))
@@ -400,6 +410,8 @@ func _apply_save(data: Dictionary) -> void:
 	_load_inventory(data)
 	_load_farm(data)
 	_load_world_state(data)
+	# Save v16 ke bawah tanpa "house": renovasi dapur lama dihitung rumah tingkat 1.
+	GameState.house.sync_with_world()
 	_load_unlocks(data)
 	GameState.balai_nadi.load_save(data.get("balai_nadi", {}))
 	_load_discoveries(data)
@@ -409,6 +421,7 @@ func _apply_save(data: Dictionary) -> void:
 	StructureManager.load_save(data.get("structures", []))
 	_load_coop_players(data)
 	GameState.daya.load_save(data.get("daya", {}))
+	GameState.cave.load_save(data.get("cave", {}))
 	if GameState.weather.is_raining():
 		FarmManager.apply_rain()
 

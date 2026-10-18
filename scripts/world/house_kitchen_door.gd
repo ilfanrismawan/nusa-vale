@@ -9,6 +9,6 @@ func _ready() -> void:
 
 func interact(player: Player) -> void:
 	if not WorldState.has_flag(required_flag):
-		Notify.say("Ruang dapur belum direnovasi. Pesan renovasi rumah di toko peralatan masak.")
+		Notify.say("Ruang dapur belum dibangun. Pesan Upgrade Rumah ke Wira, tukang kayu di Bukit.")
 		return
 	RoomDoor.travel(player, target_scene, spawn_position)

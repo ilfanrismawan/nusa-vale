@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="HouseLevelData" format=3]
+[ext_resource type="Script" path="res://scripts/resources/house_level_data.gd" id="script"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/Houses/9.png" id="icon"]
+[resource]
+script = ExtResource("script")
+display_name = "Spacious Bedroom"
+description = "Upgrade rumah tingkat 2. Kamar tidur diperluas dengan kasur besar: stamina maksimum semua penghuni +20."
+icon = ExtResource("icon")
+price = 15000
+materials = Dictionary[String, int]({"wood": 300, "stone": 150, "iron_bar": 10})
+build_days = 3
+grants_flags = PackedStringArray("house_bedroom_upgraded")
+stamina_bonus = 20
+completed_message = "Kamar tidur baru selesai! Stamina maksimum semua penghuni +20."

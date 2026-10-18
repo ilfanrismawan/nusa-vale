@@ -34,6 +34,7 @@ func _ready() -> void:
 		if item_gesture_playing:
 			item_gesture_playing = false
 			_visual_override = &""
+			sprite.speed_scale = 1.0
 			_apply(false)
 		elif _visual_override.is_empty():
 			animated_finished.emit())
@@ -52,6 +53,8 @@ func play(action: StringName) -> void:
 
 ## Pose sementara (tidur) tetap bertahan saat state locomotion diperbarui.
 func set_visual_override(action: StringName) -> void:
+	if item_gesture_playing:
+		sprite.speed_scale = 1.0
 	item_gesture_playing = false
 	_pose_hold = -1
 	_visual_override = action
@@ -83,7 +86,7 @@ func release_pose() -> bool:
 	return true
 
 ## Cosmetic one-shot without emitting tool hit frames or changing the action state.
-func play_item_gesture(action: StringName) -> bool:
+func play_item_gesture(action: StringName, speed: float = 1.0) -> bool:
 	if not _visual_override.is_empty():
 		return false
 	var found := false
@@ -93,7 +96,7 @@ func play_item_gesture(action: StringName) -> bool:
 		return false
 	item_gesture_playing = true
 	_visual_override = action
-	sprite.speed_scale = 1.0
+	sprite.speed_scale = speed
 	_apply(false)
 	return true
 	

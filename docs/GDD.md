@@ -1,6 +1,6 @@
 # Nusa Vale — Game Design Document (GDD)
 
-Versi dokumen: 2.8 (17 Oktober 2026).
+Versi dokumen: 3.8 (18 Oktober 2026).
 Dokumen ini adalah **sumber kebenaran desain** proyek `E:\nusa-vale` (Game Design Document resmi).
 Pada versi 1.9, ditambahkan 4 pilar fundamental Life-Sim / Farming RPG: **Sistem Peternakan & Satwa** (kandang Barn/Coop, sapi, kambing, domba, ayam, bebek, kuda, pakan & affection), **Mesin Pengolah Pasca-Panen (Artisan Goods)** (mayones, keju, selai, fermentasi keg, tenun, pengasap ikan), **Sistem Cuaca Harian Dinamis** (cerah, hujan penyiram otomatis, badai petir penangkal baterai, salju), serta **Sistem Sosial, Persahabatan, & Jadwal Harian NPC** (hati 0-10, sistem hadiah loved/hated, rutinitas harian, heart events, dan romansa/teman sekamar).
 
@@ -43,14 +43,14 @@ Panduan editor resep, karakter, animasi dan syarat objek: [EDITOR_GUIDE.md](EDIT
 | Cuaca | Cerah/hujan; hujan menyiram outdoor | Badai, salju, petir/baterai, prakiraan masih target |
 | Cooking | Lima resep, buku per pemain, stamina, buff laju | Dapur rumah, HP/combat, resep TV/sosial masih target |
 | Biji Daya | Tiga sumber unik, kapasitas stamina 100–130 | Target 200 membutuhkan tujuh sumber tambahan |
-| Fishing | Minigame, lokasi dan jam | `FishData` belum memiliki field musim; pembekuan air masih target |
+| Fishing | Minigame, lokasi, jam, musim ikan, air beku musim dingin, kolam air panas Gunung, danau gua lantai 10 | Pantai (`beach_sea`) belum punya scene |
 | Co-op | Lokal split-screen 2–4 pemain | Gamepad fisik dan kenyamanan perlu playtest |
-| Konten lanjutan | Data equipment, HP per pemain, combat dasar (pedang/busur/tongkat), musuh target, denda tumbang lewat Klinik | AI musuh (4B-2), gua/dungeon (4B-3), role EXP, bazaar, festival, ekonomi dinamis belum terpasang |
+| Konten lanjutan | Data equipment, HP per pemain, combat dasar (pedang/busur/tongkat), musuh dengan AI kejar/serang, denda tumbang lewat Klinik, Gunung + Gua Tambang lantai 1-20 dengan lift dan Toko Combat | lantai gua 21+ (lanjutan 4B-3), boss lantai 40/60/80/100, role EXP, bazaar, festival, ekonomi dinamis belum terpasang |
 
 Koreksi acuan implementasi:
 
 - Viewport aktif `project.godot`: **1280 × 720**, window awal 1280 × 720; angka 960 × 540 di tabel lama sudah kedaluwarsa.
-- `SAVE_VERSION = 14` (versi 14 menambah HP per pemain); angka versi save pada bagian keputusan lanjutan bukan versi aktif.
+- `SAVE_VERSION = 15` (versi 14 menambah HP per pemain, versi 15 menambah lift checkpoint Gua Tambang); angka versi save pada bagian keputusan lanjutan bukan versi aktif.
 - Stamina awal 100, maksimum pemain dapat naik melalui Biji Daya. Detail transaksi dan persistensi: [BIJI_DAYA.md](BIJI_DAYA.md).
 - Pingsan batas waktu pada 05:10 memulangkan pemain, bangun 08:00 dengan 50% kapasitas stamina; pemain co-op yang sudah tidur pulih penuh. **Tidak memotong uang atau item**. Denda medis karena HP habis (bagian 4.2 dan 8.1) terpasang terpisah sejak Phase 4B-1.
 - Shipping dibayar saat pergantian hari melalui `ShippingManager.settle`, ke saldo bersama dan ringkasan pendapatan. Kurir sore masih rancangan.
@@ -186,6 +186,24 @@ Spesifikasi terperinci dan batas antara fitur terpasang dengan rancangan lanjuta
 - Ransel 36 slot (aktif 12 / 24 / 36 sesuai `bag_level`). Upgrade ransel dibeli di toko (2.000 G dan 10.000 G).
 - Hotbar 8 slot dengan tombol geser halaman (Tab / Gamepad Back).
 - Sortir tas (R) otomatis menggabungkan stack dan merapikan alat di depan.
+- **Kontrol gamepad mengikuti Stardew Valley [terpasang]** (`scripts/player/player_input.gd`), supaya pemain Stardew langsung terbiasa:
+
+  | Tombol (Xbox) | Fungsi | Sama dengan Stardew? |
+  |---|---|---|
+  | Stik kiri / D-pad | Berjalan | Ya |
+  | A | Interaksi / konfirmasi | Ya |
+  | X | Pakai alat / serang (tahan = serangan berat, tahan saat memancing = lempar kail) | Ya |
+  | B | Buka/tutup tas, batal/tutup menu | Ya |
+  | Y | Buka tas langsung di tab Crafting | Ya |
+  | Start | Buka tas | Ya |
+  | LB / RB | Slot hotbar sebelumnya/berikutnya; di dalam tas: pindah tab | Ya |
+  | RT | Tahan = lari; tekan singkat sambil memegang senjata = roll | Tidak (Stardew: ganti baris toolbar) |
+  | LT | Tahan = block, tepat waktu = parry | Tidak (Stardew: ganti baris toolbar) |
+  | Back | Ganti halaman hotbar | Tidak (Stardew: jurnal) |
+  | Klik stik kiri (L3) | Weapon Art | Tidak ada di Stardew |
+  | Klik stik kanan (R3) | Rapikan tas | Tidak ada di Stardew |
+
+  Penyimpangan dari Stardew hanya untuk combat soulslike dan lari tahan (keputusan tanpa auto-run). Tab Pengaturan tidak ikut diputar LB/RB; buka lewat klik atau P1 keyboard. Tes: `tests/gamepad_input_regression.tscn`.
 - Equipment: 4 slot terpasang (`helmet`, `armor`, `leggings`, `boots`). Senjata (pedang, busur, tongkat sihir) **dipegang dari hotbar**, bukan dipasang; slot Weapon di menu hanya menampilkan senjata yang sedang dipegang. Save lama yang memasang senjata memindahkannya ke tas. 80 varian equipment tersedia dalam database.
 - **Konvensi Bahasa & Lokalisasi [keputusan]**:
   - `display_name` item diseragamkan ke **Bahasa Indonesia** sebagai bahasa utama (misal: "Kapak Kayu", "Pedang Besi", "Wortel", "Ikan Lele").
@@ -413,15 +431,43 @@ Mesin pengolah yang dapat dirakit melalui Crafting dan ditempatkan di ladang ata
 
 ---
 
+### 4.12 Upgrade Rumah di Wira [terpasang 2026-10-18 + angka usulan]
+
+Upgrade rumah dipesan ke **Wira**, tukang kayu di Bukit (layanan "Bangun / Upgrade"), lewat kartu pertama "Upgrade Rumah" di menu bangunan yang sama dengan Kandang/Barn/Silo.
+
+- **Alur** [terpasang]: pilih kartu, bahan diambil dari tas pemain yang memesan, uang dari kas bersama, bayar di depan. Wira bekerja beberapa hari (seperti Empu Bima); upgrade selesai saat pergantian hari ke-N setelah dipesan dan muncul Notify. Satu pesanan sekaligus, satu tingkat per pesanan. Tingkat rumah milik seluruh rumah tangga (co-op).
+- **Data** [terpasang]: `HouseLevelData` (`scripts/resources/house_level_data.gd`), satu file per tingkat `resources/house/house_level_<n>.tres` (nama, deskripsi, ikon, harga, bahan, lama hari, flag, bonus stamina, pesan selesai). Logika di `HouseManager` (`scripts/system/house_manager.gd`, dipegang `GameState.house`).
+- **Tingkat** [usulan, menunggu konfirmasi pemilik proyek; ubah angkanya di `.tres`]:
+
+| Tingkat | Nama | Harga | Bahan | Lama | Membuka |
+|---|---|---|---|---|---|
+| 1 | Kitchen Room | 5.000 G | 150 kayu, 50 batu | 2 hari | Ruang dapur (flag `house_kitchen_upgraded`, pintu Dapur di rumah) |
+| 2 | Spacious Bedroom | 15.000 G | 300 kayu, 150 batu, 10 iron bar | 3 hari | Stamina maksimum semua pemain +20 (`house_bedroom_upgraded`) |
+| 3 | Grand House | 40.000 G | 400 kayu, 300 batu, 10 gold bar | 3 hari | Stamina maksimum +20 lagi, gudang bawah tanah (`house_cellar_upgraded`, untuk fitur tong nanti) |
+
+- **Hubungan dengan dapur** [terpasang]: renovasi dapur tidak lagi dijual di toko Dapur Nusantara; toko itu tetap menjual kitchen set dan alat masak setelah tingkat 1 selesai. Pintu Dapur ditambahkan oleh `interior_house.gd` (posisi `kitchen_door_position`) karena node-nya tidak ada di `interior_house.tscn`.
+- **Save v17** [terpasang]: key `house` = `{level, order: {level, ready_day}}`. Save v16 ke bawah tanpa key ini: tingkat 0, kecuali flag `house_kitchen_upgraded` sudah menyala (dapur dibeli di toko lama) = tingkat 1.
+- **Belum** [usulan]: tampilan luar rumah belum berubah per tingkat (belum ada art rumah yang diperbaiki); gudang bawah tanah baru berupa flag.
+
+---
+
 ## 5. Sistem Memancing (Fishing) [terpasang + keputusan]
 
 - Mini-game melempar kail dengan meteran tenaga, menunggu gigitan, dan menyeimbangkan barra tangkapan hijau mengikuti ikon ikan.
 - 65 spesies ikan dengan 5 tingkat kelangkaan (Umum, Tidak Umum, Langka, Epik, Legendaris) dan variasi lokasi/jam tangkap.
 - **Musim Ikan (`seasons` di `FishData`) [keputusan]**:
   - Ditambahkan atribut daftar musim ke dalam data ikan. Spesies ikan tertentu hanya dapat dipancing pada musim yang sesuai.
+  - **[terpasang 18 Oktober 2026]** `FishData.seasons` (`spring`/`summer`/`fall`/`winter`); kosong = sepanjang tahun. `FishingManager.roll_catch` hanya memilih ikan musim berjalan.
+  - Pembagian awal (usulan Claude, bisa diubah di `resources/fish_data/*.tres`): ikan umum air tawar (mas, lele, nila, carp, chub, perch, shad, sunfish, crayfish, bullhead catfish) sepanjang tahun. Musiman: Faeries Fish (semi); Frog, Large Mouth Bass (semi, panas); Tiger Trout (semi, gugur); Gurame (semi, panas, gugur); Dorado, Golden Fish (panas); Dynamite Fish (panas, gugur); Sturgeon (panas, dingin); Zombie Fish (gugur); Bone Fish, Ghost Catfish, Pike, Walleye (gugur, dingin). Laut: Clownfish, Dolphin (panas), Salmon (gugur), Glacier Fish (dingin).
+  - Perbaikan data: lokasi ikan mas `" forest_river"` (berspasi) menjadi `"forest_river"`.
 - **Air Beku Musim Dingin [keputusan]**:
   - Permukaan danau dan sungai biasa membeku di musim dingin sehingga aktivitas memancing di luar ruangan diblokir.
   - Pemain dapat memancing di musim dingin hanya jika telah membuka akses ke area pancing khusus (seperti pemandian air panas tersembunyi atau danau bawah tanah di dalam gua).
+  - **[terpasang 18 Oktober 2026]** `FishingSpot.freezes_in_winter` (bawaan `true`). Di Musim Dingin meteran lemparan menandai air beku sebagai bukan air, dan lemparan ke air beku dibatalkan tanpa memotong stamina ("Air membeku di musim dingin..."). Spot khusus cukup memakai `freezes_in_winter = false`.
+  - **Spot musim dingin [terpasang 18 Oktober 2026, keputusan pemilik proyek: keduanya]**, dibangun dari kode oleh `scripts/world/winter_pond.gd` (tepi kolam beranimasi dari "Water Ground animations tiles.png", isi warna Water tile, tabrakan bibir kolam):
+    - **Kolam Air Panas** di Gunung (`mountain_hot_spring`, 8x6 tile di sisi barat, ada uap). Ikan: carp, perch, sunfish, pike, walleye, sturgeon, tiger trout.
+    - **Danau Bawah Tanah** di Gua Tambang lantai 10 (`cave_lake`; lantai, posisi, dan ukuran di `CaveData.lake_floor/lake_cell/lake_size`). Ikan: crayfish, chub, bullhead catfish, ghost catfish, bone fish, zombie fish, dynamite fish.
+    - Keduanya terbuka sepanjang tahun; tabel ikan tetap mengikuti musim. Pembagian ikan = usulan Claude, ubah lewat `locations` di `resources/fish_data/*.tres`.
 
 ---
 
@@ -430,7 +476,7 @@ Mesin pengolah yang dapat dirakit melalui Crafting dan ditempatkan di ladang ata
 Tahap dasar (14 Oktober 2026) [terpasang]: panci Dapur Warung di town,
 lima resep, pembelian buku per pemain, makanan pemulih stamina, buff laju
 sementara, dan save/load resep. Lihat `COOKING.md`. Dapur rumah setelah
-upgrade, HP/combat serta resep dari TV/hadiah sosial masih [keputusan].
+upgrade (kini Upgrade Rumah tingkat 1 di Wira, bagian 4.12) [terpasang], HP/combat serta resep dari TV/hadiah sosial masih [keputusan].
 
 - **Status**: Disetujui untuk diimplementasikan [keputusan].
 - **Fasilitas**: Dapur di interior rumah (setelah upgrade rumah) serta kompor/panci di Warung Makan kota.
@@ -454,7 +500,7 @@ upgrade, HP/combat serta resep dari TV/hadiah sosial masih [keputusan].
 
 ## 8. Sistem Pertarungan (Combat) & Musuh [terpasang sebagian + keputusan]
 
-### 8.1 Cakupan Combat untuk Fase MVP [terpasang sebagian - Phase 4B-1]
+### 8.1 Cakupan Combat untuk Fase MVP [terpasang sebagian - Phase 4B-1, 4B-2]
 
 **Implementasi Phase 4B-1 [terpasang, 17 Oktober 2026]:**
 - **HP**: 100 per pemain (`PlayerData.hp`), terpisah dari stamina, disimpan per pemain (save v14; save lama dimuat dengan HP penuh). Pulih penuh saat tidur. Makanan memulihkan HP sebesar `ItemData.hp_restore` (default setengah dari pemulihan stamina); efek makanan dapat memberi `hp_per_tick`. Bar HP merah di HUD, di kiri bar stamina.
@@ -468,10 +514,11 @@ upgrade, HP/combat serta resep dari TV/hadiah sosial masih [keputusan].
 - **Senjata** (`resources/combat/*.tres`, WeaponStyle): pedang tebasan sekitar 1,5 tile di depan tanpa stamina; busur proyektil 8 tile, memakai 1 anak panah terkuat di tas ("Tidak ada anak panah!" bila habis), tanpa stamina; tongkat sihir bola energi 6 tile tanpa amunisi, 3 stamina.
 - **Rumus**: damage = `max(1, ATK - DEF)`. ATK = ATK senjata (+ ATK anak panah); DEF pemain = total DEF helm, armor, celana, sepatu.
 - **Terkena serangan**: 0,8 detik kebal (berkedip), knockback, animasi damage, angka damage melayang.
-- **Musuh target** (`resources/enemies/*.tres`, EnemyData, art dari `assets/farm_rpg/Enemy`): Slime Hijau, Slime Biru, Myconid Merah. Diam di tempat, melukai bila disentuh, mati dengan animasi Dead dan menjatuhkan item (slime: Slime Gel, myconid: Common Mushroom). Suara kena/mati per musuh (`EnemyData.hit_feedback`, `death_feedback`). AI gerak menyusul di Phase 4B-2.
+- **Musuh target** (`resources/enemies/*.tres`, EnemyData, art dari `assets/farm_rpg/Enemy`): Slime Hijau, Slime Biru, Myconid Merah. Melukai bila disentuh, mati dengan animasi Dead dan menjatuhkan item (slime: Slime Gel, myconid: Common Mushroom). Suara kena/mati per musuh (`EnemyData.hit_feedback`, `death_feedback`).
 - **Kalah**: lihat bagian 4.2 (Klinik sebagai transisi + denda, lalu bangun di rumah).
 - **Uji cepat (build debug)**: Ctrl+F7 memunculkan slime di depan pemain, Ctrl+F8 memberi 20 damage ke diri sendiri, Ctrl+F9 memberi pedang, busur, 30 anak panah, dan tongkat sihir kayu. Ctrl+F6 langsung memegang tongkat sihir kayu di slot hotbar aktif dan mengisi penuh stamina; Ctrl+F10 langsung memegang busur kayu dan menambah 30 anak panah kayu. Tes otomatis: `tests/combat_regression.tscn`.
-- Belum terpasang: AI musuh (4B-2), gua/dungeon dan toko combat di pintu gua (4B-3).
+- **AI musuh [terpasang, Phase 4B-2, 17 Oktober 2026]** (`scripts/combat/enemy.gd`, angka di grup AI `EnemyData`). State machine: **Diam** (1-2,5 detik) lalu **Patroli** acak dalam radius 40 px dari titik muncul; **Mengejar** pemain terdekat dalam radius aggro (slime 80 px = 5 tile, myconid 96 px); **Ancang-ancang** 0,35-0,45 detik (musuh berkedip merah, jendela pemain menghindar); **Menyerang**: slime menerjang (lunge) ke arah pemain, myconid mengayun kapak (Attack.png, damage di frame 3 bila pemain masih di depan); **Jeda** 1-1,5 detik; **Tertegun** 0,25-0,35 detik setelah dipukul (plus knockback; dipukul panah/sihir dari jauh langsung mengincar penembaknya); **Pulang** ke titik muncul bila pemain lebih jauh dari 150 px atau musuh terlalu jauh dari asal. Pemain yang pingsan/kalah diabaikan. Animasi jalan/serang 4 arah dari baris sheet (bawah, atas, kanan, kiri). Kecepatan: slime hijau 38 px/detik, slime biru 46, myconid 30. `ai_enabled = false` membuat musuh kembali jadi target diam.
+- Gua/dungeon dan Toko Combat: terpasang di Phase 4B-3, lihat bagian 9.
 
 **Rancangan awal (acuan):**
 Untuk fase MVP, sistem combat dirancang ringkas, fungsional, dan stabil untuk melengkapi alur dungeon:
@@ -494,7 +541,7 @@ Untuk fase MVP, sistem combat dirancang ringkas, fungsional, dan stabil untuk me
 ### 8.2 Visi Pengembangan Lanjutan: Sistem Combat 2D Top-Down Soulslike [keputusan - Roadmap Lanjutan]
 Setelah fase MVP rampung, sistem combat akan dievolusikan menjadi sistem pertarungan **2D Top-Down Soulslike** yang kompleks, menantang, presisi (*deliberate*), dan membutuhkan penguasaan ritme bertarung.
 
-#### A. Mekanika Tempur Kompleks Berbasis Stamina & Timing (Soulslike Core)
+#### A. Mekanika Tempur Kompleks Berbasis Stamina & Timing (Soulslike Core) [terpasang 2026-10-17]
 1. **Stamina-Driven Combat**:
    - Setiap aksi tempur—menyerang (*light/heavy*), menghindar (*dodge roll*), menangkis (*parry/block*), dan berlari—mengonsumsi Stamina.
    - Jika stamina terkuras habis (0), pemain mengalami penalti *Exhausted* (kecepatan gerak melambat drastis, tidak bisa menyerang atau menghindar selama 1–1,5 detik). Manajemen stamina menjadi faktor krusial hidup dan mati.
@@ -526,7 +573,17 @@ Setelah fase MVP rampung, sistem combat akan dievolusikan menjadi sistem pertaru
    - *Hitstop (Micro-freeze)*: Jeda waktu mikro 0,05–0,1 detik saat benturan keras mengenai target untuk memberikan sensasi bobot pukulan.
    - *Directional Screen Shake*, percikan partikel benturan, dan angka damage bergaya RPG bertekstur.
 
-#### B. Kecerdasan Buatan Musuh Tingkat Lanjut (Behavior Tree AI)
+**Implementasi 8.2-A (terpasang 2026-10-17)**
+- **Keputusan stamina**: combat memakai **bar stamina tempur terpisah** (100, pulih 45/detik setelah jeda 0,7 detik, tampil di atas kepala pemain). Stamina harian kerja kebun dan aturan pingsan saat stamina harian 0 tidak berubah. Bar tempur habis = *Exhausted* 1,2 detik (gerak ×0,35, tidak bisa serang/roll/block). Stamina tempur tidak disimpan (tidak ada perubahan save).
+- **Kontrol**: Spasi = dodge roll (atau Shift ditekan singkat sambil memegang senjata), Q tahan = block, Q tepat sebelum kena = parry, tahan klik kiri 0,45 detik = serangan berat, F = Weapon Art. Gamepad: RT tekan singkat = roll (tahan = lari), LT = block/parry, L3 = Weapon Art.
+- **Roll**: kelas dari rasio beban perlengkapan (helmet/armor/leggings/boots × bobot tier): Fast < 0,3, Medium < 0,7, Heavy Fat-Roll. Jarak 56/46/30 px, i-frames 0,22/0,18/0,08 detik, biaya 16/20/26. Visual sementara: putaran/pipihan sprite + jejak bayangan (belum ada sheet roll).
+- **Block/parry**: block hanya dari depan (±75°), damage dikurangi per senjata (pedang 75%, tongkat 55%, busur 40%), biaya 2 stamina per poin ditahan, gerak ×0,5. Jendela parry 0,12 detik dengan anti-spam 0,45 detik; parry sukses = kilat "PARRY!", hitstop, musuh Stagger 1,6 detik. Pukulan ke musuh yang Stagger dalam 26 px = Riposte ×3 (KRITIS!).
+- **Poise**: musuh punya poise tersembunyi (slime hijau 18, slime biru 26, myconid 45); habis = Stagger ("Goyah!", damage ×1,5). Poise pemain 10 + 1,5 per satuan berat; pecah = serangan terputus 0,45 detik.
+- **Frame data**: startup tidak bisa dibatalkan; hitbox aktif sampai rasio active_end; akhir recovery bisa dibatalkan dengan roll.
+- **Variasi**: heavy (damage, jangkauan, poise lebih besar), sprint attack (lunge, 0,15 detik setelah lari), roll attack (0,35 detik setelah roll), riposte, dan 10 Weapon Art per senjata (satu per tier), mis. Obsidian Sword "Api Gelap Beruntun", Fairy Staff "Lingkaran Penyembuh Peri" (pulih 25 HP), tongkat "Sinar Penembus Zirah" (abaikan DEF).
+- **Data**: aturan umum di `resources/combat/combat_rules.tres` (CombatRules), angka per senjata di `resources/combat/<senjata>.tres` (WeaponStyle), Weapon Art di `resources/combat/arts/`, poise musuh di EnemyData. Semua angka sementara untuk penyeimbangan.
+
+#### B. Kecerdasan Buatan Musuh Tingkat Lanjut (Behavior Tree AI) [terpasang 2026-10-17]
 Musuh non-boss dan elite enemy tidak lagi sekadar berjalan lurus mengejar pemain, melainkan dikendalikan oleh sistem **Behavior Tree (BT)** dinamis:
 1. **Arsitektur Node Behavior Tree**:
    - Dibuat modular menggunakan struktur Composite (*Selector, Sequence, Parallel*), Decorator (*Repeater, Inverter, Cooldown, Limit*), dan Leaf (*Condition checks, Action execution*).
@@ -541,6 +598,52 @@ Musuh non-boss dan elite enemy tidak lagi sekadar berjalan lurus mengejar pemain
    - `Retreat / Desperation`: Musuh ber-HP rendah dapat mundur ke belakang kawannya atau memanggil bala bantuan terdekat.
 4. **Spacing & Anti-Spam Coordination**:
    - Musuh memiliki token serang (*attack ticket system*); tidak semua musuh menyerang pada milidetik yang sama, melainkan bergantian melakukan kombo, feint (serangan pancingan), atau serangan silang terkoordinasi.
+
+**Implementasi 8.2-B (terpasang 2026-10-17)**
+- **Behavior Tree**: `scripts/ai/behavior_tree.gd` berisi node Selector (reaktif, cabang prioritas tinggi menyela), Sequence (Condition dicek ulang tiap tick), Parallel, Inverter, Repeater, Cooldown, Limit, Condition, Action, dan Wait. Pohon musuh biasa di `scripts/ai/enemy_brain.gd`, urutan prioritas: mundur, bertarung (serang/feint/kejar/kepung), memeriksa gangguan, pulang, patroli.
+- **Penglihatan**: kerucut pandang ke arah hadap (default 110°, myconid 120°), jarak pandang = `aggro_radius`. Gua ×0,6, malam paling gelap ×0,6 (bertahap mengikuti `DayCycle.night_intensity`). Tembok dan batu menghalangi garis pandang. Pemain dalam 22 px selalu ketahuan walau di belakang musuh. Di dalam kerucut tapi sedikit di luar jarak pandang (≤ ×1,4) = siluet sekilas (curiga).
+- **Pendengaran**: lari (radius 64 px tiap 0,4 detik), beliung menghantam batu (112 px), senjata beradu saat memukul musuh, block, atau parry (96 px). Berjalan biasa tidak bersuara.
+- **Status waspada**: Tenang/Patroli (sesekali menoleh), Curiga ("?", berjalan waspada ke sumber lalu menoleh kiri-kanan 3 detik), Aggro ("!"), Mengepung, Mundur. Target hilang dari pandangan 3 detik (myconid 4) = musuh mencari di posisi terakhir pemain terlihat; pemain kabur melewati `give_up_radius` = musuh pulang. Dipukul dari belakang = langsung berbalik ke penyerang.
+- **Token serang**: maksimal 2 musuh menyerang satu pemain bersamaan. Musuh tanpa token mengepung di luar jangkauan pemain (attack_range + 22 px), bergeser ke sisi/belakang pemain dan menjaga jarak antar-kawan. Setelah menyerang, musuh memberi giliran 0,8 detik bila ada kawan yang menunggu.
+- **Feint**: ancang-ancang palsu yang terlihat sama dengan serangan asli lalu lompat mundur; tidak bisa di-parry dan tidak melukai (memancing parry terlalu cepat). Peluang: slime hijau 0, slime biru 10%, myconid 25% (jeda 4 detik).
+- **Mundur & bantuan**: HP ≤ 30% (slime biru 25%, slime hijau tidak pernah) = mundur ke belakang kawan terdekat sambil menghadap pemain selama 2,5 detik dan memanggil kawan dalam 112 px ("!!"), sekali per musuh. Setelahnya musuh nekat: ancang-ancang dan jeda serangan ×0,65. Bantuan = kawan yang sudah ada ikut aggro (tidak memunculkan musuh baru).
+- **Belum**: "menembak dari balik perisai kawan" menunggu musuh jarak jauh; boss memakai 8.2-C.
+- **Data**: aturan umum di `resources/ai/ai_rules.tres` (AiRules), angka per musuh di grup Persepsi dan Taktik EnemyData. Debug: Ctrl+F12 menampilkan kerucut pandang (warna = status waspada), Ctrl+Shift+F7 memunculkan kawanan myconid + 2 slime biru.
+
+**Rasa Senjata per Tier & Bidikan Jarak Jauh (terpasang 2026-10-17)**
+Visual dan suara tidak mengubah angka combat. Satu-satunya bagian gameplay adalah **efek status tier tinggi** (v3.3, keputusan pemilik proyek), lihat di bawah tabel.
+- **Identitas tier** (`resources/combat/tier_fx/<tier>.tres`, `WeaponTierFx`, dipakai pedang, busur, dan tongkat sihir):
+
+| Tier | Ciri visual | Lapisan suara benturan |
+|---|---|---|
+| Kayu | debu, ekor pendek | 1 (kayu) |
+| Tembaga | percikan oranye | 1 (timah) |
+| Besi | percikan putih logam, halo kecil | 1 (logam) |
+| Emas | kilau emas berkelip, cincin kejut | 2 (logam + lonceng) |
+| Platinum | kilau perak-biru, gema tebasan | 2 (pelat + lonceng) |
+| Crimson | bara merah naik | 2 (logam berat + pukulan) |
+| Frost | serpih es, denting kaca | 2 (kaca) |
+| Shadow | asap ungu-gelap | 3 |
+| Fairy | debu peri merah muda-hijau, akor lonceng | 3 |
+| Obsidian | api gelap + bara, dentuman bass | 3 + bass |
+
+- **Efek status tier tinggi [keputusan 2026-10-17]** (grup "Efek status" di `WeaponTierFx`, berlaku untuk pedang, busur, tongkat, termasuk Weapon Art):
+
+| Tier | Efek | Angka default |
+|---|---|---|
+| Kayu–Platinum | tidak ada (kekuatan dari ATK + Weapon Art) | – |
+| Crimson | **Terbakar** | 30% per pukulan, 3 detik, tiap 0,5 detik damage 10% ATK (min 1) |
+| Frost | **Dingin** | 35% per pukulan, 2,5 detik, gerak musuh ×0,6, ancang-ancang ×1,2 lebih lama |
+| Shadow | **Serap Jiwa** | tiap pukulan masuk memulihkan HP 15% ATK (min 1) |
+| Fairy | **Berkah Peri** | tiap pukulan masuk memulihkan 6 stamina tempur (tidak saat Exhausted) |
+| Obsidian | **Api Gelap** | 40% per pukulan, 4 detik, tiap 0,5 detik damage 15% ATK, DEF musuh ×0,5 selama terbakar |
+
+  Damage terbakar tidak memicu i-frames, dorongan, atau menyela AI, dan bisa membunuh musuh (loot normal). Efek yang sama memperbarui durasinya. Musuh berwarna jingga saat terbakar dan biru saat dingin, dengan teks dan partikel tier.
+- **Eskalasi**: dari Kayu ke Obsidian, jumlah partikel benturan (6 sampai 32), panjang ekor proyektil (6 sampai 20 titik), partikel terbang (0 sampai 40/detik), cincin kejut, halo, tebal tebasan (×1 sampai ×1,8), bonus guncangan kamera (0 sampai 1,3 px), bonus hitstop (0 sampai 25 ms), lapisan suara, dan jumlah nada denting selalu naik atau tetap, tidak pernah turun. Tebasan Platinum ke atas punya busur gema kedua.
+- **Bidik busur/tongkat (klik kanan ditahan)**: garis bidik bertitik yang mengalir dan makin terang, lingkar bidik di posisi mouse yang merapat, butir cahaya tier mengorbit ujung senjata. Tali busur berderit dan tongkat berdengung dengan nada yang naik selama ditarik.
+- **Tarikan penuh** (`CombatRules.aim_draw_time` = 0,5 detik): kilatan, akor denting (1 nada Kayu sampai 5 nada Fairy/Obsidian), badan pemain berkilau sesaat, dan partikel tier keluar sesekali selama ditahan.
+- **Melepas tembakan**: kilatan moncong, desau, dan badan tersentak mundur, semuanya makin besar per tier. Tembakan dari tarikan penuh menjadi *charged*: ekor lebih panjang dan tebal, angka damage bergaya berat, sedikit zoom kamera. Damage-nya sama. Setelah menembak, tarikan mulai lagi dari 0.
+- **Suara sintetis**: derit, dengung, denting, desau, dan dentuman dibuat dari kode (`SfxSynth`), tanpa file aset baru.
 
 #### C. Desain Pertarungan Boss yang Dinamis & Epik
 Setiap wilayah kunci di Gua/Dungeon dijaga oleh **Boss Guardian** unik dengan mekanisme tempur berbobot:
@@ -557,9 +660,38 @@ Setiap wilayah kunci di Gua/Dungeon dijaga oleh **Boss Guardian** unik dengan me
    - *Unblockable Attack Indicator*: Serangan tertentu tidak bisa di-parry atau di-block (ditandai ikon bahaya khusus), memaksa pemain untuk menghindar (*roll/spacing*).
    - *Enrage Window*: Jika boss gagal di-stagger dalam periode tertentu, boss dapat memasuki mode buas singkat dengan peningkatan serangan.
 
+##### Boss lantai 20: Raja Slime Emas [terpasang - 8.2-C, 17 Oktober 2026, keputusan pemilik proyek]
+- **Aset**: Big Slime emas (`Enemy/Slimes/Golden/Big Slime`) diperbesar 2,5x; anak slime memakai Slime emas biasa. Data: `resources/enemies/boss_slime_king.tres` (`BossData`, turunan `EnemyData`), dipasang di `CaveData.bosses`. Kode: `Boss` (`scripts/combat/boss.gd`, turunan `Enemy`), `BossArena` (`scripts/world/boss_arena.gd`), `BossHealthBar` (`scripts/ui/boss_health_bar.gd`).
+- **Statistik**: HP 450, ATK sentuh 10, DEF 4, poise 90 (terhuyung 2,4 detik), tidak terdorong.
+- **Arena & pintu kabut**: lantai 20 tanpa batu/pilar. Baris 3-7 (titik tiba, tangga naik, lift) aman; melangkah melewati garis kabut di baris 8 menutup kabut menjadi tembok, boss bangun dengan raungan, bar HP besar muncul di bawah layar (nama, isi merah dengan sisa putih yang menyusul, garis ambang fase, label Fase/MURKA), dan genderang perang sintetis berbunyi (makin cepat tiap fase dan saat murka). Belum ada musik orkestra (menunggu aset).
+- **Fase**: fase 2 di 50% HP, fase 3 di 20% HP. Tiap transisi = raungan (boss kebal), aura makin terang (jingga lalu merah tua) + bara. Tempo ancang-ancang 1,0 / 0,8 / 0,65; damage x1,0 / 1,15 / 1,3.
+- **Jurus**:
+  - *Hantaman* (tak bisa ditahan): retakan tanah + ikon bahaya muncul di titik pemain, boss melompat lalu mendarat di sana (radius 30, 22 damage). Fase 2 = 2 hantaman beruntun, fase 3 = 3.
+  - *Terjangan* (bisa di-parry): kilat merah + panah arah, lalu menerjang (16 damage). Parry = boss terhuyung.
+  - *Semburan* (bisa ditahan): 3 / 5 / 7 gumpalan emas menyebar (10 damage).
+  - *Pecah* (fase 2+): memanggil 3 Anak Slime Emas (maks. 4 hidup), jeda 14 detik.
+  - *Hujan Emas* (fase 3, jurus pamungkas): 7 retakan bertanda jatuh beruntun di sekitar pemain (18 damage, tak bisa ditahan), jeda 12 detik.
+- **Serangan tak bisa ditahan**: ditandai segitiga merah berkedip (di atas boss dan di atas retakan). Menahan tetap kena damage penuh ("Tak bisa ditahan!"); roll dengan i-frame tetap lolos.
+- **Anti-kiting**: pemain berada lebih jauh dari 110 piksel selama 2,5 detik = boss berteriak "Jangan lari!" lalu melompat menghantam (gap-closer) atau menyembur 1,8x lebih cepat.
+- **Murka**: 25 detik tanpa di-stagger = MURKA 8 detik (damage x1,3, tempo x0,7, aura merah). Stagger memadamkan murka dan mereset hitungan.
+- **Kalah / keluar**: bila semua pemain di arena keluar atau tumbang, pertarungan diulang (boss pulih penuh, kabut terbuka).
+- **Hadiah pertama** (sekali): 2000 G, 5 Bijih Emas, 8 Bijih Besi, 10 Slime Gel, plus drop biasa 4-6 Slime Gel. Boss yang sudah kalah tersimpan di save v16 (`GameState.cave.bosses_defeated`); lantai 20 lalu kembali menjadi lantai tambang biasa dan lift 20 menjadi checkpoint aman.
+- **Semua angka** bisa diatur di `boss_slime_king.tres` (grup Boss, Fase, Hantaman, Terjangan, Semburan, Anti-kiting, Pecah, Hujan Emas, Murka, Hadiah pertama).
+
 ---
 
-## 9. Gua Tambang & Dungeon [keputusan]
+## 9. Gua Tambang & Dungeon [terpasang sebagian - Phase 4B-3 + keputusan]
+
+- **Terpasang (Phase 4B-3, 17 Oktober 2026)**:
+  - **Gunung** (`scenes/world/mountain.tscn`, `scripts/world/mountain.gd`): dataran batu kecil yang dicapai lewat celah utara Hill (`EnterMountain` di `hill.tscn`). Mulut Gua Tambang ada di tebing utaranya. Tile dibangun dari kode (Rock Caves.png); dekorasi bisa ditambah di editor. Belum dikunci unlock (`CaveEntrance.required_unlock` kosong).
+  - **Lobi gua** (lantai 0): pintu keluar ke Gunung, lift, **Toko Combat** (`resources/shop/combat_shop.tres`: pedang, busur, tongkat sihir, anak panah, helm, zirah, celana, sepatu tier Kayu-Emas, harga dari `ItemData.buy_price`), dan lubang turun ke lantai 1.
+  - **Lantai 1-20** (`scenes/world/cave/cave.tscn`, `scripts/world/cave.gd`): satu scene untuk semua lantai, isi dibangun ulang di tempat (pemain co-op di gua ikut pindah bersama). Layout batu, bijih, pilar, dan musuh diacak dengan seed `hari + lantai`: sama sepanjang hari, berganti esok hari.
+  - **Tangga turun**: tiap batu yang dihancurkan berpeluang 8% memunculkan lubang tangga; tangga pasti muncul saat semua monster kalah atau semua batu habis. Injak lubangnya untuk turun. Tangga naik di titik tiba kembali ke lobi.
+  - **Lift checkpoint** tiap 5 lantai (5, 10, 15, 20) tersimpan permanen di save v15 (`GameState.cave`, `CaveManager`). Lift ada di lobi dan di lantai checkpoint.
+  - **Lantai 20** adalah arena boss Raja Slime Emas (GDD 8.2-C) sampai boss kalah, lalu menjadi lantai tambang biasa. Belum ada tangga turun; lantai 21+ menyusul.
+  - **Data** (`resources/cave/cave_data.tres`): tabel bijih dan musuh per rentang lantai (`CaveBand`), daftar batu (`CaveOre`). Rentang 21+ sudah berisi tabel GDD untuk dipakai nanti.
+  - **Keputusan sementara (bisa diubah di data)**: beliung minimal per bijih satu tier di bawah logamnya (batu/batubara/tembaga: Kayu, besi: Tembaga, emas: Besi, platinum: Emas, dst.); jumlah batu 18-28 dan monster 2-5 per lantai di 1-20; musuh lantai 1-5 slime hijau, 6-10 slime hijau + biru, 11-20 slime biru + myconid.
+  - **Debug**: Ctrl+F5 langsung masuk lobi gua.
 
 - **Status**: Disetujui untuk diimplementasikan [keputusan].
 - **Struktur Gua**:
@@ -787,7 +919,7 @@ Setiap role memiliki progresi level tersendiri (Level 1–10). Setiap aksi spesi
 ---
 
 ### 13.3 Antarmuka & Manajemen Skill di Co-op
-- **Tab Keahlian (Skills Tab)**: Terintegrasi pada menu ransel (`I` / Gamepad `Y`), menampilkan 7 panel role dengan progres bar EXP, level aktif, dan bagan Skill Tree.
+- **Tab Keahlian (Skills Tab)**: Terintegrasi pada menu ransel (`I` / Gamepad `B` atau `Start`), menampilkan 7 panel role dengan progres bar EXP, level aktif, dan bagan Skill Tree.
 - **Notifikasi Level Up**: Layar rekap tidur malam menampilkan animasi "Level Up!" lengkap dengan perolehan stat baru dan pilihan pemilihan perk spesialisasi.
 - **Sinergi Tim Co-op**: Di menu Co-op, buku status menampilkan ringkasan profil keahlian pemain lain sehingga anggota keluarga dapat saling berkoordinasi untuk membagi tugas secara optimal setiap pagi.
 
@@ -821,7 +953,7 @@ Setiap role memiliki progresi level tersendiri (Level 1–10). Setiap aksi spesi
   - NPC warga dan pengunjung berjalan melintasi koridor pasar dengan status kesadaran dan minat tertentu.
   - Setiap NPC memiliki preferensi produk (misal: Ibu Desa menyukai sayuran segar, Kakek menyukai ikan langka, Pengrajin mencari logam dan kayu).
 - **Aksi Membunyikan Lonceng (Bazaar Bell)**:
-  - Pemain berdiri di stan dan menekan tombol interaksi panggil (Spasi / Gamepad `X`) untuk membunyikan **Lonceng Lapak (*Bazaar Bell*)** atau berseru menawarkan dagangan (*"Ayo mampir! Sayur dan ikan segar baru dipanen hari ini!"*).
+  - Pemain berdiri di stan dan menekan tombol interaksi panggil (Spasi / Gamepad `A`) untuk membunyikan **Lonceng Lapak (*Bazaar Bell*)** atau berseru menawarkan dagangan (*"Ayo mampir! Sayur dan ikan segar baru dipanen hari ini!"*).
   - Gelombang dentingan lonceng memancar dalam radius suara berlingkar:
     - NPC yang terkena radius lonceng akan memunculkan ikon tanda seru (!), berbelok arah, dan mendekat ke lapak pemain.
     - Timing membunyikan lonceng yang tepat (tidak terlalu jarang dan tidak spam berlebihan) menjaga kerumunan tetap ramai di depan lapak tanpa membuat pembeli merasa terganggu.
@@ -1108,7 +1240,19 @@ Dengan disahkannya keputusan utama di atas, butir keputusan teknis turunan yang 
 
 ## 19. Changelog
 
-- **2026-10-17 (Versi 2.8)**: Phase 4B-1 Combat. HP 100 per pemain (save v14), bar HP di HUD, rumus `max(1, ATK - DEF)`, serangan pedang/busur/tongkat dari hotbar (klik kiri serang, tahan klik kanan bidik), anak panah sebagai amunisi, i-frames 0,8 detik + knockback, musuh target dari aset enemy, kalah lewat transisi Klinik dengan denda uang/barang lalu bangun di rumah. Slot equipment weapon diganti senjata di hotbar. Perbaikan: senjata kini tergambar di animasi serang (layer Sword/Bow per tier, Healer Staff), slime menjatuhkan Slime Gel, suara pukulan slime memakai impactSoft. Pose bidik busur dan tongkat sihir saat klik kanan ditahan. Combo 3 pukulan untuk pedang, busur, dan tongkat sihir. Juice combat, efek bar HP/stamina, dan pingsan saat stamina 0. Perbaikan posisi bar HP/stamina (sejajar di kanan bawah) dan kaki melangkah saat membidik sambil berjalan.
+- **2026-10-18 (Versi 3.8)**: Kontrol gamepad disamakan dengan Stardew Valley (4.3): B/Start = tas, Y = tab Crafting, A = interaksi, X = alat, LB/RB = slot (di tas: ganti tab). Lari dipindah dari B ke RT (tekan singkat sambil memegang senjata = roll), RT tidak lagi memakai alat. Teks rencana Tab Keahlian dan Lonceng Lapak disesuaikan (tas = B/Start, interaksi = A). Tanpa perubahan save.
+- **2026-10-18 (Versi 3.7)**: Spot pancing musim dingin (pilihan pemilik proyek: keduanya): Kolam Air Panas di Gunung dan Danau Bawah Tanah di Gua lantai 10, keduanya tidak membeku, dengan tabel ikan sendiri. Tanpa perubahan save.
+- **2026-10-18 (Versi 3.6)**: Fishing 4A-1 dituntaskan: musim ikan (`FishData.seasons`, kosong = sepanjang tahun) dan air beku di Musim Dingin (`FishingSpot.freezes_in_winter`). Perbaikan lokasi ikan mas. Data bijih per lantai di `cave_data.tres` dipulihkan setelah tertimpa editor. Tes `tests/fishing_season_regression.tscn`. Tanpa perubahan save.
+- **2026-10-17 (Versi 2.9)**: Phase 4B-3. Kawasan Gunung di utara Hill dengan mulut Gua Tambang; lobi gua berisi Toko Combat, lift, dan lubang ke lantai 1; lantai 1-20 acak harian (batu, batubara, tembaga, pilar, slime/myconid); tangga turun dari batu acak atau setelah semua monster kalah; lift checkpoint tiap 5 lantai disimpan (save v15). Boss lantai 20 menyusul.
+- **2026-10-17 (Versi 2.9.1)**: Perbaikan pickup. Saat memegang alat atau senjata, mengambil item tidak lagi memindah slot hotbar dan tidak memutar gesture ambil (input tidak terkunci saat combat). Gesture ambil item lainnya diputar 2x lebih cepat.
+- **2026-10-17 (Versi 3.0)**: Combat Soulslike 8.2-A. Bar stamina tempur terpisah + Exhausted, dodge roll dengan i-frames dan kelas beban perlengkapan, block/parry/riposte, poise dan stagger untuk pemain dan musuh, frame data (startup terkunci, recovery bisa dibatalkan roll), serangan berat (tahan klik kiri), sprint/roll attack, dan Weapon Art per tier (tombol F). Tanpa perubahan save.
+- **2026-10-18 (Versi 3.5)**: Upgrade Rumah di Wira (bagian 4.12): 3 tingkat data-driven (`HouseLevelData`), dibayar di depan dan selesai setelah 2-3 hari, tingkat 1 membuka ruang dapur yang sudah ada (renovasi dipindah dari toko Dapur Nusantara), tingkat 2-3 menambah stamina maksimum. Pintu Dapur di rumah dipasang dari kode. Save v17 menyimpan tingkat rumah dan pesanan; save lama dengan dapur terbeli menjadi tingkat 1. Catatan: carpenter aktif di kode adalah Wira (`data/npc/wira.json`, service carpenter), bukan Pak Damar.
+- **2026-10-17 (Versi 3.4)**: Boss 8.2-C lantai 20 Raja Slime Emas (pilihan pemilik proyek): arena dengan pintu kabut, bar HP boss besar, 3 fase dengan aura, hantaman/Hujan Emas bertelegraf yang tak bisa ditahan (ikon bahaya), terjangan yang bisa di-parry, semburan, anak slime, anti-kiting, murka, genderang sintetis, hadiah pertama 2000 G + bijih. Save v16 menyimpan boss yang sudah kalah.
+- **2026-10-17 (Versi 3.3)**: Efek status senjata tier tinggi (keputusan pemilik proyek): Crimson Terbakar, Frost Dingin, Shadow Serap Jiwa, Fairy Berkah Peri, Obsidian Api Gelap (terbakar + DEF musuh setengah). Kayu sampai Platinum tanpa efek status. Tanpa perubahan save.
+- **2026-10-17 (Versi 3.2)**: Rasa senjata per tier dan bidikan jarak jauh. Tiap tier bahan (Kayu..Obsidian) punya warna, partikel, ekor, tebasan, dan lapisan suara sendiri yang meningkat bertahap. Bidik busur/tongkat kini punya garis bertitik, lingkar bidik, derit/dengung yang naik, tarikan penuh dengan denting akor, dan tembakan charged (hanya visual). Tanpa perubahan angka combat dan tanpa perubahan save.
+- **2026-10-17 (Versi 3.1)**: AI musuh 8.2-B. Behavior Tree modular (Selector, Sequence, Parallel, Inverter, Repeater, Cooldown, Limit, Condition, Action), kerucut pandang dengan cahaya gua/malam dan garis pandang, pendengaran (lari, beliung, senjata beradu), status waspada (tenang, curiga, aggro, mengepung, mundur), token serang bergiliran, feint, dan mundur + panggil bantuan. Perbaikan data yang tertimpa editor: daftar bijih per band di cave_data.tres. Tanpa perubahan save.
+
+- **2026-10-17 (Versi 2.8)**: Phase 4B-1 Combat. HP 100 per pemain (save v14), bar HP di HUD, rumus `max(1, ATK - DEF)`, serangan pedang/busur/tongkat dari hotbar (klik kiri serang, tahan klik kanan bidik), anak panah sebagai amunisi, i-frames 0,8 detik + knockback, musuh target dari aset enemy, kalah lewat transisi Klinik dengan denda uang/barang lalu bangun di rumah. Slot equipment weapon diganti senjata di hotbar. Perbaikan: senjata kini tergambar di animasi serang (layer Sword/Bow per tier, Healer Staff), slime menjatuhkan Slime Gel, suara pukulan slime memakai impactSoft. Pose bidik busur dan tongkat sihir saat klik kanan ditahan. Combo 3 pukulan untuk pedang, busur, dan tongkat sihir. Juice combat, efek bar HP/stamina, dan pingsan saat stamina 0. Perbaikan posisi bar HP/stamina (sejajar di kanan bawah) dan kaki melangkah saat membidik sambil berjalan. Phase 4B-2: AI musuh (patroli, kejar, ancang-ancang, terjang/ayun, tertegun, pulang).
 
 - **2026-10-15 (Versi 2.7)**: audit dependensi dan cashflow progres awal; sumber bijih Forest yang pulih dan terhubung ke entrance; endapan besi kecil untuk jalur Tembaga → Besi; margin batu awal; informasi manfaat/sisa uang di UI upgrade; perbaikan callback pickup setelah HUD dibebaskan.
 

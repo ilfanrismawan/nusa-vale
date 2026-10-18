@@ -78,7 +78,8 @@ func _ready() -> void:
 
 	# 3. Tes Dialog & Interaksi (Pause gerak saat bicara)
 	var pre_talk_pos: Vector2 = rian.global_position
-	var dialog_npc: VillageNPC = ubay_scene.instantiate() as VillageNPC
+	# Ubay now has service choices; the generic talk-only path uses the chef.
+	var dialog_npc: VillageNPC = chef_scene.instantiate() as VillageNPC
 	get_tree().root.add_child(dialog_npc)
 	dialog_npc.interact(null)
 	check(is_instance_valid(dialog_npc._dialog_ui), "NPCDialogUI berhasil dibuka saat pemain berinteraksi")

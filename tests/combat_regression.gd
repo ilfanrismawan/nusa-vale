@@ -29,7 +29,7 @@ func _ready() -> void:
 	await _test_player_combat()
 	print("COMBAT REGRESSION COMPLETE: failures=%d" % failures)
 	# Beri waktu pembaca log (debugger MCP) menangkap hasil sebelum jendela tertutup.
-	await get_tree().create_timer(4.0).timeout
+	await get_tree().create_timer(30.0).timeout
 	get_tree().quit(1 if failures > 0 else 0)
 
 func _test_formula() -> void:
@@ -41,9 +41,10 @@ func _test_formula() -> void:
 	var bow := Combat.style_for(GameState._resolve_item("bow_wood"))
 	var staff := Combat.style_for(GameState._resolve_item("staff_wood"))
 	var sword := Combat.style_for(GameState._resolve_item("sword_wood"))
-	check(bow.uses_ammo and bow.stamina_cost == 0 and is_equal_approx(bow.projectile_range_tiles, 8.0), "bow: arrows, no stamina, 8 tiles")
-	check(not staff.uses_ammo and staff.stamina_cost == 3 and is_equal_approx(staff.projectile_range_tiles, 6.0), "staff: no ammo, 3 stamina, 6 tiles")
-	check(sword.melee_radius > 0.0 and sword.stamina_cost == 0, "sword: melee, no stamina")
+	# Sejak 8.2-A semua serangan memakai stamina tempur (bar terpisah), bukan stamina harian.
+	check(bow.uses_ammo and bow.stamina_cost > 0 and is_equal_approx(bow.projectile_range_tiles, 8.0), "bow: arrows, combat stamina, 8 tiles")
+	check(not staff.uses_ammo and staff.stamina_cost > bow.stamina_cost and is_equal_approx(staff.projectile_range_tiles, 6.0), "staff: no ammo, combat stamina, 6 tiles")
+	check(sword.melee_radius > 0.0 and sword.stamina_cost > 0, "sword: melee, combat stamina")
 
 func _test_player_data() -> void:
 	var data := PlayerData.new(1)
@@ -162,6 +163,10 @@ func _test_player_combat() -> void:
 	var slime := Enemy.spawn(load("res://resources/enemies/slime_green.tres"), self, player.global_position + Player.FEET_OFFSET + Vector2(14, 0))
 	slime.data = slime.data.duplicate() as EnemyData
 	slime.data.contact_damage = false
+	# Boneka latihan: poise besar supaya tidak terhuyung (riposte) di tengah tes combo.
+	slime.data.poise = 9999.0
+	slime.poise = 9999.0
+	slime.ai_enabled = false
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 	var before := slime.hp
@@ -240,10 +245,13 @@ func _test_player_combat() -> void:
 	player.animation_controller.play(&"run")
 	check(String(player.animation_controller.sprite.animation).begins_with("aim_move_run") and player.animation_controller.sprite.is_playing(), "aiming the staff while running keeps the legs running")
 	player.animation_controller.play(&"idle")
-	check(player.tool_controller.attack() and data.stamina == 47, "staff costs 3 stamina")
+	player.combat.reset()
+	var combat_before := player.combat.stamina
+	check(player.tool_controller.attack() and data.stamina == 50 and player.combat.stamina < combat_before, "staff uses combat stamina, daily stamina untouched")
 	await get_tree().create_timer(1.5).timeout
-	data.stamina = 2
-	check(not player.tool_controller.attack(), "staff needs enough stamina")
+	player.combat.spend(999.0)
+	check(player.combat.is_exhausted() and not player.tool_controller.attack(), "staff cannot cast while exhausted")
+	player.combat.reset()
 
 	# Tombol debug Ctrl+F6 / Ctrl+F10: senjata langsung dipegang di slot hotbar aktif.
 	player._debug_hold_weapon("staff_wood")
@@ -277,4 +285,71 @@ func _test_player_combat() -> void:
 	CombatJuice.zoom_punch(player)
 	await get_tree().create_timer(0.6).timeout
 	check(not CombatJuice.heavy_hit and is_equal_approx(Engine.time_scale, 1.0), "juice leaves no heavy flag or slow motion behind")
+	await _test_enemy_ai(player)
 	rig.queue_free()
+
+## Phase 4B-2: AI musuh (patroli, kejar, ancang-ancang, serang, tertegun, pulang).
+func _spawn_ai(id: String, player: Player, offset: Vector2) -> Enemy:
+	var data: EnemyData = (load("res://resources/enemies/%s.tres" % id) as EnemyData).duplicate()
+	data.contact_damage = false
+	data.feint_chance = 0.0
+	data.retreat_hp_ratio = 0.0
+	var enemy := Enemy.spawn(data, self, player.global_position + Player.FEET_OFFSET + offset)
+	# AI 8.2-B memakai kerucut pandang: hadapkan musuh ke pemain supaya langsung melihatnya.
+	enemy.look_toward(player.global_position + Player.FEET_OFFSET)
+	return enemy
+
+func _wait_until(condition: Callable, timeout: float) -> bool:
+	var waited := 0.0
+	while not condition.call() and waited < timeout:
+		await get_tree().physics_frame
+		waited += get_physics_process_delta_time()
+	return condition.call()
+
+func _test_enemy_ai(player: Player) -> void:
+	var data := player.data
+	data.hp = data.max_hp
+	player.velocity = Vector2.ZERO
+	var states: Array = []
+	var slime := _spawn_ai("slime_green", player, Vector2(60, 0))
+	slime.state_changed.connect(func(state: Enemy.AiState): states.append(state))
+	var start_distance := slime.global_position.distance_to(player.global_position + Player.FEET_OFFSET)
+	var chasing := await _wait_until(func(): return slime.ai_state == Enemy.AiState.CHASE or slime.ai_state == Enemy.AiState.WINDUP, 1.5)
+	check(chasing and slime.target == player, "enemy chases a player inside the aggro radius")
+	await get_tree().create_timer(0.3).timeout
+	check(slime.global_position.distance_to(player.global_position + Player.FEET_OFFSET) < start_distance, "chasing enemy closes the distance")
+	var hp_before := data.hp
+	var hurt := await _wait_until(func(): return data.hp < hp_before, 4.0)
+	check(hurt and states.has(Enemy.AiState.WINDUP) and states.has(Enemy.AiState.ATTACK), "slime winds up, then lunges and hurts the player")
+	await _wait_until(func(): return not slime.is_dead() and slime.take_hit(1, player, Vector2.RIGHT), 2.0)
+	check(slime.ai_state == Enemy.AiState.HURT, "a hit stuns the enemy")
+	var stunned_until := await _wait_until(func(): return slime.ai_state != Enemy.AiState.HURT, 2.0)
+	check(stunned_until and slime.ai_state == Enemy.AiState.CHASE, "after the stun the enemy chases again")
+	# Pemain kabur jauh: musuh menyerah dan pulang.
+	player.global_position += Vector2(0, 400)
+	var gave_up := await _wait_until(func(): return slime.ai_state == Enemy.AiState.RETURN or slime.ai_state == Enemy.AiState.IDLE, 1.0)
+	check(gave_up and slime.target == null, "enemy gives up and walks home when the player runs away")
+	slime.queue_free()
+
+	var far := _spawn_ai("slime_blue", player, Vector2(300, 0))
+	await get_tree().create_timer(0.5).timeout
+	check(far.target == null and far.ai_state in [Enemy.AiState.IDLE, Enemy.AiState.PATROL], "enemy ignores a player outside the aggro radius")
+	far.queue_free()
+
+	data.hp = data.max_hp
+	await _wait_until(func(): return not player.is_invulnerable(), 2.0)
+	var myconid := _spawn_ai("myconid_red", player, Vector2(16, 0))
+	var swung: Array = []
+	myconid.state_changed.connect(func(state: Enemy.AiState): swung.append(state))
+	hp_before = data.hp
+	var axed := await _wait_until(func(): return data.hp < hp_before, 4.0)
+	check(axed and swung.has(Enemy.AiState.ATTACK) and myconid.has_animation("attack"), "myconid swings its axe and hurts the player")
+	myconid.queue_free()
+
+	player.is_defeated = true
+	var calm := _spawn_ai("slime_green", player, Vector2(30, 0))
+	await get_tree().create_timer(0.4).timeout
+	check(calm.target == null and calm.ai_state != Enemy.AiState.CHASE, "enemies ignore a fainted player")
+	player.is_defeated = false
+	calm.queue_free()
+	data.hp = data.max_hp

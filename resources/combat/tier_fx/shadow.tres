@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="WeaponTierFx" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/weapon_tier_fx.gd" id="1_fx"]
+
+[resource]
+script = ExtResource("1_fx")
+display_name = "Shadow"
+motif = 5
+color = Color(0.6, 0.35, 0.9, 1)
+color_alt = Color(0.18, 0.08, 0.28, 1)
+glow = Color(0.5, 0.25, 0.9, 0.55)
+trail_points = 15
+trail_width_scale = 1.5
+flight_particles = 26
+halo_radius = 4.5
+slash_width_scale = 1.5
+slash_echo = true
+slash_particles = 12
+hit_particles = 22
+hit_ring = 16.0
+shake_bonus = 0.9
+hitstop_bonus_ms = 15
+impact_layers = PackedStringArray("impactSoft_heavy_003", "impactPunch_heavy_003", "impactMetal_heavy_001")
+impact_volume_db = -5.0
+impact_semitones = -3.0
+aim_motes = 7
+chime_notes = PackedInt32Array(0, 3, 6, 10)
+muzzle_scale = 1.6
+bass_boom = false
+status = 3
+status_chance = 1.0
+lifesteal_ratio = 0.15

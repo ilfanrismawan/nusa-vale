@@ -33,3 +33,6 @@ func apply(player: Player, cell: Vector2i) -> void:
 			hit = FarmManager.hit_world(player, cell, target_group, damage)
 	if hit:
 		player.data.spend_stamina(stamina_cost)
+		if target_group == &"mineable":
+			# Beliung menghantam batu terdengar musuh di sekitar (GDD 8.2-B2).
+			Perception.noise(player, player.global_position, Perception.RULES.mine_noise_radius, player)

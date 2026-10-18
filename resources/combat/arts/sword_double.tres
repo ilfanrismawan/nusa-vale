@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="WeaponArt" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/weapon_art.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"sword_double"
+display_name = "Tebasan Ganda"
+kind = 0
+stamina_cost = 28
+cooldown = 3.0
+damage_scale = 1.1
+poise_scale = 1.5
+count = 2
+interval = 0.14
+color = Color(1.0, 0.9, 0.55, 1)

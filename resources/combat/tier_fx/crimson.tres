@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="WeaponTierFx" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/weapon_tier_fx.gd" id="1_fx"]
+
+[resource]
+script = ExtResource("1_fx")
+display_name = "Crimson"
+motif = 3
+color = Color(1, 0.25, 0.2, 1)
+color_alt = Color(1, 0.65, 0.25, 1)
+glow = Color(1, 0.3, 0.15, 0.5)
+trail_points = 12
+trail_width_scale = 1.35
+flight_particles = 20
+halo_radius = 3.5
+slash_width_scale = 1.35
+slash_echo = true
+slash_particles = 9
+hit_particles = 18
+hit_ring = 12.0
+shake_bonus = 0.6
+hitstop_bonus_ms = 10
+impact_layers = PackedStringArray("impactMetal_heavy_003", "impactPunch_heavy_001")
+impact_volume_db = -6.0
+impact_semitones = -1.0
+aim_motes = 5
+chime_notes = PackedInt32Array(0, 3, 7)
+muzzle_scale = 1.4
+bass_boom = false
+status = 1
+status_chance = 0.3
+status_duration = 3.0
+burn_tick_ratio = 0.1
+burn_interval = 0.5

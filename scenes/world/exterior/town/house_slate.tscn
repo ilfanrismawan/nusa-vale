@@ -30,7 +30,7 @@ shape = SubResource("RectangleShape2D_tw062")
 [node name="Door" type="Area2D" parent="."]
 position = Vector2(0, 4)
 script = ExtResource("TownDoor")
-target_scene = "res://scenes/world/interior/town/house_slate.tscn"
+target_scene = "res://scenes/world/interior/ubay_home.tscn"
 spawn_position = Vector2(240, 256)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Door"]
@@ -42,7 +42,7 @@ position = Vector2(0, 36)
 [node name="Sign" parent="." instance=ExtResource("BuildingSign")]
 scale = Vector2(0.929, 0.929)
 position = Vector2(0, -24)
-caption = "Rumah Abu-abu"
+caption = "Ubay · Pos Pengiriman"
 font_size = 8
 minimum_width = 32
 minimum_height = 16

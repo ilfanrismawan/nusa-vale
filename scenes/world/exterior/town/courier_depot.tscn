@@ -1,0 +1,18 @@
+[gd_scene format=3]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/exterior/shipping box.png" id="box"]
+[ext_resource type="PackedScene" path="res://scenes/objects/building_sign.tscn" id="sign"]
+[node name="CourierDepot" type="Node2D"]
+[node name="Parcel" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("box")
+region_enabled = true
+region_rect = Rect2(0, 16, 16, 16)
+[node name="Parcel2" type="Sprite2D" parent="."]
+position = Vector2(18, 0)
+texture_filter = 1
+texture = ExtResource("box")
+region_enabled = true
+region_rect = Rect2(0, 16, 16, 16)
+[node name="Sign" parent="." instance=ExtResource("sign")]
+position = Vector2(9, -12)
+caption = "Pos Pengiriman Ubay"

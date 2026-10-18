@@ -7,5 +7,6 @@
 script = ExtResource("2_qw5l6")
 item = ExtResource("1_qqf1c")
 locations = PackedStringArray("farm_pond", "farm_river", "forest_river")
+seasons = PackedStringArray("summer")
 min_hour = 6
 max_hour = 18

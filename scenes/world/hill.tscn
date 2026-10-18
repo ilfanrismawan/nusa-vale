@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://dqqqt2bfix1qw" path="res://assets/farm_rpg/objects/exterior/Road.png" id="6_8baq5"]
 [ext_resource type="PackedScene" uid="uid://dt213rsiiyoev" path="res://scenes/world/exterior/object/carpenter_house.tscn" id="7_hsxf1"]
 [ext_resource type="Texture2D" uid="uid://r8wslcqsu0jt" path="res://assets/farm_rpg/objects/tree/Mahogany Tree.png" id="8_4atha"]
+[ext_resource type="PackedScene" path="res://scenes/objects/building_sign.tscn" id="10_t21if"]
 [ext_resource type="PackedScene" uid="uid://bye3dnnqckqj5" path="res://scenes/player/Player.tscn" id="11_4atha"]
 [ext_resource type="Texture2D" uid="uid://okrxxylany7s" path="res://assets/farm_rpg/objects/exterior/Fence and Bridge/Fence Wood.png" id="12_hsxf1"]
 [ext_resource type="Texture2D" uid="uid://dkwhv2cnn4rma" path="res://assets/farm_rpg/objects/interior/Chairs.png" id="13_xpuuc"]
@@ -20,6 +21,8 @@
 [ext_resource type="Resource" uid="uid://cwm4og8fjxtw4" path="res://resources/furniture/wooden_chair.tres" id="18_seat"]
 [ext_resource type="Resource" uid="uid://bhlx8lmisgq88" path="res://resources/furniture/wooden_bench.tres" id="19_bench"]
 [ext_resource type="Script" uid="uid://cqplc8y2i0q4t" path="res://scripts/world/scene_entrance.gd" id="20_spa1p"]
+[ext_resource type="Texture2D" uid="uid://nq7uq2ysfp3m" path="res://assets/farm_rpg/objects/exterior/Mine and Dungeon/Mine/Door Mine.png" id="23_rjvrt"]
+[ext_resource type="Script" uid="uid://5cyo43xb7vqo" path="res://scripts/npc/npc_map_presenter.gd" id="ResidentPresenter"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a4c73"]
 shader = ExtResource("2_8baq5")
@@ -193,6 +196,7 @@ texture = ExtResource("5_8ry23")
 0:3/0 = 0
 1:3/0 = 0
 1:3/0/texture_origin = Vector2i(1, -3)
+1:3/0/z_index = 3
 2:3/0 = 0
 2:3/0/texture_origin = Vector2i(1, -3)
 3:3/0 = 0
@@ -328,6 +332,9 @@ size = Vector2(12, 66)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1geds"]
 size = Vector2(507, 9)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vdhk3"]
+size = Vector2(88, 36)
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4atha"]
 texture = ExtResource("12_hsxf1")
 2:1/0 = 0
@@ -347,13 +354,13 @@ texture = ExtResource("12_hsxf1")
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_4atha")
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_wd2we"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t21if"]
 size = Vector2(8, 5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pwjru"]
 size = Vector2(32, 40)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_t21if"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rjvrt"]
 size = Vector2(26, 6)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hill_TablesAndDesks"]
@@ -445,7 +452,7 @@ tile_map_data = PackedByteArray("AAAQABAAAAAJAA4AAAARABAAAAAJAA4AAAAUABAAAAAJAA4
 tile_set = SubResource("TileSet_ywce2")
 
 [node name="Shadiw" type="TileMapLayer" parent="." unique_id=1202166598]
-tile_map_data = PackedByteArray("AAAOABUAAAALAAIAAAAOABQAAAALAAIAAAAOABMAAAALAAIAAAAOABIAAAALAAIAAAAOABEAAAALAAIAAAAQABUAAAAIAAEAAAAQABQAAAAIAAEAAAAQABMAAAAIAAEAAAAQABIAAAAIAAAAAAAOABAAAAALAAIAAAANABAAAAALAAIAAAANAA8AAAALAAIAAAAOAA8AAAALAAIAAAANAA4AAAALAAMAAAARABIAAAAKAAAAAAASABIAAAAKAAAAAAATABIAAAAKAAAAAAAUABIAAAAKAAAAAAAVABIAAAAKAAAAAAAWABIAAAAKAAAAAAAOAA4AAAALAAIAAAADABQAAAAJAAMAAAAEABQAAAAJAAMAAAAFABQAAAAJAAMAAAAGABQAAAAJAAMAAAAHABQAAAAJAAMAAAACABUAAAALAAMAAAABABUAAAAJAAMAAAACABQAAAALAAMAAAAPAAkAAAABAAMAAAAQAAkAAAACAAMAAAA=")
+tile_map_data = PackedByteArray("AAAOABUAAAALAAIAAAAOABQAAAALAAIAAAAOABMAAAALAAIAAAAOABIAAAALAAIAAAAOABEAAAALAAIAAAAQABUAAAAIAAEAAAAQABQAAAAIAAEAAAAQABMAAAAIAAEAAAAQABIAAAAIAAAAAAAOABAAAAALAAIAAAANABAAAAALAAIAAAANAA8AAAALAAIAAAAOAA8AAAALAAIAAAANAA4AAAALAAMAAAARABIAAAAKAAAAAAASABIAAAAKAAAAAAATABIAAAAKAAAAAAAUABIAAAAKAAAAAAAVABIAAAAKAAAAAAAWABIAAAAKAAAAAAAOAA4AAAALAAIAAAADABQAAAAJAAMAAAAEABQAAAAJAAMAAAAFABQAAAAJAAMAAAAGABQAAAAJAAMAAAAHABQAAAAJAAMAAAACABUAAAALAAMAAAABABUAAAAJAAMAAAACABQAAAALAAMAAAAPAAkAAAABAAMAAAAQAAkAAAACAAMAAAAVABMAAAACAAMAAAAUABMAAAACAAMAAAATABMAAAACAAMAAAASABMAAAACAAMAAAARABMAAAACAAMAAAA=")
 tile_set = SubResource("TileSet_37gcr")
 
 [node name="StonePath" type="TileMapLayer" parent="." unique_id=499166496]
@@ -536,12 +543,19 @@ polygon = PackedVector2Array(44, 351, 16, 351, 17, 306, 32, 304, 33, 287, 42, 28
 z_index = 1
 position = Vector2(285, 263)
 
+[node name="Sign2" parent="CarpenterHouseSort" unique_id=1184122200 instance=ExtResource("10_t21if")]
+position = Vector2(25, 49)
+caption = "Wira · Tukang Kayu"
+mount = 2
+
+[node name="StaticBody2D" type="StaticBody2D" parent="CarpenterHouseSort/Sign2" unique_id=637963800]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CarpenterHouseSort/Sign2/StaticBody2D" unique_id=203684333]
+position = Vector2(0, -10)
+shape = SubResource("RectangleShape2D_vdhk3")
+
 [node name="CarpenterHouse" parent="CarpenterHouseSort" unique_id=716367442 instance=ExtResource("7_hsxf1")]
 position = Vector2(0, -38)
-
-[node name="CarpenterHouseSort2" type="Node2D" parent="." unique_id=1931824412]
-z_index = 1
-position = Vector2(285, 263)
 
 [node name="Fence" type="TileMapLayer" parent="." unique_id=938188190]
 tile_map_data = PackedByteArray("AAAbABQAAAAAAAEAAAAbABUAAAAAAAEAAAAbABYAAAAAAAEAAAAbABcAAAAAAAEAAAAbABgAAAAAAAEAAAAbABkAAAAAAAEAAAAbABoAAAACAAIAAAAaABoAAAAAAAAAAAAaABsAAAAAAAEAAAAaABwAAAACAAIAAAAZABwAAAABAAIAAAAYABwAAAABAAIAAAAXABwAAAABAAIAAAAWABwAAAAAAAAAAAAWAB0AAAAAAAEAAAA=")
@@ -571,7 +585,7 @@ metadata/player_interaction = true
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ysort/Objects/Chairs/StaticBody2D" unique_id=340064637]
-shape = SubResource("RectangleShape2D_wd2we")
+shape = SubResource("RectangleShape2D_t21if")
 
 [node name="SeatPoint" type="Marker2D" parent="ysort/Objects/Chairs" unique_id=945532118]
 position = Vector2(0, -5)
@@ -601,7 +615,7 @@ metadata/player_interaction = true
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ysort/Objects/LongChair/StaticBody2D" unique_id=847009723]
-shape = SubResource("RectangleShape2D_t21if")
+shape = SubResource("RectangleShape2D_rjvrt")
 
 [node name="SeatPoint" type="Marker2D" parent="ysort/Objects/LongChair" unique_id=1190999408]
 position = Vector2(-6, -4)
@@ -885,7 +899,47 @@ spawn_position = Vector2(1233, 14)
 position = Vector2(241, 477)
 shape = SubResource("RectangleShape2D_4ha6c")
 
+[node name="EnterMountain" type="Area2D" parent="." unique_id=762607510]
+script = ExtResource("20_spa1p")
+scene_target = "res://scenes/world/mountain.tscn"
+spawn_position = Vector2(328, 352)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnterMountain" unique_id=635997167]
+position = Vector2(420, 334)
+shape = SubResource("RectangleShape2D_4ha6c")
+
 [node name="Marker2D" type="Marker2D" parent="." unique_id=610579544]
 position = Vector2(242, 462)
+
+[node name="NPCPoints" type="Node2D" parent="." unique_id=1756379113]
+
+[node name="wira_home" type="Marker2D" parent="NPCPoints" unique_id=918003747]
+position = Vector2(285, 280)
+
+[node name="wira_wood_storage" type="Marker2D" parent="NPCPoints" unique_id=574645177]
+position = Vector2(370, 278)
+
+[node name="wira_workshop" type="Marker2D" parent="NPCPoints" unique_id=1357241729]
+position = Vector2(310, 290)
+
+[node name="wira_lunch" type="Marker2D" parent="NPCPoints" unique_id=1365252426]
+position = Vector2(150, 158)
+
+[node name="wira_overlook" type="Marker2D" parent="NPCPoints" unique_id=16466512]
+position = Vector2(240, 400)
+
+[node name="NPCActors" type="Node2D" parent="." unique_id=982129201]
+z_index = 1
+y_sort_enabled = true
+
+[node name="NPCMapPresenter" type="Node" parent="." unique_id=1282020124]
+script = ExtResource("ResidentPresenter")
+map_id = "hill"
+
+[node name="DoorMine" type="Sprite2D" parent="." unique_id=477209936]
+position = Vector2(420, 324)
+texture = ExtResource("23_rjvrt")
+region_enabled = true
+region_rect = Rect2(1, 7, 30, 25)
 
 [editable path="Player"]

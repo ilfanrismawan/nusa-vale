@@ -658,11 +658,25 @@ func _input(event: InputEvent) -> void:
 	if visible and _drop_dialog_open() and input.is_event(event, &"ui_cancel"):
 		_close_drop_dialog()
 		get_viewport().set_input_as_handled()
-	elif input.is_event(event, &"inventory") or (not visible and input.is_event(event, &"ui_cancel")):
-		if get_tree().paused and not visible:
+	elif input.is_event(event, &"crafting_menu"):
+		# Y gamepad (seperti Stardew Valley): buka tas langsung di tab Crafting.
+		if visible and _crafting_panel.visible:
+			_close()
+		elif visible:
+			_show_crafting()
+		elif _can_open_now():
+			_open()
+			_show_crafting()
+		else:
 			return
-		# Co-op: jangan buka tas saat pemain ini sedang di toko/pindah area/tidur.
-		if not visible and is_instance_valid(player) and player.is_input_locked():
+		get_viewport().set_input_as_handled()
+	elif visible and event is InputEventJoypadButton and not _drop_dialog_open() \
+			and (input.is_event(event, &"tool_prev") or input.is_event(event, &"tool_next")):
+		# LB/RB di dalam tas berpindah tab, seperti menu Stardew Valley.
+		_cycle_tab(-1 if input.is_event(event, &"tool_prev") else 1)
+		get_viewport().set_input_as_handled()
+	elif input.is_event(event, &"inventory") or (not visible and input.is_event(event, &"ui_cancel")):
+		if not visible and not _can_open_now():
 			return
 		toggle()
 		get_viewport().set_input_as_handled()
@@ -682,6 +696,33 @@ func _input(event: InputEvent) -> void:
 
 
 ## ── Open / Close ────────────────────────────────────────────────────────────
+## Tas boleh dibuka: game tidak dijeda, dan (co-op) pemain ini tidak sedang di toko/pindah area/tidur.
+func _can_open_now() -> bool:
+	if get_tree().paused:
+		return false
+	return not (is_instance_valid(player) and player.is_input_locked())
+
+
+## Pindah ke tab atas sebelah kiri/kanan (tab Pengaturan dilewati; buka lewat klik).
+func _cycle_tab(step: int) -> void:
+	var tabs: Array[TextureButton] = []
+	for t in _top_tabs:
+		if is_instance_valid(t) and t != tab_gear:
+			tabs.append(t)
+	if tabs.is_empty():
+		return
+	var current: TextureButton = tab_book
+	if _status_panel.visible:
+		current = _menu_buttons["Status"]
+	elif _collection_panel.visible:
+		current = tab_collection
+	elif _equipment_panel.visible:
+		current = _menu_buttons["Equipment"]
+	elif _crafting_panel.visible:
+		current = _menu_buttons["Crafting"]
+	var idx := maxi(tabs.find(current), 0)
+	tabs[posmod(idx + step, tabs.size())].pressed.emit()
+
 func toggle() -> void:
 	if visible:
 		_close()

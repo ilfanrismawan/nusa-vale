@@ -1,7 +1,6 @@
 [gd_resource type="Resource" script_class="CookingShopData" format=3]
 [ext_resource type="Script" path="res://scripts/resources/cooking_shop_data.gd" id="script"]
 [ext_resource type="Script" path="res://scripts/resources/cooking_shop_offer.gd" id="offer_script"]
-[ext_resource type="Resource" path="res://resources/cooking/shop/offers/house_kitchen_upgrade.tres" id="offer_0"]
 [ext_resource type="Resource" path="res://resources/cooking/shop/offers/kitchen_set_wood.tres" id="offer_1"]
 [ext_resource type="Resource" path="res://resources/cooking/shop/offers/kitchen_set_white.tres" id="offer_2"]
 [ext_resource type="Resource" path="res://resources/cooking/shop/offers/kitchen_set_black.tres" id="offer_3"]
@@ -32,5 +31,5 @@
 script = ExtResource("script")
 display_name = "Dapur Nusantara · Peralatan Masak"
 keeper_name = "Penjaga Dapur Nusantara"
-greeting = "Selamat datang! Renovasi rumah terlebih dahulu, lalu pilih kitchen set dan alat masak. Pembelian dipasang di dapur rumah; berlaku untuk seluruh penghuni."
-offers = Array[ExtResource("offer_script")]([ExtResource("offer_0"), ExtResource("offer_1"), ExtResource("offer_2"), ExtResource("offer_3"), ExtResource("offer_4"), ExtResource("offer_5"), ExtResource("offer_6"), ExtResource("offer_7"), ExtResource("offer_8"), ExtResource("offer_9"), ExtResource("offer_10"), ExtResource("offer_11"), ExtResource("offer_12"), ExtResource("offer_13"), ExtResource("offer_14"), ExtResource("offer_15"), ExtResource("offer_16"), ExtResource("offer_17"), ExtResource("offer_18"), ExtResource("offer_19"), ExtResource("offer_20"), ExtResource("offer_21"), ExtResource("offer_22"), ExtResource("offer_23"), ExtResource("offer_24"), ExtResource("offer_25"), ExtResource("offer_26")])
+greeting = "Selamat datang! Minta Wira membangun ruang dapur di rumahmu dulu, lalu pilih kitchen set dan alat masak. Pembelian dipasang di dapur rumah; berlaku untuk seluruh penghuni."
+offers = Array[ExtResource("offer_script")]([ExtResource("offer_1"), ExtResource("offer_2"), ExtResource("offer_3"), ExtResource("offer_4"), ExtResource("offer_5"), ExtResource("offer_6"), ExtResource("offer_7"), ExtResource("offer_8"), ExtResource("offer_9"), ExtResource("offer_10"), ExtResource("offer_11"), ExtResource("offer_12"), ExtResource("offer_13"), ExtResource("offer_14"), ExtResource("offer_15"), ExtResource("offer_16"), ExtResource("offer_17"), ExtResource("offer_18"), ExtResource("offer_19"), ExtResource("offer_20"), ExtResource("offer_21"), ExtResource("offer_22"), ExtResource("offer_23"), ExtResource("offer_24"), ExtResource("offer_25"), ExtResource("offer_26")])

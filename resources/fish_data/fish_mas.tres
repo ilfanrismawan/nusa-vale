@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("2_to6q8")
 item = ExtResource("1_m7p5h")
-locations = ["farm_pond", " forest_river"]
+locations = ["farm_pond", "forest_river"]
 min_hour = 6
 max_hour = 20
 difficulty = 0.3

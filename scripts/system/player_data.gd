@@ -27,7 +27,8 @@ var index: int = 0
 const DAYA_IDS := ["harvest", "forest", "balai"]
 var consumed_daya: Array[String] = []
 var max_stamina: int:
-	get: return MAX_STAMINA + consumed_daya.size() * 10
+	# Bonus rumah milik rumah tangga (GDD 4.12).
+	get: return MAX_STAMINA + consumed_daya.size() * 10 + HouseManager.stamina_bonus_total
 
 func load_daya(value: Variant) -> void:
 	consumed_daya.clear()

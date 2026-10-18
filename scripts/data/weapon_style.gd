@@ -32,7 +32,9 @@ extends Resource
 @export var uses_ammo: bool = false
 
 @export_group("Biaya dan rasa")
+## Stamina tempur (bar terpisah, GDD 8.2-A1) untuk serangan ringan dan berat.
 @export_range(0, 50) var stamina_cost: int = 0
+@export_range(0, 80) var heavy_stamina_cost: int = 0
 ## Dorongan ke target dalam piksel.
 @export_range(0.0, 64.0) var knockback: float = 10.0
 ## Umpan balik Juice (resources/feedback/<nama>.tres). hit_feedback kosong = hanya suara
@@ -69,3 +71,41 @@ func combo_speed_at(step: int) -> float:
 
 func is_finisher(step: int) -> bool:
 	return combo_length() > 1 and step == combo_length() - 1
+
+@export_group("Frame data")
+## Fase serangan (GDD 8.2-A5): startup = 0..hit_frame_ratio, active = sampai active_end_ratio
+## (hitbox tebasan aktif tiap frame, tiap musuh kena sekali), sisanya recovery.
+@export_range(0.0, 1.0, 0.05) var active_end_ratio: float = 0.7
+## Recovery hanya bisa dibatalkan dengan roll setelah bagian animasi ini (1 = tidak bisa).
+@export_range(0.0, 1.0, 0.05) var recovery_cancel_ratio: float = 0.85
+
+@export_group("Variasi serangan")
+## Serangan berat: tahan klik kiri (CombatRules.heavy_charge_time).
+@export_range(1.0, 5.0, 0.05) var heavy_damage: float = 2.0
+@export_range(0.2, 2.0, 0.05) var heavy_speed: float = 0.8
+@export_range(1.0, 3.0, 0.05) var heavy_radius_scale: float = 1.25
+@export_range(1.0, 4.0, 0.1) var heavy_projectile_scale: float = 1.5
+@export_range(1.0, 4.0, 0.1) var heavy_knockback_scale: float = 2.0
+## Sprint attack (setelah berlari): damage dan dorongan maju (piksel).
+@export_range(1.0, 3.0, 0.05) var sprint_damage: float = 1.25
+@export_range(0.0, 64.0) var sprint_lunge: float = 22.0
+## Roll attack (segera setelah roll): damage dan kecepatan animasi.
+@export_range(1.0, 3.0, 0.05) var roll_damage: float = 1.3
+@export_range(0.5, 3.0, 0.05) var roll_speed: float = 1.3
+
+@export_group("Poise dan block")
+## Kikisan poise musuh per serangan ringan. Berat/finisher/sprint/roll dikali pengalinya.
+@export_range(0.0, 100.0) var poise_damage: float = 10.0
+## Bagian damage yang ditahan saat block (0..1).
+@export_range(0.0, 1.0, 0.05) var block_reduction: float = 0.6
+## Frame pose saat block (-1 = tanpa pose khusus).
+@export var guard_pose_frame: int = -1
+
+@export_group("Weapon art")
+## Satu art per tier bahan (index = ToolData.ToolTier: Wood..Obsidian). Kurang = pakai yang terakhir.
+@export var arts: Array[WeaponArt] = []
+
+func art_for(tier: int) -> WeaponArt:
+	if arts.is_empty():
+		return null
+	return arts[clampi(tier, 0, arts.size() - 1)]

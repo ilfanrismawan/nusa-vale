@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="WeaponTierFx" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/weapon_tier_fx.gd" id="1_fx"]
+
+[resource]
+script = ExtResource("1_fx")
+display_name = "Tembaga"
+motif = 1
+color = Color(1, 0.55, 0.25, 1)
+color_alt = Color(1, 0.85, 0.5, 1)
+glow = Color(1, 0.6, 0.3, 0.25)
+trail_points = 7
+trail_width_scale = 1.05
+flight_particles = 6
+halo_radius = 0.0
+slash_width_scale = 1.05
+slash_echo = false
+slash_particles = 3
+hit_particles = 8
+hit_ring = 0.0
+shake_bonus = 0.1
+hitstop_bonus_ms = 0
+impact_layers = PackedStringArray("impactTin_medium_001")
+impact_volume_db = -8.0
+impact_semitones = 0.0
+aim_motes = 1
+chime_notes = PackedInt32Array(0)
+muzzle_scale = 1.05
+bass_boom = false

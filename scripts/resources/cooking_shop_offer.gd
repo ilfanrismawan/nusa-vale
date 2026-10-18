@@ -8,7 +8,7 @@ extends Resource
 @export_range(1, 9999999) var price: int = 100
 @export var materials: Dictionary[String, int] = {}
 @export var required_flags: PackedStringArray = []
-@export_multiline var locked_message := "Terkunci: renovasi ruang dapur rumah terlebih dahulu."
+@export_multiline var locked_message := "Terkunci: pesan Upgrade Rumah (ruang dapur) ke Wira terlebih dahulu."
 @export_multiline var purchase_message: String
 @export var owned_flag: String
 @export var grants_flags: PackedStringArray = []

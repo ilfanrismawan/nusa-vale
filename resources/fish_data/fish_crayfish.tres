@@ -6,4 +6,4 @@
 [resource]
 script = ExtResource("2_ks4q7")
 item = ExtResource("1_85dsa")
-locations = PackedStringArray("farm_pond", "farm_river", "forest_river")
+locations = PackedStringArray("farm_pond", "farm_river", "forest_river", "cave_lake")

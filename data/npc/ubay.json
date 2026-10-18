@@ -1,0 +1,120 @@
+{
+  "id": "ubay",
+  "name": "Ubay",
+  "age": 28,
+  "role": "Kurir Koperasi",
+  "home_map": "ubay_home",
+  "romanceable": true,
+  "personality": [
+	"cheerful",
+	"punctual",
+	"sociable",
+    "overcommitted"
+  ],
+  "move_speed": 48.0,
+  "service": "shipping",
+  "visual": {
+	"sprite_frames": "res://resources/npc_data/npc_animation/ubay_frame.tres",
+	"portrait": "res://assets/farm_rpg/Character/NPC'S/Josh/Portrait Josh.png"
+  },
+  "dialogue": {
+	"default": [
+      "Pagi atau sore, selalu ada sesuatu yang perlu diantar!"
+	],
+	"breakfast": [
+      "Aku sedang menyiapkan bekal. Rutenya cukup panjang hari ini."
+	],
+	"sorting": [
+	  "Alamat jelas, paket aman, penerima senang.",
+      "Sekarang tinggal mencari siapa yang mengirim labu sebesar ini."
+	],
+	"delivering": [
+	  "Ada kiriman untuk warga desa.",
+      "Kalau hasil kebunmu sudah siap, simpan di kotak pengiriman."
+	],
+	"lunch": [
+      "Duduk sebentar, yuk. Kakiku sudah mengelilingi desa sejak pagi."
+	],
+	"checking_route": [
+	  "Aku sedang memeriksa rute pengambilan sore ini.",
+      "Pukul lima aku mampir ke kotak pengiriman kebunmu."
+	],
+	"collecting": [
+	  "Aku datang mengambil hasil jualanmu.",
+      "Biar aku yang mengangkatnya. Kamu sudah bekerja keras di kebun."
+	],
+	"dispatching": [
+	  "Hasil kebunmu akan kubawa ke koperasi.",
+      "Semoga harga panen berikutnya juga bagus."
+	],
+	"resting": [
+      "Semua kiriman sudah beres. Sekarang waktunya menikmati sore."
+	],
+	"sleeping": [
+      "Besok pagi aku kembali bertugas. Sampai jumpa!"
+	]
+  },
+  "schedules": {
+	"default": [
+	  {
+		"time": "06:00",
+		"map": "ubay_home",
+		"point": "ubay_home",
+		"activity": "breakfast"
+	  },
+	  {
+		"time": "07:00",
+		"map": "town",
+		"point": "ubay_depot",
+		"activity": "sorting"
+	  },
+	  {
+		"time": "09:00",
+		"map": "town",
+		"point": "ubay_delivery",
+		"activity": "delivering"
+	  },
+	  {
+		"time": "12:00",
+		"map": "town",
+		"point": "ubay_lunch",
+		"activity": "lunch"
+	  },
+	  {
+		"time": "13:00",
+		"map": "town",
+		"point": "ubay_depot",
+		"activity": "checking_route"
+	  },
+	  {
+		"time": "17:00",
+		"map": "farm",
+		"point": "shipping_pickup",
+		"activity": "collecting"
+	  },
+	  {
+		"time": "17:30",
+		"map": "town",
+		"point": "ubay_depot",
+		"activity": "dispatching"
+	  },
+	  {
+		"time": "19:00",
+		"map": "town",
+		"point": "ubay_rest",
+		"activity": "resting"
+	  },
+	  {
+		"time": "22:00",
+		"map": "ubay_home",
+		"point": "ubay_home",
+		"activity": "sleeping"
+	  }
+	]
+  },
+  "likes": [
+	"coffee",
+	"fresh_fruit",
+    "packed_lunch"
+  ]
+}

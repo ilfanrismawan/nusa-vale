@@ -325,28 +325,83 @@ func _select_page(index: int) -> void:
 		_pages[i].visible = i == index
 		_page_buttons[i].set_pressed_no_signal(i == index)
 
+## Nama tombol gamepad (tata letak Xbox) untuk halaman Kontrol.
+const JOY_BUTTON_NAMES := {
+	JOY_BUTTON_A: "A", JOY_BUTTON_B: "B", JOY_BUTTON_X: "X", JOY_BUTTON_Y: "Y",
+	JOY_BUTTON_LEFT_SHOULDER: "LB", JOY_BUTTON_RIGHT_SHOULDER: "RB",
+	JOY_BUTTON_BACK: "Back", JOY_BUTTON_START: "Start",
+	JOY_BUTTON_LEFT_STICK: "L3 (klik stik kiri)", JOY_BUTTON_RIGHT_STICK: "R3 (klik stik kanan)",
+}
+const JOY_AXIS_NAMES := {JOY_AXIS_TRIGGER_LEFT: "LT", JOY_AXIS_TRIGGER_RIGHT: "RT"}
+const COLOR_CONTROLS_HEADER := Color(0.95, 0.78, 0.45)
+
+## Halaman Kontrol: satu baris per aksi, kolom keyboard + mouse dan gamepad.
+## Teks gamepad dibaca dari PlayerInput, jadi selalu sama dengan tombol yang dipakai game.
 func _setup_controls() -> void:
-	var titles := {&"move_up": "Berjalan atas", &"move_down": "Berjalan bawah", &"move_left": "Berjalan kiri", &"move_right": "Berjalan kanan", &"run": "Berlari", &"use_tool": "Gunakan alat", &"interact": "Interaksi", &"inventory": "Tas / menu", &"cycle_hotbar": "Halaman hotbar", &"sort_inventory": "Rapikan tas", &"tool_prev": "Slot sebelumnya", &"tool_next": "Slot berikutnya"}
-	for action in titles:
-		var bindings: Array[String] = []
-		for event in InputMap.action_get_events(action):
-			if event is InputEventKey:
-				bindings.append(OS.get_keycode_string(event.physical_keycode if event.physical_keycode != 0 else event.keycode))
-			elif event is InputEventMouseButton:
-				bindings.append({MOUSE_BUTTON_LEFT: "Klik kiri", MOUSE_BUTTON_RIGHT: "Klik kanan", MOUSE_BUTTON_WHEEL_UP: "Scroll atas", MOUSE_BUTTON_WHEEL_DOWN: "Scroll bawah"}.get(event.button_index, "Mouse %d" % event.button_index))
-		if action == &"inventory":
-			bindings.append("Esc")
-		var label := Label.new()
-		label.text = titles[action]
-		%ControlsGrid.add_child(label)
-		var binding := Label.new()
-		binding.text = " / ".join(bindings) if not bindings.is_empty() else "-"
-		%ControlsGrid.add_child(binding)
-	for text in ["Slot cepat", "1-8", "Gamepad", "Y: tas | A: interaksi | X: alat", "Gamepad", "LB/RB: slot | Back: hotbar", "Co-op", "Pengaturan bersama: hanya P1"]:
+	PlayerInput.ensure_combat_actions()
+	var grid: GridContainer = %ControlsGrid
+	grid.columns = 3
+	for child in grid.get_children():
+		child.queue_free()
+	_add_controls_row(["Aksi", "Keyboard + Mouse", "Gamepad"], true)
+	# [judul, aksi untuk kolom keyboard, teks keyboard tetap, teks gamepad tetap]
+	var rows := [
+		["Berjalan", [&"move_up", &"move_left", &"move_down", &"move_right"], "", "Stik kiri / D-pad"],
+		["Berlari (tahan)", [&"run"], "", "RT (tahan)"],
+		["Pakai alat / serang", [&"use_tool"], "", "X (tahan = serangan berat)"],
+		["Interaksi", [&"interact"], "", ""],
+		["Tas / menu", [&"inventory"], "Esc", ""],
+		["Crafting", [], "Tab Crafting di tas", ""],
+		["Slot sebelumnya", [&"tool_prev"], "", "LB (di tas: tab kiri)"],
+		["Slot berikutnya", [&"tool_next"], "", "RB (di tas: tab kanan)"],
+		["Pilih slot", [], "1-8", "-"],
+		["Halaman hotbar", [&"cycle_hotbar"], "", ""],
+		["Rapikan tas", [&"sort_inventory"], "", ""],
+		["Roll", [&"dodge"], "", "RT tekan singkat (pegang senjata)"],
+		["Tangkis / parry", [&"guard"], "", "LT"],
+		["Weapon Art", [&"weapon_art"], "", ""],
+		["Membidik", [&"aim"], "", "Arah hadap"],
+	]
+	var gamepad_action := {"Interaksi": &"interact", "Tas / menu": &"inventory", "Crafting": &"crafting_menu", "Halaman hotbar": &"cycle_hotbar", "Rapikan tas": &"sort_inventory", "Weapon Art": &"weapon_art"}
+	for row in rows:
+		var keys: Array[String] = []
+		for action in row[1]:
+			keys.append_array(_keyboard_bindings(action))
+		if not String(row[2]).is_empty():
+			keys.append(row[2])
+		var pad: String = row[3]
+		if pad.is_empty() and gamepad_action.has(row[0]):
+			pad = _gamepad_binding(gamepad_action[row[0]])
+		_add_controls_row([row[0], " / ".join(keys) if not keys.is_empty() else "-", pad if not pad.is_empty() else "-"])
+	_add_controls_row(["Co-op", "Pengaturan bersama hanya P1", ""])
+
+func _add_controls_row(texts: Array, header: bool = false) -> void:
+	for text in texts:
 		var label := Label.new()
 		label.text = text
 		label.add_theme_font_size_override("font_size", 16)
+		if header:
+			label.add_theme_color_override("font_color", COLOR_CONTROLS_HEADER)
 		%ControlsGrid.add_child(label)
+
+func _keyboard_bindings(action: StringName) -> Array[String]:
+	var bindings: Array[String] = []
+	if not InputMap.has_action(action):
+		return bindings
+	for event in InputMap.action_get_events(action):
+		if event is InputEventKey:
+			bindings.append(OS.get_keycode_string(event.physical_keycode if event.physical_keycode != 0 else event.keycode))
+		elif event is InputEventMouseButton:
+			bindings.append({MOUSE_BUTTON_LEFT: "Klik kiri", MOUSE_BUTTON_RIGHT: "Klik kanan", MOUSE_BUTTON_WHEEL_UP: "Scroll atas", MOUSE_BUTTON_WHEEL_DOWN: "Scroll bawah"}.get(event.button_index, "Mouse %d" % event.button_index))
+	return bindings
+
+func _gamepad_binding(action: StringName) -> String:
+	var names: Array[String] = []
+	for button in PlayerInput.JOY_BUTTONS.get(action, []):
+		names.append(JOY_BUTTON_NAMES.get(button, "Tombol %d" % button))
+	if PlayerInput.JOY_AXES.has(action):
+		names.append(JOY_AXIS_NAMES.get(PlayerInput.JOY_AXES[action][0], "Stik"))
+	return " / ".join(names)
 
 func _confirm_exit(to_desktop: bool) -> void:
 	_exit_to_desktop = to_desktop

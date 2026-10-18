@@ -35,6 +35,7 @@ Coop="*res://autoload/coop.gd"
 StructureManager="*res://autoload/structure_manager.gd"
 BuildingPlacement="*res://autoload/building_placement.gd"
 NPCDatabase="*uid://c5rmy4324fqch"
+DebugManager="*uid://5rt16n1b0sae"
 
 [debug]
 
@@ -45,6 +46,7 @@ shapes/collision/contact_color=Color(1, 0.84313726, 0.101960786, 0.8)
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
+window/size/mode=1
 window/size/window_width_override=1280
 window/size/window_height_override=720
 window/stretch/mode="canvas_items"
