@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_ring_frost.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_id = "ring_frost"
+display_name = "Cincin Frost"
+icon = ExtResource("2")
+description = "Cincin tempaan. Menambah serangan semua senjata."
+category = 7
+stackable = false
+max_stack = 1
+equipment_slot = 7
+attack_bonus = 11
+equipment_tier = 6
+sell_price = 2190
+rarity = 3

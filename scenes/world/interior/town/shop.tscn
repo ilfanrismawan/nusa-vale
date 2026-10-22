@@ -1,5 +1,1335 @@
-[gd_scene load_steps=2 format=3]
-[ext_resource type="PackedScene" path="res://scenes/world/interior/town_room.tscn" id="1"]
-[node name="ShopCounterInterior" instance=ExtResource("1")]
-room_title = "Toko"
-service = "shop"
+[gd_scene format=4 uid="uid://bk62y4rgxv2an"]
+
+[ext_resource type="Script" uid="uid://g2d8kllu0vwi" path="res://scripts/world/shop_interior.gd" id="1_scri"]
+[ext_resource type="PackedScene" uid="uid://bye3dnnqckqj5" path="res://scenes/player/Player.tscn" id="2_pack"]
+[ext_resource type="Script" uid="uid://cwvn2t55kd6ey" path="res://scripts/world/exit_door_school.gd" id="3_scri"]
+[ext_resource type="Script" uid="uid://b14vsibn0fm0q" path="res://scripts/object/shop_counter.gd" id="4_scri"]
+[ext_resource type="Resource" uid="uid://b40c61yuwomfj" path="res://resources/shop/general_store.tres" id="5_reso"]
+[ext_resource type="TileSet" path="res://resources/world/shop_interior_tileset.tres" id="6_tile"]
+[ext_resource type="Texture2D" path="res://resources/world/shop_fx/light_radial.tres" id="7_text"]
+[ext_resource type="Texture2D" path="res://resources/world/shop_fx/soft_shadow.tres" id="8_text"]
+[ext_resource type="Texture2D" path="res://resources/world/shop_fx/wall_shadow.tres" id="9_text"]
+[ext_resource type="Shader" uid="uid://c22vk751508b4" path="res://shaders/light_shaft.gdshader" id="10_shad"]
+[ext_resource type="Shader" uid="uid://cy06ebxaqg1r5" path="res://shaders/room_vignette.gdshader" id="11_shad"]
+[ext_resource type="Texture2D" uid="uid://p0gmleyynnxh" path="res://assets/farm_rpg/objects/interior/Part 11 copiar.png" id="12_text"]
+[ext_resource type="Texture2D" uid="uid://bi6e8sg4fs5yh" path="res://assets/farm_rpg/objects/interior/Part 1 copiar.png" id="13_text"]
+[ext_resource type="Texture2D" uid="uid://craqgyen5lh3t" path="res://assets/farm_rpg/objects/interior/Doors, windows and curtains.png" id="14_text"]
+[ext_resource type="Texture2D" uid="uid://clbp8bpc31l5r" path="res://assets/farm_rpg/objects/interior/School.png" id="15_text"]
+[ext_resource type="Texture2D" uid="uid://1fclomcktd6f" path="res://assets/farm_rpg/objects/interior/hospital wing.png" id="16_text"]
+[ext_resource type="Texture2D" uid="uid://vnme8rtol84u" path="res://assets/farm_rpg/objects/interior/Part 2 copiar.png" id="17_text"]
+[ext_resource type="Texture2D" uid="uid://c8cj277v0fqa8" path="res://assets/farm_rpg/objects/interior/Part 10 copiar.png" id="18_text"]
+[ext_resource type="Texture2D" uid="uid://b6vuodmnvqiq7" path="res://assets/farm_rpg/objects/exterior/Box.png" id="19_text"]
+[ext_resource type="Texture2D" uid="uid://ruv3focfjycb" path="res://assets/farm_rpg/objects/exterior/Village Barrels.png" id="20_text"]
+[ext_resource type="Texture2D" uid="uid://b8t6w8k5bo02b" path="res://assets/farm_rpg/objects/exterior/Wooden Buckets.png" id="21_text"]
+[ext_resource type="Texture2D" uid="uid://ra7xfhn34wrv" path="res://assets/farm_rpg/Character/Pre-made/NPC'S/Manu/Idle.png" id="22_text"]
+
+[sub_resource type="RectangleShape2D" id="Rect_BackWall"]
+size = Vector2(416, 48)
+
+[sub_resource type="RectangleShape2D" id="Rect_LeftWall"]
+size = Vector2(16, 272)
+
+[sub_resource type="RectangleShape2D" id="Rect_RightWall"]
+size = Vector2(16, 272)
+
+[sub_resource type="RectangleShape2D" id="Rect_BottomLeft"]
+size = Vector2(192, 16)
+
+[sub_resource type="RectangleShape2D" id="Rect_BottomRight"]
+size = Vector2(192, 16)
+
+[sub_resource type="RectangleShape2D" id="Rect_Counter"]
+size = Vector2(64, 24)
+
+[sub_resource type="RectangleShape2D" id="Rect_ShopCounter"]
+size = Vector2(56, 20)
+
+[sub_resource type="AtlasTexture" id="Shopkeeper_0"]
+atlas = ExtResource("22_text")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Shopkeeper_1"]
+atlas = ExtResource("22_text")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Shopkeeper_2"]
+atlas = ExtResource("22_text")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="Shopkeeper_3"]
+atlas = ExtResource("22_text")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="ShopkeeperFrames"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("Shopkeeper_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("Shopkeeper_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("Shopkeeper_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("Shopkeeper_3")
+}],
+"loop": 1,
+"name": &"idle_down",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="Rect_DisplayCase"]
+size = Vector2(48, 12)
+
+[sub_resource type="RectangleShape2D" id="Rect_DrinkFridge"]
+size = Vector2(16, 10)
+
+[sub_resource type="RectangleShape2D" id="Rect_CornerPlant"]
+size = Vector2(12, 8)
+
+[sub_resource type="RectangleShape2D" id="Rect_Cabinet"]
+size = Vector2(26, 12)
+
+[sub_resource type="RectangleShape2D" id="Rect_ProduceBin1"]
+size = Vector2(12, 8)
+
+[sub_resource type="RectangleShape2D" id="Rect_ProduceBin2"]
+size = Vector2(12, 8)
+
+[sub_resource type="RectangleShape2D" id="Rect_ProduceBin3"]
+size = Vector2(12, 8)
+
+[sub_resource type="RectangleShape2D" id="Rect_ProduceBin4"]
+size = Vector2(12, 8)
+
+[sub_resource type="RectangleShape2D" id="Rect_ProduceBin5"]
+size = Vector2(12, 8)
+
+[sub_resource type="RectangleShape2D" id="Rect_ProduceBin6"]
+size = Vector2(12, 8)
+
+[sub_resource type="RectangleShape2D" id="Rect_ProduceBin7"]
+size = Vector2(12, 8)
+
+[sub_resource type="RectangleShape2D" id="Rect_ProduceBin8"]
+size = Vector2(12, 8)
+
+[sub_resource type="RectangleShape2D" id="Rect_ProduceBin9"]
+size = Vector2(12, 8)
+
+[sub_resource type="RectangleShape2D" id="Rect_SeedBin1"]
+size = Vector2(14, 8)
+
+[sub_resource type="RectangleShape2D" id="Rect_SeedBin2"]
+size = Vector2(14, 8)
+
+[sub_resource type="RectangleShape2D" id="Rect_SeedBin3"]
+size = Vector2(14, 8)
+
+[sub_resource type="RectangleShape2D" id="Rect_SeedBin4"]
+size = Vector2(14, 8)
+
+[sub_resource type="RectangleShape2D" id="Rect_Shelf1_1"]
+size = Vector2(16, 10)
+
+[sub_resource type="RectangleShape2D" id="Rect_Shelf1_2"]
+size = Vector2(16, 10)
+
+[sub_resource type="RectangleShape2D" id="Rect_Shelf1_3"]
+size = Vector2(16, 10)
+
+[sub_resource type="RectangleShape2D" id="Rect_Shelf1_4"]
+size = Vector2(16, 10)
+
+[sub_resource type="RectangleShape2D" id="Rect_Shelf1_5"]
+size = Vector2(16, 10)
+
+[sub_resource type="RectangleShape2D" id="Rect_Shelf1_6"]
+size = Vector2(16, 10)
+
+[sub_resource type="RectangleShape2D" id="Rect_Shelf1_7"]
+size = Vector2(16, 10)
+
+[sub_resource type="RectangleShape2D" id="Rect_Shelf1_8"]
+size = Vector2(16, 10)
+
+[sub_resource type="RectangleShape2D" id="Rect_Shelf2_1"]
+size = Vector2(16, 10)
+
+[sub_resource type="RectangleShape2D" id="Rect_Shelf2_2"]
+size = Vector2(16, 10)
+
+[sub_resource type="RectangleShape2D" id="Rect_Shelf2_3"]
+size = Vector2(16, 10)
+
+[sub_resource type="RectangleShape2D" id="Rect_Shelf2_4"]
+size = Vector2(16, 10)
+
+[sub_resource type="RectangleShape2D" id="Rect_Shelf2_5"]
+size = Vector2(16, 10)
+
+[sub_resource type="RectangleShape2D" id="Rect_Shelf2_6"]
+size = Vector2(16, 10)
+
+[sub_resource type="RectangleShape2D" id="Rect_Shelf2_7"]
+size = Vector2(16, 10)
+
+[sub_resource type="RectangleShape2D" id="Rect_Shelf2_8"]
+size = Vector2(16, 10)
+
+[sub_resource type="RectangleShape2D" id="Rect_BarrelA"]
+size = Vector2(14, 8)
+
+[sub_resource type="RectangleShape2D" id="Rect_BarrelB"]
+size = Vector2(14, 8)
+
+[sub_resource type="RectangleShape2D" id="Rect_Buckets"]
+size = Vector2(14, 8)
+
+[sub_resource type="RectangleShape2D" id="Rect_WaterBucket"]
+size = Vector2(12, 6)
+
+[sub_resource type="RectangleShape2D" id="Rect_FloorLampShop"]
+size = Vector2(8, 6)
+
+[sub_resource type="RectangleShape2D" id="Rect_FloorLampCorner"]
+size = Vector2(8, 6)
+
+[sub_resource type="ShaderMaterial" id="ShaftMaterial"]
+shader = ExtResource("10_shad")
+shader_parameter/shaft_color = Color(1, 0.93, 0.72, 1)
+shader_parameter/intensity = 0.22
+shader_parameter/top_width = 0.6
+shader_parameter/slant = 0.15
+shader_parameter/edge_softness = 0.22
+shader_parameter/shimmer_speed = 0.6
+shader_parameter/shimmer_amount = 0.12
+
+[sub_resource type="CanvasItemMaterial" id="DustMaterial"]
+blend_mode = 1
+light_mode = 1
+
+[sub_resource type="Gradient" id="DustFade"]
+offsets = PackedFloat32Array(0, 0.25, 0.75, 1)
+colors = PackedColorArray(1, 0.95, 0.8, 0, 1, 0.95, 0.8, 0.7, 1, 0.95, 0.8, 0.7, 1, 0.95, 0.8, 0)
+
+[sub_resource type="ShaderMaterial" id="VignetteMaterial"]
+shader = ExtResource("11_shad")
+shader_parameter/vignette_color = Color(0.1, 0.04, 0.06, 1)
+shader_parameter/strength = 0.4
+shader_parameter/inner_radius = 0.6
+shader_parameter/outer_radius = 1.15
+
+[sub_resource type="RectangleShape2D" id="Rect_ExitDoor"]
+size = Vector2(32, 12)
+
+[node name="ShopCounterInterior" type="Node2D" unique_id=518512374]
+y_sort_enabled = true
+script = ExtResource("1_scri")
+
+[node name="Floor" type="TileMapLayer" parent="." unique_id=116010941]
+z_index = -10
+tile_map_data = PackedByteArray("AAABAAMAAAAbAAMAAAACAAMAAAAbAAMAAAADAAMAAAAbAAMAAAAEAAMAAAAbAAMAAAAFAAMAAAAbAAMAAAAGAAMAAAAbAAMAAAAHAAMAAAAbAAMAAAAIAAMAAAAbAAMAAAAJAAMAAAAbAAMAAAAKAAMAAAAbAAMAAAALAAMAAAAbAAMAAAAMAAMAAAAbAAMAAAANAAMAAAAbAAMAAAAOAAMAAAAbAAMAAAAPAAMAAAAbAAMAAAAQAAMAAAAbAAMAAAARAAMAAAAbAAMAAAASAAMAAAAbAAMAAAATAAMAAAAbAAMAAAAUAAMAAAAbAAMAAAAVAAMAAAAbAAMAAAAWAAMAAAAbAAMAAAAXAAMAAAAbAAMAAAAYAAMAAAAbAAMAAAABAAQAAAAbAAMAAAACAAQAAAAbAAMAAAADAAQAAAAbAAMAAAAEAAQAAAAbAAMAAAAFAAQAAAAbAAMAAAAGAAQAAAAbAAMAAAAHAAQAAAAbAAMAAAAIAAQAAAAbAAMAAAAJAAQAAAAbAAMAAAAKAAQAAAAbAAMAAAALAAQAAAAbAAMAAAAMAAQAAAAbAAMAAAANAAQAAAAbAAMAAAAOAAQAAAAbAAMAAAAPAAQAAAAbAAMAAAAQAAQAAAAbAAMAAAARAAQAAAAbAAMAAAASAAQAAAAbAAMAAAATAAQAAAAbAAMAAAAUAAQAAAAbAAMAAAAVAAQAAAAbAAMAAAAWAAQAAAAbAAMAAAAXAAQAAAAbAAMAAAAYAAQAAAAbAAMAAAABAAUAAAAbAAMAAAACAAUAAAAbAAMAAAADAAUAAAAbAAMAAAAEAAUAAAAbAAMAAAAFAAUAAAAbAAMAAAAGAAUAAAAbAAMAAAAHAAUAAAAbAAMAAAAIAAUAAAAbAAMAAAAJAAUAAAAbAAMAAAAKAAUAAAAbAAMAAAALAAUAAAAbAAMAAAAMAAUAAAAbAAMAAAANAAUAAAAbAAMAAAAOAAUAAAAbAAMAAAAPAAUAAAAbAAMAAAAQAAUAAAAbAAMAAAARAAUAAAAbAAMAAAASAAUAAAAbAAMAAAATAAUAAAAbAAMAAAAUAAUAAAAbAAMAAAAVAAUAAAAbAAMAAAAWAAUAAAAbAAMAAAAXAAUAAAAbAAMAAAAYAAUAAAAbAAMAAAABAAYAAAAbAAMAAAACAAYAAAAbAAMAAAADAAYAAAAbAAMAAAAEAAYAAAAbAAMAAAAFAAYAAAAbAAMAAAAGAAYAAAAbAAMAAAAHAAYAAAAbAAMAAAAIAAYAAAAbAAMAAAAJAAYAAAAbAAMAAAAKAAYAAAAbAAMAAAALAAYAAAAbAAMAAAAMAAYAAAAbAAMAAAANAAYAAAAbAAMAAAAOAAYAAAAbAAMAAAAPAAYAAAAbAAMAAAAQAAYAAAAbAAMAAAARAAYAAAAbAAMAAAASAAYAAAAbAAMAAAATAAYAAAAbAAMAAAAUAAYAAAAbAAMAAAAVAAYAAAAbAAMAAAAWAAYAAAAbAAMAAAAXAAYAAAAbAAMAAAAYAAYAAAAbAAMAAAABAAcAAAAbAAMAAAACAAcAAAAbAAMAAAADAAcAAAAbAAMAAAAEAAcAAAAbAAMAAAAFAAcAAAAbAAMAAAAGAAcAAAAbAAMAAAAHAAcAAAAbAAMAAAAIAAcAAAAbAAMAAAAJAAcAAAAbAAMAAAAKAAcAAAAbAAMAAAALAAcAAAAbAAMAAAAMAAcAAAAbAAMAAAANAAcAAAAbAAMAAAAOAAcAAAAbAAMAAAAPAAcAAAAbAAMAAAAQAAcAAAAbAAMAAAARAAcAAAAbAAMAAAASAAcAAAAbAAMAAAATAAcAAAAbAAMAAAAUAAcAAAAbAAMAAAAVAAcAAAAbAAMAAAAWAAcAAAAbAAMAAAAXAAcAAAAbAAMAAAAYAAcAAAAbAAMAAAABAAgAAAAbAAMAAAACAAgAAAAbAAMAAAADAAgAAAAbAAMAAAAEAAgAAAAbAAMAAAAFAAgAAAAbAAMAAAAGAAgAAAAbAAMAAAAHAAgAAAAbAAMAAAAIAAgAAAAbAAMAAAAJAAgAAAAbAAMAAAAKAAgAAAAbAAMAAAALAAgAAAAbAAMAAAAMAAgAAAAbAAMAAAANAAgAAAAbAAMAAAAOAAgAAAAbAAMAAAAPAAgAAAAbAAMAAAAQAAgAAAAbAAMAAAARAAgAAAAbAAMAAAASAAgAAAAbAAMAAAATAAgAAAAbAAMAAAAUAAgAAAAbAAMAAAAVAAgAAAAbAAMAAAAWAAgAAAAbAAMAAAAXAAgAAAAbAAMAAAAYAAgAAAAbAAMAAAABAAkAAAAbAAMAAAACAAkAAAAbAAMAAAADAAkAAAAbAAMAAAAEAAkAAAAbAAMAAAAFAAkAAAAbAAMAAAAGAAkAAAAbAAMAAAAHAAkAAAAbAAMAAAAIAAkAAAAbAAMAAAAJAAkAAAAbAAMAAAAKAAkAAAAbAAMAAAALAAkAAAAbAAMAAAAMAAkAAAAbAAMAAAANAAkAAAAbAAMAAAAOAAkAAAAbAAMAAAAPAAkAAAAbAAMAAAAQAAkAAAAbAAMAAAARAAkAAAAbAAMAAAASAAkAAAAbAAMAAAATAAkAAAAbAAMAAAAUAAkAAAAbAAMAAAAVAAkAAAAbAAMAAAAWAAkAAAAbAAMAAAAXAAkAAAAbAAMAAAAYAAkAAAAbAAMAAAABAAoAAAAbAAMAAAACAAoAAAAbAAMAAAADAAoAAAAbAAMAAAAEAAoAAAAbAAMAAAAFAAoAAAAbAAMAAAAGAAoAAAAbAAMAAAAHAAoAAAAbAAMAAAAIAAoAAAAbAAMAAAAJAAoAAAAbAAMAAAAKAAoAAAAbAAMAAAALAAoAAAAbAAMAAAAMAAoAAAAbAAMAAAANAAoAAAAbAAMAAAAOAAoAAAAbAAMAAAAPAAoAAAAbAAMAAAAQAAoAAAAbAAMAAAARAAoAAAAbAAMAAAASAAoAAAAbAAMAAAATAAoAAAAbAAMAAAAUAAoAAAAbAAMAAAAVAAoAAAAbAAMAAAAWAAoAAAAbAAMAAAAXAAoAAAAbAAMAAAAYAAoAAAAbAAMAAAABAAsAAAAbAAMAAAACAAsAAAAbAAMAAAADAAsAAAAbAAMAAAAEAAsAAAAbAAMAAAAFAAsAAAAbAAMAAAAGAAsAAAAbAAMAAAAHAAsAAAAbAAMAAAAIAAsAAAAbAAMAAAAJAAsAAAAbAAMAAAAKAAsAAAAbAAMAAAALAAsAAAAbAAMAAAAMAAsAAAAbAAMAAAANAAsAAAAbAAMAAAAOAAsAAAAbAAMAAAAPAAsAAAAbAAMAAAAQAAsAAAAbAAMAAAARAAsAAAAbAAMAAAASAAsAAAAbAAMAAAATAAsAAAAbAAMAAAAUAAsAAAAbAAMAAAAVAAsAAAAbAAMAAAAWAAsAAAAbAAMAAAAXAAsAAAAbAAMAAAAYAAsAAAAbAAMAAAABAAwAAAAbAAMAAAACAAwAAAAbAAMAAAADAAwAAAAbAAMAAAAEAAwAAAAbAAMAAAAFAAwAAAAbAAMAAAAGAAwAAAAbAAMAAAAHAAwAAAAbAAMAAAAIAAwAAAAbAAMAAAAJAAwAAAAbAAMAAAAKAAwAAAAbAAMAAAALAAwAAAAbAAMAAAAMAAwAAAAbAAMAAAANAAwAAAAbAAMAAAAOAAwAAAAbAAMAAAAPAAwAAAAbAAMAAAAQAAwAAAAbAAMAAAARAAwAAAAbAAMAAAASAAwAAAAbAAMAAAATAAwAAAAbAAMAAAAUAAwAAAAbAAMAAAAVAAwAAAAbAAMAAAAWAAwAAAAbAAMAAAAXAAwAAAAbAAMAAAAYAAwAAAAbAAMAAAABAA0AAAAbAAMAAAACAA0AAAAbAAMAAAADAA0AAAAbAAMAAAAEAA0AAAAbAAMAAAAFAA0AAAAbAAMAAAAGAA0AAAAbAAMAAAAHAA0AAAAbAAMAAAAIAA0AAAAbAAMAAAAJAA0AAAAbAAMAAAAKAA0AAAAbAAMAAAALAA0AAAAbAAMAAAAMAA0AAAAbAAMAAAANAA0AAAAbAAMAAAAOAA0AAAAbAAMAAAAPAA0AAAAbAAMAAAAQAA0AAAAbAAMAAAARAA0AAAAbAAMAAAASAA0AAAAbAAMAAAATAA0AAAAbAAMAAAAUAA0AAAAbAAMAAAAVAA0AAAAbAAMAAAAWAA0AAAAbAAMAAAAXAA0AAAAbAAMAAAAYAA0AAAAbAAMAAAABAA4AAAAbAAMAAAACAA4AAAAbAAMAAAADAA4AAAAbAAMAAAAEAA4AAAAbAAMAAAAFAA4AAAAbAAMAAAAGAA4AAAAbAAMAAAAHAA4AAAAbAAMAAAAIAA4AAAAbAAMAAAAJAA4AAAAbAAMAAAAKAA4AAAAbAAMAAAALAA4AAAAbAAMAAAAMAA4AAAAbAAMAAAANAA4AAAAbAAMAAAAOAA4AAAAbAAMAAAAPAA4AAAAbAAMAAAAQAA4AAAAbAAMAAAARAA4AAAAbAAMAAAASAA4AAAAbAAMAAAATAA4AAAAbAAMAAAAUAA4AAAAbAAMAAAAVAA4AAAAbAAMAAAAWAA4AAAAbAAMAAAAXAA4AAAAbAAMAAAAYAA4AAAAbAAMAAAABAA8AAAAbAAMAAAACAA8AAAAbAAMAAAADAA8AAAAbAAMAAAAEAA8AAAAbAAMAAAAFAA8AAAAbAAMAAAAGAA8AAAAbAAMAAAAHAA8AAAAbAAMAAAAIAA8AAAAbAAMAAAAJAA8AAAAbAAMAAAAKAA8AAAAbAAMAAAALAA8AAAAbAAMAAAAMAA8AAAAbAAMAAAANAA8AAAAbAAMAAAAOAA8AAAAbAAMAAAAPAA8AAAAbAAMAAAAQAA8AAAAbAAMAAAARAA8AAAAbAAMAAAASAA8AAAAbAAMAAAATAA8AAAAbAAMAAAAUAA8AAAAbAAMAAAAVAA8AAAAbAAMAAAAWAA8AAAAbAAMAAAAXAA8AAAAbAAMAAAAYAA8AAAAbAAMAAAAMABAAAAAbAAMAAAANABAAAAAbAAMAAAA=")
+tile_set = ExtResource("6_tile")
+
+[node name="Walls" type="TileMapLayer" parent="." unique_id=1092890756]
+z_index = -9
+tile_map_data = PackedByteArray("AAAAAAAAAAABAAAAAAABAAAAAAACAAMAAAACAAAAAAACAAMAAAADAAAAAAACAAMAAAAEAAAAAAACAAMAAAAFAAAAAAACAAMAAAAGAAAAAAACAAMAAAAHAAAAAAACAAMAAAAIAAAAAAACAAMAAAAJAAAAAAACAAMAAAAKAAAAAAACAAMAAAALAAAAAAACAAMAAAAMAAAAAAACAAMAAAANAAAAAAACAAMAAAAOAAAAAAACAAMAAAAPAAAAAAACAAMAAAAQAAAAAAACAAMAAAARAAAAAAACAAMAAAASAAAAAAACAAMAAAATAAAAAAACAAMAAAAUAAAAAAACAAMAAAAVAAAAAAACAAMAAAAWAAAAAAACAAMAAAAXAAAAAAACAAMAAAAYAAAAAAACAAMAAAAZAAAAAAADAAAAAAAAAAEAAAAAAAEAAAABAAEAAAApAAIAAAACAAEAAAAqAAIAAAADAAEAAAAqAAIAAAAEAAEAAAAqAAIAAAAFAAEAAAAqAAIAAAAGAAEAAAAqAAIAAAAHAAEAAAAqAAIAAAAIAAEAAAAqAAIAAAAJAAEAAAAqAAIAAAAKAAEAAAAqAAIAAAALAAEAAAAqAAIAAAAMAAEAAAAqAAIAAAANAAEAAAAqAAIAAAAOAAEAAAAqAAIAAAAPAAEAAAAqAAIAAAAQAAEAAAAqAAIAAAARAAEAAAAqAAIAAAASAAEAAAAqAAIAAAATAAEAAAAqAAIAAAAUAAEAAAAqAAIAAAAVAAEAAAAqAAIAAAAWAAEAAAAqAAIAAAAXAAEAAAAqAAIAAAAYAAEAAAArAAIAAAAZAAEAAAAAAAEAAAAAAAIAAAAAAAEAAAABAAIAAAApAAMAAAACAAIAAAAqAAMAAAADAAIAAAAqAAMAAAAEAAIAAAAqAAMAAAAFAAIAAAAqAAMAAAAGAAIAAAAqAAMAAAAHAAIAAAAqAAMAAAAIAAIAAAAqAAMAAAAJAAIAAAAqAAMAAAAKAAIAAAAqAAMAAAALAAIAAAAqAAMAAAAMAAIAAAAqAAMAAAANAAIAAAAqAAMAAAAOAAIAAAAqAAMAAAAPAAIAAAAqAAMAAAAQAAIAAAAqAAMAAAARAAIAAAAqAAMAAAASAAIAAAAqAAMAAAATAAIAAAAqAAMAAAAUAAIAAAAqAAMAAAAVAAIAAAAqAAMAAAAWAAIAAAAqAAMAAAAXAAIAAAAqAAMAAAAYAAIAAAArAAMAAAAZAAIAAAAAAAEAAAAAAAMAAAAAAAEAAAAZAAMAAAAAAAEAAAAAAAQAAAAAAAEAAAAZAAQAAAAAAAEAAAAAAAUAAAAAAAEAAAAZAAUAAAAAAAEAAAAAAAYAAAAAAAEAAAAZAAYAAAAAAAEAAAAAAAcAAAAAAAEAAAAZAAcAAAAAAAEAAAAAAAgAAAAAAAEAAAAZAAgAAAAAAAEAAAAAAAkAAAAAAAEAAAAZAAkAAAAAAAEAAAAAAAoAAAAAAAEAAAAZAAoAAAAAAAEAAAAAAAsAAAAAAAEAAAAZAAsAAAAAAAEAAAAAAAwAAAAAAAEAAAAZAAwAAAAAAAEAAAAAAA0AAAAAAAEAAAAZAA0AAAAAAAEAAAAAAA4AAAAAAAEAAAAZAA4AAAAAAAEAAAAAAA8AAAAAAAEAAAAZAA8AAAAAAAEAAAAAABAAAAABAAIAAAABABAAAAACAAMAAAACABAAAAACAAMAAAADABAAAAACAAMAAAAEABAAAAACAAMAAAAFABAAAAACAAMAAAAGABAAAAACAAMAAAAHABAAAAACAAMAAAAIABAAAAACAAMAAAAJABAAAAACAAMAAAAKABAAAAACAAMAAAALABAAAAADAAMAAAAOABAAAAABAAMAAAAPABAAAAACAAMAAAAQABAAAAACAAMAAAARABAAAAACAAMAAAASABAAAAACAAMAAAATABAAAAACAAMAAAAUABAAAAACAAMAAAAVABAAAAACAAMAAAAWABAAAAACAAMAAAAXABAAAAACAAMAAAAYABAAAAACAAMAAAAZABAAAAADAAIAAAA=")
+tile_set = ExtResource("6_tile")
+
+[node name="RoomCollision" type="StaticBody2D" parent="." unique_id=2015772223]
+
+[node name="BackWall" type="CollisionShape2D" parent="RoomCollision" unique_id=669656119]
+position = Vector2(208, 24)
+shape = SubResource("Rect_BackWall")
+
+[node name="LeftWall" type="CollisionShape2D" parent="RoomCollision" unique_id=1184462143]
+position = Vector2(8, 136)
+shape = SubResource("Rect_LeftWall")
+
+[node name="RightWall" type="CollisionShape2D" parent="RoomCollision" unique_id=1668496442]
+position = Vector2(408, 136)
+shape = SubResource("Rect_RightWall")
+
+[node name="BottomLeft" type="CollisionShape2D" parent="RoomCollision" unique_id=576312433]
+position = Vector2(96, 264)
+shape = SubResource("Rect_BottomLeft")
+
+[node name="BottomRight" type="CollisionShape2D" parent="RoomCollision" unique_id=1049808547]
+position = Vector2(320, 264)
+shape = SubResource("Rect_BottomRight")
+
+[node name="Rug" type="Sprite2D" parent="." unique_id=1148142999]
+z_index = -8
+texture_filter = 1
+position = Vector2(176, 176)
+texture = ExtResource("12_text")
+region_enabled = true
+region_rect = Rect2(84, 117, 70, 40)
+
+[node name="DoorMat" type="Sprite2D" parent="." unique_id=440255256]
+z_index = -8
+texture_filter = 1
+position = Vector2(208, 248)
+texture = ExtResource("12_text")
+region_enabled = true
+region_rect = Rect2(217, 168, 30, 17)
+
+[node name="WallShadows" type="Node2D" parent="." unique_id=780621127]
+z_index = -7
+
+[node name="Back" type="Sprite2D" parent="WallShadows" unique_id=1764860833]
+texture_filter = 1
+position = Vector2(208, 54)
+scale = Vector2(24, 0.75)
+texture = ExtResource("9_text")
+
+[node name="Left" type="Sprite2D" parent="WallShadows" unique_id=75241454]
+texture_filter = 1
+position = Vector2(21, 152)
+rotation = -1.570796
+scale = Vector2(13, 0.6)
+texture = ExtResource("9_text")
+
+[node name="Right" type="Sprite2D" parent="WallShadows" unique_id=1891301272]
+texture_filter = 1
+position = Vector2(395, 152)
+rotation = 1.570796
+scale = Vector2(13, 0.6)
+texture = ExtResource("9_text")
+
+[node name="WallDecor" type="Node2D" parent="." unique_id=1931832850]
+z_index = -5
+
+[node name="WindowLeft" type="Sprite2D" parent="WallDecor" unique_id=640494360]
+texture_filter = 1
+position = Vector2(56, 30)
+texture = ExtResource("13_text")
+region_enabled = true
+region_rect = Rect2(32, 0, 32, 16)
+
+[node name="CurtainLeft" type="Sprite2D" parent="WallDecor" unique_id=350391793]
+texture_filter = 1
+position = Vector2(56, 30)
+texture = ExtResource("14_text")
+region_enabled = true
+region_rect = Rect2(96, 32, 32, 32)
+
+[node name="FramedPicture" type="Sprite2D" parent="WallDecor" unique_id=631917179]
+texture_filter = 1
+position = Vector2(88, 28)
+texture = ExtResource("13_text")
+region_enabled = true
+region_rect = Rect2(0, 32, 16, 16)
+
+[node name="SeedPoster" type="Sprite2D" parent="WallDecor" unique_id=1978787726]
+texture_filter = 1
+position = Vector2(120, 28)
+texture = ExtResource("15_text")
+region_enabled = true
+region_rect = Rect2(0, 32, 32, 32)
+
+[node name="BulletinBoard" type="Sprite2D" parent="WallDecor" unique_id=1302670644]
+texture_filter = 1
+position = Vector2(232, 28)
+texture = ExtResource("16_text")
+region_enabled = true
+region_rect = Rect2(288, 0, 32, 32)
+
+[node name="WallClock" type="Sprite2D" parent="WallDecor" unique_id=418346967]
+texture_filter = 1
+position = Vector2(272, 26)
+texture = ExtResource("13_text")
+region_enabled = true
+region_rect = Rect2(160, 0, 16, 16)
+
+[node name="WindowRight" type="Sprite2D" parent="WallDecor" unique_id=2093031696]
+texture_filter = 1
+position = Vector2(320, 30)
+texture = ExtResource("13_text")
+region_enabled = true
+region_rect = Rect2(32, 0, 32, 16)
+
+[node name="CurtainRight" type="Sprite2D" parent="WallDecor" unique_id=1548735345]
+texture_filter = 1
+position = Vector2(320, 30)
+texture = ExtResource("14_text")
+region_enabled = true
+region_rect = Rect2(96, 32, 32, 32)
+
+[node name="Furniture" type="Node2D" parent="." unique_id=1280368802]
+y_sort_enabled = true
+
+[node name="Counter" type="StaticBody2D" parent="Furniture" unique_id=1436682884]
+position = Vector2(112, 102)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/Counter" unique_id=1962601586]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(2.125, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/Counter" unique_id=1338723150]
+texture_filter = 1
+position = Vector2(0, -18.5)
+texture = ExtResource("16_text")
+region_enabled = true
+region_rect = Rect2(80, 5, 64, 37)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/Counter" unique_id=1765436705]
+position = Vector2(0, -12)
+shape = SubResource("Rect_Counter")
+
+[node name="CashRegister" type="Sprite2D" parent="Furniture/Counter" unique_id=1435773658]
+texture_filter = 1
+position = Vector2(-20, -24)
+texture = ExtResource("17_text")
+region_enabled = true
+region_rect = Rect2(16, 66, 16, 14)
+
+[node name="LedgerBook" type="Sprite2D" parent="Furniture/Counter" unique_id=767290379]
+texture_filter = 1
+position = Vector2(-2, -26)
+texture = ExtResource("13_text")
+region_enabled = true
+region_rect = Rect2(226, 85, 13, 11)
+
+[node name="CounterPlant" type="Sprite2D" parent="Furniture/Counter" unique_id=1921035447]
+texture_filter = 1
+position = Vector2(23, -36)
+texture = ExtResource("15_text")
+region_enabled = true
+region_rect = Rect2(8, 71, 16, 18)
+
+[node name="ShopCounter" type="Area2D" parent="Furniture/Counter" unique_id=1986098587]
+position = Vector2(0, 12)
+script = ExtResource("4_scri")
+shop_data = ExtResource("5_reso")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/Counter/ShopCounter" unique_id=806074180]
+shape = SubResource("Rect_ShopCounter")
+
+[node name="Shopkeeper" type="AnimatedSprite2D" parent="Furniture" unique_id=980255768]
+texture_filter = 1
+position = Vector2(112, 74)
+sprite_frames = SubResource("ShopkeeperFrames")
+animation = &"idle_down"
+autoplay = "idle_down"
+offset = Vector2(0, -10)
+
+[node name="DisplayCase" type="StaticBody2D" parent="Furniture" unique_id=1744098325]
+position = Vector2(168, 102)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/DisplayCase" unique_id=2006923128]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(1.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/DisplayCase" unique_id=2077689305]
+texture_filter = 1
+position = Vector2(0, -7.5)
+texture = ExtResource("18_text")
+region_enabled = true
+region_rect = Rect2(64, 144, 48, 15)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/DisplayCase" unique_id=55588657]
+position = Vector2(0, -6)
+shape = SubResource("Rect_DisplayCase")
+
+[node name="DrinkFridge" type="StaticBody2D" parent="Furniture" unique_id=1157478709]
+position = Vector2(204, 102)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/DrinkFridge" unique_id=2072914870]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/DrinkFridge" unique_id=2143899497]
+texture_filter = 1
+position = Vector2(0, -13)
+texture = ExtResource("18_text")
+region_enabled = true
+region_rect = Rect2(64, 118, 16, 26)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/DrinkFridge" unique_id=376110726]
+position = Vector2(0, -5)
+shape = SubResource("Rect_DrinkFridge")
+
+[node name="CornerPlant" type="StaticBody2D" parent="Furniture" unique_id=1826600649]
+position = Vector2(28, 72)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/CornerPlant" unique_id=271782171]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.594, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/CornerPlant" unique_id=1469855387]
+texture_filter = 1
+position = Vector2(0, -11.5)
+texture = ExtResource("16_text")
+region_enabled = true
+region_rect = Rect2(1, 40, 15, 23)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/CornerPlant" unique_id=533957866]
+position = Vector2(0, -4)
+shape = SubResource("Rect_CornerPlant")
+
+[node name="Cabinet" type="StaticBody2D" parent="Furniture" unique_id=2066274944]
+position = Vector2(380, 90)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/Cabinet" unique_id=1217049855]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.938, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/Cabinet" unique_id=290989371]
+texture_filter = 1
+position = Vector2(0, -20.5)
+texture = ExtResource("16_text")
+region_enabled = true
+region_rect = Rect2(195, 38, 26, 41)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/Cabinet" unique_id=1847112156]
+position = Vector2(0, -6)
+shape = SubResource("Rect_Cabinet")
+
+[node name="ProduceBins" type="Node2D" parent="Furniture" unique_id=1528674199]
+y_sort_enabled = true
+
+[node name="ProduceBin1" type="StaticBody2D" parent="Furniture/ProduceBins" unique_id=1719597722]
+position = Vector2(24, 98)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/ProduceBins/ProduceBin1" unique_id=914319307]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ProduceBins/ProduceBin1" unique_id=1219127448]
+texture_filter = 1
+position = Vector2(0, -16)
+texture = ExtResource("19_text")
+region_enabled = true
+region_rect = Rect2(48, 0, 16, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ProduceBins/ProduceBin1" unique_id=415487571]
+position = Vector2(0, -4)
+shape = SubResource("Rect_ProduceBin1")
+
+[node name="ProduceBin2" type="StaticBody2D" parent="Furniture/ProduceBins" unique_id=585799634]
+position = Vector2(24, 116)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/ProduceBins/ProduceBin2" unique_id=192372277]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ProduceBins/ProduceBin2" unique_id=2026687378]
+texture_filter = 1
+position = Vector2(0, -16)
+texture = ExtResource("19_text")
+region_enabled = true
+region_rect = Rect2(64, 0, 16, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ProduceBins/ProduceBin2" unique_id=592987320]
+position = Vector2(0, -4)
+shape = SubResource("Rect_ProduceBin2")
+
+[node name="ProduceBin3" type="StaticBody2D" parent="Furniture/ProduceBins" unique_id=561846514]
+position = Vector2(24, 134)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/ProduceBins/ProduceBin3" unique_id=499052275]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ProduceBins/ProduceBin3" unique_id=236836847]
+texture_filter = 1
+position = Vector2(0, -16)
+texture = ExtResource("19_text")
+region_enabled = true
+region_rect = Rect2(80, 0, 16, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ProduceBins/ProduceBin3" unique_id=1805261050]
+position = Vector2(0, -4)
+shape = SubResource("Rect_ProduceBin3")
+
+[node name="ProduceBin4" type="StaticBody2D" parent="Furniture/ProduceBins" unique_id=1929454325]
+position = Vector2(24, 152)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/ProduceBins/ProduceBin4" unique_id=372717182]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ProduceBins/ProduceBin4" unique_id=1029656711]
+texture_filter = 1
+position = Vector2(0, -16)
+texture = ExtResource("19_text")
+region_enabled = true
+region_rect = Rect2(96, 0, 16, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ProduceBins/ProduceBin4" unique_id=276859297]
+position = Vector2(0, -4)
+shape = SubResource("Rect_ProduceBin4")
+
+[node name="ProduceBin5" type="StaticBody2D" parent="Furniture/ProduceBins" unique_id=524844665]
+position = Vector2(24, 170)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/ProduceBins/ProduceBin5" unique_id=1495966683]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ProduceBins/ProduceBin5" unique_id=159307610]
+texture_filter = 1
+position = Vector2(0, -16)
+texture = ExtResource("19_text")
+region_enabled = true
+region_rect = Rect2(48, 96, 16, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ProduceBins/ProduceBin5" unique_id=392284132]
+position = Vector2(0, -4)
+shape = SubResource("Rect_ProduceBin5")
+
+[node name="ProduceBin6" type="StaticBody2D" parent="Furniture/ProduceBins" unique_id=1794115700]
+position = Vector2(24, 188)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/ProduceBins/ProduceBin6" unique_id=1556802872]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ProduceBins/ProduceBin6" unique_id=500511622]
+texture_filter = 1
+position = Vector2(0, -16)
+texture = ExtResource("19_text")
+region_enabled = true
+region_rect = Rect2(64, 94, 16, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ProduceBins/ProduceBin6" unique_id=1373301532]
+position = Vector2(0, -4)
+shape = SubResource("Rect_ProduceBin6")
+
+[node name="ProduceBin7" type="StaticBody2D" parent="Furniture/ProduceBins" unique_id=558092266]
+position = Vector2(24, 206)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/ProduceBins/ProduceBin7" unique_id=920784589]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ProduceBins/ProduceBin7" unique_id=1580698723]
+texture_filter = 1
+position = Vector2(0, -16)
+texture = ExtResource("19_text")
+region_enabled = true
+region_rect = Rect2(80, 94, 16, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ProduceBins/ProduceBin7" unique_id=352054991]
+position = Vector2(0, -4)
+shape = SubResource("Rect_ProduceBin7")
+
+[node name="ProduceBin8" type="StaticBody2D" parent="Furniture/ProduceBins" unique_id=563430014]
+position = Vector2(24, 224)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/ProduceBins/ProduceBin8" unique_id=1097183838]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ProduceBins/ProduceBin8" unique_id=1978942520]
+texture_filter = 1
+position = Vector2(0, -16)
+texture = ExtResource("19_text")
+region_enabled = true
+region_rect = Rect2(96, 94, 16, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ProduceBins/ProduceBin8" unique_id=1765944366]
+position = Vector2(0, -4)
+shape = SubResource("Rect_ProduceBin8")
+
+[node name="ProduceBin9" type="StaticBody2D" parent="Furniture/ProduceBins" unique_id=2087967114]
+position = Vector2(24, 242)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/ProduceBins/ProduceBin9" unique_id=804153569]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ProduceBins/ProduceBin9" unique_id=609773454]
+texture_filter = 1
+position = Vector2(0, -16)
+texture = ExtResource("19_text")
+region_enabled = true
+region_rect = Rect2(112, 93, 16, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ProduceBins/ProduceBin9" unique_id=178541000]
+position = Vector2(0, -4)
+shape = SubResource("Rect_ProduceBin9")
+
+[node name="SeedStand" type="Node2D" parent="Furniture" unique_id=1238642740]
+y_sort_enabled = true
+
+[node name="SeedBin1" type="StaticBody2D" parent="Furniture/SeedStand" unique_id=1719989607]
+position = Vector2(80, 200)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/SeedStand/SeedBin1" unique_id=979515230]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/SeedStand/SeedBin1" unique_id=1258117011]
+texture_filter = 1
+position = Vector2(0, -16)
+texture = ExtResource("19_text")
+region_enabled = true
+region_rect = Rect2(48, 32, 16, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/SeedStand/SeedBin1" unique_id=885105062]
+position = Vector2(0, -4)
+shape = SubResource("Rect_SeedBin1")
+
+[node name="SeedBin2" type="StaticBody2D" parent="Furniture/SeedStand" unique_id=155148807]
+position = Vector2(96, 200)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/SeedStand/SeedBin2" unique_id=1632900235]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/SeedStand/SeedBin2" unique_id=284581505]
+texture_filter = 1
+position = Vector2(0, -16)
+texture = ExtResource("19_text")
+region_enabled = true
+region_rect = Rect2(64, 32, 16, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/SeedStand/SeedBin2" unique_id=1663880733]
+position = Vector2(0, -4)
+shape = SubResource("Rect_SeedBin2")
+
+[node name="SeedBin3" type="StaticBody2D" parent="Furniture/SeedStand" unique_id=1517898921]
+position = Vector2(80, 220)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/SeedStand/SeedBin3" unique_id=1619227012]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/SeedStand/SeedBin3" unique_id=874726530]
+texture_filter = 1
+position = Vector2(0, -16)
+texture = ExtResource("19_text")
+region_enabled = true
+region_rect = Rect2(80, 32, 16, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/SeedStand/SeedBin3" unique_id=67395276]
+position = Vector2(0, -4)
+shape = SubResource("Rect_SeedBin3")
+
+[node name="SeedBin4" type="StaticBody2D" parent="Furniture/SeedStand" unique_id=1313368109]
+position = Vector2(96, 220)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/SeedStand/SeedBin4" unique_id=909422259]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/SeedStand/SeedBin4" unique_id=1830959314]
+texture_filter = 1
+position = Vector2(0, -16)
+texture = ExtResource("19_text")
+region_enabled = true
+region_rect = Rect2(96, 32, 16, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/SeedStand/SeedBin4" unique_id=2122657124]
+position = Vector2(0, -4)
+shape = SubResource("Rect_SeedBin4")
+
+[node name="ShelfRow1" type="Node2D" parent="Furniture" unique_id=704384474]
+y_sort_enabled = true
+
+[node name="Shelf1_1" type="StaticBody2D" parent="Furniture/ShelfRow1" unique_id=933025206]
+position = Vector2(256, 120)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/ShelfRow1/Shelf1_1" unique_id=1209862887]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ShelfRow1/Shelf1_1" unique_id=1751614543]
+texture_filter = 1
+position = Vector2(0, -13)
+texture = ExtResource("18_text")
+region_enabled = true
+region_rect = Rect2(80, 118, 16, 26)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ShelfRow1/Shelf1_1" unique_id=902299322]
+position = Vector2(0, -5)
+shape = SubResource("Rect_Shelf1_1")
+
+[node name="Shelf1_2" type="StaticBody2D" parent="Furniture/ShelfRow1" unique_id=297355071]
+position = Vector2(272, 120)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/ShelfRow1/Shelf1_2" unique_id=403784496]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ShelfRow1/Shelf1_2" unique_id=1401132354]
+texture_filter = 1
+position = Vector2(0, -13)
+texture = ExtResource("18_text")
+region_enabled = true
+region_rect = Rect2(80, 118, 16, 26)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ShelfRow1/Shelf1_2" unique_id=958934798]
+position = Vector2(0, -5)
+shape = SubResource("Rect_Shelf1_2")
+
+[node name="Shelf1_3" type="StaticBody2D" parent="Furniture/ShelfRow1" unique_id=1629585008]
+position = Vector2(288, 120)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/ShelfRow1/Shelf1_3" unique_id=1497381068]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ShelfRow1/Shelf1_3" unique_id=1817022505]
+texture_filter = 1
+position = Vector2(0, -13)
+texture = ExtResource("18_text")
+region_enabled = true
+region_rect = Rect2(80, 118, 16, 26)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ShelfRow1/Shelf1_3" unique_id=343076780]
+position = Vector2(0, -5)
+shape = SubResource("Rect_Shelf1_3")
+
+[node name="Shelf1_4" type="StaticBody2D" parent="Furniture/ShelfRow1" unique_id=473476490]
+position = Vector2(304, 120)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/ShelfRow1/Shelf1_4" unique_id=1117367249]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ShelfRow1/Shelf1_4" unique_id=412251823]
+texture_filter = 1
+position = Vector2(0, -13)
+texture = ExtResource("18_text")
+region_enabled = true
+region_rect = Rect2(96, 118, 16, 26)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ShelfRow1/Shelf1_4" unique_id=1436571437]
+position = Vector2(0, -5)
+shape = SubResource("Rect_Shelf1_4")
+
+[node name="Shelf1_5" type="StaticBody2D" parent="Furniture/ShelfRow1" unique_id=1499755530]
+position = Vector2(320, 120)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/ShelfRow1/Shelf1_5" unique_id=1147077654]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ShelfRow1/Shelf1_5" unique_id=1674613069]
+texture_filter = 1
+position = Vector2(0, -13)
+texture = ExtResource("18_text")
+region_enabled = true
+region_rect = Rect2(80, 118, 16, 26)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ShelfRow1/Shelf1_5" unique_id=728420303]
+position = Vector2(0, -5)
+shape = SubResource("Rect_Shelf1_5")
+
+[node name="Shelf1_6" type="StaticBody2D" parent="Furniture/ShelfRow1" unique_id=1382071052]
+position = Vector2(336, 120)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/ShelfRow1/Shelf1_6" unique_id=1538971564]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ShelfRow1/Shelf1_6" unique_id=731619554]
+texture_filter = 1
+position = Vector2(0, -13)
+texture = ExtResource("18_text")
+region_enabled = true
+region_rect = Rect2(80, 118, 16, 26)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ShelfRow1/Shelf1_6" unique_id=1849427357]
+position = Vector2(0, -5)
+shape = SubResource("Rect_Shelf1_6")
+
+[node name="Shelf1_7" type="StaticBody2D" parent="Furniture/ShelfRow1" unique_id=106820600]
+position = Vector2(352, 120)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/ShelfRow1/Shelf1_7" unique_id=585582849]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ShelfRow1/Shelf1_7" unique_id=1592875293]
+texture_filter = 1
+position = Vector2(0, -13)
+texture = ExtResource("18_text")
+region_enabled = true
+region_rect = Rect2(80, 118, 16, 26)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ShelfRow1/Shelf1_7" unique_id=213800387]
+position = Vector2(0, -5)
+shape = SubResource("Rect_Shelf1_7")
+
+[node name="Shelf1_8" type="StaticBody2D" parent="Furniture/ShelfRow1" unique_id=100391070]
+position = Vector2(368, 120)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/ShelfRow1/Shelf1_8" unique_id=265305980]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ShelfRow1/Shelf1_8" unique_id=69360326]
+texture_filter = 1
+position = Vector2(0, -13)
+texture = ExtResource("18_text")
+region_enabled = true
+region_rect = Rect2(96, 118, 16, 26)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ShelfRow1/Shelf1_8" unique_id=316894280]
+position = Vector2(0, -5)
+shape = SubResource("Rect_Shelf1_8")
+
+[node name="ShelfRow2" type="Node2D" parent="Furniture" unique_id=1370429920]
+y_sort_enabled = true
+
+[node name="Shelf2_1" type="StaticBody2D" parent="Furniture/ShelfRow2" unique_id=1469056988]
+position = Vector2(256, 208)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/ShelfRow2/Shelf2_1" unique_id=1129652108]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ShelfRow2/Shelf2_1" unique_id=1530466816]
+texture_filter = 1
+position = Vector2(0, -13)
+texture = ExtResource("18_text")
+region_enabled = true
+region_rect = Rect2(80, 118, 16, 26)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ShelfRow2/Shelf2_1" unique_id=1457534554]
+position = Vector2(0, -5)
+shape = SubResource("Rect_Shelf2_1")
+
+[node name="Shelf2_2" type="StaticBody2D" parent="Furniture/ShelfRow2" unique_id=1967994291]
+position = Vector2(272, 208)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/ShelfRow2/Shelf2_2" unique_id=1407717516]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ShelfRow2/Shelf2_2" unique_id=1873793291]
+texture_filter = 1
+position = Vector2(0, -13)
+texture = ExtResource("18_text")
+region_enabled = true
+region_rect = Rect2(80, 118, 16, 26)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ShelfRow2/Shelf2_2" unique_id=1679362147]
+position = Vector2(0, -5)
+shape = SubResource("Rect_Shelf2_2")
+
+[node name="Shelf2_3" type="StaticBody2D" parent="Furniture/ShelfRow2" unique_id=310747021]
+position = Vector2(288, 208)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/ShelfRow2/Shelf2_3" unique_id=1917837225]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ShelfRow2/Shelf2_3" unique_id=2024235264]
+texture_filter = 1
+position = Vector2(0, -13)
+texture = ExtResource("18_text")
+region_enabled = true
+region_rect = Rect2(80, 118, 16, 26)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ShelfRow2/Shelf2_3" unique_id=1660375829]
+position = Vector2(0, -5)
+shape = SubResource("Rect_Shelf2_3")
+
+[node name="Shelf2_4" type="StaticBody2D" parent="Furniture/ShelfRow2" unique_id=210167644]
+position = Vector2(304, 208)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/ShelfRow2/Shelf2_4" unique_id=430461865]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ShelfRow2/Shelf2_4" unique_id=183331981]
+texture_filter = 1
+position = Vector2(0, -13)
+texture = ExtResource("18_text")
+region_enabled = true
+region_rect = Rect2(96, 118, 16, 26)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ShelfRow2/Shelf2_4" unique_id=1182579483]
+position = Vector2(0, -5)
+shape = SubResource("Rect_Shelf2_4")
+
+[node name="Shelf2_5" type="StaticBody2D" parent="Furniture/ShelfRow2" unique_id=1450785943]
+position = Vector2(320, 208)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/ShelfRow2/Shelf2_5" unique_id=1353417180]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ShelfRow2/Shelf2_5" unique_id=733970868]
+texture_filter = 1
+position = Vector2(0, -13)
+texture = ExtResource("18_text")
+region_enabled = true
+region_rect = Rect2(80, 118, 16, 26)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ShelfRow2/Shelf2_5" unique_id=2020044361]
+position = Vector2(0, -5)
+shape = SubResource("Rect_Shelf2_5")
+
+[node name="Shelf2_6" type="StaticBody2D" parent="Furniture/ShelfRow2" unique_id=151359334]
+position = Vector2(336, 208)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/ShelfRow2/Shelf2_6" unique_id=2090109811]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ShelfRow2/Shelf2_6" unique_id=342711880]
+texture_filter = 1
+position = Vector2(0, -13)
+texture = ExtResource("18_text")
+region_enabled = true
+region_rect = Rect2(80, 118, 16, 26)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ShelfRow2/Shelf2_6" unique_id=1028466529]
+position = Vector2(0, -5)
+shape = SubResource("Rect_Shelf2_6")
+
+[node name="Shelf2_7" type="StaticBody2D" parent="Furniture/ShelfRow2" unique_id=1929664579]
+position = Vector2(352, 208)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/ShelfRow2/Shelf2_7" unique_id=46228289]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ShelfRow2/Shelf2_7" unique_id=656567090]
+texture_filter = 1
+position = Vector2(0, -13)
+texture = ExtResource("18_text")
+region_enabled = true
+region_rect = Rect2(80, 118, 16, 26)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ShelfRow2/Shelf2_7" unique_id=1825530559]
+position = Vector2(0, -5)
+shape = SubResource("Rect_Shelf2_7")
+
+[node name="Shelf2_8" type="StaticBody2D" parent="Furniture/ShelfRow2" unique_id=576724140]
+position = Vector2(368, 208)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/ShelfRow2/Shelf2_8" unique_id=1332112209]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/ShelfRow2/Shelf2_8" unique_id=948336369]
+texture_filter = 1
+position = Vector2(0, -13)
+texture = ExtResource("18_text")
+region_enabled = true
+region_rect = Rect2(96, 118, 16, 26)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ShelfRow2/Shelf2_8" unique_id=1638179028]
+position = Vector2(0, -5)
+shape = SubResource("Rect_Shelf2_8")
+
+[node name="BarrelA" type="StaticBody2D" parent="Furniture" unique_id=1833386913]
+position = Vector2(346, 92)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/BarrelA" unique_id=1147537975]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/BarrelA" unique_id=540040973]
+texture_filter = 1
+position = Vector2(0, -9.5)
+texture = ExtResource("20_text")
+region_enabled = true
+region_rect = Rect2(40, 8, 16, 19)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/BarrelA" unique_id=699567209]
+position = Vector2(0, -4)
+shape = SubResource("Rect_BarrelA")
+
+[node name="BarrelB" type="StaticBody2D" parent="Furniture" unique_id=482667283]
+position = Vector2(358, 104)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/BarrelB" unique_id=1117199602]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/BarrelB" unique_id=1438910025]
+texture_filter = 1
+position = Vector2(0, -9.5)
+texture = ExtResource("20_text")
+region_enabled = true
+region_rect = Rect2(72, 8, 16, 19)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/BarrelB" unique_id=599347638]
+position = Vector2(0, -4)
+shape = SubResource("Rect_BarrelB")
+
+[node name="Buckets" type="StaticBody2D" parent="Furniture" unique_id=1679430502]
+position = Vector2(122, 224)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/Buckets" unique_id=459201266]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/Buckets" unique_id=1792697236]
+texture_filter = 1
+position = Vector2(0, -8)
+texture = ExtResource("21_text")
+region_enabled = true
+region_rect = Rect2(16, 0, 16, 16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/Buckets" unique_id=1182377923]
+position = Vector2(0, -4)
+shape = SubResource("Rect_Buckets")
+
+[node name="WaterBucket" type="StaticBody2D" parent="Furniture" unique_id=1238528318]
+position = Vector2(60, 248)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/WaterBucket" unique_id=1779853159]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.531, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/WaterBucket" unique_id=1854619421]
+texture_filter = 1
+position = Vector2(0, -7.5)
+texture = ExtResource("21_text")
+region_enabled = true
+region_rect = Rect2(2, 17, 13, 15)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/WaterBucket" unique_id=1961311759]
+position = Vector2(0, -3)
+shape = SubResource("Rect_WaterBucket")
+
+[node name="FloorLampShop" type="StaticBody2D" parent="Furniture" unique_id=1551486106]
+position = Vector2(240, 122)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/FloorLampShop" unique_id=1485438310]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/FloorLampShop" unique_id=445218350]
+texture_filter = 1
+position = Vector2(0, -11)
+texture = ExtResource("13_text")
+region_enabled = true
+region_rect = Rect2(128, 42, 16, 22)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/FloorLampShop" unique_id=1367778542]
+position = Vector2(0, -3)
+shape = SubResource("Rect_FloorLampShop")
+
+[node name="LampLight" type="PointLight2D" parent="Furniture/FloorLampShop" unique_id=1186547269]
+position = Vector2(0, -18)
+color = Color(1, 0.78, 0.5, 1)
+energy = 0.45
+texture = ExtResource("7_text")
+
+[node name="FloorLampCorner" type="StaticBody2D" parent="Furniture" unique_id=255503086]
+position = Vector2(388, 246)
+
+[node name="Shadow" type="Sprite2D" parent="Furniture/FloorLampCorner" unique_id=1840904923]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.625, 0.6)
+texture = ExtResource("8_text")
+
+[node name="Sprite2D" type="Sprite2D" parent="Furniture/FloorLampCorner" unique_id=1906308551]
+texture_filter = 1
+position = Vector2(0, -11)
+texture = ExtResource("13_text")
+region_enabled = true
+region_rect = Rect2(128, 42, 16, 22)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/FloorLampCorner" unique_id=1126723626]
+position = Vector2(0, -3)
+shape = SubResource("Rect_FloorLampCorner")
+
+[node name="LampLight" type="PointLight2D" parent="Furniture/FloorLampCorner" unique_id=1415958239]
+position = Vector2(0, -18)
+color = Color(1, 0.78, 0.5, 1)
+energy = 0.45
+texture = ExtResource("7_text")
+
+[node name="Lighting" type="Node2D" parent="." unique_id=260776648]
+
+[node name="AmbientTint" type="CanvasModulate" parent="Lighting" unique_id=1122821839]
+color = Color(0.72, 0.66, 0.66, 1)
+
+[node name="WindowLightLeft" type="PointLight2D" parent="Lighting" unique_id=1055812182]
+position = Vector2(56, 84)
+color = Color(0.86, 0.94, 1, 1)
+energy = 0.35
+texture = ExtResource("7_text")
+texture_scale = 1.5
+
+[node name="WindowLightRight" type="PointLight2D" parent="Lighting" unique_id=945151212]
+position = Vector2(320, 84)
+color = Color(0.86, 0.94, 1, 1)
+energy = 0.35
+texture = ExtResource("7_text")
+texture_scale = 1.5
+
+[node name="CounterLamp" type="PointLight2D" parent="Lighting" unique_id=1061530344]
+position = Vector2(136, 92)
+color = Color(1, 0.84, 0.6, 1)
+energy = 0.3
+texture = ExtResource("7_text")
+texture_scale = 2.0
+
+[node name="CenterLamp" type="PointLight2D" parent="Lighting" unique_id=122354595]
+position = Vector2(200, 176)
+color = Color(1, 0.86, 0.66, 1)
+energy = 0.22
+texture = ExtResource("7_text")
+texture_scale = 3.2
+
+[node name="ShelfLamp" type="PointLight2D" parent="Lighting" unique_id=1612413880]
+position = Vector2(316, 160)
+color = Color(1, 0.86, 0.66, 1)
+energy = 0.25
+texture = ExtResource("7_text")
+texture_scale = 2.6
+
+[node name="LightShafts" type="Node2D" parent="Lighting" unique_id=144171487]
+z_index = 5
+
+[node name="ShaftLeft" type="ColorRect" parent="Lighting/LightShafts" unique_id=1919155519]
+material = SubResource("ShaftMaterial")
+offset_left = 36.0
+offset_top = 38.0
+offset_right = 76.0
+offset_bottom = 122.0
+mouse_filter = 2
+
+[node name="DustMotes" type="CPUParticles2D" parent="Lighting/LightShafts/ShaftLeft" unique_id=1535088481]
+material = SubResource("DustMaterial")
+position = Vector2(24, 42)
+amount = 10
+lifetime = 6.0
+preprocess = 6.0
+emission_shape = 3
+emission_rect_extents = Vector2(13.3333, 28)
+direction = Vector2(0.3, 1)
+spread = 60.0
+gravity = Vector2(0, 0.5)
+initial_velocity_min = 1.0
+initial_velocity_max = 3.0
+color_ramp = SubResource("DustFade")
+
+[node name="ShaftRight" type="ColorRect" parent="Lighting/LightShafts" unique_id=1155788857]
+material = SubResource("ShaftMaterial")
+offset_left = 300.0
+offset_top = 38.0
+offset_right = 340.0
+offset_bottom = 122.0
+mouse_filter = 2
+
+[node name="DustMotes" type="CPUParticles2D" parent="Lighting/LightShafts/ShaftRight" unique_id=1047646562]
+material = SubResource("DustMaterial")
+position = Vector2(24, 42)
+amount = 10
+lifetime = 6.0
+preprocess = 6.0
+emission_shape = 3
+emission_rect_extents = Vector2(13.3333, 28)
+direction = Vector2(0.3, 1)
+spread = 60.0
+gravity = Vector2(0, 0.5)
+initial_velocity_min = 1.0
+initial_velocity_max = 3.0
+color_ramp = SubResource("DustFade")
+
+[node name="Vignette" type="ColorRect" parent="Lighting" unique_id=915165903]
+z_index = 20
+material = SubResource("VignetteMaterial")
+offset_right = 416.0
+offset_bottom = 272.0
+mouse_filter = 2
+
+[node name="Player" parent="." unique_id=876274422 instance=ExtResource("2_pack")]
+position = Vector2(208, 236)
+
+[node name="SpawnPoint" type="Marker2D" parent="." unique_id=1172367476]
+position = Vector2(208, 236)
+
+[node name="ExitDoor" type="Area2D" parent="." unique_id=941363738]
+position = Vector2(208, 266)
+script = ExtResource("3_scri")
+target_scene = "res://scenes/world/town.tscn"
+spawn_position = Vector2(770, 255)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitDoor" unique_id=1205709780]
+shape = SubResource("Rect_ExitDoor")

@@ -13,7 +13,6 @@ var _light: PointLight2D
 var _audio_loop: AudioStreamPlayer2D
 var _was_running := false
 var _ready_bounce_time := 0.0
-const CHEST_DISTANCE := 34.0
 
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -120,10 +119,8 @@ func refresh() -> void:
 	if record.item == "pasture_grass":
 		_sprite.modulate = Color("8e805d") if int(record.get("regrow_day", 0)) > DayCycle.current_day or DayCycle.get_current_season() == "winter" else Color.WHITE
 		_sprite.scale = Vector2(1, 0.35) if int(record.get("regrow_day", 0)) > DayCycle.current_day else Vector2.ONE
-	if record.item in StructureManager.CHESTS and item.icon is AtlasTexture:
-		_sprite.region_enabled = true
-		_sprite.texture = (item.icon as AtlasTexture).atlas
-		_sprite.region_rect = Rect2(40 if _chest_open else 8, 1, 15, 15)
+	if record.item in StructureManager.CHESTS:
+		_apply_chest_texture(item)
 	var shape := RectangleShape2D.new()
 	shape.size = Vector2(item.placement_size * 16) - Vector2(2, 2)
 	_collision.shape = shape
@@ -141,11 +138,24 @@ func refresh() -> void:
 	if record.item in ["cheese_press", "loom"]:
 		_sprite.texture = (item.icon as AtlasTexture).atlas
 		_sprite.hframes = _sprite.texture.get_width() / 32
+	var art := _art(str(record.item))
+	if record.item in StructureManager.DECOR or record.item in StructureManager.WORKSHOPS:
+		if int(art.get("frames", 1)) > 1:
+			_sprite.texture = (item.icon as AtlasTexture).atlas
+			_sprite.hframes = int(art.frames)
+		# Sprite tinggi berdiri di baris bawah tapak, bukan menggantung di tengah.
+		_sprite.position.y = (item.placement_size.y * 16 - item.icon.get_height()) / 2.0
+	# Lampu malam langsung menyala saat scene dimuat (tidak menunggu _process setelah transisi).
+	_animate_art(str(record.item))
+
+func _art(item_id: String) -> Dictionary:
+	return StructureManager.DECOR.get(item_id, StructureManager.WORKSHOPS.get(item_id, {}))
 
 func _process(delta: float) -> void:
 	var record := StructureManager.record_for(uid)
-	var is_machine: bool = record.get("item") in ["furnace", "preserves_jar", "dehydrator"] or record.get("item") in StructureManager.ARTISANS
-	var is_running: bool = is_machine and not record.job.is_empty() and DayCycle.is_running
+	var is_machine: bool = record.get("item") in ["furnace", "preserves_jar", "dehydrator", "sawmill", "beehive", "keg", "oil_maker", "fish_smoker", "lightning_rod"] or record.get("item") in StructureManager.ARTISANS
+	# Sarang lebah selalu punya job (hari panen), jadi tidak dihitung "berjalan".
+	var is_running: bool = is_machine and not record.job.is_empty() and DayCycle.is_running and record.get("item") != "beehive"
 	var is_ready: bool = is_machine and not record.ready.is_empty()
 
 	if record.get("item") == "furnace":
@@ -173,6 +183,9 @@ func _process(delta: float) -> void:
 			var sfx_file := ""
 			match record.item:
 				"furnace": sfx_file = "res://assets/audio/sfx/machines/machine_furnace_loop.wav"
+				"keg": sfx_file = "res://assets/audio/sfx/machines/machine_preserves_loop.wav"
+				"oil_maker": sfx_file = "res://assets/audio/sfx/machines/machine_cheese_loop.wav"
+				"fish_smoker": sfx_file = "res://assets/audio/sfx/machines/machine_furnace_loop.wav" 
 				"preserves_jar": sfx_file = "res://assets/audio/sfx/machines/machine_preserves_loop.wav"
 				"dehydrator": sfx_file = "res://assets/audio/sfx/machines/machine_dehydrator_loop.wav"
 				"cheese_press": sfx_file = "res://assets/audio/sfx/machines/machine_cheese_loop.wav"
@@ -212,6 +225,10 @@ func _process(delta: float) -> void:
 				_particles.color = Color("fff0bd")
 				_particles.amount = 10
 				_light.enabled = false
+			"sawmill":
+				_particles.color = Color("c99a5b")
+				_particles.amount = 10
+				_light.enabled = false
 	else:
 		if _audio_loop.playing:
 			_audio_loop.stop()
@@ -241,6 +258,22 @@ func _process(delta: float) -> void:
 
 	if record.get("item") in StructureManager.CHESTS:
 		_update_chest_lid()
+	_animate_art(str(record.get("item", "")))
+
+## Dekorasi/mesin baru: frame animasi, frame malam (lampu), dan cahaya saat malam.
+func _animate_art(item_id: String) -> void:
+	var art := _art(item_id)
+	if art.is_empty():
+		return
+	var night := DayCycle.night_intensity() > 0.0
+	if art.has("night_frame"):
+		_sprite.frame = int(art.night_frame) if night else 0
+	elif int(art.get("frames", 1)) > 1:
+		_sprite.frame = int(Time.get_ticks_msec() / 140) % int(art.frames)
+	if art.get("light", false):
+		_light.enabled = night
+		_light.position = Vector2(0, _sprite.position.y - 6)
+		_light.energy = 0.6 + sin(Time.get_ticks_msec() * 0.006) * 0.08
 
 func _update_chest_lid() -> void:
 	var record := StructureManager.record_for(uid)
@@ -252,14 +285,13 @@ func _update_chest_lid() -> void:
 			if candidate is Player and is_instance_valid(candidate):
 				var feet: Vector2 = candidate.global_position + Player.FEET_OFFSET
 				var center := global_position + Vector2(item.placement_size - Vector2i.ONE) * 8
-				if feet.distance_to(center) <= CHEST_DISTANCE:
+				if feet.distance_to(center) <= item.chest_open_distance:
 					nearby = true
 					break
 	if nearby == _chest_open:
 		return
 	_chest_open = nearby
-	if _sprite != null and item.icon is AtlasTexture:
-		_sprite.region_rect = Rect2(40 if _chest_open else 8, 1, 15, 15)
+	_apply_chest_texture(item)
 	if Time.get_ticks_msec() >= _quiet_until_ms:
 		Juice.play_sound(&"bin_open" if _chest_open else &"bin_close")
 	if _lid_tween != null and _lid_tween.is_valid():
@@ -267,3 +299,8 @@ func _update_chest_lid() -> void:
 	_sprite.scale = Vector2(0.9, 1.12) if _chest_open else Vector2(1.12, 0.88)
 	_lid_tween = create_tween()
 	_lid_tween.tween_property(_sprite, "scale", Vector2.ONE, 0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+func _apply_chest_texture(item: ItemData) -> void:
+	_sprite.region_enabled = false
+	var closed: Texture2D = item.chest_closed_texture if item.chest_closed_texture != null else item.icon
+	_sprite.texture = item.chest_open_texture if _chest_open and item.chest_open_texture != null else closed

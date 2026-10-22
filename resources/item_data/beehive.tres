@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_beehive.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_id = "beehive"
+display_name = "Sarang Lebah"
+icon = ExtResource("2")
+description = "Menghasilkan 1 Madu dan 1 Lilin Lebah setiap 3 hari (berhenti di Musim Dingin). Pasang di farm."
+category = 8
+placeable = true
+placement_size = Vector2i(1, 1)
+stackable = false
+max_stack = 1

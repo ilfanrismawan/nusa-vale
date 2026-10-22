@@ -6,6 +6,9 @@ var npc_name := "Warga Desa"
 var role_title := ""
 var portrait: Texture2D
 var service := ""
+var romance_action := ""
+var letter_available := false
+var household_action := ""
 @onready var panel: PanelContainer = $Panel
 
 func _ready() -> void:
@@ -14,10 +17,33 @@ func _ready() -> void:
 	%Speaker.text = npc_name
 	%Role.text = role_title
 	%Portrait.texture = FarmServiceTheme.portrait(portrait)
-	%Service.text = "Bangun / Upgrade" if service == "carpenter" else "Info Pengiriman"
+	%Service.text = {"carpenter": "Bangun / Upgrade", "shipping": "Info Pengiriman", "livestock": "Beli Hewan Ternak"}.get(service, "Layanan")
+	%Service.visible = service in ["carpenter", "shipping", "livestock"]
 	%Talk.pressed.connect(func(): selected.emit(0))
 	%Service.pressed.connect(func(): selected.emit(1))
 	%Close.pressed.connect(func(): selected.emit(2))
+	var box := %Talk.get_parent()
+	if not romance_action.is_empty():
+		var button := Button.new()
+		button.text = "Nyatakan Perasaan" if romance_action == "dating" else "Melamar"
+		button.custom_minimum_size.y = 52
+		button.pressed.connect(func(): selected.emit(3))
+		box.add_child(button)
+		box.move_child(button, %Close.get_index())
+	if not household_action.is_empty():
+		var button := Button.new()
+		button.text = household_action
+		button.custom_minimum_size.y = 52
+		button.pressed.connect(func(): selected.emit(5))
+		box.add_child(button)
+		box.move_child(button, %Close.get_index())
+	if letter_available:
+		var button := Button.new()
+		button.text = "Baca Surat"
+		button.custom_minimum_size.y = 52
+		button.pressed.connect(func(): selected.emit(4))
+		box.add_child(button)
+		box.move_child(button, %Close.get_index())
 	get_viewport().size_changed.connect(_resize)
 	panel.minimum_size_changed.connect(_resize)
 	_resize()

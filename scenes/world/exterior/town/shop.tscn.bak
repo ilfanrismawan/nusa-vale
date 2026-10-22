@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://dkqwvuaii8bpi"]
+
+[ext_resource type="Texture2D" uid="uid://bgsc3yl2pss6j" path="res://assets/farm_rpg/objects/exterior/Base houses.png" id="9_twn"]
+[ext_resource type="PackedScene" path="res://scenes/objects/building_sign.tscn" id="BuildingSign"]
+[ext_resource type="Script" uid="uid://xi8t0k3337vc" path="res://scripts/world/town_building_door.gd" id="TownDoor"]
+
+[sub_resource type="RectangleShape2D" id="ShopFootprint"]
+size = Vector2(84, 78)
+
+[sub_resource type="RectangleShape2D" id="DoorShape"]
+size = Vector2(28, 20)
+
+[node name="ShopCounter" type="StaticBody2D" unique_id=1569830593]
+y_sort_enabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1770860576]
+texture_filter = 1
+position = Vector2(0, 0.5)
+texture = ExtResource("9_twn")
+region_enabled = true
+region_rect = Rect2(337, 48, 94, 113)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=410249623]
+position = Vector2(-2, 16)
+shape = SubResource("ShopFootprint")
+
+[node name="Door" type="Area2D" parent="." unique_id=2083244524]
+position = Vector2(0, 62)
+script = ExtResource("TownDoor")
+target_scene = "res://scenes/world/interior/town/shop.tscn"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Door" unique_id=146736559]
+position = Vector2(15, -16)
+shape = SubResource("DoorShape")
+
+[node name="ReturnSpawn" type="Marker2D" parent="." unique_id=1531456158]
+position = Vector2(16, 69)
+
+[node name="Sign" parent="." unique_id=916005073 instance=ExtResource("BuildingSign")]
+position = Vector2(0, 34)
+caption = "Toko"
+minimum_width = 32
+font_size = 8
+minimum_height = 16

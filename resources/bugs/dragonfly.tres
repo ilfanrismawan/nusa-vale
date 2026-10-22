@@ -1,0 +1,16 @@
+[gd_resource type="Resource" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/bug_data.gd" id="1_script"]
+[ext_resource type="Resource" path="res://resources/item_data/dragonfly.tres" id="2_item"]
+
+[resource]
+script = ExtResource("1_script")
+item = ExtResource("2_item")
+seasons = PackedStringArray("summer")
+locations = PackedStringArray("farm", "forest", "town")
+time = "day"
+weight = 0.8
+flying = true
+speed = 40.0
+flee_radius = 28.0
+glows = false

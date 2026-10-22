@@ -19,4 +19,4 @@ item_id = "mushroom_saute"
 display_name = "Tumis Jamur"
 icon = SubResource("FoodIcon")
 description = "Pulihkan 25 stamina. Pilih di hotbar lalu klik kiri untuk makan."
-sell_price = 70
+sell_price = 88

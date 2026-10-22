@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ForageData" format=3]
+
+[ext_resource type="Script" uid="uid://ctvcklgvmqhee" path="res://scripts/data/forage_data.gd" id="1_script"]
+[ext_resource type="Resource" path="res://resources/item_data/wild_berry.tres" id="2_item"]
+
+[resource]
+script = ExtResource("1_script")
+item = ExtResource("2_item")
+seasons = PackedStringArray("summer")
+locations = PackedStringArray("town")
+weight = 1.0

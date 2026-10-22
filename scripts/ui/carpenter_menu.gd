@@ -13,6 +13,7 @@ signal finished
 var player: Player
 var vendor_name := ""
 var vendor_portrait: Texture2D
+var social_npc_id := ""
 var _selected_id := ""
 var _closed := false
 var _refresh_pending := false
@@ -29,6 +30,8 @@ func _ready() -> void:
 		%Portrait.texture = FarmServiceTheme.portrait(art)
 	%ChooseButton.pressed.connect(_choose_selected)
 	%CloseButton.pressed.connect(_close)
+	%SocialButton.visible = NPCSocialService.known(social_npc_id)
+	%SocialButton.pressed.connect(_open_social_dialog)
 	get_viewport().size_changed.connect(_resize)
 	GameState.money_changed.connect(_money_changed)
 	GameState.inventory_changed.connect(_queue_refresh)
@@ -61,6 +64,10 @@ func _ready() -> void:
 	_resize()
 	Coop.set_menu_open(player, true)
 
+func _open_social_dialog() -> void:
+	_close()
+	NPCSocialService.open_dialog(player, social_npc_id, vendor_name, vendor_portrait)
+
 func _resize() -> void:
 	var view := get_viewport().get_visible_rect().size
 	var fit := minf(view.x / design_size.x, view.y / design_size.y)
@@ -91,7 +98,7 @@ func _fill_house_card(card: Button) -> void:
 	elif next == null:
 		card.get_node("Price").text = "Tingkat maksimal"
 	else:
-		card.get_node("Price").text = "%d G" % next.price
+		card.get_node("Price").text = "%d G" % house.price_for(player.data if is_instance_valid(player) else null)
 
 func _affordable(id: String) -> bool:
 	if id == HOUSE_ID:
@@ -151,7 +158,7 @@ func _refresh_house() -> void:
 		_fill_materials({})
 	else:
 		%Footprint.text = "Tingkat %d → %d · lama pengerjaan %d hari" % [house.level, house.level + 1, next.build_days]
-		%Cost.text = "● %d G" % next.price
+		%Cost.text = "● %d G" % house.price_for(player.data if is_instance_valid(player) else null)
 		_fill_materials(next.materials)
 	%ChooseButton.disabled = not _affordable(HOUSE_ID)
 	var reason := house.status(player.data)

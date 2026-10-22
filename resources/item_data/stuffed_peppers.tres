@@ -19,4 +19,4 @@ item_id = "stuffed_peppers"
 display_name = "Paprika Isi"
 icon = SubResource("Icon")
 description = "Masakan dari dapur. Pilih di hotbar untuk dimakan."
-sell_price = 75
+sell_price = 87

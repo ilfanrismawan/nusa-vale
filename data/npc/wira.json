@@ -1,8 +1,13 @@
 {
+  "schema_version": 1,
   "id": "wira",
   "name": "Wira",
-  "age": 36,
+  "age": 39,
   "role": "Tukang Kayu",
+  "birthday": {
+	"season": "fall",
+	"day": 12
+  },
   "home_map": "wira_home",
   "romanceable": false,
   "personality": [
@@ -12,39 +17,192 @@
     "workaholic"
   ],
   "move_speed": 36.0,
-  "service": "carpenter",
+  "friendship": {
+	"start": 0,
+	"max_hearts": 10
+  },
+  "service": {
+	"type": "carpenter",
+	"available_activities": [
+      "working"
+	],
+	"closed_days": [
+      "sunday"
+	]
+  },
   "visual": {
 	"sprite_frames": "res://resources/npc_data/npc_animation/npc_wira_frame.tres",
-	"portrait": "res://assets/farm_rpg/Character/NPC'S/Wira/npc_wira_portrait.png"
+	"portrait": "res://assets/farm_rpg/Character/NPC'S/Wira/npc_wira_portrait.png",
+	"portrait_cell_size": 64,
+	"portrait_columns": 5,
+	"expressions": {
+	  "neutral": 0,
+	  "sparkle": 5,
+	  "angry": 7,
+	  "happy": 10,
+	  "annoyed": 12
+	}
   },
   "dialogue": {
 	"default": [
-      "Butuh sesuatu untuk kebunmu? Kita bisa mulai dari gambar sederhana."
+	  {
+		"text": "Butuh sesuatu untuk kebunmu? Kita bisa mulai dari gambar sederhana.",
+		"expression": "neutral"
+	  }
 	],
 	"breakfast": [
-	  "Teh hangat dulu sebelum mulai bekerja.",
-      "Kalau kamu butuh bangunan baru, temui aku di bengkel setelah pukul delapan."
+	  {
+		"text": "Teh hangat dulu sebelum mulai bekerja.",
+		"expression": "happy"
+	  },
+	  {
+		"text": "Kalau kamu butuh bangunan baru, temui aku di bengkel setelah pukul delapan.",
+		"expression": "neutral"
+	  },
+	  {
+		"text": "Hari ini aku mau pulang sebelum gelap. Anak-anak lebih penting dari satu papan lagi.",
+		"expression": "happy",
+		"requires_flags": [
+          "story_wira_told"
+		]
+	  }
 	],
 	"checking_stock": [
-	  "Aku sedang memeriksa persediaan kayu.",
-      "Kayu yang sudah kering membuat bangunan lebih awet."
+	  {
+		"text": "Aku sedang memeriksa persediaan kayu.",
+		"expression": "neutral"
+	  },
+	  {
+		"text": "Kayu yang sudah kering membuat bangunan lebih awet.",
+		"expression": "sparkle"
+	  }
 	],
 	"working": [
-	  "Selamat datang. Ada bangunan atau furnitur yang ingin kamu buat?",
-      "Aku selalu mengukur dua kali sebelum memotong."
+	  {
+		"text": "Selamat datang. Ada bangunan atau furnitur yang ingin kamu buat?",
+		"expression": "sparkle"
+	  },
+	  {
+		"text": "Aku selalu mengukur dua kali sebelum memotong.",
+		"expression": "neutral"
+	  },
+	  {
+		"text": "Dulu aku memotong sebelum mengukur. Banyak yang rusak, termasuk hal-hal yang bukan kayu.",
+		"expression": "neutral",
+		"requires_flags": [
+          "story_wira_told"
+		]
+	  }
 	],
 	"lunch": [
-      "Mari istirahat sebentar. Serbuk kayunya sampai masuk ke kantong bajuku."
+	  {
+		"text": "Mari istirahat sebentar. Serbuk kayunya sampai masuk ke kantong bajuku.",
+		"expression": "happy"
+	  }
 	],
 	"delivering": [
-	  "Aku sedang memeriksa papan pesanan warga.",
-      "Mungkin suatu hari kita bisa membuat tempat berkumpul baru untuk desa."
+	  {
+		"text": "Aku sedang memeriksa papan pesanan warga.",
+		"expression": "neutral"
+	  },
+	  {
+		"text": "Mungkin suatu hari kita bisa membuat tempat berkumpul baru untuk desa.",
+		"expression": "sparkle"
+	  }
 	],
 	"resting": [
-      "Dari bukit ini, atap rumah warga terlihat seperti potongan kecil sebuah cerita."
+	  {
+		"text": "Dari bukit ini, atap rumah warga terlihat seperti potongan kecil sebuah cerita.",
+		"expression": "happy"
+	  },
+	  {
+		"text": "Dari bukit ini aku sering memikirkan Yayas. Semoga dia baik-baik saja di mana pun dia berada.",
+		"expression": "neutral",
+		"requires_flags": [
+          "story_wira_told"
+		]
+	  },
+	  {
+		"text": "Surat itu sudah kubaca berkali-kali. Rasanya beban lama akhirnya terangkat.",
+		"expression": "happy",
+		"requires_flags": [
+          "family_letter_read"
+		]
+	  }
+	],
+	"resting_home": [
+	  {
+		"text": "Hujan begini enaknya mengasah pahat sambil dengar suara atap.",
+		"expression": "happy"
+	  }
 	],
 	"sleeping": [
-      "Bengkelnya sudah tutup. Besok kita lanjutkan, ya."
+	  {
+		"text": "Bengkelnya sudah tutup. Besok kita lanjutkan, ya.",
+		"expression": "neutral"
+	  }
+	]
+  },
+  "gift_tastes": {
+	"loved": [
+	  "plank",
+	  "green_tea",
+      "spice_tea"
+	],
+	"liked": [
+	  "wood",
+	  "copper_bar",
+	  "iron_bar",
+	  "vegetable_soup",
+      "rice_ball"
+	],
+	"neutral": [
+	  "stone",
+	  "fiber",
+	  "carrot",
+      "apple"
+	],
+	"disliked": [
+	  "clay",
+	  "coal",
+      "fish_carp"
+	],
+	"hated": [
+	  "slime_gel",
+	  "old_bone",
+      "worm"
+	]
+  },
+  "gift_dialogue": {
+	"loved": [
+	  {
+		"text": "Hadiah yang pas sekali. Ini akan membuat hariku lebih menyenangkan.",
+		"expression": "sparkle"
+	  }
+	],
+	"liked": [
+	  {
+		"text": "Terima kasih, aku suka hadiah ini.",
+		"expression": "happy"
+	  }
+	],
+	"neutral": [
+	  {
+		"text": "Oh, terima kasih atas hadiahnya.",
+		"expression": "neutral"
+	  }
+	],
+	"disliked": [
+	  {
+		"text": "Terima kasih, tapi ini kurang cocok untukku.",
+		"expression": "annoyed"
+	  }
+	],
+	"hated": [
+	  {
+		"text": "Maaf, aku benar-benar tidak menyukai hadiah ini.",
+		"expression": "angry"
+	  }
 	]
   },
   "schedules": {
@@ -127,7 +285,7 @@
 		"time": "18:00",
 		"map": "wira_home",
 		"point": "wira_home",
-		"activity": "resting"
+		"activity": "resting_home"
 	  },
 	  {
 		"time": "21:00",
@@ -137,9 +295,48 @@
 	  }
 	]
   },
-  "likes": [
-	"quality_wood",
-	"warm_tea",
-    "home_cooking"
+  "family": {
+	"children": [
+	  "zarathustra",
+      "zarathia"
+	],
+	"former_spouse": "mother"
+  },
+  "heart_events": [
+	{
+	  "id": "wira_family_1",
+	  "hearts": 8,
+	  "requires_flags": [
+        "story_zarathustra_told"
+	  ],
+	  "sets_flags": [
+        "story_wira_told"
+	  ],
+	  "weather": "clear",
+	  "map": "hill",
+	  "point": "wira_overlook",
+	  "time_range": [
+		"18:30",
+        "21:00"
+	  ],
+	  "lines": [
+		{
+		  "text": "Waktu itu aku menikah diusia yang sangat muda sekali.",
+		  "expression": "neutral"
+		},
+		{
+		  "text": "Dan kupikir, asal saling sayang, kami pasti bisa. Ternyata kami masih sama-sama ingin dimengerti, belum tahu caranya mendengarkan.",
+		  "expression": "neutral"
+		},
+		{
+		  "text": "Anakku pernah tanya kenapa aku membiarkan ibunya pergi. Aku belum tahu cara menjawab tanpa membuat dia merasa harus membela salah satu dari kami.",
+		  "expression": "annoyed"
+		},
+		{
+		  "text": "Terima kasih sudah mau mendengarkan.",
+		  "expression": "happy"
+		}
+	  ]
+	}
   ]
 }

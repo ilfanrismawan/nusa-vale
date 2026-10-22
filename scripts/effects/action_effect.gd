@@ -11,7 +11,9 @@ func active_tool(player: Player) -> ToolData:
 
 func cost_for(player: Player) -> int:
 	var tool := active_tool(player)
-	return maxi(tool.stamina_cost if tool != null else stamina_cost, 0)
+	var cost := maxi(tool.stamina_cost if tool != null else stamina_cost, 0)
+	# Perk Farmer/Miner memotong stamina alat (GDD 13).
+	return SkillSystem.tool_cost(player.data, tool, cost)
 
 func cells_for(player: Player, cell: Vector2i) -> Array[Vector2i]:
 	var tool := active_tool(player)

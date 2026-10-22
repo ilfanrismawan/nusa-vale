@@ -10,7 +10,7 @@ display_name = "Pancing Emas"
 tool_type = 6
 tier = 3
 stamina_cost = 3
-upgrade_cost_money = 2500
+upgrade_cost_money = 2300
 required_items = {
 "gold_bar": 5
 }

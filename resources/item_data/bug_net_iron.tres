@@ -1,0 +1,44 @@
+[gd_resource type="Resource" script_class="ItemData" format=3 uid="uid://bqjn0fjlscpk"]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_bug_net_iron.tres" id="2_icon"]
+[ext_resource type="Script" uid="uid://babxwm68vuqeh" path="res://scripts/state/action_data.gd" id="3_action"]
+[ext_resource type="Script" uid="uid://cgpkmmfwo1vkf" path="res://scripts/effects/bug_net_effect.gd" id="4_effect"]
+[ext_resource type="Script" uid="uid://ce87yxxpq5y37" path="res://scripts/data/tool_data.gd" id="5_tool"]
+[ext_resource type="Script" uid="uid://vbwn6cjjdlc0" path="res://scripts/resources/food_effect_data.gd" id="5_ywfca"]
+
+[sub_resource type="Resource" id="Effect_net"]
+script = ExtResource("4_effect")
+
+[sub_resource type="Resource" id="Tool_net"]
+script = ExtResource("5_tool")
+tool_id = "bug_net_iron"
+display_name = "Jaring Serangga Besi"
+tool_type = 7
+tier = 2
+stamina_cost = 1
+action_speed = 1.2
+
+[sub_resource type="Resource" id="Action_net"]
+script = ExtResource("3_action")
+display_name = "Jaring Serangga Besi"
+icon = ExtResource("2_icon")
+animation_name = &"catch_insect"
+input_action = &"use_tool"
+hit_frame = 3
+effect = SubResource("Effect_net")
+tool_data = SubResource("Tool_net")
+
+[resource]
+script = ExtResource("1_script")
+category = 3
+item_id = "bug_net_iron"
+display_name = "Jaring Serangga Besi"
+icon = ExtResource("2_icon")
+description = "Ayunkan dekat serangga untuk menangkapnya. Jangkauan 36 px. Dibeli di Toko Umum dengan menukar jaring tier sebelumnya."
+stackable = false
+max_stack = 1
+action_data = SubResource("Action_net")
+buy_price = 5000
+requires_item_id = "bug_net_copper"
+metadata/_custom_type_script = "uid://cm1okc20ussp3"

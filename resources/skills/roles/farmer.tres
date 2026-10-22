@@ -1,0 +1,123 @@
+[gd_resource type="Resource" script_class="RoleData" load_steps=16 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/role_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/resources/role_perk.gd" id="2"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_skill_book_farmer.tres" id="3"]
+
+[sub_resource type="Resource" id="perk_0"]
+script = ExtResource("2")
+level = 1
+branch = ""
+title = "Tangan Terlatih"
+description = "Stamina cangkul, penyiram, dan sabit -10%."
+effects = Dictionary[StringName, float]({&"farm_tool_stamina": 0.1})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_1"]
+script = ExtResource("2")
+level = 2
+branch = ""
+title = "Ayunan Ringan"
+description = "Stamina alat tani -5% lagi (total -15%)."
+effects = Dictionary[StringName, float]({&"farm_tool_stamina": 0.05})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_2"]
+script = ExtResource("2")
+level = 3
+branch = ""
+title = "Tanah Lembap"
+description = "Stamina alat tani -5% lagi; 10% petak tetap basah keesokan harinya."
+effects = Dictionary[StringName, float]({&"farm_tool_stamina": 0.05, &"soil_keep_wet": 0.1})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_3"]
+script = ExtResource("2")
+level = 4
+branch = ""
+title = "Petani Ulet"
+description = "Stamina alat tani -5% lagi (total -25%)."
+effects = Dictionary[StringName, float]({&"farm_tool_stamina": 0.05})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_4"]
+script = ExtResource("2")
+level = 5
+branch = "a"
+title = "Agronomist"
+description = "Peluang 15% tiap malam tanaman tumbuh 1 hari ekstra."
+effects = Dictionary[StringName, float]({&"crop_growth": 0.15})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_5"]
+script = ExtResource("2")
+level = 5
+branch = "b"
+title = "Bountiful Harvest"
+description = "Peluang 20% panen ganda dari setiap petak."
+effects = Dictionary[StringName, float]({&"harvest_double": 0.2})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_6"]
+script = ExtResource("2")
+level = 6
+branch = ""
+title = "Siraman Hemat"
+description = "Peluang 25% menyiram tanpa memakai air di penyiram."
+effects = Dictionary[StringName, float]({&"water_save": 0.25})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_7"]
+script = ExtResource("2")
+level = 7
+branch = ""
+title = "Siraman Efisien"
+description = "Peluang hemat air +25% (total 50%)."
+effects = Dictionary[StringName, float]({&"water_save": 0.25})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_8"]
+script = ExtResource("2")
+level = 8
+branch = ""
+title = "Bintang Perak"
+description = "Panen berpeluang berkualitas Perak bernilai jual 1.25x lipat."
+effects = Dictionary[StringName, float]({&"crop_silver": 0.35})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_9"]
+script = ExtResource("2")
+level = 9
+branch = ""
+title = "Bintang Emas"
+description = "Panen berpeluang berkualitas Emas bernilai jual 1.5x lipat."
+effects = Dictionary[StringName, float]({&"crop_gold": 0.25})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_10"]
+script = ExtResource("2")
+level = 10
+branch = "a"
+title = "Perpetual Orchard"
+description = "Pohon buah berbuah 2x lebih sering dan dapat berbuah di luar musim."
+effects = Dictionary[StringName, float]({&"perpetual_orchard": 1.0})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_11"]
+script = ExtResource("2")
+level = 10
+branch = "b"
+title = "Green Thumb Mastery"
+description = "Saat musim berganti, tiap tanaman 50% bertahan tidak layu."
+effects = Dictionary[StringName, float]({&"season_survive": 0.5})
+coming_soon = false
+
+[resource]
+script = ExtResource("1")
+role_id = &"farmer"
+display_name = "Farmer"
+title = "Petani"
+exp_hint = "EXP dari mencangkul, menyiram, menanam bibit, dan memanen (panen mahal = EXP lebih besar)."
+icon = ExtResource("3")
+color = Color(0.498, 0.698, 0.2902, 1)
+perks = Array[ExtResource("2")]([SubResource("perk_0"), SubResource("perk_1"), SubResource("perk_2"), SubResource("perk_3"), SubResource("perk_4"), SubResource("perk_5"), SubResource("perk_6"), SubResource("perk_7"), SubResource("perk_8"), SubResource("perk_9"), SubResource("perk_10"), SubResource("perk_11")])

@@ -7,6 +7,10 @@ const KITCHEN_DOOR := preload("res://scenes/objects/cooking/home_kitchen_entry.t
 @export var kitchen_door_position := Vector2(358, 168)
 
 func _ready() -> void:
+	var household := Node2D.new()
+	household.name = "Household"
+	household.set_script(preload("res://scripts/world/npc_home.gd"))
+	add_child(household)
 	if get_node_or_null("KitchenDoor") == null:
 		var door := KITCHEN_DOOR.instantiate()
 		door.name = "KitchenDoor"

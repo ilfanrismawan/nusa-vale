@@ -3,8 +3,8 @@ extends Resource
 
 ## Data Gua Tambang (GDD 9): jumlah lantai, lift, tabel lantai, dan pintu keluar.
 
-## Lantai terdalam yang bisa dicapai sekarang. Lantai 20 = arena boss Raja Slime Emas.
-@export_range(1, 999) var max_floor: int = 20
+## Lantai terdalam yang bisa dicapai sekarang. Arena boss setiap 20 lantai.
+@export_range(1, 999) var max_floor: int = 100
 ## Lift checkpoint tiap kelipatan lantai ini.
 @export_range(1, 50) var lift_interval: int = 5
 ## Peluang tangga turun muncul dari satu batu yang dihancurkan.

@@ -78,6 +78,8 @@
 [ext_resource type="PackedScene" path="res://scenes/world/exterior/town/warung.tscn" id="town_warung"]
 [ext_resource type="Material" uid="uid://ci3yasder0uu3" path="res://resources/water_detail_material.tres" id="water_detail"]
 
+[ext_resource type="PackedScene" path="res://scenes/npc/routes/town_paths.tscn" id="ResidentPaths"]
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tw001"]
 texture = ExtResource("1_twn")
 18:0/0 = 0
@@ -8984,7 +8986,7 @@ shape = SubResource("RectangleShape2D_w5a0g")
 [node name="Fountain" type="Marker2D" parent="NPCPoints" unique_id=1713371617]
 
 [node name="wira_orders" type="Marker2D" parent="NPCPoints" unique_id=1145753437]
-position = Vector2(700, 440)
+position = Vector2(700, 456)
 
 [node name="ubay_home" type="Marker2D" parent="NPCPoints" unique_id=1870585110]
 position = Vector2(840, 497)
@@ -8996,10 +8998,10 @@ position = Vector2(900, 498)
 position = Vector2(970, 430)
 
 [node name="ubay_lunch" type="Marker2D" parent="NPCPoints" unique_id=38554573]
-position = Vector2(880, 430)
+position = Vector2(920, 430)
 
 [node name="ubay_rest" type="Marker2D" parent="NPCPoints" unique_id=701522841]
-position = Vector2(550, 440)
+position = Vector2(550, 456)
 
 [node name="Kirana" parent="." unique_id=1298459142 instance=ExtResource("73_njmhf")]
 position = Vector2(874, 779)
@@ -9018,3 +9020,28 @@ y_sort_enabled = true
 
 [node name="NPCMapPresenter" type="Node" parent="." unique_id=198673227]
 script = ExtResource("ResidentPresenter")
+
+[node name="NPCPaths" parent="." instance=ExtResource("ResidentPaths")]
+
+[editable path="NPCPaths"]
+
+[node name="zarathia_tea_stall" type="Marker2D" parent="NPCPoints"]
+position = Vector2(920, 446)
+
+[node name="zarathia_bench" type="Marker2D" parent="NPCPoints"]
+position = Vector2(580, 456)
+
+[node name="town_square" type="Marker2D" parent="NPCPoints"]
+position = Vector2(732, 456)
+
+[node name="eep_stall" type="Marker2D" parent="NPCPoints"]
+position = Vector2(520, 456)
+
+[node name="eep_lunch" type="Marker2D" parent="NPCPoints"]
+position = Vector2(620, 456)
+
+[node name="eep_rest" type="Marker2D" parent="NPCPoints"]
+position = Vector2(650, 456)
+
+[node name="eep_home" type="Marker2D" parent="NPCPoints"]
+position = Vector2(32, 408)

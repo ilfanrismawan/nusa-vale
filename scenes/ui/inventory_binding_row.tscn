@@ -1,0 +1,32 @@
+[gd_scene format=3]
+[ext_resource type="Theme" path="res://resources/ui/inventory_book_theme.tres" id="theme"]
+
+[node name="Binding" type="VBoxContainer"]
+size_flags_horizontal = 3
+
+[node name="Action" type="Label" parent="."]
+unique_name_in_owner = true
+theme_override_font_sizes/font_size = 12
+mouse_filter = 2
+text = ""
+autowrap_mode = 0
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Buttons" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+theme_override_constants/separation = 4
+
+[node name="Keyboard" type="Button" parent="Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(86, 24)
+size_flags_horizontal = 3
+text_overrun_behavior = 3
+theme_override_font_sizes/font_size = 12
+
+[node name="Gamepad" type="Button" parent="Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(86, 24)
+size_flags_horizontal = 3
+text_overrun_behavior = 3
+theme_override_font_sizes/font_size = 12

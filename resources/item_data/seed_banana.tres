@@ -15,6 +15,6 @@ stackable = true
 max_stack = 99
 action_data = ExtResource("3_action")
 buy_price = 75
-sell_price = 38
+sell_price = 30
 season = "summer"
 metadata/_custom_type_script = "uid://cm1okc20ussp3"

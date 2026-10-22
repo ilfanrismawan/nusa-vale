@@ -1,0 +1,57 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://scripts/effects/night_horror.gd" id="1_horror"]
+[ext_resource type="Shader" path="res://resources/horror/night_horror.gdshader" id="2_shader"]
+[ext_resource type="Script" path="res://scripts/data/horror_event.gd" id="3_event"]
+[ext_resource type="Resource" path="res://resources/horror/events/shadow_glimpse.tres" id="ev_shadow_glimpse"]
+[ext_resource type="Resource" path="res://resources/horror/events/shadow_dash.tres" id="ev_shadow_dash"]
+[ext_resource type="Resource" path="res://resources/horror/events/whisper.tres" id="ev_whisper"]
+[ext_resource type="Resource" path="res://resources/horror/events/whisper_name.tres" id="ev_whisper_name"]
+[ext_resource type="Resource" path="res://resources/horror/events/footsteps.tres" id="ev_footsteps"]
+[ext_resource type="Resource" path="res://resources/horror/events/lamp_flicker.tres" id="ev_lamp_flicker"]
+[ext_resource type="Resource" path="res://resources/horror/events/red_eyes.tres" id="ev_red_eyes"]
+[ext_resource type="Resource" path="res://resources/horror/events/crows.tres" id="ev_crows"]
+
+[ext_resource type="PackedScene" path="res://scenes/horror/kuntilanak.tscn" id="st_kuntilanak"]
+[ext_resource type="PackedScene" path="res://scenes/horror/pocong.tscn" id="st_pocong"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_veil"]
+shader = ExtResource("2_shader")
+
+[node name="NightHorror" type="CanvasLayer"]
+layer = 2
+script = ExtResource("1_horror")
+events = Array[ExtResource("3_event")]([ExtResource("ev_shadow_glimpse"), ExtResource("ev_shadow_dash"), ExtResource("ev_whisper"), ExtResource("ev_whisper_name"), ExtResource("ev_footsteps"), ExtResource("ev_lamp_flicker"), ExtResource("ev_red_eyes"), ExtResource("ev_crows")])
+stalker_scenes = Array[PackedScene]([ExtResource("st_kuntilanak"), ExtResource("st_pocong")])
+
+[node name="Veil" type="ColorRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_veil")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Flash" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.55, 0, 0.03, 0.75)
+
+[node name="Jumpscare" type="TextureRect" parent="."]
+visible = false
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5

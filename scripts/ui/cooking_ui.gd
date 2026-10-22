@@ -20,7 +20,7 @@ var _sort_mode := 0
 @onready var _panel: Control = $Panel
 @onready var _rows: GridContainer = %Rows
 @onready var _status: Label = %StatusLabel
-@onready var _debug_panel: VBoxContainer = %DebugPanel
+var _debug_panel: VBoxContainer
 @onready var _debug_toggle: Button = %DebugToggle
 
 func _ready() -> void:
@@ -31,9 +31,15 @@ func _ready() -> void:
 	%NextTab.pressed.connect(_cycle_filter.bind(1))
 	%SortButton.pressed.connect(_cycle_sort)
 	%ActionButton.pressed.connect(_selected_action)
-	_debug_panel.bind(self)
-	_debug_toggle.visible = _debug_panel.is_enabled()
-	_debug_toggle.toggled.connect(_toggle_debug)
+	_debug_toggle.visible = false
+	if OS.has_feature("editor") and OS.is_debug_build():
+		var debug_scene = load("res://scenes/ui/cooking_debug_panel.tscn")
+		if debug_scene != null:
+			_debug_panel = debug_scene.instantiate()
+			$Panel/Layout/DebugWindow/DebugScroll.add_child(_debug_panel)
+			_debug_panel.bind(self)
+			_debug_toggle.visible = _debug_panel.is_enabled()
+			_debug_toggle.toggled.connect(_toggle_debug)
 	get_viewport().size_changed.connect(_resize)
 	_resize()
 	_build_tabs()
@@ -98,7 +104,7 @@ func _cycle_sort() -> void:
 	_refresh()
 
 func _toggle_debug(open: bool) -> void:
-	if not _debug_panel.is_enabled():
+	if _debug_panel == null or not _debug_panel.is_enabled():
 		return
 	%DebugWindow.visible = open
 	_debug_panel.visible = open

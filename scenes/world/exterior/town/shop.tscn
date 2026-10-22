@@ -27,7 +27,8 @@ shape = SubResource("ShopFootprint")
 [node name="Door" type="Area2D" parent="." unique_id=2083244524]
 position = Vector2(0, 62)
 script = ExtResource("TownDoor")
-target_scene = "res://scenes/world/interior/town/shop.tscn"
+target_scene = "uid://bk62y4rgxv2an"
+spawn_position = Vector2(208, 236)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Door" unique_id=146736559]
 position = Vector2(15, -16)

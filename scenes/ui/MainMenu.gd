@@ -102,9 +102,36 @@ func _start_coop(devices: Array[int]) -> void:
 	_launch_coop(devices)
 
 func _launch_coop(devices: Array[int]) -> void:
+	# Tiap pemain tamu memilih karakter co-op save ini atau membuat baru (GDD 4.14).
+	var joined: Array[int] = [PlayerInput.DEVICE_KEYBOARD]
+	var guests: Array[PlayerData] = []
+	GameState.seat_players(guests)
+	_pick_guest(devices, 1, joined, guests)
+
+func _pick_guest(devices: Array[int], index: int, joined: Array[int], guests: Array[PlayerData]) -> void:
+	if index >= devices.size():
+		_begin_coop(joined, guests)
+		return
+	var menu = Coop.JOIN_MENU.new()
+	menu.device = devices[index]
+	menu.player_number = joined.size() + 1
+	menu.chosen.connect(func(data: PlayerData):
+		joined.append(devices[index])
+		guests.append(data)
+		_pick_guest(devices, index + 1, joined, guests))
+	menu.cancelled.connect(func(): _pick_guest(devices, index + 1, joined, guests))
+	add_child(menu)
+
+func _begin_coop(joined: Array[int], guests: Array[PlayerData]) -> void:
+	if guests.is_empty():
+		# Semua tamu batal: main sendiri; pemain lain bisa bergabung nanti dengan Start.
+		Notify.say("Main sendiri dulu. Gamepad lain bisa bergabung kapan saja dengan Start.")
+		_enter_house()
+		return
+	GameState.seat_players(guests)
 	var fade_tween := create_tween()
 	fade_tween.tween_property(self, "modulate:a", 0.0, 0.4)
-	fade_tween.tween_callback(func(): Coop.start(devices))
+	fade_tween.tween_callback(func(): Coop.start(joined))
 
 
 func _on_new_game_pressed() -> void:
@@ -129,7 +156,9 @@ func _continue_game() -> void:
 	if not SaveManager.load_game():
 		Notify.say("Gagal memuat save.")
 		return
+	_enter_house()
 
+func _enter_house() -> void:
 	GameState.next_spawn_position = Vector2(304.0, 147.0)
 	GameState.has_spawn_point = true
 	DayCycle.is_running = true

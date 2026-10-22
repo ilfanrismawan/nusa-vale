@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/icons/Food Icons/Wax.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_id = "battery_pack"
+display_name = "Battery Pack"
+icon = ExtResource("2")
+category = 4
+sell_price = 500
+buy_price = 1000
+description = "Sumber energi listrik padat hasil tangkapan petir. Bahan kunci perakitan teknologi otomatis."
+stackable = true
+max_stack = 99

@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/combat/cave/shadow_slime.tscn" id="scene"]
+[resource]
+script = ExtResource("1")
+id = &"shadow_slime"
+display_name = "Slime Bayangan"
+scene = ExtResource("scene")
+sprite_folder = "res://assets/farm_rpg/Enemy/Slimes/Black/Slime"
+max_hp = 240
+attack = 110
+defense = 16
+attack_style = 0
+contact_damage = true
+body_radius = 7.0
+patrol_speed = 18.0
+chase_speed = 42.0
+aggro_radius = 190.0
+give_up_radius = 300.0
+dark_vision_scale = 0.85
+attack_range = 22.0
+attack_windup = 0.5
+attack_cooldown = 1.1
+lunge_speed = 150.0
+poise = 71.0
+poise_damage = 49.4
+feint_chance = 0.15
+projectile_speed = 184.0
+projectile_color = Color(0.65, 0.4, 1, 1)
+preferred_distance = 72.0
+drop_item_id = "shadow_ore"
+drop_chance = 0.35
+drop_min = 1
+drop_max = 2

@@ -74,6 +74,8 @@ func run() -> void:
 	var facility := GameState.balai_nadi
 	GameState.new_game()
 	p2 = GameState.ensure_player(1)
+	# Starter slots cannot hold both 50 stone and two stacks for 100 wood.
+	p2.bag_level = 1
 	for id in facility.definition("balai_nadi_restoration").requirements:
 		if id == "money":
 			GameState.money = 10000

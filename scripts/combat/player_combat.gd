@@ -72,6 +72,8 @@ func restore(amount: float) -> void:
 ## Pakai stamina tempur. Ditolak saat Exhausted atau bar kosong; boleh menguras sampai 0
 ## (sisa kurang dari biaya tetap jalan), lalu Exhausted.
 func spend(amount: float) -> bool:
+	# Role Combat Lv2/Lv4 (GDD 13): serangan, roll, dan art lebih hemat stamina.
+	amount *= 1.0 - clampf(SkillSystem.stat(player.data, &"combat_stamina"), 0.0, 0.9)
 	if amount <= 0.0:
 		return not is_exhausted()
 	if is_exhausted() or stamina <= 0.0:
@@ -113,12 +115,24 @@ func _unhandled_input(event: InputEvent) -> void:
 	if input.is_event(event, &"dodge"):
 		if request_dodge():
 			get_viewport().set_input_as_handled()
-	elif input.is_event(event, &"weapon_art") and player.holds_weapon():
-		player.tool_controller.weapon_art()
-		get_viewport().set_input_as_handled()
 	elif input.is_event(event, &"run") and _run_pressed_ms < 0:
-		# RT gamepad mengirim event berulang selama ditekan; hitung dari tekanan pertama saja.
+		# Trigger gamepad mengirim event berulang selama ditekan; hitung dari tekanan pertama saja.
 		_run_pressed_ms = Time.get_ticks_msec()
+
+## Tombol combat yang bisa berupa trigger (LT/RT) dibaca per frame: Input Map menghitung
+## "baru ditekan" sekali walau trigger mengirim banyak event gerak.
+func _poll_combat_buttons() -> void:
+	if player.is_input_locked() or player.is_defeated or not player.holds_weapon():
+		return
+	var input := player.input
+	if input.just_pressed(&"weapon_art"):
+		player.tool_controller.weapon_art()
+	if input.just_pressed(&"heavy_attack"):
+		# RT (soulslike): serangan berat langsung tanpa menahan.
+		charging = false
+		player.tool_controller.attack(CombatState.Kind.HEAVY)
+	if input.just_pressed(&"lock_on") and player.lock_on != null:
+		player.lock_on.toggle()
 
 func _process(delta: float) -> void:
 	if player == null:
@@ -127,11 +141,12 @@ func _process(delta: float) -> void:
 	var state := player.state_machine.current_state
 	var input := player.input
 	var free := not player.is_input_locked() and not player.is_defeated
-	# Shift ditekan singkat sambil memegang senjata = roll (seperti tombol lari/roll soulslike).
+	_poll_combat_buttons()
+	# Lari ditekan singkat sambil memegang senjata = roll (Shift / gamepad B, seperti soulslike).
 	if _run_pressed_ms >= 0 and not input.pressed(&"run"):
 		var held := (Time.get_ticks_msec() - _run_pressed_ms) / 1000.0
 		_run_pressed_ms = -1
-		if free and held <= rules.tap_run_roll_time and player.holds_weapon():
+		if free and held <= rules.tap_run_roll_time and player.holds_weapon() and not player.is_jumping():
 			request_dodge()
 	if state is RunState:
 		_last_run_ms = Time.get_ticks_msec()
@@ -182,7 +197,7 @@ func _update_guard(free: bool, state: State) -> void:
 		player.update_facing_direction(dir, true)
 
 func is_parry_window() -> bool:
-	return guarding and Time.get_ticks_msec() - _guard_started_ms <= int(Combat.RULES.parry_window * 1000.0)
+	return guarding and Time.get_ticks_msec() - _guard_started_ms <= int((Combat.RULES.parry_window + SkillSystem.stat(player.data, &"parry_window")) * 1000.0)
 
 ## Dipanggil ToolController saat klik kiri ditekan dengan senjata: mulai menahan.
 func begin_charge() -> void:
@@ -221,7 +236,7 @@ func request_dodge() -> bool:
 		_flash = 0.4
 		return false
 	var roll := Combat.roll_class(player.data)
-	if not spend(float(Combat.RULES.roll_cost[clampi(roll, 0, Combat.RULES.roll_cost.size() - 1)])):
+	if not spend(CombatRules.pick(Combat.RULES.roll_cost, roll, 20.0)):
 		return false
 	var dir := player.get_input_vector()
 	if dir.length() < 0.1:
@@ -233,7 +248,7 @@ func request_dodge() -> bool:
 	return true
 
 func begin_iframes(seconds: float) -> void:
-	_iframes = seconds
+	_iframes = seconds + SkillSystem.stat(player.data, &"iframes")
 
 func on_roll_finished() -> void:
 	_roll_ended_ms = Time.get_ticks_msec()
@@ -292,6 +307,7 @@ func _faces(source: Node) -> bool:
 
 func _parry(source: Node) -> void:
 	source.on_parried(player)
+	SkillSystem.gain(player.data, &"combat", SkillSystem.RULES.parry_exp)
 	_set_stamina(stamina + 10.0)
 	CombatJuice.parry_flash(player, _guard_point())
 

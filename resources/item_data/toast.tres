@@ -19,4 +19,4 @@ item_id = "toast"
 display_name = "Roti Panggang"
 icon = SubResource("Icon")
 description = "Masakan dari dapur. Pilih di hotbar untuk dimakan."
-sell_price = 55
+sell_price = 407

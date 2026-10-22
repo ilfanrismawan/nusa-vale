@@ -2,6 +2,8 @@ extends CanvasLayer
 
 signal slot_selected(index: int)
 
+@export var tooltip_scene: PackedScene = preload("res://scenes/ui/hotbar_tooltip.tscn")
+
 @onready var slot_container: HBoxContainer = $"MarginContainer/HudBg/InnerMargin/HBoxContainer"
 
 const HOTBAR_SLOTS := 8
@@ -43,6 +45,7 @@ func _build_slots() -> void:
 
 	for i in HOTBAR_SLOTS:
 		var slot_ui: InventorySlotUI = SLOT_SCENE.instantiate()
+		slot_ui.tooltip_scene = tooltip_scene
 		slot_ui.slot_index = i
 		slot_ui.owner_ui = self
 		slot_ui.slot_clicked.connect(_on_slot_clicked)

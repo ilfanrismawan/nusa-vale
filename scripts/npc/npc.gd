@@ -40,9 +40,10 @@ func interact(player: Player = null) -> void:
 	
 	velocity = Vector2.ZERO
 	
-	_dialog_ui = NPCDialogUI.new()
+	_dialog_ui = load("res://scenes/ui/npc_dialog_ui.tscn").instantiate() as NPCDialogUI
 	_dialog_ui.player = player
 	_dialog_ui.npc_name = npc_name
+	_dialog_ui.social_npc_id = npc_id
 	_dialog_ui.lines = PackedStringArray([
 		"Halo! Senang bertem denganmu!"
 	])
@@ -101,6 +102,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	
 	if player.input.is_event(event, &"interact"):
 		get_viewport().set_input_as_handled()
+		player.mark_interacted()
 		interact(player)
 
 func _on_body_entered(body: Node2D) -> void:

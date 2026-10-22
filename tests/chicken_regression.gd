@@ -47,21 +47,19 @@ func _ready() -> void:
 	var player := rig.get_node("CharacterBody2D") as Player
 	player.set_process(false)
 	player.set_physics_process(false)
+	# Kayu 100 memerlukan dua stack (batas 99); siapkan ruang untuk bahan
+	# konstruksi di samping seluruh alat dan bibit starter.
+	player.data.bag_level = 1
 	player.data.add_item_silent("wood", 100)
 	player.data.add_item_silent("stone", 50)
-	var recipe: CraftingRecipe
-	for candidate in CraftingSystem.CATALOG.recipes:
-		if candidate.recipe_id == "chicken_coop":
-			recipe = candidate
-	check(recipe != null and CraftingSystem.craft(player.data, recipe).ok, "coop crafted using existing material transaction")
-	var slot := -1
-	for i in player.data.bag_size:
-		if player.data.inventory[i] != null and player.data.inventory[i].item.item_id == "chicken_coop":
-			slot = i
+	GameState.money = 2000
 	player.global_position = ground.map_to_local(Vector2i(2, 3)) - Player.FEET_OFFSET
 	await get_tree().physics_frame
 	await get_tree().physics_frame
-	check(StructureManager.place(player, slot, Vector2i(3, 3)).ok, "real coop footprint places on clear farm ground")
+	# Kandang sekarang dibangun lewat layanan Wira, bukan resep tas lama.
+	check(StructureManager.check_construction(player, "chicken_coop", Vector2i(3, 3)).ok, "real coop footprint accepts clear farm ground")
+	var result := StructureManager.commit_construction(player, "chicken_coop", Vector2i(3, 3), false)
+	check(result.ok and GameState.money == 0 and player.data.get_item_count("wood") == 0 and player.data.get_item_count("stone") == 0, "coop construction consumes its quoted money and materials exactly once")
 	if StructureManager.records.is_empty():
 		get_tree().quit(1)
 		return

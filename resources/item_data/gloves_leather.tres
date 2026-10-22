@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_gloves_leather.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_id = "gloves_leather"
+display_name = "Sarung Tangan Kulit"
+icon = ExtResource("2")
+description = "Aksesori tangan. Menambah serangan dan pertahanan."
+category = 7
+stackable = false
+max_stack = 1
+equipment_slot = 8
+attack_bonus = 1
+defense_bonus = 2
+equipment_tier = 0
+sell_price = 90
+rarity = 1

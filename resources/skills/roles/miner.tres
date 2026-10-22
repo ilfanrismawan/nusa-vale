@@ -1,0 +1,123 @@
+[gd_resource type="Resource" script_class="RoleData" load_steps=16 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/role_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/resources/role_perk.gd" id="2"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_skill_book_miner.tres" id="3"]
+
+[sub_resource type="Resource" id="perk_0"]
+script = ExtResource("2")
+level = 1
+branch = ""
+title = "Genggaman Beliung"
+description = "Stamina beliung -10%."
+effects = Dictionary[StringName, float]({&"pickaxe_stamina": 0.1})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_1"]
+script = ExtResource("2")
+level = 2
+branch = ""
+title = "Pukulan Keras"
+description = "Kekuatan beliung +1."
+effects = Dictionary[StringName, float]({&"pickaxe_power": 1.0})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_2"]
+script = ExtResource("2")
+level = 3
+branch = ""
+title = "Napas Penambang"
+description = "Stamina beliung -10% lagi (total -20%)."
+effects = Dictionary[StringName, float]({&"pickaxe_stamina": 0.1})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_3"]
+script = ExtResource("2")
+level = 4
+branch = ""
+title = "Lengan Baja"
+description = "Kekuatan beliung +1 lagi (total +2)."
+effects = Dictionary[StringName, float]({&"pickaxe_power": 1.0})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_4"]
+script = ExtResource("2")
+level = 5
+branch = "a"
+title = "Prospector"
+description = "Batubara dari batu yang pecah berlipat 2."
+effects = Dictionary[StringName, float]({&"coal_double": 1.0})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_5"]
+script = ExtResource("2")
+level = 5
+branch = "b"
+title = "Geologist"
+description = "Permata dan geoda berpeluang 50% jatuh berpasangan."
+effects = Dictionary[StringName, float]({&"gem_double": 0.5})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_6"]
+script = ExtResource("2")
+level = 6
+branch = ""
+title = "Urat Bijih"
+description = "Peluang 10% bijih ganda."
+effects = Dictionary[StringName, float]({&"ore_double": 0.1})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_7"]
+script = ExtResource("2")
+level = 7
+branch = ""
+title = "Ahli Tungku"
+description = "Peleburan di Furnace 25% lebih cepat."
+effects = Dictionary[StringName, float]({&"smelt_speed": 0.25})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_8"]
+script = ExtResource("2")
+level = 8
+branch = ""
+title = "Urat Kaya"
+description = "Peluang bijih ganda +15% (total 25%)."
+effects = Dictionary[StringName, float]({&"ore_double": 0.15})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_9"]
+script = ExtResource("2")
+level = 9
+branch = ""
+title = "Stamina Gua"
+description = "Stamina beliung -5% lagi (total -25%)."
+effects = Dictionary[StringName, float]({&"pickaxe_stamina": 0.05})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_10"]
+script = ExtResource("2")
+level = 10
+branch = "a"
+title = "Spelunker Master"
+description = "Tangga turun muncul 50% lebih sering. (Lift checkpoint: segera hadir.)"
+effects = Dictionary[StringName, float]({&"stairs_chance": 0.5})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_11"]
+script = ExtResource("2")
+level = 10
+branch = "b"
+title = "Demolition Expert"
+description = "Radius ledakan bom +50% tanpa melukai diri."
+effects = Dictionary[StringName, float]({})
+coming_soon = true
+
+[resource]
+script = ExtResource("1")
+role_id = &"miner"
+display_name = "Miner"
+title = "Penambang"
+exp_hint = "EXP dari memecahkan batu dan bijih (batu mahal = EXP lebih besar) dan memecahkan geoda."
+icon = ExtResource("3")
+color = Color(0.3647, 0.3647, 0.4314, 1)
+perks = Array[ExtResource("2")]([SubResource("perk_0"), SubResource("perk_1"), SubResource("perk_2"), SubResource("perk_3"), SubResource("perk_4"), SubResource("perk_5"), SubResource("perk_6"), SubResource("perk_7"), SubResource("perk_8"), SubResource("perk_9"), SubResource("perk_10"), SubResource("perk_11")])

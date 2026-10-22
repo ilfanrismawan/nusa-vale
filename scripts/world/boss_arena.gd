@@ -14,12 +14,13 @@ signal fight_reset
 signal boss_defeated(data: BossData)
 
 ## Ketebalan tembok kabut (piksel).
-const GATE_THICKNESS := 10.0
+@export_range(2.0, 32.0) var gate_thickness: float = 10.0
 ## Pemain dianggap masuk arena bila kakinya sejauh ini di bawah garis kabut.
-const ENTER_MARGIN := 6.0
+@export_range(1.0, 32.0) var enter_margin: float = 6.0
 ## Arena kosong selama ini = pertarungan diulang.
-const RESET_DELAY := 1.0
-const DRUM_VOLUME_DB := -14.0
+@export_range(0.1, 10.0) var reset_delay: float = 1.0
+## Posisi relatif boss dalam arena (0..1).
+@export var boss_spawn_ratio: Vector2 = Vector2(0.5, 0.6)
 
 var data: BossData
 var boss: Boss
@@ -37,7 +38,7 @@ var _empty_time := 0.0
 func setup(p_data: BossData, space: Node2D, rect: Rect2) -> void:
 	data = p_data
 	arena_rect = Rect2(space.to_global(rect.position), rect.size)
-	boss = Boss.spawn_boss(data, get_parent(), arena_rect.get_center() + Vector2(0, rect.size.y * 0.1))
+	boss = Boss.spawn_boss(data, get_parent(), arena_rect.position + arena_rect.size * boss_spawn_ratio.clamp(Vector2.ZERO, Vector2.ONE))
 	if boss != null:
 		boss.arena_rect = arena_rect
 		boss.died.connect(_on_boss_died)
@@ -46,7 +47,10 @@ func setup(p_data: BossData, space: Node2D, rect: Rect2) -> void:
 	add_child(_fog)
 	_fog.global_position = arena_rect.position
 	_drum = AudioStreamPlayer.new()
-	_drum.bus = Juice.SFX_BUS
+	_drum.bus = &"Music" if data.music != null and AudioServer.get_bus_index(&"Music") >= 0 else Juice.SFX_BUS
+	_drum.finished.connect(func():
+		if fighting:
+			_drum.play())
 	add_child(_drum)
 
 func gate_y() -> float:
@@ -65,7 +69,7 @@ func _physics_process(delta: float) -> void:
 		return
 	if inside.is_empty():
 		_empty_time += delta
-		if _empty_time >= RESET_DELAY:
+		if _empty_time >= reset_delay:
 			reset_fight()
 	else:
 		_empty_time = 0.0
@@ -74,7 +78,7 @@ func _physics_process(delta: float) -> void:
 ## Pemain hidup yang kakinya di dalam arena (di bawah garis kabut).
 func players_inside() -> Array[Player]:
 	var result: Array[Player] = []
-	var inner := Rect2(arena_rect.position + Vector2(0, ENTER_MARGIN), arena_rect.size - Vector2(0, ENTER_MARGIN))
+	var inner := Rect2(arena_rect.position + Vector2(0, enter_margin), arena_rect.size - Vector2(0, enter_margin))
 	for node in get_tree().get_nodes_in_group(Combat.PLAYER_GROUP):
 		var player := node as Player
 		if player == null or not player.is_inside_tree() or not player.visible or player.is_defeated or player.data.hp <= 0:
@@ -96,8 +100,8 @@ func start_fight(player: Player) -> void:
 		if parent != null and not parents.has(parent):
 			parents[parent] = true
 			_bars.append(BossHealthBar.show_for(boss, parent))
-	_drum.stream = SfxSynth.war_drum()
-	_drum.volume_db = DRUM_VOLUME_DB
+	_drum.stream = data.music if data.music != null else SfxSynth.war_drum()
+	_drum.volume_db = data.music_volume_db
 	_drum.pitch_scale = 1.0
 	_drum.play()
 	if DiscoveryManager.discover("boss_%s" % data.id):
@@ -122,11 +126,11 @@ func _close_gate() -> void:
 	_gate.name = "FogGate"
 	var shape := CollisionShape2D.new()
 	var box := RectangleShape2D.new()
-	box.size = Vector2(arena_rect.size.x, GATE_THICKNESS)
+	box.size = Vector2(arena_rect.size.x, gate_thickness)
 	shape.shape = box
 	_gate.add_child(shape)
 	add_child(_gate)
-	_gate.global_position = Vector2(arena_rect.get_center().x, gate_y() - GATE_THICKNESS * 0.5)
+	_gate.global_position = Vector2(arena_rect.get_center().x, gate_y() - gate_thickness * 0.5)
 	_fog.closed = true
 	Juice.sfx(SfxSynth.whoosh(), -4.0, 0.0, -9.0)
 
@@ -150,6 +154,8 @@ func _update_drum() -> void:
 	_drum.pitch_scale = move_toward(_drum.pitch_scale, wanted, 0.01)
 
 func _on_boss_died(_enemy: Enemy) -> void:
+	if cleared:
+		return
 	cleared = true
 	fighting = false
 	_open_gate()

@@ -17,22 +17,26 @@ func _ready() -> void:
 		var label := Label.new()
 		label.name = "Label"
 		label.position = Vector2(-115, -50)
-		label.text = "↑ Kembali ke Forest [E]" if returning else "↓ Deep Forest [E]\nUnlock permanen: 3.000G + 150 Kayu + 75 Batu"
 		label.add_theme_font_size_override("font_size", 10)
 		add_child(label)
 	body_entered.connect(_on_body_entered)
+	# Prompt tombol ikut perangkat terakhir (E di keyboard, A di gamepad).
+	PlayerInput.solo().device_changed.connect(_on_device_changed)
+	_refresh_label()
+
+func _on_device_changed(_pad: bool) -> void:
 	_refresh_label()
 
 func _refresh_label() -> void:
 	var label := get_node_or_null("Label") as Label
 	if label != null:
-		label.text = "↑ Kembali ke Forest" if returning else ("↓ Deep Forest" if UnlockManager.is_unlocked("deep_forest") else "↓ Deep Forest\n[E] Unlock permanen: 3.000G + 150 Kayu + 75 Batu")
+		label.text = "↑ Kembali ke Forest" if returning else ("↓ Deep Forest" if UnlockManager.is_unlocked("deep_forest") else "↓ Deep Forest\n" + InputPrompt.format(&"interact", "Unlock permanen: 3.000G + 150 Kayu + 75 Batu", null, InputLayout.FIELD))
 
 func _on_body_entered(body: Node2D) -> void:
 	if not body is Player or body.is_input_locked() or Transition.on_transition:
 		return
 	if not returning and not UnlockManager.is_unlocked("deep_forest"):
-		Notify.say("Deep Forest: 3.000G, 150 Kayu, 75 Batu. Tekan E untuk membuka permanen. Jamur langka, truffle, dan bijih menanti.")
+		Notify.say("Deep Forest: 3.000G, 150 Kayu, 75 Batu. Tekan %s untuk membuka permanen. Jamur langka, truffle, dan bijih menanti." % InputPrompt.key_text(&"interact", body, InputLayout.FIELD, 1))
 		return
 	_travel(body)
 

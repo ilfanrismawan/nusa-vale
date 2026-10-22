@@ -1,0 +1,76 @@
+[gd_resource type="Resource" script_class="BossData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/boss_data.gd" id="1"]
+[ext_resource type="Resource" path="res://resources/enemies/slime_blue.tres" id="2_minion"]
+
+[resource]
+script = ExtResource("1")
+title = "Ratu Kristal"
+floor_number = 60
+sprite_scale = 2.5
+rest_time = 1.1
+phase2_hp_ratio = 0.5
+phase3_hp_ratio = 0.2
+phase_tempo = PackedFloat32Array(1.0, 0.8, 0.65)
+phase_attack = PackedFloat32Array(1.0, 1.15, 1.3)
+phase_slam_combo = PackedInt32Array(1, 2, 2)
+roar_time = 1.4
+slam_windup = 0.8
+slam_air_time = 0.55
+slam_radius = 30.0
+slam_damage = 62
+charge_windup = 0.55
+charge_speed = 190.0
+charge_time = 0.45
+charge_damage = 56
+charge_range = 80.0
+spit_windup = 0.45
+spit_speed = 150.0
+spit_damage = 48
+phase_spit_count = PackedInt32Array(5, 7, 9)
+spit_spread_deg = 18.0
+kite_distance = 110.0
+kite_time = 2.5
+kite_spit_speed_scale = 1.8
+minion = ExtResource("2_minion")
+split_count = 3
+split_max = 4
+split_cooldown = 14.0
+rain_count = 9
+rain_radius = 20.0
+rain_damage = 60
+rain_delay = 0.9
+rain_cooldown = 12.0
+enrage_time = 25.0
+enrage_duration = 8.0
+enrage_attack_scale = 1.3
+enrage_tempo = 0.7
+reward_money = 6500
+reward_items = PackedStringArray("platinum_ore", "iron_ore")
+reward_counts = PackedInt32Array(8, 12)
+id = &"boss_crystal_guardian"
+display_name = "Ratu Kristal"
+sprite_folder = "res://assets/farm_rpg/Enemy/Slimes/Blue/Big Slime"
+sprite_offset = Vector2(0, -10)
+max_hp = 1250
+attack = 48
+defense = 12
+body_radius = 14.0
+knockback_resist = 1.0
+chase_speed = 34.0
+aggro_radius = 400.0
+give_up_radius = 600.0
+attack_range = 80.0
+poise = 160
+poise_regen_delay = 3.0
+poise_regen = 18.0
+stagger_time = 2.4
+poise_damage = 30.0
+feint_chance = 0.0
+retreat_hp_ratio = 0.0
+calls_for_help = false
+hit_feedback = &"slime_hit"
+drop_item_id = "slime_gel"
+drop_chance = 1.0
+drop_min = 4
+drop_max = 6

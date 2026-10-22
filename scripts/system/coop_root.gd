@@ -78,14 +78,24 @@ func _ready() -> void:
 	_layout()
 	get_viewport().size_changed.connect(_layout)
 
-	var start := _area(START_AREA)
+	# Drop-in (Coop.spawn_plan): tiap pemain mulai di area dan posisinya sebelum dibangun ulang.
 	for i in count:
-		_spawn_player(i, start)
+		var plan: Dictionary = Coop.spawn_plan.get(i, {})
+		var area: Area = null
+		if not str(plan.get("path", "")).is_empty():
+			area = _area(plan["path"])
+		if area == null:
+			area = _area(START_AREA)
+		_spawn_player(i, area, plan.get("position", null))
 
 	DayCycle.time_tick.connect(_on_time_tick)
 	_on_time_tick(DayCycle.hour, DayCycle.minute)
 	Input.joy_connection_changed.connect(_on_joy_connection_changed)
-	Notify.say("Co-op %d pemain dimulai! Masing-masing punya tas dan stamina sendiri." % count)
+	if not Coop.start_notice.is_empty():
+		Notify.say(Coop.start_notice)
+		Coop.start_notice = ""
+	else:
+		Notify.say("Co-op %d pemain dimulai! Masing-masing punya tas dan stamina sendiri." % count)
 
 func _exit_tree() -> void:
 	if Coop.root == self:
@@ -126,6 +136,22 @@ func world_of(path: String) -> Node:
 
 func juice_layer_of(index: int) -> CanvasLayer:
 	return _juice_layers[index] if index >= 0 and index < _juice_layers.size() else null
+
+## Path area pemain (dengan akhiran #ranch=), dipakai saat CoopRoot dibangun ulang (drop-in).
+func area_path_of(index: int) -> String:
+	if index < 0 or index >= _area_of.size() or not _areas.has(_area_of[index]):
+		return START_AREA
+	return (_areas[_area_of[index]] as Area).path
+
+func position_of(index: int) -> Vector2:
+	var body := body_of(index)
+	return body.global_position if is_instance_valid(body) else Vector2.ZERO
+
+func has_busy_player() -> bool:
+	return _busy.has(true)
+
+func sleeping_count() -> int:
+	return _sleeping.size()
 
 
 # ── Layar ───────────────────────────────────────────────────────────
@@ -228,7 +254,15 @@ func _layout() -> void:
 # ── Area ────────────────────────────────────────────────────────────
 
 func _key(path: String) -> String:
-	return path.to_lower()
+	# Export-file scene dapat disimpan editor sebagai uid://. UID dan res://
+	# harus menunjuk World2D yang sama; suffix kandang tetap membedakan instance.
+	var scene_path := path.get_slice("#ranch=", 0)
+	var suffix := "#ranch=" + path.get_slice("#ranch=", 1) if path.contains("#ranch=") else ""
+	if scene_path.begins_with("uid://"):
+		var uid := ResourceUID.text_to_id(scene_path)
+		if ResourceUID.has_id(uid):
+			scene_path = ResourceUID.get_id_path(uid)
+	return scene_path.to_lower() + suffix
 
 func _area(path: String) -> Area:
 	var key := _key(path)
@@ -314,7 +348,7 @@ func _unload_unused() -> void:
 
 # ── Pemain ──────────────────────────────────────────────────────────
 
-func _spawn_player(index: int, area: Area) -> void:
+func _spawn_player(index: int, area: Area, spawn: Variant = null) -> void:
 	var proot: Node2D = PLAYER_SCENE.instantiate()
 	proot.set("player_index", index)
 	proot.name = "Player%d" % (index + 1)
@@ -347,7 +381,7 @@ func _spawn_player(index: int, area: Area) -> void:
 	_area_of[index] = _key(area.path)
 	view.world_2d = area.host.world_2d
 	body.refresh_world()
-	_set_player_position(index, _spread(area.default_spawn, index))
+	_set_player_position(index, spawn if spawn is Vector2 else _spread(area.default_spawn, index))
 	_apply_camera(index)
 	if cam != null:
 		cam.global_position = body.global_position

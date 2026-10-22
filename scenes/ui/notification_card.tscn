@@ -1,0 +1,75 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://scripts/ui/notification_card.gd" id="script"]
+[sub_resource type="StyleBoxFlat" id="Paper"]
+content_margin_left = 8.0
+content_margin_right = 8.0
+content_margin_top = 5.0
+content_margin_bottom = 4.0
+bg_color = Color(0.969, 0.953, 0.914, 0.9)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_left = 8
+corner_radius_bottom_right = 8
+shadow_color = Color(0.04, 0.06, 0.03, 0.22)
+shadow_size = 2
+shadow_offset = Vector2(0, 1)
+[sub_resource type="StyleBoxFlat" id="Badge"]
+bg_color = Color(0.94, 0.75, 0.48, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_left = 8
+corner_radius_bottom_right = 8
+[sub_resource type="StyleBoxFlat" id="Track"]
+bg_color = Color(0.84, 0.82, 0.75, 0.65)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_left = 2
+corner_radius_bottom_right = 2
+[sub_resource type="StyleBoxFlat" id="Fill"]
+bg_color = Color(0.61, 0.69, 0.43, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_left = 2
+corner_radius_bottom_right = 2
+[node name="NotificationCard" type="PanelContainer"]
+mouse_filter = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("Paper")
+script = ExtResource("script")
+[node name="Content" type="VBoxContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 3
+[node name="Layout" type="HBoxContainer" parent="Content"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+[node name="Badge" type="PanelContainer" parent="Content/Layout"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Badge")
+[node name="Icon" type="Label" parent="Content/Layout/Badge"]
+layout_mode = 2
+mouse_filter = 2
+text = "!"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 11
+[node name="Message" type="Label" parent="Content/Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_font_sizes/font_size = 12
+text = "Pesan Nusa Vale"
+autowrap_mode = 3
+[node name="Lifetime" type="ProgressBar" parent="Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("Track")
+theme_override_styles/fill = SubResource("Fill")
+value = 100.0
+show_percentage = false

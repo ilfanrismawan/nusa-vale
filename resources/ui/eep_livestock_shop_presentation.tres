@@ -1,0 +1,79 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/icons/Farm Animals/Animals farm icons.png" id="animal_icons"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/Character/NPC'S/Eep/npc_portrait_eep.png" id="portrait"]
+[ext_resource type="Script" path="res://scripts/resources/livestock_shop_presentation.gd" id="script"]
+
+[sub_resource type="AtlasTexture" id="Chicken"]
+atlas = ExtResource("animal_icons")
+region = Rect2(64, 64, 16, 16)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="BrownChicken"]
+atlas = ExtResource("animal_icons")
+region = Rect2(64, 48, 16, 16)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Cow"]
+atlas = ExtResource("animal_icons")
+region = Rect2(0, 0, 16, 16)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Duck"]
+atlas = ExtResource("animal_icons")
+region = Rect2(32, 32, 16, 16)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Goat"]
+atlas = ExtResource("animal_icons")
+region = Rect2(0, 80, 16, 16)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Sheep"]
+atlas = ExtResource("animal_icons")
+region = Rect2(80, 16, 16, 16)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Vendor"]
+atlas = ExtResource("portrait")
+region = Rect2(0, 0, 64, 64)
+filter_clip = true
+
+[resource]
+script = ExtResource("script")
+title = "Peternakan Eep"
+vendor_name = "Eep"
+greeting = "Halo! Pilih teman baru untuk kebunmu."
+display_slots = 5
+vendor_art = SubResource("Vendor")
+descriptions = Dictionary[String, String]({
+"chicken": "Ayam dewasa penghuni kandang unggas. Menghasilkan telur jika diberi pakan dan dirawat dengan baik.",
+"cow": "Sapi dewasa penghuni kandang ternak. Rawat dan perah menggunakan ember susu untuk memperoleh hasilnya.",
+"duck": "Bebek dewasa penghuni kandang unggas. Menghasilkan telur bebek setelah kebutuhan hariannya terpenuhi.",
+"goat": "Kambing dewasa penghuni kandang ternak. Perah menggunakan ember susu saat hasilnya siap.",
+"sheep": "Domba dewasa penghuni kandang ternak. Gunakan gunting cukur untuk memanen wol setelah siap."
+})
+home_labels = Dictionary[String, String]({
+"barn": "Hewan kandang ternak",
+"chicken_coop": "Hewan kandang unggas"
+})
+icon_overrides = Dictionary[String, Texture2D]({
+"chicken": SubResource("Chicken"),
+"chicken_brown": SubResource("BrownChicken"),
+"chicken_white": SubResource("Chicken"),
+"cow": SubResource("Cow"),
+"duck": SubResource("Duck"),
+"goat": SubResource("Goat"),
+"sheep": SubResource("Sheep")
+})
+variants = Dictionary[String, PackedStringArray]({
+"chicken": PackedStringArray("white", "brown")
+})
+variant_labels = Dictionary[String, String]({
+"brown": "Cokelat",
+"white": "Putih"
+})
+variant_colors = Dictionary[String, Color]({
+"brown": Color(0.59, 0.32, 0.15, 1),
+"white": Color(0.97, 0.94, 0.84, 1)
+})

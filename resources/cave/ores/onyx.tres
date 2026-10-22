@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="CaveOre" format=3 uid="uid://da38cokvc2oy0"]
+
+[ext_resource type="Script" uid="uid://dc2me1q2qvfpx" path="res://scripts/data/cave_ore.gd" id="1_ore"]
+[ext_resource type="Texture2D" uid="uid://b84j5wtiu3igo" path="res://assets/farm_rpg/objects/mine/stone with minerals.png" id="2_sheet"]
+
+[sub_resource type="AtlasTexture" id="hit"]
+atlas = ExtResource("2_sheet")
+region = Rect2(160, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="sprite"]
+atlas = ExtResource("2_sheet")
+region = Rect2(128, 48, 16, 16)
+
+[resource]
+script = ExtResource("1_ore")
+item_id = "onyx"
+sprite = SubResource("sprite")
+hit_sprite = SubResource("hit")
+sprite_scale = 1.25
+minimum_tool_tier = 5
+health = 8
+drop_max = 1
+is_gem = true

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" format=3]
+[ext_resource type="Script" path="res://scripts/npc/data/resident_profile.gd" id="script"]
+[resource]
+script = ExtResource("script")
+source_json = "res://data/npc/eep.json"
+npc_id = "eep"
+display_name = "Eep"
+role_title = "Penjual Hewan Ternak"
+move_speed = 38.0
+schedule_source = 1

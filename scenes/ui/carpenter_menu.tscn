@@ -262,3 +262,11 @@ theme_override_font_sizes/font_size = 17
 text = "Biaya dan bahan diambil setelah konfirmasi lokasi.\nBatal memilih lokasi tidak dikenakan biaya."
 autowrap_mode = 3
 theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
+
+[node name="SocialButton" type="Button" parent="Design"]
+unique_name_in_owner = true
+offset_left = 40.0
+offset_top = 825.0
+offset_right = 420.0
+offset_bottom = 873.0
+text = "Bicara / Hadiah"

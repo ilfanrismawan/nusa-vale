@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="HorrorEvent" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/horror_event.gd" id="1_event"]
+
+[resource]
+script = ExtResource("1_event")
+id = &"crows"
+kind = 6
+weight = 0.9
+min_fear = 0.0
+cooldown_seconds = 60.0
+count = 5
+distance = 70.0
+volume_db = -6.0
+fear_add = 0.1
+shake = 0.8

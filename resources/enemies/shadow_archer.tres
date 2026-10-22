@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/combat/cave/shadow_archer.tscn" id="scene"]
+[resource]
+script = ExtResource("1")
+id = &"shadow_archer"
+display_name = "Pemanah Bayangan"
+scene = ExtResource("scene")
+sprite_folder = "res://assets/farm_rpg/Enemy/Goblins/Archer Goblin"
+max_hp = 210
+attack = 116
+defense = 14
+attack_style = 2
+contact_damage = false
+body_radius = 7.0
+patrol_speed = 18.0
+chase_speed = 32.0
+aggro_radius = 190.0
+give_up_radius = 300.0
+dark_vision_scale = 0.85
+attack_range = 120.0
+attack_windup = 0.75
+attack_cooldown = 1.7
+lunge_speed = 150.0
+poise = 77.0
+poise_damage = 52.0
+feint_chance = 0.0
+projectile_speed = 188.0
+projectile_color = Color(0.65, 0.4, 1, 1)
+preferred_distance = 72.0
+drop_item_id = "coal"
+drop_chance = 0.35
+drop_min = 1
+drop_max = 2

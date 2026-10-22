@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_lure.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_id = "lure"
+display_name = "Umpan Buatan"
+icon = ExtResource("2")
+description = "Umpan logam berkilau. Waktu menunggu gigitan 35% lebih singkat."
+category = 4
+sell_price = 10
+rarity = 1
+bait_bonus = 0.35

@@ -44,7 +44,8 @@ func _grow(day: int) -> void:
 		var parts := str(items[key]).split("|")
 		if parts.size() < 3 or parts[1] != SMALL:
 			continue
-		if day - int(parts[2]) < grow_days:
+		# Forest Whisperer (Forager Lv10 A): pohon tumbuh 2x lebih cepat.
+		if day - int(parts[2]) < SkillSystem.tree_grow_days(grow_days):
 			continue
 		items[key] = "%s|%s|%s" % [parts[0], BIG, parts[2]]
 		# Node lama dibuang; _sync menaruh versi besarnya.
@@ -85,6 +86,7 @@ func _make_node(id: String, cell: Vector2i) -> Node2D:
 	if "persistent" in node:
 		node.persistent = false  # posisinya dicatat ForageManager, bukan chopped_trees
 	node.name = "SpawnedTree_%d_%d" % [cell.x, cell.y]
+	node.set_meta("tree_kind", parts[0])
 	node.tree_exiting.connect(_on_tree_removed.bind(node, cell))
 	return node
 
@@ -96,6 +98,9 @@ func _on_tree_removed(node: Node, cell: Vector2i) -> void:
 	if "is_destroyed" in node and node.is_destroyed:
 		ForageManager.remove_item(_area_key(), cell)
 		_nodes.erase(ForageManager.key_of(cell))
+		if SkillSystem.household(&"tree_replant") > 0.0:
+			var kind := str(node.get_meta("tree_kind", "pine"))
+			ForageManager.add_item(_area_key(), cell, "%s|%s|%d" % [kind, SMALL, DayCycle.current_day])
 
 
 func _cell_allowed(cell: Vector2i) -> bool:

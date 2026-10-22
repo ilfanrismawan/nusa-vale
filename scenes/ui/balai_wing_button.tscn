@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[node name="Wing" type="Button"]
+custom_minimum_size = Vector2(220, 50)
+toggle_mode = true
+text = "Sayap Alam"
+theme_override_font_sizes/font_size = 18

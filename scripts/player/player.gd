@@ -59,6 +59,8 @@ var sit_transitioning := false
 const INTERACTION_DISTANCE := 32.0
 
 const FEET_OFFSET := Vector2(0, 8)
+## Klik kanan sambil memegang senjata membuka pintu bila kursor sedekat ini ke pintunya.
+const DOOR_CLICK_RADIUS := 24.0
 ## Kebal sesaat setelah terkena serangan (GDD 8.1, i-frames).
 const HIT_INVULNERABLE := 0.8
 const KNOCKBACK_DECAY := 12.0
@@ -76,6 +78,13 @@ var _aim_line: Line2D
 var aim_fx: AimFx
 ## Stamina tempur, poise, block/parry, roll (GDD 8.2-A). Dibuat di _ready.
 var combat: PlayerCombat
+## Kunci target soulslike (R3 / Q). Dibuat di _ready.
+var lock_on: LockOn
+## Gamepad A = interaksi atau lompat: lompat ditunda satu frame fisika dan batal bila
+## tombol yang sama ternyata dipakai untuk interaksi (NPC, pintu, forage, toko).
+var _pending_jump_frame := -1
+var _pending_jump_ms := 0
+const PENDING_JUMP_WINDOW_MS := 150
 const ACTION_DISTANCE := 16.0
 const MAX_ACTION_DISTANCE := 28.0
 
@@ -107,6 +116,11 @@ func _ready() -> void:
 	combat.name = "PlayerCombat"
 	combat.player = self
 	add_child(combat)
+	lock_on = LockOn.new()
+	lock_on.name = "LockOn"
+	lock_on.player = self
+	add_child(lock_on)
+	input.bind_player(self)
 	
 	state_machine.initialize(self, animation_controller)
 	
@@ -114,6 +128,11 @@ func _ready() -> void:
 	if GameState.has_spawn_point and not Coop.active:
 		global_position = GameState.next_spawn_position
 		GameState.has_spawn_point = false
+	# Pertahankan arah hadap terakhir setelah pindah scene (co-op: body tidak dibuat ulang).
+	if Transition.carry_facing != Vector2.ZERO and not Coop.active:
+		facing_direction = Transition.carry_facing
+		animation_controller.set_direction(facing_direction)
+	Transition.carry_facing = Vector2.ZERO
 		
 func _process(delta: float) -> void:
 	bind_context()
@@ -153,6 +172,9 @@ func _check_exhaustion() -> void:
 	_last_stamina = now
 
 func _input(event: InputEvent) -> void:
+	# Perangkat terakhir (keyboard/mouse atau gamepad) untuk prompt tombol dan cara membidik.
+	if input.owns_event(event):
+		input.note_event(event)
 	# HUD controls cover the viewport; handle world right-clicks before GUI routing.
 	if event is InputEventMouseButton:
 		_unhandled_input(event)
@@ -173,15 +195,42 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		return
 
-	# Memegang senjata: klik kanan dipakai membidik, bukan interaksi.
+	# Memegang senjata: klik kanan = tangkis (pedang) atau bidik (busur/tongkat), kecuali bila
+	# diarahkan ke pintu atau objek interaktif di dekat pemain (mis. pintu keluar dan tangga naik
+	# gua, tempat pemain hampir selalu memegang pedang).
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and holds_weapon() and input.uses_mouse():
+		if event.pressed and not is_input_locked():
+			var mouse: Variant = _mouse_world_position()
+			if not Coop.has_root():
+				# Posisi event adalah titik klik, termasuk saat kursor belum diperbarui OS.
+				mouse = get_viewport().get_canvas_transform().affine_inverse() * event.position
+			if mouse != null and _interact_at(mouse):
+				mark_interacted()
+				get_viewport().set_input_as_handled()
 		return
-		
-	if is_input_locked() or not input.is_event(event, &"interact"):
+
+	if is_input_locked():
 		return
-		
-	bind_context()
-	if _try_interact():
+	var wants_jump := input.is_event(event, &"jump")
+	if wants_jump and is_jumping():
+		# Di udara: tombol lompat = lompat ganda (tidak ada interaksi sambil melompat).
+		tool_controller.jump_state.double_jump()
+		get_viewport().set_input_as_handled()
+		return
+	if input.is_event(event, &"interact"):
+		bind_context()
+		if _try_interact():
+			mark_interacted()
+			get_viewport().set_input_as_handled()
+			return
+		if wants_jump:
+			# Gamepad A: tidak ada yang diajak interaksi di sini. Tunggu satu frame fisika supaya
+			# forage/NPC/toko yang memakai A yang sama sempat menandai interaksi.
+			_pending_jump_frame = Engine.get_physics_frames()
+			_pending_jump_ms = Time.get_ticks_msec()
+		return
+	if wants_jump:
+		try_jump()
 		get_viewport().set_input_as_handled()
 	
 func _physics_process(delta: float) -> void:
@@ -199,6 +248,7 @@ func _physics_process(delta: float) -> void:
 			velocity = Vector2.ZERO
 			return
 		
+	_resolve_pending_jump()
 	var previous_position := global_position
 	state_machine.physics_update(delta)
 	var moving := state_machine.current_state is MoveState
@@ -242,6 +292,45 @@ func set_input_locked(reason: StringName, locked: bool) -> void:
 func is_input_locked() -> bool:
 	return not _input_locks.is_empty() or animation_controller.item_gesture_playing
 
+## Tas/toko/dialog pemain ini sedang terbuka (konteks input Menu).
+func has_menu_open() -> bool:
+	return _input_locks.has(&"menu")
+
+## Tombol interaksi baru saja dipakai (NPC, pintu, forage, toko): gamepad A tidak dihitung lompat.
+func mark_interacted() -> void:
+	input.interacted_ms = Time.get_ticks_msec()
+
+# ── Lompat (GDD 4.3, seperti Grand Bazaar) ──────────────────────────
+
+func is_jumping() -> bool:
+	return tool_controller != null and tool_controller.jump_state != null \
+		and state_machine.current_state == tool_controller.jump_state
+
+## Berenang belum ada di map utama (lihat swimming_demo); konteks Berenang sudah disiapkan.
+func is_swimming() -> bool:
+	return false
+
+## Mulai lompat dari diam/berjalan/berlari. false bila sedang beraksi atau terkunci.
+func try_jump() -> bool:
+	if is_input_locked() or is_defeated or holds_weapon():
+		return false
+	var state := state_machine.current_state
+	if not (state is IdleState or state is MoveState):
+		return false
+	bind_context()
+	state_machine.change_state(tool_controller.jump_state)
+	return true
+
+func _resolve_pending_jump() -> void:
+	if _pending_jump_frame < 0 or Engine.get_physics_frames() <= _pending_jump_frame:
+		return
+	_pending_jump_frame = -1
+	if Time.get_ticks_msec() - _pending_jump_ms > PENDING_JUMP_WINDOW_MS or input.interacted_ms >= _pending_jump_ms:
+		return
+	if get_tree().paused or not input.in_context(InputLayout.EXPLORE):
+		return
+	try_jump()
+
 func play_item_gesture(pickup: bool = false, icon: Texture2D = null, item_id: String = "") -> void:
 	_pending_item_gesture = &"pick_up" if pickup else &"item_drop"
 	_pending_pickup_icon = icon if pickup else null
@@ -266,7 +355,7 @@ func _flush_item_gesture() -> void:
 	if _pending_item_gesture.is_empty() or is_input_locked() or get_tree().paused:
 		return
 	# Pickups can arrive during a tool hit. Finish that action before showing the gesture.
-	if state_machine.current_state in [tool_controller.action_state, tool_controller.fishing_state, tool_controller.combat_state]:
+	if state_machine.current_state in [tool_controller.action_state, tool_controller.fishing_state, tool_controller.combat_state, tool_controller.jump_state]:
 		return
 	# Saat memegang alat/senjata, pickup tidak memutar gesture (tidak mengunci input) dan
 	# slot hotbar tidak pindah ke item yang diambil, supaya combat tidak terganggu.
@@ -374,17 +463,7 @@ func _try_interact() -> bool:
 					bed._sleep()
 				return true
 	# Entrances remain interactable; interior exit triggers also travel on contact.
-	var nearest_door: Area2D
-	var door_distance := 40.0
-	for candidate in get_tree().get_nodes_in_group("scene_door"):
-		if not candidate is Area2D or candidate.get_world_2d() != get_world_2d():
-			continue
-		var shape := candidate.get_node_or_null("CollisionShape2D") as Node2D
-		var center: Vector2 = shape.global_position if shape != null else candidate.global_position
-		var offset := center - (global_position + FEET_OFFSET)
-		if candidate.overlaps_body(self) or (offset.length() < door_distance and offset.dot(facing_direction) >= -1):
-			nearest_door = candidate
-			door_distance = offset.length()
+	var nearest_door := _nearest_scene_door()
 	if nearest_door != null:
 		nearest_door.interact(self)
 		return true
@@ -402,6 +481,41 @@ func _try_interact() -> bool:
 		return true
 	return false
 
+## Pintu (grup "scene_door") yang disentuh pemain atau berada dalam 40 px di depannya.
+func _nearest_scene_door(require_facing: bool = true) -> Area2D:
+	var nearest_door: Area2D
+	var door_distance := 40.0
+	for candidate in get_tree().get_nodes_in_group("scene_door"):
+		if not candidate is Area2D or candidate.get_world_2d() != get_world_2d():
+			continue
+		var offset := _door_center(candidate) - (global_position + FEET_OFFSET)
+		if candidate.overlaps_body(self) or (offset.length() < door_distance and (not require_facing or offset.dot(facing_direction) >= -1)):
+			nearest_door = candidate
+			door_distance = offset.length()
+	return nearest_door
+
+func _door_center(door: Area2D) -> Vector2:
+	var shape := door.get_node_or_null("CollisionShape2D") as Node2D
+	return shape.global_position if shape != null else door.global_position
+
+## Klik kanan sambil memegang senjata: buka pintu atau interaksi dengan objek di bawah kursor
+## bila dekat pemain. true bila ada yang ditangani.
+func _interact_at(world_pos: Vector2) -> bool:
+	var door := _nearest_scene_door(false)
+	if door != null and _door_center(door).distance_to(world_pos) <= DOOR_CLICK_RADIUS:
+		door.interact(self)
+		return true
+	if world_pos.distance_to(global_position + FEET_OFFSET) > INTERACTION_DISTANCE + 8.0:
+		return false
+	var target := _interactable_at_point(world_pos)
+	if target == null:
+		return false
+	if target is VillageNPC or target is BlacksmithNPC or target.has_meta("player_interaction"):
+		target.interact(self)
+	else:
+		target.interact()
+	return true
+
 func release_carried_animal() -> void:
 	var carried := get_meta("carried_animal") as Node if has_meta("carried_animal") else null
 	if is_instance_valid(carried):
@@ -409,15 +523,16 @@ func release_carried_animal() -> void:
 	set_meta("carried_animal", null)
 
 func _find_interactable() -> Node:
+	var origin := global_position + FEET_OFFSET
+	var direction := facing_direction.normalized()
+	return _interactable_at_point(origin + (direction * INTERACTION_DISTANCE))
+
+func _interactable_at_point(target_position: Vector2) -> Node:
 	var space_state := get_world_2d().direct_space_state
 	if space_state == null:
 		return null
-	
-	var origin := global_position + FEET_OFFSET
-	var direction := facing_direction.normalized()
-	var target_position := origin + (direction * INTERACTION_DISTANCE)
-	var query := PhysicsPointQueryParameters2D.new()		
-	
+	var query := PhysicsPointQueryParameters2D.new()
+
 	query.position = target_position
 	query.collide_with_areas = true
 	query.collide_with_bodies = true
@@ -463,7 +578,7 @@ func get_input_vector() -> Vector2:
 	return input.get_vector()
 
 func update_facing_direction(direction: Vector2, force: bool = false) -> void:
-	if (is_input_locked() or is_aiming()) and not force:
+	if (is_input_locked() or is_aiming() or is_locked_on()) and not force:
 		return
 	if direction == Vector2.ZERO:
 		return
@@ -649,18 +764,34 @@ func _hop_to(destination: Vector2, height: float, visual_destination: Vector2 = 
 func holds_weapon() -> bool:
 	return tool_controller != null and Combat.is_weapon(tool_controller.current_item)
 
-## Klik kanan ditahan sambil memegang senjata (hanya pemain yang memakai mouse).
+## Bidik busur/tongkat ditahan: klik kanan (mouse) atau LT (gamepad, arah dari stik kanan).
 func is_aiming() -> bool:
-	return holds_weapon() and input.uses_mouse() and input.pressed(&"aim") and _input_locks.is_empty() and not is_defeated
+	return holds_weapon() and input.pressed(&"aim") and _input_locks.is_empty() and not is_defeated
 
-## Arah serangan: ke mouse saat membidik, selain itu ke arah hadap.
+## Bidik ke posisi mouse (bukan stik kanan): P1 keyboard yang terakhir memakai keyboard/mouse.
+func _aims_with_mouse() -> bool:
+	return input.uses_mouse() and not input.prefers_pad()
+
+func is_locked_on() -> bool:
+	return lock_on != null and lock_on.has_target()
+
+## Arah serangan: ke mouse / stik kanan saat membidik, ke target lock-on, selain itu arah hadap.
 func aim_vector() -> Vector2:
 	if is_aiming():
-		var mouse: Variant = _mouse_world_position()
-		if mouse != null:
-			var offset: Vector2 = mouse - (global_position + FEET_OFFSET * 0.5)
-			if offset.length() > 2.0:
-				return offset.normalized()
+		if _aims_with_mouse():
+			var mouse: Variant = _mouse_world_position()
+			if mouse != null:
+				var offset: Vector2 = mouse - (global_position + FEET_OFFSET * 0.5)
+				if offset.length() > 2.0:
+					return offset.normalized()
+		else:
+			var stick := input.right_stick()
+			if stick != Vector2.ZERO:
+				return stick.normalized()
+	if is_locked_on():
+		var to_target := lock_on.direction()
+		if to_target != Vector2.ZERO:
+			return to_target
 	return facing_direction
 
 func _update_aim() -> void:
@@ -684,7 +815,7 @@ func _update_aim() -> void:
 			aim_fx.name = "AimFx"
 			add_child(aim_fx)
 		var range_px := weapon_style.projectile_range_tiles * 16.0
-		var mouse: Variant = _mouse_world_position()
+		var mouse: Variant = _mouse_world_position() if _aims_with_mouse() else null
 		var reach := range_px
 		if mouse != null:
 			reach = clampf((mouse as Vector2).distance_to(global_position + FEET_OFFSET * 0.5), 16.0, range_px)
@@ -730,6 +861,9 @@ func take_hit(raw_attack: int, source: Node = null, knockback: Vector2 = Vector2
 	var damage := Combat.damage_after_defense(raw, Combat.player_defense(data)) if raw > 0 else 0
 	if blocked:
 		damage = mini(damage, raw)
+	# Unbreakable Bastion (Combat Lv10 B): damage musuh -20%.
+	if damage > 0 and SkillSystem.has(data, &"damage_reduction"):
+		damage = maxi(1, roundi(damage * (1.0 - SkillSystem.stat(data, &"damage_reduction"))))
 	if damage > 0:
 		data.damage_hp(damage)
 	_invulnerable = HIT_INVULNERABLE * (0.4 if blocked else 1.0)
@@ -748,6 +882,9 @@ func take_hit(raw_attack: int, source: Node = null, knockback: Vector2 = Vector2
 	var poise_hit: float = source.poise_damage_to_player() if source != null and source.has_method("poise_damage_to_player") else raw_attack * 1.5
 	var broken := combat != null and (combat.take_poise(poise_hit * (0.3 if blocked else 1.0)) or (blocked and combat.is_exhausted()))
 	var state := state_machine.current_state
+	# Bastion kebal terhuyung dari serangan musuh biasa (serangan boss tetap bisa).
+	if broken and SkillSystem.has(data, &"stagger_immune") and not source is Boss:
+		broken = false
 	if broken:
 		_stagger()
 	elif not blocked and (state is IdleState or state is MoveState) and _input_locks.is_empty():

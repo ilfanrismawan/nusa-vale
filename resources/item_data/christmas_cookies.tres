@@ -19,4 +19,4 @@ item_id = "christmas_cookies"
 display_name = "Kukis Natal"
 icon = SubResource("Icon")
 description = "Masakan dari dapur. Pilih di hotbar untuk dimakan."
-sell_price = 95
+sell_price = 327

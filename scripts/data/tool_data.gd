@@ -8,7 +8,9 @@ enum ToolType {
 	SHOVEL,
 	WATERING_CAN,
 	SICKLE,
-	FISHING_ROD
+	FISHING_ROD,
+	## Jaring serangga (GDD 7). Hanya boleh menambah di akhir: angkanya tersimpan di .tres.
+	BUG_NET
 }
 
 enum ToolTier {
@@ -30,6 +32,9 @@ enum ToolTier {
 
 @export var tool_type: ToolType
 @export var tier: ToolTier = ToolTier.WOOD
+
+## Jangkauan ayunan jaring serangga per tier (px dari titik ayun), Kayu..Emas.
+const BUG_NET_REACH: Array[float] = [20.0, 28.0, 36.0, 48.0]
 
 @export_category("Stats")
 @export var damage: int = 1
@@ -68,6 +73,8 @@ func ability_text() -> String:
 			text += "\nGali hingga %d petak; peluang +1 hasil %d%%." % [area_size, roundi(dig_bonus_chance * 100)]
 		ToolType.SICKLE:
 			text += "\nPanen massal; tebas rumput radius %d px.\nKekuatan %d." % [12 + 4 * int(tier), damage]
+		ToolType.BUG_NET:
+			text = "Jangkauan ayun %d px | Stamina %d/ayun\nKecepatan %.2fx" % [int(BUG_NET_REACH[mini(int(tier), BUG_NET_REACH.size() - 1)]), stamina_cost, action_speed]
 	return text
 
 @export_category("Upgrade")

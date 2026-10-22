@@ -63,11 +63,13 @@ func _ready() -> void:
 		FarmManager.farm_data[cell] = {"state": "tilled", "crop": null, "watered": false}
 	player.data.watering_water = 3
 	player.data.stamina = 100
+	var water_exp_before := player.data.skills.get_points(&"farmer")
 	action.effect.apply(player, Vector2i.ZERO)
 	var count := 0
 	for cell in cells:
 		if FarmManager.farm_data[cell].watered:
 			count += 1
+	check(player.data.skills.get_points(&"farmer") == water_exp_before + 3, "newly watered tiles award Farmer EXP")
 	check(count == 3 and player.data.watering_water == 0, "partial tank waters exactly available tiles")
 	check(player.data.stamina == 99, "area watering charges stamina once")
 	action.effect.apply(player, Vector2i.ZERO)
@@ -76,6 +78,7 @@ func _ready() -> void:
 	for cell in cells:
 		FarmManager.farm_data[cell].watered = true
 	action.effect.apply(player, Vector2i.ZERO)
+	check(player.data.skills.get_points(&"farmer") == water_exp_before + 3, "rewatering wet tiles cannot farm repeated EXP")
 	check(player.data.stamina == 98 and player.data.watering_water == 25, "pouring on wet soil charges once and uses water per tile")
 	player.data.stamina = 99
 	player.tool_controller.action_state.start(GameState._resolve_item("shovel_iron").action_data, Vector2i.ZERO)
@@ -112,8 +115,8 @@ func _ready() -> void:
 	GameState.money = 1000
 	player.data.add_item_silent("copper_bar", 5)
 	player.data.add_item_silent("wood", 10)
-	check(ToolUpgradeManager.upgrade_tool("axe_wood") and not player.data.has_item("axe_copper") and not player.data.has_item("axe_wood") and GameState.money == 500, "upgrade holds tool and charges materials/money")
-	check(not ToolUpgradeManager.upgrade_tool("hoe_wood") and GameState.money == 500, "one order per player, no repeated charges")
+	check(ToolUpgradeManager.upgrade_tool("axe_wood") and not player.data.has_item("axe_copper") and not player.data.has_item("axe_wood") and GameState.money == 650, "upgrade holds tool and charges materials/money")
+	check(not ToolUpgradeManager.upgrade_tool("hoe_wood") and GameState.money == 650, "one order per player, no repeated charges")
 	check(not ToolUpgradeManager.collect_tool(player.data), "tool cannot be collected immediately")
 	player.data.watering_water = 47
 	check(SaveManager.save_game(), "tool state saves")

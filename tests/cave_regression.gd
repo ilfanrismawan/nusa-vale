@@ -5,6 +5,8 @@ extends Node2D
 ## Tidak menulis save ke disk.
 
 const CAVE_SCENE := "res://scenes/world/cave/cave.tscn"
+const GeodeDataScript = preload("res://scripts/data/geode_data.gd")
+const GeodeCrack = preload("res://scripts/ui/geode_crack_dialog.gd")
 
 var failures := 0
 
@@ -36,7 +38,7 @@ func _ready() -> void:
 
 func _test_data() -> void:
 	var data := CaveManager.DATA
-	check(data.max_floor == 20 and data.lift_interval == 5, "cave MVP: floors 1-20, lift every 5 floors")
+	check(data.max_floor == 100 and data.lift_interval == 5, "cave: floors 1-100, lift every 5 floors")
 	var first := data.band_for(1)
 	check(first != null and first.ore_ids.has("stone") and first.ore_ids.has("coal") and first.ore_ids.has("copper_ore"), "floors 1-20 hold stone, coal, copper (GDD 9)")
 	check(not data.band_for(15).ore_ids.has("iron_ore") and data.band_for(30).ore_ids.has("iron_ore"), "iron starts at floor 21")
@@ -51,7 +53,44 @@ func _test_data() -> void:
 	var seen := {}
 	for i in 200:
 		seen[first.pick_ore(rng)] = true
-	check(seen.size() == 3, "weighted pick returns every ore of the band")
+	check(seen.size() == first.ore_ids.size(), "weighted pick returns every ore of the band")
+	var own_files := true
+	var gem_bands := 0
+	for ore in data.ores:
+		own_files = own_files and ore.resource_path.begins_with("res://resources/cave/ores/")
+	for band in data.bands:
+		var has_gem := false
+		for ore_id in band.ore_ids:
+			check(data.ore(ore_id) != null, "band %d-%d ore has data: %s" % [band.first_floor, band.last_floor, ore_id])
+			if data.ore(ore_id) != null and data.ore(ore_id).is_gem:
+				has_gem = true
+		gem_bands += 1 if has_gem else 0
+	check(own_files, "every ore and gem has its own .tres in resources/cave/ores")
+	check(gem_bands == data.bands.size(), "every cave tier has its own gems")
+	check(data.band_for(3).ore_ids.has("quartz") and data.band_for(90).ore_ids.has("fairy_crystal") and not data.band_for(3).ore_ids.has("ruby"), "gems follow the floor tier")
+	check(data.ore("copper_ore").sprite != null and data.ore("ruby").sprite != null, "ores and gems have their own cave sprite")
+	_test_geodes()
+
+func _test_geodes() -> void:
+	var data := CaveManager.DATA
+	var geodes := GeodeDataScript.all()
+	check(geodes.size() == 4, "four geode types have their own data")
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 11
+	for geode in geodes:
+		var all_items: bool = GameState._resolve_item(geode.item_id) != null and geode.crack_price > 0
+		for id in geode.result_ids:
+			all_items = all_items and GameState._resolve_item(id) != null
+		var result: Dictionary = geode.roll(rng)
+		check(all_items and geode.result_ids.has(result.item_id) and result.amount >= 1, "geode %s: item, price and contents exist" % geode.item_id)
+	for id in ["clay", "earth_crystal", "frozen_tear", "fire_quartz", "prismatic_shard"]:
+		check(GameState._resolve_item(id) != null, "new mining item exists: %s" % id)
+	var geode_bands := 0
+	for band in data.bands:
+		geode_bands += 1 if not band.geode_ids.is_empty() and band.geode_ids.size() == band.geode_chances.size() else 0
+	check(geode_bands == data.bands.size(), "every cave tier drops geodes")
+	check(data.band_for(3).roll_geode(0.0) == "geode" and data.band_for(50).roll_geode(0.0) == "frozen_geode" and data.band_for(90).roll_geode(0.0) == "magma_geode" and data.band_for(3).roll_geode(0.99).is_empty(), "geode type follows the floor tier")
+	check(data.ore("stone").bonus_item_ids.has("clay"), "stone rocks can drop clay")
 
 func _test_progress() -> void:
 	var cave := GameState.cave
@@ -91,7 +130,7 @@ func _test_save() -> void:
 	bad["cave"] = "rusak"
 	check(not SaveManager._is_valid_save(bad), "broken cave data is rejected")
 	cave.load_save({"deepest_lift": 12, "deepest_floor": 99})
-	check(cave.deepest_lift == 10 and cave.deepest_floor == 20, "loaded lift snaps to a checkpoint and clamps to the max floor")
+	check(cave.deepest_lift == 10 and cave.deepest_floor == 99, "loaded lift snaps to a checkpoint and clamps to the max floor")
 	var old := saved.duplicate(true)
 	old.erase("cave")
 	SaveManager._apply_save(old)
@@ -105,12 +144,25 @@ func _test_scene() -> void:
 	await get_tree().process_frame
 	var content := cave.get_node("FloorContent")
 	var player := cave.get_node("Player/CharacterBody2D") as Player
-	check(cave.floor_number == 0 and content.has_node("CombatShop") and content.has_node("ExitDoor") and content.has_node("Lift") and content.has_node("StairsDown"), "lobby: shop, exit, lift and a hole to floor 1")
+	var lobby := cave.get_node_or_null("Lobby")
+	check(cave.floor_number == 0 and lobby != null and lobby.has_node("CombatShop") and lobby.has_node("ExitDoor") and lobby.has_node("Lift") and lobby.has_node("StairsDown"), "lobby (scene nodes): shop, exit, lift and a hole to floor 1")
+	check(lobby.get_node("ExitDoor").is_in_group("scene_door") and lobby.get_node("CombatShop").get("shop_data") != null, "lobby exit can be used up close; shop has its stock")
+	check(cave.floor_badge_info().floor == "Lobi Gua", "floor badge shows the lobby")
+	var pickup := ItemPickup.spawn(cave, Vector2(328, 120), "stone", 1)
 	check(_count(content, "enemies") == 0 and _rocks(content).is_empty(), "lobby has no rocks or monsters")
 	check(cave.has_node("BaseLayerGround") and (cave.get_node("BaseLayerGround") as TileMapLayer).get_used_cells().size() == 40 * 24, "cave ground covers the room")
 
 	cave.build_floor(1)
 	await get_tree().process_frame
+	check(not is_instance_valid(pickup) or pickup.is_queued_for_deletion(), "items dropped on the old floor are cleared")
+	check(not cave.has_node("Lobby"), "lobby objects are gone below the lobby")
+	var info: Dictionary = cave.floor_badge_info()
+	check(info.floor == "Lantai 1" and info.band == "Gua Batu" and info.icon != null, "floor badge: floor number, tier name and icon")
+	var tiers := {}
+	for band_entry in CaveManager.DATA.bands:
+		tiers[band_entry.display_name] = band_entry.icon
+	check(tiers.size() == CaveManager.DATA.bands.size() and not tiers.values().has(null), "every tier has its own name and icon")
+	check(CaveManager.DATA.band_for(6).tint != CaveManager.DATA.band_for(1).tint and (cave.get_node("BaseLayerGround") as CanvasItem).modulate == CaveManager.DATA.band_for(1).tint, "tiers tint the cave differently")
 	var band := CaveManager.DATA.band_for(1)
 	var rocks := _rocks(content)
 	check(rocks.size() >= band.rock_min and rocks.size() <= band.rock_max, "floor 1 rock count follows the band (%d)" % rocks.size())
@@ -166,6 +218,12 @@ func _test_scene() -> void:
 	var wood_pick := load("res://resources/item_data/pickaxe_wood.tres")
 	check(copper.required_tool_tier() == ToolData.ToolTier.WOOD and iron.required_tool_tier() == ToolData.ToolTier.COPPER, "cave ore tool tiers")
 	check(copper.drop_item_id == "copper_ore" and iron.drop_item_id == "iron_ore" and wood_pick != null, "ore rocks drop their ore")
+	var gem: Choppable = cave._spawn_rock("amethyst", Vector2i(6, 20))
+	var gem_sprite := gem.get_node("AnimatedSprite2D") as AnimatedSprite2D
+	check(gem.drop_item_id == "amethyst" and gem_sprite.sprite_frames.get_frame_texture(&"idle", 0) == CaveManager.DATA.ore("amethyst").sprite, "gem crystals spawn with their own sprite and drop the gem")
+	var bonus: PackedStringArray = cave.rock_bonus_drops("stone", 0.0, [0.0])
+	check(bonus.has("geode") and bonus.has("clay") and cave.rock_bonus_drops("stone", 0.99, [0.99]).is_empty(), "broken rocks can drop geodes and clay")
+	await _test_geode_crack(player)
 
 	# Lantai checkpoint membuka lift.
 	cave.build_floor(5)
@@ -180,14 +238,14 @@ func _test_scene() -> void:
 	menu.close_menu()
 
 	# Lantai terdalam: tangga tidak muncul (boss sudah kalah = lantai tambang biasa; arena dites di boss_regression).
-	GameState.cave.mark_boss_defeated(20)
-	cave.build_floor(20)
+	GameState.cave.mark_boss_defeated(100)
+	cave.build_floor(100)
 	await get_tree().process_frame
 	for enemy in get_tree().get_nodes_in_group("enemies"):
 		if cave.is_ancestor_of(enemy):
 			enemy.take_hit(9999, player)
 	await _frames(40)
-	check(cave.stairs == null, "floor 20 has no stairs down")
+	check(cave.stairs == null, "floor 100 has no stairs down")
 
 	# Pindah lantai lewat tangga: pemain dipindah ke titik tiba.
 	player.get_parent().global_position = Vector2(100, 300)
@@ -197,6 +255,22 @@ func _test_scene() -> void:
 	await cave.go_to_floor(0)
 	check(cave.floor_number == 0 and GameState.cave.current_floor == 0, "lift/ladder returns to the lobby")
 	cave.queue_free()
+	await get_tree().process_frame
+
+func _test_geode_crack(player: Player) -> void:
+	GameState.use_player(player)
+	GameState.add_item("geode", 2)
+	GameState.add_money(100)
+	check(GeodeCrack.has_geodes(player), "blacksmith sees geodes in the bag")
+	var money := GameState.money
+	var stone_before := GameState.get_item_count("geode")
+	var dialog = GeodeCrack.open(player, "Empu Bima")
+	await get_tree().process_frame
+	var result: Dictionary = dialog.crack("geode")
+	GameState.use_player(player)
+	check(not result.is_empty() and GameState.get_item_count("geode") == stone_before - 1 and GameState.money == money - 25, "cracking a geode costs 25 G and uses one geode")
+	check(GameState.get_item_count(result.item_id) >= result.amount, "geode contents go into the bag")
+	dialog._finish()
 	await get_tree().process_frame
 
 func _rocks(content: Node) -> Array[Choppable]:

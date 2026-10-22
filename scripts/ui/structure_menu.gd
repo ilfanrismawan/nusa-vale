@@ -75,7 +75,7 @@ func _process(_delta: float) -> void:
 	if _progress_label == null:
 		return
 	var record := StructureManager.record_for(uid)
-	_progress_label.visible = not record.is_empty() and not record.job.is_empty()
+	_progress_label.visible = not record.is_empty() and record.job.has("seconds")
 	if _progress_label.visible:
 		_progress_label.text = "Sisa %.1f detik aktif%s" % [maxf(0, float(record.job.seconds)), " · Dijeda" if get_tree().paused or not DayCycle.is_running else ""]
 
@@ -98,18 +98,31 @@ func _refresh() -> void:
 		_content.remove_child(child)
 		child.queue_free()
 	match record.item:
-		"mayonnaise_maker", "cheese_press", "loom":
+		"mayonnaise_maker", "cheese_press", "loom", "keg", "oil_maker", "fish_smoker":
 			if not record.job.is_empty():
 				_label(_content, "Sedang mengolah. Hasil siap setelah 20 detik permainan aktif.")
 			elif not record.ready.is_empty():
 				_content.add_child(_button("Ambil " + GameState._resolve_item(record.ready.id).display_name, _collect))
 			else:
 				var options := StructureManager.artisan_options(player.data, str(record.item))
-				_label(_content, "Pilih hasil ternak dari tas:" if not options.is_empty() else "Bawa telur, susu, atau wol yang sesuai untuk mesin ini.")
+				var prompt := "Pilih bahan olahan dari tas:"
+				match str(record.item):
+					"keg": prompt = "Pilih gandum, madu, buah, atau sayur dari tas:"
+					"oil_maker": prompt = "Pilih jagung, bunga matahari, bawang, atau truffle dari tas:"
+					"fish_smoker": prompt = "Pilih ikan mentah dari tas untuk diasap:"
+					_: prompt = "Pilih hasil ternak dari tas:"
+				_label(_content, prompt if not options.is_empty() else "Bahan yang sesuai tidak ditemukan di tasmu.")
 				for id in options:
 					var output := StructureManager.artisan_output(str(record.item), id)
 					_content.add_child(_button("%s → %s" % [GameState._resolve_item(id).display_name, GameState._resolve_item(output).display_name], _artisan.bind(id)))
-			_status.text = "Satu bahan menjadi satu olahan; ukuran dan kualitas dipertahankan."
+			_status.text = "Satu bahan menjadi satu olahan; kualitas bahan dipertahankan."
+		"lightning_rod":
+			if not record.ready.is_empty():
+				_content.add_child(_button("Ambil " + GameState._resolve_item(record.ready.id).display_name, _collect))
+				_status.text = "Battery Pack terkumpul dari sambaran petir badai!"
+			else:
+				_label(_content, "Penangkal petir siap menyerap energi sambaran Badai Petir.")
+				_status.text = "Hasilkan Battery Pack keesokan paginya jika terjadi Badai Petir."
 		"silo":
 			_label(_content, "Cadangan jerami: %d/240" % int(record.get("hay", 0)))
 			_content.add_child(_button("Simpan 10 jerami dari tas", _hay.bind(true)))
@@ -118,7 +131,7 @@ func _refresh() -> void:
 		"pasture_grass":
 			_label(_content, "Rumput siap dimakan" if int(record.get("regrow_day", 0)) <= DayCycle.current_day else "Tumbuh kembali pada hari %d" % int(record.regrow_day))
 			_status.text = "Buka pintu kandang saat cerah. Satu petak untuk satu hewan; tumbuh kembali 2 hari."
-		"wooden_chest", "copper_chest", "iron_chest", "gold_chest":
+		"wooden_chest", "copper_chest", "iron_chest", "gold_chest", "platinum_chest", "crimson_chest", "frost_chest", "shadow_chest", "fairy_chest", "obsidian_chest":
 			var columns := HBoxContainer.new()
 			columns.add_theme_constant_override("separation", 14)
 			_content.add_child(columns)
@@ -158,7 +171,7 @@ func _refresh() -> void:
 				upgrade.tooltip_text = "Bahan diambil dari tas Anda. Isi dan posisi peti tetap tersimpan."
 				_content.add_child(upgrade)
 			else:
-				_label(_content, "Tier tertinggi · 60 slot")
+				_label(_content, "Tier tertinggi · %d slot" % chest.bag_size)
 			_status.text = "Klik item untuk memindahkan satu tumpukan. Peti dipakai bersama."
 		"furnace":
 			if not record.job.is_empty():
@@ -205,6 +218,51 @@ func _refresh() -> void:
 					button.disabled = not player.data.has_item(recipe.input_item_id, recipe.input_amount)
 					_content.add_child(button)
 			_status.text = "Hasil pengeringan bernilai jual tinggi. Proses tersimpan saat save."
+		"sawmill":
+			if not record.job.is_empty():
+				_label(_content, "Sedang menggergaji. Hasil tetap tersimpan sampai diambil.")
+			elif not record.ready.is_empty():
+				var item := GameState._resolve_item(record.ready.id)
+				_content.add_child(_button("Ambil %s x%d" % [item.display_name, record.ready.count], _collect))
+			else:
+				_label(_content, "Pilih kayu dari tas untuk digergaji:")
+				for recipe in StructureManager.sawmill_recipes():
+					var input := GameState._resolve_item(recipe.input_item_id)
+					var output := GameState._resolve_item(recipe.output_item_id)
+					var button := _button("%s x%d → %s x%d" % [input.display_name, recipe.input_amount, output.display_name, recipe.output_amount], _saw.bind(recipe))
+					button.disabled = not player.data.has_item(recipe.input_item_id, recipe.input_amount)
+					_content.add_child(button)
+			_status.text = "Papan Kayu dipakai untuk dekorasi dan mesin. Proses tersimpan saat save."
+		"beehive":
+			if not record.ready.is_empty():
+				var item := GameState._resolve_item(record.ready.id)
+				var text := "Ambil %s x%d" % [item.display_name, record.ready.count]
+				if record.ready.get("extra") is Dictionary:
+					text += " + %s x%d" % [GameState._resolve_item(record.ready.extra.id).display_name, record.ready.extra.count]
+				_content.add_child(_button(text, _collect))
+			elif DayCycle.get_current_season() == "winter":
+				_label(_content, "Lebah beristirahat selama Musim Dingin.")
+			else:
+				var days := maxi(1, int(record.job.get("day", DayCycle.current_day + StructureManager.BEEHIVE_DAYS)) - DayCycle.current_day)
+				_label(_content, "Madu siap dalam %d hari." % days)
+			_status.text = "Menghasilkan 1 Madu dan 1 Lilin Lebah setiap 3 hari, kecuali Musim Dingin."
+		"alchemy_table", "anvil":
+			var catalog := StructureManager.station_catalog(str(record.item))
+			_label(_content, "Pilih yang ingin dibuat. Bahan diambil dari tas:")
+			for recipe in catalog.recipes:
+				var output := GameState._resolve_item(recipe.output_item_id)
+				var costs: PackedStringArray = []
+				for id in recipe.ingredients:
+					costs.append("%s x%d" % [GameState._resolve_item(id).display_name, recipe.ingredients[id]])
+				var button := _button("%s  ←  %s" % [output.display_name, ", ".join(costs)], _station_craft.bind(recipe))
+				button.icon = output.icon
+				button.expand_icon = true
+				button.add_theme_constant_override("icon_max_width", 18)
+				button.clip_text = true
+				button.tooltip_text = output.description
+				button.disabled = not CraftingSystem.preview(player.data, recipe)["ok"]
+				_content.add_child(button)
+			_status.text = "Ramuan dimakan dari hotbar." if record.item == "alchemy_table" else "Cincin dan kalung dipasang di menu Equipment."
 		"wooden_gate":
 			_content.add_child(_button("Tutup gerbang" if record.open else "Buka gerbang", _toggle))
 			_status.text = "Gerbang terbuka bisa dilewati pemain."
@@ -215,7 +273,10 @@ func _refresh() -> void:
 			_content.add_child(_button("Buka Crafting", _open_crafting))
 			_status.text = "Meja kerja untuk membuat perlengkapan dan bangunan."
 		_:
-			_label(_content, "Pagar pembatas farm. Kemas kembali jika ingin memindahkannya.")
+			if record.item in StructureManager.DECOR:
+				_label(_content, "Hiasan farm. Kemas kembali jika ingin memindahkannya.")
+			else:
+				_label(_content, "Pagar pembatas farm. Kemas kembali jika ingin memindahkannya.")
 			_status.text = "Bangunan dikembalikan utuh tanpa biaya bahan tambahan."
 
 func _transfer(slot: int, deposit: bool) -> void:
@@ -245,6 +306,16 @@ func _preserve(recipe: PreservesJarRecipe) -> void:
 
 func _dehydrate(recipe: DehydratorRecipe) -> void:
 	var result := StructureManager.dehydrate(player.data, uid, recipe)
+	_refresh()
+	_status.text = result.message
+
+func _saw(recipe: FurnaceRecipe) -> void:
+	var result := StructureManager.saw(player.data, uid, recipe)
+	_refresh()
+	_status.text = result.message
+
+func _station_craft(recipe: CraftingRecipe) -> void:
+	var result := CraftingSystem.craft(player.data, recipe)
 	_refresh()
 	_status.text = result.message
 

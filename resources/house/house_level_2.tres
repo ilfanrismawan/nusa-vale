@@ -4,11 +4,11 @@
 [resource]
 script = ExtResource("script")
 display_name = "Spacious Bedroom"
-description = "Upgrade rumah tingkat 2. Kamar tidur diperluas dengan kasur besar: stamina maksimum semua penghuni +20."
+description = "Upgrade rumah tingkat 2. Kamar tidur diperluas dengan kasur besar: stamina maksimum semua penghuni +30."
 icon = ExtResource("icon")
-price = 15000
-materials = Dictionary[String, int]({"wood": 300, "stone": 150, "iron_bar": 10})
+price = 12000
+materials = Dictionary[String, int]({"wood": 250, "stone": 120, "iron_bar": 8})
 build_days = 3
 grants_flags = PackedStringArray("house_bedroom_upgraded")
-stamina_bonus = 20
-completed_message = "Kamar tidur baru selesai! Stamina maksimum semua penghuni +20."
+stamina_bonus = 30
+completed_message = "Kamar tidur baru selesai! Stamina maksimum semua penghuni +30."

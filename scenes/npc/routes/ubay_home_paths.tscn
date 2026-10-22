@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://h542q43hm4i2"]
+
+[ext_resource type="Script" uid="uid://x7ve63nhf2fe" path="res://scripts/npc/npc_route_point.gd" id="gateway"]
+[ext_resource type="Script" uid="uid://gb3t2h50ggc1" path="res://scripts/npc/npc_route_network.gd" id="network"]
+[ext_resource type="Script" uid="uid://j5qcghubydo6" path="res://scripts/npc/npc_walk_path.gd" id="path"]
+
+[sub_resource type="Curve2D" id="ubay_0"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 240, 300, 0, 0, 0, 0, 240, 256, 0, 0, 0, 0, 272, 224, 0, 0, 0, 0, 272, 160)
+}
+point_count = 4
+
+[node name="NPCPaths" type="Node2D" unique_id=889515071]
+script = ExtResource("network")
+
+[node name="door" type="Marker2D" parent="." unique_id=1598079362]
+position = Vector2(240, 300)
+script = ExtResource("gateway")
+destination_maps = PackedStringArray("town")
+default_gateway = true
+
+[node name="Ubay_door_to_home" type="Path2D" parent="." unique_id=634666557]
+curve = SubResource("ubay_0")
+script = ExtResource("path")
+npc_id = &"ubay"

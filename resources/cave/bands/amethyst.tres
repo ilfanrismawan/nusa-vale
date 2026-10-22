@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="CaveBand" format=3]
+
+[ext_resource type="Script" uid="uid://b83ix8aqgilpf" path="res://scripts/data/cave_band.gd" id="3_band"]
+[ext_resource type="Script" uid="uid://cdshrao3ldkws" path="res://scripts/data/enemy_data.gd" id="4_enemy"]
+[ext_resource type="Resource" uid="uid://d0okra48wwdbj" path="res://resources/enemies/myconid_red.tres" id="myconid_red"]
+[ext_resource type="Resource" uid="uid://db3agp1lgviiw" path="res://resources/enemies/slime_blue.tres" id="slime_blue"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_amethyst.tres" id="band_icon_amethyst"]
+
+[ext_resource type="PackedScene" path="res://scenes/world/cave/layouts/branching.tscn" id="dungeon_branching"]
+[ext_resource type="PackedScene" path="res://scenes/world/cave/layouts/ring.tscn" id="dungeon_ring"]
+[ext_resource type="PackedScene" path="res://scenes/world/cave/layouts/chambers.tscn" id="dungeon_chambers"]
+
+[resource]
+script = ExtResource("3_band")
+display_name = "Gua Ametis"
+icon = ExtResource("band_icon_amethyst")
+accent = Color(0.82, 0.55, 0.95, 1)
+tint = Color(0.94, 0.86, 1, 1)
+ore_ids = PackedStringArray("stone", "coal", "copper_ore", "topaz", "amethyst", "earth_crystal")
+geode_ids = PackedStringArray("geode")
+geode_chances = PackedFloat32Array(0.06)
+ore_weights = PackedFloat32Array(5.0, 2.0, 3.0, 0.4, 0.4, 0.3)
+first_floor = 11
+rock_min = 20
+rock_max = 28
+enemies = Array[ExtResource("4_enemy")]([ExtResource("slime_blue"), ExtResource("myconid_red")])
+enemy_min = 3
+enemy_max = 5
+
+dungeon_scenes = Array[PackedScene]([ExtResource("dungeon_branching"), ExtResource("dungeon_ring"), ExtResource("dungeon_chambers")])

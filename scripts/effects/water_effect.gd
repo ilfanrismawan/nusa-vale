@@ -34,9 +34,13 @@ func apply(player: Player, cell: Vector2i) -> void:
 			break
 		# Pouring on tilled soil still uses water/effort when already wet (rain included).
 		if FarmManager.can_water(target):
-			FarmManager.water(target)
+			var newly_watered := FarmManager.water(target)
 			worked = true
-			if tool != null:
+			# Rewatering still consumes effort/water, but cannot farm repeated EXP.
+			if newly_watered:
+				SkillSystem.gain(player.data, &"farmer", SkillSystem.RULES.water_exp)
+			# Siraman Hemat (Farmer Lv6-7): kadang tidak memakai air.
+			if tool != null and not SkillSystem.roll(player.data, &"water_save"):
 				player.data.watering_water -= 1
 			Juice.play(&"water", Juice.cell_center(player, target))
 	if worked:

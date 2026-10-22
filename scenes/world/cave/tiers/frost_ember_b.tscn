@@ -1,0 +1,49 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://scripts/world/cave_floor_layout.gd" id="layout"]
+
+[ext_resource type="Texture2D" path="res://resources/icons/icon_sapphire.tres" id="a"]
+
+[ext_resource type="Texture2D" path="res://resources/icons/icon_fire_quartz.tres" id="b"]
+
+[sub_resource type="RectangleShape2D" id="shape0"]
+resource_local_to_scene = true
+size = Vector2(28, 12)
+[sub_resource type="RectangleShape2D" id="shape1"]
+resource_local_to_scene = true
+size = Vector2(28, 12)
+[sub_resource type="RectangleShape2D" id="shape2"]
+resource_local_to_scene = true
+size = Vector2(28, 12)
+[node name="TierLayout" type="Node2D"]
+script = ExtResource("layout")
+y_sort_enabled = true
+
+[node name="CrystalOutcrop1" type="StaticBody2D" parent="."]
+position = Vector2(216, 184)
+[node name="Sprite2D" type="Sprite2D" parent="CrystalOutcrop1"]
+texture_filter = 1
+texture = ExtResource("a")
+position = Vector2(0, -8)
+scale = Vector2(1.5, 1.5)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CrystalOutcrop1"]
+shape = SubResource("shape0")
+
+[node name="CrystalOutcrop2" type="StaticBody2D" parent="."]
+position = Vector2(440, 312)
+[node name="Sprite2D" type="Sprite2D" parent="CrystalOutcrop2"]
+texture_filter = 1
+texture = ExtResource("b")
+position = Vector2(0, -8)
+scale = Vector2(1.5, 1.5)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CrystalOutcrop2"]
+shape = SubResource("shape1")
+
+[node name="CrystalOutcrop3" type="StaticBody2D" parent="."]
+position = Vector2(104, 280)
+[node name="Sprite2D" type="Sprite2D" parent="CrystalOutcrop3"]
+texture_filter = 1
+texture = ExtResource("a")
+position = Vector2(0, -8)
+scale = Vector2(1.5, 1.5)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CrystalOutcrop3"]
+shape = SubResource("shape2")

@@ -13,7 +13,10 @@ const SEASON_NAMES: Array[String] = ["Musim Semi", "Musim Panas", "Musim Gugur",
 ## Dipakai ringkasan slot bila save belum punya nama pemain (save versi 6 ke bawah).
 const DEFAULT_PLAYER_NAME := "Petani"
 
-const SAVE_VERSION := 17
+## v20: slot kalung/cincin/aksesori + mesin baru (sarang lebah, penggergajian); save lama otomatis kosong.
+## v22: Role & EXP per pemain ("skills" di blok player dan tiap karakter co-op); save lama = Lv0.
+## v25: permanent friendship locks and per-character household/social reward letters.
+const SAVE_VERSION := 25
 
 signal game_saved
 signal game_loaded
@@ -251,7 +254,11 @@ func _valid_inventory(entries: Variant) -> bool:
 func _valid_player(player: Variant) -> bool:
 	if not player is Dictionary or not _valid_numbers(player, ["money", "stamina", "bag_level"]):
 		return false
-	if not player.get("name", "") is String:
+	if not player.get("name", "") is String or not player.get("id", "") is String:
+		return false
+	if not NPCSocialService.valid_save(player.get("friendships", {})):
+		return false
+	if not PlayerData.valid_social_progress(player.get("npc_progress", {})):
 		return false
 	if not player.get("birthday_season", "") is String or not _valid_numbers(player, ["birthday_day"]):
 		return false
@@ -284,6 +291,8 @@ func _is_valid_save(data: Dictionary) -> bool:
 	if not CaveManager.valid_save(data.get("cave", {})):
 		return false
 	if not HouseManager.valid_save(data.get("house", {})):
+		return false
+	if not GameState.gathering.valid_save(data.get("gathering", {})):
 		return false
 	if version < 1 or version > SAVE_VERSION:
 		return false
@@ -361,8 +370,11 @@ func _build_save_data() -> Dictionary:
 			"watering_water": GameState.p1().watering_water,
 			"tool_order": GameState.p1().tool_order.duplicate(true),
 			"learned_recipes": GameState.p1().learned_recipes.duplicate(),
+			"friendships": GameState.p1().friendships.duplicate(true),
+			"npc_progress": GameState.p1().social_progress(),
 			"appearance": GameState.p1().appearance.to_dict(),
 			"equipment": GameState.p1().serialize_equipment(),
+			"skills": GameState.p1().skills.to_dict(),
 		},
 
 		"inventory": _serialize_inventory(),
@@ -391,6 +403,8 @@ func _build_save_data() -> Dictionary:
 		"cave": GameState.cave.to_save(),
 		# Versi 17: tingkat rumah + pesanan upgrade di Wira (GDD 4.12).
 		"house": GameState.house.to_save(),
+		# Versi 18: tapper di pohon (GDD 7, 4A-3).
+		"gathering": GameState.gathering.to_save(),
 
 		"coop_players": _serialize_coop_players(),
 	}
@@ -422,28 +436,42 @@ func _apply_save(data: Dictionary) -> void:
 	_load_coop_players(data)
 	GameState.daya.load_save(data.get("daya", {}))
 	GameState.cave.load_save(data.get("cave", {}))
+	GameState.gathering.load_save(data.get("gathering", {}))
 	if GameState.weather.is_raining():
 		FarmManager.apply_rain()
 
-## Versi 6: tas/stamina/penampilan P2-P4 dari co-op lokal (uang tetap satu, milik bersama).
+## Versi 6: tas/stamina/penampilan pemain co-op (uang tetap satu, milik bersama).
+## Versi 21: daftar semua karakter co-op save ini (bukan hanya yang sedang main), tiap entri punya "id".
 func _serialize_coop_players() -> Array:
 	var result: Array = []
-	for i in range(1, GameState.players.size()):
-		result.append(GameState.players[i].to_dict())
+	for player in GameState.coop_roster:
+		result.append(player.to_dict())
 	return result
 
-## Save lama tanpa key ini: belum ada pemain co-op; mereka dibuat dengan alat awal saat bergabung.
+## Save lama tanpa key ini: belum ada karakter co-op. Save v6-v20: P2-P4 lama menjadi karakter
+## co-op pertama di daftar (id dibuat baru). Setelah dimuat game selalu mulai sendiri (P1);
+## pemain lain bergabung lagi dan memilih karakternya.
 func _load_coop_players(data: Dictionary) -> void:
 	var entries: Variant = data.get("coop_players", [])
 	if not entries is Array:
 		entries = []
-	var player_count := mini(entries.size(), GameState.MAX_PLAYERS - 1)
-	for i in player_count:
-		var entry: Variant = entries[i]
-		var player := GameState.ensure_player(i + 1)
-		if entry is Dictionary:
-			player.load_dict(entry)
-	GameState.players.resize(player_count + 1)
+	GameState.players.resize(1)
+	GameState.coop_roster.clear()
+	var ids := {}
+	for entry in entries:
+		if GameState.coop_roster.size() >= GameState.MAX_COOP_CHARACTERS:
+			break
+		if not entry is Dictionary:
+			continue
+		var player := PlayerData.new(1)
+		player.reset_to_starter()
+		player.load_dict(entry)
+		if player.character_id.is_empty() or ids.has(player.character_id):
+			player.character_id = GameState._new_character_id()
+		if player.player_name.strip_edges().is_empty():
+			player.player_name = "Pemain %d" % (GameState.coop_roster.size() + 2)
+		ids[player.character_id] = true
+		GameState.coop_roster.append(player)
 	GameState.use_player(GameState.p1())
 	GameState.inventory_changed.emit()
 
@@ -512,10 +540,14 @@ func _load_player(data: Variant) -> void:
 	
 	GameState.p1().load_daya(player_data.get("consumed_daya", []))
 	GameState.p1().load_recipes(player_data.get("learned_recipes", []))
+	GameState.p1().load_friendships(player_data.get("friendships", {}))
+	GameState.p1().load_social_progress(player_data.get("npc_progress", {}))
 	GameState.stamina = clampi(
 		int(player_data.get("stamina",GameState.MAX_STAMINA)), 0, GameState.p1().max_stamina
 	)
 	
+	# Versi 22: Role & EXP. Dimuat sebelum HP karena perk Combat menambah HP maks.
+	GameState.p1().skills.load_dict(player_data.get("skills", {}))
 	# Versi 14: HP per pemain. Save lama tanpa key ini = HP penuh.
 	GameState.p1().hp = clampi(int(player_data.get("hp", PlayerData.MAX_HP)), 1, GameState.p1().max_hp)
 

@@ -1,8 +1,8 @@
 ## DebugManager — Autoload khusus untuk testing/cheat
 ## 
-## Otomatis nonaktif pada release build.
+## Hanya aktif saat dijalankan melalui editor; dikecualikan dari semua export.
 ## CARA DISABLE SAAT DEBUG:
-##   Hapus baris "DebugManager=..." dari [autoload] di project.godot
+##   Hapus baris "DebugBootstrap=..." dari [autoload] di project.godot
 ##   ATAU beri tanda komentar # di depannya.
 ##   Tidak ada kode lain yang bergantung pada autoload ini.
 ##
@@ -25,6 +25,8 @@
 extends CanvasLayer
 
 ## ── Konfigurasi ──────────────────────────────────────────────────────────────
+const SkillDebugPanel = preload("res://development/skill_debug_panel.gd")
+const TestingActions = preload("res://development/testing_actions.gd")
 const ENABLED := true   # Ganti ke false untuk matikan semua tanpa hapus kode
 
 var _panel: PanelContainer
@@ -34,7 +36,7 @@ var _equipment_tier: int = 0
 
 ## ── Lifecycle ─────────────────────────────────────────────────────────────────
 func _ready() -> void:
-	if not ENABLED or not OS.is_debug_build():
+	if not ENABLED or (not OS.is_debug_build() or not OS.has_feature("editor")):
 		set_process(false)
 		set_process_unhandled_input(false)
 		return
@@ -47,7 +49,7 @@ func _ready() -> void:
 	print("[DEBUG] DebugManager aktif. Tekan F1 untuk panel cheat.")
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not ENABLED or not OS.is_debug_build():
+	if not ENABLED or (not OS.is_debug_build() or not OS.has_feature("editor")):
 		return
 	if not event is InputEventKey or not event.pressed or event.is_echo():
 		return
@@ -98,7 +100,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 ## ── Process Hooks ─────────────────────────────────────────────────────────────
 func _process(_delta: float) -> void:
-	if not ENABLED or not OS.is_debug_build():
+	if not ENABLED or (not OS.is_debug_build() or not OS.has_feature("editor")):
 		return
 
 	# God Mode: stamina selalu penuh
@@ -220,6 +222,28 @@ func _build_panel() -> void:
 	_add_cheat_row(box, "", "Spawn Semua Bar Batangan ×5", _cheat_add_bars)
 	_add_cheat_row(box, "Ins", "Bahan Jembatan (+20 Wood, +10 Stone)", _cheat_add_bridge_materials)
 	_add_cheat_row(box, "", "Buka Semua Area (Forest/Cave/School/Bridge)", _cheat_unlock_all_areas)
+
+	_add_category_header(box, "PENGUJIAN TAMBAHAN (pemain aktif)")
+	_add_cheat_row(box, "", "Pulihkan HP, stamina, air & efek makanan", func():
+		TestingActions.recover(GameState.current)
+		_notify("Pemain aktif dipulihkan."))
+	_add_cheat_row(box, "", "Toggle jam berjalan / berhenti", func():
+		DayCycle.is_running = not DayCycle.is_running
+		_notify("Jam berjalan: %s" % DayCycle.is_running))
+	for target_hour in [6, 12, 18, 0, 4]:
+		_add_cheat_row(box, "", "Set jam %02d:00" % target_hour, _testing_set_hour.bind(target_hour))
+	var item_id := LineEdit.new()
+	item_id.placeholder_text = "ID item, contoh: wood"
+	box.add_child(item_id)
+	var amount := SpinBox.new()
+	amount.min_value = 1
+	amount.max_value = 999
+	amount.value = 10
+	box.add_child(amount)
+	_add_cheat_row(box, "", "Berikan item ke pemain aktif", func():
+		_notify(TestingActions.give_item(GameState.current, item_id.text, int(amount.value))))
+
+	box.add_child(SkillDebugPanel.new())
 
 	# ── Kategori: Sistem ──
 	_add_category_header(box, "⚙  SISTEM")
@@ -538,3 +562,13 @@ func _format_money(amount: int) -> String:
 		formatted = s[i] + formatted
 		count += 1
 	return formatted
+
+func _testing_set_hour(value: int) -> void:
+	if DayCycle.is_sleep_transition or DayCycle._is_passing_out:
+		_notify("Tunggu transisi tidur selesai.")
+		return
+	DayCycle.hour = value
+	DayCycle.minute = 0
+	DayCycle.time_tick.emit(value, 0)
+	DayCycle.apply_scene_lighting()
+	_notify("Jam pengujian: %02d:00" % value)

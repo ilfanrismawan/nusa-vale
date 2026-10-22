@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_plank.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_id = "plank"
+display_name = "Papan Kayu"
+icon = ExtResource("2")
+description = "Kayu yang sudah digergaji. Bahan furnitur dan dekorasi."
+category = 4
+sell_price = 18

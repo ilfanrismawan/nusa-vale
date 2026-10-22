@@ -1,12 +1,21 @@
-[gd_resource type="Resource" script_class="RestorationProject" load_steps=2 format=3]
-[ext_resource type="Script" path="res://scripts/resources/restoration_project.gd" id="1"]
+[gd_resource type="Resource" script_class="RestorationProject" format=3 uid="uid://06yoabyb0pn4"]
+
+[ext_resource type="Script" uid="uid://dexc7jaawor5t" path="res://scripts/resources/restoration_project.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/balai_nadi/v3/icon_lotus.tres" id="icon"]
+
 [resource]
 script = ExtResource("1")
 project_id = "greenhouse_restoration"
 display_name = "Sayap Alam — Kebun Sepanjang Musim"
+ui_icon = ExtResource("icon")
+ui_short_name = "Kebun Sepanjang Musim"
+description = "Kaca retak dan rangka berkarat membuat rumah kaca terbengkalai. Titipkan bahan di Balai Nadi agar warga memulihkannya menjadi kebun terlindung sepanjang musim."
+requirements = Dictionary[String, int]({
+"copper_bar": 5,
+"stone": 75,
+"wood": 150
+})
 wing_id = "alam"
 unlock_id = "greenhouse"
-description = "Kaca retak dan rangka berkarat membuat rumah kaca terbengkalai. Titipkan bahan di Balai Nadi agar warga memulihkannya menjadi kebun terlindung sepanjang musim."
-requirements = Dictionary[String, int]({"wood": 150, "stone": 75, "copper_bar": 5})
 completion_flag = "greenhouse_unlocked"
 completion_message = "Greenhouse telah dipulihkan! Kini kamu bisa menanam sepanjang musim."

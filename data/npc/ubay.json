@@ -1,10 +1,15 @@
 {
+  "schema_version": 1,
   "id": "ubay",
   "name": "Ubay",
   "age": 28,
   "role": "Kurir Koperasi",
+  "birthday": {
+	"season": "summer",
+	"day": 3
+  },
   "home_map": "ubay_home",
-  "romanceable": true,
+  "romanceable": false,
   "personality": [
 	"cheerful",
 	"punctual",
@@ -12,10 +17,23 @@
     "overcommitted"
   ],
   "move_speed": 48.0,
+  "friendship": {
+	"start": 0,
+	"max_hearts": 10
+  },
   "service": "shipping",
   "visual": {
 	"sprite_frames": "res://resources/npc_data/npc_animation/ubay_frame.tres",
-	"portrait": "res://assets/farm_rpg/Character/NPC'S/Josh/Portrait Josh.png"
+	"portrait": "res://assets/farm_rpg/Character/NPC'S/Josh/Portrait Josh.png",
+	"portrait_cell_size": 64,
+	"portrait_columns": 5,
+	"expressions": {
+	  "neutral": 0,
+	  "sparkle": 5,
+	  "angry": 7,
+	  "happy": 10,
+	  "annoyed": 12
+	}
   },
   "dialogue": {
 	"default": [
@@ -112,9 +130,67 @@
 	  }
 	]
   },
-  "likes": [
-	"coffee",
-	"fresh_fruit",
-    "packed_lunch"
-  ]
+  "gift_tastes": {
+	"loved": [
+	  "coffee",
+	  "complete_breakfast",
+	  "fruit_salad",
+      "rice_ball"
+	],
+	"liked": [
+	  "apple",
+	  "banana",
+	  "orange",
+	  "bread",
+      "green_tea"
+	],
+	"neutral": [
+	  "wood",
+	  "stone",
+	  "corn",
+      "cow_milk"
+	],
+	"disliked": [
+	  "clay",
+	  "fiber",
+      "coal"
+	],
+	"hated": [
+	  "slime_gel",
+	  "old_bone",
+      "worm"
+	]
+  },
+  "gift_dialogue": {
+	"loved": [
+	  {
+		"text": "Wah, ini favoritku! Bekal semangat untuk rute berikutnya.",
+		"expression": "sparkle"
+	  }
+	],
+	"liked": [
+	  {
+		"text": "Terima kasih, aku suka hadiah ini.",
+		"expression": "happy"
+	  }
+	],
+	"neutral": [
+	  {
+		"text": "Oh, terima kasih atas hadiahnya.",
+		"expression": "neutral"
+	  }
+	],
+	"disliked": [
+	  {
+		"text": "Terima kasih, tapi ini kurang cocok untukku.",
+		"expression": "annoyed"
+	  }
+	],
+	"hated": [
+	  {
+		"text": "Maaf, aku benar-benar tidak menyukai hadiah ini.",
+		"expression": "angry"
+	  }
+	]
+  }
 }

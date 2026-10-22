@@ -10,8 +10,11 @@ func check(value: bool, label: String) -> void:
 
 func dismiss_shipping_report() -> void:
 	for dialog in GameState.shipping.get_children():
-		if dialog is AcceptDialog:
-			dialog.confirmed.emit()
+		# Laporan shipping kini CanvasLayer dengan tombol Continue. Tekan tombol
+		# sebenarnya agar pause reason dilepas seperti pada alur pemain.
+		var button := dialog.get_node_or_null("%Continue") as Button
+		if button != null:
+			button.pressed.emit()
 
 func _ready() -> void:
 	if OS.get_environment("NUSA_SAVE_AUDIT") != "1" or not OS.get_user_data_dir().replace("\\", "/").contains("nusa-save-audit-"):
@@ -84,6 +87,7 @@ func _ready() -> void:
 	var house := get_tree().current_scene
 	var bed := house.get_node("Kasur") as Bed
 	dismiss_shipping_report()
+	check(not get_tree().paused, "closing shipping report releases the pause before solo sleep")
 	bed._sleep()
 	check(DayCycle.is_sleep_transition, "normal bedtime locks the clock immediately")
 	wait_until = Time.get_ticks_msec() + 15000

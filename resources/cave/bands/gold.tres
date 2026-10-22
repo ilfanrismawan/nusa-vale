@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="CaveBand" format=3]
+
+[ext_resource type="Script" uid="uid://b83ix8aqgilpf" path="res://scripts/data/cave_band.gd" id="3_band"]
+[ext_resource type="Script" uid="uid://cdshrao3ldkws" path="res://scripts/data/enemy_data.gd" id="4_enemy"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_gold_ore.tres" id="band_icon_3"]
+[ext_resource type="Resource" path="res://resources/enemies/gold_slime.tres" id="gold_slime"]
+[ext_resource type="Resource" path="res://resources/enemies/gold_archer.tres" id="gold_archer"]
+[ext_resource type="Resource" path="res://resources/enemies/gold_myconid.tres" id="gold_myconid"]
+[ext_resource type="PackedScene" path="res://scenes/world/cave/tiers/gold_a.tscn" id="layout_a"]
+[ext_resource type="PackedScene" path="res://scenes/world/cave/tiers/gold_b.tscn" id="layout_b"]
+
+[ext_resource type="PackedScene" path="res://scenes/world/cave/layouts/branching.tscn" id="dungeon_branching"]
+[ext_resource type="PackedScene" path="res://scenes/world/cave/layouts/ring.tscn" id="dungeon_ring"]
+[ext_resource type="PackedScene" path="res://scenes/world/cave/layouts/chambers.tscn" id="dungeon_chambers"]
+
+[resource]
+script = ExtResource("3_band")
+display_name = "Gua Emas"
+icon = ExtResource("band_icon_3")
+accent = Color(0.98, 0.8, 0.25, 1)
+tint = Color(1, 0.94, 0.7, 1)
+ore_ids = PackedStringArray("stone", "coal", "gold_ore", "citrine", "sapphire", "emerald", "frozen_tear")
+geode_ids = PackedStringArray("frozen_geode", "geode", "omni_geode")
+geode_chances = PackedFloat32Array(0.06, 0.02, 0.01)
+ore_weights = PackedFloat32Array(5.0, 1.0, 3.0, 0.3, 0.4, 0.2, 0.3)
+first_floor = 41
+last_floor = 60
+rock_min = 22
+rock_max = 30
+enemies = Array[ExtResource("4_enemy")]([ExtResource("gold_slime"), ExtResource("gold_archer"), ExtResource("gold_myconid")])
+enemy_min = 4
+enemy_max = 6
+enemy_weights = PackedFloat32Array(4, 2, 3)
+floor_scenes = Array[PackedScene]([ExtResource("layout_a"), ExtResource("layout_b")])
+pillar_min = 2
+pillar_max = 4
+decal_min = 6
+decal_max = 12
+
+
+dungeon_scenes = Array[PackedScene]([ExtResource("dungeon_branching"), ExtResource("dungeon_ring"), ExtResource("dungeon_chambers")])

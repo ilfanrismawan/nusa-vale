@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ShopData" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/shop_data.gd" id="1_shop"]
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="2_item"]
+[ext_resource type="Resource" path="res://resources/item_data/skill_book_farmer.tres" id="farmer"]
+[ext_resource type="Resource" path="res://resources/item_data/skill_book_forager.tres" id="forager"]
+[ext_resource type="Resource" path="res://resources/item_data/skill_book_fisher.tres" id="fisher"]
+[ext_resource type="Resource" path="res://resources/item_data/skill_book_combat.tres" id="combat"]
+[ext_resource type="Resource" path="res://resources/item_data/skill_book_miner.tres" id="miner"]
+[ext_resource type="Resource" path="res://resources/item_data/skill_book_merchant.tres" id="merchant"]
+[ext_resource type="Resource" path="res://resources/item_data/skill_book_economist.tres" id="economist"]
+
+[resource]
+script = ExtResource("1_shop")
+shop_id = "library_books"
+shop_name = "Perpustakaan"
+keeper_name = "Pustakawan"
+greeting = "Buku riset bisa mempercepat keahlianmu. Satu buku, satu bidang."
+stock = Array[ExtResource("2_item")]([ExtResource("farmer"), ExtResource("forager"), ExtResource("fisher"), ExtResource("combat"), ExtResource("miner"), ExtResource("merchant"), ExtResource("economist")])
+buys_items = false

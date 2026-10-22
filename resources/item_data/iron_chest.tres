@@ -1,7 +1,9 @@
 [gd_resource type="Resource" script_class="ItemData" format=3]
 
-[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://autoload/data/item_data.gd" id="1"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1"]
 [ext_resource type="Texture2D" path="res://resources/icons/icon_iron_chest.tres" id="2"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_iron_chest_open.tres" id="3"]
+
 [resource]
 script = ExtResource("1")
 category = 8
@@ -10,6 +12,9 @@ display_name = "Peti Besi"
 icon = ExtResource("2")
 description = "Peti tier 3 dengan 48 slot bersama. Pasang di farm; interaksi untuk menyimpan barang atau meningkatkan tier tanpa memindahkan isi."
 placeable = true
+chest_closed_texture = ExtResource("2")
+chest_open_texture = ExtResource("3")
+chest_open_distance = 34.0
 placement_size = Vector2i(1, 1)
 storage_slots = 48
 chest_tier = 2

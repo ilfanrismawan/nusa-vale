@@ -13,6 +13,11 @@ extends CharacterBody2D
 @export var npc_name: String = "Warga Desa"
 @export var role_title: String = ""
 @export var portrait: Texture2D
+## Texture2D / AtlasTexture keyed by neutral, happy, angry, etc.
+@export var portrait_expressions: Dictionary[String, Texture2D] = {}
+@export var dialog_expressions: PackedStringArray = []
+## Activity name -> expression, or Array of expressions matching dialogue lines.
+@export var activity_expressions: Dictionary = {}
 @export var walk_speed: float = 38.0
 @export var dialog_lines: PackedStringArray = [
 	"Halo! Selamat menikmati harimu di Nusa Vale."
@@ -243,8 +248,16 @@ func interact(player: Player = null) -> void:
 	_dialog_ui = load("res://scenes/ui/npc_dialog_ui.tscn").instantiate() as NPCDialogUI
 	_dialog_ui.player = player
 	_dialog_ui.npc_name = npc_name
+	_dialog_ui.social_npc_id = npc_id
 	_dialog_ui.role_title = role_title
 	_dialog_ui.portrait_texture = portrait
+	_dialog_ui.portrait_expressions = portrait_expressions
+	_dialog_ui.line_expressions = dialog_expressions if _schedule_dialog_lines.is_empty() else PackedStringArray()
+	var expression: Variant = activity_expressions.get(_current_activity, "neutral")
+	if expression is String:
+		_dialog_ui.default_expression = expression
+	elif expression is Array or expression is PackedStringArray:
+		_dialog_ui.line_expressions = PackedStringArray(expression)
 	_dialog_ui.lines = lines_to_use
 	
 	_dialog_ui.finished.connect(_on_dialog_finished)

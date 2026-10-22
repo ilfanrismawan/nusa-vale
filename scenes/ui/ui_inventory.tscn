@@ -2,29 +2,43 @@
 
 [ext_resource type="Script" uid="uid://5f2xbdnvcc84" path="res://scripts/ui/ui_inventory.gd" id="1_script"]
 [ext_resource type="Texture2D" path="res://resources/ui/book_bg.tres" id="2_book_bg"]
-[ext_resource type="Texture2D" path="res://resources/ui/tab_top_normal.tres" id="3_tab_normal"]
-[ext_resource type="Texture2D" path="res://resources/ui/tab_top_active.tres" id="4_tab_active"]
-[ext_resource type="Texture2D" path="res://resources/ui/icon_tab_book.tres" id="6_icon_book"]
-[ext_resource type="Texture2D" path="res://resources/ui/icon_tab_gear.tres" id="7_icon_gear"]
-[ext_resource type="Texture2D" path="res://resources/ui/ribbon_red.tres" id="9_ribbon_red"]
-[ext_resource type="Texture2D" path="res://resources/ui/ribbon_blue.tres" id="10_ribbon_blue"]
-[ext_resource type="Texture2D" path="res://resources/ui/ribbon_green.tres" id="11_ribbon_green"]
-[ext_resource type="Texture2D" path="res://resources/ui/ribbon_orange.tres" id="12_ribbon_orange"]
-[ext_resource type="Texture2D" path="res://resources/ui/ribbon_tan.tres" id="13_ribbon_tan"]
-[ext_resource type="Texture2D" path="res://resources/ui/icon_tab_heart.tres" id="14_icon_heart"]
-[ext_resource type="Texture2D" path="res://resources/ui/icon_tab_person.tres" id="15_icon_person"]
-[ext_resource type="Texture2D" path="res://resources/ui/icon_tab_crop.tres" id="16_icon_crop"]
 [ext_resource type="Texture2D" path="res://resources/ui/btn_close_x.tres" id="17_btn_close"]
 [ext_resource type="Texture2D" path="res://resources/ui/btn_close_x_pressed.tres" id="18_btn_close_pressed"]
 [ext_resource type="Texture2D" path="res://resources/ui/slider_track.tres" id="20_slider_track"]
 [ext_resource type="Texture2D" path="res://resources/ui/slider_handle.tres" id="21_slider_handle"]
 [ext_resource type="Texture2D" path="res://resources/ui/frame_scallop_square.tres" id="22_frame_square"]
-[ext_resource type="Font" path="res://resources/ui/readable_font.tres" id="25_font"]
 [ext_resource type="Texture2D" uid="uid://cwgdwms3l80kv" path="res://assets/farm_rpg/ui/inventory/inventory.png" id="26_inv_png"]
 [ext_resource type="Texture2D" uid="uid://duh7k2bv6sk0i" path="res://assets/farm_rpg/ui/inventory/Banner.png" id="27_banner_png"]
-[ext_resource type="Texture2D" uid="uid://cplqbi4dvu6y6" path="res://resources/icons/icon_catfish.tres" id="28_icon_fish"]
-[ext_resource type="Texture2D" path="res://resources/icons/icon_common_mushroom.tres" id="29_icon_forage"]
+[ext_resource type="PackedScene" path="res://scenes/ui/skill_tree_ui.tscn" id="30_skills"]
+[ext_resource type="PackedScene" path="res://scenes/ui/npc_relationship_ui.tscn" id="31_relationship"]
+[ext_resource type="PackedScene" path="res://scenes/ui/inventory_action.tscn" id="action"]
+[ext_resource type="FontVariation" path="res://resources/ui/readable_font.tres" id="actions_1_wuc6u"]
+[ext_resource type="Theme" uid="uid://cl73ou0e04t25" path="res://resources/ui/inventory_book_theme.tres" id="book_theme"]
+[ext_resource type="PackedScene" path="res://scenes/ui/drop_item_dialog.tscn" id="drop_dialog"]
+[ext_resource type="PackedScene" path="res://scenes/ui/inventory_collection.tscn" id="page_collection"]
+[ext_resource type="PackedScene" path="res://scenes/ui/inventory_crafting.tscn" id="page_crafting"]
+[ext_resource type="PackedScene" path="res://scenes/ui/inventory_equipment.tscn" id="page_equipment"]
+[ext_resource type="PackedScene" path="res://scenes/ui/inventory_status.tscn" id="page_status"]
+[ext_resource type="Texture2D" uid="uid://dmcgw5n2vubjy" path="res://resources/ui/ribbon_category_active.svg" id="RightRibbonsContainer_1_ajyiq"]
+[ext_resource type="Texture2D" path="res://resources/ui/icon_tab_book.tres" id="RightRibbonsContainer_2_1m6vq"]
+[ext_resource type="Texture2D" uid="uid://ceaabjb2hrclc" path="res://resources/ui/ribbon_category.svg" id="RightRibbonsContainer_4_f6yib"]
+[ext_resource type="Texture2D" uid="uid://dnuda24td53re" path="res://resources/icons/icon_seed_carrot.tres" id="RightRibbonsContainer_5_e1qjn"]
+[ext_resource type="Texture2D" uid="uid://bj0iwlm1nw5f8" path="res://resources/icons/icon_carrot.tres" id="RightRibbonsContainer_6_t3yne"]
+[ext_resource type="Texture2D" uid="uid://c6qejnmrms4qu" path="res://resources/icons/icon_stone.tres" id="RightRibbonsContainer_7_khxut"]
+[ext_resource type="Texture2D" uid="uid://birkrsryiufsg" path="res://resources/ui/icon_tab_sword.tres" id="RightRibbonsContainer_8_0gtmw"]
+[ext_resource type="Texture2D" uid="uid://cplqbi4dvu6y6" path="res://resources/icons/icon_catfish.tres" id="RightRibbonsContainer_9_nv1c6"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_common_mushroom.tres" id="RightRibbonsContainer_10_cvi2t"]
+[ext_resource type="PackedScene" path="res://scenes/ui/inventory_settings.tscn" id="settings_page"]
+[ext_resource type="PackedScene" uid="uid://cbg24vroh5cka" path="res://scenes/ui/inventory_slot.tscn" id="slot"]
+[ext_resource type="Texture2D" path="res://resources/ui/tab_top_active.tres" id="TopTabsContainer_1_xdvng"]
+[ext_resource type="Texture2D" path="res://resources/ui/tab_top_normal.tres" id="TopTabsContainer_4_enmef"]
+[ext_resource type="Texture2D" path="res://resources/ui/icon_tab_gear.tres" id="TopTabsContainer_5_tvmee"]
+[ext_resource type="Texture2D" path="res://resources/ui/icon_tab_person.tres" id="TopTabsContainer_6_0j4qj"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_skill_book_farmer.tres" id="TopTabsContainer_7_50xux"]
+[ext_resource type="Texture2D" path="res://resources/ui/icon_tab_heart.tres" id="TopTabsContainer_8_1d1eo"]
+[ext_resource type="Texture2D" uid="uid://dsim82onojwo2" path="res://resources/icons/icon_pickaxe_wood.tres" id="TopTabsContainer_10_siyrm"]
 
+[ext_resource type="PackedScene" path="res://scenes/ui/book_text.tscn" id="text"]
 [sub_resource type="AtlasTexture" id="AtlasTexture_panel_light"]
 atlas = ExtResource("26_inv_png")
 region = Rect2(0, 64, 48, 48)
@@ -54,28 +68,23 @@ corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
 [sub_resource type="LabelSettings" id="LabelSettings_page"]
-font = ExtResource("25_font")
-font_size = 16
+font = ExtResource("actions_1_wuc6u")
 font_color = Color(0.32, 0.16, 0.08, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_capacity"]
-font = ExtResource("25_font")
-font_size = 16
+font = ExtResource("actions_1_wuc6u")
 font_color = Color(0.4, 0.22, 0.1, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_detail_sub"]
-font = ExtResource("25_font")
-font_size = 16
+font = ExtResource("actions_1_wuc6u")
 font_color = Color(0.48, 0.22, 0.1, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_badge_title"]
-font = ExtResource("25_font")
-font_size = 16
+font = ExtResource("actions_1_wuc6u")
 font_color = Color(0.22, 0.1, 0.04, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_badge_sub"]
-font = ExtResource("25_font")
-font_size = 16
+font = ExtResource("actions_1_wuc6u")
 font_color = Color(0.35, 0.2, 0.1, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_detail_frame"]
@@ -83,14 +92,13 @@ atlas = ExtResource("27_banner_png")
 region = Rect2(67, 211, 42, 42)
 
 [sub_resource type="LabelSettings" id="LabelSettings_detail_title"]
-font = ExtResource("25_font")
-font_size = 16
+font = ExtResource("actions_1_wuc6u")
 font_color = Color(0.22, 0.1, 0.04, 1)
 shadow_color = Color(0, 0, 0, 0.1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_detail_desc"]
 line_spacing = 2.0
-font = ExtResource("25_font")
+font = ExtResource("actions_1_wuc6u")
 font_color = Color(0.25, 0.14, 0.08, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_panel_dark"]
@@ -98,15 +106,13 @@ atlas = ExtResource("26_inv_png")
 region = Rect2(7, 9, 18, 18)
 
 [sub_resource type="LabelSettings" id="LabelSettings_gold"]
-font = ExtResource("25_font")
-font_size = 16
+font = ExtResource("actions_1_wuc6u")
 font_color = Color(0.98, 0.9, 0.65, 1)
 shadow_size = 2
 shadow_color = Color(0, 0, 0, 0.6)
 
 [sub_resource type="LabelSettings" id="LabelSettings_price"]
-font = ExtResource("25_font")
-font_size = 16
+font = ExtResource("actions_1_wuc6u")
 font_color = Color(0.95, 0.85, 0.55, 1)
 shadow_color = Color(0, 0, 0, 0.5)
 
@@ -124,23 +130,19 @@ corner_radius_bottom_left = 4
 shadow_size = 4
 
 [sub_resource type="LabelSettings" id="LabelSettings_tooltip_title"]
-font = ExtResource("25_font")
-font_size = 16
+font = ExtResource("actions_1_wuc6u")
 font_color = Color(1, 0.92, 0.6, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_tooltip_cat"]
-font = ExtResource("25_font")
-font_size = 16
+font = ExtResource("actions_1_wuc6u")
 font_color = Color(0.7, 0.88, 0.7, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_tooltip_hotbar"]
-font = ExtResource("25_font")
-font_size = 16
+font = ExtResource("actions_1_wuc6u")
 font_color = Color(0.6, 0.8, 1, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_tooltip_price"]
-font = ExtResource("25_font")
-font_size = 16
+font = ExtResource("actions_1_wuc6u")
 font_color = Color(1, 0.85, 0.45, 1)
 
 [node name="UIInventory" type="CanvasLayer" unique_id=152005689]
@@ -173,318 +175,8 @@ offset_right = 238.0
 offset_bottom = 144.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="TopTabsContainer" type="Control" parent="Dimmer/BookRoot" unique_id=29984571]
-unique_name_in_owner = true
-z_index = 5
-layout_mode = 1
-anchors_preset = 0
-offset_left = 24.0
-offset_top = -62.0
-offset_right = 452.0
-offset_bottom = 4.0
-mouse_filter = 1
-
-[node name="TabBook" type="TextureButton" parent="Dimmer/BookRoot/TopTabsContainer" unique_id=890337480]
-unique_name_in_owner = true
-texture_filter = 1
-custom_minimum_size = Vector2(66, 58)
-layout_mode = 0
-offset_top = 8.0
-offset_right = 66.0
-offset_bottom = 66.0
-texture_normal = ExtResource("4_tab_active")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/TopTabsContainer/TabBook" unique_id=1771090054]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -10.0
-offset_top = 8.0
-offset_right = 10.0
-offset_bottom = 28.0
-grow_horizontal = 2
-mouse_filter = 2
-texture = ExtResource("6_icon_book")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="TabGear" type="TextureButton" parent="Dimmer/BookRoot/TopTabsContainer" unique_id=1238431858]
-unique_name_in_owner = true
-texture_filter = 1
-custom_minimum_size = Vector2(94, 58)
-layout_mode = 0
-offset_left = 210.0
-offset_top = 8.0
-offset_right = 304.0
-offset_bottom = 66.0
-texture_normal = ExtResource("3_tab_normal")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/TopTabsContainer/TabGear" unique_id=1982057661]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -10.0
-offset_top = 8.0
-offset_right = 10.0
-offset_bottom = 28.0
-grow_horizontal = 2
-mouse_filter = 2
-texture = ExtResource("7_icon_gear")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="TabStatus" type="TextureButton" parent="Dimmer/BookRoot/TopTabsContainer" unique_id=1145220273]
-texture_filter = 1
-custom_minimum_size = Vector2(66, 58)
-layout_mode = 0
-offset_left = 70.0
-offset_top = 8.0
-offset_right = 136.0
-offset_bottom = 66.0
-tooltip_text = "Status Petani"
-texture_normal = ExtResource("3_tab_normal")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/TopTabsContainer/TabStatus" unique_id=1864328260]
-layout_mode = 0
-offset_left = 13.0
-offset_top = 8.0
-offset_right = 37.0
-offset_bottom = 32.0
-mouse_filter = 2
-texture = ExtResource("15_icon_person")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="TabKoleksi" type="TextureButton" parent="Dimmer/BookRoot/TopTabsContainer" unique_id=26520292]
-unique_name_in_owner = true
-texture_filter = 1
-custom_minimum_size = Vector2(66, 58)
-layout_mode = 0
-offset_left = 140.0
-offset_top = 8.0
-offset_right = 206.0
-offset_bottom = 66.0
-tooltip_text = "Ensiklopedia Penemuan"
-texture_normal = ExtResource("3_tab_normal")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/TopTabsContainer/TabKoleksi" unique_id=170375806]
-layout_mode = 0
-offset_left = 13.0
-offset_top = 8.0
-offset_right = 37.0
-offset_bottom = 32.0
-mouse_filter = 2
-texture = ExtResource("6_icon_book")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="RightRibbonsContainer" type="Control" parent="Dimmer/BookRoot" unique_id=1984179342]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 0
-offset_left = 472.0
-offset_top = 36.0
-offset_right = 598.0
-offset_bottom = 272.0
-mouse_filter = 1
-
-[node name="RibbonRed" type="TextureButton" parent="Dimmer/BookRoot/RightRibbonsContainer" unique_id=177086437]
-unique_name_in_owner = true
-texture_filter = 1
-custom_minimum_size = Vector2(54, 36)
-layout_mode = 0
-offset_right = 54.0
-offset_bottom = 36.0
-texture_normal = ExtResource("9_ribbon_red")
-ignore_texture_size = true
-stretch_mode = 5
-
-[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonRed" unique_id=1235575488]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 12.0
-offset_top = -8.0
-offset_right = 28.0
-offset_bottom = 8.0
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("14_icon_heart")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="RibbonBlue" type="TextureButton" parent="Dimmer/BookRoot/RightRibbonsContainer" unique_id=2107410091]
-unique_name_in_owner = true
-texture_filter = 1
-custom_minimum_size = Vector2(54, 36)
-layout_mode = 0
-offset_top = 44.0
-offset_right = 54.0
-offset_bottom = 80.0
-texture_normal = ExtResource("10_ribbon_blue")
-ignore_texture_size = true
-stretch_mode = 5
-
-[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonBlue" unique_id=1350810680]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 12.0
-offset_top = -10.0
-offset_right = 28.0
-offset_bottom = 10.0
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("15_icon_person")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="RibbonGreen" type="TextureButton" parent="Dimmer/BookRoot/RightRibbonsContainer" unique_id=1001551484]
-unique_name_in_owner = true
-texture_filter = 1
-custom_minimum_size = Vector2(54, 36)
-layout_mode = 0
-offset_top = 88.0
-offset_right = 54.0
-offset_bottom = 124.0
-texture_normal = ExtResource("11_ribbon_green")
-ignore_texture_size = true
-stretch_mode = 5
-
-[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonGreen" unique_id=1750822534]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 12.0
-offset_top = -10.0
-offset_right = 28.0
-offset_bottom = 8.0
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("16_icon_crop")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="RibbonOrange" type="TextureButton" parent="Dimmer/BookRoot/RightRibbonsContainer" unique_id=2060420116]
-unique_name_in_owner = true
-texture_filter = 1
-custom_minimum_size = Vector2(54, 36)
-layout_mode = 0
-offset_top = 132.0
-offset_right = 54.0
-offset_bottom = 168.0
-texture_normal = ExtResource("12_ribbon_orange")
-ignore_texture_size = true
-stretch_mode = 5
-
-[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonOrange" unique_id=2030477832]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 12.0
-offset_top = -8.0
-offset_right = 28.0
-offset_bottom = 8.0
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("14_icon_heart")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="RibbonTan" type="TextureButton" parent="Dimmer/BookRoot/RightRibbonsContainer" unique_id=1094266433]
-unique_name_in_owner = true
-texture_filter = 1
-custom_minimum_size = Vector2(54, 36)
-layout_mode = 0
-offset_top = 176.0
-offset_right = 54.0
-offset_bottom = 212.0
-texture_normal = ExtResource("13_ribbon_tan")
-ignore_texture_size = true
-stretch_mode = 5
-
-[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonTan" unique_id=1068373062]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 12.0
-offset_top = -8.0
-offset_right = 28.0
-offset_bottom = 8.0
-grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("6_icon_book")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="RibbonFish" type="TextureButton" parent="Dimmer/BookRoot/RightRibbonsContainer" unique_id=1602860210]
-unique_name_in_owner = true
-texture_filter = 1
-custom_minimum_size = Vector2(78, 30)
-layout_mode = 0
-offset_top = 170.0
-offset_right = 78.0
-offset_bottom = 200.0
-texture_normal = ExtResource("10_ribbon_blue")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonFish" unique_id=682747731]
-layout_mode = 0
-offset_left = 8.0
-offset_top = 7.0
-offset_right = 24.0
-offset_bottom = 23.0
-mouse_filter = 2
-texture = ExtResource("28_icon_fish")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="RibbonForage" type="TextureButton" parent="Dimmer/BookRoot/RightRibbonsContainer" unique_id=331207123]
-unique_name_in_owner = true
-texture_filter = 1
-custom_minimum_size = Vector2(78, 30)
-layout_mode = 0
-offset_top = 204.0
-offset_right = 78.0
-offset_bottom = 234.0
-texture_normal = ExtResource("11_ribbon_green")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonForage" unique_id=1498638039]
-layout_mode = 0
-offset_left = 8.0
-offset_top = 7.0
-offset_right = 24.0
-offset_bottom = 23.0
-mouse_filter = 2
-texture = ExtResource("29_icon_forage")
-expand_mode = 1
-stretch_mode = 5
+scale = Vector2(1.5, 1.5)
+pivot_offset = Vector2(238, 144)
 
 [node name="BookBg" type="TextureRect" parent="Dimmer/BookRoot" unique_id=2014250803]
 unique_name_in_owner = true
@@ -519,382 +211,1097 @@ texture_hover = ExtResource("18_btn_close_pressed")
 ignore_texture_size = true
 stretch_mode = 5
 
-[node name="LeftPage" type="Control" parent="Dimmer/BookRoot" unique_id=1213915201]
-layout_mode = 1
+[node name="SkillTreePage" parent="Dimmer/BookRoot" unique_id=1089942463 instance=ExtResource("30_skills")]
+unique_name_in_owner = true
+visible = false
 anchors_preset = 0
 offset_left = 28.0
 offset_top = 20.0
-offset_right = 228.0
-offset_bottom = 268.0
+offset_right = 448.0
+offset_bottom = 244.0
+embedded = true
 
-[node name="SlotGrid" type="GridContainer" parent="Dimmer/BookRoot/LeftPage" unique_id=354640233]
+[node name="RelationshipPage" parent="Dimmer/BookRoot" unique_id=1351297896 instance=ExtResource("31_relationship")]
 unique_name_in_owner = true
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -78.0
-offset_top = 10.0
-offset_right = 78.0
-offset_bottom = 126.0
-grow_horizontal = 2
-theme_override_constants/h_separation = 4
-theme_override_constants/v_separation = 4
-columns = 4
+process_mode = 3
+visible = false
+layout_mode = 0
+offset_left = 28.0
+offset_top = 20.0
+offset_right = 448.0
+offset_bottom = 244.0
+embedded = true
 
-[node name="LeftBottomPanel" type="NinePatchRect" parent="Dimmer/BookRoot/LeftPage" unique_id=45581795]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -82.0
-offset_top = -112.0
-offset_right = 82.0
-offset_bottom = -12.0
-grow_horizontal = 2
-grow_vertical = 0
-texture = SubResource("AtlasTexture_panel_light")
-patch_margin_left = 8
-patch_margin_top = 8
-patch_margin_right = 8
-patch_margin_bottom = 8
-
-[node name="Margin" type="MarginContainer" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel" unique_id=533257817]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 6
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 6
-
-[node name="VBox" type="VBoxContainer" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin" unique_id=1221380898]
-layout_mode = 2
-theme_override_constants/separation = 2
-
-[node name="PageNav" type="HBoxContainer" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox" unique_id=321833486]
-layout_mode = 2
-theme_override_constants/separation = 8
-alignment = 1
-
-[node name="BtnPrevPage" type="Button" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox/PageNav" unique_id=781467441]
+[node name="RightRibbonsContainer" type="Control" parent="Dimmer/BookRoot" unique_id=1743247451]
 unique_name_in_owner = true
-texture_filter = 1
-custom_minimum_size = Vector2(24, 20)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("25_font")
-theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = SubResource("StyleBoxFlat_btn_page")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_page_hover")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_page_hover")
-text = "<"
-
-[node name="PageLabel" type="Label" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox/PageNav" unique_id=1652131168]
-unique_name_in_owner = true
-texture_filter = 1
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Halaman 1 / 2"
-label_settings = SubResource("LabelSettings_page")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="BtnNextPage" type="Button" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox/PageNav" unique_id=1026881388]
-unique_name_in_owner = true
-texture_filter = 1
-custom_minimum_size = Vector2(24, 20)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("25_font")
-theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = SubResource("StyleBoxFlat_btn_page")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_page_hover")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_page_hover")
-text = ">"
-
-[node name="SliderContainer" type="HBoxContainer" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox" unique_id=1417127710]
-layout_mode = 2
-theme_override_constants/separation = 6
-alignment = 1
-
-[node name="TrackBox" type="Control" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox/SliderContainer" unique_id=785757576]
-custom_minimum_size = Vector2(80, 16)
-layout_mode = 2
-
-[node name="Track" type="TextureRect" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox/SliderContainer/TrackBox" unique_id=52105750]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -7.0
-offset_right = 72.0
-offset_bottom = 7.0
-grow_vertical = 2
-texture = ExtResource("20_slider_track")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Handle" type="TextureRect" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox/SliderContainer/TrackBox/Track" unique_id=1537313908]
-unique_name_in_owner = true
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 6.0
-offset_top = -8.0
-offset_right = 26.0
-offset_bottom = 8.0
-grow_vertical = 2
-texture = ExtResource("21_slider_handle")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="CapacityLabel" type="Label" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox/SliderContainer" unique_id=939150994]
-unique_name_in_owner = true
-texture_filter = 1
-layout_mode = 2
-size_flags_horizontal = 3
-text = "0 / 20"
-label_settings = SubResource("LabelSettings_capacity")
-horizontal_alignment = 2
-vertical_alignment = 1
-
-[node name="HotbarHint" type="Label" parent="Dimmer/BookRoot/LeftPage/LeftBottomPanel/Margin/VBox" unique_id=995577374]
-unique_name_in_owner = true
-texture_filter = 1
-layout_mode = 2
-text = "Slot 1-8 = Hotbar"
-label_settings = SubResource("LabelSettings_detail_sub")
-horizontal_alignment = 1
-clip_text = true
-text_overrun_behavior = 3
-
-[node name="RightPage" type="Control" parent="Dimmer/BookRoot" unique_id=1014387944]
 layout_mode = 1
 anchors_preset = 0
+offset_left = 468.0
+offset_top = 24.0
+offset_right = 598.0
+offset_bottom = 268.0
+mouse_filter = 1
+theme = ExtResource("book_theme")
+
+[node name="RibbonRed" type="TextureButton" parent="Dimmer/BookRoot/RightRibbonsContainer" unique_id=1847065313]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(120, 30)
+layout_mode = 0
+offset_left = 6.0
+offset_right = 126.0
+offset_bottom = 30.0
+tooltip_text = "Semua Item — filter isi tas
+Angka menunjukkan jumlah slot terisi."
+texture_normal = ExtResource("RightRibbonsContainer_1_ajyiq")
+texture_pressed = ExtResource("RightRibbonsContainer_1_ajyiq")
+texture_hover = ExtResource("RightRibbonsContainer_1_ajyiq")
+texture_focused = ExtResource("RightRibbonsContainer_1_ajyiq")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonRed" unique_id=373380396]
+texture_filter = 1
+layout_mode = 1
+offset_left = 10.0
+offset_top = 7.0
+offset_right = 26.0
+offset_bottom = 23.0
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("RightRibbonsContainer_2_1m6vq")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ColorRect1" type="ColorRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonRed" unique_id=159684503]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 5.0
+offset_right = 5.0
+offset_bottom = 25.0
+mouse_filter = 2
+color = Color(0.70980394, 0.36078432, 0.28627452, 1)
+
+[node name="CategoryLabel" type="Label" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonRed" unique_id=344981154]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 5.0
+offset_right = 85.0
+offset_bottom = 28.0
+theme_override_font_sizes/font_size = 16
+text = "Semua"
+
+[node name="SlotCount" type="Label" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonRed" unique_id=84706425]
+layout_mode = 0
+offset_left = 85.0
+offset_top = 5.0
+offset_right = 107.0
+offset_bottom = 28.0
+theme_override_font_sizes/font_size = 16
+text = "10"
+horizontal_alignment = 2
+
+[node name="RibbonBlue" type="TextureButton" parent="Dimmer/BookRoot/RightRibbonsContainer" unique_id=2000100778]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(120, 30)
+layout_mode = 0
+offset_top = 34.0
+offset_right = 120.0
+offset_bottom = 64.0
+tooltip_text = "Bibit Tanaman — filter isi tas
+Angka menunjukkan jumlah slot terisi."
+texture_normal = ExtResource("RightRibbonsContainer_4_f6yib")
+texture_pressed = ExtResource("RightRibbonsContainer_1_ajyiq")
+texture_hover = ExtResource("RightRibbonsContainer_1_ajyiq")
+texture_focused = ExtResource("RightRibbonsContainer_1_ajyiq")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonBlue" unique_id=1381660956]
+texture_filter = 1
+layout_mode = 1
+offset_left = 10.0
+offset_top = 7.0
+offset_right = 26.0
+offset_bottom = 23.0
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("RightRibbonsContainer_5_e1qjn")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ColorRect2" type="ColorRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonBlue" unique_id=1637181226]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 5.0
+offset_right = 5.0
+offset_bottom = 25.0
+mouse_filter = 2
+color = Color(0.4392157, 0.5882353, 0.3019608, 1)
+
+[node name="CategoryLabel" type="Label" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonBlue" unique_id=1843040398]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 5.0
+offset_right = 85.0
+offset_bottom = 28.0
+theme_override_font_sizes/font_size = 16
+text = "Bibit"
+
+[node name="SlotCount" type="Label" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonBlue" unique_id=1828273793]
+layout_mode = 0
+offset_left = 85.0
+offset_top = 5.0
+offset_right = 107.0
+offset_bottom = 28.0
+theme_override_font_sizes/font_size = 16
+text = "2"
+horizontal_alignment = 2
+
+[node name="RibbonGreen" type="TextureButton" parent="Dimmer/BookRoot/RightRibbonsContainer" unique_id=726013547]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(120, 30)
+layout_mode = 0
+offset_top = 68.0
+offset_right = 120.0
+offset_bottom = 98.0
+tooltip_text = "Hasil Panen — filter isi tas
+Angka menunjukkan jumlah slot terisi."
+texture_normal = ExtResource("RightRibbonsContainer_4_f6yib")
+texture_pressed = ExtResource("RightRibbonsContainer_1_ajyiq")
+texture_hover = ExtResource("RightRibbonsContainer_1_ajyiq")
+texture_focused = ExtResource("RightRibbonsContainer_1_ajyiq")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonGreen" unique_id=798332601]
+texture_filter = 1
+layout_mode = 1
+offset_left = 10.0
+offset_top = 7.0
+offset_right = 26.0
+offset_bottom = 23.0
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("RightRibbonsContainer_6_t3yne")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ColorRect3" type="ColorRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonGreen" unique_id=1965949225]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 5.0
+offset_right = 5.0
+offset_bottom = 25.0
+mouse_filter = 2
+color = Color(0.827451, 0.57254905, 0.21568628, 1)
+
+[node name="CategoryLabel" type="Label" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonGreen" unique_id=31235349]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 5.0
+offset_right = 85.0
+offset_bottom = 28.0
+theme_override_font_sizes/font_size = 16
+text = "Panen"
+
+[node name="SlotCount" type="Label" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonGreen" unique_id=1132938715]
+layout_mode = 0
+offset_left = 85.0
+offset_top = 5.0
+offset_right = 107.0
+offset_bottom = 28.0
+theme_override_font_sizes/font_size = 16
+text = "0"
+horizontal_alignment = 2
+
+[node name="RibbonOrange" type="TextureButton" parent="Dimmer/BookRoot/RightRibbonsContainer" unique_id=714915487]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(120, 30)
+layout_mode = 0
+offset_top = 102.0
+offset_right = 120.0
+offset_bottom = 132.0
+tooltip_text = "Material & Bahan — filter isi tas
+Angka menunjukkan jumlah slot terisi."
+texture_normal = ExtResource("RightRibbonsContainer_4_f6yib")
+texture_pressed = ExtResource("RightRibbonsContainer_1_ajyiq")
+texture_hover = ExtResource("RightRibbonsContainer_1_ajyiq")
+texture_focused = ExtResource("RightRibbonsContainer_1_ajyiq")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonOrange" unique_id=2054435493]
+texture_filter = 1
+layout_mode = 1
+offset_left = 10.0
+offset_top = 7.0
+offset_right = 26.0
+offset_bottom = 23.0
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("RightRibbonsContainer_7_khxut")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ColorRect4" type="ColorRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonOrange" unique_id=419546442]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 5.0
+offset_right = 5.0
+offset_bottom = 25.0
+mouse_filter = 2
+color = Color(0.6039216, 0.4745098, 0.39607844, 1)
+
+[node name="CategoryLabel" type="Label" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonOrange" unique_id=1050577098]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 5.0
+offset_right = 85.0
+offset_bottom = 28.0
+theme_override_font_sizes/font_size = 16
+text = "Bahan"
+
+[node name="SlotCount" type="Label" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonOrange" unique_id=695109824]
+layout_mode = 0
+offset_left = 85.0
+offset_top = 5.0
+offset_right = 107.0
+offset_bottom = 28.0
+theme_override_font_sizes/font_size = 16
+text = "0"
+horizontal_alignment = 2
+
+[node name="RibbonTan" type="TextureButton" parent="Dimmer/BookRoot/RightRibbonsContainer" unique_id=1244244736]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(120, 30)
+layout_mode = 0
+offset_top = 136.0
+offset_right = 120.0
+offset_bottom = 166.0
+tooltip_text = "Peralatan Kerja — filter isi tas
+Angka menunjukkan jumlah slot terisi."
+texture_normal = ExtResource("RightRibbonsContainer_4_f6yib")
+texture_pressed = ExtResource("RightRibbonsContainer_1_ajyiq")
+texture_hover = ExtResource("RightRibbonsContainer_1_ajyiq")
+texture_focused = ExtResource("RightRibbonsContainer_1_ajyiq")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonTan" unique_id=1690785010]
+texture_filter = 1
+layout_mode = 1
+offset_left = 10.0
+offset_top = 7.0
+offset_right = 26.0
+offset_bottom = 23.0
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("RightRibbonsContainer_8_0gtmw")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ColorRect5" type="ColorRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonTan" unique_id=339361581]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 5.0
+offset_right = 5.0
+offset_bottom = 25.0
+mouse_filter = 2
+color = Color(0.7058824, 0.60784316, 0.4627451, 1)
+
+[node name="CategoryLabel" type="Label" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonTan" unique_id=268764774]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 5.0
+offset_right = 85.0
+offset_bottom = 28.0
+theme_override_font_sizes/font_size = 16
+text = "Alat"
+
+[node name="SlotCount" type="Label" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonTan" unique_id=1561206855]
+layout_mode = 0
+offset_left = 85.0
+offset_top = 5.0
+offset_right = 107.0
+offset_bottom = 28.0
+theme_override_font_sizes/font_size = 16
+text = "7"
+horizontal_alignment = 2
+
+[node name="RibbonFish" type="TextureButton" parent="Dimmer/BookRoot/RightRibbonsContainer" unique_id=527607334]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(120, 30)
+layout_mode = 0
+offset_top = 170.0
+offset_right = 120.0
+offset_bottom = 200.0
+tooltip_text = "Ikan — filter isi tas
+Angka menunjukkan jumlah slot terisi."
+texture_normal = ExtResource("RightRibbonsContainer_4_f6yib")
+texture_pressed = ExtResource("RightRibbonsContainer_1_ajyiq")
+texture_hover = ExtResource("RightRibbonsContainer_1_ajyiq")
+texture_focused = ExtResource("RightRibbonsContainer_1_ajyiq")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonFish" unique_id=754854038]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 7.0
+offset_right = 26.0
+offset_bottom = 23.0
+mouse_filter = 2
+texture = ExtResource("RightRibbonsContainer_9_nv1c6")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ColorRect6" type="ColorRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonFish" unique_id=320445814]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 5.0
+offset_right = 5.0
+offset_bottom = 25.0
+mouse_filter = 2
+color = Color(0.36078432, 0.5686275, 0.6666667, 1)
+
+[node name="CategoryLabel" type="Label" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonFish" unique_id=93241477]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 5.0
+offset_right = 85.0
+offset_bottom = 28.0
+theme_override_font_sizes/font_size = 16
+text = "Ikan"
+
+[node name="SlotCount" type="Label" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonFish" unique_id=411912524]
+layout_mode = 0
+offset_left = 85.0
+offset_top = 5.0
+offset_right = 107.0
+offset_bottom = 28.0
+theme_override_font_sizes/font_size = 16
+text = "0"
+horizontal_alignment = 2
+
+[node name="RibbonForage" type="TextureButton" parent="Dimmer/BookRoot/RightRibbonsContainer" unique_id=663379354]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(120, 30)
+layout_mode = 0
+offset_top = 204.0
+offset_right = 120.0
+offset_bottom = 234.0
+tooltip_text = "Hasil Hutan — filter isi tas
+Angka menunjukkan jumlah slot terisi."
+texture_normal = ExtResource("RightRibbonsContainer_4_f6yib")
+texture_pressed = ExtResource("RightRibbonsContainer_1_ajyiq")
+texture_hover = ExtResource("RightRibbonsContainer_1_ajyiq")
+texture_focused = ExtResource("RightRibbonsContainer_1_ajyiq")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonForage" unique_id=2017484096]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 7.0
+offset_right = 26.0
+offset_bottom = 23.0
+mouse_filter = 2
+texture = ExtResource("RightRibbonsContainer_10_cvi2t")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ColorRect7" type="ColorRect" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonForage" unique_id=464789767]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 5.0
+offset_right = 5.0
+offset_bottom = 25.0
+mouse_filter = 2
+color = Color(0.4117647, 0.52156866, 0.38039216, 1)
+
+[node name="CategoryLabel" type="Label" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonForage" unique_id=1837719579]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 5.0
+offset_right = 85.0
+offset_bottom = 28.0
+theme_override_font_sizes/font_size = 16
+text = "Hutan"
+
+[node name="SlotCount" type="Label" parent="Dimmer/BookRoot/RightRibbonsContainer/RibbonForage" unique_id=1789260695]
+layout_mode = 0
+offset_left = 85.0
+offset_top = 5.0
+offset_right = 107.0
+offset_bottom = 28.0
+theme_override_font_sizes/font_size = 16
+text = "0"
+horizontal_alignment = 2
+
+[node name="Label1" type="Label" parent="Dimmer/BookRoot/RightRibbonsContainer" unique_id=1901115553]
+layout_mode = 0
+offset_left = 16.0
+offset_top = -18.0
+offset_right = 16.0
+offset_bottom = -18.0
+theme_override_font_sizes/font_size = 16
+text = "FILTER TAS"
+
+[node name="StatusPage" parent="Dimmer/BookRoot" unique_id=2041402207 instance=ExtResource("page_status")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 28.0
+offset_top = 20.0
+offset_right = 448.0
+offset_bottom = 244.0
+
+[node name="EquipmentPage" parent="Dimmer/BookRoot" unique_id=426814284 instance=ExtResource("page_equipment")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 28.0
+offset_top = 20.0
+offset_right = 448.0
+offset_bottom = 244.0
+
+[node name="CraftingPage" parent="Dimmer/BookRoot" unique_id=522899848 instance=ExtResource("page_crafting")]
+unique_name_in_owner = true
+offset_left = 28.0
+offset_top = 20.0
+offset_right = 448.0
+offset_bottom = 244.0
+
+[node name="CollectionPage" parent="Dimmer/BookRoot" unique_id=942099727 instance=ExtResource("page_collection")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 28.0
+offset_top = 20.0
+offset_right = 448.0
+offset_bottom = 244.0
+
+[node name="SettingsPage" parent="Dimmer/BookRoot" unique_id=1599755604 instance=ExtResource("settings_page")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 28.0
+offset_top = 20.0
+offset_right = 448.0
+offset_bottom = 244.0
+
+
+[node name="LeftPage" type="Control" parent="Dimmer/BookRoot"]
+unique_name_in_owner = true
+offset_left = 32.0
+offset_top = 20.0
+offset_right = 228.0
+offset_bottom = 244.0
+theme = ExtResource("book_theme")
+clip_contents = true
+mouse_filter = 2
+
+[node name="BagHeading" type="Label" parent="Dimmer/BookRoot/LeftPage"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 0.0
+offset_right = 196.0
+offset_bottom = 20.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 17
+text = "TAS"
+clip_text = true
+
+
+[node name="SlotGrid" type="GridContainer" parent="Dimmer/BookRoot/LeftPage"]
+unique_name_in_owner = true
+offset_left = 22.0
+offset_top = 26.0
+offset_right = 178.0
+offset_bottom = 142.0
+columns = 4
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
+
+[node name="Slot01" parent="Dimmer/BookRoot/LeftPage/SlotGrid" instance=ExtResource("slot")]
+unique_name_in_owner = true
+
+
+[node name="Slot02" parent="Dimmer/BookRoot/LeftPage/SlotGrid" instance=ExtResource("slot")]
+unique_name_in_owner = true
+
+
+[node name="Slot03" parent="Dimmer/BookRoot/LeftPage/SlotGrid" instance=ExtResource("slot")]
+unique_name_in_owner = true
+
+
+[node name="Slot04" parent="Dimmer/BookRoot/LeftPage/SlotGrid" instance=ExtResource("slot")]
+unique_name_in_owner = true
+
+
+[node name="Slot05" parent="Dimmer/BookRoot/LeftPage/SlotGrid" instance=ExtResource("slot")]
+unique_name_in_owner = true
+
+
+[node name="Slot06" parent="Dimmer/BookRoot/LeftPage/SlotGrid" instance=ExtResource("slot")]
+unique_name_in_owner = true
+
+
+[node name="Slot07" parent="Dimmer/BookRoot/LeftPage/SlotGrid" instance=ExtResource("slot")]
+unique_name_in_owner = true
+
+
+[node name="Slot08" parent="Dimmer/BookRoot/LeftPage/SlotGrid" instance=ExtResource("slot")]
+unique_name_in_owner = true
+
+
+[node name="Slot09" parent="Dimmer/BookRoot/LeftPage/SlotGrid" instance=ExtResource("slot")]
+unique_name_in_owner = true
+
+
+[node name="Slot10" parent="Dimmer/BookRoot/LeftPage/SlotGrid" instance=ExtResource("slot")]
+unique_name_in_owner = true
+
+
+[node name="Slot11" parent="Dimmer/BookRoot/LeftPage/SlotGrid" instance=ExtResource("slot")]
+unique_name_in_owner = true
+
+
+[node name="Slot12" parent="Dimmer/BookRoot/LeftPage/SlotGrid" instance=ExtResource("slot")]
+unique_name_in_owner = true
+
+
+[node name="PageNav" type="HBoxContainer" parent="Dimmer/BookRoot/LeftPage"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 148.0
+offset_right = 196.0
+offset_bottom = 170.0
+theme_override_constants/separation = 6
+
+[node name="BtnPrevPage" type="Button" parent="Dimmer/BookRoot/LeftPage/PageNav"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(24, 22)
+text = "‹"
+theme_override_font_sizes/font_size = 12
+
+[node name="PageLabel" type="Label" parent="Dimmer/BookRoot/LeftPage/PageNav"]
+unique_name_in_owner = true
+mouse_filter = 2
+theme_override_font_sizes/font_size = 12
+text = "Halaman 1 / 1"
+size_flags_horizontal = 3
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BtnNextPage" type="Button" parent="Dimmer/BookRoot/LeftPage/PageNav"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(24, 22)
+text = "›"
+theme_override_font_sizes/font_size = 12
+
+[node name="SortButton" type="Button" parent="Dimmer/BookRoot/LeftPage"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 176.0
+offset_right = 196.0
+offset_bottom = 198.0
+text = "Rapikan Tas"
+theme_override_font_sizes/font_size = 12
+
+[node name="TrackBox" type="Control" parent="Dimmer/BookRoot/LeftPage"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 207.0
+offset_right = 88.0
+offset_bottom = 217.0
+mouse_filter = 2
+
+[node name="Track" type="TextureRect" parent="Dimmer/BookRoot/LeftPage/TrackBox"]
+unique_name_in_owner = true
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 80.0
+offset_bottom = 10.0
+texture = ExtResource("20_slider_track")
+expand_mode = 1
+mouse_filter = 2
+
+[node name="Handle" type="TextureRect" parent="Dimmer/BookRoot/LeftPage/TrackBox"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 1.0
+offset_right = 16.0
+offset_bottom = 9.0
+texture = ExtResource("21_slider_handle")
+expand_mode = 1
+mouse_filter = 2
+
+[node name="CapacityLabel" type="Label" parent="Dimmer/BookRoot/LeftPage"]
+unique_name_in_owner = true
+offset_left = 104.0
+offset_top = 204.0
+offset_right = 196.0
+offset_bottom = 222.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 12
+text = "0 / 12"
+clip_text = true
+horizontal_alignment = 2
+
+[node name="RightPage" type="Control" parent="Dimmer/BookRoot"]
+unique_name_in_owner = true
 offset_left = 248.0
 offset_top = 20.0
 offset_right = 448.0
-offset_bottom = 268.0
+offset_bottom = 244.0
+theme = ExtResource("book_theme")
+clip_contents = true
+mouse_filter = 2
 
-[node name="TopFrames" type="HBoxContainer" parent="Dimmer/BookRoot/RightPage" unique_id=1214231530]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -90.0
-offset_top = 8.0
-offset_right = 90.0
-offset_bottom = 92.0
-grow_horizontal = 2
-theme_override_constants/separation = 12
-alignment = 1
+[node name="DetailTitle" type="Label" parent="Dimmer/BookRoot/RightPage"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 0.0
+offset_right = 196.0
+offset_bottom = 22.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 16
+text = "Detail Item"
+clip_text = true
 
-[node name="FramePreview" type="TextureRect" parent="Dimmer/BookRoot/RightPage/TopFrames" unique_id=1509017898]
-texture_filter = 1
-custom_minimum_size = Vector2(84, 84)
-layout_mode = 2
-texture = ExtResource("22_frame_square")
+
+[node name="DetailIcon" type="TextureRect" parent="Dimmer/BookRoot/RightPage"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 28.0
+offset_right = 48.0
+offset_bottom = 72.0
 expand_mode = 1
 stretch_mode = 5
+mouse_filter = 2
 
-[node name="DetailIcon" type="TextureRect" parent="Dimmer/BookRoot/RightPage/TopFrames/FramePreview" unique_id=1922754159]
+[node name="BadgeCount" type="Label" parent="Dimmer/BookRoot/RightPage"]
 unique_name_in_owner = true
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -24.0
-offset_top = -24.0
-offset_right = 24.0
-offset_bottom = 24.0
-grow_horizontal = 2
-grow_vertical = 2
-expand_mode = 1
-stretch_mode = 5
+offset_left = 60.0
+offset_top = 24.0
+offset_right = 196.0
+offset_bottom = 44.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 15
+text = "—"
+clip_text = true
 
-[node name="FrameBadge" type="TextureRect" parent="Dimmer/BookRoot/RightPage/TopFrames" unique_id=270031366]
-texture_filter = 1
-custom_minimum_size = Vector2(84, 84)
-layout_mode = 2
-texture = ExtResource("22_frame_square")
-expand_mode = 1
-stretch_mode = 5
 
-[node name="BadgeBox" type="VBoxContainer" parent="Dimmer/BookRoot/RightPage/TopFrames/FrameBadge" unique_id=1686490343]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 6.0
-offset_right = -6.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 2
-alignment = 1
-
-[node name="BadgeCount" type="Label" parent="Dimmer/BookRoot/RightPage/TopFrames/FrameBadge/BadgeBox" unique_id=778438632]
+[node name="BadgeHotbar" type="Label" parent="Dimmer/BookRoot/RightPage"]
 unique_name_in_owner = true
-texture_filter = 1
-layout_mode = 2
-text = "--"
-label_settings = SubResource("LabelSettings_badge_title")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="BadgeHotbar" type="Label" parent="Dimmer/BookRoot/RightPage/TopFrames/FrameBadge/BadgeBox" unique_id=2105140067]
-unique_name_in_owner = true
-texture_filter = 1
-custom_minimum_size = Vector2(72, 0)
-layout_mode = 2
-label_settings = SubResource("LabelSettings_badge_sub")
-horizontal_alignment = 1
-vertical_alignment = 1
+offset_left = 60.0
+offset_top = 47.0
+offset_right = 196.0
+offset_bottom = 77.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 12
+text = ""
+clip_text = true
 autowrap_mode = 3
-
-[node name="DetailBox" type="NinePatchRect" parent="Dimmer/BookRoot/RightPage" unique_id=1123397558]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -90.0
-offset_top = -152.0
-offset_right = 90.0
-offset_bottom = -68.0
-grow_horizontal = 2
-grow_vertical = 0
-texture = SubResource("AtlasTexture_detail_frame")
-patch_margin_left = 10
-patch_margin_top = 10
-patch_margin_right = 10
-patch_margin_bottom = 10
-
-[node name="Margin" type="MarginContainer" parent="Dimmer/BookRoot/RightPage/DetailBox" unique_id=1935271513]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 6
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 6
-
-[node name="VBox" type="VBoxContainer" parent="Dimmer/BookRoot/RightPage/DetailBox/Margin" unique_id=1152246454]
-layout_mode = 2
-theme_override_constants/separation = 2
-
-[node name="DetailTitle" type="Label" parent="Dimmer/BookRoot/RightPage/DetailBox/Margin/VBox" unique_id=1786244471]
-unique_name_in_owner = true
-texture_filter = 1
-layout_mode = 2
-text = "Pilih Item"
-label_settings = SubResource("LabelSettings_detail_title")
-clip_text = true
-text_overrun_behavior = 3
-
-[node name="DetailSub" type="Label" parent="Dimmer/BookRoot/RightPage/DetailBox/Margin/VBox" unique_id=1021706769]
-unique_name_in_owner = true
-texture_filter = 1
-layout_mode = 2
-text = "Arahkan kursor atau klik slot"
-label_settings = SubResource("LabelSettings_detail_sub")
-clip_text = true
-text_overrun_behavior = 3
-
-[node name="DetailDesc" type="Label" parent="Dimmer/BookRoot/RightPage/DetailBox/Margin/VBox" unique_id=699189561]
-unique_name_in_owner = true
-texture_filter = 1
-layout_mode = 2
-size_flags_vertical = 3
-text = "Arahkan kursor ke item atau perkakas untuk melihat fungsi dan deskripsi lengkap."
-label_settings = SubResource("LabelSettings_detail_desc")
-autowrap_mode = 3
-clip_text = true
-text_overrun_behavior = 3
 max_lines_visible = 2
 
-[node name="BottomActionBox" type="NinePatchRect" parent="Dimmer/BookRoot/RightPage" unique_id=1402320186]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -90.0
-offset_top = -62.0
-offset_right = 90.0
-offset_bottom = -12.0
-grow_horizontal = 2
-grow_vertical = 0
-texture = SubResource("AtlasTexture_panel_dark")
-patch_margin_left = 5
-patch_margin_top = 5
-patch_margin_right = 5
-patch_margin_bottom = 5
-
-[node name="Margin" type="MarginContainer" parent="Dimmer/BookRoot/RightPage/BottomActionBox" unique_id=1686568039]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 4
-
-[node name="VBox" type="VBoxContainer" parent="Dimmer/BookRoot/RightPage/BottomActionBox/Margin" unique_id=737906576]
-layout_mode = 2
-theme_override_constants/separation = 1
-
-[node name="Row" type="HBoxContainer" parent="Dimmer/BookRoot/RightPage/BottomActionBox/Margin/VBox" unique_id=2095256140]
-layout_mode = 2
-
-[node name="GoldLabel" type="Label" parent="Dimmer/BookRoot/RightPage/BottomActionBox/Margin/VBox/Row" unique_id=218549408]
+[node name="DetailSub" type="Label" parent="Dimmer/BookRoot/RightPage"]
 unique_name_in_owner = true
-texture_filter = 1
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Uang: 100 G"
-label_settings = SubResource("LabelSettings_gold")
-vertical_alignment = 1
+offset_left = 4.0
+offset_top = 80.0
+offset_right = 196.0
+offset_bottom = 96.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 12
+text = ""
 clip_text = true
-text_overrun_behavior = 3
 
-[node name="PriceLabel" type="Label" parent="Dimmer/BookRoot/RightPage/BottomActionBox/Margin/VBox/Row" unique_id=183716143]
+
+[node name="DetailDesc" parent="Dimmer/BookRoot/RightPage" instance=ExtResource("text")]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 102.0
+offset_right = 196.0
+offset_bottom = 166.0
+
+
+[node name="GoldLabel" type="Label" parent="Dimmer/BookRoot/RightPage"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 170.0
+offset_right = 196.0
+offset_bottom = 188.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 13
+text = "Uang: 0 G"
+clip_text = true
+
+
+[node name="PriceLabel" type="Label" parent="Dimmer/BookRoot/RightPage"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 188.0
+offset_right = 196.0
+offset_bottom = 202.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 11
+text = ""
+clip_text = true
+
+
+[node name="TipLabel" type="Label" parent="Dimmer/BookRoot/RightPage"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 204.0
+offset_right = 196.0
+offset_bottom = 224.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 11
+text = "Pilih item di halaman kiri."
+clip_text = true
+horizontal_alignment = 1
+
+[node name="ActionRow" type="HBoxContainer" parent="Dimmer/BookRoot/RightPage"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 204.0
+offset_right = 196.0
+offset_bottom = 224.0
+theme_override_constants/separation = 4
+
+[node name="DropButton" type="Button" parent="Dimmer/BookRoot/RightPage/ActionRow"]
+unique_name_in_owner = true
+visible = false
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+clip_text = true
+text = "Buang"
+
+[node name="HotbarButton" type="Button" parent="Dimmer/BookRoot/RightPage/ActionRow"]
+unique_name_in_owner = true
+visible = false
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+clip_text = true
+text = "Hotbar"
+
+[node name="ConsumeButton" type="Button" parent="Dimmer/BookRoot/RightPage/ActionRow"]
+unique_name_in_owner = true
+visible = false
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+clip_text = true
+text = "Konsumsi Biji Daya"
+
+[node name="TopTabsContainer" type="Control" parent="Dimmer/BookRoot" unique_id=1846145942]
+unique_name_in_owner = true
+z_index = 5
+layout_mode = 1
+anchors_preset = 0
+offset_left = 24.0
+offset_top = -62.0
+offset_right = 452.0
+offset_bottom = 4.0
+mouse_filter = 1
+theme = ExtResource("book_theme")
+
+[node name="TabBook" type="TextureButton" parent="Dimmer/BookRoot/TopTabsContainer" unique_id=108560119]
 unique_name_in_owner = true
 texture_filter = 1
-layout_mode = 2
-label_settings = SubResource("LabelSettings_price")
-horizontal_alignment = 2
-vertical_alignment = 1
+custom_minimum_size = Vector2(36, 58)
+layout_mode = 0
+offset_right = 36.0
+offset_bottom = 58.0
+tooltip_text = "Semua Item"
+texture_normal = ExtResource("TopTabsContainer_1_xdvng")
+ignore_texture_size = true
+stretch_mode = 0
 
-[node name="TipLabel" type="Label" parent="Dimmer/BookRoot/RightPage/BottomActionBox/Margin/VBox" unique_id=253532875]
+[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/TopTabsContainer/TabBook" unique_id=2122060935]
 texture_filter = 1
-layout_mode = 2
-text = "Tarik/klik untuk tukar slot"
-label_settings = SubResource("LabelSettings_price")
+layout_mode = 1
+offset_left = 6.0
+offset_top = 8.0
+offset_right = 30.0
+offset_bottom = 32.0
+grow_horizontal = 2
+mouse_filter = 2
+texture = ExtResource("RightRibbonsContainer_2_1m6vq")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TabLabel" type="Label" parent="Dimmer/BookRoot/TopTabsContainer/TabBook" unique_id=1217370712]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 32.0
+offset_right = 34.0
+offset_bottom = 55.0
+theme_override_font_sizes/font_size = 12
+text = "Tas"
 horizontal_alignment = 1
 clip_text = true
-text_overrun_behavior = 3
+
+[node name="TabGear" type="TextureButton" parent="Dimmer/BookRoot/TopTabsContainer" unique_id=412402609]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(46, 58)
+layout_mode = 0
+offset_left = 382.0
+offset_top = 8.0
+offset_right = 428.0
+offset_bottom = 66.0
+tooltip_text = "Buka pengaturan layar, audio, dan permainan"
+texture_normal = ExtResource("TopTabsContainer_4_enmef")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/TopTabsContainer/TabGear" unique_id=761368986]
+texture_filter = 1
+layout_mode = 1
+offset_left = 11.0
+offset_top = 8.0
+offset_right = 35.0
+offset_bottom = 32.0
+grow_horizontal = 2
+mouse_filter = 2
+texture = ExtResource("TopTabsContainer_5_tvmee")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TabLabel" type="Label" parent="Dimmer/BookRoot/TopTabsContainer/TabGear" unique_id=597720057]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 32.0
+offset_right = 60.0
+offset_bottom = 55.0
+theme_override_font_sizes/font_size = 12
+text = "Setelan"
+horizontal_alignment = 1
+clip_text = true
+
+[node name="TabStatus" type="TextureButton" parent="Dimmer/BookRoot/TopTabsContainer" unique_id=1274388282]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(44, 58)
+layout_mode = 0
+offset_left = 40.0
+offset_top = 8.0
+offset_right = 84.0
+offset_bottom = 66.0
+tooltip_text = "Status"
+texture_normal = ExtResource("TopTabsContainer_4_enmef")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/TopTabsContainer/TabStatus" unique_id=1373402825]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = 34.0
+offset_bottom = 32.0
+mouse_filter = 2
+texture = ExtResource("TopTabsContainer_6_0j4qj")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TabLabel" type="Label" parent="Dimmer/BookRoot/TopTabsContainer/TabStatus" unique_id=1151063832]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 32.0
+offset_right = 51.0
+offset_bottom = 55.0
+theme_override_font_sizes/font_size = 12
+text = "Status"
+horizontal_alignment = 1
+clip_text = true
+
+[node name="TabKoleksi" type="TextureButton" parent="Dimmer/BookRoot/TopTabsContainer" unique_id=973450335]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(52, 58)
+layout_mode = 0
+offset_left = 326.0
+offset_top = 8.0
+offset_right = 378.0
+offset_bottom = 66.0
+tooltip_text = "Ensiklopedia penemuan: ikan, hasil hutan, tanaman, dan mineral"
+texture_normal = ExtResource("TopTabsContainer_4_enmef")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/TopTabsContainer/TabKoleksi" unique_id=525753560]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 8.0
+offset_right = 38.0
+offset_bottom = 32.0
+mouse_filter = 2
+texture = ExtResource("RightRibbonsContainer_2_1m6vq")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TabLabel" type="Label" parent="Dimmer/BookRoot/TopTabsContainer/TabKoleksi" unique_id=1463760138]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 32.0
+offset_right = 58.0
+offset_bottom = 55.0
+theme_override_font_sizes/font_size = 12
+text = "Koleksi"
+horizontal_alignment = 1
+clip_text = true
+
+[node name="TabSkills" type="TextureButton" parent="Dimmer/BookRoot/TopTabsContainer" unique_id=44117410]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(58, 58)
+layout_mode = 0
+offset_left = 220.0
+offset_top = 8.0
+offset_right = 278.0
+offset_bottom = 66.0
+tooltip_text = "Level role, EXP, dan pohon keahlian"
+texture_normal = ExtResource("TopTabsContainer_4_enmef")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/TopTabsContainer/TabSkills" unique_id=2055376209]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 8.0
+offset_right = 41.0
+offset_bottom = 32.0
+mouse_filter = 2
+texture = ExtResource("TopTabsContainer_7_50xux")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TabLabel" type="Label" parent="Dimmer/BookRoot/TopTabsContainer/TabSkills" unique_id=1164143287]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 32.0
+offset_right = 70.0
+offset_bottom = 55.0
+theme_override_font_sizes/font_size = 12
+text = "Keahlian"
+horizontal_alignment = 1
+clip_text = true
+
+[node name="TabNPC" type="TextureButton" parent="Dimmer/BookRoot/TopTabsContainer" unique_id=120790487]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(40, 58)
+layout_mode = 0
+offset_left = 282.0
+offset_top = 8.0
+offset_right = 322.0
+offset_bottom = 66.0
+tooltip_text = "Hubungan warga, hati, ulang tahun, dan selera hadiah"
+texture_normal = ExtResource("TopTabsContainer_4_enmef")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/TopTabsContainer/TabNPC" unique_id=427009988]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 32.0
+offset_bottom = 32.0
+mouse_filter = 2
+texture = ExtResource("TopTabsContainer_8_1d1eo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TabLabel" type="Label" parent="Dimmer/BookRoot/TopTabsContainer/TabNPC" unique_id=1257724687]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 32.0
+offset_right = 38.0
+offset_bottom = 55.0
+theme_override_font_sizes/font_size = 12
+text = "NPC"
+horizontal_alignment = 1
+clip_text = true
+
+[node name="TabEquipment" type="TextureButton" parent="Dimmer/BookRoot/TopTabsContainer" unique_id=1618371323]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(66, 58)
+layout_mode = 0
+offset_left = 88.0
+offset_top = 8.0
+offset_right = 154.0
+offset_bottom = 66.0
+tooltip_text = "Senjata dan armor yang sedang dipakai"
+texture_normal = ExtResource("TopTabsContainer_4_enmef")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/TopTabsContainer/TabEquipment" unique_id=182922885]
+layout_mode = 0
+offset_left = 21.0
+offset_top = 8.0
+offset_right = 45.0
+offset_bottom = 32.0
+mouse_filter = 2
+texture = ExtResource("RightRibbonsContainer_8_0gtmw")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TabLabel" type="Label" parent="Dimmer/BookRoot/TopTabsContainer/TabEquipment" unique_id=1717160553]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 32.0
+offset_right = 87.0
+offset_bottom = 55.0
+theme_override_font_sizes/font_size = 12
+text = "Equip"
+horizontal_alignment = 1
+clip_text = true
+
+[node name="TabCrafting" type="TextureButton" parent="Dimmer/BookRoot/TopTabsContainer" unique_id=278218724]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(58, 58)
+layout_mode = 0
+offset_left = 158.0
+offset_top = 8.0
+offset_right = 216.0
+offset_bottom = 66.0
+tooltip_text = "Buat perlengkapan dari bahan dalam tas"
+texture_normal = ExtResource("TopTabsContainer_4_enmef")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/TopTabsContainer/TabCrafting" unique_id=92877185]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 8.0
+offset_right = 41.0
+offset_bottom = 32.0
+mouse_filter = 2
+texture = ExtResource("TopTabsContainer_10_siyrm")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TabLabel" type="Label" parent="Dimmer/BookRoot/TopTabsContainer/TabCrafting" unique_id=572242418]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 32.0
+offset_right = 64.0
+offset_bottom = 55.0
+theme_override_font_sizes/font_size = 12
+text = "Craft"
+horizontal_alignment = 1
+clip_text = true
 
 [node name="HoverTooltip" type="PanelContainer" parent="." unique_id=1822203427]
 unique_name_in_owner = true
@@ -945,3 +1352,15 @@ texture_filter = 1
 layout_mode = 2
 text = "Harga Jual: 25 G"
 label_settings = SubResource("LabelSettings_tooltip_price")
+
+[node name="DropDialog" parent="." unique_id=674030010 instance=ExtResource("drop_dialog")]
+unique_name_in_owner = true
+
+[node name="ConsumeDialog" type="ConfirmationDialog" parent="." unique_id=299545048]
+unique_name_in_owner = true
+title = "Konsumsi Biji Daya?"
+theme = ExtResource("book_theme")
+ok_button_text = "Konsumsi"
+dialog_text = "Stamina maksimum +10 permanen.
+Memulihkan 10 stamina. Biji hanya dapat dikonsumsi sekali."
+cancel_button_text = "Batal"

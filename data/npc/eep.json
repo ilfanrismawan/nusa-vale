@@ -1,0 +1,322 @@
+{
+  "schema_version": 1,
+  "id": "eep",
+  "name": "Eep",
+  "age": 27,
+  "gender": "male",
+  "role": "Penjual Hewan Ternak",
+  "birthday": {
+    "season": "summer",
+    "day": 14
+  },
+  "home_map": "town",
+  "residence": "Peternakan di luar gerbang barat kota",
+  "romanceable": false,
+  "personality": [
+    "patient",
+    "friendly",
+    "animal_lover",
+    "early_riser"
+  ],
+  "move_speed": 38.0,
+  "friendship": {
+    "start": 0,
+    "max_hearts": 10
+  },
+  "offscreen_activities": [
+    "sleeping"
+  ],
+  "service": {
+    "type": "livestock",
+    "available_activities": [
+      "selling"
+    ],
+    "closed_days": [
+      "wednesday"
+    ],
+    "presentation": "res://resources/ui/eep_livestock_shop_presentation.tres"
+  },
+  "visual": {
+    "sprite_frames": "res://resources/npc_data/npc_animation/eep_frame.tres",
+    "portrait": "res://assets/farm_rpg/Character/NPC'S/Eep/npc_portrait_eep.png",
+    "portrait_cell_size": 64,
+    "portrait_columns": 5,
+    "expressions": {
+      "neutral": 0,
+      "sparkle": 5,
+      "angry": 7,
+      "happy": 10,
+      "annoyed": 12
+    }
+  },
+  "dialogue": {
+    "default": [
+      {
+        "text": "Aku Eep. Kalau kamu ingin mulai beternak, kita bisa mencari hewan yang cocok untuk kebunmu.",
+        "expression": "happy"
+      },
+      {
+        "text": "Siapkan kandang, pakan, dan waktu untuk merawatnya sebelum membawa hewan pulang.",
+        "expression": "neutral"
+      }
+    ],
+    "checking_feed": [
+      {
+        "text": "Aku sedang memeriksa pakan dan kondisi hewan. Lapak buka pukul sembilan.",
+        "expression": "happy"
+      },
+      {
+        "text": "Ayam dan bebek tinggal di kandang unggas. Sapi, kambing, dan domba memerlukan kandang ternak.",
+        "expression": "neutral"
+      }
+    ],
+    "selling": [
+      {
+        "text": "Mau mencari teman baru untuk peternakanmu? Semua hewan di lapakku sudah dewasa.",
+        "expression": "happy"
+      },
+      {
+        "text": "Pilih kandang yang sesuai, beri nama, lalu aku akan mengantarkannya ke sana.",
+        "expression": "neutral"
+      },
+      {
+        "text": "Setiap Rabu lapak libur. Aku perlu waktu untuk memeriksa kesehatan hewan di ranch.",
+        "expression": "neutral"
+      }
+    ],
+    "lunch": [
+      {
+        "text": "Istirahat makan dulu. Merawat hewan juga perlu tenaga!",
+        "expression": "happy"
+      },
+      {
+        "text": "Hewan yang kenyang dan kandangnya bersih akan menghasilkan produk dengan kualitas lebih baik.",
+        "expression": "neutral"
+      }
+    ],
+    "resting": [
+      {
+        "text": "Lapak sudah tutup. Aku memeriksa catatan pesanan sebelum pulang.",
+        "expression": "neutral"
+      },
+      {
+        "text": "Jangan lupa cek pakan sebelum tidur. Saat hujan, hewan perlu makan di dalam kandang.",
+        "expression": "neutral"
+      }
+    ],
+    "sleeping": [
+      {
+        "text": "Aku pulang ke ranch di luar gerbang barat. Sampai besok pagi!",
+        "expression": "happy"
+      }
+    ]
+  },
+  "dialogue_by_hearts": {
+    "4": [
+      {
+        "text": "Senang melihatmu makin telaten merawat hewan. Peternakan yang nyaman dimulai dari kebiasaan kecil.",
+        "expression": "happy"
+      },
+      {
+        "text": "Terima kasih sudah mau belajar menyapa hewan dengan sabar.",
+        "expression": "happy",
+        "requires_flags": [
+          "eep_ranch_trust"
+        ]
+      }
+    ],
+    "8": [
+      {
+        "text": "Kalau hewan-hewan itu betah di kebunmu, aku ikut merasa senang. Terima kasih sudah menjaga mereka.",
+        "expression": "sparkle"
+      }
+    ]
+  },
+  "gift_tastes": {
+    "loved": [
+      "complete_breakfast",
+      "carrot",
+      "cow_milk",
+      "chicken_egg"
+    ],
+    "liked": [
+      "apple",
+      "hay",
+      "animal_feed",
+      "green_tea"
+    ],
+    "neutral": [
+      "bread",
+      "wood",
+      "stone",
+      "fiber"
+    ],
+    "disliked": [
+      "clay",
+      "coal",
+      "fish_bone_fish"
+    ],
+    "hated": [
+      "slime_gel",
+      "old_bone",
+      "shadow_ore"
+    ]
+  },
+  "gift_dialogue": {
+    "loved": [
+      {
+        "text": "Wah, ini kesukaanku! Terima kasih, kamu perhatian sekali.",
+        "expression": "sparkle"
+      }
+    ],
+    "liked": [
+      {
+        "text": "Terima kasih! Ini pasti berguna di ranch.",
+        "expression": "happy"
+      }
+    ],
+    "neutral": [
+      {
+        "text": "Terima kasih sudah membawakan hadiah.",
+        "expression": "neutral"
+      }
+    ],
+    "disliked": [
+      {
+        "text": "Terima kasih, tapi barang ini kurang cocok untukku.",
+        "expression": "annoyed"
+      }
+    ],
+    "hated": [
+      {
+        "text": "Maaf, tolong jauhkan ini dari hewan-hewan di ranch.",
+        "expression": "angry"
+      }
+    ]
+  },
+  "schedules": {
+    "default": [
+      {
+        "time": "06:00",
+        "map": "town",
+        "point": "eep_home",
+        "activity": "sleeping",
+        "location": "Ranch di luar gerbang barat"
+      },
+      {
+        "time": "07:00",
+        "map": "town",
+        "point": "eep_stall",
+        "activity": "checking_feed"
+      },
+      {
+        "time": "09:00",
+        "map": "town",
+        "point": "eep_stall",
+        "activity": "selling"
+      },
+      {
+        "time": "12:00",
+        "map": "town",
+        "point": "eep_lunch",
+        "activity": "lunch"
+      },
+      {
+        "time": "13:00",
+        "map": "town",
+        "point": "eep_stall",
+        "activity": "selling"
+      },
+      {
+        "time": "17:00",
+        "map": "town",
+        "point": "eep_rest",
+        "activity": "resting"
+      },
+      {
+        "time": "19:00",
+        "map": "town",
+        "point": "eep_home",
+        "activity": "sleeping",
+        "location": "Ranch di luar gerbang barat"
+      }
+    ],
+    "rainy": [
+      {
+        "time": "06:00",
+        "map": "town",
+        "point": "eep_home",
+        "activity": "sleeping",
+        "location": "Ranch di luar gerbang barat"
+      },
+      {
+        "time": "07:00",
+        "map": "town",
+        "point": "eep_stall",
+        "activity": "checking_feed"
+      },
+      {
+        "time": "09:00",
+        "map": "town",
+        "point": "eep_stall",
+        "activity": "selling"
+      },
+      {
+        "time": "12:00",
+        "map": "town",
+        "point": "eep_stall",
+        "activity": "lunch"
+      },
+      {
+        "time": "13:00",
+        "map": "town",
+        "point": "eep_stall",
+        "activity": "selling"
+      },
+      {
+        "time": "17:00",
+        "map": "town",
+        "point": "eep_rest",
+        "activity": "resting"
+      },
+      {
+        "time": "19:00",
+        "map": "town",
+        "point": "eep_home",
+        "activity": "sleeping",
+        "location": "Ranch di luar gerbang barat"
+      }
+    ]
+  },
+  "heart_events": [
+    {
+      "id": "eep_ranch_trust_1",
+      "hearts": 4,
+      "requires_flags": [],
+      "sets_flags": [
+        "eep_ranch_trust"
+      ],
+      "map": "town",
+      "point": "eep_stall",
+      "weather": "any",
+      "time_range": [
+        "15:00",
+        "17:00"
+      ],
+      "lines": [
+        {
+          "text": "Dulu aku mengira hewan akan langsung nyaman kalau kandangnya bagus. Ternyata mereka juga perlu mengenali orang yang merawatnya.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Coba dekati mereka pelan-pelan. Beri makan, elus, dan jaga kebersihan kandangnya setiap hari.",
+          "expression": "happy"
+        },
+        {
+          "text": "Terima kasih sudah peduli. Aku jadi lebih tenang saat mengantar hewan ke kebunmu.",
+          "expression": "sparkle"
+        }
+      ]
+    }
+  ]
+}

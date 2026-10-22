@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://ebink24f7btb"]
+
+[ext_resource type="Script" uid="uid://x7ve63nhf2fe" path="res://scripts/npc/npc_route_point.gd" id="gateway"]
+[ext_resource type="Script" uid="uid://gb3t2h50ggc1" path="res://scripts/npc/npc_route_network.gd" id="network"]
+[ext_resource type="Script" uid="uid://j5qcghubydo6" path="res://scripts/npc/npc_walk_path.gd" id="path"]
+
+[sub_resource type="Curve2D" id="ubay_0"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 1153, 298, 0, 0, 0, 0, 1110, 300, 0, 0, 0, 0, 1110, 370, 0, 0, 0, 0, 1192, 370, 0, 0, 0, 0, 1192, 398, 0, 0, 0, 0, 1240, 398, 0, 0, 0, 0, 1240, 376, 0, 0, 0, 0, 1280, 376)
+}
+point_count = 8
+
+[node name="NPCPaths" type="Node2D" unique_id=403216219]
+script = ExtResource("network")
+
+[node name="town" type="Marker2D" parent="." unique_id=1804392134]
+position = Vector2(1280, 376)
+script = ExtResource("gateway")
+destination_maps = PackedStringArray("town")
+default_gateway = true
+
+[node name="Ubay_pickup_to_town" type="Path2D" parent="." unique_id=1824281080]
+curve = SubResource("ubay_0")
+script = ExtResource("path")
+npc_id = &"ubay"

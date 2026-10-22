@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://bqof8rvm3d7uo"]
 
-[ext_resource type="PackedScene" path="res://scenes/ui/cooking_debug_panel.tscn" id="debug"]
 [ext_resource type="Texture2D" uid="uid://e01al3uc5cwv" path="res://resources/ui/cooking_pot.svg" id="pot"]
 [ext_resource type="Script" uid="uid://dijug71jq22cb" path="res://scripts/ui/cooking_ui.gd" id="script"]
 [ext_resource type="Shader" uid="uid://u3opbt5e1rcp" path="res://resources/ui/cooking_backdrop.gdshader" id="shader"]
@@ -299,8 +298,3 @@ offset_bottom = 960.0
 [node name="DebugScroll" type="ScrollContainer" parent="Panel/Layout/DebugWindow" unique_id=1402232085]
 layout_mode = 2
 horizontal_scroll_mode = 0
-
-[node name="DebugPanel" parent="Panel/Layout/DebugWindow/DebugScroll" unique_id=1027775141 instance=ExtResource("debug")]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3

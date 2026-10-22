@@ -28,8 +28,9 @@ func _ready() -> void:
 	await _test_enemy()
 	await _test_player_combat()
 	print("COMBAT REGRESSION COMPLETE: failures=%d" % failures)
-	# Beri waktu pembaca log (debugger MCP) menangkap hasil sebelum jendela tertutup.
-	await get_tree().create_timer(30.0).timeout
+	# Headless runner sudah menangkap stdout; jangan menunda penutupan suite.
+	if not DisplayServer.get_name() == "headless":
+		await get_tree().create_timer(30.0).timeout
 	get_tree().quit(1 if failures > 0 else 0)
 
 func _test_formula() -> void:
@@ -124,7 +125,22 @@ func _test_enemy() -> void:
 	var weapon_layers := {}
 	for sheet in CharacterVisual.CATALOG.sheets:
 		if sheet != null and sheet.animation_name in [&"sword", &"archer", &"mage"]:
-			weapon_layers[sheet.animation_name] = sheet.tool_type >= CharacterVisual.WEAPON_TIER_KEY_BASE or not sheet.extra_layers.is_empty()
+			# Uji gambar hasil builder, termasuk fallback mage saat katalog disimpan
+			# ulang editor. Metadata kosong sendiri tidak berarti senjata hilang.
+			var body_only := sheet.duplicate() as CharacterSheet
+			body_only.tool_asset = ""
+			body_only.extra_layers = PackedStringArray()
+			body_only.animation_name = &"test_body_only"
+			var size := Vector2i(sheet.frame_size * 20, sheet.frame_size * sheet.directions)
+			var look := CharacterVisual.CATALOG.sanitize(CharacterAppearance.new())
+			var armed := CharacterSpriteBuilder.compose_sheet(sheet, CharacterVisual.CATALOG, look, 0, size)
+			var unarmed := CharacterSpriteBuilder.compose_sheet(body_only, CharacterVisual.CATALOG, look, 0, size)
+			var weapon_file := "Healer Staff.png" if sheet.animation_name == &"mage" else sheet.tool_asset.replace("{tier}", "1")
+			var weapon_found := false
+			for path in CharacterSpriteBuilder._layer_paths(sheet, CharacterVisual.CATALOG, look, 0):
+				if path.ends_with(weapon_file) and ResourceLoader.exists(path):
+					weapon_found = true
+			weapon_layers[sheet.animation_name] = weapon_found and armed.get_data() != unarmed.get_data()
 	check(weapon_layers.get(&"sword", false) and weapon_layers.get(&"archer", false) and weapon_layers.get(&"mage", false), "attack animations draw the weapon")
 
 func _test_player_combat() -> void:

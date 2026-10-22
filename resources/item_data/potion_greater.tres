@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_potion_greater.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_id = "potion_greater"
+display_name = "Ramuan Penyembuh Besar"
+icon = ExtResource("2")
+description = "Ramuan sirup maple dari meja alkimia. Memulihkan 120 HP dan 40 stamina."
+category = 9
+stamina_restore = 40
+hp_restore = 120
+sell_price = 220
+rarity = 2

@@ -83,7 +83,9 @@ func take_hit(_damage: int = 1) -> void:
 	Juice.play(&"cut_break", pos)
 	if area_key.begins_with("farm"):
 		StructureManager.harvest_hay()
-	if data and data.drop_item and randf() < data.drop_chance:
+	SkillSystem.gain(null, &"forager", SkillSystem.RULES.weed_exp)
+	# Serat Melimpah (Forager Lv6): rumput liar selalu menjatuhkan hasilnya.
+	if data and data.drop_item and (randf() < data.drop_chance or SkillSystem.has(null, &"weed_fiber")):
 		ItemPickup.spawn(get_parent(), pos, data.drop_item.item_id, data.drop_count)
 	ForageManager.remove_item(area_key, cell)
 	if DiscoveryManager.discover("weed_cut_tip"):

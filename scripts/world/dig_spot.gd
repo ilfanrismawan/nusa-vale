@@ -72,7 +72,10 @@ func dig(bonus_chance: float = 0.0) -> bool:
 		return false
 	_dug = true
 	var pos := ground_position()
-	var loot: ForageData = ForageManager.pick(spawner.location_id, true) if spawner else null
+	# Ancient Tracker (Forager Lv10 B): barang gali langka lebih sering.
+	var rare_mult := SkillSystem.RULES.rare_dig_weight_mult if SkillSystem.has(null, &"dig_rare") else 1.0
+	var loot: ForageData = ForageManager.pick(spawner.location_id, true, rare_mult) if spawner else null
+	SkillSystem.gain(null, &"forager", SkillSystem.RULES.dig_exp)
 	if loot and loot.item:
 		var amount := randi_range(loot.amount_min, maxi(loot.amount_min, loot.amount_max))
 		if randf() < bonus_chance:

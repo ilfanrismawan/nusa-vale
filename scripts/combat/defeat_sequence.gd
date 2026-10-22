@@ -28,13 +28,18 @@ static func start(body: Player, p_rules: DefeatRules = null, p_exhausted: bool =
 	return sequence
 
 ## Potong uang bersama dan sebagian barang acak. Mengembalikan {"money": int, "lost": Array[String]}.
-static func apply_penalty(data: PlayerData, p_rules: DefeatRules, rng: RandomNumberGenerator = null) -> Dictionary:
+## on_farm: tumbang di ladang (Economist Lv7 menghapus denda uang di sana).
+static func apply_penalty(data: PlayerData, p_rules: DefeatRules, rng: RandomNumberGenerator = null, on_farm: bool = false) -> Dictionary:
 	if rng == null:
 		rng = RandomNumberGenerator.new()
 		rng.randomize()
 	var fee := floori(GameState.money * p_rules.money_penalty_percent / 100.0)
 	if p_rules.money_penalty_max > 0:
 		fee = mini(fee, p_rules.money_penalty_max)
+	# Role Economist (GDD 13): denda pingsan -25%/-50%, gratis di ladang.
+	fee = floori(fee * (1.0 - clampf(SkillSystem.stat(data, &"faint_penalty"), 0.0, 1.0)))
+	if on_farm and SkillSystem.has(data, &"faint_farm_free"):
+		fee = 0
 	fee = clampi(fee, 0, GameState.money)
 	if fee > 0:
 		GameState.spend_money(fee)
@@ -56,6 +61,14 @@ static func apply_penalty(data: PlayerData, p_rules: DefeatRules, rng: RandomNum
 			lost.append("%s x%d" % [item.display_name, amount])
 	return {"money": fee, "lost": lost}
 
+static func _in_farm(body: Node) -> bool:
+	var node := body if is_instance_valid(body) else null
+	while node != null:
+		if node.scene_file_path.get_file().to_lower() == "farm.tscn":
+			return true
+		node = node.get_parent()
+	return false
+
 ## Barang yang aman dari denda: alat, senjata, perlengkapan, bangunan, barang taruh, Biji Daya.
 static func can_lose(item: ItemData) -> bool:
 	if item == null or item.is_tool() or item.placeable:
@@ -71,7 +84,8 @@ func _run() -> void:
 		await _run_exhausted(data)
 		return
 
-	var penalty := apply_penalty(data, rules)
+	var on_farm := _in_farm(_body)
+	var penalty := apply_penalty(data, rules, null, on_farm)
 	data.hp = maxi(1, ceili(data.max_hp * rules.hp_after_respawn))
 	data.stamina = mini(data.stamina, ceili(data.max_stamina * rules.stamina_after_respawn))
 	var solo := not Coop.has_root()

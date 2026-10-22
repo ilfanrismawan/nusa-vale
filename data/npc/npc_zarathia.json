@@ -1,0 +1,333 @@
+{
+  "schema_version": 1,
+  "id": "zarathia",
+  "name": "Zarathia",
+  "gender": "female",
+  "age": 20,
+  "role": "Penjual Teh dan Kue",
+  "birthday": {
+    "season": "spring",
+    "day": 3
+  },
+  "home_map": "wira_home",
+  "romanceable": true,
+  "family": {
+    "father": "wira",
+    "twin": "zarathustra"
+  },
+  "personality": [
+    "calm",
+    "curious",
+    "artistic",
+    "caring"
+  ],
+  "move_speed": 36.0,
+  "friendship": {
+    "start": 0,
+    "max_hearts": 10
+  },
+  "romance": {
+    "dating_hearts": 8,
+    "marriage_hearts": 10,
+    "spouse_home_map": "player_farm_house"
+  },
+  "service": null,
+  "visual": {
+    "sprite_frames": "res://resources/npc_data/npc_animation/npc_zarathia_frame.tres",
+    "portrait": "res://assets/farm_rpg/Character/NPC'S/Tori/Portrait Tori.png",
+    "portrait_cell_size": 64,
+    "portrait_columns": 5,
+    "expressions": {
+      "neutral": 0,
+      "sparkle": 5,
+      "angry": 7,
+      "happy": 10,
+      "annoyed": 12
+    }
+  },
+  "dialogue": {
+    "default": [
+      {
+        "text": "Mau mampir minum teh? Hari ini aku buat yang agak manis.",
+        "expression": "happy"
+      }
+    ],
+    "breakfast": [
+      {
+        "text": "Aku bangun lebih awal supaya sempat menyeduh teh untuk Ayah dan Thustra.",
+        "expression": "happy"
+      },
+      {
+        "text": "Zarathustra makannya cepat sekali. Aku selalu harus menyisakan bagian untukku.",
+        "expression": "neutral"
+      }
+    ],
+    "tea_stall": [
+      {
+        "text": "Selamat datang. Teh hangat, kue pisang, atau dua-duanya?",
+        "expression": "sparkle"
+      },
+      {
+        "text": "Warung kecil ini mungkin sepi, tapi aku suka melihat orang berhenti sebentar untuk minum.",
+        "expression": "neutral"
+      },
+      {
+        "text": "Warung teh ini kecil, tapi aku ingin rumah kami selalu punya sesuatu yang hangat.",
+        "expression": "happy",
+        "requires_flags": [
+          "story_zarathia_told"
+        ]
+      }
+    ],
+    "lunch": [
+      {
+        "text": "Makan siang di bangku ini dengan pemandangan kota. Tidak buruk.",
+        "expression": "happy"
+      }
+    ],
+    "sketching": [
+      {
+        "text": "Aku sedang menggambar atap-atap desa. Jangan lihat dulu, belum rapi.",
+        "expression": "annoyed"
+      },
+      {
+        "text": "Dari bukit ini, semuanya terlihat lebih tenang.",
+        "expression": "happy"
+      }
+    ],
+    "baking": [
+      {
+        "text": "Kalau hujan, aku panggang kue di rumah. Baunya enak, kan?",
+        "expression": "sparkle"
+      }
+    ],
+    "family_time": [
+      {
+        "text": "Kami bertiga kadang diam saja sambil minum teh. Tapi rasanya hangat.",
+        "expression": "happy"
+      },
+      {
+        "text": "Kursi di ujung meja itu dulu tempat Ibu. Sekarang tidak ada yang mau duduk di sana.",
+        "expression": "neutral",
+        "requires_flags": [
+          "story_zarathia_told"
+        ]
+      },
+      {
+        "text": "Surat Ibu sudah kami baca bertiga. Rasanya kursi itu tidak sedingin dulu lagi.",
+        "expression": "happy",
+        "requires_flags": [
+          "family_truth_known"
+        ]
+      }
+    ],
+    "sleeping": [
+      {
+        "text": "Sudah malam. Sampai ketemu besok.",
+        "expression": "neutral"
+      }
+    ]
+  },
+  "dialogue_by_hearts": {
+    "4": [
+      {
+        "text": "Aku senang kamu sering mampir ke warungku. Terima kasih.",
+        "expression": "happy"
+      }
+    ],
+    "8": [
+      {
+        "text": "Kadang aku menggambar sesuatu, lalu sadar wajahnya mirip kamu. Aneh, ya?",
+        "expression": "sparkle"
+      }
+    ]
+  },
+  "romance_dialogue": {
+    "confession_accept": [
+      {
+        "text": "Aku juga merasakan hal yang sama. Aku senang kamu yang bilang duluan.",
+        "expression": "sparkle"
+      }
+    ],
+    "confession_too_early": [
+      {
+        "text": "Maaf, aku butuh waktu. Tapi tolong tetap mampir minum teh, ya.",
+        "expression": "neutral"
+      }
+    ],
+    "marriage_accept": [
+      {
+        "text": "Iya. Aku mau menyeduh teh untukmu setiap pagi.",
+        "expression": "sparkle"
+      }
+    ]
+  },
+  "gift_tastes": {
+    "loved": [
+      "sunflower",
+      "sweet_pea",
+      "cake",
+      "sweet_berry_cake"
+    ],
+    "liked": [
+      "green_tea",
+      "chamomile_tea",
+      "lavender_tea",
+      "honey",
+      "banana_bread"
+    ],
+    "neutral": [
+      "apple",
+      "carrot",
+      "rice",
+      "bread"
+    ],
+    "disliked": [
+      "coal",
+      "iron_ore",
+      "stone"
+    ],
+    "hated": [
+      "slime_gel",
+      "old_bone",
+      "worm"
+    ]
+  },
+  "gift_dialogue": {
+    "loved": [
+      {
+        "text": "Aku suka sekali! Terima kasih, kamu ingat kesukaanku.",
+        "expression": "sparkle"
+      }
+    ],
+    "liked": [
+      {
+        "text": "Terima kasih, aku suka hadiah ini.",
+        "expression": "happy"
+      }
+    ],
+    "neutral": [
+      {
+        "text": "Oh, terima kasih atas hadiahnya.",
+        "expression": "neutral"
+      }
+    ],
+    "disliked": [
+      {
+        "text": "Terima kasih, tapi ini kurang cocok untukku.",
+        "expression": "annoyed"
+      }
+    ],
+    "hated": [
+      {
+        "text": "Maaf, aku benar-benar tidak menyukai hadiah ini.",
+        "expression": "angry"
+      }
+    ]
+  },
+  "schedules": {
+    "default": [
+      {
+        "time": "06:30",
+        "map": "wira_home",
+        "point": "zarathia_home",
+        "activity": "breakfast"
+      },
+      {
+        "time": "09:00",
+        "map": "town",
+        "point": "zarathia_tea_stall",
+        "activity": "tea_stall"
+      },
+      {
+        "time": "12:30",
+        "map": "town",
+        "point": "zarathia_bench",
+        "activity": "lunch"
+      },
+      {
+        "time": "13:30",
+        "map": "town",
+        "point": "zarathia_tea_stall",
+        "activity": "tea_stall"
+      },
+      {
+        "time": "16:30",
+        "map": "hill",
+        "point": "wira_overlook",
+        "activity": "sketching"
+      },
+      {
+        "time": "19:00",
+        "map": "wira_home",
+        "point": "zarathia_home",
+        "activity": "family_time"
+      },
+      {
+        "time": "22:00",
+        "map": "wira_home",
+        "point": "zarathia_home",
+        "activity": "sleeping"
+      }
+    ],
+    "rainy": [
+      {
+        "time": "06:30",
+        "map": "wira_home",
+        "point": "zarathia_home",
+        "activity": "breakfast"
+      },
+      {
+        "time": "09:00",
+        "map": "wira_home",
+        "point": "zarathia_kitchen",
+        "activity": "baking"
+      },
+      {
+        "time": "12:30",
+        "map": "wira_home",
+        "point": "zarathia_home",
+        "activity": "lunch"
+      },
+      {
+        "time": "19:00",
+        "map": "wira_home",
+        "point": "zarathia_home",
+        "activity": "family_time"
+      },
+      {
+        "time": "22:00",
+        "map": "wira_home",
+        "point": "zarathia_home",
+        "activity": "sleeping"
+      }
+    ]
+  },
+  "heart_events": [
+    {
+      "id": "zarathia_family_1",
+      "hearts": 4,
+      "requires_flags": [],
+      "sets_flags": [
+        "story_zarathia_told"
+      ],
+      "weather": "clear",
+      "map": "hill",
+      "point": "wira_overlook",
+      "time_range": [
+        "16:30",
+        "18:00"
+      ],
+      "lines": [
+        {
+          "text": "Dulu rumah kami kecil sekali. Aku ingat Ibu sering duduk diam di dekat jendela.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Aku tidak pernah benci Ibu. Aku cuma ingin tahu apa yang ada di kepalanya waktu itu.",
+          "expression": "annoyed"
+        }
+      ]
+    }
+  ]
+}

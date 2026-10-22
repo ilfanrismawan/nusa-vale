@@ -10,6 +10,7 @@ signal finished
 @export var design_size := Vector2(1600, 800)
 
 var player: Player
+var social_npc_id := ""
 var data: PlayerData:
 	get: return player.data if is_instance_valid(player) else GameState.p1()
 var _selected_tool_entry: Dictionary = {}
@@ -40,6 +41,8 @@ func _ready() -> void:
 	%PortraitLayers.visible = presentation.vendor_art == null
 	_upgrade_btn.pressed.connect(_on_upgrade_pressed)
 	%CloseButton.pressed.connect(_close)
+	%SocialButton.visible = NPCSocialService.known(social_npc_id)
+	%SocialButton.pressed.connect(_open_social_dialog)
 	%PreviousPage.pressed.connect(_change_page.bind(-1))
 	%NextPage.pressed.connect(_change_page.bind(1))
 	get_viewport().size_changed.connect(_resize)
@@ -56,6 +59,10 @@ func _ready() -> void:
 	_refresh_tools()
 	_resize()
 	Coop.set_menu_open(player, true)
+
+func _open_social_dialog() -> void:
+	_close()
+	NPCSocialService.open_dialog(player, social_npc_id, presentation.vendor_name, presentation.vendor_art)
 
 func _resize() -> void:
 	var view := get_viewport().get_visible_rect().size

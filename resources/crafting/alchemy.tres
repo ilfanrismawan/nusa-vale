@@ -1,0 +1,64 @@
+[gd_resource type="Resource" script_class="CraftingCatalog" format=3]
+
+[ext_resource type="Script" uid="uid://b48f86kva881a" path="res://scripts/resources/crafting_catalog.gd" id="1"]
+[ext_resource type="Script" uid="uid://cifuu4is8ndbw" path="res://scripts/resources/crafting_recipe.gd" id="2"]
+
+[sub_resource type="Resource" id="Recipe_potion_health"]
+script = ExtResource("2")
+recipe_id = "potion_health"
+output_item_id = "potion_health"
+ingredients = {
+"aloe": 1,
+"slime_gel": 2,
+"honey": 1
+}
+group = "Ramuan"
+
+[sub_resource type="Resource" id="Recipe_potion_stamina"]
+script = ExtResource("2")
+recipe_id = "potion_stamina"
+output_item_id = "potion_stamina"
+ingredients = {
+"tea_leaves": 1,
+"honey": 1,
+"slime_gel": 1
+}
+group = "Ramuan"
+
+[sub_resource type="Resource" id="Recipe_potion_speed"]
+script = ExtResource("2")
+recipe_id = "potion_speed"
+output_item_id = "potion_speed"
+ingredients = {
+"coffee_beans": 2,
+"sugar": 1,
+"slime_gel": 1
+}
+group = "Ramuan"
+
+[sub_resource type="Resource" id="Recipe_potion_regen"]
+script = ExtResource("2")
+recipe_id = "potion_regen"
+output_item_id = "potion_regen"
+ingredients = {
+"aloe": 2,
+"quartz": 1,
+"slime_gel": 2
+}
+group = "Ramuan"
+
+[sub_resource type="Resource" id="Recipe_potion_greater"]
+script = ExtResource("2")
+recipe_id = "potion_greater"
+output_item_id = "potion_greater"
+ingredients = {
+"maple_syrup": 1,
+"honey": 1,
+"aloe": 2,
+"slime_gel": 2
+}
+group = "Ramuan"
+
+[resource]
+script = ExtResource("1")
+recipes = Array[ExtResource("2")]([SubResource("Recipe_potion_health"), SubResource("Recipe_potion_stamina"), SubResource("Recipe_potion_speed"), SubResource("Recipe_potion_regen"), SubResource("Recipe_potion_greater")])

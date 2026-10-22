@@ -76,6 +76,12 @@ func _build_service() -> void:
 		var counter := preload("res://scenes/world/exterior/object/ShopCounter.tscn").instantiate()
 		counter.position = Vector2(240, 112)
 		add_child(counter)
+	elif service == "library":
+		# Buku riset Role & EXP (GDD 13.1) dijual di meja pustakawan.
+		var desk := preload("res://scenes/world/exterior/object/ShopCounter.tscn").instantiate()
+		desk.shop_data = preload("res://resources/shop/library_books.tres")
+		desk.position = Vector2(240, 112)
+		add_child(desk)
 	else:
 		var notice := preload("res://scripts/world/school_notice.gd").new()
 		notice.position = Vector2(240, 104)

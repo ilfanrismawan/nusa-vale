@@ -21,7 +21,7 @@ offset = Vector2(0, -47)
 [node name="Door" type="Area2D" parent="." unique_id=1353296392]
 position = Vector2(-27, -15)
 script = ExtResource("2_wbx71")
-target_scene = "res://scenes/world/interior/town/house_teal.tscn"
+target_scene = "res://scenes/world/interior/town/herbal_house.tscn"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Door" unique_id=1462359028]
 position = Vector2(-3, -6.5)

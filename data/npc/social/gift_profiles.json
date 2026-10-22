@@ -1,0 +1,251 @@
+{
+  "kirana": {
+    "name": "Kirana",
+    "gift_tastes": {
+      "loved": [
+        "sunflower",
+        "cake",
+        "strawberry"
+      ],
+      "liked": [
+        "apple",
+        "honey",
+        "green_tea",
+        "sweet_pea"
+      ],
+      "neutral": [
+        "wood",
+        "stone",
+        "rice",
+        "bread"
+      ],
+      "disliked": [
+        "coal",
+        "clay",
+        "fiber"
+      ],
+      "hated": [
+        "slime_gel",
+        "old_bone",
+        "worm"
+      ]
+    },
+    "role": "Warga Nusa Vale"
+  },
+  "bahar": {
+    "name": "Pak Bahar",
+    "gift_tastes": {
+      "loved": [
+        "grilled_catfish",
+        "fish_red_snapper",
+        "fish_stew",
+        "spice_tea"
+      ],
+      "liked": [
+        "rice_ball",
+        "baked_fish",
+        "fish_mas",
+        "bait",
+        "worm"
+      ],
+      "neutral": [
+        "bread",
+        "wood",
+        "stone",
+        "carrot"
+      ],
+      "disliked": [
+        "chili",
+        "pepper",
+        "espresso"
+      ],
+      "hated": [
+        "slime_gel",
+        "old_bone",
+        "coal"
+      ]
+    },
+    "role": "Nelayan Sepuh",
+    "visual": {
+      "portrait": "res://assets/farm_rpg/Character/NPC'S/Pirate/Premade/Jack/Pirate Portrait.png"
+    }
+  },
+  "joko": {
+    "name": "Pak Joko",
+    "gift_tastes": {
+      "loved": [
+        "vegetable_soup",
+        "pumpkin_soup",
+        "complete_breakfast",
+        "cake"
+      ],
+      "liked": [
+        "fish_mas",
+        "cow_milk",
+        "chicken_egg",
+        "flour",
+        "pepper"
+      ],
+      "neutral": [
+        "wood",
+        "apple",
+        "corn",
+        "rice"
+      ],
+      "disliked": [
+        "clay",
+        "fiber",
+        "stone"
+      ],
+      "hated": [
+        "slime_gel",
+        "old_bone",
+        "worm"
+      ]
+    },
+    "role": "Koki Warung Nusa",
+    "visual": {
+      "portrait": "res://assets/farm_rpg/Character/NPC'S/Chef/Premade/Gaston/Chef Portrait.png"
+    }
+  },
+  "ratih": {
+    "name": "dr. Ratih",
+    "gift_tastes": {
+      "loved": [
+        "chamomile_tea",
+        "lavender_tea",
+        "vegetable_soup",
+        "aloe"
+      ],
+      "liked": [
+        "daffodil",
+        "sweet_pea",
+        "honey",
+        "salad"
+      ],
+      "neutral": [
+        "apple",
+        "carrot",
+        "wood",
+        "rice"
+      ],
+      "disliked": [
+        "espresso",
+        "chili",
+        "coal"
+      ],
+      "hated": [
+        "slime_gel",
+        "old_bone",
+        "worm"
+      ]
+    },
+    "role": "Tabib & Herbalis Desa",
+    "visual": {
+      "portrait": "res://assets/farm_rpg/Character/NPC'S/Portrait (1).png"
+    }
+  },
+  "rian": {
+    "name": "Rian",
+    "gift_tastes": {
+      "loved": [
+        "cow_milk",
+        "chicken_egg",
+        "cheese",
+        "complete_breakfast"
+      ],
+      "liked": [
+        "hay",
+        "animal_feed",
+        "apple",
+        "carrot"
+      ],
+      "neutral": [
+        "wood",
+        "rice",
+        "bread",
+        "stone"
+      ],
+      "disliked": [
+        "coal",
+        "clay",
+        "fiber"
+      ],
+      "hated": [
+        "slime_gel",
+        "old_bone",
+        "worm"
+      ]
+    },
+    "role": "Penjual Ternak",
+    "visual": {
+      "portrait": "res://assets/farm_rpg/Character/NPC'S/Alex/Portrait Alex.png"
+    }
+  },
+  "damar": {
+    "name": "Pak Damar",
+    "gift_tastes": {
+      "loved": [
+        "plank",
+        "iron_bar",
+        "complete_breakfast"
+      ],
+      "liked": [
+        "wood",
+        "copper_bar",
+        "coffee",
+        "vegetable_soup"
+      ],
+      "neutral": [
+        "stone",
+        "rice",
+        "bread",
+        "apple"
+      ],
+      "disliked": [
+        "clay",
+        "fiber",
+        "fish_carp"
+      ],
+      "hated": [
+        "slime_gel",
+        "old_bone",
+        "worm"
+      ]
+    },
+    "role": "Tukang Bangunan"
+  },
+  "bima": {
+    "name": "Empu Bima",
+    "gift_tastes": {
+      "loved": [
+        "iron_bar",
+        "gold_bar",
+        "coffee"
+      ],
+      "liked": [
+        "copper_bar",
+        "coal",
+        "iron_ore",
+        "baked_potato"
+      ],
+      "neutral": [
+        "wood",
+        "stone",
+        "rice",
+        "bread"
+      ],
+      "disliked": [
+        "daffodil",
+        "sweet_pea",
+        "clay"
+      ],
+      "hated": [
+        "slime_gel",
+        "old_bone",
+        "worm"
+      ]
+    },
+    "role": "Pandai Besi"
+  }
+}

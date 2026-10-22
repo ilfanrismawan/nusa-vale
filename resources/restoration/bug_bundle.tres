@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="RestorationProject" format=3 uid="uid://dfph8x3a26s8v"]
+
+[ext_resource type="Script" uid="uid://dexc7jaawor5t" path="res://scripts/resources/restoration_project.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+project_id = "bug_bundle"
+display_name = "Sayap Alam — Bundel Serangga"
+ui_short_name = "Bundel Serangga"
+description = "Para tetua ingin taman balai kembali ramai oleh serangga. Tangkap dengan jaring serangga lalu titipkan di sini: tiap musim punya penghuni sendiri."
+requirements = Dictionary[String, int]({
+"cricket": 1,
+"dragonfly": 1,
+"firefly": 1,
+"luna_moth": 1,
+"monarch": 1
+})
+wing_id = "alam"
+completion_flag = "bug_bundle_done"
+completion_message = "Bundel Serangga lengkap! Taman balai kembali berdengung. Warga menitipkan tiga tapper untukmu."
+reward_items = Dictionary[String, int]({
+"tapper": 3
+})

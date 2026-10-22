@@ -1,0 +1,123 @@
+[gd_resource type="Resource" script_class="RoleData" load_steps=16 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/role_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/resources/role_perk.gd" id="2"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_skill_book_forager.tres" id="3"]
+
+[sub_resource type="Resource" id="perk_0"]
+script = ExtResource("2")
+level = 1
+branch = ""
+title = "Mata Jeli"
+description = "Peluang 10% memungut forage 2x."
+effects = Dictionary[StringName, float]({&"forage_double": 0.1})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_1"]
+script = ExtResource("2")
+level = 2
+branch = ""
+title = "Penebang Muda"
+description = "Peluang 15% kayu ekstra saat pohon tumbang."
+effects = Dictionary[StringName, float]({&"wood_extra": 0.15})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_2"]
+script = ExtResource("2")
+level = 3
+branch = ""
+title = "Tangan Rajin"
+description = "Peluang forage 2x +10% (total 20%)."
+effects = Dictionary[StringName, float]({&"forage_double": 0.1})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_3"]
+script = ExtResource("2")
+level = 4
+branch = ""
+title = "Penebang Cekatan"
+description = "Peluang kayu ekstra +15% (total 30%)."
+effects = Dictionary[StringName, float]({&"wood_extra": 0.15})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_4"]
+script = ExtResource("2")
+level = 5
+branch = "a"
+title = "Lumberjack"
+description = "Kapak memberi damage 2x pada pohon. (Kayu keras: segera hadir.)"
+effects = Dictionary[StringName, float]({&"axe_tree_damage": 1.0})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_5"]
+script = ExtResource("2")
+level = 5
+branch = "b"
+title = "Botanist"
+description = "Forage selalu berkualitas Emas."
+effects = Dictionary[StringName, float]({})
+coming_soon = true
+
+[sub_resource type="Resource" id="perk_6"]
+script = ExtResource("2")
+level = 6
+branch = ""
+title = "Serat Melimpah"
+description = "Rumput liar selalu menjatuhkan serat."
+effects = Dictionary[StringName, float]({&"weed_fiber": 1.0})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_7"]
+script = ExtResource("2")
+level = 7
+branch = ""
+title = "Pemungut Ahli"
+description = "Peluang forage 2x +5% (total 25%)."
+effects = Dictionary[StringName, float]({&"forage_double": 0.05})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_8"]
+script = ExtResource("2")
+level = 8
+branch = ""
+title = "Penebang Ahli"
+description = "Peluang kayu ekstra +10% (total 40%)."
+effects = Dictionary[StringName, float]({&"wood_extra": 0.1})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_9"]
+script = ExtResource("2")
+level = 9
+branch = ""
+title = "Kompas Alam"
+description = "Penanda titik gali dan forage langka di peta."
+effects = Dictionary[StringName, float]({})
+coming_soon = true
+
+[sub_resource type="Resource" id="perk_10"]
+script = ExtResource("2")
+level = 10
+branch = "a"
+title = "Forest Whisperer"
+description = "Pohon tanam dan pohon hutan tumbuh 2x lebih cepat; pohon yang ditebang ditanam ulang otomatis."
+effects = Dictionary[StringName, float]({&"tree_growth": 1.0, &"tree_replant": 1.0})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_11"]
+script = ExtResource("2")
+level = 10
+branch = "b"
+title = "Ancient Tracker"
+description = "Barang langka dari titik gali 4x lebih sering."
+effects = Dictionary[StringName, float]({&"dig_rare": 1.0})
+coming_soon = false
+
+[resource]
+script = ExtResource("1")
+role_id = &"forager"
+display_name = "Forager"
+title = "Pengumpul Alam"
+exp_hint = "EXP dari memungut forage, menebang pohon, menebas rumput liar, dan menggali titik gali."
+icon = ExtResource("3")
+color = Color(0.5412, 0.4157, 0.2275, 1)
+perks = Array[ExtResource("2")]([SubResource("perk_0"), SubResource("perk_1"), SubResource("perk_2"), SubResource("perk_3"), SubResource("perk_4"), SubResource("perk_5"), SubResource("perk_6"), SubResource("perk_7"), SubResource("perk_8"), SubResource("perk_9"), SubResource("perk_10"), SubResource("perk_11")])

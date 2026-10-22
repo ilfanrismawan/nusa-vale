@@ -1,0 +1,9 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://tests/hud_feedback_preview.gd" id="script"]
+[ext_resource type="PackedScene" path="res://scenes/ui/startup_background.tscn" id="background"]
+[ext_resource type="PackedScene" path="res://scenes/ui/action_hints.tscn" id="hints"]
+[node name="HudFeedbackPreview" type="Node"]
+process_mode = 3
+script = ExtResource("script")
+[node name="Background" parent="." instance=ExtResource("background")]
+[node name="Hints" parent="." instance=ExtResource("hints")]

@@ -24,6 +24,14 @@ var _holder: Node
 var _nodes: Dictionary = {}  # "x,y" -> node barang
 var _covered: Array[Rect2] = []  # area gambar pohon/objek besar, supaya barang tidak tertutup daun
 
+## Cache ruang terpakai per world+holder, dibangun paling banyak sekali per frame dan
+## ditambah langsung saat spawner menaruh node. Sebelumnya tiap cek sel menelusuri seluruh
+## scene (ribuan node), sehingga masuk farm bisa macet belasan detik.
+static var _occupancy: Dictionary = {}
+static var _placing := 0
+const OCC_GRID := 32.0
+const OCC_RADIUS := 28.0
+
 
 ## Buat spawner lewat kode, mis. di forest.gd: ForageSpawner.attach(self, "forest")
 static func attach(scene_root: Node, p_location_id: String, p_entities_path: NodePath = ^"YSortEntities") -> ForageSpawner:
@@ -69,6 +77,7 @@ func _process(_delta: float) -> void:
 			continue
 		if not p.input.just_pressed(&"interact"):
 			continue
+		# Gamepad A juga tombol lompat: lompat dibatalkan bila A dipakai memungut.
 		# Kalau E pemain sudah mengenai hal lain (NPC, pintu, kasur), biarkan player.gd yang menangani.
 		var other: Node = p._find_interactable()
 		if other != null and not (other is Forageable):
@@ -84,6 +93,7 @@ func try_pickup(p: Player) -> bool:
 		var node: Variant = _nodes.get(ForageManager.key_of(cell))
 		if is_instance_valid(node) and node is Forageable:
 			_bind_player(p)
+			p.mark_interacted()
 			node.interact()
 			return true
 	# Tidak tepat di depan: ambil yang paling dekat dengan kaki (maks. ~1 petak).
@@ -98,6 +108,7 @@ func try_pickup(p: Player) -> bool:
 				best = node
 	if best:
 		_bind_player(p)
+		p.mark_interacted()
 		best.interact()
 		return true
 	return false
@@ -181,6 +192,8 @@ func _place(cell: Vector2i, id: String, animate: bool) -> void:
 			ForageManager.remove_item(_area_key(), cell)
 			ForageManager.add_item(_area_key(), replacement, id)
 			cell = replacement
+	# Node sendiri tidak membuat cache basi: dicatat langsung oleh _note_placed.
+	_placing += 1
 	_holder.add_child(node)
 	node.global_position = _ground.to_global(_ground.map_to_local(cell))
 	if node.has_method("apply_sort_shift"):
@@ -188,6 +201,8 @@ func _place(cell: Vector2i, id: String, animate: bool) -> void:
 	if animate and node.has_method("play_appear"):
 		node.play_appear()
 	_nodes[ForageManager.key_of(cell)] = node
+	_note_placed(node)
+	_placing -= 1
 
 
 # ── Bisa diganti oleh turunan (WeedSpawner) ──────────────────────────────────
@@ -245,6 +260,8 @@ func _is_free(cell: Vector2i) -> bool:
 		return false
 	if ForageManager.has_item_at(_area_key(), cell):
 		return false
+	# Bangun/ambil cache dulu: _cell_allowed (titik gali) membaca _covered.
+	_occupancy_cache()
 	if not _cell_allowed(cell):
 		return false
 	var center := _ground.to_global(_ground.map_to_local(cell))
@@ -266,20 +283,113 @@ func _is_free(cell: Vector2i) -> bool:
 
 
 func _resource_space_blocked(center: Vector2) -> bool:
-	# Refresh visual occupancy: physics and the initial cover cache can lag
-	# behind nodes placed by another spawner in this same frame.
-	_covered.clear()
-	_collect_covered(_holder)
-	_collect_scene_covers(_ground.get_parent())
+	var occ := _occupancy_cache()
+	var grid: Dictionary = occ.grid
+	var base := Vector2i((center / OCC_GRID).floor())
+	for dx in range(-1, 2):
+		for dy in range(-1, 2):
+			var bucket: Variant = grid.get(base + Vector2i(dx, dy))
+			if bucket == null:
+				continue
+			for other: Variant in bucket:
+				if _occ_alive(other) and (other as Node2D).global_position.distance_to(center) < OCC_RADIUS:
+					return true
+	var rects: Array[Rect2] = occ.rects
+	var owners: Array = occ.owners
+	for i in rects.size():
+		if rects[i].has_point(center) and (owners[i] == null or _occ_alive(owners[i])):
+			return true
+	return false
+
+
+static func _occ_alive(node: Variant) -> bool:
+	return is_instance_valid(node) and not (node as Node).is_queued_for_deletion()
+
+
+## Tutupan sprite besar + pohon/batu/rumput liar di world ini. Dibangun ulang tiap frame baru,
+## atau saat node lain masuk/keluar scene (lihat _on_tree_changed); node yang ditaruh spawner
+## sendiri dicatat langsung oleh _note_placed. Node yang sudah queue_free dilewati saat dicek.
+func _occupancy_cache() -> Dictionary:
+	_watch_tree()
+	var world := _ground.get_parent()
+	var key := "%d:%d" % [world.get_instance_id(), _holder.get_instance_id()]
+	var frame := Engine.get_process_frames()
+	var occ: Dictionary = _occupancy.get(key, {})
+	if not occ.is_empty() and occ.frame == frame:
+		_covered = occ.rects
+		return occ
+	var rects: Array[Rect2] = []
+	var owners: Array = []
+	_covered = rects
+	for child in _holder.get_children():
+		if child.is_queued_for_deletion() or child is Forageable or child is Weed:
+			continue
+		_collect_covered_one(child)
+		_collect_covered(child)
+		owners.resize(rects.size())
+		for i in range(owners.size() - 1, -1, -1):
+			if owners[i] != null:
+				break
+			owners[i] = child
+	_collect_scene_covers(world)
+	owners.resize(rects.size())  # Sprite pemandangan: selalu dianggap ada (null).
+	occ = {"frame": frame, "rects": rects, "owners": owners, "grid": {}, "world": world.get_instance_id()}
 	for group in [&"choppable", &"mineable", &"weed"]:
 		for other in get_tree().get_nodes_in_group(group):
 			if other is Node2D and other.get_world_2d() == get_world_2d() and not other.is_queued_for_deletion():
-				if other.global_position.distance_to(center) < 28.0:
-					return true
-	for rect in _covered:
-		if rect.has_point(center):
-			return true
-	return false
+				_occ_add(occ, other)
+	# Buang cache world lain yang sudah tidak ada.
+	for k in _occupancy.keys():
+		if not is_instance_id_valid(int(str(k).get_slice(":", 0))):
+			_occupancy.erase(k)
+	_occupancy[key] = occ
+	return occ
+
+
+static func _occ_add(occ: Dictionary, node: Node2D) -> void:
+	var cell := Vector2i((node.global_position / OCC_GRID).floor())
+	var grid: Dictionary = occ.grid
+	if not grid.has(cell):
+		grid[cell] = []
+	(grid[cell] as Array).append(node)
+
+
+## Node yang ditaruh spawner langsung terhitung di cache frame ini (tanpa membangun ulang).
+func _note_placed(node: Node2D) -> void:
+	var world_id := _ground.get_parent().get_instance_id()
+	var frame := Engine.get_process_frames()
+	var is_blocker := node.is_in_group(&"choppable") or node.is_in_group(&"mineable") or node.is_in_group(&"weed")
+	for occ: Dictionary in _occupancy.values():
+		if occ.world != world_id or occ.frame != frame:
+			continue
+		if is_blocker:
+			_occ_add(occ, node)
+		if node is Forageable or node is Weed:
+			continue
+		var mine := _covered
+		var added: Array[Rect2] = []
+		_covered = added
+		_collect_covered_one(node)
+		_collect_covered(node)
+		_covered = mine
+		(occ.rects as Array[Rect2]).append_array(added)
+		for i in added.size():
+			(occ.owners as Array).append(node)
+
+
+## Pohon/batu/sprite yang ditambah atau dibuang kode lain membuat cache basi: bangun ulang.
+func _watch_tree() -> void:
+	var tree := get_tree()
+	if tree != null and not tree.node_added.is_connected(_on_tree_changed):
+		tree.node_added.connect(_on_tree_changed)
+		tree.node_removed.connect(_on_tree_changed)
+
+
+func _on_tree_changed(node: Node) -> void:
+	if _placing > 0 or _occupancy.is_empty():
+		return
+	if node is Sprite2D or node is AnimatedSprite2D or node is Choppable or node is Weed:
+		_occupancy.clear()
 
 
 ## Sprite besar di luar node entitas (jembatan, air terjun) juga menutup tanah di bawahnya.

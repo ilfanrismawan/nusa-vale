@@ -1,0 +1,112 @@
+[gd_resource type="Resource" format=3 uid="uid://bsmk85agyilt2"]
+
+[ext_resource type="Script" uid="uid://b6f6jkjfa5a1i" path="res://scripts/npc/data/npc_schedule_entry.gd" id="entry"]
+[ext_resource type="Script" uid="uid://ddkllbx2rhsac" path="res://scripts/npc/data/resident_profile.gd" id="profile"]
+
+[sub_resource type="Resource" id="default_0"]
+script = ExtResource("entry")
+map_id = &"wira_home"
+point_id = &"wira_home"
+activity = &"breakfast"
+
+[sub_resource type="Resource" id="default_1"]
+script = ExtResource("entry")
+hour = 7
+map_id = &"hill"
+point_id = &"wira_wood_storage"
+activity = &"checking_stock"
+
+[sub_resource type="Resource" id="default_2"]
+script = ExtResource("entry")
+hour = 8
+map_id = &"hill"
+point_id = &"wira_workshop"
+activity = &"working"
+
+[sub_resource type="Resource" id="default_3"]
+script = ExtResource("entry")
+hour = 12
+map_id = &"hill"
+point_id = &"wira_lunch"
+activity = &"lunch"
+
+[sub_resource type="Resource" id="default_4"]
+script = ExtResource("entry")
+hour = 13
+map_id = &"hill"
+point_id = &"wira_workshop"
+activity = &"working"
+
+[sub_resource type="Resource" id="default_5"]
+script = ExtResource("entry")
+hour = 17
+map_id = &"town"
+point_id = &"wira_orders"
+activity = &"delivering"
+
+[sub_resource type="Resource" id="default_6"]
+script = ExtResource("entry")
+hour = 18
+minute = 30
+map_id = &"hill"
+point_id = &"wira_overlook"
+activity = &"resting"
+
+[sub_resource type="Resource" id="default_7"]
+script = ExtResource("entry")
+hour = 21
+map_id = &"wira_home"
+point_id = &"wira_home"
+activity = &"sleeping"
+
+[sub_resource type="Resource" id="rainy_0"]
+script = ExtResource("entry")
+map_id = &"wira_home"
+point_id = &"wira_home"
+activity = &"breakfast"
+
+[sub_resource type="Resource" id="rainy_1"]
+script = ExtResource("entry")
+hour = 8
+map_id = &"hill"
+point_id = &"wira_workshop"
+activity = &"working"
+
+[sub_resource type="Resource" id="rainy_2"]
+script = ExtResource("entry")
+hour = 12
+map_id = &"hill"
+point_id = &"wira_lunch"
+activity = &"lunch"
+
+[sub_resource type="Resource" id="rainy_3"]
+script = ExtResource("entry")
+hour = 13
+map_id = &"hill"
+point_id = &"wira_workshop"
+activity = &"working"
+
+[sub_resource type="Resource" id="rainy_4"]
+script = ExtResource("entry")
+hour = 18
+map_id = &"wira_home"
+point_id = &"wira_home"
+activity = &"resting"
+
+[sub_resource type="Resource" id="rainy_5"]
+script = ExtResource("entry")
+hour = 21
+map_id = &"wira_home"
+point_id = &"wira_home"
+activity = &"sleeping"
+
+[resource]
+script = ExtResource("profile")
+source_json = "res://data/npc/wira.json"
+npc_id = "wira"
+display_name = "Wira"
+role_title = "Tukang Kayu"
+move_speed = 36.0
+schedule_source = 1
+default_schedule = Array[ExtResource("entry")]([SubResource("default_0"), SubResource("default_1"), SubResource("default_2"), SubResource("default_3"), SubResource("default_4"), SubResource("default_5"), SubResource("default_6"), SubResource("default_7")])
+rainy_schedule = Array[ExtResource("entry")]([SubResource("rainy_0"), SubResource("rainy_1"), SubResource("rainy_2"), SubResource("rainy_3"), SubResource("rainy_4"), SubResource("rainy_5")])

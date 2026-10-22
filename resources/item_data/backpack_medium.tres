@@ -12,6 +12,6 @@ description = "Upgrade tas menjadi 24 slot. Dibeli di Toko."
 icon = ExtResource("2_icon")
 stackable = false
 max_stack = 1
-buy_price = 2000
+buy_price = 1500
 sell_price = 0
 metadata/_custom_type_script = "uid://cm1okc20ussp3"

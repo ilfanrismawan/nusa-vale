@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/icons/Food Icons/Coffee cup.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_id = "beer"
+display_name = "Bir Olahan (Beer)"
+icon = ExtResource("2")
+category = 9
+sell_price = 200
+buy_price = 400
+stamina_restore = 35
+hp_restore = 15
+description = "Minuman gandum hasil fermentasi keg yang menyegarkan."
+stackable = true
+max_stack = 99

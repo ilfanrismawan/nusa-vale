@@ -1,0 +1,14 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://scripts/ui/action_hints.gd" id="script"]
+[ext_resource type="Theme" path="res://resources/ui/cooking_theme.tres" id="theme"]
+[node name="ActionHints" type="Control"]
+process_mode = 3
+mouse_filter = 2
+theme = ExtResource("theme")
+script = ExtResource("script")
+[node name="Hints" type="HFlowContainer" parent="."]
+unique_name_in_owner = true
+offset_right = 900.0
+mouse_filter = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8

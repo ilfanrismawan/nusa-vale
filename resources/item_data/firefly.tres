@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_firefly.tres" id="2_icon"]
+
+[resource]
+script = ExtResource("1_script")
+category = 4
+item_id = "firefly"
+display_name = "Kunang-kunang"
+icon = ExtResource("2_icon")
+description = "Cahaya kecil yang berkedip di malam musim panas. Serangga: jual, olah jadi umpan pancing di crafting, atau titipkan di Balai Nadi."
+sell_price = 90
+rarity = 1
+metadata/_custom_type_script = "uid://cm1okc20ussp3"

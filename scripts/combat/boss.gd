@@ -64,7 +64,13 @@ var _embers: CPUParticles2D
 static func spawn_boss(p_data: BossData, parent: Node, world_pos: Vector2) -> Boss:
 	if p_data == null or parent == null:
 		return null
-	var created := Boss.new()
+	var prefab: PackedScene = p_data.scene if p_data.scene != null else load("res://scenes/combat/boss.tscn")
+	var instance := prefab.instantiate()
+	var created := instance as Boss
+	if created == null:
+		instance.free()
+		push_error("Scene BossData harus berakar Boss: %s" % p_data.id)
+		return null
 	created.data = p_data
 	created.name = "Boss_%s" % p_data.id
 	created.home = world_pos

@@ -13,6 +13,8 @@ const HAND_HARVEST: ActionData = preload("res://resources/action_data/hand_harve
 ## Dibuat di _ready (sebelum Player memanggil state_machine.initialize).
 var combat_state: CombatState
 var dodge_state: DodgeState
+## Lompat + lompat ganda (GDD 4.3, seperti Grand Bazaar).
+var jump_state: JumpState
 ## Combo senjata: pukulan berikutnya, jenis senjata, dan batas waktu menyambung (msec).
 var combo_step := 0
 var _combo_weapon := -1
@@ -51,6 +53,10 @@ func _ready() -> void:
 	dodge_state.name = "DodgeState"
 	dodge_state.idle_state = combat_state.idle_state
 	state_machine.add_child(dodge_state)
+	jump_state = JumpState.new()
+	jump_state.name = "JumpState"
+	jump_state.idle_state = combat_state.idle_state
+	state_machine.add_child(jump_state)
 	furniture_preview = load("res://scripts/player/furniture_preview.gd").new()
 	furniture_preview.player = player
 	player.add_child.call_deferred(furniture_preview)
@@ -72,6 +78,14 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if state_machine.current_state in [action_state, fishing_state, dodge_state]:
 		return
+	if state_machine.current_state == jump_state:
+		# Di udara hanya benih yang bisa dipakai: ditebar saat mendarat (Grand Bazaar).
+		if input.is_event(event, &"use_tool") and EquipmentContext.is_seed(current_item):
+			jump_state.queue_scatter(current_item)
+			get_viewport().set_input_as_handled()
+			return
+		if input.is_event(event, &"use_tool"):
+			return
 	if input.is_event(event, &"use_tool"):
 		player.bind_context()
 		if player.has_meta("carried_animal") and is_instance_valid(player.get_meta("carried_animal")):
@@ -92,6 +106,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			return
 		if current_item != null and current_item.category == ItemData.Category.FOOD:
 			Notify.say(CookingManager.eat(player, player.data.hotbar_page * 8 + current_index).message)
+			get_viewport().set_input_as_handled()
+			return
+		# Buku riset Perpustakaan (GDD 13.1): dibaca untuk EXP role.
+		if current_item != null and not current_item.skill_book_role.is_empty():
+			SkillSystem.read_book(player.data, player.data.hotbar_page * 8 + current_index)
 			get_viewport().set_input_as_handled()
 			return
 		for bin in get_tree().get_nodes_in_group("shipping_bin"):
@@ -168,7 +187,7 @@ func attack(kind: CombatState.Kind = CombatState.Kind.LIGHT) -> bool:
 	var style := Combat.style_for(weapon)
 	if style == null or player.is_defeated:
 		return false
-	if state_machine.current_state in [action_state, fishing_state, combat_state, dodge_state]:
+	if state_machine.current_state in [action_state, fishing_state, combat_state, dodge_state, jump_state]:
 		return false
 	var combat := player.combat
 	if combat.is_exhausted():
@@ -276,10 +295,42 @@ func on_attack_finished(chain: bool) -> void:
 	if chain:
 		attack.call_deferred()
 
+## Tebar benih ke petak cangkul kosong 3x3 di sekitar tempat mendarat (lompat + benih).
+## Mengembalikan jumlah benih yang tertanam.
+func scatter_seeds(item: ItemData) -> int:
+	if not EquipmentContext.is_seed(item) or player.base_layer_ground == null:
+		return 0
+	var effect := item.action_data.effect as SeedEffect
+	if effect.crop == null:
+		return 0
+	player.bind_context()
+	if not FarmManager.is_crop_in_season(effect.crop):
+		Notify.say("%s tidak bisa ditanam di %s" % [effect.crop.display_name, DayCycle.get_season_display_name()])
+		return 0
+	var center := player.get_player_cell()
+	var planted := 0
+	for dy in [-1, 0, 1]:
+		for dx in [-1, 0, 1]:
+			if not GameState.has_item(effect.seed_item_id, 1):
+				break
+			var cell: Vector2i = center + Vector2i(dx, dy)
+			if FarmManager.plant(cell, effect.crop):
+				GameState.remove_item(effect.seed_item_id, 1)
+				SkillSystem.gain(player.data, &"farmer", SkillSystem.RULES.plant_exp)
+				Juice.play(&"plant", Juice.cell_center(player, cell))
+				planted += 1
+	if planted > 0:
+		Notify.say("%d benih %s ditebar." % [planted, effect.crop.display_name])
+	elif not GameState.has_item(effect.seed_item_id, 1):
+		Notify.say("Bibit habis! Beli di toko")
+	else:
+		Notify.say("Tidak ada tanah cangkul kosong di sekitar tempat mendarat.")
+	return planted
+
 func use_action(action: ActionData) -> void:
 	if action == null:
 		return
-	if state_machine.current_state in [action_state, fishing_state, combat_state]:
+	if state_machine.current_state in [action_state, fishing_state, combat_state, jump_state]:
 		return
 	if action.effect is FishingEffect:
 		_start_fishing(action)

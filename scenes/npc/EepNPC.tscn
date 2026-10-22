@@ -1,0 +1,10 @@
+[gd_scene format=3]
+[ext_resource type="PackedScene" path="res://scenes/npc/ScheduledNPC.tscn" id="actor"]
+[ext_resource type="SpriteFrames" path="res://resources/npc_data/npc_animation/eep_frame.tres" id="frames"]
+[node name="EepNPC" instance=ExtResource("actor")]
+npc_id = "eep"
+
+[node name="AnimatedSprite2D" parent="." index="0"]
+sprite_frames = ExtResource("frames")
+animation = &"idle_down"
+autoplay = "idle_down"

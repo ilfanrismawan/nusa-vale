@@ -1,0 +1,114 @@
+[gd_resource type="Resource" script_class="RoleData" load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/role_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/resources/role_perk.gd" id="2"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_skill_book_economist.tres" id="3"]
+
+[sub_resource type="Resource" id="perk_0"]
+script = ExtResource("2")
+level = 1
+branch = ""
+title = "Pembukuan Rapi"
+description = "Pendapatan Shipping Bin +5%."
+effects = Dictionary[StringName, float]({&"ship_bonus": 0.05})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_1"]
+script = ExtResource("2")
+level = 2
+branch = ""
+title = "Asuransi Desa"
+description = "Denda pingsan -25%."
+effects = Dictionary[StringName, float]({&"faint_penalty": 0.25})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_2"]
+script = ExtResource("2")
+level = 3
+branch = ""
+title = "Harga Pasar"
+description = "Pendapatan Shipping Bin +5% lagi (total +10%)."
+effects = Dictionary[StringName, float]({&"ship_bonus": 0.05})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_3"]
+script = ExtResource("2")
+level = 4
+branch = ""
+title = "Jaringan Dagang"
+description = "Pendapatan Shipping Bin +5% lagi (total +15%); denda pingsan -25% lagi (total -50%)."
+effects = Dictionary[StringName, float]({&"ship_bonus": 0.05, &"faint_penalty": 0.25})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_4"]
+script = ExtResource("2")
+level = 5
+branch = "a"
+title = "Village Treasurer"
+description = "Bahan proyek Balai Nadi -15% (uang tidak berubah)."
+effects = Dictionary[StringName, float]({&"balai_discount": 0.15})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_5"]
+script = ExtResource("2")
+level = 5
+branch = "b"
+title = "Smart Investor"
+description = "Uang bersama mendapat bunga 2% tiap pagi (maks 500 G per hari)."
+effects = Dictionary[StringName, float]({&"daily_interest": 1.0})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_6"]
+script = ExtResource("2")
+level = 6
+branch = ""
+title = "Kurir Logistik"
+description = "Shipping Bin dibayar pukul 12.00 dan 17.00; sisa kiriman dibayar esok pagi."
+effects = Dictionary[StringName, float]({&"shipping_pickups": 1.0})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_7"]
+script = ExtResource("2")
+level = 7
+branch = ""
+title = "Jaminan Ladang"
+description = "Tanpa denda bila pingsan di area ladang."
+effects = Dictionary[StringName, float]({&"faint_farm_free": 1.0})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_8"]
+script = ExtResource("2")
+level = 8
+branch = ""
+title = "Analis Pasar"
+description = "Pendapatan Shipping Bin +5% lagi (total +20%)."
+effects = Dictionary[StringName, float]({&"ship_bonus": 0.05})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_9"]
+script = ExtResource("2")
+level = 10
+branch = "a"
+title = "Commodity Tycoon"
+description = "Papan kontrak komoditas harian."
+effects = Dictionary[StringName, float]({})
+coming_soon = true
+
+[sub_resource type="Resource" id="perk_10"]
+script = ExtResource("2")
+level = 10
+branch = "b"
+title = "Shared Prosperity"
+description = "Aura co-op: semua pemain hemat stamina 10% dan pendapatan Shipping Bin +10%."
+effects = Dictionary[StringName, float]({&"shared_prosperity": 1.0})
+coming_soon = false
+
+[resource]
+script = ExtResource("1")
+role_id = &"economist"
+display_name = "Economist"
+title = "Ahli Ekonomi"
+exp_hint = "EXP dari mengisi Shipping Bin dan menyumbang ke proyek Balai Nadi (nilai besar = EXP lebih besar)."
+icon = ExtResource("3")
+color = Color(0.1843, 0.2902, 0.4784, 1)
+perks = Array[ExtResource("2")]([SubResource("perk_0"), SubResource("perk_1"), SubResource("perk_2"), SubResource("perk_3"), SubResource("perk_4"), SubResource("perk_5"), SubResource("perk_6"), SubResource("perk_7"), SubResource("perk_8"), SubResource("perk_9"), SubResource("perk_10")])

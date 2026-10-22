@@ -1,9 +1,12 @@
+@tool
 extends Node2D
 
 ## Kolam pancing yang tidak membeku di Musim Dingin (GDD 5): kolam air panas Gunung
 ## dan danau bawah tanah Gua Tambang. Dibangun dari kode: tepi kolam memakai ubin animasi
 ## "Water Ground animations tiles.png", isi kolam memakai warna Water tile.png,
 ## lalu FishingSpot (freezes_in_winter = false) dan tabrakan supaya pemain tidak masuk air.
+## Berjalan juga di editor (@tool) supaya kolam terlihat dan ikut berubah saat properti diubah.
+## Bagian buatan kode tidak tersimpan ke .tscn; node anak yang ditambah sendiri tidak dihapus.
 
 const RIM_TEXTURE := preload("res://assets/farm_rpg/tileset/ext/Water Ground animations tiles.png")
 const WATER_COLOR := Color8(0, 146, 221)
@@ -16,19 +19,38 @@ const RIM_FRAME_TIME := 0.3
 const WATER_INSET := 9.0
 
 ## Ukuran kolam dalam tile (minimal 3x3).
-@export var size_tiles: Vector2i = Vector2i(8, 6)
-@export var location_id: String = "mountain_hot_spring"
+@export var size_tiles: Vector2i = Vector2i(8, 6):
+	set(value):
+		size_tiles = value
+		_rebuild_if_ready()
+@export var location_id: String = "mountain_hot_spring":
+	set(value):
+		location_id = value
+		_rebuild_if_ready()
 ## Uap hangat di atas air (kolam air panas).
-@export var steam: bool = true
-@export var tint: Color = Color.WHITE
+@export var steam: bool = true:
+	set(value):
+		steam = value
+		_rebuild_if_ready()
+@export var tint: Color = Color.WHITE:
+	set(value):
+		tint = value
+		_rebuild_if_ready()
+
+const GENERATED := &"winter_pond_generated"
 
 func _ready() -> void:
 	build()
 
+func _rebuild_if_ready() -> void:
+	if is_node_ready():
+		build()
+
 func build() -> void:
 	for child in get_children():
-		remove_child(child)
-		child.queue_free()
+		if child.has_meta(GENERATED):
+			remove_child(child)
+			child.queue_free()
 	var size := Vector2i(maxi(size_tiles.x, 3), maxi(size_tiles.y, 3))
 	var pixel_size := Vector2(size * TILE)
 	modulate = tint
@@ -41,7 +63,7 @@ func build() -> void:
 	water.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	water.z_index = -8
 	water.z_as_relative = false
-	add_child(water)
+	_add_generated(water)
 	_add_body(pixel_size)
 	_add_spot(pixel_size)
 	if steam:
@@ -59,7 +81,7 @@ func _build_rim(size: Vector2i) -> void:
 	rim.z_index = -9
 	rim.z_as_relative = false
 	rim.tile_set = tiles
-	add_child(rim)
+	_add_generated(rim)
 	for x in size.x:
 		for y in size.y:
 			var col := 0 if x == 0 else (2 if x == size.x - 1 else 1)
@@ -80,7 +102,7 @@ func _build_rim(size: Vector2i) -> void:
 func _add_body(pixel_size: Vector2) -> void:
 	var body := StaticBody2D.new()
 	body.name = "Edge"
-	add_child(body)
+	_add_generated(body)
 	var shape := CollisionShape2D.new()
 	var box := RectangleShape2D.new()
 	box.size = pixel_size - Vector2(8, 8)
@@ -93,7 +115,7 @@ func _add_spot(pixel_size: Vector2) -> void:
 	spot.name = "FishingSpot"
 	spot.location_id = location_id
 	spot.freezes_in_winter = false
-	add_child(spot)
+	_add_generated(spot)
 	var shape := CollisionShape2D.new()
 	var box := RectangleShape2D.new()
 	box.size = pixel_size - Vector2(10, 10)
@@ -122,4 +144,8 @@ func _add_steam(pixel_size: Vector2) -> void:
 	fade.set_color(1, Color(1, 1, 1, 0.0))
 	fade.add_point(0.25, Color(1, 1, 1, 0.45))
 	particles.color_ramp = fade
-	add_child(particles)
+	_add_generated(particles)
+
+func _add_generated(node: Node) -> void:
+	node.set_meta(GENERATED, true)
+	add_child(node)

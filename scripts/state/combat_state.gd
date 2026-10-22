@@ -62,7 +62,8 @@ func enter() -> void:
 	var from_aim_pose := animation_controller.release_pose()
 	super.enter()
 	var sprite := animation_controller.sprite
-	sprite.speed_scale = style.speed_scale * _speed_scale()
+	# Berserker (Combat Lv5 B): ayunan lebih cepat, kecuali roll.
+	sprite.speed_scale = style.speed_scale * _speed_scale() * (1.0 + (SkillSystem.stat(player.data, &"attack_speed") if kind != Kind.ROLL else 0.0))
 	_frames = sprite.sprite_frames.get_frame_count(sprite.animation) if sprite.sprite_frames != null else 1
 	_hit_frame = clampi(int(_frames * style.hit_frame_ratio), 0, maxi(0, _frames - 1))
 	_active_end = clampi(int(ceil(_frames * style.active_end_ratio)), _hit_frame, maxi(0, _frames - 1))
@@ -144,7 +145,7 @@ func _damage_scale() -> float:
 		Kind.ROLL:
 			return style.roll_damage
 		Kind.RIPOSTE:
-			return Combat.RULES.riposte_multiplier
+			return Combat.RULES.riposte_multiplier * (1.0 + SkillSystem.stat(player.data, &"riposte_bonus"))
 		Kind.ART:
 			return art.damage_scale if art != null else 1.0
 	return style.combo_damage_at(combo_step)
@@ -164,8 +165,13 @@ func _perform() -> void:
 		return
 	_performed = true
 	player.bind_context()
-	var base := weapon.attack_bonus + (arrow.attack_bonus if arrow != null else 0)
+	## Cincin, sarung tangan & tabung panah menambah ATK di atas senjata.
+	var base := weapon.attack_bonus + (arrow.attack_bonus if arrow != null else 0) + player.data.equipment_stats().x
+	# Role Combat (GDD 13): ATK +5 per level 1-4, Berserker saat HP rendah.
+	base += roundi(SkillSystem.stat(player.data, &"attack"))
 	_attack = maxi(1, roundi(base * _damage_scale()))
+	if player.data.hp < player.data.max_hp * SkillSystem.LOW_HP_RATIO:
+		_attack = roundi(_attack * (1.0 + SkillSystem.stat(player.data, &"low_hp_damage")))
 	if is_finisher() and not style.finisher_feedback.is_empty():
 		Juice.play(style.finisher_feedback, player.global_position + Player.FEET_OFFSET + aim * style.melee_reach)
 	if combo_step > 0 and kind == Kind.LIGHT:
@@ -228,7 +234,7 @@ func _melee(attack: int, radius_override: float = -1.0, reach_override: float = 
 ## Satu pukulan ke satu target, membawa poise, kritis, dan penembus zirah lewat Combat.hit().
 func _strike(target: Node, attack: int, knockback: Vector2, fallback_pos: Vector2) -> void:
 	var critical := kind == Kind.RIPOSTE
-	var landed := Combat.hit(target, attack, player, knockback, style.poise_damage * _poise_scale(), art != null and art.ignore_defense, critical, is_heavy(), fx)
+	var landed := Combat.hit(target, attack, player, knockback, style.poise_damage * _poise_scale() * (1.0 + SkillSystem.stat(player.data, &"poise_damage")), art != null and art.ignore_defense, critical, is_heavy(), fx)
 	if not landed:
 		return
 	var at := (target as Node2D).global_position if target is Node2D else fallback_pos

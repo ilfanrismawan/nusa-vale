@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Texture2D" path="res://resources/icons/icon_citrine.tres" id="1_icon"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="2_script"]
+
+[resource]
+script = ExtResource("2_script")
+category = 4
+item_id = "citrine"
+display_name = "Sitrin"
+icon = ExtResource("1_icon")
+description = "Permata kuning keemasan yang memantulkan cahaya obor."
+stackable = true
+max_stack = 99
+sell_price = 80
+rarity = 1
+metadata/_custom_type_script = "uid://cm1okc20ussp3"

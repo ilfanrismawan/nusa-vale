@@ -67,9 +67,12 @@ func _dummy(id: String, player: Player, offset: Vector2) -> Enemy:
 func _test_rules() -> void:
 	var rules := Combat.RULES
 	check(rules != null and rules.combat_stamina_max == 100 and rules.exhausted_time >= 1.0 and rules.exhausted_time <= 1.5, "combat rules: 100 combat stamina, Exhausted 1-1.5 s")
-	for action in [&"dodge", &"guard", &"weapon_art"]:
-		PlayerInput.ensure_combat_actions()
-		check(InputMap.has_action(action) and not InputMap.action_get_events(action).is_empty(), "input action exists: " + action)
+	PlayerInput.ensure_combat_actions()
+	for action in [&"dodge", &"guard", &"weapon_art", &"heavy_attack", &"lock_on"]:
+		# Tombol combat hidup di varian konteks (mis. "guard@8"); aksi dasar tetap ada.
+		var bound := not PlayerInput.solo().bindings(action, false, InputLayout.MELEE).is_empty() \
+			or not PlayerInput.solo().bindings(action, true, InputLayout.MELEE).is_empty()
+		check(InputMap.has_action(action) and bound, "input action exists: " + action)
 	var light := PlayerData.new(1)
 	light.reset_to_starter()
 	check(Combat.roll_class(light) == 0, "starter gear gives a Fast Roll (load %.2f)" % Combat.equip_load_ratio(light))

@@ -1,0 +1,260 @@
+[gd_scene format=3]
+[ext_resource type="Theme" path="res://resources/ui/inventory_book_theme.tres" id="theme"]
+[ext_resource type="PackedScene" path="res://scenes/ui/book_pager.tscn" id="pager"]
+[ext_resource type="PackedScene" path="res://scenes/ui/book_text.tscn" id="text"]
+[ext_resource type="Script" path="res://scripts/ui/inventory_crafting.gd" id="script"]
+
+[node name="InventoryCrafting" type="PanelContainer"]
+custom_minimum_size = Vector2(420, 224)
+theme = ExtResource("theme")
+script = ExtResource("script")
+
+[node name="Pages" type="Control" parent="."]
+unique_name_in_owner = true
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 420.0
+offset_bottom = 224.0
+mouse_filter = 2
+
+[node name="Left" type="Control" parent="Pages"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 0.0
+offset_right = 200.0
+offset_bottom = 224.0
+clip_contents = true
+mouse_filter = 2
+
+[node name="Right" type="Control" parent="Pages"]
+unique_name_in_owner = true
+offset_left = 220.0
+offset_top = 0.0
+offset_right = 420.0
+offset_bottom = 224.0
+clip_contents = true
+mouse_filter = 2
+
+[node name="Heading" type="Label" parent="Pages/Left"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 0.0
+offset_right = 196.0
+offset_bottom = 22.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 17
+text = "RESEP CRAFTING"
+clip_text = true
+
+
+[node name="Filter1" type="Button" parent="Pages/Left"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 24.0
+offset_right = 98.0
+offset_bottom = 42.0
+toggle_mode = true
+theme_override_font_sizes/font_size = 12
+clip_text = true
+text = "Semua"
+
+[node name="Filter2" type="Button" parent="Pages/Left"]
+unique_name_in_owner = true
+offset_left = 102.0
+offset_top = 24.0
+offset_right = 196.0
+offset_bottom = 42.0
+toggle_mode = true
+theme_override_font_sizes/font_size = 12
+clip_text = true
+text = "Equip"
+
+[node name="Filter3" type="Button" parent="Pages/Left"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 44.0
+offset_right = 98.0
+offset_bottom = 62.0
+toggle_mode = true
+theme_override_font_sizes/font_size = 12
+clip_text = true
+text = "Amunisi"
+
+[node name="Filter4" type="Button" parent="Pages/Left"]
+unique_name_in_owner = true
+offset_left = 102.0
+offset_top = 44.0
+offset_right = 196.0
+offset_bottom = 62.0
+toggle_mode = true
+theme_override_font_sizes/font_size = 12
+clip_text = true
+text = "Bangunan"
+
+[node name="Filter5" type="Button" parent="Pages/Left"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 64.0
+offset_right = 98.0
+offset_bottom = 82.0
+toggle_mode = true
+theme_override_font_sizes/font_size = 12
+clip_text = true
+text = "Furnitur"
+
+[node name="Filter6" type="Button" parent="Pages/Left"]
+unique_name_in_owner = true
+offset_left = 102.0
+offset_top = 64.0
+offset_right = 196.0
+offset_bottom = 82.0
+toggle_mode = true
+theme_override_font_sizes/font_size = 12
+clip_text = true
+text = "Dekorasi"
+
+[node name="Filter7" type="Button" parent="Pages/Left"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 84.0
+offset_right = 98.0
+offset_bottom = 102.0
+toggle_mode = true
+theme_override_font_sizes/font_size = 12
+clip_text = true
+text = "Bahan"
+
+[node name="Summary" type="Label" parent="Pages/Left"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 106.0
+offset_right = 196.0
+offset_bottom = 120.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 11
+text = ""
+clip_text = true
+
+
+[node name="List" type="GridContainer" parent="Pages/Left"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 124.0
+offset_right = 196.0
+offset_bottom = 192.0
+columns = 5
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 4
+
+[node name="RecipePager" parent="Pages/Left" instance=ExtResource("pager")]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 201.0
+offset_right = 196.0
+offset_bottom = 222.0
+content_path = NodePath("../List")
+page_size = 10
+
+[node name="Icon" type="TextureRect" parent="Pages/Right"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 0.0
+offset_right = 36.0
+offset_bottom = 36.0
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Title" type="Label" parent="Pages/Right"]
+unique_name_in_owner = true
+offset_left = 42.0
+offset_top = 0.0
+offset_right = 196.0
+offset_bottom = 38.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 15
+text = ""
+clip_text = true
+autowrap_mode = 3
+max_lines_visible = 2
+
+[node name="Description" parent="Pages/Right" instance=ExtResource("text")]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 42.0
+offset_right = 196.0
+offset_bottom = 104.0
+
+
+[node name="MaterialsHeading" type="Label" parent="Pages/Right"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 106.0
+offset_right = 104.0
+offset_bottom = 122.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 14
+text = "BAHAN"
+clip_text = true
+
+
+[node name="CountsHeading" type="Label" parent="Pages/Right"]
+unique_name_in_owner = true
+offset_left = 106.0
+offset_top = 106.0
+offset_right = 196.0
+offset_bottom = 122.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 10
+text = "PUNYA / BUTUH"
+clip_text = true
+horizontal_alignment = 2
+
+[node name="Materials" type="VBoxContainer" parent="Pages/Right"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 124.0
+offset_right = 196.0
+offset_bottom = 178.0
+theme_override_constants/separation = 0
+
+[node name="MaterialPager" parent="Pages/Right" instance=ExtResource("pager")]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 180.0
+offset_right = 94.0
+offset_bottom = 200.0
+content_path = NodePath("../Materials")
+page_size = 3
+
+[node name="Message" type="Label" parent="Pages/Right"]
+unique_name_in_owner = true
+offset_left = 100.0
+offset_top = 180.0
+offset_right = 196.0
+offset_bottom = 198.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 10
+text = ""
+clip_text = true
+
+
+[node name="Quantity" type="SpinBox" parent="Pages/Right"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 202.0
+offset_right = 56.0
+offset_bottom = 224.0
+min_value = 1.0
+max_value = 99.0
+value = 1.0
+theme_override_font_sizes/font_size = 12
+
+[node name="CraftButton" type="Button" parent="Pages/Right"]
+unique_name_in_owner = true
+offset_left = 62.0
+offset_top = 202.0
+offset_right = 196.0
+offset_bottom = 224.0
+text = "Buat"
+theme_override_font_sizes/font_size = 12

@@ -19,4 +19,4 @@ item_id = "mango_sticky_rice"
 display_name = "Ketan Mangga"
 icon = SubResource("Icon")
 description = "Masakan dari dapur. Pilih di hotbar untuk dimakan."
-sell_price = 95
+sell_price = 241

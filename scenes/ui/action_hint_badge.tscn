@@ -1,0 +1,44 @@
+[gd_scene format=3]
+[sub_resource type="StyleBoxFlat" id="Pill"]
+content_margin_left = 8.0
+content_margin_top = 6.0
+content_margin_right = 10.0
+content_margin_bottom = 6.0
+bg_color = Color(0.2, 0.25, 0.17, 0.93)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_left = 12
+corner_radius_bottom_right = 12
+[sub_resource type="StyleBoxFlat" id="Key"]
+content_margin_left = 7.0
+content_margin_top = 2.0
+content_margin_right = 7.0
+content_margin_bottom = 2.0
+bg_color = Color(0.969, 0.953, 0.914, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+[node name="ActionHintBadge" type="PanelContainer"]
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Pill")
+[node name="Layout" type="HBoxContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+[node name="Key" type="PanelContainer" parent="Layout"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Key")
+[node name="KeyText" type="Label" parent="Layout/Key"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_font_sizes/font_size = 15
+text = "E"
+horizontal_alignment = 1
+[node name="Action" type="Label" parent="Layout"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
+theme_override_font_sizes/font_size = 15
+text = "Interaksi"

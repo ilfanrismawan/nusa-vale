@@ -1,0 +1,133 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/drop_item_dialog.gd" id="1_qf1tb"]
+[ext_resource type="FontVariation" path="res://resources/ui/readable_font.tres" id="2_jvhgm"]
+
+[ext_resource type="Theme" path="res://resources/ui/inventory_book_theme.tres" id="book_theme"]
+
+[node name="DropItemDialog" type="PanelContainer"]
+theme = ExtResource("book_theme")
+theme_type_variation = &"BookCard"
+visible = false
+z_index = 70
+custom_minimum_size = Vector2(176, 0)
+script = ExtResource("1_qf1tb")
+
+[node name="MarginContainer1" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer1" type="VBoxContainer" parent="MarginContainer1"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="HBoxContainer1" type="HBoxContainer" parent="MarginContainer1/VBoxContainer1"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Icon" type="TextureRect" parent="MarginContainer1/VBoxContainer1/HBoxContainer1"]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Title" type="Label" parent="MarginContainer1/VBoxContainer1/HBoxContainer1"]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer1/VBoxContainer1"]
+layout_mode = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="BtnMinus" type="Button" parent="MarginContainer1/VBoxContainer1/HBoxContainer2"]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(18, 16)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 16
+text = "-"
+
+[node name="AmountLabel" type="Label" parent="MarginContainer1/VBoxContainer1/HBoxContainer2"]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "1"
+horizontal_alignment = 1
+
+[node name="BtnPlus" type="Button" parent="MarginContainer1/VBoxContainer1/HBoxContainer2"]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(18, 16)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 16
+text = "+"
+
+[node name="PriceLabel" type="Label" parent="MarginContainer1/VBoxContainer1"]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer1/VBoxContainer1"]
+layout_mode = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="One" type="Button" parent="MarginContainer1/VBoxContainer1/HBoxContainer3"]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(18, 16)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 16
+text = "1"
+
+[node name="BtnDrop" type="Button" parent="MarginContainer1/VBoxContainer1/HBoxContainer3"]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(18, 16)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 16
+text = "Buang"
+
+[node name="All" type="Button" parent="MarginContainer1/VBoxContainer1/HBoxContainer3"]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(18, 16)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 16
+text = "Semua"
+
+[node name="Cancel" type="Button" parent="MarginContainer1/VBoxContainer1/HBoxContainer3"]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(18, 16)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 16
+text = "Batal"
+
+[node name="Label1" type="Label" parent="MarginContainer1/VBoxContainer1"]
+texture_filter = 1
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Scroll / Shift = ubah cepat"
+horizontal_alignment = 1

@@ -15,8 +15,9 @@ func apply(player: Player, cell: Vector2i) -> void:
 		push_warning("DamageEffect: ToolData tidak ditemukan.")
 		return
 	
-	var stamina_cost := tool_data.stamina_cost
-	var damage := tool_data.damage
+	# Perk Miner (stamina/kekuatan beliung) dan Lumberjack (damage kapak), GDD 13.
+	var stamina_cost := SkillSystem.tool_cost(player.data, tool_data, tool_data.stamina_cost)
+	var damage := SkillSystem.tool_damage(player.data, tool_data, tool_data.damage)
 	
 	if player.data.stamina < stamina_cost:
 		Notify.say("Terlalu lelah! Istirahatlah.")

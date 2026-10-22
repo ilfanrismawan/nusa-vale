@@ -214,17 +214,52 @@ func harvest(cell: Vector2i) -> bool:
 	
 	var item_id: String = crop.harvest_item_id
 	var count: int = crop.harvest_count
-	crop_harvested.emit(cell, item_id, count)
-	print("Panen: %s x%d" % [item_id, count])
+	# Role Farmer (GDD 13): EXP dari harga hasil panen, Bountiful Harvest panen ganda.
+	var farmer := GameState.current
+	if SkillSystem.roll(farmer, &"harvest_double"):
+		count *= 2
+		Notify.say("Panen ganda!")
+
+	# Kualitas panen (GDD 5.2 & Farmer Perk 8-9)
+	var quality := ""
+	var gold_chance := SkillSystem.stat(farmer, &"crop_gold")
+	var silver_chance := SkillSystem.stat(farmer, &"crop_silver")
+	var farmer_lvl := SkillSystem.level_for_points(farmer.skills.points.get(&"farmer", 0)) if farmer and farmer.skills != null else 0
+	if gold_chance > 0.0 or farmer_lvl >= 9:
+		var g_chance := maxf(gold_chance, 0.20 + (farmer_lvl - 9) * 0.05)
+		if randf() < g_chance:
+			quality = "_gold"
+	if quality.is_empty() and (silver_chance > 0.0 or farmer_lvl >= 8):
+		var s_chance := maxf(silver_chance, 0.35 + (farmer_lvl - 8) * 0.05)
+		if randf() < s_chance:
+			quality = "_silver"
+
+	var harvest_item_id := item_id + quality
+	var produce := GameState._resolve_item(harvest_item_id)
+	if produce == null:
+		produce = GameState._resolve_item(item_id)
+		harvest_item_id = item_id
+
+	SkillSystem.gain(farmer, &"farmer", SkillSystem.scaled_exp(produce.sell_price * crop.harvest_count if produce != null else 0, SkillSystem.RULES.harvest_exp_per_price, SkillSystem.RULES.harvest_exp_min, SkillSystem.RULES.harvest_exp_max))
+	crop_harvested.emit(cell, harvest_item_id, count)
+	print("Panen: %s x%d" % [harvest_item_id, count])
 	
-	if is_instance_valid(crop_layer):
-		crop_layer.erase_cell(cell)
-	data["state"] = "tilled"
-	data["crop"] = null
-	data["stage"] = 0
-	data["days_in_stage"] = 0
-	data["watered"] = false
-	_spawn_harvest_drop(cell, item_id, count)
+	if crop.is_fruit_tree():
+		var max_stage = crop.get_total_stages() - 1
+		data["stage"] = maxi(0, max_stage - 1)
+		data["days_in_stage"] = 0
+		data["watered"] = false
+		if is_instance_valid(crop_layer) and _visible_plot(data):
+			_update_crop_tile(cell, crop, data["stage"])
+	else:
+		if is_instance_valid(crop_layer):
+			crop_layer.erase_cell(cell)
+		data["state"] = "tilled"
+		data["crop"] = null
+		data["stage"] = 0
+		data["days_in_stage"] = 0
+		data["watered"] = false
+	_spawn_harvest_drop(cell, harvest_item_id, count)
 	return true
 
 
@@ -252,19 +287,33 @@ func _on_day_passed(_day: int) -> void:
 			var max_stage = crop.get_total_stages() - 1
 					
 			if data["stage"] < max_stage:
-				data["days_in_stage"] += 1
-				if data["days_in_stage"] >= crop.days_per_stage:
-					data["stage"] += 1
-					data["days_in_stage"] = 0
-					if layers_valid and _visible_plot(data):
-						_update_crop_tile(cell, crop, data["stage"])
-					print("%s tumbuh ke stage %d" % [crop.display_name, data["stage"]])
+				var orchard_active := SkillSystem.household(&"perpetual_orchard") > 0.0
+				var can_grow := true
+				if crop.is_fruit_tree() and data["stage"] >= max_stage - 1:
+					if not is_crop_in_season(crop) and not orchard_active:
+						can_grow = false
+				if can_grow:
+					var growth_bonus := 1
+					if SkillSystem.household_roll(&"crop_growth"):
+						growth_bonus += 1
+					if crop.is_fruit_tree() and orchard_active:
+						growth_bonus += 1
+					data["days_in_stage"] += growth_bonus
+					if data["days_in_stage"] >= crop.days_per_stage:
+						data["stage"] += 1
+						data["days_in_stage"] = 0
+						if layers_valid and _visible_plot(data):
+							_update_crop_tile(cell, crop, data["stage"])
+						print("%s tumbuh ke stage %d" % [crop.display_name, data["stage"]])
 			else:
 				print("%s sudah siap panen di %s" % [crop.display_name, cell])
 		
 		if data.get("crop") == null:
 			_erase_empty_plot_visuals(cell, str(data.get("area", "farm")))
 			farm_data.erase(cell)
+			continue
+		# Farmer Lv3: sebagian petak tetap basah keesokan harinya.
+		if data["watered"] and SkillSystem.household_roll(&"soil_keep_wet"):
 			continue
 		data["watered"] = false
 		
@@ -296,6 +345,11 @@ func _on_season_changed(_season: int) -> void:
 		var data: Dictionary = farm_data[cell]
 		var crop: CropData = data["crop"]
 		if crop == null or data.get("area", "farm") == "greenhouse" or crop.season.is_empty() or crop.season == DayCycle.get_current_season():
+			continue
+		if crop.is_fruit_tree():
+			continue
+		# Green Thumb Mastery (Farmer Lv10 B): 50% tanaman bertahan melewati pergantian musim.
+		if SkillSystem.household_roll(&"season_survive"):
 			continue
 		if is_instance_valid(crop_layer) and _visible_plot(data):
 			crop_layer.erase_cell(cell)

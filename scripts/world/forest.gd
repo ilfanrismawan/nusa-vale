@@ -20,6 +20,7 @@ func _ready() -> void:
 	WeedSpawner.attach_weeds(self, "forest", ^"YSortEntities", 3, 15)
 	TreeSpawner.attach_trees(self, "forest", ^"YSortEntities", 2, 12)
 	DigSpotSpawner.attach_dig_spots(self, "forest", ^"YSortEntities", 2, 5)
+	preload("res://scripts/world/bug_spawner.gd").attach(self, "forest", ^"YSortEntities", 6)
 
 	Notify.say("Cahaya keemasan berdenyut di akar keramat dekat jalan hutan. Dekati dan berinteraksi.")
 

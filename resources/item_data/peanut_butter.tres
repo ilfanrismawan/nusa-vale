@@ -15,4 +15,4 @@ item_id = "peanut_butter"
 display_name = "Selai Kacang"
 icon = SubResource("Icon")
 description = "Bahan olahan untuk resep lanjutan."
-sell_price = 75
+sell_price = 39

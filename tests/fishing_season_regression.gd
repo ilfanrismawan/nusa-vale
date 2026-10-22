@@ -64,6 +64,15 @@ func _ready() -> void:
 	await get_tree().physics_frame
 	var player: Player = mountain.get_node("Player/CharacterBody2D")
 	var spring := mountain.get_node_or_null("HotSpring/FishingSpot") as FishingSpot
+	# Gunung tersimpan sebagai node di .tscn (bisa diedit di editor), bukan dibangun dari kode.
+	var ground := mountain.get_node_or_null("BaseLayerGround") as TileMapLayer
+	var walls := mountain.get_node_or_null("MountainWalls") as TileMapLayer
+	check(ground != null and ground.get_used_cells().size() == 40 * 24, "lantai Gunung tersimpan di scene (40x24 ubin)")
+	check(walls != null and walls.get_cell_atlas_coords(Vector2i(0, 5)) == Vector2i(11, 1) and walls.get_cell_source_id(Vector2i(19, 23)) == -1, "dinding Gunung tersimpan dan celah ke Hill terbuka")
+	check(mountain.get_node("Walls").get_child_count() == 6 and mountain.get_node_or_null("CaveSign") is Label, "tabrakan batas dan papan nama ada sebagai node")
+	var mouth := mountain.get_node_or_null("CaveEntrance") as Area2D
+	check(mouth != null and mouth.is_in_group("scene_door"), "mulut gua Gunung bisa dimasuki dari dekat (grup scene_door)")
+	check(mountain.get_node("HotSpring").get_child_count() == 5, "kolam air panas tidak menggandakan bagian buatan kode")
 	check(spring != null, "Gunung punya kolam air panas")
 	if spring != null:
 		check(spring.location_id == "mountain_hot_spring" and not spring.is_frozen(), "air panas tidak beku di musim dingin")
@@ -83,7 +92,7 @@ func _ready() -> void:
 	if lake != null:
 		var lake_spot := lake.get_node("FishingSpot") as FishingSpot
 		check(lake_spot.location_id == "cave_lake" and not lake_spot.is_frozen(), "danau gua tidak beku")
-		var cave_player: Player = cave.find_children("*", "CharacterBody2D", true, false)[0]
+		var cave_player: Player = cave.find_children("*", "CharacterBody2D", true, false).filter(func(n): return n is Player)[0]
 		check(FishingManager.find_spot_at(cave_player, (lake_spot.get_child(0) as Node2D).global_position) == lake_spot, "tengah danau gua bisa dipancing")
 	cave.build_floor(cave_data.lake_floor - 1)
 	check(cave.find_child("CaveLake", true, false) == null or cave.find_child("CaveLake", true, false).is_queued_for_deletion(), "danau hanya di lantai danau")

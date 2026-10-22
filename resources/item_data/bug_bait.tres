@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_bug_bait.tres" id="2_icon"]
+
+[resource]
+script = ExtResource("1_script")
+category = 4
+item_id = "bug_bait"
+display_name = "Umpan Serangga"
+icon = ExtResource("2_icon")
+description = "Umpan dari jangkrik dan ulat. Waktu menunggu gigitan 30% lebih singkat."
+sell_price = 4
+rarity = 1
+bait_bonus = 0.3
+metadata/_custom_type_script = "uid://cm1okc20ussp3"

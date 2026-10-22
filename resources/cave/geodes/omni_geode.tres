@@ -1,0 +1,12 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/geode_data.gd" id="1_geode"]
+
+[resource]
+script = ExtResource("1_geode")
+item_id = "omni_geode"
+crack_price = 100
+result_ids = PackedStringArray("earth_crystal", "frozen_tear", "fire_quartz", "quartz", "topaz", "amethyst", "citrine", "sapphire", "emerald", "ruby", "onyx", "fairy_crystal", "shadow_ore", "fairy_ore", "obsidian_ore", "prismatic_shard")
+result_weights = PackedFloat32Array(1.5, 1.5, 1.5, 1.0, 1.0, 1.0, 0.8, 0.8, 0.6, 0.5, 0.3, 0.2, 0.5, 0.3, 0.2, 0.05)
+result_min = PackedInt32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+result_max = PackedInt32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1)

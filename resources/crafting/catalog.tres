@@ -217,6 +217,46 @@ ingredients = {
 }
 group = "Bangunan"
 
+[sub_resource type="Resource" id="Recipe_platinum_chest"]
+script = ExtResource("2")
+recipe_id = "platinum_chest"
+output_item_id = "platinum_chest"
+ingredients = {
+"platinum_bar": 12,
+"wood": 60
+}
+group = "Bangunan"
+
+[sub_resource type="Resource" id="Recipe_crimson_chest"]
+script = ExtResource("2")
+recipe_id = "crimson_chest"
+output_item_id = "crimson_chest"
+ingredients = {
+"crimson_bar": 14,
+"wood": 70
+}
+group = "Bangunan"
+
+[sub_resource type="Resource" id="Recipe_frost_chest"]
+script = ExtResource("2")
+recipe_id = "frost_chest"
+output_item_id = "frost_chest"
+ingredients = {
+"frost_bar": 16,
+"wood": 80
+}
+group = "Bangunan"
+
+[sub_resource type="Resource" id="Recipe_shadow_chest"]
+script = ExtResource("2")
+recipe_id = "shadow_chest"
+output_item_id = "shadow_chest"
+ingredients = {
+"shadow_bar": 18,
+"wood": 90
+}
+group = "Bangunan"
+
 [sub_resource type="Resource" id="Recipe_preserves_jar"]
 script = ExtResource("2")
 recipe_id = "preserves_jar"
@@ -272,6 +312,1207 @@ ingredients = {
 }
 group = "Bangunan"
 
+[sub_resource type="Resource" id="Recipe_bug_net_wood"]
+script = ExtResource("2")
+recipe_id = "bug_net_wood"
+output_item_id = "bug_net_wood"
+ingredients = {
+"fiber": 15,
+"wood": 10
+}
+
+[sub_resource type="Resource" id="Recipe_tapper"]
+script = ExtResource("2")
+recipe_id = "tapper"
+output_item_id = "tapper"
+ingredients = {
+"copper_bar": 2,
+"wood": 40
+}
+
+[sub_resource type="Resource" id="Recipe_bait"]
+script = ExtResource("2")
+recipe_id = "bait"
+output_item_id = "bait"
+output_amount = 5
+ingredients = {
+"worm": 2
+}
+
+[sub_resource type="Resource" id="Recipe_bug_bait"]
+script = ExtResource("2")
+recipe_id = "bug_bait"
+output_item_id = "bug_bait"
+output_amount = 5
+ingredients = {
+"caterpillar": 1,
+"cricket": 1
+}
+
+[sub_resource type="Resource" id="Recipe_glow_bait"]
+script = ExtResource("2")
+recipe_id = "glow_bait"
+output_item_id = "glow_bait"
+output_amount = 3
+ingredients = {
+"firefly": 1,
+"silkmoth": 1
+}
+
+[sub_resource type="Resource" id="Recipe_bow_copper"]
+script = ExtResource("2")
+recipe_id = "bow_copper"
+output_item_id = "bow_copper"
+ingredients = {
+"copper_bar": 2,
+"fiber": 6,
+"wood": 8
+}
+
+[sub_resource type="Resource" id="Recipe_staff_copper"]
+script = ExtResource("2")
+recipe_id = "staff_copper"
+output_item_id = "staff_copper"
+ingredients = {
+"copper_bar": 2,
+"quartz": 1,
+"wood": 6
+}
+
+[sub_resource type="Resource" id="Recipe_helmet_copper"]
+script = ExtResource("2")
+recipe_id = "helmet_copper"
+output_item_id = "helmet_copper"
+ingredients = {
+"copper_bar": 3,
+"fiber": 2
+}
+
+[sub_resource type="Resource" id="Recipe_leggings_copper"]
+script = ExtResource("2")
+recipe_id = "leggings_copper"
+output_item_id = "leggings_copper"
+ingredients = {
+"copper_bar": 4,
+"fiber": 4
+}
+
+[sub_resource type="Resource" id="Recipe_boots_copper"]
+script = ExtResource("2")
+recipe_id = "boots_copper"
+output_item_id = "boots_copper"
+ingredients = {
+"copper_bar": 2,
+"fiber": 4
+}
+
+[sub_resource type="Resource" id="Recipe_arrow_copper"]
+script = ExtResource("2")
+recipe_id = "arrow_copper"
+output_item_id = "arrow_copper"
+output_amount = 10
+ingredients = {
+"copper_bar": 1,
+"wood": 2
+}
+group = "Amunisi"
+
+[sub_resource type="Resource" id="Recipe_bow_iron"]
+script = ExtResource("2")
+recipe_id = "bow_iron"
+output_item_id = "bow_iron"
+ingredients = {
+"fiber": 6,
+"iron_bar": 2,
+"wood": 8
+}
+
+[sub_resource type="Resource" id="Recipe_staff_iron"]
+script = ExtResource("2")
+recipe_id = "staff_iron"
+output_item_id = "staff_iron"
+ingredients = {
+"amethyst": 1,
+"iron_bar": 2,
+"wood": 6
+}
+
+[sub_resource type="Resource" id="Recipe_helmet_iron"]
+script = ExtResource("2")
+recipe_id = "helmet_iron"
+output_item_id = "helmet_iron"
+ingredients = {
+"fiber": 2,
+"iron_bar": 3
+}
+
+[sub_resource type="Resource" id="Recipe_leggings_iron"]
+script = ExtResource("2")
+recipe_id = "leggings_iron"
+output_item_id = "leggings_iron"
+ingredients = {
+"fiber": 4,
+"iron_bar": 4
+}
+
+[sub_resource type="Resource" id="Recipe_boots_iron"]
+script = ExtResource("2")
+recipe_id = "boots_iron"
+output_item_id = "boots_iron"
+ingredients = {
+"fiber": 4,
+"iron_bar": 2
+}
+
+[sub_resource type="Resource" id="Recipe_arrow_iron"]
+script = ExtResource("2")
+recipe_id = "arrow_iron"
+output_item_id = "arrow_iron"
+output_amount = 10
+ingredients = {
+"iron_bar": 1,
+"wood": 2
+}
+group = "Amunisi"
+
+[sub_resource type="Resource" id="Recipe_sword_gold"]
+script = ExtResource("2")
+recipe_id = "sword_gold"
+output_item_id = "sword_gold"
+ingredients = {
+"gold_bar": 3,
+"topaz": 1,
+"wood": 4
+}
+
+[sub_resource type="Resource" id="Recipe_bow_gold"]
+script = ExtResource("2")
+recipe_id = "bow_gold"
+output_item_id = "bow_gold"
+ingredients = {
+"fiber": 6,
+"gold_bar": 2,
+"topaz": 1,
+"wood": 8
+}
+
+[sub_resource type="Resource" id="Recipe_staff_gold"]
+script = ExtResource("2")
+recipe_id = "staff_gold"
+output_item_id = "staff_gold"
+ingredients = {
+"gold_bar": 2,
+"topaz": 1,
+"wood": 6
+}
+
+[sub_resource type="Resource" id="Recipe_helmet_gold"]
+script = ExtResource("2")
+recipe_id = "helmet_gold"
+output_item_id = "helmet_gold"
+ingredients = {
+"fiber": 2,
+"gold_bar": 3
+}
+
+[sub_resource type="Resource" id="Recipe_armor_gold"]
+script = ExtResource("2")
+recipe_id = "armor_gold"
+output_item_id = "armor_gold"
+ingredients = {
+"fiber": 6,
+"gold_bar": 5
+}
+
+[sub_resource type="Resource" id="Recipe_leggings_gold"]
+script = ExtResource("2")
+recipe_id = "leggings_gold"
+output_item_id = "leggings_gold"
+ingredients = {
+"fiber": 4,
+"gold_bar": 4
+}
+
+[sub_resource type="Resource" id="Recipe_boots_gold"]
+script = ExtResource("2")
+recipe_id = "boots_gold"
+output_item_id = "boots_gold"
+ingredients = {
+"fiber": 4,
+"gold_bar": 2
+}
+
+[sub_resource type="Resource" id="Recipe_arrow_gold"]
+script = ExtResource("2")
+recipe_id = "arrow_gold"
+output_item_id = "arrow_gold"
+output_amount = 10
+ingredients = {
+"gold_bar": 1,
+"wood": 2
+}
+group = "Amunisi"
+
+[sub_resource type="Resource" id="Recipe_sword_platinum"]
+script = ExtResource("2")
+recipe_id = "sword_platinum"
+output_item_id = "sword_platinum"
+ingredients = {
+"emerald": 1,
+"platinum_bar": 3,
+"wood": 4
+}
+
+[sub_resource type="Resource" id="Recipe_bow_platinum"]
+script = ExtResource("2")
+recipe_id = "bow_platinum"
+output_item_id = "bow_platinum"
+ingredients = {
+"emerald": 1,
+"fiber": 6,
+"platinum_bar": 2,
+"wood": 8
+}
+
+[sub_resource type="Resource" id="Recipe_staff_platinum"]
+script = ExtResource("2")
+recipe_id = "staff_platinum"
+output_item_id = "staff_platinum"
+ingredients = {
+"emerald": 1,
+"platinum_bar": 2,
+"wood": 6
+}
+
+[sub_resource type="Resource" id="Recipe_helmet_platinum"]
+script = ExtResource("2")
+recipe_id = "helmet_platinum"
+output_item_id = "helmet_platinum"
+ingredients = {
+"fiber": 2,
+"platinum_bar": 3
+}
+
+[sub_resource type="Resource" id="Recipe_armor_platinum"]
+script = ExtResource("2")
+recipe_id = "armor_platinum"
+output_item_id = "armor_platinum"
+ingredients = {
+"fiber": 6,
+"platinum_bar": 5
+}
+
+[sub_resource type="Resource" id="Recipe_leggings_platinum"]
+script = ExtResource("2")
+recipe_id = "leggings_platinum"
+output_item_id = "leggings_platinum"
+ingredients = {
+"fiber": 4,
+"platinum_bar": 4
+}
+
+[sub_resource type="Resource" id="Recipe_boots_platinum"]
+script = ExtResource("2")
+recipe_id = "boots_platinum"
+output_item_id = "boots_platinum"
+ingredients = {
+"fiber": 4,
+"platinum_bar": 2
+}
+
+[sub_resource type="Resource" id="Recipe_arrow_platinum"]
+script = ExtResource("2")
+recipe_id = "arrow_platinum"
+output_item_id = "arrow_platinum"
+output_amount = 10
+ingredients = {
+"platinum_bar": 1,
+"wood": 2
+}
+group = "Amunisi"
+
+[sub_resource type="Resource" id="Recipe_sword_crimson"]
+script = ExtResource("2")
+recipe_id = "sword_crimson"
+output_item_id = "sword_crimson"
+ingredients = {
+"crimson_bar": 3,
+"ruby": 1,
+"wood": 4
+}
+
+[sub_resource type="Resource" id="Recipe_bow_crimson"]
+script = ExtResource("2")
+recipe_id = "bow_crimson"
+output_item_id = "bow_crimson"
+ingredients = {
+"crimson_bar": 2,
+"fiber": 6,
+"ruby": 1,
+"wood": 8
+}
+
+[sub_resource type="Resource" id="Recipe_staff_crimson"]
+script = ExtResource("2")
+recipe_id = "staff_crimson"
+output_item_id = "staff_crimson"
+ingredients = {
+"crimson_bar": 2,
+"ruby": 1,
+"wood": 6
+}
+
+[sub_resource type="Resource" id="Recipe_helmet_crimson"]
+script = ExtResource("2")
+recipe_id = "helmet_crimson"
+output_item_id = "helmet_crimson"
+ingredients = {
+"crimson_bar": 3,
+"fiber": 2,
+"ruby": 1
+}
+
+[sub_resource type="Resource" id="Recipe_armor_crimson"]
+script = ExtResource("2")
+recipe_id = "armor_crimson"
+output_item_id = "armor_crimson"
+ingredients = {
+"crimson_bar": 5,
+"fiber": 6,
+"ruby": 1
+}
+
+[sub_resource type="Resource" id="Recipe_leggings_crimson"]
+script = ExtResource("2")
+recipe_id = "leggings_crimson"
+output_item_id = "leggings_crimson"
+ingredients = {
+"crimson_bar": 4,
+"fiber": 4,
+"ruby": 1
+}
+
+[sub_resource type="Resource" id="Recipe_boots_crimson"]
+script = ExtResource("2")
+recipe_id = "boots_crimson"
+output_item_id = "boots_crimson"
+ingredients = {
+"crimson_bar": 2,
+"fiber": 4,
+"ruby": 1
+}
+
+[sub_resource type="Resource" id="Recipe_arrow_crimson"]
+script = ExtResource("2")
+recipe_id = "arrow_crimson"
+output_item_id = "arrow_crimson"
+output_amount = 10
+ingredients = {
+"crimson_bar": 1,
+"wood": 2
+}
+group = "Amunisi"
+
+[sub_resource type="Resource" id="Recipe_sword_frost"]
+script = ExtResource("2")
+recipe_id = "sword_frost"
+output_item_id = "sword_frost"
+ingredients = {
+"frost_bar": 3,
+"sapphire": 1,
+"wood": 4
+}
+
+[sub_resource type="Resource" id="Recipe_bow_frost"]
+script = ExtResource("2")
+recipe_id = "bow_frost"
+output_item_id = "bow_frost"
+ingredients = {
+"fiber": 6,
+"frost_bar": 2,
+"sapphire": 1,
+"wood": 8
+}
+
+[sub_resource type="Resource" id="Recipe_staff_frost"]
+script = ExtResource("2")
+recipe_id = "staff_frost"
+output_item_id = "staff_frost"
+ingredients = {
+"frost_bar": 2,
+"sapphire": 1,
+"wood": 6
+}
+
+[sub_resource type="Resource" id="Recipe_helmet_frost"]
+script = ExtResource("2")
+recipe_id = "helmet_frost"
+output_item_id = "helmet_frost"
+ingredients = {
+"fiber": 2,
+"frost_bar": 3,
+"sapphire": 1
+}
+
+[sub_resource type="Resource" id="Recipe_armor_frost"]
+script = ExtResource("2")
+recipe_id = "armor_frost"
+output_item_id = "armor_frost"
+ingredients = {
+"fiber": 6,
+"frost_bar": 5,
+"sapphire": 1
+}
+
+[sub_resource type="Resource" id="Recipe_leggings_frost"]
+script = ExtResource("2")
+recipe_id = "leggings_frost"
+output_item_id = "leggings_frost"
+ingredients = {
+"fiber": 4,
+"frost_bar": 4,
+"sapphire": 1
+}
+
+[sub_resource type="Resource" id="Recipe_boots_frost"]
+script = ExtResource("2")
+recipe_id = "boots_frost"
+output_item_id = "boots_frost"
+ingredients = {
+"fiber": 4,
+"frost_bar": 2,
+"sapphire": 1
+}
+
+[sub_resource type="Resource" id="Recipe_arrow_frost"]
+script = ExtResource("2")
+recipe_id = "arrow_frost"
+output_item_id = "arrow_frost"
+output_amount = 10
+ingredients = {
+"frost_bar": 1,
+"wood": 2
+}
+group = "Amunisi"
+
+[sub_resource type="Resource" id="Recipe_sword_shadow"]
+script = ExtResource("2")
+recipe_id = "sword_shadow"
+output_item_id = "sword_shadow"
+ingredients = {
+"onyx": 1,
+"shadow_bar": 3,
+"wood": 4
+}
+
+[sub_resource type="Resource" id="Recipe_bow_shadow"]
+script = ExtResource("2")
+recipe_id = "bow_shadow"
+output_item_id = "bow_shadow"
+ingredients = {
+"fiber": 6,
+"onyx": 1,
+"shadow_bar": 2,
+"wood": 8
+}
+
+[sub_resource type="Resource" id="Recipe_staff_shadow"]
+script = ExtResource("2")
+recipe_id = "staff_shadow"
+output_item_id = "staff_shadow"
+ingredients = {
+"onyx": 1,
+"shadow_bar": 2,
+"wood": 6
+}
+
+[sub_resource type="Resource" id="Recipe_helmet_shadow"]
+script = ExtResource("2")
+recipe_id = "helmet_shadow"
+output_item_id = "helmet_shadow"
+ingredients = {
+"fiber": 2,
+"onyx": 1,
+"shadow_bar": 3
+}
+
+[sub_resource type="Resource" id="Recipe_armor_shadow"]
+script = ExtResource("2")
+recipe_id = "armor_shadow"
+output_item_id = "armor_shadow"
+ingredients = {
+"fiber": 6,
+"onyx": 1,
+"shadow_bar": 5
+}
+
+[sub_resource type="Resource" id="Recipe_leggings_shadow"]
+script = ExtResource("2")
+recipe_id = "leggings_shadow"
+output_item_id = "leggings_shadow"
+ingredients = {
+"fiber": 4,
+"onyx": 1,
+"shadow_bar": 4
+}
+
+[sub_resource type="Resource" id="Recipe_boots_shadow"]
+script = ExtResource("2")
+recipe_id = "boots_shadow"
+output_item_id = "boots_shadow"
+ingredients = {
+"fiber": 4,
+"onyx": 1,
+"shadow_bar": 2
+}
+
+[sub_resource type="Resource" id="Recipe_arrow_shadow"]
+script = ExtResource("2")
+recipe_id = "arrow_shadow"
+output_item_id = "arrow_shadow"
+output_amount = 10
+ingredients = {
+"shadow_bar": 1,
+"wood": 2
+}
+group = "Amunisi"
+
+[sub_resource type="Resource" id="Recipe_sword_fairy"]
+script = ExtResource("2")
+recipe_id = "sword_fairy"
+output_item_id = "sword_fairy"
+ingredients = {
+"fairy_bar": 3,
+"fairy_crystal": 1,
+"wood": 4
+}
+
+[sub_resource type="Resource" id="Recipe_bow_fairy"]
+script = ExtResource("2")
+recipe_id = "bow_fairy"
+output_item_id = "bow_fairy"
+ingredients = {
+"fairy_bar": 2,
+"fairy_crystal": 1,
+"fiber": 6,
+"wood": 8
+}
+
+[sub_resource type="Resource" id="Recipe_staff_fairy"]
+script = ExtResource("2")
+recipe_id = "staff_fairy"
+output_item_id = "staff_fairy"
+ingredients = {
+"fairy_bar": 2,
+"fairy_crystal": 1,
+"wood": 6
+}
+
+[sub_resource type="Resource" id="Recipe_helmet_fairy"]
+script = ExtResource("2")
+recipe_id = "helmet_fairy"
+output_item_id = "helmet_fairy"
+ingredients = {
+"fairy_bar": 3,
+"fairy_crystal": 1,
+"fiber": 2
+}
+
+[sub_resource type="Resource" id="Recipe_armor_fairy"]
+script = ExtResource("2")
+recipe_id = "armor_fairy"
+output_item_id = "armor_fairy"
+ingredients = {
+"fairy_bar": 5,
+"fairy_crystal": 1,
+"fiber": 6
+}
+
+[sub_resource type="Resource" id="Recipe_leggings_fairy"]
+script = ExtResource("2")
+recipe_id = "leggings_fairy"
+output_item_id = "leggings_fairy"
+ingredients = {
+"fairy_bar": 4,
+"fairy_crystal": 1,
+"fiber": 4
+}
+
+[sub_resource type="Resource" id="Recipe_boots_fairy"]
+script = ExtResource("2")
+recipe_id = "boots_fairy"
+output_item_id = "boots_fairy"
+ingredients = {
+"fairy_bar": 2,
+"fairy_crystal": 1,
+"fiber": 4
+}
+
+[sub_resource type="Resource" id="Recipe_arrow_fairy"]
+script = ExtResource("2")
+recipe_id = "arrow_fairy"
+output_item_id = "arrow_fairy"
+output_amount = 10
+ingredients = {
+"fairy_bar": 1,
+"wood": 2
+}
+group = "Amunisi"
+
+[sub_resource type="Resource" id="Recipe_sword_obsidian"]
+script = ExtResource("2")
+recipe_id = "sword_obsidian"
+output_item_id = "sword_obsidian"
+ingredients = {
+"fire_quartz": 1,
+"obsidian_bar": 3,
+"wood": 4
+}
+
+[sub_resource type="Resource" id="Recipe_bow_obsidian"]
+script = ExtResource("2")
+recipe_id = "bow_obsidian"
+output_item_id = "bow_obsidian"
+ingredients = {
+"fiber": 6,
+"fire_quartz": 1,
+"obsidian_bar": 2,
+"wood": 8
+}
+
+[sub_resource type="Resource" id="Recipe_staff_obsidian"]
+script = ExtResource("2")
+recipe_id = "staff_obsidian"
+output_item_id = "staff_obsidian"
+ingredients = {
+"fire_quartz": 1,
+"obsidian_bar": 2,
+"wood": 6
+}
+
+[sub_resource type="Resource" id="Recipe_helmet_obsidian"]
+script = ExtResource("2")
+recipe_id = "helmet_obsidian"
+output_item_id = "helmet_obsidian"
+ingredients = {
+"fiber": 2,
+"fire_quartz": 1,
+"obsidian_bar": 3
+}
+
+[sub_resource type="Resource" id="Recipe_armor_obsidian"]
+script = ExtResource("2")
+recipe_id = "armor_obsidian"
+output_item_id = "armor_obsidian"
+ingredients = {
+"fiber": 6,
+"fire_quartz": 1,
+"obsidian_bar": 5
+}
+
+[sub_resource type="Resource" id="Recipe_leggings_obsidian"]
+script = ExtResource("2")
+recipe_id = "leggings_obsidian"
+output_item_id = "leggings_obsidian"
+ingredients = {
+"fiber": 4,
+"fire_quartz": 1,
+"obsidian_bar": 4
+}
+
+[sub_resource type="Resource" id="Recipe_boots_obsidian"]
+script = ExtResource("2")
+recipe_id = "boots_obsidian"
+output_item_id = "boots_obsidian"
+ingredients = {
+"fiber": 4,
+"fire_quartz": 1,
+"obsidian_bar": 2
+}
+
+[sub_resource type="Resource" id="Recipe_arrow_obsidian"]
+script = ExtResource("2")
+recipe_id = "arrow_obsidian"
+output_item_id = "arrow_obsidian"
+output_amount = 10
+ingredients = {
+"obsidian_bar": 1,
+"wood": 2
+}
+group = "Amunisi"
+
+[sub_resource type="Resource" id="Recipe_fairy_chest"]
+script = ExtResource("2")
+recipe_id = "fairy_chest"
+output_item_id = "fairy_chest"
+ingredients = {
+"fairy_bar": 20,
+"wood": 100
+}
+group = "Bangunan"
+
+[sub_resource type="Resource" id="Recipe_obsidian_chest"]
+script = ExtResource("2")
+recipe_id = "obsidian_chest"
+output_item_id = "obsidian_chest"
+ingredients = {
+"obsidian_bar": 22,
+"wood": 110
+}
+group = "Bangunan"
+
+[sub_resource type="Resource" id="Recipe_scarecrow"]
+script = ExtResource("2")
+recipe_id = "scarecrow"
+output_item_id = "scarecrow"
+ingredients = {
+"fiber": 20,
+"rope": 1,
+"wood": 10
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_birdhouse"]
+script = ExtResource("2")
+recipe_id = "birdhouse"
+output_item_id = "birdhouse"
+ingredients = {
+"plank": 3
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_street_lamp"]
+script = ExtResource("2")
+recipe_id = "street_lamp"
+output_item_id = "street_lamp"
+ingredients = {
+"coal": 2,
+"iron_bar": 2,
+"stone": 5
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_hay_bale"]
+script = ExtResource("2")
+recipe_id = "hay_bale"
+output_item_id = "hay_bale"
+ingredients = {
+"fiber": 15
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_wooden_bucket"]
+script = ExtResource("2")
+recipe_id = "wooden_bucket"
+output_item_id = "wooden_bucket"
+ingredients = {
+"wood": 6
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_village_barrel"]
+script = ExtResource("2")
+recipe_id = "village_barrel"
+output_item_id = "village_barrel"
+ingredients = {
+"copper_bar": 1,
+"plank": 3
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_mailbox_decor"]
+script = ExtResource("2")
+recipe_id = "mailbox_decor"
+output_item_id = "mailbox_decor"
+ingredients = {
+"iron_bar": 1,
+"plank": 2
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_stone_statue"]
+script = ExtResource("2")
+recipe_id = "stone_statue"
+output_item_id = "stone_statue"
+ingredients = {
+"quartz": 1,
+"stone": 60
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_snowman"]
+script = ExtResource("2")
+recipe_id = "snowman"
+output_item_id = "snowman"
+ingredients = {
+"coal": 2,
+"fiber": 5,
+"holly": 1
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_feed_trough"]
+script = ExtResource("2")
+recipe_id = "feed_trough"
+output_item_id = "feed_trough"
+ingredients = {
+"wood": 15
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_bonfire"]
+script = ExtResource("2")
+recipe_id = "bonfire"
+output_item_id = "bonfire"
+ingredients = {
+"coal": 3,
+"stone": 10,
+"wood": 20
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_candle"]
+script = ExtResource("2")
+recipe_id = "candle"
+output_item_id = "candle"
+ingredients = {
+"beeswax": 2,
+"fiber": 1
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_stacked_barrels"]
+script = ExtResource("2")
+recipe_id = "stacked_barrels"
+output_item_id = "stacked_barrels"
+ingredients = {
+"copper_bar": 2,
+"plank": 8
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_notice_board"]
+script = ExtResource("2")
+recipe_id = "notice_board"
+output_item_id = "notice_board"
+ingredients = {
+"plank": 4,
+"rope": 1
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_beehive"]
+script = ExtResource("2")
+recipe_id = "beehive"
+output_item_id = "beehive"
+ingredients = {
+"fiber": 10,
+"honey": 1,
+"plank": 8
+}
+group = "Bangunan"
+
+[sub_resource type="Resource" id="Recipe_sawmill"]
+script = ExtResource("2")
+recipe_id = "sawmill"
+output_item_id = "sawmill"
+ingredients = {
+"iron_bar": 3,
+"stone": 20,
+"wood": 50
+}
+group = "Bangunan"
+
+[sub_resource type="Resource" id="Recipe_alchemy_table"]
+script = ExtResource("2")
+recipe_id = "alchemy_table"
+output_item_id = "alchemy_table"
+ingredients = {
+"plank": 10,
+"quartz": 2,
+"slime_gel": 10
+}
+group = "Bangunan"
+
+[sub_resource type="Resource" id="Recipe_anvil"]
+script = ExtResource("2")
+recipe_id = "anvil"
+output_item_id = "anvil"
+ingredients = {
+"coal": 10,
+"iron_bar": 10,
+"stone": 40
+}
+group = "Bangunan"
+
+[sub_resource type="Resource" id="Recipe_rope"]
+script = ExtResource("2")
+recipe_id = "rope"
+output_item_id = "rope"
+ingredients = {
+"fiber": 4
+}
+group = "Bahan"
+
+[sub_resource type="Resource" id="Recipe_leather"]
+script = ExtResource("2")
+recipe_id = "leather"
+output_item_id = "leather"
+output_amount = 2
+ingredients = {
+"cloth": 1,
+"pine_tar": 1
+}
+group = "Bahan"
+
+[sub_resource type="Resource" id="Recipe_lure"]
+script = ExtResource("2")
+recipe_id = "lure"
+output_item_id = "lure"
+output_amount = 5
+ingredients = {
+"copper_bar": 1,
+"fiber": 2
+}
+group = "Bahan"
+
+[sub_resource type="Resource" id="Recipe_gloves_leather"]
+script = ExtResource("2")
+recipe_id = "gloves_leather"
+output_item_id = "gloves_leather"
+ingredients = {
+"fiber": 2,
+"leather": 2
+}
+
+[sub_resource type="Resource" id="Recipe_gloves_iron"]
+script = ExtResource("2")
+recipe_id = "gloves_iron"
+output_item_id = "gloves_iron"
+ingredients = {
+"iron_bar": 2,
+"leather": 2
+}
+
+[sub_resource type="Resource" id="Recipe_gloves_gold"]
+script = ExtResource("2")
+recipe_id = "gloves_gold"
+output_item_id = "gloves_gold"
+ingredients = {
+"gold_bar": 2,
+"leather": 2
+}
+
+[sub_resource type="Resource" id="Recipe_quiver"]
+script = ExtResource("2")
+recipe_id = "quiver"
+output_item_id = "quiver"
+ingredients = {
+"leather": 2,
+"rope": 1,
+"wood": 5
+}
+
+[sub_resource type="Resource" id="Recipe_garden_well"]
+script = ExtResource("2")
+recipe_id = "garden_well"
+output_item_id = "garden_well"
+ingredients = {
+"iron_bar": 2,
+"plank": 10,
+"rope": 2,
+"stone": 50
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_water_fountain"]
+script = ExtResource("2")
+recipe_id = "water_fountain"
+output_item_id = "water_fountain"
+ingredients = {
+"copper_bar": 4,
+"quartz": 2,
+"stone": 80
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_garden_swing"]
+script = ExtResource("2")
+recipe_id = "garden_swing"
+output_item_id = "garden_swing"
+ingredients = {
+"plank": 10,
+"rope": 4
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_seesaw"]
+script = ExtResource("2")
+recipe_id = "seesaw"
+output_item_id = "seesaw"
+ingredients = {
+"iron_bar": 1,
+"plank": 8
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_signpost"]
+script = ExtResource("2")
+recipe_id = "signpost"
+output_item_id = "signpost"
+ingredients = {
+"plank": 3
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_picnic_blanket"]
+script = ExtResource("2")
+recipe_id = "picnic_blanket"
+output_item_id = "picnic_blanket"
+ingredients = {
+"cloth": 1,
+"wool": 4
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_twin_lamp"]
+script = ExtResource("2")
+recipe_id = "twin_lamp"
+output_item_id = "twin_lamp"
+ingredients = {
+"coal": 2,
+"iron_bar": 3,
+"resin": 2
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_clothesline"]
+script = ExtResource("2")
+recipe_id = "clothesline"
+output_item_id = "clothesline"
+ingredients = {
+"cloth": 2,
+"rope": 2,
+"wood": 4
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_dog_house"]
+script = ExtResource("2")
+recipe_id = "dog_house"
+output_item_id = "dog_house"
+ingredients = {
+"old_bone": 2,
+"plank": 12
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_cow_weathervane"]
+script = ExtResource("2")
+recipe_id = "cow_weathervane"
+output_item_id = "cow_weathervane"
+ingredients = {
+"copper_bar": 3,
+"wood": 2
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_chicken_weathervane"]
+script = ExtResource("2")
+recipe_id = "chicken_weathervane"
+output_item_id = "chicken_weathervane"
+ingredients = {
+"copper_bar": 2,
+"wood": 2
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_hanging_lantern"]
+script = ExtResource("2")
+recipe_id = "hanging_lantern"
+output_item_id = "hanging_lantern"
+ingredients = {
+"copper_bar": 1,
+"resin": 1
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_xmas_tree"]
+script = ExtResource("2")
+recipe_id = "xmas_tree"
+output_item_id = "xmas_tree"
+ingredients = {
+"fiber": 10,
+"holly": 3,
+"topaz": 1,
+"wood": 20
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_sandbox"]
+script = ExtResource("2")
+recipe_id = "sandbox"
+output_item_id = "sandbox"
+ingredients = {
+"plank": 6,
+"stone": 10
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_wooden_broom"]
+script = ExtResource("2")
+recipe_id = "wooden_broom"
+output_item_id = "wooden_broom"
+ingredients = {
+"fiber": 6,
+"wood": 2
+}
+group = "Dekorasi"
+
+[sub_resource type="Resource" id="Recipe_keg"]
+script = ExtResource("2")
+recipe_id = "keg"
+output_item_id = "keg"
+ingredients = {
+"copper_bar": 2,
+"iron_bar": 1,
+"wood": 30
+}
+group = "Bangunan"
+
+[sub_resource type="Resource" id="Recipe_oil_maker"]
+script = ExtResource("2")
+recipe_id = "oil_maker"
+output_item_id = "oil_maker"
+ingredients = {
+"iron_bar": 2,
+"stone": 20,
+"wood": 25
+}
+group = "Bangunan"
+
+[sub_resource type="Resource" id="Recipe_fish_smoker"]
+script = ExtResource("2")
+recipe_id = "fish_smoker"
+output_item_id = "fish_smoker"
+ingredients = {
+"coal": 5,
+"iron_bar": 1,
+"wood": 30
+}
+group = "Bangunan"
+
+[sub_resource type="Resource" id="Recipe_lightning_rod"]
+script = ExtResource("2")
+recipe_id = "lightning_rod"
+output_item_id = "lightning_rod"
+ingredients = {
+"copper_bar": 1,
+"iron_bar": 2,
+"stone": 10
+}
+group = "Bangunan"
+
 [resource]
 script = ExtResource("1")
-recipes = Array[ExtResource("2")]([SubResource("Recipe_wooden_chair"), SubResource("Recipe_wooden_bench"), SubResource("Recipe_sword_wood"), SubResource("Recipe_bow_wood"), SubResource("Recipe_staff_wood"), SubResource("Recipe_helmet_wood"), SubResource("Recipe_armor_wood"), SubResource("Recipe_leggings_wood"), SubResource("Recipe_boots_wood"), SubResource("Recipe_arrow_wood"), SubResource("Recipe_sword_copper"), SubResource("Recipe_armor_copper"), SubResource("Recipe_sword_iron"), SubResource("Recipe_armor_iron"), SubResource("Recipe_furnace"), SubResource("Recipe_wooden_chest"), SubResource("Recipe_wooden_fence"), SubResource("Recipe_crafting_workbench"), SubResource("Recipe_stone_fence"), SubResource("Recipe_wooden_gate"), SubResource("Recipe_copper_chest"), SubResource("Recipe_iron_chest"), SubResource("Recipe_gold_chest"), SubResource("Recipe_preserves_jar"), SubResource("Recipe_dehydrator"), SubResource("Recipe_mayonnaise_maker"), SubResource("Recipe_cheese_press"), SubResource("Recipe_loom")])
+recipes = Array[ExtResource("2")]([SubResource("Recipe_wooden_chair"), SubResource("Recipe_wooden_bench"), SubResource("Recipe_sword_wood"), SubResource("Recipe_bow_wood"), SubResource("Recipe_staff_wood"), SubResource("Recipe_helmet_wood"), SubResource("Recipe_armor_wood"), SubResource("Recipe_leggings_wood"), SubResource("Recipe_boots_wood"), SubResource("Recipe_arrow_wood"), SubResource("Recipe_sword_copper"), SubResource("Recipe_armor_copper"), SubResource("Recipe_sword_iron"), SubResource("Recipe_armor_iron"), SubResource("Recipe_furnace"), SubResource("Recipe_wooden_chest"), SubResource("Recipe_wooden_fence"), SubResource("Recipe_crafting_workbench"), SubResource("Recipe_stone_fence"), SubResource("Recipe_wooden_gate"), SubResource("Recipe_copper_chest"), SubResource("Recipe_iron_chest"), SubResource("Recipe_gold_chest"), SubResource("Recipe_platinum_chest"), SubResource("Recipe_crimson_chest"), SubResource("Recipe_frost_chest"), SubResource("Recipe_shadow_chest"), SubResource("Recipe_preserves_jar"), SubResource("Recipe_dehydrator"), SubResource("Recipe_mayonnaise_maker"), SubResource("Recipe_cheese_press"), SubResource("Recipe_loom"), SubResource("Recipe_bug_net_wood"), SubResource("Recipe_tapper"), SubResource("Recipe_bait"), SubResource("Recipe_bug_bait"), SubResource("Recipe_glow_bait"), SubResource("Recipe_bow_copper"), SubResource("Recipe_staff_copper"), SubResource("Recipe_helmet_copper"), SubResource("Recipe_leggings_copper"), SubResource("Recipe_boots_copper"), SubResource("Recipe_arrow_copper"), SubResource("Recipe_bow_iron"), SubResource("Recipe_staff_iron"), SubResource("Recipe_helmet_iron"), SubResource("Recipe_leggings_iron"), SubResource("Recipe_boots_iron"), SubResource("Recipe_arrow_iron"), SubResource("Recipe_sword_gold"), SubResource("Recipe_bow_gold"), SubResource("Recipe_staff_gold"), SubResource("Recipe_helmet_gold"), SubResource("Recipe_armor_gold"), SubResource("Recipe_leggings_gold"), SubResource("Recipe_boots_gold"), SubResource("Recipe_arrow_gold"), SubResource("Recipe_sword_platinum"), SubResource("Recipe_bow_platinum"), SubResource("Recipe_staff_platinum"), SubResource("Recipe_helmet_platinum"), SubResource("Recipe_armor_platinum"), SubResource("Recipe_leggings_platinum"), SubResource("Recipe_boots_platinum"), SubResource("Recipe_arrow_platinum"), SubResource("Recipe_sword_crimson"), SubResource("Recipe_bow_crimson"), SubResource("Recipe_staff_crimson"), SubResource("Recipe_helmet_crimson"), SubResource("Recipe_armor_crimson"), SubResource("Recipe_leggings_crimson"), SubResource("Recipe_boots_crimson"), SubResource("Recipe_arrow_crimson"), SubResource("Recipe_sword_frost"), SubResource("Recipe_bow_frost"), SubResource("Recipe_staff_frost"), SubResource("Recipe_helmet_frost"), SubResource("Recipe_armor_frost"), SubResource("Recipe_leggings_frost"), SubResource("Recipe_boots_frost"), SubResource("Recipe_arrow_frost"), SubResource("Recipe_sword_shadow"), SubResource("Recipe_bow_shadow"), SubResource("Recipe_staff_shadow"), SubResource("Recipe_helmet_shadow"), SubResource("Recipe_armor_shadow"), SubResource("Recipe_leggings_shadow"), SubResource("Recipe_boots_shadow"), SubResource("Recipe_arrow_shadow"), SubResource("Recipe_sword_fairy"), SubResource("Recipe_bow_fairy"), SubResource("Recipe_staff_fairy"), SubResource("Recipe_helmet_fairy"), SubResource("Recipe_armor_fairy"), SubResource("Recipe_leggings_fairy"), SubResource("Recipe_boots_fairy"), SubResource("Recipe_arrow_fairy"), SubResource("Recipe_sword_obsidian"), SubResource("Recipe_bow_obsidian"), SubResource("Recipe_staff_obsidian"), SubResource("Recipe_helmet_obsidian"), SubResource("Recipe_armor_obsidian"), SubResource("Recipe_leggings_obsidian"), SubResource("Recipe_boots_obsidian"), SubResource("Recipe_arrow_obsidian"), SubResource("Recipe_fairy_chest"), SubResource("Recipe_obsidian_chest"), SubResource("Recipe_scarecrow"), SubResource("Recipe_birdhouse"), SubResource("Recipe_street_lamp"), SubResource("Recipe_hay_bale"), SubResource("Recipe_wooden_bucket"), SubResource("Recipe_village_barrel"), SubResource("Recipe_mailbox_decor"), SubResource("Recipe_stone_statue"), SubResource("Recipe_snowman"), SubResource("Recipe_feed_trough"), SubResource("Recipe_bonfire"), SubResource("Recipe_candle"), SubResource("Recipe_stacked_barrels"), SubResource("Recipe_notice_board"), SubResource("Recipe_beehive"), SubResource("Recipe_sawmill"), SubResource("Recipe_alchemy_table"), SubResource("Recipe_anvil"), SubResource("Recipe_rope"), SubResource("Recipe_leather"), SubResource("Recipe_lure"), SubResource("Recipe_gloves_leather"), SubResource("Recipe_gloves_iron"), SubResource("Recipe_gloves_gold"), SubResource("Recipe_quiver"), SubResource("Recipe_garden_well"), SubResource("Recipe_water_fountain"), SubResource("Recipe_garden_swing"), SubResource("Recipe_seesaw"), SubResource("Recipe_signpost"), SubResource("Recipe_picnic_blanket"), SubResource("Recipe_twin_lamp"), SubResource("Recipe_clothesline"), SubResource("Recipe_dog_house"), SubResource("Recipe_cow_weathervane"), SubResource("Recipe_chicken_weathervane"), SubResource("Recipe_hanging_lantern"), SubResource("Recipe_xmas_tree"), SubResource("Recipe_sandbox"), SubResource("Recipe_wooden_broom"), SubResource("Recipe_keg"), SubResource("Recipe_oil_maker"), SubResource("Recipe_fish_smoker"), SubResource("Recipe_lightning_rod")])

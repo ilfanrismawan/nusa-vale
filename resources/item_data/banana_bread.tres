@@ -19,4 +19,4 @@ item_id = "banana_bread"
 display_name = "Roti Pisang"
 icon = SubResource("Icon")
 description = "Masakan dari dapur. Pilih di hotbar untuk dimakan."
-sell_price = 95
+sell_price = 481

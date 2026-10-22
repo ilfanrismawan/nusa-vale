@@ -14,5 +14,5 @@ description = "Benih untuk menanam tanaman Strawberry di musim semi."
 action_data = ExtResource("3_action")
 season = "spring"
 buy_price = 30
-sell_price = 15
+sell_price = 12
 metadata/_custom_type_script = "uid://cm1okc20ussp3"

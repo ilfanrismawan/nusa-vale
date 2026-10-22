@@ -62,7 +62,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	if Coop.has_root():
 		_coop_input(event)
 		return
-	if not _players.is_empty() and event.is_action_pressed("ui_accept"):
+	# Lewat PlayerInput: Spasi di dunia = lompat, bukan konfirmasi tidur.
+	if not _players.is_empty() and PlayerInput.find_presser(event, _players, [&"ui_accept"]) != null:
 		get_viewport().set_input_as_handled()
 		_sleep()
 		return
@@ -76,6 +77,7 @@ func _coop_input(event: InputEvent) -> void:
 	for p in _players:
 		if not is_instance_valid(p) or not (p.input.is_event(event, &"ui_accept") or p.input.is_event(event, &"interact")):
 			continue
+		p.mark_interacted()
 		get_viewport().set_input_as_handled()
 		var lying := not Coop.is_sleeping(p)
 		var count := Coop.set_sleeping(p, lying)

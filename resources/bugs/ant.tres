@@ -1,0 +1,16 @@
+[gd_resource type="Resource" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/bug_data.gd" id="1_script"]
+[ext_resource type="Resource" path="res://resources/item_data/ant.tres" id="2_item"]
+
+[resource]
+script = ExtResource("1_script")
+item = ExtResource("2_item")
+seasons = PackedStringArray()
+locations = PackedStringArray("cave")
+time = "any"
+weight = 1.2
+flying = false
+speed = 14.0
+flee_radius = 0.0
+glows = false

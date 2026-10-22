@@ -16,6 +16,11 @@ extends EnemyData
 ## Jeda istirahat di antara jurus (dikali tempo fase).
 @export_range(0.1, 5.0, 0.05) var rest_time: float = 1.1
 
+@export_group("Musik")
+## Kosong memakai genderang sintetis. Isi aset loop saat tersedia.
+@export var music: AudioStream
+@export var music_volume_db: float = -14.0
+
 @export_group("Fase")
 ## HP di bawah rasio ini = fase 2 / fase 3 (0 = tidak ada fase itu).
 @export_range(0.0, 1.0, 0.05) var phase2_hp_ratio: float = 0.5

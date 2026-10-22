@@ -1,6 +1,6 @@
 # Nusa Vale — Game Design Document (GDD)
 
-Versi dokumen: 3.8 (18 Oktober 2026).
+Versi dokumen: 3.30 (22 Oktober 2026).
 Dokumen ini adalah **sumber kebenaran desain** proyek `E:\nusa-vale` (Game Design Document resmi).
 Pada versi 1.9, ditambahkan 4 pilar fundamental Life-Sim / Farming RPG: **Sistem Peternakan & Satwa** (kandang Barn/Coop, sapi, kambing, domba, ayam, bebek, kuda, pakan & affection), **Mesin Pengolah Pasca-Panen (Artisan Goods)** (mayones, keju, selai, fermentasi keg, tenun, pengasap ikan), **Sistem Cuaca Harian Dinamis** (cerah, hujan penyiram otomatis, badai petir penangkal baterai, salju), serta **Sistem Sosial, Persahabatan, & Jadwal Harian NPC** (hati 0-10, sistem hadiah loved/hated, rutinitas harian, heart events, dan romansa/teman sekamar).
 
@@ -8,19 +8,25 @@ Pada versi 1.9, ditambahkan 4 pilar fundamental Life-Sim / Farming RPG: **Sistem
 
 Setiap angka atau aturan desain diberi label:
 
-- **[terpasang]**: sudah ada di kode/Resource dan berfungsi di proyek saat ini.
+- **[terpasang]**: implementasi tersedia di kode/Resource dan memiliki jalur integrasi. Label ini tidak otomatis berarti lulus tes terkini atau selesai playtest; batas fitur dan bukti verifikasi disebutkan terpisah.
 - **[keputusan]**: sudah diputuskan oleh pemilik proyek (menjadi spesifikasi wajib yang harus diimplementasikan).
 - **[usulan]**: ide lanjutan yang masih terbuka untuk penyempurnaan detail teknis lebih lanjut.
 
 ---
 
-## Status implementasi hasil audit — 15 Oktober 2026
+## Status implementasi hasil audit — 22 Oktober 2026
 
-Proyek berada pada **alpha dengan banyak sistem inti terpasang**, berdasarkan inspeksi kode dan cakupan tes, belum berarti siap rilis. Lihat [audit](AUDIT_2026-10-15.md) dan [laporan progres](PROJECT_PROGRESS_2026-10-15.md). Catatan ini mengoreksi status historis di bawah tanpa membatalkan keputusan desain.
+Proyek berada pada **alpha dengan banyak sistem inti terpasang**. Audit ini membaca kode, scene, Resource, konfigurasi proyek, data NPC, runner dan tes pada workspace aktif, termasuk perubahan yang belum di-commit. Jumlah file/data tidak menunjukkan persentase penyelesaian atau kesiapan rilis.
 
-Verifikasi 15 Oktober: full suite berhenti gagal pada tes transisi Balai (referensi `ReturnFarm` di tes, `ReturnWorld` di scene). Sebelas kelompok regresi sebelumnya lulus; tes berikutnya belum dijalankan. Status ini tidak membatalkan bukti historis, tetapi proyek belum dapat dinyatakan lulus full suite terkini.
+Ringkasan berikut menjadi acuan status terkini. Angka dan keputusan desain di bagian rinci tetap berlaku kecuali diberi koreksi implementasi. Hasil audit 15–20 Oktober adalah riwayat, bukan bukti pengujian kode terbaru. Inventaris audit awal ada di [AUDIT_GDD_2026-10-22.md](AUDIT_GDD_2026-10-22.md); tindak lanjut akses HerbalHouse, kunci hati, rumah tangga/surat, serta Role dijelaskan di [IMPLEMENTATION_SOCIAL_ROLE_2026-10-22.md](IMPLEMENTATION_SOCIAL_ROLE_2026-10-22.md).
 
-Kelanjutan sesi 15 Oktober: referensi lama pada dua tes Balai telah diperbaiki, menu kandang diberi guard ID invalid dan fixture carpenter diperkuat. Aturan penyiraman, tanah kosong dan syarat tier objek di bawah sudah diimplementasikan serta lulus tes. Seluruh cakupan runner selesai melalui gabungan run, dengan run terakhir feedback hingga save lulus. Ini bukan klaim satu full run baru tanpa interupsi. Bukti ada pada [laporan perubahan gameplay](GAMEPLAY_RULES_2026-10-15.md).
+**Playtest pemilik — LULUS / SELESAI (22 Oktober 2026):** pemilik proyek mengonfirmasi bahwa prioritas stabilitas dan playtest loop inti solo/co-op sudah dilakukan dan lulus. Jangan merekomendasikan ulang milestone ini sebagai pekerjaan yang belum selesai. Pengujian berikutnya difokuskan pada perubahan baru atau bug/regresi konkret. Acuan lintas dokumen: [PLAYTEST_STATUS.md](PLAYTEST_STATUS.md). Prioritas aktif berikutnya: **balancing progres dan ekonomi**, kemudian kelengkapan konten serta fitur yang belum terpasang.
+
+**Baseline balancing 22 Oktober 2026 [terpasang]:** modal tanam dipertahankan setelah upgrade Tembaga, biaya tas/rumah bertahap, target stamina 200 tercapai, EXP aktivitas diselaraskan, nilai 137 resep cooking diaudit (136 harga diubah), selisih jual kembali bibit mencegah loop EXP tanpa biaya, serta serangan gua diselaraskan terhadap DEF equipment. Detail angka, asumsi simulasi kas solo/co-op dan bukti tes terarah: [ECONOMY_BALANCE_2026-10-22.md](ECONOMY_BALANCE_2026-10-22.md). Kelulusan playtest umum pemilik di atas tetap berlaku; ini bukan pembukaan ulang milestone tersebut.
+
+**Tingkat bukti:** “kode/data” berarti telah diperiksa secara statis; “lulus tes” hanya berlaku untuk tes dan run yang disebutkan; “playtest” memerlukan pemeriksaan permainan nyata. Tes headless tidak membuktikan kualitas visual, gamepad fisik, balancing, atau alur panjang solo/co-op.
+
+**Verifikasi 22 Oktober:** validator NPC dan konfigurasi rumah tangga lulus tanpa error/warning. Tindak lanjut telah menjalankan regresi Town/HerbalHouse, Role EXP, seluruh cabang Role, NPC Story, Household, Skill Tree UI, House dan Gathering dengan marker `failures=0`; hasil suite terkait dan batas verifikasi dicatat dalam laporan implementasi. Error sertifikat Windows pada run awal kini dapat ditoleransi secara eksplisit lewat opsi runner `-AllowCertificateStoreWarning`, tanpa mengabaikan error script/assertion atau error Godot lainnya. Bukti otomatis ini tidak menyatakan full suite lulus. Status playtest manual pemilik dicatat terpisah pada konfirmasi di atas; rincian perangkat dan platform tidak ditambahkan.
 
 **Aturan gameplay terbaru [terpasang]:**
 
@@ -35,32 +41,34 @@ Panduan editor resep, karakter, animasi dan syarat objek: [EDITOR_GUIDE.md](EDIT
 
 | Sistem | Terpasang | Batas implementasi |
 |---|---|---|
-| Loop inti | Farming, inventory, toko, shipping esok hari, crafting, alat, save | Playtest alur panjang dan balancing tetap diperlukan |
+| Loop inti | Farming, inventory, toko, shipping esok hari, crafting, alat, save | Playtest loop inti solo/co-op lulus menurut pemilik; balancing progres/ekonomi menjadi prioritas berikutnya |
 | Peternakan | Ayam, bebek, sapi, kambing, domba; perawatan, kualitas, merumput, interior, upgrade | Kuda, pembiakan, satwa tambahan belum selesai |
-| Pengolahan | Furnace, Mayonnaise Maker, Cheese Press, Loom, Preserves Jar, Dehydrator | Keg, Oil Maker, Fish Smoker masih target |
-| Dunia | Farm, rumah, Forest, Deep Forest, Town, Balai Nadi, Greenhouse | Gunung, dungeon, pantai, Modern City masih target |
-| Town/NPC | 14 bangunan child scene, interior, dialog, jadwal, layanan | Klinik/rumah dasar; hati, hadiah, romansa belum selesai |
-| Cuaca | Cerah/hujan; hujan menyiram outdoor | Badai, salju, petir/baterai, prakiraan masih target |
-| Cooking | Lima resep, buku per pemain, stamina, buff laju | Dapur rumah, HP/combat, resep TV/sosial masih target |
-| Biji Daya | Tiga sumber unik, kapasitas stamina 100–130 | Target 200 membutuhkan tujuh sumber tambahan |
+| Pengolahan | Furnace, Mayonnaise Maker, Cheese Press, Loom, Preserves Jar, Dehydrator, Beehive, Sawmill, Keg, Oil Maker, Fish Smoker, Penangkal Petir; stasiun Alchemy Table dan Anvil | Mesin olahan artisan lengkap dan teruji di runner; penuaan Cellar masih target |
+| Dunia | Farm, rumah, Forest, Deep Forest, Town, Balai Nadi, Greenhouse, Gunung dan Gua Tambang 1–100 | Pohon buah permanen lintas musim terpasang; Pantai dan Modern City masih target |
+| Town/NPC | Bangunan/interior, jadwal/rute, layanan, hadiah, panel hubungan, dialog bersyarat hati/flag; heart event, surat cerita, status dating/married, upacara dasar, pasangan/roommate tinggal di rumah, bantuan harian, surat resep/bingkisan | Upacara dasar berupa dialog di rumah; sinematik khusus, bouquet/pendant dan reward untuk seluruh warga masih target |
+| Cuaca | Cerah, Hujan, Badai Petir (Thunderstorm) dengan kilat prosedural & penangkal petir Battery Pack; menyiram outdoor otomatis | Salju/blizzard dan prakiraan TV masih target |
+| Cooking | 137 Resource resep, 22 Resource alat masak, database resep, buku per pemain, dapur rumah, stamina/HP, buff laju dan regenerasi HP | Hitungan data bukan bukti semua resep bisa diakses; resep TV dan buff lanjutan perlu implementasi/verifikasi; hadiah resep sosial terpasang untuk lima resident |
+| Biji Daya | Tiga sumber unik memberi +30 stamina; rumah Lv2 +30 dan Lv3 +40, maksimum individu 200 | Biji tetap per karakter; penghuni tanpa Biji Daya mencapai 170 dengan rumah penuh |
 | Fishing | Minigame, lokasi, jam, musim ikan, air beku musim dingin, kolam air panas Gunung, danau gua lantai 10 | Pantai (`beach_sea`) belum punya scene |
-| Co-op | Lokal split-screen 2–4 pemain | Gamepad fisik dan kenyamanan perlu playtest |
-| Konten lanjutan | Data equipment, HP per pemain, combat dasar (pedang/busur/tongkat), musuh dengan AI kejar/serang, denda tumbang lewat Klinik, Gunung + Gua Tambang lantai 1-20 dengan lift dan Toko Combat | lantai gua 21+ (lanjutan 4B-3), boss lantai 40/60/80/100, role EXP, bazaar, festival, ekonomi dinamis belum terpasang |
+| Co-op | Lokal split-screen 2–4 pemain | Playtest solo/co-op lulus menurut pemilik; perubahan baru diuji sesuai dampaknya |
+| Konten lanjutan | Data equipment, HP per pemain, combat dasar (pedang/busur/tongkat), musuh dengan AI kejar/serang, denda tumbang lewat Klinik, Gunung + Gua Tambang lantai 1-100, lima boss, pemanah/penyihir, lift dan Toko Combat | musik boss orkestra (belum dibuktikan), bazaar, festival, ekonomi dinamis belum terpasang |
+| Role/EXP | Tujuh role Lv1–10 per karakter, EXP aktivitas, level setelah tidur, cabang, buku riset, Token Talenta, UI keahlian | Kurir Logistik, Forest Whisperer, Bintang Perak, Bintang Emas, dan Perpetual Orchard aktif; 7 perk bergantung sistem lanjutan masih “Segera hadir” |
+| Audio/horor | Autoload MusicManager, aset BGM area/siang/malam/hujan/tengah malam, crossfade; NightHorror dan data kejadian | Belum ada playtest audio sesi ini; bukan bukti musik boss orkestra selesai |
 
 Koreksi acuan implementasi:
 
 - Viewport aktif `project.godot`: **1280 × 720**, window awal 1280 × 720; angka 960 × 540 di tabel lama sudah kedaluwarsa.
-- `SAVE_VERSION = 15` (versi 14 menambah HP per pemain, versi 15 menambah lift checkpoint Gua Tambang); angka versi save pada bagian keputusan lanjutan bukan versi aktif.
+- `SAVE_VERSION = 25` di `autoload/save_manager.gd`. Riwayat v17 rumah, v18 gathering/tapper, v19 hubungan NPC, v20 aksesori/mesin, v21 roster co-op, v22 Role & EXP tetap berlaku. Format saat ini juga menyimpan `npc_progress` (flag, event selesai, romansa, surat dan household) serta `friendships.<npc>.locked` per karakter. Shipping menyimpan histori pembayaran kurir. Save lama memperoleh default kosong; hubungan lama yang masih maksimum dikunci saat dibaca. Riwayat pernah maksimum tetapi sudah turun sebelum v25 tidak dapat dipulihkan dari data yang tidak pernah disimpan.
 - Stamina awal 100, maksimum pemain dapat naik melalui Biji Daya. Detail transaksi dan persistensi: [BIJI_DAYA.md](BIJI_DAYA.md).
 - Pingsan batas waktu pada 05:10 memulangkan pemain, bangun 08:00 dengan 50% kapasitas stamina; pemain co-op yang sudah tidur pulih penuh. **Tidak memotong uang atau item**. Denda medis karena HP habis (bagian 4.2 dan 8.1) terpasang terpisah sejak Phase 4B-1.
-- Shipping dibayar saat pergantian hari melalui `ShippingManager.settle`, ke saldo bersama dan ringkasan pendapatan. Kurir sore masih rancangan.
+- Shipping dibayar saat pergantian hari melalui `ShippingManager.settle`, ke saldo bersama dan ringkasan pendapatan. Dengan Economist Lv6 Kurir Logistik, kas dibayar pada 12.00 dan 17.00; sisa kiriman dibayar esok pagi. Ringkasan pagi juga memuat kiriman yang sudah dibayar, tanpa membayar ulang.
 - Restorasi Balai Nadi membutuhkan **100 kayu + 50 batu + 500 G**; Greenhouse 150 kayu + 75 batu + 5 copper_bar. Akses Balai dari town sudah terpasang.
 - `DailyWeather`: hari pertama cerah; berikutnya peluang hujan 30% berdasarkan seed tersimpan. Desain lima cuaca di bagian 4.1 belum seluruhnya tersedia.
 - Deep Forest sudah terpasang di `scenes/world/DeepForest.tscn`: akses Forest + 3.000 G + 150 kayu + 75 batu untuk unlock permanen. Area gathering ini bukan dungeon combat. Lihat [DEEP_FOREST.md](DEEP_FOREST.md).
-- Durasi mesin menggunakan detik aktif, pause menghentikan proses, tidur/offline tidak memberikan catch-up. Lihat [PROCESSING_AUDIT.md](PROCESSING_AUDIT.md).
+- Mesin berbasis detik aktif berhenti saat pause dan tidak mendapat catch-up tidur/offline. **Pengecualian: Beehive memakai siklus hari permainan, menghasilkan madu/lilin tiap 3 hari dan dijeda saat musim dingin.** Lihat [PROCESSING_AUDIT.md](PROCESSING_AUDIT.md).
 - Usulan peternakan pada bagian 4.10 yang telah diwujudkan mengacu pada aturan aktual [LIVESTOCK_CORE_LOOP.md](LIVESTOCK_CORE_LOOP.md); angka historis bukan spesifikasi kedua.
 
-Prioritas rekomendasi audit: stabilisasi dan playtest loop lengkap → selaraskan kriteria MVP terhadap target combat → HP/combat dasar dan satu area dungeon → perluasan sosial/konten. Urutan ini rekomendasi, bukan perubahan keputusan fitur pemilik proyek.
+Prioritas aktif setelah konfirmasi pemilik: balancing progres/ekonomi → kelengkapan konten pada sistem yang tersedia → farming/produksi dan sistem pendukung perk → sosial serta eksplorasi/combat → perluasan dunia. Milestone playtest loop inti solo/co-op sudah lulus dan tidak menjadi pekerjaan awal lagi. Pengujian perubahan baru tetap mengikuti dampaknya; rekomendasi lama yang meminta pengulangan playtest umum digantikan oleh [status playtest terkini](PLAYTEST_STATUS.md).
 
 ---
 
@@ -74,7 +82,7 @@ Prioritas rekomendasi audit: stabilisasi dan playtest loop lengkap → selaraska
 | Ukuran tile | 16 px | [terpasang] |
 | Filter tekstur | Nearest (pixel art tajam) | [terpasang] |
 | Bahasa | Default teks UI, dialog, notifikasi, dan `display_name` item berbahasa **Indonesia**; ke depannya mendukung opsi pilihan bahasa (Indonesia & Inggris) di Pengaturan; `item_id` tetap snake_case Inggris | [keputusan] |
-| Pemain | 1 pemain, atau co-op lokal split screen 2-4 pemain | [terpasang] |
+| Pemain | 1 pemain, atau co-op lokal split screen 2-4 pemain; pemain bisa ikut/keluar di tengah permainan (4.14) | [terpasang] |
 | Aset utama | Farm RPG Tiny Asset Pack + gambar tambahan dengan palet `Paletta.png` | [terpasang] |
 | Scene awal | `scenes/ui/main_menu.tscn` | [terpasang] |
 
@@ -94,7 +102,7 @@ Prioritas rekomendasi audit: stabilisasi dan playtest loop lengkap → selaraska
 3. Kumpulkan sumber daya alam: tebang pohon (kayu), tambang batu/bijih di Hutan & Gua, pungut tanaman forage, gali titik cacing, atau memancing.
 4. Jual hasil di **Shipping Bin** (barang diambil oleh NPC kurir di sore hari atau pembukuan uang diterima keesokan paginya saat tidur) atau langsung di toko.
 5. Manfaatkan bengkel & crafting: lebur bijih di Furnace, rakit peralatan/bangunan di meja crafting, atau bawa alat ke Blacksmith kota untuk di-upgrade (ditinggal 1–2 hari pengerjaan).
-6. Eksplorasi malam diperbolehkan sampai 05:00 dengan kabut, ambience horror, dan siluet setelah tengah malam di luar ruangan. Tidur di kasur paling lambat 05:00 (hari baru + simpan otomatis). Pada tick 05:10 pemain terjaga **pingsan**, dipulangkan, dan bangun 08:00 dengan stamina 50%; pemain co-op yang sudah berbaring pulih penuh. Tidak ada kehilangan item akibat batas waktu.
+6. Eksplorasi malam diperbolehkan sampai 05:00 dengan kabut, ambience horror, rasa takut, dan kejadian ganjil setelah tengah malam di luar ruangan (lihat 4.1, Horor Tengah Malam). Tidur di kasur paling lambat 05:00 (hari baru + simpan otomatis). Pada tick 05:10 pemain terjaga **pingsan**, dipulangkan, dan bangun 08:00 dengan stamina 50%; pemain co-op yang sudah berbaring pulih penuh. Tidak ada kehilangan item akibat batas waktu.
 
 ### Loop Jangka Menengah [terpasang + keputusan]
 - Memperbaiki jembatan rusak (100 kayu + 50 batu) untuk membuka Hutan.
@@ -130,11 +138,13 @@ Spesifikasi terperinci dan batas antara fitur terpasang dengan rancangan lanjuta
 | Farm | `scenes/world/farm.tscn` | Rumah, Greenhouse (32 petak), papan proyek Balai Nadi, Shipping Bin, ShopCounter, Broken Bridge, 2 FishingSpot (`farm_pond`, `farm_river`), pohon, batu, forage, titik gali | [terpasang] |
 | Rumah (interior) | `scenes/world/interior/interior_house.tscn` | Kasur tidur, lemari Wardrobe, dapur memasak, pintu keluar | [terpasang + keputusan] |
 | Greenhouse (interior) | `scenes/world/interior/greenhouse.tscn` | 32 petak tanam lintas musim; terbuka setelah proyek Greenhouse selesai | [terpasang] |
-| Balai Nadi | `scenes/world/balai_nadi/exterior.tscn`, `interior.tscn` | Gedung permanen di Kota dengan pintu masuk permanen; meja kontribusi proyek restorasi desa | [keputusan] |
+| Balai Nadi | `scenes/world/balai_nadi/exterior.tscn`, `interior.tscn` | Gedung permanen di Kota dengan pintu masuk permanen; meja kontribusi proyek restorasi desa | [terpasang + keputusan] |
 | Hutan (Forest) | `scenes/world/Forest.tscn` | Pohon spawn, batu tembaga, batu besi, forage musiman, rumput liar, titik gali, sungai hutan | [terpasang] |
 | Kota (Town) | `scenes/world/town.tscn` | Toko General Store, Sekolah, Universitas, Blacksmith (Pandai Besi), Warung Makan, Klinik, Balai Nadi permanen, rumah warga | [terpasang + keputusan] |
-| Gunung (Mountain) | scene baru | Area berbatu menuju pintu masuk Gua, spot forage pegunungan, stasiun/jalur ke Modern City (harus di-unlock) | [keputusan] |
-| Gua / Dungeon | scene baru | Lantai tambang bertingkat, batu bijih langka (Gold ke atas), monster musuh, tangga turun, Toko Combat | [keputusan] |
+| Gunung (Mountain) | `scenes/world/mountain.tscn` | Akses dari Hill, pintu Gua, forage dan kolam air panas; jalur Modern City masih keputusan | [terpasang sebagian + keputusan] |
+| Gua / Dungeon | `scenes/world/cave/cave.tscn` | Konfigurasi 1–100, bijih, musuh, lima boss, tangga/lift dan Toko Combat; layout/tier di `resources/cave/` dan `scenes/world/cave/` | [terpasang sebagian] |
+| Bukit (Hill) | `scenes/world/hill.tscn` | Rumah warga, akses Gunung dan rute NPC | [terpasang] |
+| Deep Forest | `scenes/world/DeepForest.tscn` | Gathering lanjutan; unlock permanen dari Forest | [terpasang] |
 | Pantai (Beach) | scene baru | Spot memancing laut (`beach_sea`), hasil laut, forage pantai (harus di-unlock) | [keputusan] |
 | Modern City | scene baru | Area perkotaan metropolitan late-game, teknologi modern, kendaraan canggih (harus di-unlock setelah Nusa Vale makmur) | [keputusan] |
 
@@ -158,6 +168,14 @@ Spesifikasi terperinci dan batas antara fitur terpasang dengan rancangan lanjuta
 | Tanaman Musim Dingin | Ladang luar ruangan di musim dingin **memiliki tanaman khusus musim dingin** (mis. Snow Yam, Winter Root, Kubis Salju) | [keputusan] |
 | Memancing di Musim Dingin | Permukaan air luar ruangan (kolam & sungai ladang/hutan) membeku sehingga **memancing diblokir**, KECUALI di spot khusus (seperti sumber air panas atau danau gua es) yang harus di-unlock terlebih dahulu | [keputusan] |
 | Visual Musim | Tekstur tileset dan pepohonan berganti otomatis sesuai musim lewat `SeasonalTileSwapper` | [terpasang] |
+| Tint waktu (siang/sore/malam) | Global: setiap scene dunia otomatis ikut, tanpa node tambahan. Siang 06–16 putih, sore 16–18 jingga, malam 18–06 biru gelap | [terpasang 19 Oktober 2026] |
+| Kekuatan tint | Outdoor 100%; interior (path scene berisi `interior`) 50% (`DayCycle.interior_time_strength`); gua (path berisi `/cave/`) 0%, tampilan sendiri | [terpasang; angka usulan] |
+
+**Tint Waktu Global [terpasang 19 Oktober 2026]** (`autoload/day_cycle.gd`, `scripts/world/scene_lighting.gd`):
+- Saat scene dunia masuk tree (scene utama, atau area co-op di SubViewport `CoopRoot`), DayCycle memakai CanvasModulate milik scene itu jika ada; jika tidak ada, DayCycle menambahkan `DayCycleTint` sendiri. Scene baru tidak perlu disetel apa pun.
+- Warna CanvasModulate yang diatur di editor (mis. `AmbientTint` toko, `WarnaRuangan` rumah Ubay, CanvasModulate kehijauan DeepForest) menjadi **warna dasar ruangan** dan dikalikan dengan warna waktu, tidak lagi ditimpa. Hasil = warna dasar × (putih → warna waktu sesuai kekuatan). Tidak ada penggelapan ganda karena tetap satu CanvasModulate per scene.
+- Override per scene: tambahkan node `SceneLighting` di mana saja dalam scene. `follow_time` (matikan untuk tempat selalu gelap/khusus), `time_strength` 0–1, `room_color` (warna dasar tambahan).
+- HUD/UI di CanvasLayer tidak terpengaruh. Warna dipasang saat scene masuk tree, jadi tidak ada kedip saat pindah scene walau Transition menjeda game.
 
 **Sistem Cuaca Harian Dinamis (Weather System) [keputusan]**:
 - Prakiraan cuaca diprediksi setiap hari melalui siaran Televisi di rumah atau papan cuaca desa.
@@ -168,9 +186,38 @@ Spesifikasi terperinci dan batas antara fitur terpasang dengan rancangan lanjuta
   4. **Berkabut (Foggy / Overcast)**: Hutan diselimuti kabut tebal; jamur dan forage langka bermunculan lebih banyak di hutan.
   5. **Salju & Badai Salju (Snow & Blizzard)**: Terjadi di musim dingin; permukaan tanah membeku, suhu dingin menuntut pemain mengenakan pakaian hangat atau masakan berbuff penghangat tubuh.
 
+#### Horor Tengah Malam [terpasang 19 Oktober 2026; angka usulan]
+
+Hanya di luar ruangan; interior, pemain yang tidur, dan transisi tidur/pingsan tetap tenang. Per pemain (co-op: tiap layar punya efeknya sendiri). Scene `scenes/effects/night_horror.tscn` (dibuat oleh HUD); semua angka ada di Inspector node `NightHorror`. Tanpa perubahan save.
+
+- **Rasa Takut (0–1)**: naik di gelap (sebelum 00.00 maksimal 0,45; setelah 00.00 sampai penuh ±1 menit di gelap), turun cepat dalam radius 72 px dari cahaya yang menyala (PointLight2D: Api Unggun, Lampu Taman, Lentera, Lilin, Furnace, dst.) atau node grup `horror_safe_light` (boleh punya properti `safe_radius`). Habis saat masuk ruangan, tidur, atau hari berganti. Tanpa denda gameplay.
+- **Detak jantung**: mulai rasa takut 0,25; jeda 1,15 detik → 0,4 detik dan makin keras. Tiap detak tepi layar berdenyut merah; mulai 0,75 kamera ikut bergoyang (solo saja).
+- **Layar 00.00–05.00**: kabut + vinyet lama, warna memudar kebiruan, film grain, chromatic aberration yang melebar saat takut, dan glitch (potongan layar bergeser + dengung rendah) pada kejadian besar. Shader `resources/horror/night_horror.gdshader`. Catatan: efek layar ikut mewarnai HUD karena digambar di atasnya.
+- **Kejadian ganjil** (`resources/horror/events/*.tres`, kelas `HorrorEvent`; mulai kegelapan 0,7 = 00.00, jeda 18–38 detik, makin sering saat takut, tiap kejadian punya bobot, rasa takut minimal, cooldown, suara pengganti opsional, dan teks Notify opsional):
+
+| Kejadian | Isi | Takut minimal |
+|---|---|---|
+| Siluet sekilas | Bayangan diam di tepi layar (efek lama) | 0 |
+| Siluet melesat | Bayangan melintas cepat + glitch | 0,4 |
+| Bisikan | Bisikan dari kiri/kanan pemain (suara posisional) | 0 |
+| Bisikan nama | Bisikan dekat + glitch + teks "ada yang membisikkan namamu" | 0,6 |
+| Langkah kaki | 8 langkah makin dekat di belakang; hanya terdengar saat pemain berjalan, berhenti saat pemain berhenti | 0,2 |
+| Lampu berkedip | Hingga 3 lampu terdekat berkedip lalu padam sesaat (rasa aman hilang); tanpa lampu layar berkedip gelap | 0 |
+| Mata merah | Sepasang mata merah 110 px dari pemain, berkedip, hilang bila didekati (<40 px) | 0,35 |
+| Gagak | 5 gagak terbang mendadak + koak + guncangan kecil | 0 |
+
+Suara (detak, bisikan, langkah, koak, dengung lampu, dengung glitch, angin) disintesis lewat `scripts/effects/horror_synth.gd`; file audio bisa dipasang di properti `sound` / `heartbeat_sound`.
+
+**Penunggu malam (makhluk penguntit) [terpasang 19 Oktober 2026; angka usulan]**: Kuntilanak dan Pocong (`scenes/horror/kuntilanak.tscn`, `pocong.tscn`, script `NightStalker`; sprite + wajah jumpscare di `assets/horror/` dengan file .aseprite, digambar dari Paletta).
+- Muncul mulai ±01.00 (kegelapan 0,75) bila rasa takut ≥ 0,45, pemain tidak dekat cahaya, dan tidak ada makhluk lain: diundi tiap 15 detik (peluang 35%, jeda awal 40 detik, jeda 150 detik setelah makhluk pergi). Muncul 170 px di belakang pemain, di titik yang tidak terang. Satu makhluk per pemain.
+- Hanya bergerak saat tidak dilihat. Dilihat = pemain mana pun di area itu menghadapnya (±62°, ≤ 230 px); makhluk membeku (Pocong membeku di udara). Ditatap 3,5 detik: menghilang lalu muncul 70 px di belakang pemain sambil berbisik (maksimal 2 kali).
+- Kuntilanak melayang hingga 34 px/detik (berjalan 25, berlari 75) dan menganga saat dekat; kemunculannya ditandai tawa melengking. Pocong melompat 20 px tiap ±0,7 detik dengan bunyi hentakan. Keduanya pucat bercahaya dan berdengung saat dekat; dalam 110 px rasa takut naik cepat dan layar sesekali glitch.
+- Disentuh: jumpscare wajah layar penuh + jeritan + kilat merah + guncangan, kontrol terkunci 0,9 detik, rasa takut penuh, energi -25 (Kuntilanak) / -30 (Pocong). Default tidak bisa membuat pingsan (sisa minimal 1; `jumpscare_can_faint`).
+- Lolos: berlari, masuk ruangan, atau berdiri di dekat cahaya (lampu/api mengusirnya). Pergi sendiri setelah 75–85 detik. Tanpa perubahan save.
+
 ### 4.2 Stamina, Tidur, dan Denda Pingsan [terpasang + keputusan]
 
-- Stamina awal 100 per pemain; kapasitas aktual dapat naik sampai 130 melalui tiga Biji Daya yang sudah tersedia.
+- Stamina awal 100 per pemain; tiga Biji Daya menambah 30, rumah tingkat 2 memberi +30 dan tingkat 3 +40 lagi (bonus rumah total 70), sehingga maksimum individu mencapai **200**. Bonus rumah dibagi seluruh penghuni; Biji Daya tetap milik karakter yang mengonsumsinya.
 - Biaya stamina alat sekali per ayunan (berkurang drastis pada tier tinggi, lihat tabel 4.5).
 - Memungut forage dan menebas rumput liar tidak menggunakan stamina (stamina cost = 0) [keputusan].
 - Tidur di kasur rumah memulihkan stamina 100%, memicu pergantian hari, dan menyimpan game otomatis.
@@ -183,28 +230,49 @@ Spesifikasi terperinci dan batas antara fitur terpasang dengan rancangan lanjuta
 
 ### 4.3 Inventory, Equipment, dan Lokalisasi Bahasa [terpasang + keputusan]
 
-- Ransel 36 slot (aktif 12 / 24 / 36 sesuai `bag_level`). Upgrade ransel dibeli di toko (2.000 G dan 10.000 G).
+- Ransel 36 slot (aktif 12 / 24 / 36 sesuai `bag_level`). Upgrade ransel dibeli di toko (1.500 G dan 7.500 G).
 - Hotbar 8 slot dengan tombol geser halaman (Tab / Gamepad Back).
 - Sortir tas (R) otomatis menggabungkan stack dan merapikan alat di depan.
-- **Kontrol gamepad mengikuti Stardew Valley [terpasang]** (`scripts/player/player_input.gd`), supaya pemain Stardew langsung terbiasa:
+- **Kontrol & Konteks Input [terpasang, v3.24]**: satu tombol boleh punya arti berbeda di konteks berbeda, tetapi di satu konteks satu tombol hanya punya satu aksi, jadi farming, lompat, combat, dan dialog tidak bertabrakan. Tata letak meniru game yang sudah dikenal pemain baru: lapangan seperti **Stardew Valley**, lompat seperti **Story of Seasons: Grand Bazaar**, combat seperti **game soulslike** (Elden Ring / Dark Souls).
+  - **Input router**: `PlayerInput` (`scripts/player/player_input.gd`) satu-satunya tempat yang memutuskan aksi. Tata letak bawaan ada di `InputLayout` (`scripts/player/input_layout.gd`); tiap binding membawa konteks dan router hanya mengaktifkan binding yang konteksnya cocok (aksi Input Map varian `aksi@konteks`, co-op `p2_aksi@konteks`).
+  - **Konteks** (dipilih otomatis, yang pertama cocok menang): UI yang mendorong konteks (dialog NPC = Dialog) → Menu (tas/toko/pause terbuka) → Di udara (sedang lompat) → Berenang (disiapkan, belum ada air yang bisa direnangi) → **equipment context** dari barang yang dipegang di hotbar (`scripts/player/equipment_context.gd`): pedang = Combat dekat; busur/tongkat = Combat jauh; alat, benih, makanan, tangan kosong = Lapangan.
+  - **Lapangan (Stardew Valley)**:
 
-  | Tombol (Xbox) | Fungsi | Sama dengan Stardew? |
-  |---|---|---|
-  | Stik kiri / D-pad | Berjalan | Ya |
-  | A | Interaksi / konfirmasi | Ya |
-  | X | Pakai alat / serang (tahan = serangan berat, tahan saat memancing = lempar kail) | Ya |
-  | B | Buka/tutup tas, batal/tutup menu | Ya |
-  | Y | Buka tas langsung di tab Crafting | Ya |
-  | Start | Buka tas | Ya |
-  | LB / RB | Slot hotbar sebelumnya/berikutnya; di dalam tas: pindah tab | Ya |
-  | RT | Tahan = lari; tekan singkat sambil memegang senjata = roll | Tidak (Stardew: ganti baris toolbar) |
-  | LT | Tahan = block, tepat waktu = parry | Tidak (Stardew: ganti baris toolbar) |
-  | Back | Ganti halaman hotbar | Tidak (Stardew: jurnal) |
-  | Klik stik kiri (L3) | Weapon Art | Tidak ada di Stardew |
-  | Klik stik kanan (R3) | Rapikan tas | Tidak ada di Stardew |
+    | Aksi | Keyboard + Mouse | Gamepad (Xbox) |
+    |---|---|---|
+    | Jalan | WASD | Stik kiri / D-pad |
+    | Pakai alat | Klik kiri / C | X |
+    | Interaksi, bicara, periksa | E / X / klik kanan | A |
+    | Lari (tahan, tanpa auto-run) | Shift | RT |
+    | Tas / menu | I / Esc | B / Start |
+    | Tas tab Crafting / beri hadiah | - | Y |
+    | Slot sebelumnya / berikutnya | Scroll / ← → | LB / RB (di tas: ganti tab) |
+    | Pilih slot | 1-8 | - |
+    | Halaman hotbar | Tab | Back |
+    | Rapikan tas | R | R3 |
 
-  Penyimpangan dari Stardew hanya untuk combat soulslike dan lari tahan (keputusan tanpa auto-run). Tab Pengaturan tidak ikut diputar LB/RB; buka lewat klik atau P1 keyboard. Tes: `tests/gamepad_input_regression.tscn`.
-- Equipment: 4 slot terpasang (`helmet`, `armor`, `leggings`, `boots`). Senjata (pedang, busur, tongkat sihir) **dipegang dari hotbar**, bukan dipasang; slot Weapon di menu hanya menampilkan senjata yang sedang dipegang. Save lama yang memasang senjata memindahkannya ke tas. 80 varian equipment tersedia dalam database.
+  - **Lompat (Grand Bazaar)**: Spasi / A. Tekan lagi di udara = **lompat ganda**. Pakai alat di udara sambil memegang **benih** = benih ditebar ke petak cangkul kosong 3x3 di sekitar tempat mendarat. Gamepad A juga interaksi: bila ada NPC, pintu, forage, atau objek di depan, A = interaksi; selain itu A = lompat. Lompat tidak memakai stamina dan hanya visual (tabrakan tetap). Tidak bisa melompat sambil memegang senjata (Spasi = roll). Belum ada sheet animasi lompat: sprite jalan diangkat di atas bayangan.
+  - **Combat saat memegang senjata (soulslike)**:
+
+    | Aksi | Keyboard + Mouse | Gamepad (Xbox) |
+    |---|---|---|
+    | Serang ringan (tahan = berat) | Klik kiri / C | RB / X |
+    | Serangan berat | tahan klik kiri | RT |
+    | Roll | Spasi | B tekan singkat |
+    | Lari | Shift | B tahan |
+    | Tangkis (tahan) / parry (tepat waktu) | Klik kanan (pedang) | LB |
+    | Bidik busur / tongkat | Klik kanan (busur/tongkat) | LT + stik kanan |
+    | Weapon Art | F | LT (pedang) / L3 |
+    | Kunci target (lock-on) | Q / klik tengah | R3 (stik kanan = pindah target) |
+    | Ganti slot | Scroll / ← → | D-pad kiri / kanan |
+    | Tas | I / Esc | Start |
+
+    Klik kanan ke pintu/objek di dekat pemain tetap interaksi walau memegang senjata (tangga gua). B saat combat tidak membatalkan/membuka tas.
+  - **Lock-on** (`scripts/combat/lock_on.gd`): mengunci musuh terdekat di depan dalam 150 px; pemain menghadap target saat berjalan, serangan dan bidikan mengarah ke target; lepas otomatis bila target mati, lebih dari 200 px, atau senjata disimpan.
+  - **Prompt tombol dinamis** (`scripts/ui/input_prompt.gd`): teks seperti "[E] Masuk" berganti jadi "[A] Masuk" begitu pemain memegang gamepad, dan ikut tombol yang diatur ulang (gerbang Hutan Dalam, jembatan rusak, dialog NPC). **Petunjuk tombol HUD** (`scripts/ui/action_hints.gd`) di kiri bawah menampilkan arti tombol penting sesuai konteks; bisa dimatikan di Pengaturan > Kontrol.
+  - **Atur ulang tombol (remap)** di Pengaturan > Kontrol: klik tombol di kolom Keyboard + Mouse atau Gamepad lalu tekan tombol baru (Esc batal). Tombol yang sudah dipakai aksi lain di konteks yang sama otomatis ditukar. Disimpan per komputer di `user://input_bindings.cfg` (bukan save game, tanpa perubahan save). Satu pengaturan gamepad berlaku untuk semua gamepad co-op. Stik kiri selalu berjalan dan tidak bisa diatur ulang.
+  - Tes: `tests/input_context_regression.tscn`, `tests/gamepad_input_regression.tscn`.
+- Equipment: 7 slot terpasang (`helmet`, `armor`, `leggings`, `boots`, lalu `necklace`, `ring`, `accessory` sejak save v20, lihat 4.13). Senjata (pedang, busur, tongkat sihir) **dipegang dari hotbar**, bukan dipasang; slot Weapon di menu hanya menampilkan senjata yang sedang dipegang. Save lama yang memasang senjata memindahkannya ke tas. 96 Resource item memiliki `equipment_slot` eksplisit: 30 senjata dan 66 wearable. Angka ini adalah inventaris data; tidak menyatakan semua dijual di toko atau telah diuji.
 - **Konvensi Bahasa & Lokalisasi [keputusan]**:
   - `display_name` item diseragamkan ke **Bahasa Indonesia** sebagai bahasa utama (misal: "Kapak Kayu", "Pedang Besi", "Wortel", "Ikan Lele").
   - Sistem disiapkan mendukung multi-bahasa dengan opsi beralih Bahasa Indonesia / Bahasa Inggris di menu Pengaturan.
@@ -245,9 +313,9 @@ Spesifikasi terperinci dan batas antara fitur terpasang dengan rancangan lanjuta
 - Pemain membuka dialog layanan bengkel: membeli batangan/batu bara, memperbaiki perlengkapan, atau memesan penempaan upgrade alat.
 - **Waktu Pengerjaan 1–2 Hari**: Alat yang di-upgrade diserahkan ke NPC Blacksmith beserta batangan logam dan biaya uang, ditinggal selama 1–2 hari kerja, lalu diambil kembali dari NPC setelah selesai.
 - Resep upgrade tier:
-  - Copper: 500 G + 5 copper_bar + 10 wood
-  - Iron: 1.200 G + 5 iron_bar + 15 wood
-  - Gold: 2.500 G + 5 gold_bar
+  - Copper: 350 G + 5 copper_bar + 10 wood
+  - Iron: 1.000 G + 5 iron_bar + 15 wood
+  - Gold: 2.300 G + 5 gold_bar
   - Platinum: 4.500 G + 5 platinum_bar
   - Crimson: 7.000 G + 5 crimson_bar
   - Frost: 10.000 G + 5 frost_bar
@@ -255,8 +323,7 @@ Spesifikasi terperinci dan batas antara fitur terpasang dengan rancangan lanjuta
   - Fairy: 20.000 G + 5 fairy_bar
   - Obsidian: 28.000 G + 5 obsidian_bar
 
-Balancing demo saat ini tercatat pada `ECONOMY_BALANCE.md`: margin 39 tanaman,
-jumlah panen, stamina, pakan, produk ternak, olahan, serta target progres awal.
+Baseline terbaru: [ECONOMY_BALANCE_2026-10-22.md](ECONOMY_BALANCE_2026-10-22.md). Panen awal 510 G + modal 100 G membayar Tembaga 350 G dan bibit ulang 225 G, menyisakan 35 G. Margin 39 crop dan ternak dipertahankan. Nilai jual kembali benih menjadi 40% harga beli untuk mencegah jual-beli berulang tanpa rugi saat bonus grosir/shipping aktif.
 
 ### 4.6 Tebang, Tambang, Furnace, dan Nilai Logam [terpasang + keputusan]
 
@@ -424,7 +491,7 @@ Mesin pengolah yang dapat dirakit melalui Crafting dan ditempatkan di ladang ata
 - **Mayonnaise Maker**: Telur biasa $\rightarrow$ Mayones (nilai jual +50%); Telur Emas/Besar $\rightarrow$ Mayones Kualitas Emas.
 - **Cheese Press**: Susu Sapi $\rightarrow$ Keju Batangan; Susu Kambing $\rightarrow$ Keju Kambing (*Goat Cheese* bernilai jual tinggi).
 - **Preserves Jar (Toples Pengawet)**: Buah segar $\rightarrow$ Selai Manis (*Jam*); Sayuran $\rightarrow$ Acar Segar (*Pickles*).
-- **Keg (Tong Fermentasi)**: Gandum $\rightarrow$ Bir Olahan; Buah $\rightarrow$ Anggur/Jus Buah Fermentasi (membutuhkan waktu fermentasi 2–4 hari).
+- **Keg (Tong Fermentasi)**: Gandum $\rightarrow$ Bir Olahan; Buah $\rightarrow$ Anggur/Jus Buah Fermentasi (membutuhkan waktu fermentasi 2–4 hari). Catatan [terpasang]: tong fermentasi (`fermentation_barrel`) dan butter churn saat ini dibeli di toko Dapur Nusantara, bukan dirakit.
 - **Loom (Alat Tenun)**: Wol domba $\rightarrow$ Kain Halus (*Cloth*) untuk bahan pakaian dan dekorasi.
 - **Oil Maker**: Jagung / Biji Bunga Matahari / Truffle $\rightarrow$ Minyak Masak & Minyak Truffle bernilai mewah.
 - **Fish Smoker (Pengasap Ikan)**: Ikan mentah + kayu $\rightarrow$ Ikan Asap bernilai jual 2x lipat dan memulihkan stamina tinggi.
@@ -441,13 +508,45 @@ Upgrade rumah dipesan ke **Wira**, tukang kayu di Bukit (layanan "Bangun / Upgra
 
 | Tingkat | Nama | Harga | Bahan | Lama | Membuka |
 |---|---|---|---|---|---|
-| 1 | Kitchen Room | 5.000 G | 150 kayu, 50 batu | 2 hari | Ruang dapur (flag `house_kitchen_upgraded`, pintu Dapur di rumah) |
-| 2 | Spacious Bedroom | 15.000 G | 300 kayu, 150 batu, 10 iron bar | 3 hari | Stamina maksimum semua pemain +20 (`house_bedroom_upgraded`) |
-| 3 | Grand House | 40.000 G | 400 kayu, 300 batu, 10 gold bar | 3 hari | Stamina maksimum +20 lagi, gudang bawah tanah (`house_cellar_upgraded`, untuk fitur tong nanti) |
+| 1 | Kitchen Room | 3.500 G | 120 kayu, 40 batu | 2 hari | Ruang dapur (flag `house_kitchen_upgraded`, pintu Dapur di rumah) |
+| 2 | Spacious Bedroom | 12.000 G | 250 kayu, 120 batu, 8 iron bar | 3 hari | Stamina maksimum semua pemain +30 (`house_bedroom_upgraded`) |
+| 3 | Grand House | 30.000 G | 400 kayu, 250 batu, 8 gold bar | 3 hari | Stamina maksimum +40 lagi, gudang bawah tanah (`house_cellar_upgraded`, untuk fitur tong nanti) |
 
 - **Hubungan dengan dapur** [terpasang]: renovasi dapur tidak lagi dijual di toko Dapur Nusantara; toko itu tetap menjual kitchen set dan alat masak setelah tingkat 1 selesai. Pintu Dapur ditambahkan oleh `interior_house.gd` (posisi `kitchen_door_position`) karena node-nya tidak ada di `interior_house.tscn`.
 - **Save v17** [terpasang]: key `house` = `{level, order: {level, ready_day}}`. Save v16 ke bawah tanpa key ini: tingkat 0, kecuali flag `house_kitchen_upgraded` sudah menyala (dapur dibeli di toko lama) = tingkat 1.
 - **Belum** [usulan]: tampilan luar rumah belum berubah per tingkat (belum ada art rumah yang diperbaiki); gudang bawah tanah baru berupa flag.
+
+### 4.13 Crafting Lanjutan [terpasang 2026-10-18 + angka usulan]
+
+Semua resep di bawah memakai `CraftingRecipe` di `resources/crafting/catalog.tres` (meja crafting/tas), kecuali yang disebut stasiun. Bahan dan angka adalah usulan Claude dan bisa diubah langsung di `.tres`.
+
+- **Senjata, armor, dan panah per tier** [terpasang]: Tembaga sampai Obsidian kini punya resep pedang, busur, tongkat sihir, helm, armor, celana zirah, sepatu, dan panah x10 (70 resep). Pola: pedang 3 bar + 4 kayu, busur 2 bar + 8 kayu + 6 serat, tongkat 2 bar + 6 kayu + permata, helm 3 bar + 2 serat, armor 5 bar + 6 serat, celana 4 bar + 4 serat, sepatu 2 bar + 4 serat, panah 1 bar + 2 kayu. Permata per tier: Tembaga kuarsa, Besi ametis, Emas topaz, Platinum zamrud, Crimson rubi, Frost safir, Shadow oniks, Fairy kristal peri, Obsidian kuarsa api. Pedang/busur memakai permata mulai Emas; armor mulai Crimson.
+- **Peti tier 9-10** [terpasang]: Peti Fairy (120 slot, 20 Fairy Bar + 100 kayu) dan Peti Obsidian (132 slot, 22 Obsidian Bar + 110 kayu), juga lewat upgrade peti di tempat.
+- **Dekorasi farm** (grup "Dekorasi") [terpasang]: Orang-orangan Sawah, Rumah Burung, Lampu Taman (menyala malam), Tumpukan Jerami, Ember Kayu, Tong Kayu, Kotak Surat Hias, Patung Batu, Manusia Salju, Palung Pakan, Api Unggun (animasi + cahaya), Lilin Hias (animasi + cahaya), Tumpukan Tong, Papan Pengumuman. Tambahan versi 3.19: Sumur Hias, Air Mancur, Ayunan, Jungkat-jungkit, Papan Petunjuk, Tikar Piknik (wol), Lampu Kembar (resin, menyala malam), Jemuran, Rumah Anjing (tulang tua), Penunjuk Angin Sapi dan Ayam, Lentera Resin (menyala malam), Pohon Natal, Kotak Pasir, Sapu Lidi Hias. Dipasang dan dikemas seperti pagar; hanya hiasan (orang-orangan belum mengusir gagak, sumur belum mengisi penyiram).
+- **Mesin baru** (grup "Bangunan") [terpasang]:
+  - **Sarang Lebah**: 1 Madu + 1 Lilin Lebah tiap 3 hari, dijeda Musim Dingin. Ini sumber pertama Lilin Lebah.
+  - **Penggergajian**: 3 Kayu menjadi 1 Papan Kayu dalam 8 detik (`resources/sawmill/`).
+  - **Meja Alkimia**: stasiun ramuan (`resources/crafting/alchemy.tres`): Ramuan Penyembuh (+60 HP), Ramuan Stamina (+80), Ramuan Kilat (kecepatan 1,3x 120 detik), Ramuan Pemulihan (+4 HP tiap 3 detik selama 60 detik), Ramuan Penyembuh Besar (sirup maple, +120 HP dan +40 stamina).
+  - **Landasan Tempa**: stasiun cincin dan kalung Kayu sampai Obsidian (`resources/crafting/anvil.tres`); cincin = 2 bar + permata, kalung = 3 bar + permata (tier Kayu memakai tali). Puncaknya Cincin Prisma (ATK +22) dan Kalung Prisma (DEF +14) dari Pecahan Prisma + batangan Obsidian dan Fairy.
+- **Bahan baru** (grup "Bahan") [terpasang]: Papan Kayu (penggergajian), Tali Sulur (4 serat), Kulit Olahan x2 (1 kain + 1 tar pinus), Umpan Buatan x5 (1 copper bar + 2 serat, bonus umpan 0,35).
+- **Slot aksesori aktif** [terpasang]: slot Kalung (kalung, DEF +1..+11), Cincin (cincin, ATK +1..+18), dan Aksesori (sarung tangan kulit/besi/emas, tabung panah ATK +3). ATK dari perlengkapan kini ikut menambah serangan senjata di combat. Slot Perisai masih terkunci.
+- **Save v20** [terpasang]: equipment menyimpan key `necklace`, `ring`, `accessory`; record sarang lebah (`job.day`, `ready` madu + `extra` lilin) dan penggergajian disimpan seperti furnace. Save lama: slot baru kosong.
+- **Tidak dikerjakan** [catatan]: Butter churn dan tong fermentasi sudah dijual di toko Dapur Nusantara (bukan crafting). Bom, troli tambang, dan prop gua menunggu thread gua. Pagar besi/putih butuh autotile. Furnitur interior, buku, seruling, dan dekorasi pantai menunggu penempatan di luar farm / scene pantai.
+
+
+### 4.14 Co-op Drop-in ala Stardew [keputusan 2026-10-19, terpasang]
+
+Pemain lain bisa ikut atau keluar di tengah permainan tanpa kembali ke main menu. Keputusan pemilik proyek (2026-10-19): tanpa kabin (langsung ikut, tidur di rumah utama), cara ikut = tekan Start di gamepad yang belum dipakai lalu konfirmasi, karakter yang bisa dimuat hanya karakter co-op save ini, dan pemain boleh keluar di tengah permainan dengan data tersimpan.
+
+- **Bergabung** [terpasang]: saat bermain (sendiri atau sudah co-op), gamepad yang belum dipakai menekan **Start**. Game dijeda sebentar dan menu "P2 bergabung" muncul, hanya dikendalikan gamepad itu (D-pad/stik pilih, A pilih, B batal, X dua kali = hapus karakter). Pilihan: karakter co-op save ini yang sedang tidak dimainkan, **+ Karakter Baru**, atau Batal. Karakter baru membuka layar kustomisasi yang sama dengan Game Baru, tetapi tanpa nama farm dan pet (milik P1); nama bawaan "Pemain N" sehingga bisa langsung lanjut dengan gamepad. Setelah memilih, layar terbagi dan pemain baru muncul di samping P1; semua pemain tetap di area dan posisinya.
+- **Gamepad P1** [terpasang]: gamepad pertama yang dipakai P1 saat main sendiri tetap milik P1 setelah co-op dimulai (keyboard + mouse + gamepad itu), jadi Start-nya tetap membuka tas. Gamepad lain yang menekan Start dianggap pemain baru.
+- **Keluar** [terpasang]: pemain tamu **menahan Start 1,5 detik** lalu memilih "Ya, keluar"; P1 juga bisa memakai tombol **Keluarkan <nama>** di menu pause halaman Permainan. Game disimpan saat pemain keluar. Layar sisa pemain digabung ulang; bila tinggal P1, game kembali ke main sendiri di area dan posisi P1.
+- **Batasan** [terpasang]: bergabung/keluar ditolak (dengan Notify) saat ada pemain di gua, saat pemain sedang pindah area atau berbaring di kasur, saat transisi berjalan, dan (main sendiri) saat menu pause terbuka. Maksimal 4 pemain bersamaan.
+- **Daftar karakter co-op** [terpasang]: tiap save menyimpan semua karakter co-op yang pernah ikut (maks. 8), termasuk yang sedang tidak bermain, seperti farmhand Stardew. Tas, stamina, HP, equipment, resep, persahabatan, ulang tahun, dan penampilan per karakter; uang tetap bersama. Game yang dimuat selalu mulai sendiri; pemain lain bergabung lagi dan memilih karakternya.
+- **Lobby main menu** [terpasang]: tombol Co-op Lokal tetap ada; setelah lobby, tiap pemain tamu memilih karakter dengan menu yang sama. Bila semua tamu batal, game dimulai sendiri.
+- **Save v21** [terpasang]: `coop_players` kini daftar semua karakter co-op dengan key `id` per karakter. Save v6-v20: P2-P4 lama menjadi karakter co-op pertama di daftar dengan id baru.
+- **Catatan** [terpasang]: saat layar dibangun ulang (bergabung/keluar), area dimuat ulang seperti saat pindah pintu, jadi barang yang dijatuhkan di tanah dan musuh di area itu ikut direset; isi ladang, bangunan, dan tas tidak berubah. Uji tanpa gamepad di editor: F2 menambah/mengeluarkan pemain numpad (numpad 8456 jalan, 0 alat, 1 interaksi; tahan * untuk keluar).
+- Kode: `autoload/coop.gd` (request_join, leave, current_plan), `scripts/system/coop_drop_in.gd`, `scripts/ui/coop_join_menu.gd`, `CoopRoot.spawn_plan`, `GameState.coop_roster`. Tes: `res://tests/coop_drop_in_regression.tscn`.
 
 ---
 
@@ -473,10 +572,12 @@ Upgrade rumah dipesan ke **Wira**, tukang kayu di Bukit (layanan "Bangun / Upgra
 
 ## 6. Sistem Memasak (Cooking) [terpasang sebagian + keputusan]
 
-Tahap dasar (14 Oktober 2026) [terpasang]: panci Dapur Warung di town,
-lima resep, pembelian buku per pemain, makanan pemulih stamina, buff laju
-sementara, dan save/load resep. Lihat `COOKING.md`. Dapur rumah setelah
-upgrade (kini Upgrade Rumah tingkat 1 di Wira, bagian 4.12) [terpasang], HP/combat serta resep dari TV/hadiah sosial masih [keputusan].
+**Nilai ekonomi [terpasang 22 Oktober]:** harga hasil dihitung sekitar 110% nilai jual seluruh bahan per batch dibagi jumlah hasil, dengan dependensi resep bertingkat ikut dihitung. Jika seluruh bahan bisa dibeli/dibuat dari bahan toko, harga hasil dibatasi agar bonus jual maksimum tidak menutup biaya beli termurah setelah diskon. Sebagian masakan bahan toko berfungsi sebagai konsumsi/buff, bukan jalur uang instan. Tool `tools/balance_audit.py` menghitung harga secara deterministik; 136 dari 137 harga output berubah. Contoh: Omelet 75 → 220 G, Mentega 55 → 220 G, Kopi 35 → 13 G. Harga buku, alat masak dan efek makanan tetap.
+
+
+**Cakupan saat audit 22 Oktober 2026 [terpasang, kode/data]:** 137 Resource resep di `resources/cooking/recipes/`, 22 Resource alat di `resources/cooking/equipment/`, database `resources/cooking/data/recipe_database.tres`, dan `CookingManager`. Lima resep adalah cakupan tahap awal 14 Oktober, bukan jumlah konten saat ini. Resep yang dapat dimasak bergantung pada entri database, buku yang dipelajari karakter, alat yang tersedia, dan bahan. Jumlah Resource tidak membuktikan seluruh resep sudah dapat dibuat dalam permainan.
+
+Dapur rumah setelah upgrade tingkat 1 di Wira, buku per pemain, pemulihan stamina/HP, buff laju dan regenerasi HP sudah memiliki implementasi. Hadiah resep sosial kini tersedia untuk lima resident melalui kotak surat (12.4); TV dan kelengkapan buff lanjutan masih memerlukan implementasi/verifikasi. Lihat `COOKING.md` untuk riwayat tahap dasar.
 
 - **Status**: Disetujui untuk diimplementasikan [keputusan].
 - **Fasilitas**: Dapur di interior rumah (setelah upgrade rumah) serta kompor/panci di Warung Makan kota.
@@ -489,16 +590,86 @@ upgrade (kini Upgrade Rumah tingkat 1 di Wira, bagian 4.12) [terpasang], HP/comb
 
 ---
 
-## 7. Ekspansi Pengumpulan Alam (Gathering Expansion) [keputusan]
+## 7. Ekspansi Pengumpulan Alam (Gathering Expansion) [terpasang]
 
-- **Status**: Disetujui untuk diimplementasikan [keputusan].
-- Penangkapan Serangga (*Bug Catching*): Menggunakan jaring serangga untuk menangkap kupu-kupu, kumbang, kunang-kunang di ladang, hutan, dan gua.
-- Ekspansi titik forage musiman ke area Kota, Pegunungan, dan Pantai.
-- Pohon liar dapat disadap (*Tapper*) untuk menghasilkan getah, resin, atau sirup.
+- **Status**: Phase 4A-3 terpasang 18 Oktober 2026 (save v18). Keputusan pemilik proyek: jaring tier Kayu dibuat lewat crafting, tier berikutnya dibeli di toko hanya bila jaring sebelumnya sudah dimiliki; tangkap cukup dengan ayun; serangga dijual, jadi umpan, dan sebagian untuk paket Balai Nadi; tapper dari crafting, dipasang di pohon liar dan pohon tanaman pemain.
+
+### 7.1 Jaring Serangga [terpasang]
+
+| Jaring | Cara dapat | Harga | Syarat | Jangkauan | Stamina |
+|---|---|---|---|---|---|
+| Jaring Kayu | Crafting: 15 Serat + 10 Kayu | - | - | 20 px | 2 |
+| Jaring Tembaga | Toko Umum | 2.000 G | Jaring Kayu | 28 px | 2 |
+| Jaring Besi | Toko Umum | 5.000 G | Jaring Tembaga | 36 px | 1 |
+| Jaring Emas | Toko Umum | 12.500 G | Jaring Besi | 48 px | 1 |
+
+- Membeli tier baru menukar jaring lama di tas (jaring lama hilang). Toko menampilkan "terkunci" bila jaring sebelumnya belum ada. Harga, resep, dan stamina adalah pilihan Claude [usulan, bisa diubah].
+- Ayunan memakai animasi `catch_insect` dan menangkap serangga terdekat dari titik ayun dalam jangkauan tier. Data: `resources/item_data/bug_net_*.tres`, `ToolData.BUG_NET_REACH`.
+
+### 7.2 Serangga [terpasang]
+
+15 serangga, data di `resources/bugs/*.tres` (item di `resources/item_data/`). Muncul per musim, siang (06-18) atau malam, dan area; serangga terbang melayang, serangga darat merayap, dan semuanya kabur bila pemain terlalu dekat. Tiap area punya batas jumlah: Ladang 5, Hutan 6, Kota 4, Gunung 4, Gua 3 (lantai biasa, bukan arena boss).
+
+| Serangga | Area | Musim | Waktu |
+|---|---|---|---|
+| Kupu Kubis | Ladang, Hutan, Kota | Semi, Panas | Siang |
+| Kupu Ujung Oranye | Ladang, Hutan | Semi | Siang |
+| Lebah | Ladang, Kota | Semi, Panas | Siang |
+| Ulat | Ladang, Hutan | Semi, Gugur | Siang |
+| Kupu Raja (Monarch) | Hutan, Gunung | Panas, Gugur | Siang |
+| Capung | Ladang, Hutan, Kota | Panas | Siang |
+| Tonggeret | Hutan, Kota | Panas | Siang |
+| Jangkrik | Ladang, Hutan, Kota | Panas, Gugur | Malam |
+| Ngengat Luna | Hutan, Gunung | Semi, Panas | Malam (langka) |
+| Kupu Morpho | Hutan | Panas | Siang (langka) |
+| Kupu Laksamana Merah | Ladang, Kota, Gunung | Gugur | Siang |
+| Ngengat Sutra | Kota, Gunung | Gugur, Dingin | Malam |
+| Semut | Gua | Sepanjang tahun | Bebas |
+| Kunang-kunang | Ladang, Hutan | Panas | Malam (bercahaya) |
+| Ngengat Cinnabar | Gua | Sepanjang tahun | Bebas (langka) |
+
+- Kegunaan: dijual, bahan resep umpan pancing, dan 5 serangga untuk paket Balai Nadi.
+- **Umpan** [keputusan, 18 Oktober 2026]: umpan dibuat lewat crafting; serangga dan cacing mentah bukan umpan, hanya bahannya. Saat melempar kail, umpan termurah di tas dipakai otomatis (1 buah).
+
+| Umpan | Resep | Hasil | Efek |
+|---|---|---|---|
+| Umpan | 2 Cacing | 5 | Waktu tunggu gigitan -20% |
+| Umpan Serangga | 1 Jangkrik + 1 Ulat Daun | 5 | Waktu tunggu -30% |
+| Umpan Kilau | 1 Kunang-kunang + 1 Ngengat Sutra | 3 | Waktu tunggu -40%, ikan langka lebih sering |
+
+- **Paket Serangga** Balai Nadi (sayap Alam): Kupu Raja, Capung, Kunang-kunang, Jangkrik, Ngengat Luna, masing-masing 1. Hadiah: 3 Tapper. Data `resources/restoration/bug_bundle.tres`; `RestorationProject.reward_items` baru untuk hadiah barang.
+
+### 7.3 Tapper [terpasang]
+
+- Resep: 2 Batang Tembaga + 40 Kayu. Dipasang dengan menghadap pohon besar (pohon kecil tidak bisa). Satu tapper per pohon; panen dengan interaksi, lalu tapper mulai lagi.
+- Game belum punya pohon ek, jadi resin datang dari birch dan mahoni [usulan]:
+
+| Pohon | Hasil | Hari | Harga jual |
+|---|---|---|---|
+| Maple | Sirup Maple | 4 | 25 G |
+| Pinus | Tar Pinus | 3 | 50 G |
+| Birch | Resin | 3 | 60 G |
+| Mahoni | Resin | 2 | 60 G |
+
+- Menebang pohon bertapper menjatuhkan tapper (dan hasilnya bila sudah siap). Data tapper disimpan per world dan posisi pohon (save v18, kunci `gathering`).
+- **Pohon tanaman pemain** [usulan]: pohon besar yang ditebang menjatuhkan biji pohon (30%): Biji Maple, Buah Pinus, Biji Birch, Biji Mahoni. Biji ditanam di tanah Ladang yang tidak dicangkul, tumbuh seperti pohon liar, dan bisa dipasangi tapper setelah besar.
+
+### 7.4 Forage Musiman Kota, Gunung, Pantai [terpasang]
+
+| Area | Semi | Panas | Gugur | Dingin |
+|---|---|---|---|---|
+| Kota | Daffodil, Bawang Daun, Kacang Polong Manis, Lidah Buaya | Bunga Matahari, Beri Liar, Blackberry, Lidah Buaya | Jamur, Hazelnut, Pala, Blackberry | Holly, Akar Musim Dingin, Hazelnut, Pala |
+| Gunung | Bawang Daun, Kacang Polong Manis, Mooncap, Tanah Liat | Bunga Matahari, Beri Liar, Jamur, Kuarsa | Blackberry, Hazelnut, Truffle, Mooncap | Holly, Akar Musim Dingin, Tanah Liat, Kuarsa |
+| Pantai | Kelapa Muda, Lidah Buaya, Kerang, Cangkang | Kelapa, Lidah Buaya, Cangkang, Bintang Laut | Kelapa, Kerang, Siput, Teripang | Kerang, Cangkang, Siput, Bintang Laut |
+
+- Data `resources/forage_data/<area>_<item>.tres`. Kota dan Gunung aktif sekarang (ForageSpawner baru di `mountain.tscn`). Pantai belum punya scene; datanya aktif begitu scene pantai diberi ForageSpawner dengan lokasi `beach`.
 
 ---
 
 ## 8. Sistem Pertarungan (Combat) & Musuh [terpasang sebagian + keputusan]
+
+**Balancing gua 22 Oktober:** rumus `max(1, ATK − DEF)` dipertahankan. ATK musuh/jurus boss dinaikkan mengikuti armor setingkat agar equipment tidak membuat seluruh rentang gua hanya memberi 1 damage. Fase, HP, pola serangan, telegraph, hadiah sekali dan checkpoint tidak diubah. Band awal dikurangi menjadi 1–2 musuh (lantai 1–5) dan 2–3 (6–10). Damage normal dengan empat bagian armor rujukan: lantai 3 Kayu 4; 8 Tembaga 1–4; 15 Tembaga 4–14; 30 Besi 6–14; 50 Emas 10–18; 70 Crimson 14–24; 90 Shadow 21–33. Aksesori, buff, block dan bonus role dapat mengurangi angka ini. Jurus boss fase pertama terhadap armor rujukan memberi 10–60 damage; fase/murka tetap menaikkan bahayanya. Angka lengkap ada di laporan balancing.
+
 
 ### 8.1 Cakupan Combat untuk Fase MVP [terpasang sebagian - Phase 4B-1, 4B-2]
 
@@ -575,7 +746,7 @@ Setelah fase MVP rampung, sistem combat akan dievolusikan menjadi sistem pertaru
 
 **Implementasi 8.2-A (terpasang 2026-10-17)**
 - **Keputusan stamina**: combat memakai **bar stamina tempur terpisah** (100, pulih 45/detik setelah jeda 0,7 detik, tampil di atas kepala pemain). Stamina harian kerja kebun dan aturan pingsan saat stamina harian 0 tidak berubah. Bar tempur habis = *Exhausted* 1,2 detik (gerak ×0,35, tidak bisa serang/roll/block). Stamina tempur tidak disimpan (tidak ada perubahan save).
-- **Kontrol**: Spasi = dodge roll (atau Shift ditekan singkat sambil memegang senjata), Q tahan = block, Q tepat sebelum kena = parry, tahan klik kiri 0,45 detik = serangan berat, F = Weapon Art. Gamepad: RT tekan singkat = roll (tahan = lari), LT = block/parry, L3 = Weapon Art.
+- **Kontrol**: Spasi = dodge roll (atau Shift ditekan singkat sambil memegang senjata), klik kanan tahan = block, klik kanan tepat sebelum kena = parry (pedang), tahan klik kiri 0,45 detik = serangan berat, F = Weapon Art, Q = lock-on. Gamepad: RB = serang, RT = serangan berat, B tekan singkat = roll (tahan = lari), LB = block/parry, LT / L3 = Weapon Art, R3 = lock-on (diperbarui v3.24, lihat 4.3).
 - **Roll**: kelas dari rasio beban perlengkapan (helmet/armor/leggings/boots × bobot tier): Fast < 0,3, Medium < 0,7, Heavy Fat-Roll. Jarak 56/46/30 px, i-frames 0,22/0,18/0,08 detik, biaya 16/20/26. Visual sementara: putaran/pipihan sprite + jejak bayangan (belum ada sheet roll).
 - **Block/parry**: block hanya dari depan (±75°), damage dikurangi per senjata (pedang 75%, tongkat 55%, busur 40%), biaya 2 stamina per poin ditahan, gerak ×0,5. Jendela parry 0,12 detik dengan anti-spam 0,45 detik; parry sukses = kilat "PARRY!", hitstop, musuh Stagger 1,6 detik. Pukulan ke musuh yang Stagger dalam 26 px = Riposte ×3 (KRITIS!).
 - **Poise**: musuh punya poise tersembunyi (slime hijau 18, slime biru 26, myconid 45); habis = Stagger ("Goyah!", damage ×1,5). Poise pemain 10 + 1,5 per satuan berat; pecah = serangan terputus 0,45 detik.
@@ -607,7 +778,7 @@ Musuh non-boss dan elite enemy tidak lagi sekadar berjalan lurus mengejar pemain
 - **Token serang**: maksimal 2 musuh menyerang satu pemain bersamaan. Musuh tanpa token mengepung di luar jangkauan pemain (attack_range + 22 px), bergeser ke sisi/belakang pemain dan menjaga jarak antar-kawan. Setelah menyerang, musuh memberi giliran 0,8 detik bila ada kawan yang menunggu.
 - **Feint**: ancang-ancang palsu yang terlihat sama dengan serangan asli lalu lompat mundur; tidak bisa di-parry dan tidak melukai (memancing parry terlalu cepat). Peluang: slime hijau 0, slime biru 10%, myconid 25% (jeda 4 detik).
 - **Mundur & bantuan**: HP ≤ 30% (slime biru 25%, slime hijau tidak pernah) = mundur ke belakang kawan terdekat sambil menghadap pemain selama 2,5 detik dan memanggil kawan dalam 112 px ("!!"), sekali per musuh. Setelahnya musuh nekat: ancang-ancang dan jeda serangan ×0,65. Bantuan = kawan yang sudah ada ikut aggro (tidak memunculkan musuh baru).
-- **Belum**: "menembak dari balik perisai kawan" menunggu musuh jarak jauh; boss memakai 8.2-C.
+- **Musuh jarak jauh (18 Oktober)**: Pemanah Goblin dan Penyihir Spora mulai lantai 21, menggunakan token serangan, ancang-ancang 0,7 detik, menjaga jarak 70 px, memeriksa garis pandang sebelum menembak. Tembakan lurus berjangkauan 240 px berhenti pada tembok/batu dan pemain pertama; kawan musuh dilewati. Belum ada musuh perisai; boss memakai 8.2-C.
 - **Data**: aturan umum di `resources/ai/ai_rules.tres` (AiRules), angka per musuh di grup Persepsi dan Taktik EnemyData. Debug: Ctrl+F12 menampilkan kerucut pandang (warna = status waspada), Ctrl+Shift+F7 memunculkan kawanan myconid + 2 slime biru.
 
 **Rasa Senjata per Tier & Bidikan Jarak Jauh (terpasang 2026-10-17)**
@@ -680,16 +851,57 @@ Setiap wilayah kunci di Gua/Dungeon dijaga oleh **Boss Guardian** unik dengan me
 
 ---
 
+##### Guardian lanjutan [terpasang 18 Oktober 2026; desain dan balancing sementara]
+
+Lantai 21–100 kini bisa dicapai. Guardian berikut memakai mesin jurus boss yang sama dengan Raja Slime, dengan sprite, statistik, kombo, semburan, pemanggilan bantuan, dan hadiah berbeda. Belum memiliki animasi jurus atau moveset eksklusif baru.
+
+| Lantai | Guardian | HP / DEF | Ciri pola | Hadiah pertama |
+|---|---|---|---|---|
+| 40 | Penjaga Besi (Myconid merah besar) | 850 / 8 | hantaman 2/2/3, memanggil Myconid | 4.000 G, 8 emas, 12 besi |
+| 60 | Ratu Kristal (Slime biru besar) | 1.250 / 12 | semburan 5/7/9, hantaman 1/2/2 | 6.500 G, 8 platinum, 12 besi |
+| 80 | Tiran Bara Beku (Myconid biru besar) | 1.800 / 16 | hantaman 2/3/4, memanggil penyihir | 9.000 G, 8 crimson, 12 besi |
+| 100 | Penguasa Bayangan (Slime ungu besar) | 2.500 / 20 | hantaman 2/3/4, semburan 5/7/9, memanggil penyihir | 15.000 G, 8 obsidian, 12 besi |
+
+Semua arena memakai fog gate, tiga fase, anti-kiting, murka, reset saat kosong, dan hadiah sekali yang tersimpan melalui save boss yang sudah ada. Sesudah menang, tangga turun langsung tersedia kecuali lantai 100. Slot `BossData.music` dan volume tersedia untuk aset musik loop; tanpa aset tetap memakai genderang sintetis. Musik berhenti saat reset/menang dan tempo naik per fase/murka. Musik orkestra masih menunggu aset. Playtest balancing combat panjang tetap diperlukan. Verifikasi sesi ini: parser, regresi gua, arena boss dan konten gua lanjutan lulus. Regresi combat umum masih gagal pada pemeriksaan `attack animations draw the weapon` (konfigurasi lapisan senjata karakter; di luar perubahan gua).
+
+---
+
 ## 9. Gua Tambang & Dungeon [terpasang sebagian - Phase 4B-3 + keputusan]
 
 - **Terpasang (Phase 4B-3, 17 Oktober 2026)**:
-  - **Gunung** (`scenes/world/mountain.tscn`, `scripts/world/mountain.gd`): dataran batu kecil yang dicapai lewat celah utara Hill (`EnterMountain` di `hill.tscn`). Mulut Gua Tambang ada di tebing utaranya. Tile dibangun dari kode (Rock Caves.png); dekorasi bisa ditambah di editor. Belum dikunci unlock (`CaveEntrance.required_unlock` kosong).
-  - **Lobi gua** (lantai 0): pintu keluar ke Gunung, lift, **Toko Combat** (`resources/shop/combat_shop.tres`: pedang, busur, tongkat sihir, anak panah, helm, zirah, celana, sepatu tier Kayu-Emas, harga dari `ItemData.buy_price`), dan lubang turun ke lantai 1.
-  - **Lantai 1-20** (`scenes/world/cave/cave.tscn`, `scripts/world/cave.gd`): satu scene untuk semua lantai, isi dibangun ulang di tempat (pemain co-op di gua ikut pindah bersama). Layout batu, bijih, pilar, dan musuh diacak dengan seed `hari + lantai`: sama sepanjang hari, berganti esok hari.
-  - **Tangga turun**: tiap batu yang dihancurkan berpeluang 8% memunculkan lubang tangga; tangga pasti muncul saat semua monster kalah atau semua batu habis. Injak lubangnya untuk turun. Tangga naik di titik tiba kembali ke lobi.
-  - **Lift checkpoint** tiap 5 lantai (5, 10, 15, 20) tersimpan permanen di save v15 (`GameState.cave`, `CaveManager`). Lift ada di lobi dan di lantai checkpoint.
-  - **Lantai 20** adalah arena boss Raja Slime Emas (GDD 8.2-C) sampai boss kalah, lalu menjadi lantai tambang biasa. Belum ada tangga turun; lantai 21+ menyusul.
-  - **Data** (`resources/cave/cave_data.tres`): tabel bijih dan musuh per rentang lantai (`CaveBand`), daftar batu (`CaveOre`). Rentang 21+ sudah berisi tabel GDD untuk dipakai nanti.
+  - **Gunung** (`scenes/world/mountain.tscn`, `scripts/world/mountain.gd`): dataran batu kecil yang dicapai lewat celah utara Hill (`EnterMountain` di `hill.tscn`). Mulut Gua Tambang ada di tebing utaranya. Scene berupa node biasa (TileMapLayer, tabrakan, mulut gua) yang bisa diedit di editor. Mulut gua dimasuki otomatis saat diinjak. Akses Gua memerlukan jembatan Hutan selesai (`forest`); interaksi pertama setelah syarat terpenuhi membuka `cave` permanen tanpa biaya tambahan. Ini pilihan balancing sementara, dapat diubah di `UnlockManager.try_unlock_cave()`.
+  - **Lobi gua** (lantai 0, node `Lobby` di `cave.tscn`): pintu keluar ke Gunung (dengan konfirmasi "Keluar dari gua?"), lift, **Toko Combat** (`resources/shop/combat_shop.tres`: pedang, busur, tongkat sihir, anak panah, helm, zirah, celana, sepatu tier Kayu-Emas, harga dari `ItemData.buy_price`), dan lubang turun ke lantai 1.
+  - **Lantai 1-100** (`scenes/world/cave/cave.tscn`, `scripts/world/cave.gd`): satu scene untuk semua lantai, berupa node yang bisa diedit di editor (TileMapLayer `BaseLayerGround`/`CaveWalls` dengan `resources/world/cave_tileset.tres`, `Walls`, `FloorContent`, `Lobby`). Isi lantai dibangun ulang di tempat (pemain co-op di gua ikut pindah bersama); barang yang dijatuhkan di lantai sebelumnya dibersihkan saat pindah lantai. Layout batu, bijih, pilar, dan musuh diacak dengan seed `hari + lantai`: sama sepanjang hari, berganti esok hari.
+  - **Tangga turun**: tiap batu yang dihancurkan berpeluang 8% memunculkan lubang tangga; tangga pasti muncul saat semua monster kalah atau semua batu habis. Injak lubangnya untuk turun (tanpa tombol interaksi). Tangga naik di titik tiba kembali ke lobi setelah konfirmasi "Naik ke lobi?". Pintu keluar lobi dan tangga naik langsung memunculkan konfirmasi saat pemain melangkah masuk ke areanya, tanpa tombol interaksi (tidak muncul sendiri saat baru tiba di titik tiba; keluar lalu masuk lagi untuk ditanya ulang). Selama konfirmasi terbuka, game dijeda saat main sendiri; saat co-op hanya pemain yang menyentuhnya yang terkunci, pemain lain tetap jalan. Keduanya juga tetap bisa dipakai dengan tombol interaksi (E / gamepad A) atau klik kanan; klik kanan yang diarahkan ke pintu/tangga di dekat pemain tetap membukanya walau sedang memegang senjata (di tempat lain klik kanan tetap membidik). Dialog konfirmasi dijawab dengan A / Enter / E (ya) dan B / Esc (batal), tanpa perlu memindah fokus tombol.
+  - **Lift checkpoint** tiap 5 lantai (5–100) tersimpan permanen di save v15 (`GameState.cave`, `CaveManager`). Lift ada di lobi dan di lantai checkpoint.
+  - **Lantai 20** adalah arena boss Raja Slime Emas (GDD 8.2-C) sampai boss kalah, lalu menjadi lantai tambang biasa. Tangga turun muncul setelah boss kalah; lantai 100 adalah batas akhir.
+  - **Data** (`resources/cave/cave_data.tres`): tabel bijih dan musuh per rentang lantai (`CaveBand`: nama tier, ikon, warna aksen, warna ruangan). Tiap batu tambang dan kristal permata punya file sendiri di `resources/cave/ores/<item_id>.tres` (`CaveOre`: gambar di gua, beliung minimal, ketahanan, jumlah drop). Seluruh rentang sampai lantai 100 aktif.
+  - **Penanda lantai**: lencana di tengah atas layar (per pemain di co-op) menampilkan nomor lantai, nama tier, dan ikon tier; ruangan gua juga diwarnai per tier.
+  - **Tier lantai, bijih, dan permata [terpasang 2026-10-18; nama tier, permata, harga, dan bobot adalah pilihan sementara, bisa diubah di data]**:
+
+    | Lantai | Tier | Bijih | Permata |
+    |---|---|---|---|
+    | 1-5 | Gua Batu | batu, batubara, tembaga | Kuarsa |
+    | 6-10 | Gua Tembaga | batu, batubara, tembaga | Kuarsa, Topaz |
+    | 11-20 | Gua Ametis | batu, batubara, tembaga | Topaz, Ametis |
+    | 21-40 | Gua Besi | batu, batubara, besi | Ametis, Sitrin |
+    | 41-60 | Gua Emas | batu, batubara, emas | Sitrin, Safir, Zamrud |
+    | 61-80 | Gua Bara Beku | batu, platinum, crimson, frost | Safir, Zamrud, Rubi |
+    | 81+ | Gua Bayangan | batu, shadow, fairy, obsidian | Rubi, Oniks, Kristal Peri |
+
+    Mineral (kristal non-permata) ikut tampil sebagai kristal di gua: Kristal Bumi (lantai 1-20), Air Mata Beku (41-60), Kuarsa Api (61+). Pecahan Prisma hanya dari Geoda Pelangi.
+
+    Permata adalah item bahan baru (`resources/item_data/`): Kuarsa 25 G, Topaz 40 G, Ametis 60 G, Sitrin 80 G, Safir 120 G, Zamrud 160 G, Rubi 220 G, Oniks 300 G, Kristal Peri 400 G. Kristal permata muncul sekitar 1-2 per lantai, ditambang dengan beliung dan menjatuhkan 1 permata. Bijih logam di gua kini memakai gambar batu besar berwarna dari `stone with minerals2.png` agar mudah dibedakan dari batu biasa. Bonus permata Geologist belum dibuat.
+  - **Geoda dan Tanah Liat [terpasang 2026-10-18; peluang, harga, dan isi adalah pilihan sementara, bisa diubah di data]**: tiap batu yang dihancurkan di gua berpeluang menjatuhkan satu geoda sesuai tier (`CaveBand.geode_ids/geode_chances`); batu biasa juga berpeluang 6% menjatuhkan Tanah Liat (`CaveOre.bonus_item_ids`). Geoda dipecahkan di Pandai Besi (Empu Bima): saat pemain membawa geoda, layar pecah geoda muncul dulu dengan tombol "Upgrade Alat" untuk lanjut ke upgrade. Isi diundi dari `resources/cave/geodes/<id>.tres`.
+
+    | Geoda | Lantai (peluang per batu) | Biaya pecah | Isi |
+    |---|---|---|---|
+    | Geoda | 1-40 (4-6%), 41-60 (2%) | 25 G | tanah liat, batubara, tembaga, besi, Kristal Bumi, Kuarsa, Topaz, Ametis, Sitrin |
+    | Geoda Beku | 41-60 (6%), 61-80 (3%) | 50 G | batubara, besi, emas, frost, Air Mata Beku, Kuarsa, Safir, Zamrud |
+    | Geoda Magma | 61-80 (5%), 81+ (6%) | 75 G | batubara, emas, platinum, crimson, Kuarsa Api, Rubi, Zamrud, Oniks |
+    | Geoda Pelangi | 21+ (1-2%) | 100 G | semua permata dan mineral, shadow/fairy/obsidian, Pecahan Prisma (sangat langka) |
+
+    Harga jual: Tanah Liat 10 G, Geoda 50, Geoda Beku 100, Geoda Magma 150, Geoda Pelangi 200, Kristal Bumi 50, Air Mata Beku 75, Kuarsa Api 100, Pecahan Prisma 2000.
   - **Keputusan sementara (bisa diubah di data)**: beliung minimal per bijih satu tier di bawah logamnya (batu/batubara/tembaga: Kayu, besi: Tembaga, emas: Besi, platinum: Emas, dst.); jumlah batu 18-28 dan monster 2-5 per lantai di 1-20; musuh lantai 1-5 slime hijau, 6-10 slime hijau + biru, 11-20 slime biru + myconid.
   - **Debug**: Ctrl+F5 langsung masuk lobi gua.
 
@@ -736,7 +948,9 @@ Setiap wilayah kunci di Gua/Dungeon dijaga oleh **Boss Guardian** unik dengan me
 
 ---
 
-## 12. Hubungan Sosial, Persahabatan, & Warga Desa (NPC Schedules & Friendship) [keputusan]
+## 12. Hubungan Sosial, Persahabatan, & Warga Desa (NPC Schedules & Friendship) [terpasang sebagian + keputusan]
+
+**Status 22 Oktober 2026:** Wira, Ubay, Eep, Zarathia dan Zarathustra memiliki profil resident. Dialog hati/flag/ekspresi, hadiah, event, surat cerita dan panel hubungan sudah tersedia. Tindak lanjut menambahkan kunci hati permanen, upacara dasar, household per karakter, pasangan/teman sekamar di rumah, bantuan harian, serta surat resep dan bahan. Detail implementasi/pengujian: [IMPLEMENTATION_SOCIAL_ROLE_2026-10-22.md](IMPLEMENTATION_SOCIAL_ROLE_2026-10-22.md). Bagian berikut tetap memuat target lanjutan yang belum seluruhnya selesai.
 
 ### 12.1 Filosofi Desain: Desa yang Hidup, Bernyawa, dan Personal
 - **Bukan Boneka Statis**: Warga desa Nusa Vale memiliki kepribadian yang khas, rutinitas harian yang berubah sesuai cuaca dan musim (*Daily Schedules*), preferensi makanan/barang kesukaan yang unik, serta cerita kehidupan masa lalu yang terungkap seiring meningkatnya rasa percaya mereka kepada pemain.
@@ -752,7 +966,7 @@ Setiap wilayah kunci di Gua/Dungeon dijaga oleh **Boss Guardian** unik dengan me
       - *Dibenci (Hated)*: -40 poin (balon marah atau sedih).
     - **Menyelesaikan Permintaan Warga (Help Wanted Board)**: +100 poin (papan pengumuman di depan Balai Nadi/Toko).
     - **Berpartisipasi dalam Festival & Tradisi THR Lebaran**: Memberikan bingkisan atau bersilaturahmi memberikan bonus hubungan desa secara massal.
-  - *Peluruhan Hubungan (Decay)*: Jika pemain tidak berbicara dengan warga selama berpekan-pekan, poin persahabatan berkurang sangat sedikit (hanya -2 poin/hari jika belum mencapai 10 hati; setelah 10 hati, hubungan permanen terkunci dan tidak pernah luntur).
+  - *Peluruhan Hubungan (Decay)*: Jika pemain tidak berbicara dengan warga selama berpekan-pekan, poin persahabatan berkurang sangat sedikit (hanya -2 poin/hari jika belum mencapai 10 hati; setelah 10 hati, hubungan permanen terkunci dan tidak pernah luntur). **[terpasang v25]:** `locked` dicatat setelah poin mencapai maksimum NPC (default 10 hati/2.500 poin). Setelah terkunci, poin tidak turun karena hadiah negatif maupun decay. Reaksi hadiah dan kuota/konsumsi barang tetap berlaku. Save lama tanpa `locked` dipromosikan bila poin saat ini maksimum; penanda ini tersimpan per karakter.
 
 ---
 
@@ -790,6 +1004,11 @@ Warga desa memiliki rutinitas realistis:
 ---
 
 ### 12.4 Resep Hadiah Masakan & Bingkisan Lewat Kotak Surat
+
+**[terpasang 22 Oktober 2026]** Kotak Surat aktif di Farm, di kiri pintu rumah (berbeda dari dekorasi `mailbox_decor`). Ambang persahabatan mengantrekan surat sekali per reward, tiba esok hari. Selesaikan semua halaman untuk menerima resep gratis dan bahan; membatalkan atau tas penuh menjaga surat tetap belum diklaim. Resep milik karakter penerima, bukan seluruh sesi co-op. Surat cerita Wira tetap dapat dibaca melalui Wira dan juga kotak surat.
+
+Konfigurasi awal di `data/npc/social/household_rules.json`: Wira 4 hati → Omelet + 5 kayu; Ubay 4 hati → Pancakes + 2 gandum; Eep 4 hati → Salad + 2 wortel; Zarathia 6 hati → Sun Tea + 1 madu; Zarathustra 6 hati → Vegetable Mix + 2 kentang. Ini konten awal dan angka balancing yang bisa diubah lewat data; target semua warga di bawah tetap lanjutan.
+
 - Warga yang senang dengan pemain akan mengirimkan surat kejutan di kotak surat ladang:
   - Berisi resep masakan keluarga (*Family Recipes*) untuk dimasak di dapur rumah (misal: Pak Joko mengirimkan resep Rawon Rempah dan Sayur Lodeh Istimewa).
   - Bingkisan bahan material langka (misal: Empu Bima sesekali mengirim batangan besi/emas, warga tani mengirim bibit langka).
@@ -797,6 +1016,13 @@ Warga desa memiliki rutinitas realistis:
 ---
 
 ### 12.5 Romansa, Pernikahan, & Teman Sekamar (Romance, Marriage, & Roommates)
+
+**Cakupan terpasang 22 Oktober 2026:** Zarathia/Zarathustra memakai syarat hati dari data untuk dating/lamaran. Lamaran memerlukan rumah tingkat 2 dan mengantrekan upacara esok hari. Temui NPC di rumah, pilih **Mulai Upacara Pernikahan**, lalu selesaikan dialog untuk meresmikan hidup bersama; batal tidak menyelesaikan upacara. Upacara saat ini memakai dialog berhalaman, belum adegan sinematik atau artwork khusus.
+
+Pasangan kembali ke rumah sebelum 09.00 dan mulai 18.00; rutinitas siang tetap berjalan. Satu karakter memiliki satu household, dan NPC yang sudah pindah tidak dapat ditempatkan pada household kedua. Ubay/Eep dapat diundang sebagai teman sekamar platonis pada 10 hati dengan rumah tingkat 2; ada dialog penyambutan esok hari tanpa status romansa. Household dan progres upacara tersimpan untuk karakter co-op yang sedang offline juga.
+
+Bantuan harian saat ini: sarapan Omelet menunggu di kotak surat (maksimal satu sarapan belum diambil); pada nomor hari genap menyiram crop Farm, pada hari ganjil memberi pakan ternak dengan mengonsumsi pakan/jerami dari tas pemilik. Greenhouse tidak ikut disiram. Bantuan dijalankan sekali per hari, termasuk saat pemilik tidak sedang ikut sesi. Ini perilaku awal yang dapat diperluas, bukan AI pekerjaan bebas. Buket, pendant, gate hati 9–10 melalui buket, cutscene/undangan tamu dan aktivitas keluarga lanjutan pada target di bawah belum terpasang.
+
 - **Karakter Lajang (Marriage Candidates)**: Tersedia beberapa kandidat warga desa yang dapat dijalin hubungan romantis.
 - **Pemberian Buket Bunga (Bouquet pada 8 Hati)**: Membuka hati ke-9 dan ke-10 sebagai tanda resmi berpacaran (*Dating*).
 - **Lamaran & Bunga Pengantin (Pendant Lamaran pada 10 Hati)**:
@@ -807,7 +1033,7 @@ Warga desa memiliki rutinitas realistis:
 
 ---
 
-## 13. Sistem Role, EXP, dan Skill Tree (Co-op Synergy) [keputusan]
+## 13. Sistem Role, EXP, dan Skill Tree (Co-op Synergy) [keputusan + terpasang sebagian]
 
 ### 13.1 Filosofi Desain & Arsitektur EXP: Opsi B (Per-Activity EXP) dengan Sentuhan Hybrid [keputusan]
 - **Classless & Open Progression**: Pemain **tidak dikunci pada satu kelas tunggal**. Setiap pemain dapat meningkatkan level dan membuka skill dari ketujuh role yang tersedia secara bebas.
@@ -922,6 +1148,27 @@ Setiap role memiliki progresi level tersendiri (Level 1–10). Setiap aksi spesi
 - **Tab Keahlian (Skills Tab)**: Terintegrasi pada menu ransel (`I` / Gamepad `B` atau `Start`), menampilkan 7 panel role dengan progres bar EXP, level aktif, dan bagan Skill Tree.
 - **Notifikasi Level Up**: Layar rekap tidur malam menampilkan animasi "Level Up!" lengkap dengan perolehan stat baru dan pilihan pemilihan perk spesialisasi.
 - **Sinergi Tim Co-op**: Di menu Co-op, buku status menampilkan ringkasan profil keahlian pemain lain sehingga anggota keluarga dapat saling berkoordinasi untuk membagi tugas secara optimal setiap pagi.
+
+### 13.4 Implementasi Role & EXP [terpasang 2026-10-19]
+
+**Tindak lanjut 22 Oktober 2026:** Kurir Logistik (Economist Lv6) kini membayar Shipping Bin pada 12.00/17.00 dengan slot harian tersimpan, tidak membayar ulang setelah reload atau settlement pagi. Forest Whisperer menanam ulang jenis pohon yang ditebang sebagai bibit tersimpan; muncul pada sinkronisasi spawner berikutnya (hari berikutnya/kunjungan ulang) dan tetap tumbuh 2× lebih cepat. EXP role yang tidak dikenal ditolak, EXP sangat besar dibatasi sebelum konversi integer.
+
+Regresi mencakup ketujuh role pada ambang Lv1–10, level aktif sesudah tidur, cabang A/B yang tersedia/ditunda, pilihan permanen, stat dan serialisasi, isolasi progres co-op, efek bersama memakai nilai maksimum pemain aktif, rod pribadi tanpa mengubah Resource bersama, damage kapak/growth/replant, serta transaksi kurir/save/reload. Pengujian ini tidak menggantikan playtest semua efek probabilistik dan semua kombinasi combat.
+
+**10 perk Resource masih ditunda karena memerlukan sistem/konten baru:** Farmer—Bintang Perak, Bintang Emas, Perpetual Orchard; Forager—Botanist, Kompas Alam; Miner—Demolition Expert; Merchant—Stok Langka, Guild Magnate, Capitalist Investor; Economist—Commodity Tycoon. Sistem kualitas crop/forage, orchard permanen, peta penanda, bom, katalog/pedagang eksklusif dan kontrak komoditas belum diselesaikan dalam cakupan ini. Ide Overdrive dan lift otomatis di rancangan juga belum terpasang. Label “Segera hadir” tidak dihapus untuk fitur yang belum mempunyai efek.
+
+
+Keputusan pemilik proyek (2026-10-19, semua opsi "a"): (1) hanya perk yang sistemnya sudah ada yang dipasang, sisanya tampil "Segera hadir" di pohon; (2) kurva EXP di bawah; (3) pilihan cabang A/B Lv5/Lv10 di layar rekap tidur dengan animasi "Level Up!"; (4) tiap pemain co-op punya EXP dan level sendiri, EXP masuk ke pemain yang beraksi; (5) buku riset (Perpustakaan) dan Token Talenta (Balai Nadi) dipasang sekarang, token festival dan Santap Malam Bersama menyusul.
+
+- **Kode dan data** [terpasang]: `scripts/system/skill_system.gd` (aturan + efek perk), `player_skills.gd` (progres per pemain di `PlayerData.skills`), `skill_manager.gd` (anak GameState, naik level saat tidur), `scripts/ui/inventory_skills.gd` (tab Keahlian), `scripts/ui/level_up_ui.gd` (rekap). Data: `resources/skills/skill_rules.tres` (semua angka EXP), `resources/skills/roles/<role>.tres` (7 `RoleData` berisi `RolePerk` per level, efek berupa kunci stat). Tes: `tests/role_exp_regression.tscn`.
+- **Kurva EXP** [keputusan]: total EXP Lv1..Lv10 = 100, 380, 770, 1300, 2150, 3300, 4800, 6900, 10000, 15000.
+- **Naik level** [terpasang]: EXP masuk langsung; saat ambang tercapai muncul notifikasi "siap naik ke Lv N, tidur untuk membuka keahlian". Level aktif saat hari berganti (tidur atau pingsan), lalu layar rekap muncul setelah laporan Shipping Bin ditutup. Cabang A/B yang dilewati ("Nanti saja") tetap bisa dipilih di tab Keahlian; pilihan permanen. Cabang yang seluruh perknya "Segera hadir" tidak bisa dipilih.
+- **Sumber EXP** [terpasang; balancing 22 Oktober, angka pada `SkillRules`]: Farmer cangkul 1/petak, siram baru 1/petak, tanam 3/bibit, panen 15% nilai total hasil dasar per petak (4–40; bonus panen ganda tidak menggandakan EXP). Menyiram ulang tanah basah tetap memakai air/stamina, tetapi tidak memberi EXP tambahan. Forager forage 7, pohon 8, rumput 1, titik gali 5. Fisher per rarity 8/12/20/35/65. Combat pukulan 1, parry 4, bunuh musuh 35% HP maks (3–65), boss 200. Miner batu/bijih 20% nilai hasil (3–35), geoda 6. Merchant 1 EXP/10 G transaksi, maksimal 100 per transaksi. Economist 1 EXP/15 G kiriman dan sumbangan. Kurva level dan progres EXP yang sudah tersimpan tidak diubah; sumber EXP baru berlaku untuk aktivitas berikutnya.
+- **Jalur hybrid** [terpasang]: 7 buku riset (`skill_book_<role>`, 1500 G, +250 EXP role, [usulan]) dijual di meja Perpustakaan kota (`resources/shop/library_books.tres`); dibaca dengan memakai buku dari hotbar. Menyelesaikan paket Balai Nadi memberi penyumbang terakhir 1 Token Talenta; token ditukar di tab Keahlian dengan EXP tepat sampai level berikutnya (aktif setelah tidur).
+- **Co-op** [terpasang]: progres per pemain (P1 di blok `player`, karakter co-op di `coop_players`). Efek dunia bersama memakai nilai tertinggi di antara pemain sesi ini: tanah tetap basah, Agronomist, Green Thumb, Forest Whisperer, Spelunker, Village Treasurer, Smart Investor, Shared Prosperity. Tab Keahlian menampilkan role tertinggi rekan; tab Status menampilkan level ketujuh role.
+- **Penyesuaian terhadap 13.2** [usulan]: Duelist riposte +50% (riposte dasar sudah 3x, jadi 4,5x); Lumberjack 2x damage kapak ke pohon (kayu keras menyusul); Agronomist = peluang 15% tiap malam tanaman tumbuh 1 hari ekstra; Berserker damage +30% saat HP < 40%; Soulforged memulihkan 10 HP dan 10 stamina tempur per musuh tumbang; Smart Investor 2% uang bersama per pagi, maks 500 G; Shared Prosperity berlaku untuk stamina harian dan Shipping Bin saat lebih dari 1 pemain; Ancient Tracker = bobot barang gali langka (bobot < 1) x4; Merchant/Economist Lv9 belum punya perk.
+- **Segera hadir** (10 perk Resource tampil abu-abu): Farmer Bintang Perak/Emas, Perpetual Orchard; Forager Botanist, Kompas Alam; Miner Demolition Expert; Merchant Stok Langka, Guild Magnate, Capitalist Investor; Economist Commodity Tycoon. Overdrive, lift otomatis dan barter masih ide desain; tidak semuanya memiliki node perk tersendiri.
+- **Save v22** [terpasang]: dict `skills` = `{"points": {role: EXP}, "levels": {role: level aktif}, "choices": {"role:5": "a"/"b"}, "tokens": int}`. Save lama tanpa key ini = semua role Lv0; nilai rusak diabaikan.
 
 ---
 
@@ -1231,7 +1478,7 @@ Dengan disahkannya keputusan utama di atas, butir keputusan teknis turunan yang 
 2. **Pilihan Tanaman Musim Dingin**: Menentukan daftar 3–4 varietas tanaman dingin awal beserta durasi panennya (misal: Snow Yam 6 hari, Winter Radish 4 hari, Snow Cabbage 8 hari).
 3. **Layout Balai Nadi di Town**: akses sudah terpasang; penyempurnaan posisi bangunan berikutnya mengikuti layout kota, bukan blocker implementasi pintu.
 4. **Behavior Tree Framework Godot**: Memilih implementasi Behavior Tree di GDScript (library plugin Beehave / LimboAI / custom node-based GDScript).
-5. **Format Penyimpanan EXP & Skill Tree di Save Game**: Menentukan struktur dictionary `skills` pada `SaveManager` (SAVE_VERSION aktif = 13).
+5. ~~**Format Penyimpanan EXP & Skill Tree di Save Game**~~: selesai di save v22, lihat 13.4.
 6. **Layout Alun-Alun Pekan Bazaar**: Menentukan posisi deretan stan pemain dan rute jalan NPC pembeli di alun-alun kota pada scene `town.tscn`.
 7. **Tanggal Pasti Kalender Hari Raya**: Menetapkan tanggal kalender (1–28) per musim untuk Hari Raya Idul Fitri, Natal (25 Dingin), dan Malam Tahun Baru (28 Dingin).
 8. **Formula Numerik Fluktuasi Pasar**: Menentukan batas ambang kuantitas penjualan harian (misal: threshold > 50 item) sebelum harga pasar mengalami penurunan 10%.
@@ -1240,6 +1487,32 @@ Dengan disahkannya keputusan utama di atas, butir keputusan teknis turunan yang 
 
 ## 19. Changelog
 
+- **2026-10-22 (Versi 3.30)**: Baseline balancing progres/ekonomi: Tembaga/Besi/Emas 350/1.000/2.300 G; tas 1.500/7.500 G; rumah 3.500/12.000/30.000 G dengan bahan bertahap dan bonus stamina +30/+40 (target 200 bersama tiga Biji Daya); 136 harga masakan dihitung dari bahan dan dibatasi terhadap arbitrase, jual kembali 39 benih menjadi 40%; EXP aktivitas diselaraskan dan siram ulang tidak memberi EXP; damage musuh/boss mengikuti armor dan kelompok awal diperkecil. Tambah audit deterministik, simulasi kas solo/co-op, serta regresi harga/EXP/stamina/gua. Format save tetap v25; status playtest umum lulus tidak diubah.
+
+- **2026-10-22 (Versi 3.29)**: Catat konfirmasi pemilik bahwa stabilitas/playtest loop inti solo/co-op sudah dilakukan dan lulus. Tutup milestone tersebut dalam rekomendasi prioritas, tetapkan balancing progres/ekonomi sebagai langkah berikutnya, dan tambahkan `PLAYTEST_STATUS.md` serta catatan `AGENTS.md` untuk mencegah pengulangan rekomendasi. Pengujian perubahan baru/regresi tetap berlaku.
+
+- **2026-10-22 (Versi 3.28)**: HerbalHouse menuju interior yang tersedia dan transisi diuji solo/co-op; persahabatan maksimum dikunci permanen; rumah tangga/upacara dialog, pasangan/roommate, bantuan harian dan surat resep/bingkisan; Kurir Logistik dua pembayaran/hari, Forest Whisperer tanam ulang; tes progres/cabang/co-op/save ditambahkan ke runner. Save v25; dokumentasi membedakan cakupan selesai dan 10 perk yang masih memerlukan sistem baru.
+
+- **2026-10-22 (Versi 3.27)**: Sinkronisasi hasil inspeksi workspace: matriks status dan tingkat bukti, save v24, Gunung/Gua/Hill/Deep Forest, 137 resep/22 alat cooking, 96 equipment berslot, Beehive/Sawmill/Alchemy/Anvil, Role/EXP, heart event/surat/romansa sebagian, serta musik/horor. Catat target pintu HerbalHouse yang hilang, selisih kunci 10 hati, batas verifikasi, dan backlog tanpa mengubah keputusan desain atau kode gameplay. Lihat audit 22 Oktober.
+
+- **2026-10-19 (Versi 3.26)**: Role & EXP (bagian 13.4, keputusan pemilik proyek semua opsi "a"): 7 role Lv1-10 per pemain dengan EXP dari aksi, level aktif saat tidur, layar rekap "Level Up!" dengan pilihan cabang A/B di Lv5/Lv10, tab Keahlian di tas, perk yang sistemnya ada dipasang (sisanya "Segera hadir"), 7 buku riset di Perpustakaan, Token Talenta dari paket Balai Nadi. Save v22 menyimpan `skills` per pemain. Tes `tests/role_exp_regression.tscn`.
+
+- **2026-10-19 (Versi 3.25)**: Co-op drop-in ala Stardew (bagian 4.14): gamepad yang belum dipakai menekan Start saat bermain untuk ikut tanpa ke main menu, memilih karakter co-op save ini atau membuat karakter baru di layar kustomisasi; tahan Start (atau P1 lewat menu pause) untuk keluar, sisa P1 kembali main sendiri di tempat. Tanpa kabin. Gamepad P1 tetap milik P1. Save v21: daftar karakter co-op dengan id.
+- **2026-10-19 (Versi 3.24)**: Kontrol & Konteks Input (bagian 4.3): router input satu pintu, konteks per barang yang dipegang (Lapangan/Combat dekat/Combat jauh/Di udara/Menu/Dialog), lompat + lompat ganda + tebar benih seperti Grand Bazaar, lock-on, prompt tombol dinamis, petunjuk tombol HUD, dan atur ulang tombol di Pengaturan. Perubahan tombol dari versi sebelumnya: keyboard Q kini lock-on (tangkis pindah ke klik kanan saat memegang pedang); gamepad LT bukan lagi tangkis (kini LB), RT saat memegang senjata = serangan berat, B saat memegang senjata = roll/lari. Tanpa perubahan save.
+- **2026-10-19 (Versi 3.23)**: Tint siang/sore/malam berlaku global (bagian 4.1 "Tint Waktu Global"). Semua scene dunia otomatis ikut, termasuk interior (50%), Gunung, dan Bukit; gua tetap tanpa tint. CanvasModulate milik scene kini jadi warna dasar yang dikalikan warna waktu (sebelumnya ditimpa). Node opsional `SceneLighting` untuk override per scene. Tanpa perubahan save.
+- **2026-10-19 (Versi 3.22)**: Perbaikan flicker saat pindah scene di sore/malam: warna CanvasModulate dipasang begitu scene masuk tree (sebelumnya baru setelah transisi selesai karena game dijeda), efek layar horor langsung pada nilai sekarang tanpa fade-in, rasa takut terbawa antar scene, dan lampu dekorasi langsung menyala. DayCycle tidak lagi mencari CanvasModulate di seluruh scene tiap frame. Tanpa perubahan save.
+- **2026-10-19 (Versi 3.21)**: Penunggu malam (4.1): Kuntilanak (melayang) dan Pocong (melompat) yang hanya bergerak saat tidak dilihat, berpindah ke belakang pemain bila ditatap terlalu lama, diusir cahaya, dan memicu jumpscare + energi berkurang saat menyentuh. Sprite, wajah jumpscare, dan suara baru. Tanpa perubahan save.
+- **2026-10-19 (Versi 3.20)**: Horor Tengah Malam (4.1): meter Rasa Takut per pemain (naik di gelap, turun dekat cahaya), detak jantung + denyut merah + guncangan, shader 00.00–05.00 (warna pudar, grain, aberration, glitch), dan 8 kejadian ganjil berbasis data (siluet, bisikan, langkah kaki pengikut, lampu berkedip, mata merah, gagak). NightHorror kini scene node yang bisa diatur di editor. Tanpa perubahan save.
+- **2026-10-18 (Versi 3.19)**: Crafting lanjutan bagian 2 (4.13): 15 dekorasi farm baru (sumur, air mancur, ayunan, jungkat-jungkit, papan petunjuk, tikar piknik, lampu kembar, jemuran, rumah anjing, dua penunjuk angin, lentera resin, pohon Natal, kotak pasir, sapu lidi), Ramuan Penyembuh Besar, Cincin dan Kalung Prisma. Bahan yang tadinya menganggur kini dipakai: resin, sirup maple, tulang tua, wol, pecahan prisma. Tanpa perubahan save.
+- **2026-10-18 (Versi 3.18)**: Crafting lanjutan (bagian 4.13): 70 resep senjata/armor/panah Tembaga sampai Obsidian, Peti Fairy dan Peti Obsidian, 14 dekorasi farm, Sarang Lebah (madu + lilin lebah), Penggergajian (papan kayu), Meja Alkimia (4 ramuan), Landasan Tempa (10 cincin + 10 kalung), sarung tangan dan tabung panah, bahan Tali Sulur/Kulit Olahan/Umpan Buatan. Slot Kalung, Cincin, dan Aksesori di menu Equipment aktif; ATK perlengkapan ikut combat. Save v20. Tes `tests/crafting_expansion_regression.tscn`.
+- **2026-10-18 (Versi 3.16)**: Performa scene farm (tanpa perubahan desain atau save). Spawner forage/rumput/pohon memakai cache ruang terpakai per frame, jadi masuk farm tidak lagi macet belasan detik. Kanopi pohon hanya disalin saat animasinya berubah, shader pemisah batang/kanopi dipakai bersama, dan mask poligon pinus dipanggang ke tekstur saat game jalan (poligon di editor tetap sumbernya). Probe: tests/farm_perf_probe.tscn; tes: forage_cache_regression, pine_bake_regression.
+- **2026-10-18 (Versi 3.15)**: Umpan pancing kini dibuat lewat crafting (keputusan pemilik proyek): Umpan (cacing), Umpan Serangga (jangkrik + ulat), Umpan Kilau (kunang-kunang + ngengat sutra). Serangga dan cacing mentah tidak lagi dipakai otomatis sebagai umpan. Tanpa perubahan save.
+- **2026-10-18 (Versi 3.14)**: Phase 4A-3 Gathering (bagian 7): jaring serangga Kayu (crafting) sampai Emas (Toko Umum, tukar jaring sebelumnya), 15 serangga per musim/waktu/area termasuk gua, serangga sebagai umpan pancing otomatis, Paket Serangga Balai Nadi dengan hadiah 3 Tapper, tapper (crafting) di pohon maple/pinus/birch/mahoni, biji pohon untuk menanam pohon di Ladang, dan forage musiman Kota/Gunung/Pantai. Save v18 menyimpan tapper.
+- **2026-10-18 (Versi 3.12)**: Tangga naik dan pintu keluar gua menampilkan konfirmasi langsung saat disentuh (tanpa interaksi). Solo: game dijeda; co-op: hanya pemain yang menyentuh yang terkunci. Tanpa perubahan save.
+- **2026-10-18 (Versi 3.11)**: Perbaikan pintu keluar dan tangga naik gua: klik kanan sekarang berfungsi walau memegang senjata (bila kursor di pintu/tangga dan pemain di dekatnya), dan dialog konfirmasi bisa dijawab langsung dengan gamepad A/B atau Enter/E/Esc. Tes `tests/cave_exit_input_regression.tscn`. Tanpa perubahan save.
+- **2026-10-18 (Versi 3.10)**: Geoda (Geoda, Geoda Beku, Geoda Magma, Geoda Pelangi) jatuh dari batu gua sesuai tier dan dipecahkan di Pandai Besi. Item baru: Tanah Liat (dari batu biasa), mineral Kristal Bumi, Air Mata Beku, Kuarsa Api, dan Pecahan Prisma. Data geoda di `resources/cave/geodes/`. Tanpa perubahan save.
+- **2026-10-18 (Versi 3.9)**: Gua Tambang: scene gua menjadi node yang bisa diedit (TileMapLayer, Lobby, FloorContent). Mulut gua dan lubang turun dimasuki otomatis; pintu keluar lobi dan tangga naik meminta konfirmasi. Lencana lantai dengan nama, ikon, dan warna per tier; ruangan diwarnai per tier; barang jatuh dibersihkan saat pindah lantai. Batu tambang dan permata dipisah menjadi file `resources/cave/ores/*.tres`; 9 permata baru (Kuarsa sampai Kristal Peri) tersebar per tier lantai; bijih memakai gambar batu besar berwarna. Tanpa perubahan save.
+- **2026-10-18 (Versi 3.8, lanjutan)**: Scene Gunung (`mountain.tscn`) kini berupa node biasa yang bisa diedit di editor: TileMapLayer lantai/dinding (tileset `resources/world/mountain_rock_tileset.tres`), tabrakan batas, mulut gua, jalan ke Hill, papan nama, dan kolam air panas (tampil di editor). Perbaikan: mulut Gua Tambang di Gunung sekarang bisa dimasuki saat pemain berdiri menempel di depannya. Tanpa perubahan save.
 - **2026-10-18 (Versi 3.8)**: Kontrol gamepad disamakan dengan Stardew Valley (4.3): B/Start = tas, Y = tab Crafting, A = interaksi, X = alat, LB/RB = slot (di tas: ganti tab). Lari dipindah dari B ke RT (tekan singkat sambil memegang senjata = roll), RT tidak lagi memakai alat. Teks rencana Tab Keahlian dan Lonceng Lapak disesuaikan (tas = B/Start, interaksi = A). Tanpa perubahan save.
 - **2026-10-18 (Versi 3.7)**: Spot pancing musim dingin (pilihan pemilik proyek: keduanya): Kolam Air Panas di Gunung dan Danau Bawah Tanah di Gua lantai 10, keduanya tidak membeku, dengan tabel ikan sendiri. Tanpa perubahan save.
 - **2026-10-18 (Versi 3.6)**: Fishing 4A-1 dituntaskan: musim ikan (`FishData.seasons`, kosong = sepanjang tahun) dan air beku di Musim Dingin (`FishingSpot.freezes_in_winter`). Perbaikan lokasi ikan mas. Data bijih per lantai di `cave_data.tres` dipulihkan setelah tertimpa editor. Tes `tests/fishing_season_regression.tscn`. Tanpa perubahan save.
@@ -1350,3 +1623,27 @@ Dengan disahkannya keputusan utama di atas, butir keputusan teknis turunan yang 
     - Status Cooking, Gathering Expansion, Combat, Cave/Dungeon, dan Kendaraan dinaikkan menjadi `[keputusan]`.
 - **2026-10-11 (Versi 1.0)**:
   - GDD 1.0 disusun ulang dari isi proyek (crafting, bangunan, 80 equipment, tier alat, Balai Nadi save 8, Greenhouse save 9, fishing minigame, split-screen co-op).
+
+
+### Konten gua 41+ — Gold, Frost–Ember, Shadow [terpasang 18 Oktober 2026]
+
+Lantai aktif tetap 1–100. Setiap rentang sekarang berada di `resources/cave/bands/*.tres`; `cave_data.tres` menjadi katalog referensinya. Tabel bijih/permata/geoda sebelumnya dipertahankan.
+
+| Lantai | Tier | Musuh baru (HP / ATK / DEF) | Template layout |
+|---|---|---|---|
+| 41–60 | Gold / Gua Emas | Slime Emas Tambang 95/40/6; Pemanah Emas 110/44/7; Myconid Sitrin 145/48/8 | `gold_a.tscn`, `gold_b.tscn` |
+| 61–80 | Frost–Ember / Gua Bara Beku | Slime Beku 165/68/11; Penyihir Bara 145/78/9; Penjaga Bara 200/74/12 | `frost_ember_a.tscn`, `frost_ember_b.tscn` |
+| 81–100 | Shadow / Gua Bayangan | Slime Bayangan 240/110/16; Pemanah Bayangan 210/116/14; Penyihir Bayangan 230/122/15 | `shadow_a.tscn`, `shadow_b.tscn` |
+
+Angka dan komposisi adalah **balancing awal yang dapat diubah melalui Inspector**. Bobot musuh default 4:2:3; jumlah musuh Gold dan Frost–Ember 4–6, Shadow 5–7. Musuh memakai AI melee/ranged yang sudah ada, bukan jurus status baru. Setiap musuh memiliki prefab berisi SpriteFrames yang dapat diedit sebelum Play. Flash damage mempertahankan palette prefab.
+
+Enam scene layout di `scenes/world/cave/tiers/` berisi dekorasi solid yang dapat digeser/edit melalui node Sprite2D dan CollisionShape2D. Collider template otomatis menutup area spawn batu, musuh dan pilar. Pemilihan template, isi dan posisi mengikuti seed harian. Lantai boss tetap arena lapang; tidak ada perubahan format save. Detail editor: [CAVE_EDITOR_GUIDE.md](CAVE_EDITOR_GUIDE.md).
+
+
+### Layout dungeon utuh dan zona isi [terpasang 19 Oktober 2026]
+
+Lantai tambang kini memilih satu dari tiga bentuk scene di `scenes/world/cave/layouts/`: cabang tambang, lingkar batu, dan rangkaian ruang. Scene berisi `GroundTiles`/`WallTiles`, marker kedatangan/tangga/lift, kandidat tangga turun, serta zona Rock/Ore/Gem/Enemy/Safe yang bisa diedit melalui Inspector. Pool layout disimpan pada `CaveBand.dungeon_scenes` untuk semua tier. Lantai danau yang dikonfigurasi dan arena boss memakai tata letak khusus.
+
+Budget batu/mineral dan musuh tetap berasal dari tier. Zona mengatur distribusi, minimum/maksimum, whitelist mineral, kelompok endapan, serta kumpulan musuh khusus. Kategori mineral tersimpan pada `CaveOre.spawn_kind`; `is_gem` tetap kompatibel. Tidak ada koordinat layout atau komposisi tier dalam cabang generator. Semua bentuk awal tersimpan sebagai TileMap native di `.tscn`.
+
+Validasi memastikan ground, lift/tangga dan kandidat tangga dapat dicapai dari Arrival. Rute utama dan area aman dijaga bebas spawn; template invalid dilewati. Tembok fisik mengikuti sel non-ground dan props solid yang didukung. Enemy memakai navigasi grid melalui koridor dan menghindari batu; penambangan memperbarui grid. Kandidat tangga dipilih saat tangga ditemukan, bukan muncul terbuka sejak awal. Semua isi memakai seed hari+lantai; tidak ada perubahan format save. Peti harta, puzzle, dan pintu berkunci belum ditambahkan. Panduan: [CAVE_EDITOR_GUIDE.md](CAVE_EDITOR_GUIDE.md).

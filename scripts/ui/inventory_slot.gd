@@ -19,6 +19,8 @@ const TEX_OVERLAY_SELECT := preload("res://resources/icons/icon_select.tres")
 @onready var overlay_icon: TextureRect = %OverlayIcon
 
 var slot_index: int = -1
+@export var drag_preview_scene: PackedScene = preload("res://scenes/ui/inventory_drag_preview.tscn")
+@export var tooltip_scene: PackedScene
 ## Latar slot; hotbar memakai kulit kayu sendiri lewat set_skin().
 var skin_normal: Texture2D = TEX_NORMAL
 var skin_selected: Texture2D = TEX_SELECTED_BG
@@ -34,13 +36,7 @@ var data: PlayerData:
 
 
 func _ready() -> void:
-	mouse_filter = Control.MOUSE_FILTER_STOP
 	texture = skin_normal
-	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	custom_minimum_size = Vector2(36, 36)
-	pivot_offset = Vector2(18, 18)
 
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
@@ -67,6 +63,15 @@ func clear() -> void:
 	count_label.text = ""
 	count_label.hide()
 	tooltip_text = ""
+
+
+func _make_custom_tooltip(for_text: String) -> Object:
+	if tooltip_scene == null:
+		return null
+	var card := tooltip_scene.instantiate() as Control
+	card.get_node("Margin/Content/Icon").texture = icon.texture
+	card.get_node("Margin/Content/Name").text = for_text.get_slice("\n", 0)
+	return card
 
 
 ## Ganti latar slot (normal boleh null bila latar sudah tergambar di bingkai).
@@ -150,26 +155,10 @@ func _get_drag_data(_at_position: Vector2) -> Variant:
 	var item: ItemData = slot_data["item"]
 	var count: int = slot_data.get("count", 1)
 
-	# Buat preview item mengambang di bawah kursor
-	var preview_root := Control.new()
-	preview_root.z_index = 100
-
-	var preview_icon := TextureRect.new()
-	preview_icon.texture = item.icon
-	preview_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	preview_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	preview_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	preview_icon.size = Vector2(32, 32)
-	preview_icon.position = Vector2(-16, -16) # Terpusat di kursor
-	preview_icon.modulate = Color(1.15, 1.15, 1.15, 0.95)
-	preview_root.add_child(preview_icon)
-
-	if count > 1:
-		var lbl := Label.new()
-		lbl.text = str(count)
-		lbl.add_theme_font_size_override("font_size", 14)
-		lbl.position = Vector2(4, 2)
-		preview_root.add_child(lbl)
+	var preview_root := drag_preview_scene.instantiate() as Control
+	preview_root.get_node("Icon").texture = item.icon
+	preview_root.get_node("Count").text = str(count)
+	preview_root.get_node("Count").visible = count > 1
 
 	set_drag_preview(preview_root)
 	# Menekan slot untuk mulai menarik juga memilihnya di tas; batalkan supaya klik

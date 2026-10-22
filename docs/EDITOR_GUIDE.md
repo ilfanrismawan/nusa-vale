@@ -59,3 +59,8 @@ harus mengikuti posisi masuk Forest karena dipakai untuk memilih patch spawn yan
 `small_iron_rock.tscn` merupakan endapan besi kategori normal (minimal Tembaga), sedangkan
 `RockIron.tscn` tetap kategori besar (minimal Besi). Jangan mengunci seluruh sumber bahan
 upgrade di belakang tier alat yang justru memerlukan bahan tersebut.
+
+
+## Gua, spawn dan prefab enemy/boss
+
+Lihat [CAVE_EDITOR_GUIDE.md](CAVE_EDITOR_GUIDE.md) untuk marker layout, pengaturan spawn/pilar, scene enemy/boss, serta prefab tangga dan lift.

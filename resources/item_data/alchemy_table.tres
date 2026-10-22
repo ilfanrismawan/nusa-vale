@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_alchemy_table.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_id = "alchemy_table"
+display_name = "Meja Alkimia"
+icon = ExtResource("2")
+description = "Meja untuk meracik ramuan penyembuh, stamina, kilat, dan pemulihan. Pasang di farm."
+category = 8
+placeable = true
+placement_size = Vector2i(2, 1)
+stackable = false
+max_stack = 1

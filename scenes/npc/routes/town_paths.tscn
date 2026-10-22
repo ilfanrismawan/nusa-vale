@@ -1,0 +1,374 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://scripts/npc/npc_route_network.gd" id="network"]
+[ext_resource type="Script" path="res://scripts/npc/npc_route_point.gd" id="gateway"]
+[ext_resource type="Script" path="res://scripts/npc/npc_walk_path.gd" id="path"]
+
+[sub_resource type="Curve2D" id="wira_0"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 960.0, 300.0, 0, 0, 0, 0, 780.0, 300.0, 0, 0, 0, 0, 780.0, 430.0)
+}
+
+[sub_resource type="Curve2D" id="wira_1"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 970.0, 430.0, 0, 0, 0, 0, 920.0, 430.0, 0, 0, 0, 0, 920.0, 470.0, 0, 0, 0, 0, 900.0, 498.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="wira_2"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 1232.0, 344.0, 0, 0, 0, 0, 1232.0, 200.0, 0, 0, 0, 0, 1232.0, 24.0)
+}
+
+[sub_resource type="Curve2D" id="wira_3"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 780.0, 430.0, 0, 0, 0, 0, 780.0, 500.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="wira_4"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 780.0, 430.0, 0, 0, 0, 0, 700.0, 440.0, 0, 0, 0, 0, 550.0, 440.0, 0, 0, 0, 0, 340.0, 408.0, 0, 0, 0, 0, 300.0, 408.0, 0, 0, 0, 0, 32.0, 408.0)
+}
+
+[sub_resource type="Curve2D" id="wira_5"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 840.0, 470.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="ubay_0"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 960.0, 300.0, 0, 0, 0, 0, 780.0, 300.0, 0, 0, 0, 0, 780.0, 430.0)
+}
+
+[sub_resource type="Curve2D" id="ubay_1"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 970.0, 430.0, 0, 0, 0, 0, 920.0, 430.0, 0, 0, 0, 0, 920.0, 470.0, 0, 0, 0, 0, 900.0, 498.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="ubay_2"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 1232.0, 344.0, 0, 0, 0, 0, 1232.0, 200.0, 0, 0, 0, 0, 1232.0, 24.0)
+}
+
+[sub_resource type="Curve2D" id="ubay_3"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 780.0, 430.0, 0, 0, 0, 0, 780.0, 500.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="ubay_4"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 780.0, 430.0, 0, 0, 0, 0, 700.0, 440.0, 0, 0, 0, 0, 550.0, 440.0, 0, 0, 0, 0, 340.0, 408.0, 0, 0, 0, 0, 300.0, 408.0, 0, 0, 0, 0, 32.0, 408.0)
+}
+
+[sub_resource type="Curve2D" id="ubay_5"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 840.0, 470.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="zarathia_ubay_0"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 960.0, 300.0, 0, 0, 0, 0, 780.0, 300.0, 0, 0, 0, 0, 780.0, 430.0)
+}
+
+[sub_resource type="Curve2D" id="zarathia_ubay_1"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 970.0, 430.0, 0, 0, 0, 0, 920.0, 430.0, 0, 0, 0, 0, 920.0, 470.0, 0, 0, 0, 0, 900.0, 498.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="zarathia_ubay_2"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 1232.0, 344.0, 0, 0, 0, 0, 1232.0, 200.0, 0, 0, 0, 0, 1232.0, 24.0)
+}
+
+[sub_resource type="Curve2D" id="zarathia_ubay_3"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 780.0, 430.0, 0, 0, 0, 0, 780.0, 500.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="zarathia_ubay_4"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 780.0, 430.0, 0, 0, 0, 0, 700.0, 440.0, 0, 0, 0, 0, 550.0, 440.0, 0, 0, 0, 0, 340.0, 408.0, 0, 0, 0, 0, 300.0, 408.0, 0, 0, 0, 0, 32.0, 408.0)
+}
+
+[sub_resource type="Curve2D" id="zarathia_ubay_5"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 840.0, 470.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="zarathustra_ubay_0"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 960.0, 300.0, 0, 0, 0, 0, 780.0, 300.0, 0, 0, 0, 0, 780.0, 430.0)
+}
+
+[sub_resource type="Curve2D" id="zarathustra_ubay_1"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 970.0, 430.0, 0, 0, 0, 0, 920.0, 430.0, 0, 0, 0, 0, 920.0, 470.0, 0, 0, 0, 0, 900.0, 498.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="zarathustra_ubay_2"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 1232.0, 344.0, 0, 0, 0, 0, 1232.0, 200.0, 0, 0, 0, 0, 1232.0, 24.0)
+}
+
+[sub_resource type="Curve2D" id="zarathustra_ubay_3"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 780.0, 430.0, 0, 0, 0, 0, 780.0, 500.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="zarathustra_ubay_4"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 780.0, 430.0, 0, 0, 0, 0, 700.0, 440.0, 0, 0, 0, 0, 550.0, 440.0, 0, 0, 0, 0, 340.0, 408.0, 0, 0, 0, 0, 300.0, 408.0, 0, 0, 0, 0, 32.0, 408.0)
+}
+
+[sub_resource type="Curve2D" id="zarathustra_ubay_5"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 840.0, 470.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+
+[sub_resource type="Curve2D" id="eep_west_gate_to_ranch"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {"points": PackedVector2Array(0, 0, 0, 0, 32, 408, 0, 0, 0, 0, 300, 408, 0, 0, 0, 0, 340, 408, 0, 0, 0, 0, 550, 440, 0, 0, 0, 0, 600, 440, 0, 0, 0, 0, 650, 440)}
+point_count = 6
+
+[sub_resource type="Curve2D" id="eep_stall"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {"points": PackedVector2Array(0, 0, 0, 0, 550, 440, 0, 0, 0, 0, 520, 440, 0, 0, 0, 0, 520, 456)}
+point_count = 3
+
+[sub_resource type="Curve2D" id="eep_lunch"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {"points": PackedVector2Array(0, 0, 0, 0, 600, 440, 0, 0, 0, 0, 620, 440, 0, 0, 0, 0, 620, 456)}
+point_count = 3
+
+[sub_resource type="Curve2D" id="eep_rest"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {"points": PackedVector2Array(0, 0, 0, 0, 650, 440, 0, 0, 0, 0, 650, 456)}
+point_count = 2
+
+[node name="NPCPaths" type="Node2D"]
+script = ExtResource("network")
+
+[node name="farm" type="Marker2D" parent="."]
+script = ExtResource("gateway")
+position = Vector2(32, 408)
+destination_maps = PackedStringArray("farm")
+
+[node name="door" type="Marker2D" parent="."]
+script = ExtResource("gateway")
+position = Vector2(840, 470)
+destination_maps = PackedStringArray("ubay_home")
+default_gateway = true
+
+[node name="hill" type="Marker2D" parent="."]
+script = ExtResource("gateway")
+position = Vector2(1232, 24)
+destination_maps = PackedStringArray("hill", "wira_home")
+
+[node name="Wira_bridge_to_center" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"wira"
+curve = SubResource("wira_0")
+
+[node name="Wira_bridge_to_home" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"wira"
+curve = SubResource("wira_1")
+
+[node name="Wira_bridge_to_hill" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"wira"
+curve = SubResource("wira_2")
+
+[node name="Wira_center_to_home" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"wira"
+curve = SubResource("wira_3")
+
+[node name="Wira_center_to_farm" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"wira"
+curve = SubResource("wira_4")
+
+[node name="Wira_door_to_home" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"wira"
+curve = SubResource("wira_5")
+
+[node name="Ubay_bridge_to_center" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"ubay"
+curve = SubResource("ubay_0")
+
+[node name="Ubay_bridge_to_home" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"ubay"
+curve = SubResource("ubay_1")
+
+[node name="Ubay_bridge_to_hill" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"ubay"
+curve = SubResource("ubay_2")
+
+[node name="Ubay_center_to_home" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"ubay"
+curve = SubResource("ubay_3")
+
+[node name="Ubay_center_to_farm" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"ubay"
+curve = SubResource("ubay_4")
+
+[node name="Ubay_door_to_home" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"ubay"
+curve = SubResource("ubay_5")
+
+[node name="Zarathia_Ubay_bridge_to_center" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"zarathia"
+curve = SubResource("zarathia_ubay_0")
+
+
+[node name="Zarathia_Ubay_bridge_to_home" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"zarathia"
+curve = SubResource("zarathia_ubay_1")
+
+
+[node name="Zarathia_Ubay_bridge_to_hill" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"zarathia"
+curve = SubResource("zarathia_ubay_2")
+
+
+[node name="Zarathia_Ubay_center_to_home" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"zarathia"
+curve = SubResource("zarathia_ubay_3")
+
+
+[node name="Zarathia_Ubay_center_to_farm" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"zarathia"
+curve = SubResource("zarathia_ubay_4")
+
+
+[node name="Zarathia_Ubay_door_to_home" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"zarathia"
+curve = SubResource("zarathia_ubay_5")
+
+
+[node name="Zarathustra_Ubay_bridge_to_center" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"zarathustra"
+curve = SubResource("zarathustra_ubay_0")
+
+
+[node name="Zarathustra_Ubay_bridge_to_home" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"zarathustra"
+curve = SubResource("zarathustra_ubay_1")
+
+
+[node name="Zarathustra_Ubay_bridge_to_hill" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"zarathustra"
+curve = SubResource("zarathustra_ubay_2")
+
+
+[node name="Zarathustra_Ubay_center_to_home" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"zarathustra"
+curve = SubResource("zarathustra_ubay_3")
+
+
+[node name="Zarathustra_Ubay_center_to_farm" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"zarathustra"
+curve = SubResource("zarathustra_ubay_4")
+
+
+[node name="Zarathustra_Ubay_door_to_home" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"zarathustra"
+curve = SubResource("zarathustra_ubay_5")
+
+
+[node name="Eep_west_gate_to_ranch" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"eep"
+curve = SubResource("eep_west_gate_to_ranch")
+
+[node name="Eep_stall" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"eep"
+curve = SubResource("eep_stall")
+
+[node name="Eep_lunch" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"eep"
+curve = SubResource("eep_lunch")
+
+[node name="Eep_rest" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"eep"
+curve = SubResource("eep_rest")
+
+[node name="eep_west_gate" type="Marker2D" parent="."]
+script = ExtResource("gateway")
+position = Vector2(32, 408)
+npc_id = &"eep"
+destination_maps = PackedStringArray("town")

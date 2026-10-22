@@ -1,0 +1,21 @@
+[gd_scene format=3]
+[node name="Recipe" type="Button"]
+custom_minimum_size = Vector2(32, 32)
+expand_icon = true
+theme_override_constants/icon_max_width = 22
+toggle_mode = true
+[node name="Amount" type="Label" parent="."]
+offset_left = 16.0
+offset_top = 20.0
+offset_right = 30.0
+offset_bottom = 32.0
+horizontal_alignment = 2
+theme_override_font_sizes/font_size = 12
+mouse_filter = 2
+[node name="Ready" type="ColorRect" parent="."]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 8.0
+offset_bottom = 8.0
+color = Color(0.21, 0.39, 0.27, 1)
+mouse_filter = 2

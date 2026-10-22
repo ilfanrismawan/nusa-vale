@@ -46,3 +46,24 @@ Gunakan NUSA_SAVE_AUDIT=1 dan APPDATA terisolasi yang mengandung nusa-save-audit
 - `tests/save_regression.tscn`
 
 NUSA_SERVICE_SCREENSHOT=1 pada tes khusus tanpa --headless menyimpan preview slot, kalender, pet, dan peti di scratch.
+
+## Mengatur gambar peti per tier
+
+Buka `resources/item_data/wooden_chest.tres`, `copper_chest.tres`, `iron_chest.tres`, atau `gold_chest.tres` di Inspector. Pada **Chest Visuals**, atur **Chest Closed Texture**, **Chest Open Texture**, dan **Chest Open Distance** (jarak kaki player ke pusat peti dalam piksel; default 34).
+
+Setiap tier memiliki pasangan AtlasTexture sendiri di `resources/icons/icon_<tier>_chest.tres` dan `icon_<tier>_chest_open.tres`. Expand texture lalu edit **Atlas / Region**, atau ganti dengan Texture2D lain. Sprite sheet `chest.png` memakai baris y=0 untuk tertutup dan y=16 untuk terbuka, ukuran 16×16; kolom kayu x=232, tembaga x=40, besi x=8, emas x=104. Kedua state harus memakai kolom tier yang sama. Ikon inventory memakai gambar tertutup. Jika tekstur terbuka belum diisi, peti memakai tekstur tertutup miliknya sendiri.
+
+### Delapan tier chest
+
+| Tier | Item | Slot | Kolom atlas | Bahan crafting / upgrade |
+| --- | --- | --- | --- | --- |
+| 1 | wooden_chest | 24 | 232 | Resep kayu yang sudah ada |
+| 2 | copper_chest | 36 | 40 | 5 copper_bar + 30 wood |
+| 3 | iron_chest | 48 | 8 | 8 iron_bar + 40 wood |
+| 4 | gold_chest | 60 | 104 | 10 gold_bar + 50 wood |
+| 5 | platinum_chest | 72 | 72 | 12 platinum_bar + 60 wood |
+| 6 | crimson_chest | 84 | 168 | 14 crimson_bar + 70 wood |
+| 7 | frost_chest | 96 | 136 | 16 frost_bar + 80 wood |
+| 8 | shadow_chest | 108 | 200 | 18 shadow_bar + 90 wood |
+
+Empat nama tier baru mengikuti urutan material game; pasangan warna aset ditetapkan melalui resource masing-masing. Semua tekstur, jarak, kapasitas dan bahan resep bisa diedit di resource Inspector. Upgrade mempertahankan isi peti dan peti dapat dibuat langsung dari menu crafting Bangunan.

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="HorrorEvent" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/horror_event.gd" id="1_event"]
+
+[resource]
+script = ExtResource("1_event")
+id = &"shadow_dash"
+kind = 1
+weight = 0.8
+min_fear = 0.4
+cooldown_seconds = 60.0
+duration = 0.5
+fear_add = 0.12
+glitch = true
+volume_db = -6.0

@@ -7,4 +7,5 @@
 # Local editor settings and disposable experiments
 /Godot/
 /scratch/
+tests/*.log
 *.TMP

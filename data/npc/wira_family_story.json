@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "id": "wira_family_story",
+  "timeline": {
+    "wira_married_at_age": 18,
+    "twins_born_at_wira_age": 19,
+    "mother_left_when_twins_age": 11
+  },
+  "mother": {
+    "id": "mother",
+    "name": "Yayas",
+    "status": "offscreen"
+  },
+  "reasons": [
+    "married_very_young",
+    "financial_hardship",
+    "raising_twins_alone_together"
+  ],
+  "truth_summary": "Wira dan Yayas menikah saat masih sangat muda. Ekonomi sulit, kedua belah pihak memiliki ketidakstabilan emosional, dan mengurus anak kembar membuat Yayas kewalahan, dan akhirnya ia pergi. Wira bekerja tanpa henti sejak itu agar anak-anaknya tidak kekurangan lagi.",
+  "reveals": [
+    {
+      "id": "zarathia_family_1",
+      "npc": "zarathia",
+      "hearts": 4,
+      "sets_flags": [
+        "story_zarathia_told"
+      ]
+    },
+    {
+      "id": "zarathustra_family_1",
+      "npc": "zarathustra",
+      "hearts": 6,
+      "requires_flags": [
+        "story_zarathia_told"
+      ],
+      "sets_flags": [
+        "story_zarathustra_told"
+      ]
+    },
+    {
+      "id": "wira_family_1",
+      "npc": "wira",
+      "hearts": 8,
+      "requires_flags": [
+        "story_zarathustra_told"
+      ],
+      "sets_flags": [
+        "story_wira_told"
+      ]
+    }
+  ],
+  "completion": {
+    "requires_flags": [
+      "story_zarathia_told",
+      "story_zarathustra_told",
+      "story_wira_told"
+    ],
+    "sets_flags": [
+      "family_truth_known"
+    ],
+    "event": {
+      "type": "mail",
+      "id": "letter_from_laras",
+      "delay_days": 2,
+      "subject": "Dari Yayas",
+      "body": "Untuk Wira, Zarathustra, dan Zarathia. Maaf aku pergi tanpa banyak kata. Waktu itu aku terlalu lelah dan takut. Kalian tidak pernah salah. Aku baik-baik saja, dan aku bangga pada kalian.",
+      "npc": "wira",
+      "read_flags": [
+        "family_letter_read"
+      ]
+    }
+  }
+}

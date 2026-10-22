@@ -5,6 +5,9 @@ extends CanvasLayer
 const DURATION := 0.4
 
 var on_transition := false
+## Arah hadap pemain sebelum pindah scene; dipakai Player._ready di scene baru
+## lalu dikosongkan. Hanya runtime (tidak disimpan).
+var carry_facing := Vector2.ZERO
 
 
 func _ready() -> void:
@@ -34,6 +37,9 @@ func scene_transition(path: String, body: Node = null) -> void:
 	tween.tween_property(rect, "modulate:a", 1.0, DURATION)
 	await tween.finished
 
+	var leaving: Node = body if body is Player else get_tree().get_first_node_in_group("player")
+	if leaving is Player:
+		carry_facing = leaving.facing_direction
 	get_tree().change_scene_to_file(path)
 	await get_tree().process_frame
 	_stop_player()

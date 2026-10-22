@@ -93,12 +93,29 @@ static func hit(target: Node, attack: int, source: Node, knockback: Vector2, poi
 	var landed: bool = target.take_hit(attack, source, knockback)
 	if landed and fx != null and fx.has_status():
 		apply_tier_status(target, fx, attack, source)
+	if landed and source is Player and target is Enemy:
+		_combat_exp(source as Player, target as Enemy)
 	hit_poise = -1.0
 	hit_ignores_defense = false
 	hit_critical = false
 	CombatJuice.heavy_hit = false
 	CombatJuice.hit_fx = null
 	return landed
+
+## Role Combat (GDD 13): EXP per pukulan masuk dan per musuh tumbang; Soulforged memulihkan.
+static func _combat_exp(player: Player, enemy: Enemy) -> void:
+	SkillSystem.gain(player.data, &"combat", SkillSystem.RULES.hit_exp)
+	if not enemy.is_dead():
+		return
+	var rules := SkillSystem.RULES
+	var reward := rules.boss_exp if enemy is Boss else SkillSystem.scaled_exp(enemy.data.max_hp if enemy.data != null else 0, rules.kill_exp_per_hp, rules.kill_exp_min, rules.kill_exp_max)
+	SkillSystem.gain(player.data, &"combat", reward)
+	var heal := roundi(SkillSystem.stat(player.data, &"kill_heal"))
+	if heal > 0 and not player.is_defeated:
+		player.data.restore_hp(heal)
+		if player.combat != null:
+			player.combat.restore(float(heal))
+		CombatJuice.damage_number("+%d" % heal, player.global_position + Vector2(0, -18), Color(0.6, 1.0, 0.6))
 
 ## Efek status tier senjata (GDD 8.2, v3.3) setelah pukulan masuk. Terbakar/dingin/api gelap
 ## menempel di musuh (Enemy.apply_status); serap jiwa dan berkah peri memulihkan penyerangnya.

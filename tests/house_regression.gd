@@ -38,7 +38,8 @@ func _ready() -> void:
 	if file != null:
 		file.store_string("\n".join(_log))
 		file.close()
-	await get_tree().create_timer(40.0).timeout
+	if DisplayServer.get_name() != "headless":
+		await get_tree().create_timer(40.0).timeout
 	get_tree().quit(1 if failures > 0 else 0)
 
 func _give(data: PlayerData, level: HouseLevelData) -> void:
@@ -97,12 +98,12 @@ func _test_save() -> void:
 	check(house.order_upgrade(data), "grand house ordered")
 	data.stamina = data.max_stamina
 	var saved := SaveManager._build_save_data()
-	check(int(SaveManager.SAVE_VERSION) == 17 and saved.has("house") and SaveManager._is_valid_save(saved), "save v17 stores the house")
+	check(int(SaveManager.SAVE_VERSION) >= 17 and saved.has("house") and SaveManager._is_valid_save(saved), "save supports house upgrades (v17+)")
 	var json: Dictionary = JSON.parse_string(JSON.stringify(saved))
 	GameState.new_game()
 	SaveManager._apply_save(json)
 	check(house.level == 2 and house.is_building() and int(house.order.level) == 3, "level and pending order survive save/load")
-	check(GameState.p1().stamina == PlayerData.MAX_STAMINA + 20, "saved stamina above 100 is not clipped")
+	check(GameState.p1().stamina == PlayerData.MAX_STAMINA + 30, "saved bedroom stamina is not clipped")
 	_pass_days(house.days_remaining())
 	check(house.level == 3 and WorldState.has_flag("house_cellar_upgraded"), "loaded order still finishes")
 	var bad := saved.duplicate(true)

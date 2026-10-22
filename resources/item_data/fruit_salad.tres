@@ -20,4 +20,4 @@ item_id = "fruit_salad"
 display_name = "Salad Buah"
 icon = SubResource("FoodIcon")
 description = "Pulihkan 40 stamina. Pilih di hotbar lalu klik kiri untuk makan."
-sell_price = 170
+sell_price = 212

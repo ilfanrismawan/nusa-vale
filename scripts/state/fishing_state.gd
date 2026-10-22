@@ -44,6 +44,8 @@ var _wait_target := 0.0
 var _anim_done := false
 var _bobber_pos := Vector2.ZERO
 var _nibble_timer := 0.0
+## Umpan yang terpasang di lemparan ini (GDD 7: serangga dan cacing). null = tanpa umpan.
+var _bait: ItemData
 
 func _init() -> void:
 	animation_name = ANIM_CAST
@@ -54,7 +56,8 @@ func initialize(_player: Player, _animation_controller: AnimationController) -> 
 					
 ## rod = data tier pancing, stamina_cost dipotong saat kail jatuh di air.
 func start(rod: RodData, stamina_cost: int) -> void:
-	_rod = rod if rod != null else RodData.new()
+	# Perk Fisher (GDD 13) bekerja pada salinan data pancing.
+	_rod = SkillSystem.apply_rod(player.data if player != null else null, rod if rod != null else RodData.new())
 	_stamina_cost = stamina_cost
 
 func enter() -> void:
@@ -64,6 +67,7 @@ func enter() -> void:
 		_rod = RodData.new()
 	_hooked = null
 	_spot = null
+	_bait = null
 	_power = 0.0
 	_power_dir = 1.0
 	_charge_tick = 0.0
@@ -117,7 +121,9 @@ func physics_update(_delta: float) -> void:
 			if player.input.just_pressed(&"use_tool"):
 				_end(false, "Terlalu cepat.. ikan kabur.")
 			elif _timer >= _wait_target:
-				_hooked = FishingManager.roll_catch(_spot.location_id, _rod.rare_weight_mult, _rod.legendary_weight_mult)
+				# Umpan langka (serangga Rare ke atas) juga menaikkan peluang ikan langka.
+				var bait_rare := 1.0 + (_bait.bait_bonus if _bait != null and int(_bait.rarity) >= ItemData.Rarity.RARE else 0.0)
+				_hooked = FishingManager.roll_catch(_spot.location_id, _rod.rare_weight_mult * bait_rare, _rod.legendary_weight_mult)
 				if _hooked == null:
 					_end(false, "Tidak ada ikan yang menggigit saat ini.")
 					return
@@ -176,7 +182,7 @@ func _update_landing() -> void:
 	_bobber_pos = _landing_position(_power)
 	_meter.landing = _bobber_pos
 	var spot := FishingManager.find_spot_at(player, _bobber_pos)
-	_meter.landing_on_water = spot != null and not spot.is_frozen()
+	_meter.landing_on_water = spot != null and not _frozen(spot)
 
 func _release_cast() -> void:
 	_perfect = _meter.is_perfect()
@@ -187,7 +193,7 @@ func _release_cast() -> void:
 		Notify.say("Kail jatuh di darat.")
 		transitioned.emit(idle_state)
 		return
-	if _spot.is_frozen():
+	if _frozen(_spot):
 		_free_meter()
 		_spot = null
 		Notify.say("Air membeku di musim dingin. Cari tempat memancing yang tidak beku.")
@@ -208,9 +214,34 @@ func _release_cast() -> void:
 	_wait_target = 0.1 if OS.has_feature("editor") and FishingManager.debug_instant_bite else randf_range(WAIT_MIN, WAIT_MAX)
 	#_wait_target = randf_range(WAIT_MIN, WAIT_MAX) <--- code asli
 	_wait_target *= _rod.bite_time_mult * (PERFECT_BITE_MULT if _perfect else 1.0)
+	_bait = _use_bait()
+	if _bait != null:
+		_wait_target *= 1.0 - _bait.bait_bonus
 
 	_set_phase(Phase.CAST, ANIM_CAST)
 	animation_controller.restart()
+
+## Icebreaker Fisherman (Fisher Lv10 B) bisa memancing di air beku.
+func _frozen(spot: FishingSpot) -> bool:
+	return spot.is_frozen() and not SkillSystem.has(player.data, &"ice_fishing")
+
+## Pakai satu umpan termurah dari tas (item umpan hasil crafting, bait_bonus > 0).
+## Serangga dan cacing mentah bukan umpan; keduanya bahan resep umpan (GDD 7.2).
+func _use_bait() -> ItemData:
+	var best: ItemData = null
+	for i in player.data.bag_size:
+		var slot = player.data.inventory[i]
+		if slot == null:
+			continue
+		var item: ItemData = slot["item"]
+		if item.bait_bonus <= 0.0:
+			continue
+		if best == null or item.sell_price < best.sell_price:
+			best = item
+	if best == null or not player.data.remove_item(best.item_id, 1):
+		return null
+	Juice.float_text("Umpan: %s" % best.display_name, player.global_position + Vector2(0, -30), Color(0.85, 0.95, 0.6), 0.8)
+	return best
 
 func _free_meter() -> void:
 	if is_instance_valid(_meter):
@@ -248,6 +279,8 @@ func _on_minigame_finished(success: bool) -> void:
 		var tier_name: String = FishTiers.get_tier(int(_hooked.item.rarity))["name"]
 		Notify.say("Dapat %s! (%s)" % [_hooked.item.display_name, tier_name])
 		_catch_feedback()
+		var fish_exp := SkillSystem.RULES.fish_exp
+		SkillSystem.gain(player.data, &"fisher", fish_exp[clampi(int(_hooked.item.rarity), 0, fish_exp.size() - 1)])
 		_try_double_catch()
 		_end(true)
 	else:

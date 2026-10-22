@@ -51,7 +51,7 @@ func _ready() -> void:
 	SaveManager._apply_save(legacy)
 	check(GameState.weather.current == "sunny", "old save receives clear weather default")
 	var invalid := SaveManager._build_save_data()
-	invalid.weather.current = "storm"
+	invalid.weather.current = "toxic_storm"
 	check(not SaveManager._is_valid_save(invalid), "unsupported weather rejected before changing state")
 	var reference := GameState.weather
 	GameState.ensure_player(1)

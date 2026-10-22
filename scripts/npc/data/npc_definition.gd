@@ -15,7 +15,11 @@ extends Resource
 
 @export var loved_items: PackedStringArray
 @export var liked_items: PackedStringArray
+@export var neutral_items: PackedStringArray
 @export var disliked_items: PackedStringArray
+@export var hated_items: PackedStringArray
+@export var birthday_season: String = ""
+@export_range(0, 28) var birthday_day: int = 0
 
 @export var default_schedule: Array[NPCScheduleEntry] = []
 @export var rainy_schedule: Array[NPCScheduleEntry] = []

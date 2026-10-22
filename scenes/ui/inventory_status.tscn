@@ -1,0 +1,74 @@
+[gd_scene format=3]
+[ext_resource type="Theme" path="res://resources/ui/inventory_book_theme.tres" id="theme"]
+[ext_resource type="PackedScene" path="res://scenes/ui/book_pager.tscn" id="pager"]
+[ext_resource type="PackedScene" path="res://scenes/ui/book_text.tscn" id="text"]
+
+[node name="InventoryStatus" type="PanelContainer"]
+custom_minimum_size = Vector2(420, 224)
+theme = ExtResource("theme")
+
+[node name="Pages" type="Control" parent="."]
+unique_name_in_owner = true
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 420.0
+offset_bottom = 224.0
+mouse_filter = 2
+
+[node name="Left" type="Control" parent="Pages"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 0.0
+offset_right = 200.0
+offset_bottom = 224.0
+clip_contents = true
+mouse_filter = 2
+
+[node name="Right" type="Control" parent="Pages"]
+unique_name_in_owner = true
+offset_left = 220.0
+offset_top = 0.0
+offset_right = 420.0
+offset_bottom = 224.0
+clip_contents = true
+mouse_filter = 2
+
+[node name="ProfileHeading" type="Label" parent="Pages/Left"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 0.0
+offset_right = 196.0
+offset_bottom = 22.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 17
+text = "STATUS PETANI"
+clip_text = true
+
+
+[node name="StatusText" parent="Pages/Left" instance=ExtResource("text")]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 28.0
+offset_right = 196.0
+offset_bottom = 222.0
+
+
+[node name="SkillsHeading" type="Label" parent="Pages/Right"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 0.0
+offset_right = 196.0
+offset_bottom = 22.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 17
+text = "KEAHLIAN & EXP"
+clip_text = true
+
+
+[node name="RoleLevels" parent="Pages/Right" instance=ExtResource("text")]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 28.0
+offset_right = 196.0
+offset_bottom = 222.0
+

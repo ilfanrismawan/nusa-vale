@@ -1,0 +1,123 @@
+[gd_resource type="Resource" script_class="RoleData" load_steps=16 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/role_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/resources/role_perk.gd" id="2"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_skill_book_combat.tres" id="3"]
+
+[sub_resource type="Resource" id="perk_0"]
+script = ExtResource("2")
+level = 1
+branch = ""
+title = "Kuda-kuda"
+description = "Attack +5."
+effects = Dictionary[StringName, float]({&"attack": 5.0})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_1"]
+script = ExtResource("2")
+level = 2
+branch = ""
+title = "Napas Panjang"
+description = "Attack +5; stamina serangan dan roll -10%."
+effects = Dictionary[StringName, float]({&"attack": 5.0, &"combat_stamina": 0.1})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_2"]
+script = ExtResource("2")
+level = 3
+branch = ""
+title = "Pukulan Mantap"
+description = "Attack +5."
+effects = Dictionary[StringName, float]({&"attack": 5.0})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_3"]
+script = ExtResource("2")
+level = 4
+branch = ""
+title = "Veteran"
+description = "Attack +5 (total +20); stamina serangan dan roll -10% lagi."
+effects = Dictionary[StringName, float]({&"attack": 5.0, &"combat_stamina": 0.1})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_4"]
+script = ExtResource("2")
+level = 5
+branch = "a"
+title = "Duelist"
+description = "Jendela parry +4 frame; damage riposte +50% (3x jadi 4,5x)."
+effects = Dictionary[StringName, float]({&"parry_window": 0.067, &"riposte_bonus": 0.5})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_5"]
+script = ExtResource("2")
+level = 5
+branch = "b"
+title = "Berserker"
+description = "Ayunan senjata 20% lebih cepat; damage +30% saat HP di bawah 40%."
+effects = Dictionary[StringName, float]({&"attack_speed": 0.2, &"low_hp_damage": 0.3})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_6"]
+script = ExtResource("2")
+level = 6
+branch = ""
+title = "Tubuh Tangguh"
+description = "HP maks +20; i-frame roll +0,05 detik."
+effects = Dictionary[StringName, float]({&"max_hp": 20.0, &"iframes": 0.05})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_7"]
+script = ExtResource("2")
+level = 7
+branch = ""
+title = "Hantaman Berat"
+description = "HP maks +20; damage poise +25%."
+effects = Dictionary[StringName, float]({&"max_hp": 20.0, &"poise_damage": 0.25})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_8"]
+script = ExtResource("2")
+level = 8
+branch = ""
+title = "Gerak Lincah"
+description = "HP maks +20; i-frame roll +0,05 detik lagi."
+effects = Dictionary[StringName, float]({&"max_hp": 20.0, &"iframes": 0.05})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_9"]
+script = ExtResource("2")
+level = 9
+branch = ""
+title = "Penghancur Kuda-kuda"
+description = "HP maks +20 (total +80); damage poise +25% lagi."
+effects = Dictionary[StringName, float]({&"max_hp": 20.0, &"poise_damage": 0.25})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_10"]
+script = ExtResource("2")
+level = 10
+branch = "a"
+title = "Soulforged Champion"
+description = "Membunuh musuh memulihkan 10 HP dan 10 stamina. (Weapon Arts Overdrive: segera hadir.)"
+effects = Dictionary[StringName, float]({&"kill_heal": 10.0})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_11"]
+script = ExtResource("2")
+level = 10
+branch = "b"
+title = "Unbreakable Bastion"
+description = "Damage musuh -20%; kebal stagger dari serangan biasa."
+effects = Dictionary[StringName, float]({&"damage_reduction": 0.2, &"stagger_immune": 1.0})
+coming_soon = false
+
+[resource]
+script = ExtResource("1")
+role_id = &"combat"
+display_name = "Combat"
+title = "Petarung"
+exp_hint = "EXP dari serangan yang kena, parry tepat waktu, membunuh musuh, dan mengalahkan boss."
+icon = ExtResource("3")
+color = Color(0.7608, 0.2706, 0.2471, 1)
+perks = Array[ExtResource("2")]([SubResource("perk_0"), SubResource("perk_1"), SubResource("perk_2"), SubResource("perk_3"), SubResource("perk_4"), SubResource("perk_5"), SubResource("perk_6"), SubResource("perk_7"), SubResource("perk_8"), SubResource("perk_9"), SubResource("perk_10"), SubResource("perk_11")])

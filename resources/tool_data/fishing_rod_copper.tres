@@ -10,7 +10,7 @@ display_name = "Pancing Tembaga"
 tool_type = 6
 tier = 1
 stamina_cost = 3
-upgrade_cost_money = 500
+upgrade_cost_money = 350
 required_items = {
 "copper_bar": 5,
 "wood": 10

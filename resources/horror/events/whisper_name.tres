@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="HorrorEvent" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/horror_event.gd" id="1_event"]
+
+[resource]
+script = ExtResource("1_event")
+id = &"whisper_name"
+kind = 2
+weight = 0.4
+min_fear = 0.6
+cooldown_seconds = 150.0
+duration = 1.8
+distance = 40.0
+volume_db = -4.0
+fear_add = 0.15
+glitch = true
+notify_text = "...ada yang membisikkan namamu dari balik kegelapan."

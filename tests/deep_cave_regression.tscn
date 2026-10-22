@@ -1,0 +1,4 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://tests/deep_cave_regression.gd" id="1"]
+[node name="DeepCaveRegression" type="Node2D"]
+script = ExtResource("1")

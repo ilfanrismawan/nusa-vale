@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CaveOre" format=3]
+
+[ext_resource type="Script" uid="uid://dc2me1q2qvfpx" path="res://scripts/data/cave_ore.gd" id="1_ore"]
+[ext_resource type="PackedScene" path="res://scenes/objects/small_rock.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_ore")
+item_id = "stone"
+scene = ExtResource("2_scene")
+health = 2
+bonus_item_ids = PackedStringArray("clay")
+bonus_chances = PackedFloat32Array(0.06)
+
+spawn_kind = 0

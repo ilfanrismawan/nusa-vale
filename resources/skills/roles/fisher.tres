@@ -1,0 +1,123 @@
+[gd_resource type="Resource" script_class="RoleData" load_steps=16 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/role_data.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/resources/role_perk.gd" id="2"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_skill_book_fisher.tres" id="3"]
+
+[sub_resource type="Resource" id="perk_0"]
+script = ExtResource("2")
+level = 1
+branch = ""
+title = "Genggam Mantap"
+description = "Zona hijau mini-game +10%."
+effects = Dictionary[StringName, float]({&"fish_zone": 0.1})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_1"]
+script = ExtResource("2")
+level = 2
+branch = ""
+title = "Umpan Menggoda"
+description = "Ikan menggigit 15% lebih cepat."
+effects = Dictionary[StringName, float]({&"bite_speed": 0.15})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_2"]
+script = ExtResource("2")
+level = 3
+branch = ""
+title = "Tangan Stabil"
+description = "Zona hijau +5% lagi (total +15%)."
+effects = Dictionary[StringName, float]({&"fish_zone": 0.05})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_3"]
+script = ExtResource("2")
+level = 4
+branch = ""
+title = "Nelayan Sabar"
+description = "Zona hijau +5% lagi (total +20%); gigitan 15% lebih cepat lagi."
+effects = Dictionary[StringName, float]({&"fish_zone": 0.05, &"bite_speed": 0.15})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_4"]
+script = ExtResource("2")
+level = 5
+branch = "a"
+title = "Angler"
+description = "Harga jual ikan +25%."
+effects = Dictionary[StringName, float]({&"fish_sell": 0.25})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_5"]
+script = ExtResource("2")
+level = 5
+branch = "b"
+title = "Master Caster"
+description = "Lemparan +2 petak; jendela lemparan Sempurna 2x lebih lebar."
+effects = Dictionary[StringName, float]({&"cast_range": 2.0, &"perfect_window": 1.0})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_6"]
+script = ExtResource("2")
+level = 6
+branch = ""
+title = "Tarikan Ganda"
+description = "Peluang 5% dapat 2 ikan sekaligus."
+effects = Dictionary[StringName, float]({&"fish_double": 0.05})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_7"]
+script = ExtResource("2")
+level = 7
+branch = ""
+title = "Air Tenang"
+description = "Ikan bergerak 15% lebih lambat di mini-game."
+effects = Dictionary[StringName, float]({&"fish_calm": 0.15})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_8"]
+script = ExtResource("2")
+level = 8
+branch = ""
+title = "Jaring Rezeki"
+description = "Peluang 2 ikan +10% (total 15%)."
+effects = Dictionary[StringName, float]({&"fish_double": 0.1})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_9"]
+script = ExtResource("2")
+level = 9
+branch = ""
+title = "Bisikan Air"
+description = "Ikan bergerak 15% lebih lambat lagi (total 30%)."
+effects = Dictionary[StringName, float]({&"fish_calm": 0.15})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_10"]
+script = ExtResource("2")
+level = 10
+branch = "a"
+title = "Legend Hunter"
+description = "Peluang ikan langka dan legendaris 2x."
+effects = Dictionary[StringName, float]({&"rare_fish": 1.0})
+coming_soon = false
+
+[sub_resource type="Resource" id="perk_11"]
+script = ExtResource("2")
+level = 10
+branch = "b"
+title = "Icebreaker Fisherman"
+description = "Bisa memancing di air beku saat musim dingin."
+effects = Dictionary[StringName, float]({&"ice_fishing": 1.0})
+coming_soon = false
+
+[resource]
+script = ExtResource("1")
+role_id = &"fisher"
+display_name = "Fisher"
+title = "Nelayan"
+exp_hint = "EXP dari menangkap ikan; ikan makin langka, EXP makin besar."
+icon = ExtResource("3")
+color = Color(0.2471, 0.5255, 0.7608, 1)
+perks = Array[ExtResource("2")]([SubResource("perk_0"), SubResource("perk_1"), SubResource("perk_2"), SubResource("perk_3"), SubResource("perk_4"), SubResource("perk_5"), SubResource("perk_6"), SubResource("perk_7"), SubResource("perk_8"), SubResource("perk_9"), SubResource("perk_10"), SubResource("perk_11")])

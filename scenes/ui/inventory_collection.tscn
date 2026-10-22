@@ -1,0 +1,137 @@
+[gd_scene format=3]
+[ext_resource type="Theme" path="res://resources/ui/inventory_book_theme.tres" id="theme"]
+[ext_resource type="PackedScene" path="res://scenes/ui/book_pager.tscn" id="pager"]
+[ext_resource type="PackedScene" path="res://scenes/ui/book_text.tscn" id="text"]
+[ext_resource type="Script" path="res://scripts/ui/inventory_collection.gd" id="script"]
+
+[node name="InventoryCollection" type="PanelContainer"]
+custom_minimum_size = Vector2(420, 224)
+theme = ExtResource("theme")
+script = ExtResource("script")
+
+[node name="Pages" type="Control" parent="."]
+unique_name_in_owner = true
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 420.0
+offset_bottom = 224.0
+mouse_filter = 2
+
+[node name="Left" type="Control" parent="Pages"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 0.0
+offset_right = 200.0
+offset_bottom = 224.0
+clip_contents = true
+mouse_filter = 2
+
+[node name="Right" type="Control" parent="Pages"]
+unique_name_in_owner = true
+offset_left = 220.0
+offset_top = 0.0
+offset_right = 420.0
+offset_bottom = 224.0
+clip_contents = true
+mouse_filter = 2
+
+[node name="Heading" type="Label" parent="Pages/Left"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 0.0
+offset_right = 196.0
+offset_bottom = 22.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 17
+text = "KOLEKSI"
+clip_text = true
+
+
+[node name="Filters" type="GridContainer" parent="Pages/Left"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 25.0
+offset_right = 196.0
+offset_bottom = 69.0
+columns = 2
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
+
+[node name="Filter1" type="Button" parent="Pages/Left/Filters"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(94, 20)
+toggle_mode = true
+theme_override_font_sizes/font_size = 12
+text = "Ikan"
+
+[node name="Filter2" type="Button" parent="Pages/Left/Filters"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(94, 20)
+toggle_mode = true
+theme_override_font_sizes/font_size = 12
+text = "Hutan"
+
+[node name="Filter3" type="Button" parent="Pages/Left/Filters"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(94, 20)
+toggle_mode = true
+theme_override_font_sizes/font_size = 12
+text = "Tanaman"
+
+[node name="Filter4" type="Button" parent="Pages/Left/Filters"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(94, 20)
+toggle_mode = true
+theme_override_font_sizes/font_size = 12
+text = "Mineral"
+
+[node name="Summary" type="Label" parent="Pages/Left"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 74.0
+offset_right = 196.0
+offset_bottom = 102.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 11
+text = ""
+clip_text = true
+autowrap_mode = 3
+max_lines_visible = 2
+
+[node name="List" type="GridContainer" parent="Pages/Left"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 108.0
+offset_right = 196.0
+offset_bottom = 194.0
+columns = 1
+theme_override_constants/v_separation = 4
+
+[node name="CollectionPager" parent="Pages/Left" instance=ExtResource("pager")]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 201.0
+offset_right = 196.0
+offset_bottom = 222.0
+content_path = NodePath("../List")
+page_size = 3
+
+[node name="NotesHeading" type="Label" parent="Pages/Right"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 0.0
+offset_right = 196.0
+offset_bottom = 22.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 16
+text = "CATATAN PENEMUAN"
+clip_text = true
+
+
+[node name="Detail" parent="Pages/Right" instance=ExtResource("text")]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 28.0
+offset_right = 196.0
+offset_bottom = 222.0
+

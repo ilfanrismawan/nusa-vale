@@ -1,0 +1,9 @@
+[gd_resource type="Resource" format=3]
+[ext_resource type="Script" path="res://scripts/resources/balai_nadi_catalog.gd" id="script"]
+[ext_resource type="Script" path="res://scripts/resources/restoration_project.gd" id="project_type"]
+[ext_resource type="Resource" path="res://resources/restoration/balai_nadi_restoration.tres" id="hall"]
+[ext_resource type="Resource" path="res://resources/restoration/greenhouse_restoration.tres" id="greenhouse"]
+[ext_resource type="Resource" path="res://resources/restoration/bug_bundle.tres" id="bugs"]
+[resource]
+script = ExtResource("script")
+projects = Array[ExtResource("project_type")]([ExtResource("hall"), ExtResource("greenhouse"), ExtResource("bugs")])

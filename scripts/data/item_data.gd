@@ -14,10 +14,17 @@ enum Category { ALL, SEED, CROP, TOOL, MATERIAL, FISH, FORAGE, EQUIPMENT, BUILDI
 ## Assign a seat preset to make this item placeable, rotatable seating.
 @export var seat_definition: SeatDefinition
 @export var placement_size: Vector2i = Vector2i.ONE
-@export_range(0, 60) var storage_slots: int = 0
+@export_range(0, 240) var storage_slots: int = 0
 @export var chest_tier: ToolData.ToolTier = ToolData.ToolTier.WOOD
+@export_group("Chest Visuals")
+## Independent textures (including AtlasTexture regions) for this tier only.
+@export var chest_closed_texture: Texture2D
+@export var chest_open_texture: Texture2D
+## Distance from player feet to the chest center, in world pixels.
+@export_range(0, 256, 1) var chest_open_distance: float = 34.0
+@export_group("")
 ## Hanya boleh ditambah di akhir (angkanya tersimpan di .tres). ARMOR = pelindung badan (chestplate).
-enum EquipmentSlot { NONE, WEAPON, ARMOR, HELMET, LEGGINGS, BOOTS }
+enum EquipmentSlot { NONE, WEAPON, ARMOR, HELMET, LEGGINGS, BOOTS, NECKLACE, RING, ACCESSORY }
 ## Jenis senjata untuk combat nanti. ARROW = amunisi busur (tidak dipasang ke slot).
 enum WeaponType { NONE, SWORD, BOW, STAFF, ARROW }
 
@@ -37,9 +44,16 @@ enum Rarity {
 	LEGENDARY
 }
 
+enum Quality {
+	NORMAL,
+	SILVER,
+	GOLD
+}
+
 @export_category("Pickup")
 
 @export var category: Category = Category.MATERIAL
+@export var quality: Quality = Quality.NORMAL
 @export var item_id: String = ""
 @export var display_name: String = ""
 @export var icon: Texture2D
@@ -59,6 +73,19 @@ enum Rarity {
 @export var pickup_amount_text :=true
 @export var magnet_radius := 48.0
 @export var auto_pickup := false
+
+@export_category("Gathering")
+## Toko hanya menjual barang ini bila tas sudah berisi item ini (mis. jaring tier sebelumnya).
+## Saat dibeli, item itu ditukar dengan barang baru di slot yang sama (GDD 7).
+@export var requires_item_id: String = ""
+## Lebih dari 0 = bisa dipakai sebagai umpan pancing: waktu tunggu gigitan berkurang sebanyak ini
+## (0.25 = 25% lebih cepat). Umpan termurah di tas dipakai otomatis saat kail jatuh di air.
+@export_range(0.0, 0.8, 0.05) var bait_bonus: float = 0.0
+
+@export_category("Skill")
+## Buku riset (GDD 13.1): role_id yang mendapat EXP saat buku dibaca (kosong = bukan buku).
+@export var skill_book_role: String = ""
+@export_range(0, 5000) var skill_book_exp: int = 0
 
 func is_tool() -> bool:
 	return action_data != null

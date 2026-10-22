@@ -232,7 +232,7 @@ func test_chest_tiers() -> void:
 	var previous := StructureManager.to_save()
 	var bag := player.data.serialize_inventory()
 	check(not StructureManager.upgrade_chest(player.data, record.uid).ok and previous == StructureManager.to_save() and bag == player.data.serialize_inventory(), "Missing upgrade materials leave both chest and bag unchanged")
-	for id in ["copper_chest", "iron_chest", "gold_chest"]:
+	for id in StructureManager.CHESTS.slice(1):
 		var recipe := StructureManager.next_chest_recipe(record.uid)
 		player.data.load_inventory([])
 		for material in recipe.ingredients:
@@ -257,7 +257,7 @@ func test_chest_tiers() -> void:
 		record.storage = chest.serialize_inventory()
 		var other := PlayerData.new(1)
 		check(StructureManager.transfer(other, record.uid, capacity - 1, false).ok and other.get_item_count("wood") == 7, "Co-op can withdraw from the highest tier slot: " + id)
-	check(not StructureManager.upgrade_chest(player.data, record.uid).ok and StructureManager.next_chest_recipe(record.uid) == null, "Gold chest is the final tier")
+	check(not StructureManager.upgrade_chest(player.data, record.uid).ok and StructureManager.next_chest_recipe(record.uid) == null, "Shadow chest is the final tier")
 	check(player.data.bag_size == 24 and player.data.inventory.size() == 36, "Chest capacities do not change player bag limits")
 	StructureManager.reset()
 	for i in StructureManager.CHESTS.size():
@@ -266,7 +266,7 @@ func test_chest_tiers() -> void:
 		saved.storage = [{"slot": capacity - 1, "id": "gold_bar", "count": 3}, {"slot": capacity, "id": "wood", "count": 8}]
 	check(SaveManager.save_game(), "All chest tiers save through the real save manager")
 	StructureManager.reset()
-	check(SaveManager.load_game() and StructureManager.records.size() == 4, "All chest tiers restore from JSON")
+	check(SaveManager.load_game() and StructureManager.records.size() == StructureManager.CHESTS.size(), "All chest tiers restore from JSON")
 	for saved in StructureManager.records:
 		var chest := StructureManager.storage(saved)
 		check(chest.inventory[chest.bag_size - 1] != null and chest.get_item_count("gold_bar") == 3 and chest.get_item_count("wood") == 0, "Save load retains high slots and rejects slots beyond tier capacity: " + saved.item)

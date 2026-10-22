@@ -1,0 +1,10 @@
+[gd_scene format=3]
+[node name="Resident" type="Button"]
+custom_minimum_size = Vector2(0, 34)
+size_flags_horizontal = 3
+toggle_mode = true
+alignment = 0
+expand_icon = true
+theme_override_constants/icon_max_width = 24
+theme_override_font_sizes/font_size = 12
+clip_text = true

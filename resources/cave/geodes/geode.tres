@@ -1,0 +1,12 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/geode_data.gd" id="1_geode"]
+
+[resource]
+script = ExtResource("1_geode")
+item_id = "geode"
+crack_price = 25
+result_ids = PackedStringArray("clay", "coal", "copper_ore", "iron_ore", "earth_crystal", "quartz", "topaz", "amethyst", "citrine")
+result_weights = PackedFloat32Array(2.0, 2.0, 2.0, 1.5, 2.0, 1.5, 1.0, 1.0, 0.4)
+result_min = PackedInt32Array(1, 2, 3, 2, 1, 1, 1, 1, 1)
+result_max = PackedInt32Array(3, 4, 5, 4, 1, 1, 1, 1, 1)

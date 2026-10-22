@@ -16,6 +16,10 @@ func _ready() -> void:
 	if OS.get_environment("NUSA_SAVE_AUDIT") != "1" or not OS.get_user_data_dir().replace("\\", "/").contains("nusa-save-audit-"):
 		get_tree().quit(2)
 		return
+	# SaveManager memuat slot secara deferred. Selesaikan startup sebelum
+	# fixture dibuat, terutama setelah tes tidur menyimpan ke direktori audit.
+	await get_tree().process_frame
+	GameState.new_game()
 	DayCycle.is_running = false
 	DiscoveryManager.reset()
 	var data := GameState.p1()
@@ -34,6 +38,10 @@ func _ready() -> void:
 	check(settings.RESOLUTIONS[settings.resolution_option.selected] == Vector2i(1366, 768), "saved resolution survives settings load instead of old dropdown overriding it")
 	ui = load("res://scenes/ui/ui_inventory.tscn").instantiate()
 	ui.name = "UIInventory"
+	check(ui.get_node("%SlotGrid").get_child_count() == 12, "Bag slots exist in the scene before any UI script runs")
+	for page_name in ["StatusPage", "EquipmentPage", "CraftingPage", "CollectionPage", "SettingsPage", "SkillTreePage", "RelationshipPage"]:
+		var page := ui.get_node("Dimmer/BookRoot/" + page_name) as Control
+		check(page != null and not page.scene_file_path.is_empty(), "Book page is an editable scene instance: " + page_name)
 	add_child(ui)
 	var esc := InputEventKey.new()
 	esc.keycode = KEY_ESCAPE
@@ -41,9 +49,15 @@ func _ready() -> void:
 	get_viewport().push_input(esc, true)
 	await get_tree().process_frame
 	check(ui.visible and not settings.visible and get_tree().paused, "Esc opens inventory, not settings, and pauses solo")
-	check(ui._top_tabs.size() == 6 and not ui.has_method("_on_save_pressed"), "Top tabs contain six pages and no direct save action")
+	check(ui._top_tabs.size() == 8 and not ui.has_method("_on_save_pressed"), "Top tabs include skills and NPC pages without a direct save action")
+	await click_icon(ui._menu_buttons["NPC"])
+	check(is_instance_valid(ui._relationship_ui), "NPC tab opens from an actual mouse click")
+	ui._relationship_ui.close_menu()
+	await get_tree().process_frame
 	await click_icon(ui._menu_buttons["Crafting"])
 	check(ui._crafting_panel.visible and not ui._equipment_panel.visible, "Crafting is a separate inventory page")
+	var recipe_tile := recipe_button("sword_wood")
+	await click_control(recipe_tile, recipe_tile.get_global_rect().get_center())
 	check(ui._crafting_panel._craft_button.disabled, "Craft action is disabled when materials are missing")
 	data.add_item("wood", 8)
 	check(not ui._crafting_panel._craft_button.disabled, "Craft action refreshes when materials enter the bag")
@@ -51,10 +65,10 @@ func _ready() -> void:
 	check(ui._crafting_panel._craft_button.disabled, "Craft quantity validates total material requirements")
 	ui._crafting_panel._quantity.value = 1
 	await capture("menu_crafting")
-	var recipe_tile: Button = ui._crafting_panel._recipe_buttons[1]
+	recipe_tile = recipe_button("bow_wood")
 	await click_control(recipe_tile, recipe_tile.get_global_rect().get_center())
 	check(ui._crafting_panel._selected.recipe_id == "bow_wood", "Recipe grid click changes the selected recipe and detail")
-	recipe_tile = ui._crafting_panel._recipe_buttons[0]
+	recipe_tile = recipe_button("sword_wood")
 	await click_control(recipe_tile, recipe_tile.get_global_rect().get_center())
 	var craft_button: Button = ui._crafting_panel._craft_button
 	await click_control(craft_button, craft_button.get_global_rect().get_center())
@@ -64,7 +78,9 @@ func _ready() -> void:
 	check(SaveManager.load_game() and data.has_item("sword_wood"), "Crafted output survives game save/load")
 	var ammo_filter: Button = ui._crafting_panel._filters[2]
 	await click_control(ammo_filter, ammo_filter.get_global_rect().get_center())
-	check(ui._crafting_panel._recipe_buttons.size() == 1 and ui._crafting_panel._selected.recipe_id == "arrow_wood", "Ammo filter selects the ammunition recipe")
+	check(ui._crafting_panel._recipe_buttons.size() >= 1 and recipe_button("arrow_wood") != null, "Ammo filter includes wooden ammunition alongside other tiers")
+	recipe_tile = recipe_button("arrow_wood")
+	await click_control(recipe_tile, recipe_tile.get_global_rect().get_center())
 	data.add_item("wood", 4)
 	data.add_item("stone", 2)
 	ui._crafting_panel._quantity.value = 2
@@ -73,6 +89,8 @@ func _ready() -> void:
 	check(data.get_item_count("arrow_wood") == 20, "Batch crafting from the menu produces the displayed quantity")
 	var building_filter: Button = ui._crafting_panel._filters[3]
 	await click_control(building_filter, building_filter.get_global_rect().get_center())
+	recipe_tile = recipe_button("furnace")
+	await click_control(recipe_tile, recipe_tile.get_global_rect().get_center())
 	check(ui._crafting_panel._recipe_buttons.size() >= 13 and ui._crafting_panel._selected.recipe_id == "furnace", "Building filter offers structures, farm buildings, machines and all chest tiers")
 	data.bag_level = 1
 	ui._crafting_panel._quantity.value = 1
@@ -157,21 +175,35 @@ func _ready() -> void:
 	await click_control(ui._btn_sort, ui._btn_sort.get_global_rect().get_center())
 	check(ui._selected_slot_index == -1, "Sort is a button inside Bag")
 	await click_icon(ui.tab_gear)
-	check(settings.visible and settings.layer > ui.layer, "Settings opens above inventory")
-	settings.music_slider.value = 0.35
-	settings.sfx_slider.value = 0.65
+	var settings_page: PanelContainer = ui._settings_panel
+	check(settings_page.visible and not settings.visible, "Settings opens as a book page without a separate overlay")
+	settings_page.get_node("%Section").select(1)
+	settings_page._select_section(1)
+	settings_page.get_node("%Music").value = 0.35
+	settings_page.get_node("%Sfx").value = 0.65
 	check(is_equal_approx(db_to_linear(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Music"))), 0.35), "Music slider controls Music bus")
 	check(is_equal_approx(db_to_linear(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("SFX"))), 0.65), "SFX slider controls SFX bus independently")
 	var config := ConfigFile.new()
 	config.load(SettingsMenu.CONFIG_PATH)
 	check(is_equal_approx(config.get_value("audio", "music_volume", 0.0), 0.35) and is_equal_approx(config.get_value("audio", "sfx_volume", 0.0), 0.65), "Audio channels persist separately")
 	await capture("menu_settings")
-	await click_control(settings.get_node("%BtnControls"), settings.get_node("%BtnControls").get_global_rect().get_center())
-	check(settings.get_node("%ControlsPage").visible, "Controls page opens")
+	check(settings_page.get_node("%Bindings").get_child_count() > 0, "Book settings exposes editable keyboard and gamepad bindings")
+	var binding_button := settings_page.get_node("%Bindings").get_child(0).get_node("Buttons/Keyboard") as Button
+	var binding_before := binding_button.text
+	binding_button.pressed.emit()
+	check(not settings_page._capture.is_empty(), "Book binding button begins key capture while standalone settings stays hidden")
+	var cancel_binding := InputEventKey.new()
+	cancel_binding.physical_keycode = KEY_ESCAPE
+	cancel_binding.pressed = true
+	check(settings_page.capture_input(cancel_binding) and settings_page._capture.is_empty() and binding_button.text == binding_before, "Esc cancels binding capture and restores the button without closing inventory")
+
 	await capture("menu_controls")
-	await click_control(settings.get_node("%BtnGame"), settings.get_node("%BtnGame").get_global_rect().get_center())
 	await capture("menu_game")
-	await click_control(settings._btn_save, settings._btn_save.get_global_rect().get_center())
+	var save_button := settings_page.get_node("%Save") as Button
+	settings_page.get_node("%Section").select(2)
+	settings_page._select_section(2)
+	await get_tree().process_frame
+	await click_control(save_button, save_button.get_global_rect().get_center())
 	check(is_instance_valid(settings._slot_menu), "Single save route opens the three-slot chooser")
 	settings._slot_menu.queue_free()
 	await get_tree().process_frame
@@ -182,8 +214,8 @@ func _ready() -> void:
 	settings._confirm_exit(true)
 	check(settings._exit_dialog.visible and settings._exit_to_desktop, "Desktop exit also requires in-game confirmation")
 	settings._exit_dialog.hide()
-	await click_control(settings.btn_close, settings.btn_close.get_global_rect().get_center())
-	check(not settings.visible and get_tree().paused, "Closing settings returns to paused inventory")
+	await click_icon(ui.tab_book)
+	check(not settings_page.visible and get_tree().paused, "Switching from settings returns to paused bag page")
 	ui._close()
 	Coop.active = true
 	settings._open()
@@ -209,6 +241,14 @@ func _ready() -> void:
 	check(is_equal_approx(db_to_linear(AudioServer.get_bus_volume_db(AudioServer.get_bus_index("Music"))), 0.35), "Audio channels reload in main-menu settings")
 	print("MENU REGRESSION COMPLETE: failures=%d" % failures)
 	get_tree().quit(1 if failures else 0)
+
+func recipe_button(id: String) -> Button:
+	for button: Button in ui._crafting_panel._recipe_buttons:
+		var recipe: CraftingRecipe = button.get_meta("recipe")
+		if recipe.recipe_id == id:
+			ui._crafting_panel.get_node("%RecipePager").reveal(button.get_index())
+			return button
+	return null
 
 func click_icon(button: TextureButton) -> void:
 	var point: Vector2 = button.get_node("Icon").get_global_rect().get_center()

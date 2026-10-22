@@ -44,11 +44,19 @@ const ROWS := [
 ## Tampilkan profil wajib saat Game Baru.
 @export var ask_name: bool = false
 
+## Karakter co-op baru (drop-in): profil tanpa nama farm dan tanpa pet (milik P1).
+@export var guest: bool = false
+
 var appearance: CharacterAppearance
 ## Pemain yang mengganti penampilan (lemari co-op). Kosong = P1.
 var player: Player
+## Data yang diedit bila belum punya Player (karakter co-op baru). Diutamakan bila diisi.
+var target_data: PlayerData
 var data: PlayerData:
-	get: return player.data if is_instance_valid(player) else GameState.p1()
+	get:
+		if target_data != null:
+			return target_data
+		return player.data if is_instance_valid(player) else GameState.p1()
 @onready var _preview: AnimatedSprite2D = %Preview
 var _direction_index := 0
 var _value_labels: Dictionary = {}
@@ -95,7 +103,11 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	appearance = CATALOG.sanitize(data.appearance)
 	%ProfileTab.visible = ask_name
-	%PetTab.visible = ask_name
+	%PetTab.visible = ask_name and not guest
+	%FarmName.visible = not guest
+	%Identity.get_node("FarmLabel").visible = not guest
+	if guest:
+		%Heading.text = "Karakter Co-op Baru"
 	%Cancel.visible = allow_cancel
 	_name_edit.max_length = name_max_length
 	_farm_edit.max_length = farm_name_max_length
@@ -143,6 +155,9 @@ func _ready() -> void:
 	_refresh()
 	_validate_profile()
 	_show_page(0 if ask_name else 1)
+	if guest:
+		# Gamepad: fokus awal supaya D-pad/stik bisa langsung memilih (nama sudah terisi bawaan).
+		%BirthdayButton.grab_focus.call_deferred()
 	if pause_game:
 		Coop.set_menu_open(player, true)
 		_menu_open = true
@@ -299,7 +314,7 @@ func _select_pet(index: int, animate: bool = true) -> void:
 		_validate_profile()
 
 func _profile_valid() -> bool:
-	return not ask_name or (not _name_edit.text.strip_edges().is_empty() and not _farm_edit.text.strip_edges().is_empty() and _birthday_season >= 0 and _birthday_day > 0 and (_pet_id.is_empty() or not _pet_name.text.strip_edges().is_empty()))
+	return not ask_name or (not _name_edit.text.strip_edges().is_empty() and (guest or not _farm_edit.text.strip_edges().is_empty()) and _birthday_season >= 0 and _birthday_day > 0 and (_pet_id.is_empty() or not _pet_name.text.strip_edges().is_empty()))
 
 func _validate_profile() -> void:
 	var valid := _profile_valid()
@@ -417,7 +432,7 @@ func _confirm() -> void:
 		if _name_edit.text.strip_edges().is_empty():
 			_show_page(0)
 			_name_edit.grab_focus()
-		elif _farm_edit.text.strip_edges().is_empty():
+		elif not guest and _farm_edit.text.strip_edges().is_empty():
 			_show_page(0)
 			_farm_edit.grab_focus()
 		elif _birthday_season < 0 or _birthday_day <= 0:
@@ -429,11 +444,13 @@ func _confirm() -> void:
 		return
 	if ask_name:
 		data.player_name = _name_edit.text.strip_edges()
-		GameState.farm_name = _farm_edit.text.strip_edges()
+		if not guest:
+			GameState.farm_name = _farm_edit.text.strip_edges()
 		data.birthday_season = DayCycle.SEASONS[_birthday_season]
 		data.birthday_day = _birthday_day
-		data.pet_id = _pet_id
-		data.pet_name = _pet_name.text.strip_edges() if not _pet_id.is_empty() else ""
+		if not guest:
+			data.pet_id = _pet_id
+			data.pet_name = _pet_name.text.strip_edges() if not _pet_id.is_empty() else ""
 	data.set_appearance(appearance)
 	_closed = true
 	_release_menu()

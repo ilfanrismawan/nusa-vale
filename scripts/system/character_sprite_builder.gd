@@ -13,6 +13,11 @@ extends RefCounted
 const FALLBACK_EXTRA_LAYERS := {
 	&"mage": ["Healer Staff.png", "Fx.png"],
 }
+## Layer tambahan bawaan untuk animasi yang tidak punya extra_layers di katalog (tanpa peringatan).
+## catch_insect = ayunan jaring serangga (GDD 7).
+const DEFAULT_EXTRA_LAYERS := {
+	&"catch_insect": ["Weapons/Bug net.png"],
+}
 
 const LAYER_ORDER: Array[CharacterPart.Layer] = [
 	CharacterPart.Layer.SKIN,
@@ -243,6 +248,8 @@ static func _layer_paths(
 			paths.append(tool_path)
 
 	var extras := sheet.extra_layers
+	if extras.is_empty() and DEFAULT_EXTRA_LAYERS.has(sheet.animation_name):
+		extras = PackedStringArray(DEFAULT_EXTRA_LAYERS[sheet.animation_name])
 	if extras.is_empty() and FALLBACK_EXTRA_LAYERS.has(sheet.animation_name):
 		# Editor Godot yang terbuka pernah menyimpan ulang character_catalog.tres tanpa
 		# extra_layers (tongkat sihir hilang dari animasi mage). Pakai daftar cadangan.

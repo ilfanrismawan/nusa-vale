@@ -73,9 +73,9 @@ func get_upgrade_data(tool_id: String) -> Dictionary:
 
 func _get_fallback_upgrade_data(_tool_type: String, next_tier: String, next_tool_id: String) -> Dictionary:
 	var costs := {
-		"copper": 500,
-		"iron": 1200,
-		"gold": 2500,
+		"copper": 350,
+		"iron": 1000,
+		"gold": 2300,
 		"platinum": 4500,
 		"crimson": 7000,
 		"frost": 10000,
@@ -132,6 +132,7 @@ func upgrade_tool(tool_id: String) -> bool:
 	owner.tool_order = {"old": actual_id, "next": str(upgrade["next"]), "ready_day": DayCycle.current_day + WORK_DAYS}
 	owner.remove_item(actual_id, 1)
 	GameState.spend_money(cost)
+	SkillSystem.gain_from_value(owner, &"merchant", cost, SkillSystem.RULES.shop_gold_per_exp, SkillSystem.RULES.shop_exp_max)
 	for id in materials:
 		owner.remove_item(id, int(materials[id]))
 	Notify.say("Alat dititipkan ke Empu Bima. Kembali setelah %d hari." % WORK_DAYS)

@@ -1,0 +1,231 @@
+[gd_scene format=3]
+[ext_resource type="Theme" path="res://resources/ui/inventory_book_theme.tres" id="theme"]
+[ext_resource type="PackedScene" path="res://scenes/ui/book_pager.tscn" id="pager"]
+[ext_resource type="PackedScene" path="res://scenes/ui/book_text.tscn" id="text"]
+[ext_resource type="Script" path="res://scripts/ui/skill_tree_ui.gd" id="script"]
+
+[node name="SkillTreeUI" type="Control"]
+script = ExtResource("script")
+design_size = Vector2(420, 224)
+
+[node name="Backdrop" type="ColorRect" parent="."]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.2, 0.11, 0.06, 0.95)
+
+[node name="Design" type="Control" parent="."]
+unique_name_in_owner = true
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 420.0
+offset_bottom = 224.0
+theme = ExtResource("theme")
+mouse_filter = 2
+
+[node name="TreePanel" type="Control" parent="Design"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 0.0
+offset_right = 200.0
+offset_bottom = 224.0
+clip_contents = true
+mouse_filter = 2
+
+[node name="Detail" type="Control" parent="Design"]
+unique_name_in_owner = true
+offset_left = 220.0
+offset_top = 0.0
+offset_right = 420.0
+offset_bottom = 224.0
+clip_contents = true
+mouse_filter = 2
+
+[node name="RoleTitle" type="Label" parent="Design/TreePanel"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 0.0
+offset_right = 196.0
+offset_bottom = 20.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 15
+text = "KEAHLIAN"
+clip_text = true
+
+
+[node name="Roles" type="GridContainer" parent="Design/TreePanel"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 24.0
+offset_right = 196.0
+offset_bottom = 110.0
+columns = 2
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 2
+
+[node name="Exp" type="Label" parent="Design/TreePanel"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 112.0
+offset_right = 196.0
+offset_bottom = 126.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 11
+text = ""
+clip_text = true
+
+
+[node name="Progress" type="ProgressBar" parent="Design/TreePanel"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 128.0
+offset_right = 196.0
+offset_bottom = 131.0
+show_percentage = false
+
+[node name="Lines" type="Node2D" parent="Design/TreePanel"]
+unique_name_in_owner = true
+
+
+[node name="Nodes" type="Control" parent="Design/TreePanel"]
+unique_name_in_owner = true
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 196.0
+offset_bottom = 202.0
+mouse_filter = 2
+
+[node name="TierOrigin" type="Marker2D" parent="Design/TreePanel"]
+unique_name_in_owner = true
+position = Vector2(4, 149)
+
+[node name="TierStep" type="Marker2D" parent="Design/TreePanel"]
+unique_name_in_owner = true
+position = Vector2(41, 149)
+
+[node name="BranchStep" type="Marker2D" parent="Design/TreePanel"]
+unique_name_in_owner = true
+position = Vector2(4, 169)
+
+[node name="Previous" type="Button" parent="Design/TreePanel"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 202.0
+offset_right = 28.0
+offset_bottom = 224.0
+text = "‹"
+theme_override_font_sizes/font_size = 12
+
+[node name="Page" type="Label" parent="Design/TreePanel"]
+unique_name_in_owner = true
+offset_left = 32.0
+offset_top = 202.0
+offset_right = 168.0
+offset_bottom = 224.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 11
+text = ""
+clip_text = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Next" type="Button" parent="Design/TreePanel"]
+unique_name_in_owner = true
+offset_left = 172.0
+offset_top = 202.0
+offset_right = 196.0
+offset_bottom = 224.0
+text = "›"
+theme_override_font_sizes/font_size = 12
+
+[node name="Owner" type="Label" parent="Design/Detail"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 0.0
+offset_right = 196.0
+offset_bottom = 16.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 11
+text = ""
+clip_text = true
+
+
+[node name="DetailIcon" type="TextureRect" parent="Design/Detail"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 22.0
+offset_right = 32.0
+offset_bottom = 50.0
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="SkillTitle" type="Label" parent="Design/Detail"]
+unique_name_in_owner = true
+offset_left = 38.0
+offset_top = 20.0
+offset_right = 196.0
+offset_bottom = 54.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 14
+text = ""
+clip_text = true
+autowrap_mode = 3
+max_lines_visible = 2
+
+[node name="Description" parent="Design/Detail" instance=ExtResource("text")]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 58.0
+offset_right = 196.0
+offset_bottom = 144.0
+
+
+[node name="Requirement" parent="Design/Detail" instance=ExtResource("text")]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 148.0
+offset_right = 196.0
+offset_bottom = 196.0
+
+
+[node name="Confirm" type="Button" parent="Design/Detail"]
+unique_name_in_owner = true
+offset_left = 4.0
+offset_top = 202.0
+offset_right = 120.0
+offset_bottom = 224.0
+text = "Pilih Cabang"
+theme_override_font_sizes/font_size = 11
+clip_text = true
+
+[node name="UseToken" type="Button" parent="Design/Detail"]
+unique_name_in_owner = true
+offset_left = 124.0
+offset_top = 202.0
+offset_right = 196.0
+offset_bottom = 224.0
+text = "1 Token"
+theme_override_font_sizes/font_size = 11
+
+[node name="EarnHint" type="Label" parent="Design"]
+unique_name_in_owner = true
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 1.0
+offset_bottom = 1.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 11
+text = ""
+clip_text = true
+visible = false
+
+[node name="Close" type="Button" parent="Design"]
+unique_name_in_owner = true
+offset_left = 320.0
+offset_top = 0.0
+offset_right = 420.0
+offset_bottom = 20.0
+text = "Kembali"
+visible = false

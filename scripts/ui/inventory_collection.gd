@@ -1,64 +1,25 @@
 extends PanelContainer
 ## Penemuan disimpan DiscoveryManager, tetap terbuka setelah item dijual/dibuang.
 
-const FONT = preload("res://resources/ui/readable_font.tres")
+@export var entry_scene: PackedScene = preload("res://scenes/ui/inventory_collection_entry.tscn")
+
 const CATEGORIES := [ItemData.Category.FISH, ItemData.Category.FORAGE, ItemData.Category.CROP, ItemData.Category.MATERIAL]
 var category: ItemData.Category = ItemData.Category.FISH
 var catalog: Array[ItemData] = []
 var _summary: Label
 var _list: GridContainer
-var _detail: Label
+var _detail: Control
 var _filters: Array[Button] = []
 var _metadata: Dictionary = {}
 var _catalog_loaded := false
 
 func _ready() -> void:
-	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.95, 0.79, 0.62)
-	style.border_color = Color(0.55, 0.32, 0.2)
-	style.set_border_width_all(1)
-	style.content_margin_left = 10
-	style.content_margin_right = 10
-	style.content_margin_top = 8
-	style.content_margin_bottom = 8
-	add_theme_stylebox_override("panel", style)
-	var ui_theme := Theme.new()
-	ui_theme.default_font = FONT
-	ui_theme.default_font_size = 16
-	ui_theme.set_color("font_color", "Label", Color(0.28, 0.16, 0.11))
-	theme = ui_theme
-	var content := VBoxContainer.new()
-	content.add_theme_constant_override("separation", 4)
-	add_child(content)
-	var filters := HBoxContainer.new()
-	content.add_child(filters)
-	for i in range(CATEGORIES.size()):
-		var button := Button.new()
-		button.text = ["Ikan", "Hutan", "Tanaman", "Mineral"][i]
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.toggle_mode = true
-		button.pressed.connect(_set_category.bind(CATEGORIES[i]))
-		filters.add_child(button)
-		_filters.append(button)
-	_summary = Label.new()
-	content.add_child(_summary)
-	var scroll := ScrollContainer.new()
-	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	content.add_child(scroll)
-	_list = GridContainer.new()
-	_list.columns = 2
-	_list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_list.add_theme_constant_override("h_separation", 4)
-	_list.add_theme_constant_override("v_separation", 4)
-	scroll.add_child(_list)
-	_detail = Label.new()
-	_detail.custom_minimum_size = Vector2(0, 38)
-	_detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_detail.max_lines_visible = 2
-	_detail.clip_text = true
-	content.add_child(_detail)
+	_summary = %Summary
+	_list = %List
+	_detail = %Detail
+	_filters.assign(find_children("Filter*", "Button", true, false))
+	for i in _filters.size():
+		_filters[i].pressed.connect(_set_category.bind(CATEGORIES[i]))
 	DiscoveryManager.discovered.connect(_on_discovered)
 	refresh()
 
@@ -88,6 +49,7 @@ func is_known(item: ItemData) -> bool:
 
 func _set_category(value: ItemData.Category) -> void:
 	category = value
+	%CollectionPager.current_page = 0
 	refresh()
 
 func refresh() -> void:
@@ -113,17 +75,12 @@ func refresh() -> void:
 		var known := is_known(item)
 		if known:
 			found += 1
-		var button := Button.new()
-		button.custom_minimum_size = Vector2(185, 26)
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var button := entry_scene.instantiate() as Button
 		button.text = item.display_name if known else "??? Belum ditemukan"
 		button.icon = item.icon if known else null
-		button.expand_icon = true
-		button.add_theme_constant_override("icon_max_width", 20)
-		button.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		button.pressed.connect(_show_detail.bind(item))
 		_list.add_child(button)
+	%CollectionPager.refresh()
 	_summary.text = "%d / %d ditemukan - penemuan bersama semua pemain" % [found, total]
 	_detail.text = "Pilih penemuan untuk melihat info. ??? akan terbuka saat ditemukan."
 	for i in range(_filters.size()):

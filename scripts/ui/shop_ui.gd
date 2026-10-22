@@ -342,8 +342,8 @@ func _refresh_rows() -> void:
 			price_label.add_theme_color_override("font_color", COLOR_TEXT_LIGHT if hovered else COLOR_TEXT)
 			row["panel"].modulate = Color(1, 1, 1, 0.6)
 		else:
-			price_label.text = "%s G" % _format_money(item.buy_price)
-			var affordable := GameState.money >= item.buy_price
+			price_label.text = "%s G" % _format_money(_unit_price(item, 1))
+			var affordable := GameState.money >= _unit_price(item, 1)
 			if affordable:
 				price_label.add_theme_color_override("font_color", COLOR_TEXT_LIGHT if hovered else COLOR_TEXT)
 			else:
@@ -400,7 +400,7 @@ func _on_row_input(event: InputEvent, item: ItemData) -> void:
 	var mb := event as InputEventMouseButton
 	if mb != null and mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT:
 		_selected_item = item
-		_quantity.value = BUY_SHIFT_AMOUNT if mb.shift_pressed and not BAG_UPGRADES.has(item.item_id) else 1
+		_quantity.value = BUY_SHIFT_AMOUNT if mb.shift_pressed and not BAG_UPGRADES.has(item.item_id) and item.requires_item_id.is_empty() else 1
 		_refresh_purchase()
 		_refresh_rows()
 		_show_greeting()
@@ -413,11 +413,11 @@ func _refresh_purchase() -> void:
 		_purchase_button.disabled = true
 		return
 	var item := _selected_item
-	var bag_upgrade := BAG_UPGRADES.has(item.item_id)
+	var bag_upgrade := BAG_UPGRADES.has(item.item_id) or not item.requires_item_id.is_empty()
 	_quantity.editable = not bag_upgrade
 	if bag_upgrade: _quantity.value = 1
 	var count := int(_quantity.value)
-	var total := item.buy_price * count
+	var total := _unit_price(item, count) * count
 	var available := _bag_status(item).is_empty() and GameState.money >= total and (bag_upgrade or _can_fit(item, count))
 	_purchase_summary.text = "%s ×%d\nTotal %s G" % [item.display_name, count, _format_money(total)]
 	if not available:
@@ -476,7 +476,7 @@ func _on_slot_hover(index: int) -> void:
 	var text := "%s\n%s" % [item.display_name, item.description]
 	if shop_data.buys_items:
 		if _can_sell(item):
-			text += "\n\nJual: %s G" % _format_money(item.sell_price)
+			text += "\n\nJual: %s G" % _format_money(SkillSystem.sell_price(data, item, false))
 		else:
 			text += "\n\nTidak bisa dijual."
 	_dialog_label.text = text
@@ -490,16 +490,21 @@ func _buy(item: ItemData, amount: int) -> void:
 	if BAG_UPGRADES.has(item.item_id):
 		_buy_bag_upgrade(item)
 		return
+	if not item.requires_item_id.is_empty():
+		_buy_trade_in(item)
+		return
 	# Shift+klik: beli sebanyak yang terjangkau (maks. amount)
-	amount = mini(amount, floori(float(GameState.money) / float(item.buy_price)))
+	amount = mini(amount, floori(float(GameState.money) / float(_unit_price(item, amount))))
 	if amount <= 0:
 		Notify.say("Uang tidak cukup!")
 		return
 	if not _can_fit(item, amount):
 		Notify.say("Tas penuh!")
 		return
-	if data.buy_item(item.item_id, amount):
+	var unit := _unit_price(item, amount)
+	if data.buy_item(item.item_id, amount, unit):
 		Notify.say("Membeli %s x%d" % [item.display_name, amount])
+		_merchant_exp(unit * amount)
 
 func _buy_bag_upgrade(item: ItemData) -> void:
 	match _bag_status(item):
@@ -509,10 +514,32 @@ func _buy_bag_upgrade(item: ItemData) -> void:
 		"locked":
 			Notify.say("Beli upgrade tas sebelumnya dulu.")
 			return
-	if not GameState.spend_money(item.buy_price):
+	var price := _unit_price(item, 1)
+	if not GameState.spend_money(price):
 		Notify.say("Uang tidak cukup!")
 		return
 	data.upgrade_bag()
+	_merchant_exp(price)
+
+## Jaring serangga tier berikutnya (GDD 7): butuh jaring sebelumnya di tas, lalu ditukar di slot yang sama.
+func _buy_trade_in(item: ItemData) -> void:
+	match _bag_status(item):
+		"owned":
+			Notify.say("%s sudah dimiliki." % item.display_name)
+			return
+		"locked":
+			var needed := GameState._resolve_item(item.requires_item_id)
+			Notify.say("Butuh %s di tas untuk membeli ini." % (needed.display_name if needed else item.requires_item_id))
+			return
+	var price := _unit_price(item, 1)
+	if not GameState.spend_money(price):
+		Notify.say("Uang tidak cukup!")
+		return
+	if not data.replace_tool(item.requires_item_id, item.item_id):
+		GameState.add_money(price)
+		return
+	_merchant_exp(price)
+	Notify.say("%s ditukar dengan %s!" % [GameState._resolve_item(item.requires_item_id).display_name, item.display_name])
 
 func _sell(index: int, whole_stack: bool) -> void:
 	var slot = data.inventory[index]
@@ -523,16 +550,28 @@ func _sell(index: int, whole_stack: bool) -> void:
 		Notify.say("Barang ini tidak bisa dijual.")
 		return
 	var amount: int = slot["count"] if whole_stack else 1
-	var earned := item.sell_price * amount
+	var earned := SkillSystem.sell_price(data, item, false) * amount
 	data.remove_item_at(index, amount)
 	GameState.add_money(earned)
+	_merchant_exp(earned)
 	Notify.say("Terjual %s x%d +%s G" % [item.display_name, amount, _format_money(earned)])
+
+## Harga beli per unit setelah perk Merchant (GDD 13): diskon toko, grosir bibit, diskon upgrade tas.
+func _unit_price(item: ItemData, count: int) -> int:
+	if BAG_UPGRADES.has(item.item_id):
+		return SkillSystem.facility_price(data, item.buy_price)
+	return SkillSystem.buy_price(data, item, count, item.buy_price)
+
+func _merchant_exp(gold: int) -> void:
+	SkillSystem.gain_from_value(data, &"merchant", gold, SkillSystem.RULES.shop_gold_per_exp, SkillSystem.RULES.shop_exp_max)
 
 func _can_sell(item: ItemData) -> bool:
 	return item.sell_price > 0 and not item.is_tool()
 
-## "owned" / "locked" / "" (bisa dibeli). Hanya relevan untuk upgrade tas.
+## "owned" / "locked" / "" (bisa dibeli). Untuk upgrade tas dan barang tukar-tambah (requires_item_id).
 func _bag_status(item: ItemData) -> String:
+	if not item.requires_item_id.is_empty():
+		return _trade_in_status(item)
 	if not BAG_UPGRADES.has(item.item_id):
 		return ""
 	var req_level: int = BAG_UPGRADES[item.item_id]
@@ -541,6 +580,22 @@ func _bag_status(item: ItemData) -> String:
 	if data.bag_level < req_level - 1:
 		return "locked"
 	return ""
+
+## "owned" bila tas sudah berisi alat sejenis dengan tier sama atau lebih tinggi,
+## "locked" bila item syaratnya (tier sebelumnya) belum ada di tas.
+func _trade_in_status(item: ItemData) -> String:
+	var wanted := item.action_data.tool_data if item.action_data != null else null
+	for i in data.bag_size:
+		var slot = data.inventory[i]
+		if slot == null:
+			continue
+		var owned: ItemData = slot["item"]
+		if owned.item_id == item.item_id:
+			return "owned"
+		var tool := owned.action_data.tool_data if owned.action_data != null else null
+		if wanted != null and tool != null and tool.tool_type == wanted.tool_type and int(tool.tier) > int(wanted.tier):
+			return "owned"
+	return "" if data.has_item(item.requires_item_id) else "locked"
 
 ## Cek ruang di tas aktif sebelum membeli, supaya uang tidak terpotong sia-sia.
 func _can_fit(item: ItemData, amount: int) -> bool:

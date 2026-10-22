@@ -43,7 +43,8 @@ func _ready() -> void:
 	p2.stamina = 1
 	GameState.p1().hotbar_page = 4
 	check(SaveManager.load_game(), "round trip succeeds")
-	check(GameState.money == 987 and DayCycle.current_day == 35 and p2.stamina == 42 and GameState.players[1] == p2 and GameState.hotbar_page == 0, "round trip restores state and preserves P2 reference")
+	# Save v21: P2 kembali sebagai karakter co-op di daftar save; game dimuat sendiri (P1).
+	check(GameState.money == 987 and DayCycle.current_day == 35 and GameState.players.size() == 1 and GameState.coop_roster.size() == 1 and GameState.coop_roster[0].stamina == 42 and GameState.coop_roster[0].character_id == p2.character_id and GameState.hotbar_page == 0, "round trip restores state and P2 as co-op character")
 	check(SaveManager.save_game(), "save replaces existing file and creates backup")
 	DirAccess.remove_absolute(SaveManager.SAVE_PATH)
 	check(SaveManager.has_save() and SaveManager.load_game(), "backup-only save is available and loads")

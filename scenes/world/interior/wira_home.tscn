@@ -3,6 +3,8 @@
 [ext_resource type="Script" path="res://scripts/world/resident_interior.gd" id="Interior"]
 [ext_resource type="Script" path="res://scripts/npc/npc_map_presenter.gd" id="ResidentPresenter"]
 
+[ext_resource type="PackedScene" path="res://scenes/npc/routes/wira_home_paths.tscn" id="ResidentPaths"]
+
 [node name="WiraHome" instance=ExtResource("Room")]
 script = ExtResource("Interior")
 room_title = "Rumah dan Bengkel Wira"
@@ -29,3 +31,16 @@ script = ExtResource("ResidentPresenter")
 map_id = "wira_home"
 actors_root = NodePath("../NPCActors")
 points_root = NodePath("../NPCPoints")
+
+[node name="NPCPaths" parent="." instance=ExtResource("ResidentPaths")]
+
+[editable path="NPCPaths"]
+
+[node name="zarathia_home" type="Marker2D" parent="NPCPoints"]
+position = Vector2(350, 190)
+
+[node name="zarathustra_home" type="Marker2D" parent="NPCPoints"]
+position = Vector2(220, 190)
+
+[node name="zarathia_kitchen" type="Marker2D" parent="NPCPoints"]
+position = Vector2(176, 152)

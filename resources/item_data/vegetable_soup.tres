@@ -19,4 +19,4 @@ item_id = "vegetable_soup"
 display_name = "Sup Sayur Bening"
 icon = SubResource("FoodIcon")
 description = "Pulihkan 35 stamina. Pilih di hotbar lalu klik kiri untuk makan."
-sell_price = 110
+sell_price = 143

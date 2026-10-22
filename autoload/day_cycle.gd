@@ -17,17 +17,129 @@ const DAYS_PER_SEASON := 28
 const SEASONS: Array[String] = ["spring", "summer", "fall", "winter"]
 
 
-func apply_scene_lighting() -> void:
+## ── Tint siang/sore/malam (GDD 4.1 "Tint Waktu Global") ──
+## Setiap scene dunia otomatis ikut warna waktu, tanpa konfigurasi:
+## - Scene dunia = scene utama (current_scene) atau area co-op di SubViewport CoopRoot.
+## - Jika scene sudah punya CanvasModulate, node itu yang dipakai dan warnanya di
+##   editor menjadi warna dasar ruangan (dikalikan warna waktu, tidak ditimpa).
+## - Jika belum, DayCycle menambahkan CanvasModulate "DayCycleTint" saat scene masuk.
+## - Kekuatan: outdoor 1.0, path berisi "interior" = interior_time_strength,
+##   path berisi "/cave/" = 0 (gua punya tampilan sendiri). Override per scene
+##   dengan node SceneLighting (scripts/world/scene_lighting.gd).
+## HUD/UI di CanvasLayer tidak terpengaruh CanvasModulate.
+
+## Kekuatan warna waktu di interior: 1 = sama dengan outdoor, 0 = tidak berubah.
+@export_range(0.0, 1.0, 0.05) var interior_time_strength := 0.5
+
+const INTERIOR_PATH_KEYWORD := "interior"
+const UNLIT_PATH_KEYWORD := "/cave/"
+const AUTO_TINT_NAME := "DayCycleTint"
+const META_BASE := &"day_tint_base"
+const META_CONFIG := &"scene_lighting"
+
+## Semua CanvasModulate di tree (termasuk layar co-op). Didaftarkan saat masuk tree,
+## jadi warna sore/malam sudah benar sejak frame pertama scene baru tampil,
+## walau game sedang dijeda oleh Transition.
+var _modulates: Array = []
+
+func _ready() -> void:
+	get_tree().node_added.connect(_on_node_added)
+	# Scene yang dibuka langsung (F6) sudah masuk tree sebelum autoload ini siap.
+	for light in get_tree().root.find_children("*", "CanvasModulate", true, false):
+		_register_modulate(light)
+	_ensure_current_scene_tint.call_deferred()
+
+func _ensure_current_scene_tint() -> void:
 	var scene := get_tree().current_scene
-	
-	if scene == null:
+	if scene is Node2D:
+		_ensure_scene_tint(scene)
+
+func _on_node_added(node: Node) -> void:
+	var light := node as CanvasModulate
+	if light != null:
+		_register_modulate(light)
+	elif _is_world_root(node):
+		# Deferred: anak scene (CanvasModulate milik scene, SceneLighting) sudah
+		# terdaftar dulu. Tetap jalan sebelum frame digambar, juga saat tree dijeda.
+		_ensure_scene_tint.call_deferred(node)
+
+func _register_modulate(light: CanvasModulate) -> void:
+	if not light.has_meta(META_BASE):
+		light.set_meta(META_BASE, light.color)
+	if not _modulates.has(light):
+		_modulates.append(light)
+	_apply_to(light, _lighting_color(hour))
+
+## Scene tanpa CanvasModulate mendapat satu dari DayCycle (hanya ada satu per canvas).
+func _ensure_scene_tint(root: Node) -> void:
+	if not is_instance_valid(root) or not root.is_inside_tree():
 		return
-	
-	for node in scene.find_children("*", "CanvasModulate", true, false):
-		var light := node as CanvasModulate
-		
-		if light != null:
-			light.color = _lighting_color(hour)
+	for light in _modulates:
+		if is_instance_valid(light) and light.is_inside_tree() and _scene_root_of(light) == root:
+			return
+	var config := _config_of(root)
+	var room_color := config.room_color if config != null else Color.WHITE
+	if _strength_for(root) <= 0.0 and room_color == Color.WHITE:
+		return
+	var tint := CanvasModulate.new()
+	tint.name = AUTO_TINT_NAME
+	root.add_child(tint)
+
+func _is_world_root(node: Node) -> bool:
+	if not node is Node2D:
+		return false
+	var parent := node.get_parent()
+	if parent == get_tree().root:
+		return node == get_tree().current_scene
+	return parent is SubViewport and Coop.root != null and parent.get_parent() == Coop.root
+
+## Node teratas scene: anak langsung dari Viewport (window utama atau SubViewport co-op).
+func _scene_root_of(node: Node) -> Node:
+	var current := node
+	while current.get_parent() != null and not current.get_parent() is Viewport:
+		current = current.get_parent()
+	return current
+
+func _config_of(root: Node) -> SceneLighting:
+	if not root.has_meta(META_CONFIG):
+		return null
+	var config = root.get_meta(META_CONFIG)
+	if config is SceneLighting and is_instance_valid(config) and config.is_inside_tree():
+		return config
+	return null
+
+func _strength_for(root: Node) -> float:
+	var config := _config_of(root)
+	if config != null:
+		return config.effective_strength()
+	var path := root.scene_file_path.to_lower()
+	if path.contains(UNLIT_PATH_KEYWORD):
+		return 0.0
+	if path.contains(INTERIOR_PATH_KEYWORD):
+		return interior_time_strength
+	return 1.0
+
+func _apply_to(light: CanvasModulate, time_color: Color) -> void:
+	var root := _scene_root_of(light)
+	var base: Color = light.get_meta(META_BASE, Color.WHITE)
+	var config := _config_of(root)
+	if config != null:
+		base *= config.room_color
+	light.color = base * Color.WHITE.lerp(time_color, _strength_for(root))
+
+## Dipanggil SceneLighting saat masuk tree.
+func configure_scene(config: SceneLighting) -> void:
+	_scene_root_of(config).set_meta(META_CONFIG, config)
+	apply_scene_lighting()
+
+func apply_scene_lighting() -> void:
+	var color := _lighting_color(hour)
+	for i in range(_modulates.size() - 1, -1, -1):
+		var light = _modulates[i]
+		if not is_instance_valid(light):
+			_modulates.remove_at(i)
+		elif light.is_inside_tree():
+			_apply_to(light, color)
 	
 ## 0 = Semi, 1 = Panas, 2 = Gugur, 3 = Dingin. Dihitung dari current_day,
 ## jadi tidak perlu disimpan di save.
@@ -169,6 +281,7 @@ func advance_day() -> void:
 		season_changed.emit(get_season())
 		Notify.say("%s dimulai!" % get_season_display_name())
 	GameState.weather.advance_day(current_day)
+	NPCHousehold.advance_all(current_day)
 	time_tick.emit(hour, minute)
 	
 func _lighting_color(current_hour: int) -> Color:

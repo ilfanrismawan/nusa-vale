@@ -19,4 +19,4 @@ item_id = "tropical_fruit_salad"
 display_name = "Salad Buah Tropis"
 icon = SubResource("Icon")
 description = "Masakan dari dapur. Pilih di hotbar untuk dimakan."
-sell_price = 75
+sell_price = 567

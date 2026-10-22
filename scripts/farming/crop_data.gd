@@ -95,3 +95,6 @@ func get_total_stages() -> int:
 	
 func is_harvestable(current_stage: int) -> bool:
 	return current_stage >= growth_stages.size() - 1
+
+func is_fruit_tree() -> bool:
+	return crop_id in ["cherry", "apricot", "banana", "orange", "mango", "peach", "apple"]

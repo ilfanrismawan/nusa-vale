@@ -2,9 +2,9 @@
 
 Tiga biji unik per permainan: panen dua jenis tanaman; berinteraksi dengan Akar Keramat di hutan (672, 480) setelah perbaikan jembatan; menyelesaikan fasilitas pertama Balai Nadi. Petunjuk tampil setelah panen pertama dan ketika masuk hutan.
 
-Konsumsi dari inventory memakai konfirmasi. Setiap biji menambah kapasitas pemain penerima 10 permanen dan memulihkan tepat 10 stamina, dibatasi kapasitas baru. MVP: 100 → 130. Ikon emas berpola akar, gestur memegang biji, aliran akar bercahaya, dan HUD memanjang ke atas.
+Konsumsi dari inventory memakai konfirmasi. Setiap biji menambah kapasitas pemain penerima 10 permanen dan memulihkan tepat 10 stamina, dibatasi kapasitas baru. Biji Daya sendiri: 100 → 130; ditambah bonus rumah Lv2 +30 dan Lv3 +40, maksimum individu kini 200 (balancing 22 Oktober 2026). Ikon emas berpola akar, gestur memegang biji, aliran akar bercahaya, dan HUD memanjang ke atas.
 
-Save v13 menyimpan ID diperoleh, hadiah tertunda saat tas penuh, jenis panen, dan ID dikonsumsi per pemain. Hadiah bersama berlaku sekali dalam co-op; kapasitas bertambah untuk pemain yang mengonsumsi. Biji tidak bisa dibuang atau dijual. Save lama tetap memakai stamina awal 100. Tujuh sumber lanjutan belum aktif; target penuh 200 memerlukan sepuluh ID dan sumber progres berikutnya.
+Save v13 menyimpan ID diperoleh, hadiah tertunda saat tas penuh, jenis panen, dan ID dikonsumsi per pemain. Hadiah bersama berlaku sekali dalam co-op; kapasitas bertambah untuk pemain yang mengonsumsi. Biji tidak bisa dibuang atau dijual. Save lama tetap memakai stamina awal 100. Tujuh sumber lanjutan belum aktif; target 200 kini sudah dicapai melalui tiga Biji Daya dan total bonus rumah 70, tanpa menambah ID baru.
 
 Uji: Godot headless tests/daya_regression.tscn.
 

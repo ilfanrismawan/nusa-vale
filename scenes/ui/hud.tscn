@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dcvh6rh0mven1" path="res://assets/farm_rpg/Clock/Extras.png" id="2_136eg"]
 [ext_resource type="Font" path="res://resources/ui/readable_font.tres" id="3_136eg"]
 [ext_resource type="Texture2D" uid="uid://c8stes0isa8kg" path="res://assets/farm_rpg/ui/Bars.png" id="6_oj5la"]
+[ext_resource type="PackedScene" path="res://scenes/ui/action_hints.tscn" id="action_hints"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ywce2"]
 font = ExtResource("3_136eg")
@@ -152,3 +153,5 @@ value = 100.0
 fill_mode = 3
 texture_under = SubResource("AtlasTexture_ovsut")
 texture_progress = SubResource("AtlasTexture_qn2nl")
+
+[node name="ActionHints" parent="." instance=ExtResource("action_hints")]

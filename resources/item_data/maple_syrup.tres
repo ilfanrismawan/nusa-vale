@@ -1,13 +1,14 @@
 [gd_resource type="Resource" script_class="ItemData" format=3]
 
 [ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1_item"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_maple_syrup.tres" id="2_icon"]
 
 [resource]
 script = ExtResource("1_item")
 item_id = "maple_syrup"
 display_name = "Sirup Maple"
 category = 4
-description = "Bahan dapur. Harga dan ikon dapat diubah melalui Inspector."
+icon = ExtResource("2_icon")
+description = "Sirup manis dari tapper di pohon maple. Juga dijual di Toko Umum sebagai bahan dapur."
 buy_price = 50
 sell_price = 25
-

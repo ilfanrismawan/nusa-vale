@@ -73,7 +73,7 @@ func _show_requirements() -> void:
 		REQUIRED_WOOD, wood, REQUIRED_WOOD,
 		REQUIRED_STONE, stone, REQUIRED_STONE,
 	])
-	Notify.say("Tekan E untuk Tnteract/Memperbaiki")
+	Notify.say("Tekan %s untuk memperbaiki." % InputPrompt.key_text(&"interact", null, InputLayout.FIELD, 1))
 	
 func interact() -> void:
 	if WorldState.has_flag("bridge_repaired"):

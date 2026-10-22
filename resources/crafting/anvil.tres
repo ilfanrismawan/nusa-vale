@@ -1,0 +1,230 @@
+[gd_resource type="Resource" script_class="CraftingCatalog" format=3]
+
+[ext_resource type="Script" uid="uid://b48f86kva881a" path="res://scripts/resources/crafting_catalog.gd" id="1"]
+[ext_resource type="Script" uid="uid://cifuu4is8ndbw" path="res://scripts/resources/crafting_recipe.gd" id="2"]
+
+[sub_resource type="Resource" id="Recipe_ring_wood"]
+script = ExtResource("2")
+recipe_id = "ring_wood"
+output_item_id = "ring_wood"
+ingredients = {
+"rope": 2,
+"fiber": 5
+}
+group = "Perhiasan"
+
+[sub_resource type="Resource" id="Recipe_amulet_wood"]
+script = ExtResource("2")
+recipe_id = "amulet_wood"
+output_item_id = "amulet_wood"
+ingredients = {
+"rope": 3,
+"wood": 2
+}
+group = "Perhiasan"
+
+[sub_resource type="Resource" id="Recipe_ring_copper"]
+script = ExtResource("2")
+recipe_id = "ring_copper"
+output_item_id = "ring_copper"
+ingredients = {
+"copper_bar": 2,
+"quartz": 1
+}
+group = "Perhiasan"
+
+[sub_resource type="Resource" id="Recipe_amulet_copper"]
+script = ExtResource("2")
+recipe_id = "amulet_copper"
+output_item_id = "amulet_copper"
+ingredients = {
+"copper_bar": 3,
+"quartz": 1
+}
+group = "Perhiasan"
+
+[sub_resource type="Resource" id="Recipe_ring_iron"]
+script = ExtResource("2")
+recipe_id = "ring_iron"
+output_item_id = "ring_iron"
+ingredients = {
+"iron_bar": 2,
+"amethyst": 1
+}
+group = "Perhiasan"
+
+[sub_resource type="Resource" id="Recipe_amulet_iron"]
+script = ExtResource("2")
+recipe_id = "amulet_iron"
+output_item_id = "amulet_iron"
+ingredients = {
+"iron_bar": 3,
+"amethyst": 1
+}
+group = "Perhiasan"
+
+[sub_resource type="Resource" id="Recipe_ring_gold"]
+script = ExtResource("2")
+recipe_id = "ring_gold"
+output_item_id = "ring_gold"
+ingredients = {
+"gold_bar": 2,
+"topaz": 1
+}
+group = "Perhiasan"
+
+[sub_resource type="Resource" id="Recipe_amulet_gold"]
+script = ExtResource("2")
+recipe_id = "amulet_gold"
+output_item_id = "amulet_gold"
+ingredients = {
+"gold_bar": 3,
+"topaz": 1
+}
+group = "Perhiasan"
+
+[sub_resource type="Resource" id="Recipe_ring_platinum"]
+script = ExtResource("2")
+recipe_id = "ring_platinum"
+output_item_id = "ring_platinum"
+ingredients = {
+"platinum_bar": 2,
+"emerald": 1
+}
+group = "Perhiasan"
+
+[sub_resource type="Resource" id="Recipe_amulet_platinum"]
+script = ExtResource("2")
+recipe_id = "amulet_platinum"
+output_item_id = "amulet_platinum"
+ingredients = {
+"platinum_bar": 3,
+"emerald": 1
+}
+group = "Perhiasan"
+
+[sub_resource type="Resource" id="Recipe_ring_crimson"]
+script = ExtResource("2")
+recipe_id = "ring_crimson"
+output_item_id = "ring_crimson"
+ingredients = {
+"crimson_bar": 2,
+"ruby": 1
+}
+group = "Perhiasan"
+
+[sub_resource type="Resource" id="Recipe_amulet_crimson"]
+script = ExtResource("2")
+recipe_id = "amulet_crimson"
+output_item_id = "amulet_crimson"
+ingredients = {
+"crimson_bar": 3,
+"ruby": 1
+}
+group = "Perhiasan"
+
+[sub_resource type="Resource" id="Recipe_ring_frost"]
+script = ExtResource("2")
+recipe_id = "ring_frost"
+output_item_id = "ring_frost"
+ingredients = {
+"frost_bar": 2,
+"sapphire": 1
+}
+group = "Perhiasan"
+
+[sub_resource type="Resource" id="Recipe_amulet_frost"]
+script = ExtResource("2")
+recipe_id = "amulet_frost"
+output_item_id = "amulet_frost"
+ingredients = {
+"frost_bar": 3,
+"sapphire": 1
+}
+group = "Perhiasan"
+
+[sub_resource type="Resource" id="Recipe_ring_shadow"]
+script = ExtResource("2")
+recipe_id = "ring_shadow"
+output_item_id = "ring_shadow"
+ingredients = {
+"shadow_bar": 2,
+"onyx": 1
+}
+group = "Perhiasan"
+
+[sub_resource type="Resource" id="Recipe_amulet_shadow"]
+script = ExtResource("2")
+recipe_id = "amulet_shadow"
+output_item_id = "amulet_shadow"
+ingredients = {
+"shadow_bar": 3,
+"onyx": 1
+}
+group = "Perhiasan"
+
+[sub_resource type="Resource" id="Recipe_ring_fairy"]
+script = ExtResource("2")
+recipe_id = "ring_fairy"
+output_item_id = "ring_fairy"
+ingredients = {
+"fairy_bar": 2,
+"fairy_crystal": 1
+}
+group = "Perhiasan"
+
+[sub_resource type="Resource" id="Recipe_amulet_fairy"]
+script = ExtResource("2")
+recipe_id = "amulet_fairy"
+output_item_id = "amulet_fairy"
+ingredients = {
+"fairy_bar": 3,
+"fairy_crystal": 1
+}
+group = "Perhiasan"
+
+[sub_resource type="Resource" id="Recipe_ring_obsidian"]
+script = ExtResource("2")
+recipe_id = "ring_obsidian"
+output_item_id = "ring_obsidian"
+ingredients = {
+"obsidian_bar": 2,
+"fire_quartz": 1
+}
+group = "Perhiasan"
+
+[sub_resource type="Resource" id="Recipe_amulet_obsidian"]
+script = ExtResource("2")
+recipe_id = "amulet_obsidian"
+output_item_id = "amulet_obsidian"
+ingredients = {
+"obsidian_bar": 3,
+"fire_quartz": 1
+}
+group = "Perhiasan"
+
+[sub_resource type="Resource" id="Recipe_ring_prismatic"]
+script = ExtResource("2")
+recipe_id = "ring_prismatic"
+output_item_id = "ring_prismatic"
+ingredients = {
+"prismatic_shard": 1,
+"obsidian_bar": 2,
+"fairy_bar": 2
+}
+group = "Perhiasan"
+
+[sub_resource type="Resource" id="Recipe_amulet_prismatic"]
+script = ExtResource("2")
+recipe_id = "amulet_prismatic"
+output_item_id = "amulet_prismatic"
+ingredients = {
+"prismatic_shard": 1,
+"obsidian_bar": 3,
+"fairy_bar": 2
+}
+group = "Perhiasan"
+
+[resource]
+script = ExtResource("1")
+recipes = Array[ExtResource("2")]([SubResource("Recipe_ring_wood"), SubResource("Recipe_amulet_wood"), SubResource("Recipe_ring_copper"), SubResource("Recipe_amulet_copper"), SubResource("Recipe_ring_iron"), SubResource("Recipe_amulet_iron"), SubResource("Recipe_ring_gold"), SubResource("Recipe_amulet_gold"), SubResource("Recipe_ring_platinum"), SubResource("Recipe_amulet_platinum"), SubResource("Recipe_ring_crimson"), SubResource("Recipe_amulet_crimson"), SubResource("Recipe_ring_frost"), SubResource("Recipe_amulet_frost"), SubResource("Recipe_ring_shadow"), SubResource("Recipe_amulet_shadow"), SubResource("Recipe_ring_fairy"), SubResource("Recipe_amulet_fairy"), SubResource("Recipe_ring_obsidian"), SubResource("Recipe_amulet_obsidian"), SubResource("Recipe_ring_prismatic"), SubResource("Recipe_amulet_prismatic")])

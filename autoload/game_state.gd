@@ -34,9 +34,17 @@ var weather: DailyWeather
 var cave: CaveManager
 ## Tingkat rumah + pesanan upgrade di Wira (GDD 4.12, save v17).
 var house: HouseManager
+## Tapper di pohon (GDD 7, 4A-3). Script tanpa class_name: lihat scripts/system/gathering_manager.gd.
+var gathering: Node
+## Role & EXP (GDD 13): naik level saat tidur + layar rekap. Progres ada di PlayerData.skills.
+var skills: SkillManager
 
 ## Index 0 = P1. Pemain lain dibuat saat bergabung di co-op dan ikut tersimpan di save.
 var players: Array[PlayerData] = [PlayerData.new(0)]
+## Semua karakter co-op milik save ini (sedang main atau tidak), seperti farmhand Stardew.
+## Pemain P2-P4 di `players` adalah anggota daftar ini. Disimpan di save ("coop_players").
+var coop_roster: Array[PlayerData] = []
+const MAX_COOP_CHARACTERS := 8
 ## Pemain yang sedang beraksi. Diisi Player sebelum memproses input/aksi (use_player()).
 var current: PlayerData = players[0]
 
@@ -69,7 +77,7 @@ var next_spawn_position: Vector2 = Vector2.ZERO
 var has_spawn_point: bool = false
 
 const SHOP_PRICES := {
-	"seed_strawberry": 15,
+	"seed_strawberry": 30,
 	"seed_carrot": 25,
 }
 
@@ -91,8 +99,17 @@ func _ready() -> void:
 	house = HouseManager.new()
 	house.name = "House"
 	add_child(house)
+	gathering = preload("res://scripts/system/gathering_manager.gd").new()
+	gathering.name = "Gathering"
+	add_child(gathering)
+	skills = SkillManager.new()
+	skills.name = "Skills"
+	add_child(skills)
 	players[0].stamina_changed.connect(func(value: int, maximum: int): stamina_changed.emit(value, maximum))
 	players[0].appearance_changed.connect(func(look: CharacterAppearance): appearance_changed.emit(look))
+	DayCycle.day_passed.connect(func(day: int):
+		for data in players:
+			NPCSocialService.advance(data, day))
 
 
 # ── Pemain ──────────────────────────────────────────────────────────
@@ -104,10 +121,60 @@ func get_player(index: int) -> PlayerData:
 func ensure_player(index: int) -> PlayerData:
 	index = clampi(index, 0, MAX_PLAYERS - 1)
 	while players.size() <= index:
-		var data := PlayerData.new(players.size())
-		data.reset_to_starter()
+		var data := new_coop_character()
+		data.index = players.size()
 		players.append(data)
 	return players[index]
+
+## Karakter co-op baru (alat awal). add_to_roster = false: belum masuk daftar save ini
+## (layar kustomisasi bisa dibatalkan); seat_players memasukkannya saat bergabung.
+func new_coop_character(add_to_roster: bool = true) -> PlayerData:
+	var data := PlayerData.new(1)
+	data.reset_to_starter()
+	data.character_id = _new_character_id()
+	data.player_name = "Pemain %d" % (coop_roster.size() + 2)
+	if add_to_roster:
+		coop_roster.append(data)
+	return data
+
+func _new_character_id() -> String:
+	var used := {}
+	for data in coop_roster:
+		used[data.character_id] = true
+	var id := ""
+	while id.is_empty() or used.has(id):
+		id = "c%d_%04d" % [Time.get_unix_time_from_system(), randi() % 10000]
+	return id
+
+## Karakter co-op yang sedang tidak dimainkan (boleh dipilih pemain yang bergabung).
+func available_coop_characters() -> Array[PlayerData]:
+	var out: Array[PlayerData] = []
+	for data in coop_roster:
+		if not players.has(data):
+			out.append(data)
+	return out
+
+func can_create_coop_character() -> bool:
+	return coop_roster.size() < MAX_COOP_CHARACTERS
+
+## Hapus karakter co-op yang sedang tidak dimainkan.
+func delete_coop_character(data: PlayerData) -> bool:
+	if data == null or players.has(data) or not coop_roster.has(data):
+		return false
+	coop_roster.erase(data)
+	return true
+
+## Susun pemain sesi co-op: P1 + `guests` (urut P2, P3, ...). Index tiap data ikut diperbarui.
+func seat_players(guests: Array[PlayerData]) -> void:
+	players.resize(1)
+	for data in guests:
+		if data == null or players.has(data) or players.size() >= MAX_PLAYERS:
+			continue
+		if not coop_roster.has(data):
+			coop_roster.append(data)
+		data.index = players.size()
+		players.append(data)
+	current = players[0]
 
 ## Jadikan pemain ini `current` supaya GameState.add_item/stamina/... mengenai tasnya.
 func use_player(player_or_data: Variant) -> void:
@@ -130,6 +197,8 @@ func new_game() -> void:
 	balai_nadi.reset()
 	cave.reset()
 	house.reset()
+	gathering.reset()
+	skills.reset()
 	StructureManager.reset()
 	money = 100
 	farm_name = ""
@@ -143,6 +212,7 @@ func new_game() -> void:
 	has_spawn_point = false
 	next_spawn_position = Vector2.ZERO
 	players.resize(1)
+	coop_roster.clear()
 	current = players[0]
 	set_appearance(CharacterAppearance.new())
 	players[0].reset_to_starter()
@@ -229,6 +299,8 @@ func sort_inventory() -> void:
 
 # ── Bersama ─────────────────────────────────────────────────────────
 
+var _derived_quality_items: Dictionary = {}
+
 func _resolve_item(item_or_id: Variant) -> ItemData:
 	if item_or_id is ItemData:
 		return item_or_id
@@ -241,9 +313,26 @@ func _resolve_item(item_or_id: Variant) -> ItemData:
 	if item_id.is_empty():
 		return null
 
+	if _derived_quality_items.has(item_id):
+		return _derived_quality_items[item_id]
+
 	var path: String = "res://resources/item_data/%s.tres" % item_or_id
 
 	if not ResourceLoader.exists(path):
+		if item_id.ends_with("_gold") or item_id.ends_with("_silver"):
+			var is_gold := item_id.ends_with("_gold")
+			var base_id := item_id.trim_suffix("_gold") if is_gold else item_id.trim_suffix("_silver")
+			var base_item := _resolve_item(base_id)
+			if base_item != null:
+				var derived := base_item.duplicate() as ItemData
+				derived.item_id = item_id
+				derived.quality = ItemData.Quality.GOLD if is_gold else ItemData.Quality.SILVER
+				derived.display_name = "%s (%s)" % [base_item.display_name, "Emas" if is_gold else "Perak"]
+				var mult := 1.5 if is_gold else 1.25
+				derived.sell_price = int(base_item.sell_price * mult)
+				derived.buy_price = int(base_item.buy_price * mult)
+				_derived_quality_items[item_id] = derived
+				return derived
 		push_error("ItemData tidak ditemukan: %s" % path)
 		return null
 

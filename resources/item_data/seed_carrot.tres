@@ -14,5 +14,5 @@ description = "Benih untuk menanam tanaman Wortel di musim semi."
 action_data = ExtResource("3_action")
 season = "spring"
 buy_price = 25
-sell_price = 12
+sell_price = 10
 metadata/_custom_type_script = "uid://cm1okc20ussp3"

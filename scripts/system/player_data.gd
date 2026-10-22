@@ -30,6 +30,86 @@ var max_stamina: int:
 	# Bonus rumah milik rumah tangga (GDD 4.12).
 	get: return MAX_STAMINA + consumed_daya.size() * 10 + HouseManager.stamina_bonus_total
 
+var story_flags: Dictionary = {}
+var completed_events: Dictionary = {}
+var romances: Dictionary = {}
+var story_mail: Dictionary = {}
+## Per-character household: npc, mode, ceremony_day, celebrated, last_help_day.
+var household: Dictionary = {}
+
+func has_story_flags(required: Variant) -> bool:
+	if not (required is Array or required is PackedStringArray):
+		return false
+	for flag in required:
+		if not bool(story_flags.get(str(flag), false)):
+			return false
+	return true
+
+func social_progress() -> Dictionary:
+	return {
+		"flags": story_flags.duplicate(true),
+		"events": completed_events.duplicate(true),
+		"romances": romances.duplicate(true),
+		"mail": story_mail.duplicate(true),
+		"household": household.duplicate(true)
+	}
+
+static func valid_social_progress(value: Variant) -> bool:
+	if not value is Dictionary:
+		return false
+	for key in ["flags", "events", "romances"]:
+		var entries: Variant = value.get(key, {})
+		if not entries is Dictionary or entries.size() > 2048:
+			return false
+		for id in entries:
+			if not id is String or id.is_empty() or id.length() > 256:
+				return false
+			if key == "romances":
+				if not entries[id] is String or entries[id] not in ["dating", "married"]:
+					return false
+			elif not entries[id] is bool:
+				return false
+	if not NPCHousehold.valid_home(value.get("household", {})):
+		return false
+	var mail: Variant = value.get("mail", {})
+	if not mail is Dictionary or mail.size() > 256:
+		return false
+	for id in mail:
+		if not id is String or not mail[id] is Dictionary:
+			return false
+		var letter: Dictionary = mail[id]
+		for field in ["subject", "body", "npc"]:
+			if not letter.get(field) is String:
+				return false
+		var day: Variant = letter.get("arrival_day")
+		if not (day is int or day is float) or not is_finite(float(day)) or float(day) != floorf(float(day)) or day < 1 or day > 1000000:
+			return false
+		if not letter.get("read") is bool:
+			return false
+		if not NPCHousehold.valid_rewards(letter):
+			return false
+		var flags: Variant = letter.get("sets_flags", [])
+		if not flags is Array or flags.size() > 256:
+			return false
+		for flag in flags:
+			if not flag is String or flag.is_empty():
+				return false
+	return true
+
+func load_social_progress(value: Variant) -> void:
+	household.clear()
+	story_mail.clear()
+	story_flags.clear()
+	completed_events.clear()
+	romances.clear()
+	if not valid_social_progress(value):
+		return
+	story_flags = value.get("flags", {}).duplicate(true)
+	completed_events = value.get("events", {}).duplicate(true)
+	romances = value.get("romances", {}).duplicate(true)
+	story_mail = value.get("mail", {}).duplicate(true)
+	household = value.get("household", {}).duplicate(true)
+
 func load_daya(value: Variant) -> void:
 	consumed_daya.clear()
 	if value is Array:
@@ -43,7 +123,7 @@ var stamina: int = MAX_STAMINA:
 		stamina_changed.emit(stamina, max_stamina)
 
 var max_hp: int:
-	get: return MAX_HP
+	get: return MAX_HP + roundi(skills.stat(&"max_hp")) if skills != null else MAX_HP
 
 var hp: int = MAX_HP:
 	set(value):
@@ -54,6 +134,11 @@ var watering_water: int = 20
 ## One order per player, held by the blacksmith until explicitly collected.
 var tool_order: Dictionary = {}
 var learned_recipes: Array[String] = []
+var friendships: Dictionary = {}
+
+func load_friendships(value: Variant) -> void:
+	friendships = value.duplicate(true) if NPCSocialService.valid_save(value) else {}
+
 var active_food_effects: Array[Dictionary] = []
 var _food_cost_remainder := 0.0
 
@@ -70,11 +155,15 @@ var _storage_capacity: int = 0
 var hotbar_page: int = 0
 var inventory: Array = []
 ## Senjata tidak lagi dipakai di slot equipment: pemain memegangnya dari hotbar (Phase 4B-1).
-const EQUIPMENT_KEYS: Array[String] = ["helmet", "armor", "leggings", "boots"]
+const EQUIPMENT_KEYS: Array[String] = ["helmet", "armor", "leggings", "boots", "necklace", "ring", "accessory"]
 var equipment: Dictionary = empty_equipment()
 var appearance: CharacterAppearance = CharacterAppearance.new()
+## Id tetap karakter co-op di save ini (save v21). Kosong untuk P1.
+var character_id: String = ""
 ## Nama yang diketik saat Game Baru (ditampilkan di menu slot save). Kosong = belum diberi nama.
 var player_name: String = ""
+## Role & EXP pemain ini (GDD 13).
+var skills: PlayerSkills = PlayerSkills.new()
 var birthday_season: String = ""
 var birthday_day: int = 0
 var pet_id: String = ""
@@ -86,7 +175,7 @@ var bag_size: int:
 
 func configure_storage(capacity: int) -> void:
 	assert(index == -1, "Storage capacity is reserved for temporary chest inventories.")
-	_storage_capacity = clampi(capacity, 1, 60)
+	_storage_capacity = clampi(capacity, 1, 240)
 	inventory.resize(_storage_capacity)
 
 
@@ -99,10 +188,17 @@ func _init(p_index: int = 0) -> void:
 
 ## Isi awal pemain baru: tas kosong + alat kayu + bibit.
 func reset_to_starter() -> void:
+	story_mail.clear()
+	household.clear()
+	story_flags.clear()
+	completed_events.clear()
+	romances.clear()
+	friendships.clear()
 	clear_food_effects()
 	consumed_daya.clear()
 	tool_order.clear()
 	learned_recipes.clear()
+	skills.reset()
 	equipment = empty_equipment()
 	equipment["armor"] = GameState._resolve_item("armor_wood")
 	stamina = MAX_STAMINA
@@ -129,7 +225,7 @@ func set_appearance(new_appearance: CharacterAppearance) -> void:
 func spend_stamina(amount: int) -> bool:
 	if amount < 0:
 		return false
-	var exact_cost := amount * food_stamina_cost_multiplier() + _food_cost_remainder
+	var exact_cost := amount * food_stamina_cost_multiplier() * SkillSystem.stamina_mult(self) + _food_cost_remainder
 	var cost := floori(exact_cost)
 	if stamina < cost:
 		stamina_exhausted.emit()
@@ -302,7 +398,8 @@ func _store(item: ItemData, amount: int) -> int:
 		DiscoveryManager.discover("item_" + item.item_id)
 	return remaining
 
-func buy_item(item_id: String, amount: int = 1) -> bool:
+## unit_override > 0: harga per unit dari pemanggil (mis. ShopUI setelah diskon Merchant).
+func buy_item(item_id: String, amount: int = 1, unit_override: int = 0) -> bool:
 	if amount <= 0:
 		return false
 	var item: ItemData = GameState._resolve_item(item_id)
@@ -311,6 +408,8 @@ func buy_item(item_id: String, amount: int = 1) -> bool:
 	var unit_price: int = item.buy_price
 	if unit_price <= 0 and GameState.SHOP_PRICES.has(item_id):
 		unit_price = GameState.SHOP_PRICES[item_id]
+	if unit_override > 0:
+		unit_price = unit_override
 	if unit_price <= 0:
 		return false
 	var cost: int = unit_price * amount
@@ -526,6 +625,9 @@ static func equipment_key(item: ItemData) -> String:
 		ItemData.EquipmentSlot.HELMET: return "helmet"
 		ItemData.EquipmentSlot.LEGGINGS: return "leggings"
 		ItemData.EquipmentSlot.BOOTS: return "boots"
+		ItemData.EquipmentSlot.NECKLACE: return "necklace"
+		ItemData.EquipmentSlot.RING: return "ring"
+		ItemData.EquipmentSlot.ACCESSORY: return "accessory"
 	return ""
 
 func equipment_stats() -> Vector2i:
@@ -605,9 +707,11 @@ func load_inventory(entries: Variant) -> void:
 ## Data pemain P2-P4 di save (P1 tetap memakai key lama "player" dan "inventory").
 func to_dict() -> Dictionary:
 	return {
+		"id": character_id,
 		"name": player_name,
 		"birthday_season": birthday_season,
 		"birthday_day": birthday_day,
+		"npc_progress": social_progress(),
 		"pet_id": pet_id,
 		"pet_name": pet_name,
 		"stamina": clampi(stamina, 0, max_stamina),
@@ -617,21 +721,28 @@ func to_dict() -> Dictionary:
 		"watering_water": watering_water,
 		"tool_order": tool_order.duplicate(true),
 		"learned_recipes": learned_recipes.duplicate(),
+		"friendships": friendships.duplicate(true),
 		"appearance": appearance.to_dict(),
 		"inventory": serialize_inventory(),
 		"equipment": serialize_equipment(),
+		"skills": skills.to_dict(),
 	}
 
 func load_dict(data: Dictionary) -> void:
+	load_social_progress(data.get("npc_progress", {}))
+	load_friendships(data.get("friendships", {}))
 	clear_food_effects()
 	load_recipes(data.get("learned_recipes", []))
 	load_tool_order(data.get("tool_order", {}))
 	var saved_name: Variant = data.get("name", "")
 	player_name = saved_name if saved_name is String else ""
+	var saved_id: Variant = data.get("id", "")
+	character_id = saved_id if saved_id is String else ""
 	load_birthday(data)
 	load_pet(data)
 	watering_water = clampi(int(data.get("watering_water", 20)), 0, 350)
 	load_daya(data.get("consumed_daya", []))
+	skills.load_dict(data.get("skills", {}))
 	stamina = clampi(int(data.get("stamina", MAX_STAMINA)), 0, max_stamina)
 	hp = clampi(int(data.get("hp", MAX_HP)), 1, max_hp)
 	bag_level = clampi(int(data.get("bag_level", 0)), 0, BAG_SIZES.size() - 1)

@@ -1,0 +1,362 @@
+{
+  "schema_version": 1,
+  "id": "zarathustra",
+  "name": "Zarathustra",
+  "gender": "male",
+  "age": 20,
+  "role": "Asisten Tukang Kayu",
+  "birthday": {
+    "season": "spring",
+    "day": 3
+  },
+  "home_map": "wira_home",
+  "romanceable": true,
+  "family": {
+    "father": "wira",
+    "twin": "zarathia"
+  },
+  "personality": [
+    "cheerful",
+    "clumsy",
+    "ambitious",
+    "loyal"
+  ],
+  "move_speed": 40.0,
+  "friendship": {
+    "start": 0,
+    "max_hearts": 10
+  },
+  "romance": {
+    "dating_hearts": 8,
+    "marriage_hearts": 10,
+    "spouse_home_map": "player_farm_house"
+  },
+  "service": null,
+  "visual": {
+    "sprite_frames": "res://resources/npc_data/npc_animation/npc_zarathustra_frame.tres",
+    "portrait": "res://assets/farm_rpg/Character/NPC'S/Manu/Portrait Manu.png",
+    "portrait_cell_size": 64,
+    "portrait_columns": 5,
+    "expressions": {
+      "neutral": 0,
+      "sparkle": 5,
+      "angry": 7,
+      "happy": 10,
+      "annoyed": 12
+    }
+  },
+  "dialogue": {
+    "default": [
+      {
+        "text": "Oh, hai! Aku lagi belajar bikin sambungan kayu yang rapi seperti punya Ayah.",
+        "expression": "happy"
+      }
+    ],
+    "breakfast": [
+      {
+        "text": "Ayah bikin teh lagi. Aku kebagian yang pahit, hehe.",
+        "expression": "happy"
+      },
+      {
+        "text": "Hari ini aku janji tidak menjatuhkan papan lagi.",
+        "expression": "neutral"
+      }
+    ],
+    "carrying_wood": [
+      {
+        "text": "Awas, awas! Kayunya panjang, jangan sampai kena kepalamu.",
+        "expression": "sparkle"
+      }
+    ],
+    "apprenticing": [
+      {
+        "text": "Ayah bilang ukur dua kali, potong sekali. Aku baru sampai tahap ukur yang pertama.",
+        "expression": "neutral"
+      },
+      {
+        "text": "Suatu hari aku mau punya bengkel sendiri, tapi masih panjang jalannya.",
+        "expression": "sparkle"
+      },
+      {
+        "text": "Aku mau punya bengkel sendiri supaya keluargaku nanti tidak pernah kekurangan.",
+        "expression": "sparkle",
+        "requires_flags": [
+          "story_zarathustra_told"
+        ]
+      }
+    ],
+    "lunch": [
+      {
+        "text": "Nasi dan sambal selalu jadi bahan bakar terbaik.",
+        "expression": "happy"
+      }
+    ],
+    "hanging_out": [
+      {
+        "text": "Habis kerja memang paling enak jalan-jalan sebentar di kota.",
+        "expression": "happy"
+      },
+      {
+        "text": "Kamu sering lewat sini? Kita bisa ngobrol kapan-kapan.",
+        "expression": "neutral"
+      }
+    ],
+    "family_time": [
+      {
+        "text": "Rumah ramai kalau Zarathia sudah pulang. Dia cerewet, tapi aku sayang.",
+        "expression": "happy"
+      },
+      {
+        "text": "Aku masih sedikit marah soal Ibu. Tapi sekarang aku mengerti kenapa Ayah selalu diam.",
+        "expression": "neutral",
+        "requires_flags": [
+          "story_wira_told"
+        ]
+      },
+      {
+        "text": "Surat dari Ibu itu aku simpan di laci bengkelku. Kadang kubaca kalau sedang sepi.",
+        "expression": "happy",
+        "requires_flags": [
+          "family_truth_known"
+        ]
+      }
+    ],
+    "sleeping": [
+      {
+        "text": "Zzz... eh, maaf. Besok lagi, ya.",
+        "expression": "neutral"
+      }
+    ]
+  },
+  "dialogue_by_hearts": {
+    "4": [
+      {
+        "text": "Aku senang kamu mampir. Rasanya bengkel jadi tidak terlalu sepi.",
+        "expression": "happy"
+      }
+    ],
+    "8": [
+      {
+        "text": "Kalau sedang bersamamu, aku lupa kalau tanganku penuh serbuk kayu.",
+        "expression": "sparkle"
+      }
+    ]
+  },
+  "romance_dialogue": {
+    "confession_accept": [
+      {
+        "text": "Aku... iya. Aku mau. Jantungku berisik sekali sekarang.",
+        "expression": "sparkle"
+      }
+    ],
+    "confession_too_early": [
+      {
+        "text": "Maaf, aku belum siap. Tapi aku tidak mau menjauh darimu.",
+        "expression": "neutral"
+      }
+    ],
+    "marriage_accept": [
+      {
+        "text": "Aku akan buatkan rumah yang kuat untuk kita, dengan tanganku sendiri.",
+        "expression": "sparkle"
+      }
+    ]
+  },
+  "gift_tastes": {
+    "loved": [
+      "banana_bread",
+      "banana_pudding",
+      "iron_bar",
+      "coffee"
+    ],
+    "liked": [
+      "plank",
+      "wood",
+      "copper_bar",
+      "baked_potato"
+    ],
+    "neutral": [
+      "apple",
+      "carrot",
+      "stone",
+      "bread"
+    ],
+    "disliked": [
+      "sweet_pea",
+      "chamomile_tea",
+      "daffodil"
+    ],
+    "hated": [
+      "slime_gel",
+      "old_bone",
+      "worm"
+    ]
+  },
+  "gift_dialogue": {
+    "loved": [
+      {
+        "text": "Ini buatku? Keren banget! Terima kasih!",
+        "expression": "sparkle"
+      }
+    ],
+    "liked": [
+      {
+        "text": "Terima kasih, aku suka hadiah ini.",
+        "expression": "happy"
+      }
+    ],
+    "neutral": [
+      {
+        "text": "Oh, terima kasih atas hadiahnya.",
+        "expression": "neutral"
+      }
+    ],
+    "disliked": [
+      {
+        "text": "Terima kasih, tapi ini kurang cocok untukku.",
+        "expression": "annoyed"
+      }
+    ],
+    "hated": [
+      {
+        "text": "Maaf, aku benar-benar tidak menyukai hadiah ini.",
+        "expression": "angry"
+      }
+    ]
+  },
+  "schedules": {
+    "default": [
+      {
+        "time": "06:30",
+        "map": "wira_home",
+        "point": "zarathustra_home",
+        "activity": "breakfast"
+      },
+      {
+        "time": "07:30",
+        "map": "hill",
+        "point": "zarathustra_wood_storage",
+        "activity": "carrying_wood"
+      },
+      {
+        "time": "08:30",
+        "map": "hill",
+        "point": "zarathustra_workbench",
+        "activity": "apprenticing"
+      },
+      {
+        "time": "12:00",
+        "map": "hill",
+        "point": "zarathustra_lunch",
+        "activity": "lunch"
+      },
+      {
+        "time": "13:00",
+        "map": "hill",
+        "point": "zarathustra_workbench",
+        "activity": "apprenticing"
+      },
+      {
+        "time": "17:00",
+        "map": "town",
+        "point": "town_square",
+        "activity": "hanging_out"
+      },
+      {
+        "time": "19:00",
+        "map": "wira_home",
+        "point": "zarathustra_home",
+        "activity": "family_time"
+      },
+      {
+        "time": "21:30",
+        "map": "wira_home",
+        "point": "zarathustra_home",
+        "activity": "sleeping"
+      }
+    ],
+    "rainy": [
+      {
+        "time": "06:30",
+        "map": "wira_home",
+        "point": "zarathustra_home",
+        "activity": "breakfast"
+      },
+      {
+        "time": "08:30",
+        "map": "hill",
+        "point": "zarathustra_workbench",
+        "activity": "apprenticing"
+      },
+      {
+        "time": "12:00",
+        "map": "hill",
+        "point": "zarathustra_lunch",
+        "activity": "lunch"
+      },
+      {
+        "time": "13:00",
+        "map": "hill",
+        "point": "zarathustra_workbench",
+        "activity": "apprenticing"
+      },
+      {
+        "time": "17:30",
+        "map": "wira_home",
+        "point": "zarathustra_home",
+        "activity": "family_time"
+      },
+      {
+        "time": "21:30",
+        "map": "wira_home",
+        "point": "zarathustra_home",
+        "activity": "sleeping"
+      }
+    ]
+  },
+  "heart_events": [
+    {
+      "id": "zarathustra_family_1",
+      "hearts": 6,
+      "requires_flags": [
+        "story_zarathia_told"
+      ],
+      "sets_flags": [
+        "story_zarathustra_told"
+      ],
+      "weather": "clear",
+      "map": "town",
+      "point": "town_square",
+      "time_range": [
+        "17:00",
+        "19:00"
+      ],
+      "lines": [
+        {
+          "text": "Jangan bilang aku mirip Ibu. Aku nggak suka.",
+          "expression": "angry"
+        },
+        {
+          "text": "Aku bilang ke adikku, berhenti tungguin Ibu. Dia malah nangis… terus aku nggak tahu harus bilang apa.",
+          "expression": "annoyed"
+        },
+        {
+          "text": "Ibu pergi begitu saja. Saat Ayah lagi susah, dia malah pergi!",
+          "expression": "angry"
+        },
+        {
+          "text": "Aku masih ingat malam itu. Aku cuma bisa berdiri di pintu.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Aku nggak kangen. Aku cuma mau tahu… apa Ibu pernah tanya kabar kami?",
+          "expression": "angry"
+        },
+        {
+          "text": "Maaf, aku emosi. Tapi memang itu yang kurasakan sampai sekarang.",
+          "expression": "annoyed"
+        }
+      ]
+    }
+  ]
+}

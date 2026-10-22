@@ -1,0 +1,4 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://tests/dungeon_layout_regression.gd" id="1"]
+[node name="DungeonLayoutRegression" type="Node2D"]
+script = ExtResource("1")

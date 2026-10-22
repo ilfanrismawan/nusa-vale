@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_potion_speed.tres" id="2"]
+[ext_resource type="Script" uid="uid://vbwn6cjjdlc0" path="res://scripts/resources/food_effect_data.gd" id="3"]
+[ext_resource type="Resource" path="res://resources/cooking/effects/potion_swift.tres" id="4"]
+
+[resource]
+script = ExtResource("1")
+item_id = "potion_speed"
+display_name = "Ramuan Kilat"
+icon = ExtResource("2")
+description = "Ramuan biru dari meja alkimia. Gerak 30% lebih cepat selama 2 menit."
+category = 9
+stamina_restore = 10
+hp_restore = 0
+food_effects = Array[ExtResource("3")]([ExtResource("4")])
+sell_price = 90
+rarity = 1

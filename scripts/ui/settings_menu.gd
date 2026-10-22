@@ -38,6 +38,7 @@ const LOAD_SPAWN := Vector2(304.0, 147.0)
 var _save_row: HBoxContainer
 var _btn_save: Button
 var _btn_load: Button
+var _coop_row: HBoxContainer
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -123,6 +124,29 @@ func _add_save_buttons() -> void:
 	_save_row.add_child(_btn_load)
 	var content: VBoxContainer = %SaveActions
 	content.add_child(_save_row)
+	# Co-op drop-in (GDD 4.14): P1 bisa mengeluarkan pemain tamu dari sini.
+	_coop_row = HBoxContainer.new()
+	_coop_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	_coop_row.add_theme_constant_override("separation", 8)
+	_coop_row.visible = false
+	content.add_child(_coop_row)
+
+func _refresh_coop_buttons() -> void:
+	if _coop_row == null:
+		return
+	for child in _coop_row.get_children():
+		child.queue_free()
+	_coop_row.visible = Coop.active and Coop.player_count() > 1
+	if not _coop_row.visible:
+		return
+	for i in range(1, Coop.player_count()):
+		var data := GameState.get_player(i)
+		var who := data.player_name if not data.player_name.is_empty() else "P%d" % (i + 1)
+		var button := _make_save_button("Keluarkan %s" % who, func():
+			_close()
+			Coop.leave(i))
+		button.tooltip_text = "P%d keluar dari co-op; datanya disimpan. Pemain tamu juga bisa menahan Start." % (i + 1)
+		_coop_row.add_child(button)
 
 func _make_save_button(text: String, callback: Callable) -> Button:
 	var button := Button.new()
@@ -325,83 +349,175 @@ func _select_page(index: int) -> void:
 		_pages[i].visible = i == index
 		_page_buttons[i].set_pressed_no_signal(i == index)
 
-## Nama tombol gamepad (tata letak Xbox) untuk halaman Kontrol.
-const JOY_BUTTON_NAMES := {
-	JOY_BUTTON_A: "A", JOY_BUTTON_B: "B", JOY_BUTTON_X: "X", JOY_BUTTON_Y: "Y",
-	JOY_BUTTON_LEFT_SHOULDER: "LB", JOY_BUTTON_RIGHT_SHOULDER: "RB",
-	JOY_BUTTON_BACK: "Back", JOY_BUTTON_START: "Start",
-	JOY_BUTTON_LEFT_STICK: "L3 (klik stik kiri)", JOY_BUTTON_RIGHT_STICK: "R3 (klik stik kanan)",
-}
-const JOY_AXIS_NAMES := {JOY_AXIS_TRIGGER_LEFT: "LT", JOY_AXIS_TRIGGER_RIGHT: "RT"}
 const COLOR_CONTROLS_HEADER := Color(0.95, 0.78, 0.45)
+const COLOR_CONTROLS_GROUP := Color(0.7, 0.85, 1.0)
+## Batas waktu menunggu tombol baru (gamepad tidak punya tombol batal yang aman).
+const CAPTURE_TIMEOUT := 6.0
+const GROUP_TITLES := {
+	"Lapangan": "Lapangan (seperti Stardew Valley)",
+	"Lompat": "Lompat (seperti Grand Bazaar)",
+	"Combat": "Combat, pegang senjata (seperti soulslike)",
+}
+## Lebar kolom halaman Kontrol (panel Pengaturan 560 px).
+const CONTROLS_LABEL_WIDTH := 190.0
+const CONTROLS_BUTTON_WIDTH := 135.0
 
-## Halaman Kontrol: satu baris per aksi, kolom keyboard + mouse dan gamepad.
-## Teks gamepad dibaca dari PlayerInput, jadi selalu sama dengan tombol yang dipakai game.
+## Tombol yang sedang menunggu input baru: {row_id, kind, button}. Kosong = tidak menunggu.
+var _capture := {}
+var _capture_time := 0.0
+
+## Halaman Kontrol (GDD 4.3): satu baris per aksi dari InputLayout, dikelompokkan per konteks.
+## Klik tombol di kolom Keyboard + Mouse atau Gamepad, lalu tekan tombol baru. Tombol yang
+## sudah dipakai aksi lain di konteks yang sama ditukar. Disimpan di user://input_bindings.cfg.
 func _setup_controls() -> void:
 	PlayerInput.ensure_combat_actions()
+	_capture = {}
 	var grid: GridContainer = %ControlsGrid
 	grid.columns = 3
+	grid.add_theme_constant_override("h_separation", 10)
 	for child in grid.get_children():
+		grid.remove_child(child)
 		child.queue_free()
+	var hints := CheckBox.new()
+	hints.text = "Tampilkan"
+	hints.button_pressed = ActionHints.is_enabled()
+	hints.toggled.connect(func(on: bool): ActionHints.set_enabled(on))
+	var reset := Button.new()
+	reset.text = "Kembalikan"
+	reset.tooltip_text = "Kembalikan semua tombol ke bawaan"
+	reset.pressed.connect(_on_reset_controls)
+	_add_controls_label("Petunjuk tombol di layar")
+	grid.add_child(hints)
+	_add_controls_label("")
+	_add_controls_label("Semua tombol ke bawaan")
+	_add_controls_label("")
+	grid.add_child(reset)
 	_add_controls_row(["Aksi", "Keyboard + Mouse", "Gamepad"], true)
-	# [judul, aksi untuk kolom keyboard, teks keyboard tetap, teks gamepad tetap]
-	var rows := [
-		["Berjalan", [&"move_up", &"move_left", &"move_down", &"move_right"], "", "Stik kiri / D-pad"],
-		["Berlari (tahan)", [&"run"], "", "RT (tahan)"],
-		["Pakai alat / serang", [&"use_tool"], "", "X (tahan = serangan berat)"],
-		["Interaksi", [&"interact"], "", ""],
-		["Tas / menu", [&"inventory"], "Esc", ""],
-		["Crafting", [], "Tab Crafting di tas", ""],
-		["Slot sebelumnya", [&"tool_prev"], "", "LB (di tas: tab kiri)"],
-		["Slot berikutnya", [&"tool_next"], "", "RB (di tas: tab kanan)"],
-		["Pilih slot", [], "1-8", "-"],
-		["Halaman hotbar", [&"cycle_hotbar"], "", ""],
-		["Rapikan tas", [&"sort_inventory"], "", ""],
-		["Roll", [&"dodge"], "", "RT tekan singkat (pegang senjata)"],
-		["Tangkis / parry", [&"guard"], "", "LT"],
-		["Weapon Art", [&"weapon_art"], "", ""],
-		["Membidik", [&"aim"], "", "Arah hadap"],
-	]
-	var gamepad_action := {"Interaksi": &"interact", "Tas / menu": &"inventory", "Crafting": &"crafting_menu", "Halaman hotbar": &"cycle_hotbar", "Rapikan tas": &"sort_inventory", "Weapon Art": &"weapon_art"}
-	for row in rows:
-		var keys: Array[String] = []
-		for action in row[1]:
-			keys.append_array(_keyboard_bindings(action))
-		if not String(row[2]).is_empty():
-			keys.append(row[2])
-		var pad: String = row[3]
-		if pad.is_empty() and gamepad_action.has(row[0]):
-			pad = _gamepad_binding(gamepad_action[row[0]])
-		_add_controls_row([row[0], " / ".join(keys) if not keys.is_empty() else "-", pad if not pad.is_empty() else "-"])
-	_add_controls_row(["Co-op", "Pengaturan bersama hanya P1", ""])
+	var group := ""
+	for row in PlayerInput.rows():
+		if not row["show"]:
+			continue
+		if row["group"] != group:
+			group = row["group"]
+			_add_controls_label(GROUP_TITLES.get(group, group), COLOR_CONTROLS_GROUP)
+			_add_controls_label("")
+			_add_controls_label("")
+		_add_controls_label(row["label"])
+		for kind in ["kb", "pad"]:
+			var button := Button.new()
+			button.custom_minimum_size = Vector2(CONTROLS_BUTTON_WIDTH, 0)
+			button.clip_text = true
+			button.text = _binding_text(row, kind)
+			button.tooltip_text = button.text
+			button.add_theme_font_size_override("font_size", 14)
+			button.pressed.connect(_begin_capture.bind(row["id"], kind, button))
+			grid.add_child(button)
+	_add_controls_row(["Berjalan (gamepad)", "-", "Stik kiri (selalu)"])
+	_add_controls_row(["Ganti target lock-on", "-", "Stik kanan"])
+	_add_controls_row(["Co-op", "Satu pengaturan untuk semua gamepad", ""])
 
 func _add_controls_row(texts: Array, header: bool = false) -> void:
 	for text in texts:
-		var label := Label.new()
-		label.text = text
-		label.add_theme_font_size_override("font_size", 16)
-		if header:
-			label.add_theme_color_override("font_color", COLOR_CONTROLS_HEADER)
-		%ControlsGrid.add_child(label)
+		_add_controls_label(text, COLOR_CONTROLS_HEADER if header else Color.TRANSPARENT)
 
-func _keyboard_bindings(action: StringName) -> Array[String]:
-	var bindings: Array[String] = []
-	if not InputMap.has_action(action):
-		return bindings
-	for event in InputMap.action_get_events(action):
-		if event is InputEventKey:
-			bindings.append(OS.get_keycode_string(event.physical_keycode if event.physical_keycode != 0 else event.keycode))
-		elif event is InputEventMouseButton:
-			bindings.append({MOUSE_BUTTON_LEFT: "Klik kiri", MOUSE_BUTTON_RIGHT: "Klik kanan", MOUSE_BUTTON_WHEEL_UP: "Scroll atas", MOUSE_BUTTON_WHEEL_DOWN: "Scroll bawah"}.get(event.button_index, "Mouse %d" % event.button_index))
-	return bindings
+func _add_controls_label(text: String, color: Color = Color.TRANSPARENT) -> void:
+	var label := Label.new()
+	label.text = text
+	label.add_theme_font_size_override("font_size", 14)
+	# Teks panjang dibungkus supaya tabel muat di panel tanpa geser ke samping.
+	var first_column: bool = %ControlsGrid.get_child_count() % 3 == 0
+	label.custom_minimum_size = Vector2(CONTROLS_LABEL_WIDTH if first_column else CONTROLS_BUTTON_WIDTH, 0)
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	if color.a > 0.0:
+		label.add_theme_color_override("font_color", color)
+	%ControlsGrid.add_child(label)
 
-func _gamepad_binding(action: StringName) -> String:
-	var names: Array[String] = []
-	for button in PlayerInput.JOY_BUTTONS.get(action, []):
-		names.append(JOY_BUTTON_NAMES.get(button, "Tombol %d" % button))
-	if PlayerInput.JOY_AXES.has(action):
-		names.append(JOY_AXIS_NAMES.get(PlayerInput.JOY_AXES[action][0], "Stik"))
-	return " / ".join(names)
+func _binding_text(row: Dictionary, kind: String) -> String:
+	var labels: Array[String] = []
+	for b in row[kind]:
+		labels.append(InputLayout.spec_label(b[0]))
+	return " / ".join(labels) if not labels.is_empty() else "-"
+
+func _begin_capture(row_id: String, kind: String, button: Button) -> void:
+	_cancel_capture()
+	_capture = {"row_id": row_id, "kind": kind, "button": button}
+	_capture_time = CAPTURE_TIMEOUT
+	button.text = "Tekan tombol..." if kind == "kb" else "Tekan tombol gamepad..."
+
+func _cancel_capture() -> void:
+	if _capture.is_empty():
+		return
+	var button: Button = _capture["button"]
+	var row := _row_by_id(_capture["row_id"])
+	if is_instance_valid(button) and not row.is_empty():
+		button.text = _binding_text(row, _capture["kind"])
+	_capture = {}
+
+func _row_by_id(row_id: String) -> Dictionary:
+	for row in PlayerInput.rows():
+		if row["id"] == row_id:
+			return row
+	return {}
+
+func _process(delta: float) -> void:
+	if _capture.is_empty():
+		return
+	_capture_time -= delta
+	if _capture_time <= 0.0 or not visible:
+		_cancel_capture()
+
+## Input saat menunggu tombol baru. true = event dipakai.
+func _capture_input(event: InputEvent) -> bool:
+	if _capture.is_empty():
+		return false
+	var kind: String = _capture["kind"]
+	if event is InputEventKey and event.pressed and event.physical_keycode == KEY_ESCAPE:
+		_cancel_capture()
+		return true
+	var spec := InputLayout.from_event(event)
+	if spec.is_empty() or InputLayout.is_pad_spec(spec) != (kind == "pad"):
+		# Abaikan gerakan mouse/stik dan perangkat lain, tetapi jangan biarkan sampai ke menu.
+		return event is InputEventKey or event is InputEventMouseButton or event is InputEventJoypadButton
+	_apply_binding(_capture["row_id"], kind, spec)
+	_capture = {}
+	_setup_controls.call_deferred()
+	return true
+
+## Tombol baru jadi tombol utama baris itu; tombol lain baris itu tetap. Aksi lain di konteks
+## yang sama yang memakai tombol ini menerima tombol utama lama (ditukar).
+func _apply_binding(row_id: String, kind: String, spec: String) -> void:
+	var row := _row_by_id(row_id)
+	if row.is_empty():
+		return
+	var specs: Array[String] = []
+	for b in row[kind]:
+		specs.append(b[0])
+	var old: String = specs[0] if not specs.is_empty() else ""
+	if old == spec:
+		return
+	for other in PlayerInput.conflicts(row_id, spec):
+		var theirs: Array[String] = []
+		for b in other[kind]:
+			if b[0] == spec:
+				if not old.is_empty():
+					theirs.append(old)
+			elif not theirs.has(b[0]):
+				theirs.append(b[0])
+		PlayerInput.set_binding(other["id"], kind, theirs)
+		Notify.say("Tombol ditukar: %s sekarang %s" % [other["label"], InputLayout.spec_label(old) if not old.is_empty() else "tanpa tombol"])
+	if specs.has(spec):
+		# Sudah tombol kedua baris ini: jadikan utama, tombol lama tetap.
+		specs.erase(spec)
+		specs.insert(0, spec)
+	elif specs.is_empty():
+		specs.append(spec)
+	else:
+		specs[0] = spec
+	PlayerInput.set_binding(row_id, kind, specs)
+
+func _on_reset_controls() -> void:
+	PlayerInput.reset_bindings()
+	_setup_controls.call_deferred()
 
 func _confirm_exit(to_desktop: bool) -> void:
 	_exit_to_desktop = to_desktop
@@ -436,6 +552,7 @@ func _open() -> void:
 	if _btn_load:
 		_btn_load.disabled = Coop.active
 		_btn_load.tooltip_text = "Saat co-op, muat save dari menu utama." if Coop.active else ""
+	_refresh_coop_buttons()
 	show()
 	_select_page(0)
 	var inventory_node := get_parent().get_node_or_null("UIInventory")
@@ -461,6 +578,9 @@ func _toggle_fullscreen() -> void:
 		_on_window_mode_selected(1)
 
 func _input(event: InputEvent) -> void:
+	if visible and _capture_input(event):
+		get_viewport().set_input_as_handled()
+		return
 	if is_instance_valid(_slot_menu) or (is_instance_valid(_exit_dialog) and _exit_dialog.visible):
 		return
 	# Co-op: hanya P1 yang membuka menu pengaturan/pause.

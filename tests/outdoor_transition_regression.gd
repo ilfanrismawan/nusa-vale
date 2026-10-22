@@ -14,6 +14,12 @@ func cross(player: Player, door: Area2D) -> void:
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 	await get_tree().create_timer(1.5, true).timeout
+	# World2D sudah dapat berpindah sebelum fade co-op selesai. Pemain nyata
+	# masih terkunci pada saat itu; tunggu kontrol kembali sebelum uji pintu lain.
+	var deadline := Time.get_ticks_msec() + 15000
+	while (Transition.on_transition or (is_instance_valid(player) and player.is_input_locked())) and Time.get_ticks_msec() < deadline:
+		await get_tree().process_frame
+	check(not Transition.on_transition and (not is_instance_valid(player) or not player.is_input_locked()), "boundary transition releases input before the next crossing")
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -90,6 +96,9 @@ func _ready() -> void:
 	player = Coop.root.body_of(1)
 	await cross(player, player.world_root().get_node("EnterTown"))
 	check(player.world_root().scene_file_path.ends_with("town.tscn") and Coop.root.body_of(0).world_root().scene_file_path.ends_with("farm.tscn"), "automatic co-op boundary moves only the crossing player")
+	var farm_alias: String = player.world_root().get_node("FarmEntrance").scene_target
+	check(Coop.root._key(farm_alias) == Coop.root._key(Coop.root.START_AREA), "UID and resource path share one co-op area key")
+	check(Coop.root._key(farm_alias + "#ranch=1") != Coop.root._key(farm_alias + "#ranch=2"), "canonical scene keys keep ranch instances separate")
 	await cross(player, player.world_root().get_node("FarmEntrance"))
 	check(player.world_root() == Coop.root.body_of(0).world_root(), "automatic co-op return rejoins the shared farm")
 	var coop_root: Node = Coop.root

@@ -1,0 +1,77 @@
+[gd_resource type="Resource" format=3 uid="uid://djv2wb7dep05d"]
+
+[ext_resource type="Script" uid="uid://b6f6jkjfa5a1i" path="res://scripts/npc/data/npc_schedule_entry.gd" id="entry"]
+[ext_resource type="Script" uid="uid://ddkllbx2rhsac" path="res://scripts/npc/data/resident_profile.gd" id="profile"]
+
+[sub_resource type="Resource" id="default_0"]
+script = ExtResource("entry")
+map_id = &"ubay_home"
+point_id = &"ubay_home"
+activity = &"breakfast"
+
+[sub_resource type="Resource" id="default_1"]
+script = ExtResource("entry")
+hour = 7
+map_id = &"town"
+point_id = &"ubay_depot"
+activity = &"sorting"
+
+[sub_resource type="Resource" id="default_2"]
+script = ExtResource("entry")
+hour = 9
+map_id = &"town"
+point_id = &"ubay_delivery"
+activity = &"delivering"
+
+[sub_resource type="Resource" id="default_3"]
+script = ExtResource("entry")
+hour = 12
+map_id = &"town"
+point_id = &"ubay_lunch"
+activity = &"lunch"
+
+[sub_resource type="Resource" id="default_4"]
+script = ExtResource("entry")
+hour = 13
+map_id = &"town"
+point_id = &"ubay_depot"
+activity = &"checking_route"
+
+[sub_resource type="Resource" id="default_5"]
+script = ExtResource("entry")
+hour = 17
+map_id = &"farm"
+point_id = &"shipping_pickup"
+activity = &"collecting"
+
+[sub_resource type="Resource" id="default_6"]
+script = ExtResource("entry")
+hour = 17
+minute = 30
+map_id = &"town"
+point_id = &"ubay_depot"
+activity = &"dispatching"
+
+[sub_resource type="Resource" id="default_7"]
+script = ExtResource("entry")
+hour = 19
+map_id = &"town"
+point_id = &"ubay_rest"
+activity = &"resting"
+
+[sub_resource type="Resource" id="default_8"]
+script = ExtResource("entry")
+hour = 22
+map_id = &"ubay_home"
+point_id = &"ubay_home"
+activity = &"sleeping"
+
+[resource]
+script = ExtResource("profile")
+source_json = "res://data/npc/ubay.json"
+npc_id = "ubay"
+display_name = "Ubay"
+role_title = "Kurir Koperasi"
+move_speed = 48.0
+schedule_source = 1
+default_schedule = Array[ExtResource("entry")]([SubResource("default_0"), SubResource("default_1"), SubResource("default_2"), SubResource("default_3"), SubResource("default_4"), SubResource("default_5"), SubResource("default_6"), SubResource("default_7"), SubResource("default_8")])

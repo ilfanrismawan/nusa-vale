@@ -3,8 +3,12 @@ extends StaticBody2D
 
 ## NPC Pandai Besi di kota (Town).
 ## Menghadapi pemain dan membuka UI upgrade alat saat diajak bicara.
+## Bila pemain membawa geoda, layar pecah geoda muncul dulu (GDD 9).
+
+const GeodeCrack = preload("res://scripts/ui/geode_crack_dialog.gd")
 
 @export var npc_name: String = "Empu Bima"
+@export var npc_id: String = "bima"
 @export var default_lines: PackedStringArray = [
 	"Halo! Selamat datang di bengkel tempa Nusa Vale.",
 	"Alat berkebun yang tajam dan kokoh membuat pekerjaanmu jauh lebih ringan.",
@@ -16,6 +20,7 @@ extends StaticBody2D
 
 var _players: Array[Player] = []
 var _ui: ToolUpgradeUI
+var _geode_ui: AcceptDialog
 var _line_index: int = 0
 
 func _ready() -> void:
@@ -34,7 +39,7 @@ func _on_body_exited(body: Node2D) -> void:
 		_players.erase(body)
 
 func _unhandled_input(event: InputEvent) -> void:
-	if is_instance_valid(_ui):
+	if is_instance_valid(_ui) or is_instance_valid(_geode_ui):
 		return
 	var player := PlayerInput.find_presser(event, _players)
 	if player != null:
@@ -43,16 +48,26 @@ func _unhandled_input(event: InputEvent) -> void:
 
 ## Dipanggil langsung atau via Player._try_interact()
 func interact(player: Player = null) -> void:
-	if is_instance_valid(_ui):
+	if is_instance_valid(_ui) or is_instance_valid(_geode_ui):
 		return
 	if player == null:
 		player = Coop.current_player() if Coop.active else get_tree().get_first_node_in_group("player")
 
 	_face_player(player)
 
+	if GeodeCrack.has_geodes(player):
+		_geode_ui = GeodeCrack.open(player, npc_name)
+		_geode_ui.connect("upgrade_requested", _open_upgrade.bind(player))
+		return
+	_open_upgrade(player)
+
+func _open_upgrade(player: Player) -> void:
+	if is_instance_valid(_ui):
+		return
 	# Buka antarmuka upgrade alat
 	_ui = load("res://scenes/ui/tool_upgrade_ui.tscn").instantiate() as ToolUpgradeUI
 	_ui.player = player
+	_ui.social_npc_id = npc_id
 	_ui.finished.connect(func():
 		Notify.say("%s: Terima kasih sudah mampir!" % npc_name)
 	)

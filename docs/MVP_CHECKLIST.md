@@ -1,5 +1,15 @@
 # Nusa Vale: stabilisasi MVP
 
+## Status aktif — 22 Oktober 2026
+
+- [x] Stabilitas dan playtest loop inti solo/co-op: **LULUS**, dikonfirmasi langsung pemilik proyek.
+- [x] Milestone playtest umum ditutup sebagai rekomendasi prioritas awal.
+- Prioritas berikutnya: **balancing progres dan ekonomi**, kemudian kelengkapan konten/fitur GDD.
+- Uji ulang hanya untuk perubahan baru atau bug/regresi konkret; jangan mengulang rekomendasi playtest umum dari catatan historis di bawah. Sumber dan cakupan: [PLAYTEST_STATUS.md](PLAYTEST_STATUS.md).
+
+Bagian bertanggal lama di bawah adalah riwayat. Kelulusan pemilik merupakan bukti tersendiri dari tes otomatis; tidak menambahkan rincian perangkat/platform yang tidak disebutkan.
+
+
 Target: satu loop yang utuh dari game baru, farming/fishing, penjualan,
 upgrade, membuka forest, tidur, hingga memuat kembali save.
 
@@ -106,8 +116,7 @@ Log bukti berada di `scratch/` (artefak lokal, tidak dijamin masuk Git):
 
 ## Checklist playtest manual menuju MVP
 
-Bagian ini tetap terbuka sampai dimainkan langsung. Lulus tes otomatis
-di atas tidak membuktikan kenyamanan, kualitas suara, atau keseluruhan alur UI.
+Status milestone umum: **sudah dimainkan dan lulus menurut konfirmasi pemilik 22 Oktober 2026**. Checkbox historis berikut dipertahankan; jangan menafsirkannya sebagai permintaan mengulang playtest umum. Tes otomatis tetap mempunyai cakupannya sendiri.
 
 - [x] New Game: konfirmasi overwrite, character creator, spawn di farm.
 - [x] Semua arah/animasi rambut, baju, mata, dan tools terlihat benar.
@@ -134,6 +143,4 @@ Scene school/school_v2 dan asset lama dipertahankan sampai penggunaan
 dan hasil visualnya dikonfirmasi. Jangan menghapus asset berdasarkan
 jumlah file saja.
 
-Urutan berikutnya: playtest cooking dan kontrol terbaru; lanjutkan fondasi
-HP/combat MVP serta fasilitas upgrade rumah untuk melengkapi cooking,
-kemudian integrasi sosial/resep dan area lanjutan sesuai GDD.
+Urutan aktif berikutnya: balancing progres/ekonomi → kelengkapan konten → fitur GDD yang belum terpasang. Playtest loop inti solo/co-op sudah lulus; HP/combat, upgrade rumah dan sosial/resep sudah memiliki implementasi. Gunakan status GDD terbaru, bukan urutan implementasi historis.

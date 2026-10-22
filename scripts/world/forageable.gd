@@ -67,13 +67,32 @@ func ground_position() -> Vector2:
 func interact() -> void:
 	if _taken or item == null:
 		return
-	var leftover: int = int(GameState.add_item(item, 1))
+
+	# Kualitas Forage (GDD 5.2): Forager Lv5+ perak, Lv8+ emas
+	var quality := ""
+	var forager_lvl := SkillSystem.level_for_points(GameState.current.skills.points.get(&"forager", 0)) if GameState.current and GameState.current.skills != null else 0
+	if forager_lvl >= 8:
+		if randf() < 0.25: quality = "_gold"
+		elif randf() < 0.50: quality = "_silver"
+	elif forager_lvl >= 5:
+		if randf() < 0.35: quality = "_silver"
+
+	var target_item: ItemData = GameState._resolve_item(item.item_id + quality) if not quality.is_empty() else item
+	if target_item == null:
+		target_item = item
+
+	var leftover: int = int(GameState.add_item(target_item, 1))
 	if leftover > 0:
 		Notify.say("Tas penuh!")
 		return
 	_taken = true
 	set_deferred("monitorable", false)
 	ForageManager.take_item(location_id, cell)
-	Notify.say("+1 %s" % item.display_name)
-	Juice.collect(item.item_id, item.icon, global_position)
+	# Role Forager (GDD 13): EXP + peluang memungut 2x.
+	SkillSystem.gain(null, &"forager", SkillSystem.RULES.forage_exp)
+	if SkillSystem.roll(null, &"forage_double") and int(GameState.add_item(target_item, 1)) == 0:
+		Notify.say("+2 %s (pungutan ganda)" % target_item.display_name)
+	else:
+		Notify.say("+1 %s" % target_item.display_name)
+	Juice.collect(target_item.item_id, target_item.icon, global_position)
 	queue_free()

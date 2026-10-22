@@ -1,7 +1,10 @@
 param(
     [string]$GodotPath = 'E:\Godot\Godot.exe',
     [int]$TimeoutSeconds = 120,
-    [string[]]$Scenes = @()
+    [string[]]$Scenes = @(),
+    [switch]$RecoveryEditor,
+    [switch]$SkipEditor,
+    [switch]$AllowCertificateStoreWarning
 )
 
 $ErrorActionPreference = 'Stop'
@@ -11,6 +14,7 @@ $auditPath = Join-Path ([System.IO.Path]::GetTempPath()) ('nusa-save-audit-' + [
 New-Item -ItemType Directory -Path $auditPath | Out-Null
 $previousAppData = $env:APPDATA
 $previousAudit = $env:NUSA_SAVE_AUDIT
+$script:verifiedScenes = [System.Collections.Generic.HashSet[string]]::new()
 
 function Invoke-GodotCheck([string]$Label, [string[]]$Arguments, [bool]$ExpectedErrors = $false) {
     if ($Scenes.Count -gt 0 -and -not ($Arguments | Where-Object { $_ -in $Scenes })) { return }
@@ -58,6 +62,9 @@ function Invoke-GodotCheck([string]$Label, [string[]]$Arguments, [bool]$Expected
     $process.Dispose()
     $output | ForEach-Object { Write-Host $_ }
     if ($exitCode -ne 0) { throw "$Label gagal (exit $exitCode)" }
+    foreach ($argument in $Arguments) {
+        if ($argument -like 'tests/*.tscn') { [void]$script:verifiedScenes.Add($argument) }
+    }
     if ($Arguments -contains 'tests/night_survival_regression.tscn' -and -not ($output -match 'NIGHT SURVIVAL REGRESSION COMPLETE: failures=0')) {
         throw 'Night survival regression tidak menyelesaikan semua pemeriksaan'
     }
@@ -79,7 +86,13 @@ function Invoke-GodotCheck([string]$Label, [string[]]$Arguments, [bool]$Expected
     if ($output -match 'SCRIPT ERROR:|FAIL:') {
         throw "$Label mengandung kegagalan script atau assertion"
     }
-    if (-not $ExpectedErrors -and ($output -match 'SCRIPT ERROR:|ERROR:')) {
+    # Keep the full log, but optionally tolerate only this known Windows environment error.
+    $checkedOutput = $output
+    if ($AllowCertificateStoreWarning) {
+        $checkedOutput = $output | Where-Object { $_ -ne 'ERROR: Failed to read the root certificate store.' }
+        if ($output -contains 'ERROR: Failed to read the root certificate store.') { Write-Warning 'Windows certificate store unavailable; explicitly tolerated for local gameplay tests.' }
+    }
+    if (-not $ExpectedErrors -and ($checkedOutput -match 'SCRIPT ERROR:|ERROR:')) {
         throw "$Label mengandung error Godot"
     }
     if ($Arguments -contains 'tests/daya_regression.tscn' -and -not ($output -match 'DAYA REGRESSION COMPLETE: failures=0')) {
@@ -113,7 +126,25 @@ function Invoke-GodotCheck([string]$Label, [string[]]$Arguments, [bool]$Expected
         throw 'Crafting regression tidak menyelesaikan semua pemeriksaan'
     }
     if ($Arguments -contains 'tests/combat_regression.tscn' -and -not ($output -match 'COMBAT REGRESSION COMPLETE: failures=0')) {
-        throw 'Crafting regression tidak menyelesaikan semua pemeriksaan'
+        throw 'Combat regression tidak menyelesaikan semua pemeriksaan'
+    }
+    $completionMarkers = @{
+        'tests/progression_balance_regression.tscn' = 'PROGRESSION BALANCE COMPLETE: failures=0'
+        'tests/town_buildings_regression.tscn' = 'TOWN BUILDINGS COMPLETE: failures=0'
+        'tests/role_exp_regression.tscn' = 'ROLE EXP REGRESSION COMPLETE: failures=0'
+        'tests/npc_story_regression.tscn' = 'NPC STORY COMPLETE: failures=0'
+        'tests/household_regression.tscn' = 'HOUSEHOLD COMPLETE: failures=0'
+        'tests/role_coverage_regression.tscn' = 'ROLE COVERAGE COMPLETE: failures=0'
+        'tests/house_regression.tscn' = 'HOUSE REGRESSION COMPLETE: failures=0'
+        'tests/gathering_regression.tscn' = 'GATHERING REGRESSION COMPLETE: failures=0'
+        'tests/fishing_season_regression.tscn' = 'FISHING SEASON COMPLETE: failures=0'
+        'tests/portrait_expression_regression.tscn' = 'PORTRAIT REGRESSION COMPLETE'
+        'tests/npc_social_regression.tscn' = 'NPC SOCIAL COMPLETE: failures=0'
+    }
+    foreach ($scene in $completionMarkers.Keys) {
+        if ($Arguments -contains $scene -and -not ($output -match [regex]::Escape($completionMarkers[$scene]))) {
+            throw "Tes $scene tidak menyelesaikan semua pemeriksaan"
+        }
     }
     if ($Arguments -contains 'tests/structure_regression.tscn' -and -not ($output -match 'STRUCTURE REGRESSION COMPLETE: failures=0')) {
         throw 'Structure regression tidak menyelesaikan semua pemeriksaan'
@@ -147,7 +178,13 @@ try {
     # SaveManager auto-loads on startup: isolate every run from real player saves.
     $env:APPDATA = $auditPath
     $env:NUSA_SAVE_AUDIT = '1'
-    Invoke-GodotCheck 'Editor/parser' @('--editor', '--quit')
+    if ($SkipEditor) {
+        Write-Host 'Editor/parser skipped explicitly; runtime checks only.'
+    } elseif ($RecoveryEditor) {
+        Invoke-GodotCheck 'Editor/parser (recovery mode, editor plugins disabled)' @('--editor', '--recovery-mode', '--quit')
+    } else {
+        Invoke-GodotCheck 'Editor/parser' @('--editor', '--quit')
+    }
     Invoke-GodotCheck 'Main menu' @('--quit-after', '60')
     foreach ($scene in @(
         'scenes/world/farm.tscn',
@@ -171,8 +208,17 @@ try {
     Invoke-GodotCheck 'Shared Forest ore, owner stamina and reentry in co-op' @('tests/forest_ore_coop_regression.tscn')
     Invoke-GodotCheck 'Co-op 2/3/4 players' @('tests/coop_smoke.tscn')
     Invoke-GodotCheck 'Inventory and settings menu' @('tests/menu_regression.tscn')
+    Invoke-GodotCheck 'Book paper bounds and pagination without scrolling' @('tests/inventory_book_layout_regression.tscn')
+    Invoke-GodotCheck 'Gamepad inventory navigation and input bindings' @('tests/gamepad_input_regression.tscn')
     Invoke-GodotCheck 'Crafting recipes and transactions' @('tests/crafting_regression.tscn')
     Invoke-GodotCheck 'Combat HP, weapons, enemies and defeat' @('tests/combat_regression.tscn')
+    Invoke-GodotCheck 'Dungeon shapes, editor zones and reachable routes' @('tests/dungeon_layout_regression.tscn')
+    Invoke-GodotCheck 'Cave generation, mining and progression' @('tests/cave_regression.tscn')
+    Invoke-GodotCheck 'Boss arena and combat' @('tests/boss_regression.tscn')
+    Invoke-GodotCheck 'Cave exit interaction and confirmation' @('tests/cave_exit_input_regression.tscn')
+    Invoke-GodotCheck 'Gold, Frost-Ember and Shadow cave tier content' @('tests/cave_tiers_regression.tscn')
+    Invoke-GodotCheck 'Deep cave guardians and ranged enemies' @('tests/deep_cave_regression.tscn')
+    Invoke-GodotCheck 'Chest proximity visuals for every tier' @('tests/chest_visual_regression.tscn')
     Invoke-GodotCheck 'Farm structures and storage' @('tests/structure_regression.tscn')
     Invoke-GodotCheck 'Furniture placement, rotation and seating' @('tests/furniture_regression.tscn')
     Invoke-GodotCheck 'Chicken coop, care, eggs and persistence' @('tests/chicken_regression.tscn')
@@ -183,6 +229,7 @@ try {
     Invoke-GodotCheck 'Right-click doors and livestock shop purchases' @('tests/doors_livestock_shop_regression.tscn')
     Invoke-GodotCheck 'Automatic outdoor boundaries in solo and co-op' @('tests/outdoor_transition_regression.tscn')
     Invoke-GodotCheck 'Daily weather and outdoor rain watering' @('tests/weather_regression.tscn')
+    Invoke-GodotCheck 'Artisan production, fruit trees, quality, keg, oil maker, smoker, lightning rod' @('tests/artisan_production_regression.tscn')
     Invoke-GodotCheck 'Forest river fishing, land and bridge boundaries' @('tests/forest_fishing_regression.tscn')
     Invoke-GodotCheck 'Instanced town buildings, interiors, doors and return spawns' @('tests/town_buildings_regression.tscn')
     Invoke-GodotCheck 'Deep Forest unlock, layout routes and resource persistence' @('tests/deep_forest_regression.tscn')
@@ -193,6 +240,7 @@ try {
     Invoke-GodotCheck 'Tool pickup, single-item shipping and town Balai Nadi access' @('tests/request_feedback_regression.tscn')
     Invoke-GodotCheck 'Gameplay regression' @('tests/gameplay_regression.tscn')
     Invoke-GodotCheck 'Crop, livestock and tool upgrade economy balance' @('tests/economy_balance_regression.tscn')
+    Invoke-GodotCheck 'Progression, cooking arbitrage, stamina and matched cave gear' @('tests/progression_balance_regression.tscn')
     Invoke-GodotCheck 'Cooking, recipe ownership, full-bag rollback and food effects' @('tests/cooking_regression.tscn')
     Invoke-GodotCheck 'One-time farm cleanup' @('tests/farm_cleanup_regression.tscn')
     Invoke-GodotCheck 'Deferred inventory and character cache' @('tests/performance_ui_regression.tscn')
@@ -200,13 +248,28 @@ try {
     Invoke-GodotCheck 'Focus pause, sleep alignment and water HUD' @('tests/feedback_focus_regression.tscn')
     Invoke-GodotCheck 'Crop growth regression' @('tests/crop_regression.tscn')
     Invoke-GodotCheck 'Character animations' @('tests/character_animation_regression.tscn')
+    Invoke-GodotCheck 'Role EXP progression and persistence' @('tests/role_exp_regression.tscn')
+    Invoke-GodotCheck 'Role branches and cooperative effects' @('tests/role_coverage_regression.tscn')
+    Invoke-GodotCheck 'NPC story and romance' @('tests/npc_story_regression.tscn')
+    Invoke-GodotCheck 'Household and social recipe mail' @('tests/household_regression.tscn')
+    Invoke-GodotCheck 'Inventory skill tree page' @('tests/skill_tree_ui_regression.tscn')
+    Invoke-GodotCheck 'Inventory NPC relationship page' @('tests/npc_relationship_ui_regression.tscn')
     Invoke-GodotCheck 'NPC schedules, waypoints, animations and dialogues' @('tests/npc_regression.tscn')
+    Invoke-GodotCheck 'House upgrades, kitchen access and migration' @('tests/house_regression.tscn')
+    Invoke-GodotCheck 'Bugs, bait, tappers and planted trees' @('tests/gathering_regression.tscn')
+    Invoke-GodotCheck 'Seasonal fish and frozen water' @('tests/fishing_season_regression.tscn')
+    Invoke-GodotCheck 'NPC portrait expressions' @('tests/portrait_expression_regression.tscn')
+    Invoke-GodotCheck 'Per-player NPC friendship, gifting and persistence' @('tests/npc_social_regression.tscn')
     Invoke-GodotCheck 'Balai Nadi contributions (expected save I/O error)' @('tests/balai_nadi_regression.tscn') $true
     Invoke-GodotCheck 'Greenhouse community restoration and farming' @('tests/greenhouse_regression.tscn') $false
     Invoke-GodotCheck 'Balai wings, funds and greenhouse reward' @('tests/balai_wings_regression.tscn') $true
     Invoke-GodotCheck 'Biji Daya unique rewards, consumption and persistence' @('tests/daya_regression.tscn') $true
     Invoke-GodotCheck 'Save regression (expected I/O errors)' @('tests/save_regression.tscn') $true
+    $missingScenes = @($Scenes | Where-Object { -not $script:verifiedScenes.Contains($_) })
+    if ($missingScenes.Count -gt 0) { throw ('Selected scenes were not registered/executed: ' + ($missingScenes -join ', ')) }
     if ($Scenes.Count -gt 0) { Write-Host 'Selected MVP verification passed.' }
+    elseif ($SkipEditor) { Write-Host 'MVP runtime verification passed (editor/parser skipped).' }
+    elseif ($RecoveryEditor) { Write-Host 'MVP verification passed (editor recovery mode).' }
     else { Write-Host 'MVP verification passed.' }
 } finally {
     $env:APPDATA = $previousAppData

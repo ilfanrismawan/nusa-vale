@@ -2,7 +2,7 @@ class_name DailyWeather
 extends Node
 
 signal changed
-const STATES := ["sunny", "rain"]
+const STATES := ["sunny", "rain", "storm"]
 var current := "sunny"
 var seed := 1
 var _day := 1
@@ -18,7 +18,12 @@ func weather_for(day: int) -> String:
 		return "sunny"
 	var rng := RandomNumberGenerator.new()
 	rng.seed = seed + day * 7919
-	return "rain" if rng.randf() < 0.3 else "sunny"
+	var roll := rng.randf()
+	if roll < 0.20:
+		return "rain"
+	elif roll < 0.30:
+		return "storm"
+	return "sunny"
 
 func advance_day(day: int) -> void:
 	if day != _day:
@@ -29,9 +34,14 @@ func advance_day(day: int) -> void:
 	changed.emit()
 
 func is_raining() -> bool:
-	return current == "rain"
+	return current == "rain" or current == "storm"
+
+func is_storm() -> bool:
+	return current == "storm"
 
 func display_name() -> String:
+	if is_storm():
+		return "Badai Petir"
 	return "Hujan" if is_raining() else "Cerah"
 
 func to_save() -> Dictionary:

@@ -4,7 +4,21 @@ signal changed
 const FURNITURE := ["wooden_chair", "wooden_bench"]
 const PreservesJarRecipe = preload("res://scripts/resources/preserves_jar_recipe.gd")
 const DehydratorRecipe = preload("res://scripts/resources/dehydrator_recipe.gd")
-const IDS := ["furnace", "wooden_chest", "wooden_fence", "crafting_workbench", "stone_fence", "wooden_gate", "copper_chest", "iron_chest", "gold_chest", "chicken_coop", "preserves_jar", "barn", "dehydrator", "silo", "pasture_grass", "mayonnaise_maker", "cheese_press", "loom", "wooden_chair", "wooden_bench"]
+const IDS := ["furnace", "wooden_chest", "wooden_fence", "crafting_workbench", "stone_fence", "wooden_gate", "copper_chest", "iron_chest", "gold_chest", "platinum_chest", "crimson_chest", "frost_chest", "shadow_chest", "chicken_coop", "preserves_jar", "barn", "dehydrator", "silo", "pasture_grass", "mayonnaise_maker", "cheese_press", "loom", "wooden_chair", "wooden_bench", "fairy_chest", "obsidian_chest", "beehive", "sawmill", "alchemy_table", "anvil", "scarecrow", "birdhouse", "street_lamp", "hay_bale", "wooden_bucket", "village_barrel", "mailbox_decor", "stone_statue", "snowman", "feed_trough", "bonfire", "candle", "stacked_barrels", "notice_board", "garden_well", "water_fountain", "garden_swing", "seesaw", "signpost", "picnic_blanket", "twin_lamp", "clothesline", "dog_house", "cow_weathervane", "chicken_weathervane", "hanging_lantern", "xmas_tree", "sandbox", "wooden_broom", "keg", "oil_maker", "fish_smoker", "lightning_rod"]
+## Dekorasi pasang (GDD 4.13). frames = jumlah frame animasi di atlas ikon, night_frame = frame saat malam, light = menyala saat malam.
+const DECOR := {
+	"scarecrow": {}, "birdhouse": {}, "street_lamp": {"frames": 2, "night_frame": 1, "light": true}, "hay_bale": {}, "wooden_bucket": {},
+	"village_barrel": {}, "mailbox_decor": {}, "stone_statue": {}, "snowman": {}, "feed_trough": {},
+	"bonfire": {"frames": 6, "light": true}, "candle": {"frames": 4, "light": true}, "stacked_barrels": {}, "notice_board": {},
+	"garden_well": {}, "water_fountain": {}, "garden_swing": {}, "seesaw": {}, "signpost": {}, "picnic_blanket": {},
+	"twin_lamp": {"frames": 2, "night_frame": 1, "light": true}, "clothesline": {}, "dog_house": {}, "cow_weathervane": {},
+	"chicken_weathervane": {}, "hanging_lantern": {"light": true}, "xmas_tree": {}, "sandbox": {}, "wooden_broom": {},
+}
+## Mesin crafting baru (GDD 4.13): sprite dirapatkan ke bawah tapak seperti dekorasi.
+const WORKSHOPS := {"beehive": {"frames": 7}, "sawmill": {}, "alchemy_table": {}, "anvil": {}, "keg": {}, "oil_maker": {}, "fish_smoker": {}, "lightning_rod": {}}
+## Meja yang meracik langsung dari katalog crafting sendiri.
+const STATION_CATALOGS := {"alchemy_table": "res://resources/crafting/alchemy.tres", "anvil": "res://resources/crafting/anvil.tres"}
+const BEEHIVE_DAYS := 3
 const CONSTRUCTION := {
 	"chicken_coop": {"money": 2000, "materials": {"wood": 100, "stone": 50}},
 	"barn": {"money": 3000, "materials": {"wood": 200, "stone": 100}},
@@ -15,9 +29,21 @@ const ARTISANS := {
 	"mayonnaise_maker": {"chicken_egg": "mayonnaise", "duck_egg": "duck_mayonnaise"},
 	"cheese_press": {"cow_milk": "cheese", "goat_milk": "goat_cheese"},
 	"loom": {"wool": "cloth"},
+	"keg": {
+		"wheat": "beer", "grape": "wine", "apple": "wine", "cherry": "wine",
+		"peach": "wine", "orange": "wine", "strawberry": "wine", "blueberry": "wine",
+		"honey": "mead", "banana": "juice", "mango": "juice", "melon": "juice",
+		"watermelon": "juice", "pineapple": "juice", "tomato": "juice", "carrot": "juice"
+	},
+	"oil_maker": {
+		"corn": "oil", "sunflower": "oil", "truffle": "truffle_oil", "garlic": "garlic_oil"
+	},
+	"fish_smoker": {
+		"smoked_fish": "smoked_fish"
+	},
 }
 const ARTISAN_SECONDS := 20.0
-const CHESTS := ["wooden_chest", "copper_chest", "iron_chest", "gold_chest"]
+const CHESTS := ["wooden_chest", "copper_chest", "iron_chest", "gold_chest", "platinum_chest", "crimson_chest", "frost_chest", "shadow_chest", "fairy_chest", "obsidian_chest"]
 var records: Array[Dictionary] = []
 var _next_uid := 1
 var _views: Array[WeakRef] = []
@@ -27,9 +53,12 @@ var _ranch_returns: Dictionary = {}
 var _recipes: Array[FurnaceRecipe] = []
 var _preserves_recipes: Array[PreservesJarRecipe] = []
 var _dehydrator_recipes: Array[DehydratorRecipe] = []
+var _sawmill_recipes: Array[FurnaceRecipe] = []
 
 func _ready() -> void:
 	DayCycle.day_passed.connect(_advance_chickens)
+	DayCycle.day_passed.connect(_advance_beehives)
+	DayCycle.day_passed.connect(func(_day: int): if GameState.weather.is_storm(): _advance_lightning_rods())
 	DayCycle.time_tick.connect(_ranch_time)
 	GameState.weather.changed.connect(func(): _ranch_time(DayCycle.hour, DayCycle.minute))
 
@@ -53,6 +82,27 @@ func _advance_chickens(day: int) -> void:
 			updated = true
 	if updated:
 		_sync_all()
+
+## Sarang lebah: job = {"day": hari siap}. Musim Dingin menunda panen sehari demi sehari.
+func _advance_beehives(day: int) -> void:
+	var updated := false
+	for record in records:
+		if record.item != "beehive" or not record.ready.is_empty():
+			continue
+		if record.job.is_empty():
+			record.job = {"day": day + BEEHIVE_DAYS}
+		elif int(record.job.get("day", 0)) <= day:
+			if DayCycle.get_current_season() == "winter":
+				record.job = {"day": day + 1}
+			else:
+				record.job = {}
+				record.ready = {"id": "honey", "count": 1, "extra": {"id": "beeswax", "count": 1}}
+		updated = true
+	if updated:
+		_sync_all()
+
+func station_catalog(machine: String) -> CraftingCatalog:
+	return load(STATION_CATALOGS[machine]) as CraftingCatalog if STATION_CATALOGS.has(machine) else null
 
 func _feed_from_silos(state: Dictionary, day: int) -> void:
 	for animal in state.chickens:
@@ -510,6 +560,8 @@ func place(player: Player, slot: int, cell: Vector2i, facing: int = 1) -> Dictio
 	var record := {"uid": _next_uid, "item": item.item_id, "cell": [cell.x, cell.y], "storage": [], "open": false, "job": {}, "ready": {}}
 	if item.item_id in RANCHES:
 		record.livestock = ChickenHusbandry.empty(DayCycle.current_day)
+	if item.item_id == "beehive":
+		record.job = {"day": DayCycle.current_day + BEEHIVE_DAYS}
 	_next_uid += 1
 	records.append(record)
 	player.data.remove_item_at(slot, 1)
@@ -705,7 +757,7 @@ func pack(data: PlayerData, uid: int) -> Dictionary:
 		return _result(false, "Silo berisi jerami tidak dapat dikemas.")
 	if record.item == "pasture_grass" and int(record.get("regrow_day", 0)) > DayCycle.current_day:
 		return _result(false, "Tunggu rumput tumbuh kembali sebelum dikemas.")
-	if not record.storage.is_empty() or not record.job.is_empty() or not record.ready.is_empty():
+	if not record.storage.is_empty() or (not record.job.is_empty() and record.item != "beehive") or not record.ready.is_empty():
 		return _result(false, "Kosongkan peti atau ambil hasil furnace terlebih dahulu.")
 	if data.add_item(record.item, 1) > 0:
 		return _result(false, "Tas penuh. Bangunan tetap terpasang.")
@@ -741,6 +793,29 @@ func smelt(data: PlayerData, uid: int, recipe: FurnaceRecipe) -> Dictionary:
 	Juice.sfx(load("res://assets/audio/sfx/machines/machine_start.wav"), -6.0)
 	changed.emit()
 	return _result(true, "Peleburan dimulai.")
+
+func sawmill_recipes() -> Array[FurnaceRecipe]:
+	if _sawmill_recipes.is_empty():
+		for file in DirAccess.get_files_at("res://resources/sawmill"):
+			var resource_name := file.trim_suffix(".remap")
+			if resource_name.ends_with(".tres"):
+				var recipe: Resource = load("res://resources/sawmill/" + resource_name)
+				if recipe is FurnaceRecipe and not _sawmill_recipes.has(recipe):
+					_sawmill_recipes.append(recipe)
+	return _sawmill_recipes
+
+func saw(data: PlayerData, uid: int, recipe: FurnaceRecipe) -> Dictionary:
+	var record := record_for(uid)
+	if data == null or record.is_empty() or record.item != "sawmill" or not sawmill_recipes().has(recipe):
+		return _result(false, "Penggergajian atau resep tidak tersedia.")
+	if not record.job.is_empty() or not record.ready.is_empty():
+		return _result(false, "Tunggu proses selesai dan ambil hasilnya.")
+	if not data.remove_item(recipe.input_item_id, recipe.input_amount):
+		return _result(false, "Kayu tidak cukup.")
+	record.job = {"recipe": recipe.recipe_id, "seconds": recipe.process_time}
+	Juice.sfx(load("res://assets/audio/sfx/machines/machine_start.wav"), -6.0)
+	changed.emit()
+	return _result(true, "Penggergajian dimulai.")
 
 func preserves_jar_recipes() -> Array[PreservesJarRecipe]:
 	if _preserves_recipes.is_empty():
@@ -796,7 +871,14 @@ func collect(data: PlayerData, uid: int) -> Dictionary:
 	var count: int = record.ready.count
 	var left := data._store(item, count)
 	if left == 0:
+		var extra: Variant = record.ready.get("extra", {})
 		record.ready = {}
+		if extra is Dictionary and extra.get("id") is String and ResourceLoader.exists("res://resources/item_data/%s.tres" % extra.id):
+			var extra_left := data._store(GameState._resolve_item(extra.id), int(extra.get("count", 1)))
+			if extra_left > 0:
+				record.ready = {"id": extra.id, "count": extra_left}
+		if record.item == "beehive" and record.ready.is_empty():
+			record.job = {"day": DayCycle.current_day + BEEHIVE_DAYS}
 	else:
 		record.ready.count = left
 	if left < count:
@@ -807,6 +889,14 @@ func collect(data: PlayerData, uid: int) -> Dictionary:
 func artisan_output(machine: String, input: String) -> String:
 	if not ARTISANS.has(machine):
 		return ""
+	if machine == "fish_smoker":
+		var base_id := input.trim_suffix("_gold").trim_suffix("_silver")
+		var item := GameState._resolve_item(base_id)
+		if item != null and item.category == ItemData.Category.FISH:
+			var qual := ""
+			if input.ends_with("_gold"): qual = "_gold"
+			elif input.ends_with("_silver"): qual = "_silver"
+			return "smoked_fish" + qual
 	for base in ARTISANS[machine]:
 		if RanchHusbandry.valid_product(input, base):
 			return str(ARTISANS[machine][base]) + input.trim_prefix(base)
@@ -840,7 +930,7 @@ func _process(delta: float) -> void:
 	if not DayCycle.is_running:
 		return
 	for record in records:
-		if record.job.is_empty():
+		if record.job.is_empty() or record.item == "beehive":
 			continue
 		record.job.seconds -= delta
 		if record.job.seconds > 0:
@@ -857,6 +947,11 @@ func _process(delta: float) -> void:
 					break
 		elif record.item == "dehydrator":
 			for recipe in dehydrator_recipes():
+				if recipe.recipe_id == record.job.recipe:
+					record.ready = {"id": recipe.output_item_id, "count": recipe.output_amount}
+					break
+		elif record.item == "sawmill":
+			for recipe in sawmill_recipes():
 				if recipe.recipe_id == record.job.recipe:
 					record.ready = {"id": recipe.output_item_id, "count": recipe.output_amount}
 					break
@@ -964,6 +1059,26 @@ func load_save(saved: Variant) -> void:
 						record.job = {"recipe": recipe.recipe_id, "seconds": clampf(float(job.seconds), 0, recipe.process_time)}
 					if ready is Dictionary and ready.get("id") == recipe.output_item_id and _integer(ready.get("count")) and ready.count > 0:
 						record.ready = {"id": ready.id, "count": mini(ready.count, recipe.output_amount)}
+			if entry.item == "sawmill":
+				var job: Variant = entry.get("job", {})
+				var ready: Variant = entry.get("ready", {})
+				for recipe in sawmill_recipes():
+					if job is Dictionary and job.get("recipe") == recipe.recipe_id and (job.get("seconds") is float or job.get("seconds") is int) and is_finite(float(job.seconds)):
+						record.job = {"recipe": recipe.recipe_id, "seconds": clampf(float(job.seconds), 0, recipe.process_time)}
+					if ready is Dictionary and ready.get("id") == recipe.output_item_id and _integer(ready.get("count")) and ready.count > 0:
+						record.ready = {"id": ready.id, "count": mini(ready.count, recipe.output_amount)}
+			if entry.item == "beehive":
+				var job: Variant = entry.get("job", {})
+				var ready: Variant = entry.get("ready", {})
+				if job is Dictionary and _integer(job.get("day")) and job.day >= 0 and job.day <= 1000000:
+					record.job = {"day": int(job.day)}
+				if ready is Dictionary and ready.get("id") in ["honey", "beeswax"] and _integer(ready.get("count")) and ready.count > 0:
+					record.ready = {"id": ready.id, "count": mini(int(ready.count), 1)}
+					var extra: Variant = ready.get("extra", {})
+					if ready.id == "honey" and extra is Dictionary and extra.get("id") == "beeswax" and _integer(extra.get("count")) and extra.count > 0:
+						record.ready.extra = {"id": "beeswax", "count": 1}
+				if record.job.is_empty() and record.ready.is_empty():
+					record.job = {"day": DayCycle.current_day + BEEHIVE_DAYS}
 			# Ready output wins over a stale simultaneous job after loading.
 			if not record.ready.is_empty():
 				record.job = {}
@@ -1051,3 +1166,12 @@ func _result(ok: bool, message: String) -> Dictionary:
 
 func _integer(value: Variant) -> bool:
 	return (value is int or value is float) and is_finite(float(value)) and float(value) == floorf(float(value))
+
+func _advance_lightning_rods() -> void:
+	var updated := false
+	for record in records:
+		if record.item == "lightning_rod" and record.ready.is_empty():
+			record.ready = {"id": "battery_pack", "count": 1}
+			updated = true
+	if updated:
+		_sync_all()

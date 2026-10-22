@@ -1,0 +1,14 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://autoload/notify.gd" id="script"]
+[ext_resource type="Theme" path="res://resources/ui/cooking_theme.tres" id="theme"]
+[node name="Notify" type="CanvasLayer"]
+layer = 110
+process_mode = 3
+script = ExtResource("script")
+[node name="Presentation" type="Control" parent="."]
+mouse_filter = 2
+theme = ExtResource("theme")
+[node name="Messages" type="VBoxContainer" parent="Presentation"]
+offset_right = 200.0
+mouse_filter = 2
+theme_override_constants/separation = 4

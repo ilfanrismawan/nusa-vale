@@ -8,7 +8,7 @@ size = Vector2(42, 45)
 [node name="BalaiNadiAccess" type="Area2D" unique_id=963677985]
 script = ExtResource("1")
 interaction_type = 1
-target_scene = "res://scenes/world/balai_nadi/exterior.tscn"
+target_scene = "uid://c5tsfm4qrkbui"
 spawn_position = Vector2(427, 277)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1750198245]

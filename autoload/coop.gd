@@ -3,12 +3,19 @@ extends Node
 ## Autoload "Coop": sesi co-op lokal split screen (2-4 pemain).
 ## Solo (active = false) semua fungsi di sini jatuh ke perilaku lama, jadi kode lain
 ## boleh memanggilnya tanpa cek. Layar, area, dan perpindahan pemain diurus CoopRoot.
+##
+## Drop-in seperti Stardew (GDD 4.14): saat bermain, gamepad yang belum dipakai menekan Start
+## -> menu pilih karakter (CoopJoinMenu) -> CoopRoot dibangun ulang dengan pemain baru, tiap
+## pemain tetap di area dan posisinya. Pemain tamu keluar dengan menahan Start (atau P1 lewat
+## menu pause); sisa P1 saja = kembali ke main sendiri tanpa ke main menu.
 
 signal session_started
 signal session_ended
 
 const ROOT_SCENE := "res://scenes/main/coop_root.tscn"
 const MAX_PLAYERS := 4
+const JOIN_MENU := preload("res://scripts/ui/coop_join_menu.gd")
+const DROP_IN := preload("res://scripts/system/coop_drop_in.gd")
 
 var active := false
 ## Perangkat per pemain, urut bergabung. Index 0 = P1 (keyboard + mouse).
@@ -16,22 +23,44 @@ var devices: Array[int] = []
 var inputs: Array[PlayerInput] = []
 ## CoopRoot yang sedang berjalan (null saat solo).
 var root: Node
+## Gamepad yang dipakai P1 saat main sendiri; tetap milik P1 (bersama keyboard + mouse)
+## setelah co-op dimulai dari dalam game. -1 = P1 belum memakai gamepad.
+var p1_pad: int = -1
+## Untuk CoopRoot berikutnya: index pemain -> {"path": String, "position": Vector2}.
+## Kosong = semua pemain mulai di Farm (lobby main menu).
+var spawn_plan: Dictionary = {}
+## Pesan yang ditampilkan CoopRoot saat dibangun (kosong = pesan mulai co-op biasa).
+var start_notice: String = ""
+## Simpan game saat pemain tamu keluar (tes mematikannya supaya tidak menulis slot save).
+var save_on_leave := true
+var _drop_in: Node
+var _join_menu: CanvasLayer
+var _switching := false
 
 
-## Mulai sesi dari lobby. Save sudah dimuat / game baru sudah disiapkan oleh pemanggil.
-func start(p_devices: Array[int]) -> void:
+func _ready() -> void:
+	_drop_in = DROP_IN.new()
+	_drop_in.name = "CoopDropIn"
+	get_tree().root.add_child.call_deferred(_drop_in)
+
+
+## Mulai (atau bangun ulang) sesi. Pemain P2-P4 sudah disusun di GameState.players
+## (seat_players); yang belum ada dibuat baru.
+func start(p_devices: Array[int], plan: Dictionary = {}) -> void:
 	devices = p_devices.duplicate()
+	spawn_plan = plan.duplicate(true)
 	inputs.clear()
 	for i in devices.size():
-		inputs.append(PlayerInput.create(i, devices[i]))
+		inputs.append(PlayerInput.create(i, devices[i], p1_pad if i == 0 else -1))
 		GameState.ensure_player(i)
+	GameState.players.resize(devices.size())
 	GameState.use_player(GameState.p1())
 	active = true
 	session_started.emit()
 	DayCycle.is_running = true
 	get_tree().change_scene_to_file(ROOT_SCENE)
 
-## Kembali ke mode solo (dipanggil main menu).
+## Kembali ke mode solo (dipanggil main menu, atau saat pemain tamu terakhir keluar).
 func stop() -> void:
 	if not active and root == null:
 		return
@@ -39,8 +68,163 @@ func stop() -> void:
 	root = null
 	devices.clear()
 	inputs.clear()
+	spawn_plan.clear()
+	GameState.players.resize(1)
 	GameState.use_player(GameState.p1())
 	session_ended.emit()
+
+
+# ── Drop-in / keluar di tengah permainan ────────────────────────────
+
+## true bila sedang di dalam game (bukan main menu).
+func in_game() -> bool:
+	if has_root():
+		return true
+	var scene := get_tree().current_scene
+	return scene != null and get_tree().get_first_node_in_group("player") != null
+
+## Perangkat ini sudah dipakai pemain (P1 atau tamu).
+func device_in_use(device: int) -> bool:
+	if device >= 0 and device == p1_pad:
+		return true
+	return active and devices.has(device)
+
+func is_switching() -> bool:
+	return _switching or is_instance_valid(_join_menu)
+
+## Alasan pemain belum bisa bergabung/keluar sekarang; "" = boleh.
+func block_reason(joining: bool) -> String:
+	if not in_game():
+		return "Mulai atau muat game dulu."
+	if joining and player_count() >= MAX_PLAYERS:
+		return "Co-op sudah penuh (4 pemain)."
+	if _switching or Transition.on_transition:
+		return "Tunggu sebentar, lalu coba lagi."
+	if has_root():
+		if root.has_busy_player() or root.sleeping_count() > 0:
+			return "Tunggu pemain selesai pindah area atau bangun tidur."
+	elif get_tree().paused:
+		return "Tutup menu dulu, lalu tekan Start lagi."
+	for plan in current_plan().values():
+		if str(plan.get("path", "")).contains("/cave/"):
+			return "Tidak bisa bergabung atau keluar saat ada pemain di gua."
+	return ""
+
+## Gamepad/numpad `device` ingin ikut: buka menu pilih karakter (game dijeda sebentar).
+func request_join(device: int) -> void:
+	if is_switching():
+		return
+	var reason := block_reason(true)
+	if not reason.is_empty():
+		Notify.say(reason)
+		return
+	var menu = JOIN_MENU.new()
+	menu.device = device
+	menu.player_number = player_count() + 1
+	menu.chosen.connect(func(data: PlayerData): _finish_join(device, data))
+	menu.cancelled.connect(func(): PauseManager.set_reason(&"coop_join", false))
+	_join_menu = menu
+	PauseManager.set_reason(&"coop_join", true)
+	get_tree().root.add_child(menu)
+
+func _finish_join(device: int, data: PlayerData) -> void:
+	PauseManager.set_reason(&"coop_join", false)
+	if not block_reason(true).is_empty():
+		Notify.say(block_reason(true))
+		return
+	var plan := current_plan()
+	var new_devices: Array[int] = []
+	if active:
+		new_devices.assign(devices)
+	else:
+		new_devices.append(PlayerInput.DEVICE_KEYBOARD)
+	var guests: Array[PlayerData] = []
+	for i in range(1, GameState.players.size()):
+		guests.append(GameState.players[i])
+	guests.append(data)
+	new_devices.append(device)
+	# Pemain baru muncul di samping P1.
+	var p1_plan: Dictionary = plan.get(0, {})
+	plan[new_devices.size() - 1] = {"path": p1_plan.get("path", ""), "position": p1_plan.get("position", Vector2.ZERO) + Vector2(16, 0)}
+	GameState.seat_players(guests)
+	start_notice = "%s bergabung sebagai P%d! Tahan Start untuk keluar." % [_display_name(data), new_devices.size()]
+	_relaunch(new_devices, plan)
+
+## Pemain tamu ke-index keluar. Datanya disimpan ke save; layar lain digabung ulang.
+## Sisa P1 saja = kembali main sendiri di area dan posisinya.
+func leave(index: int) -> void:
+	if not has_root() or index <= 0 or index >= player_count() or _switching:
+		return
+	var reason := block_reason(false)
+	if not reason.is_empty():
+		Notify.say(reason)
+		return
+	var plan := current_plan()
+	var leaving := GameState.get_player(index)
+	var new_devices: Array[int] = []
+	var guests: Array[PlayerData] = []
+	var new_plan := {}
+	for i in player_count():
+		if i == index:
+			continue
+		if i > 0:
+			guests.append(GameState.players[i])
+		new_plan[new_devices.size()] = plan.get(i, {})
+		new_devices.append(devices[i])
+	var notice := "%s keluar dari co-op. Datanya tersimpan." % _display_name(leaving)
+	if save_on_leave and not SaveManager.save_game():
+		notice = "%s keluar dari co-op, tetapi game gagal disimpan." % _display_name(leaving)
+	if guests.is_empty():
+		_to_solo(new_plan.get(0, {}), notice)
+		return
+	GameState.seat_players(guests)
+	start_notice = notice
+	_relaunch(new_devices, new_plan)
+
+## Area dan posisi tiap pemain sekarang: index -> {"path", "position"}.
+func current_plan() -> Dictionary:
+	var plan := {}
+	if has_root():
+		for i in player_count():
+			plan[i] = {"path": root.area_path_of(i), "position": root.position_of(i)}
+		return plan
+	var scene := get_tree().current_scene
+	var body := get_tree().get_first_node_in_group("player") as Node2D
+	if scene == null or body == null:
+		return plan
+	var path := scene.scene_file_path
+	if path.ends_with("coop_interior.tscn") or path.ends_with("barn_interior.tscn"):
+		path += "#ranch=%d" % StructureManager.solo_ranch_uid
+	plan[0] = {"path": path, "position": body.global_position}
+	return plan
+
+func _relaunch(new_devices: Array[int], plan: Dictionary) -> void:
+	_switching = true
+	var rebuild := func() -> void:
+		start(new_devices, plan)
+	await Transition.fade_action(rebuild, 0.2)
+	_switching = false
+
+func _to_solo(p1_plan: Dictionary, notice: String) -> void:
+	_switching = true
+	var path: String = p1_plan.get("path", "res://scenes/world/farm.tscn")
+	if path.contains("#ranch="):
+		StructureManager.solo_ranch_uid = int(path.get_slice("#ranch=", 1))
+		path = path.get_slice("#ranch=", 0)
+	var go_solo := func() -> void:
+		stop()
+		if p1_plan.has("position"):
+			GameState.next_spawn_position = p1_plan["position"]
+			GameState.has_spawn_point = true
+		get_tree().change_scene_to_file(path)
+		Notify.say(notice)
+	await Transition.fade_action(go_solo, 0.2)
+	_switching = false
+
+func _display_name(data: PlayerData) -> String:
+	if data == null or data.player_name.strip_edges().is_empty():
+		return "Pemain baru"
+	return data.player_name
 
 func player_count() -> int:
 	return inputs.size() if active else 1

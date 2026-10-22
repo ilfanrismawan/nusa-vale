@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://dr83g863vc8y2"]
+
+[ext_resource type="Resource" path="res://resources/npc_data/characters/zarathustra_resident.tres" id="5_gnvdn"]
+[ext_resource type="Resource" path="res://resources/npc_data/characters/zarathia_resident.tres" id="6_e1rpp"]
+[ext_resource type="Script" uid="uid://ddkllbx2rhsac" path="res://scripts/npc/data/resident_profile.gd" id="profile"]
+[ext_resource type="Script" uid="uid://c5rmy4324fqch" path="res://scripts/npc/npc_database.gd" id="script"]
+[ext_resource type="Resource" uid="uid://djv2wb7dep05d" path="res://resources/npc_data/characters/ubay_resident.tres" id="ubay"]
+[ext_resource type="Resource" uid="uid://bsmk85agyilt2" path="res://resources/npc_data/characters/wira_resident.tres" id="wira"]
+
+[ext_resource type="Resource" path="res://resources/npc_data/characters/eep_resident.tres" id="eep"]
+
+[node name="NPCDatabase" type="Node" unique_id=155323052]
+script = ExtResource("script")
+resident_profiles = Array[ExtResource("profile")]([ExtResource("wira"), ExtResource("ubay"), ExtResource("5_gnvdn"), ExtResource("6_e1rpp"), ExtResource("eep")])

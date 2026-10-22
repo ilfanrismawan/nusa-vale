@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+[ext_resource type="Script" path="res://scripts/data/enemy_data.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/combat/cave/ember_guard.tscn" id="scene"]
+[resource]
+script = ExtResource("1")
+id = &"ember_guard"
+display_name = "Penjaga Bara"
+scene = ExtResource("scene")
+sprite_folder = "res://assets/farm_rpg/Enemy/Goblins/Spear Goblin"
+max_hp = 200
+attack = 74
+defense = 12
+attack_style = 1
+contact_damage = true
+body_radius = 7.0
+patrol_speed = 18.0
+chase_speed = 32.0
+aggro_radius = 190.0
+give_up_radius = 300.0
+dark_vision_scale = 0.85
+attack_range = 22.0
+attack_windup = 0.5
+attack_cooldown = 1.1
+lunge_speed = 150.0
+poise = 65.0
+poise_damage = 39.0
+feint_chance = 0.15
+projectile_speed = 180.0
+projectile_color = Color(1, 0.85, 0.35, 1)
+preferred_distance = 72.0
+drop_item_id = "coal"
+drop_chance = 0.35
+drop_min = 1
+drop_max = 2

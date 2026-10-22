@@ -36,26 +36,35 @@ func requirement_text() -> String:
 var is_chopping: bool = false
 var is_destroyed: bool = false
 var _canopy: AnimatedSprite2D
+## Satu shader untuk semua pohon (dulu tiap pohon meng-compile shader sendiri saat load).
+static var _split_shader: Shader
+static var _trunk_material: ShaderMaterial
+static var _canopy_material: ShaderMaterial
+## Kanopi hanya disalin dari batang saat ada yang berubah (frame, pukulan, tumbang), bukan
+## tiap frame: ratusan pohon yang menyalin 9 properti per frame membuat farm jalan ~20 fps.
+var _sync_until_ms := 0
 const TREE_SPLIT_SHADER := "shader_type canvas_item; uniform bool canopy = false; uniform float split_y = -12.0; varying float local_y; void vertex() { local_y = VERTEX.y; } void fragment() { if ((canopy && local_y >= split_y) || (!canopy && local_y < split_y)) { discard; } }"
 
 func _setup_tree_layers() -> void:
 	# Rocks share this script; only trees use the canopy/trunk split.
 	if object_group != &"choppable":
 		return
-	var shader := Shader.new()
-	shader.code = TREE_SPLIT_SHADER
-	var trunk_material := ShaderMaterial.new()
-	trunk_material.shader = shader
-	animated_sprite.material = trunk_material
+	if _split_shader == null:
+		_split_shader = Shader.new()
+		_split_shader.code = TREE_SPLIT_SHADER
+		_trunk_material = ShaderMaterial.new()
+		_trunk_material.shader = _split_shader
+		_canopy_material = ShaderMaterial.new()
+		_canopy_material.shader = _split_shader
+		_canopy_material.set_shader_parameter("canopy", true)
+	# Material dipakai bersama supaya pohon-pohon bisa digambar dalam satu batch.
+	animated_sprite.material = _trunk_material
 	animated_sprite.z_as_relative = true
 	animated_sprite.z_index = 0
 	_canopy = AnimatedSprite2D.new()
 	_canopy.name = "Canopy"
 	_canopy.sprite_frames = animated_sprite.sprite_frames
-	var canopy_material := ShaderMaterial.new()
-	canopy_material.shader = shader
-	canopy_material.set_shader_parameter("canopy", true)
-	_canopy.material = canopy_material
+	_canopy.material = _canopy_material
 	_canopy.z_as_relative = true
 	_canopy.z_index = 0
 	add_child(_canopy)
@@ -63,6 +72,16 @@ func _setup_tree_layers() -> void:
 
 func _process(_delta: float) -> void:
 	_sync_tree_layers()
+	if not is_chopping and Time.get_ticks_msec() > _sync_until_ms:
+		set_process(false)
+
+
+## Salin kanopi tiap frame selama `seconds` ke depan (goyangan, animasi tebang/tumbang).
+func _keep_synced(seconds: float) -> void:
+	if _canopy == null:
+		return
+	_sync_until_ms = maxi(_sync_until_ms, Time.get_ticks_msec() + int(seconds * 1000.0))
+	set_process(true)
 
 func _sync_tree_layers() -> void:
 	if _canopy == null:
@@ -84,22 +103,35 @@ func _ready() -> void:
 		return
 	add_to_group(object_group)
 	_setup_tree_layers()
+	set_process(false)
+	if _canopy != null and animated_sprite != null:
+		animated_sprite.frame_changed.connect(_sync_tree_layers)
+		animated_sprite.animation_changed.connect(_sync_tree_layers)
+		animated_sprite.visibility_changed.connect(_sync_tree_layers)
 	DayCycle.season_changed.connect(_apply_season)
 	_apply_season(DayCycle.get_season())
 	_play(&"idle")
+	# Tapper yang terpasang di pohon ini (GDD 7). Deferred: spawner baru mengatur posisi setelah add_child.
+	if object_group == &"choppable":
+		GameState.gathering.on_tree_ready.call_deferred(self)
 
+
+## Pemain terakhir yang memukul: penerima EXP dan bonus perk (GDD 13).
+var last_hitter: PlayerData
 
 func take_hit(damage: int, tool_tier: int = ToolData.ToolTier.WOOD) -> void:
 	if tool_tier < required_tool_tier():
 		return
 	if is_destroyed or is_chopping:
 		return
+	last_hitter = GameState.current
 	health -= damage
 	is_chopping = true
 	_play(&"chopping")
 	Juice.play(_feedback_key(), _impact_point())
 	_wobble()
 	var anim_time := _chop_duration()
+	_keep_synced(anim_time + 0.25)
 	get_tree().create_timer(anim_time).timeout.connect(_on_chop_timeout)
 
 
@@ -130,6 +162,9 @@ func _destroy_tree() -> void:
 	is_destroyed = true
 	Juice.play(StringName(String(_feedback_key()) + "_break"), _impact_point())
 	_spawn_wood_drop()
+	SkillSystem.on_resource_broken(last_hitter, object_group, drop_item_id)
+	if object_group == &"choppable":
+		GameState.gathering.on_tree_destroyed(self)
 	if persistent:
 		var path_id := _persistence_key()
 		var removed := _removed_ids()
@@ -137,6 +172,7 @@ func _destroy_tree() -> void:
 			removed.append(path_id)
 	collision_layer = 0
 	collision_mask = 0
+	_keep_synced(0.5)
 	_play(&"stump")
 	await get_tree().create_timer(0.35).timeout
 	queue_free()
@@ -147,9 +183,16 @@ func _spawn_wood_drop() -> void:
 	if parent == null:
 		parent = get_tree().current_scene
 	var origin := global_position + Vector2(0, -8)
-	for i in drop_count:
+	# Perk Forager (kayu ekstra) dan Miner (bijih/batubara/permata ganda).
+	var total := drop_count + SkillSystem.extra_drops(last_hitter, object_group, drop_item_id, drop_count)
+	for i in total:
 		var offset := Vector2(randf_range(-12.0, 12.0), randf_range(-6.0, 6.0))
 		ItemPickupScript.spawn(parent, origin + offset, drop_item_id, 1)
+	# Pohon besar kadang menjatuhkan bijinya untuk ditanam di farm (GDD 7).
+	if object_group == &"choppable":
+		var seed_id: String = GameState.gathering.roll_seed_drop(self)
+		if not seed_id.is_empty():
+			ItemPickupScript.spawn(parent, origin + Vector2(randf_range(-8.0, 8.0), 4.0), seed_id, 1)
 
 
 func _play(anim: StringName) -> void:

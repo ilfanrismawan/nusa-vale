@@ -1,0 +1,95 @@
+[gd_scene format=3 uid="uid://bj8nuy7cdkti1"]
+
+[ext_resource type="Script" uid="uid://x7ve63nhf2fe" path="res://scripts/npc/npc_route_point.gd" id="gateway"]
+[ext_resource type="Script" uid="uid://gb3t2h50ggc1" path="res://scripts/npc/npc_route_network.gd" id="network"]
+[ext_resource type="Script" uid="uid://j5qcghubydo6" path="res://scripts/npc/npc_walk_path.gd" id="path"]
+
+[sub_resource type="Curve2D" id="wira_0"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 241, 298, 0, 0, 0, 0, 240, 220, 0, 0, 0, 0, 350, 220, 0, 0, 0, 0, 364, 160, 0, 0, 0, 0, 364, 128)
+}
+point_count = 5
+
+
+[sub_resource type="Curve2D" id="family_room_0"]
+resource_local_to_scene = true
+_data = {"points": PackedVector2Array(0, 0, 0, 0, 350, 220, 0, 0, 0, 0, 350, 190)}
+
+[sub_resource type="Curve2D" id="family_room_1"]
+resource_local_to_scene = true
+_data = {"points": PackedVector2Array(0, 0, 0, 0, 240, 220, 0, 0, 0, 0, 220, 190)}
+
+[sub_resource type="Curve2D" id="family_room_2"]
+resource_local_to_scene = true
+_data = {"points": PackedVector2Array(0, 0, 0, 0, 240, 220, 0, 0, 0, 0, 176, 220, 0, 0, 0, 0, 176, 152)}
+
+[sub_resource type="Curve2D" id="zarathia_door"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 241, 298, 0, 0, 0, 0, 240, 220, 0, 0, 0, 0, 350, 220, 0, 0, 0, 0, 364, 160, 0, 0, 0, 0, 364, 128)
+}
+point_count = 5
+
+
+[sub_resource type="Curve2D" id="zarathustra_door"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 241, 298, 0, 0, 0, 0, 240, 220, 0, 0, 0, 0, 350, 220, 0, 0, 0, 0, 364, 160, 0, 0, 0, 0, 364, 128)
+}
+point_count = 5
+
+
+[node name="NPCPaths" type="Node2D" unique_id=1626214631]
+script = ExtResource("network")
+
+[node name="door" type="Marker2D" parent="." unique_id=1860425015]
+position = Vector2(240, 298)
+script = ExtResource("gateway")
+destination_maps = PackedStringArray("hill")
+default_gateway = true
+
+[node name="Wira_door_to_home" type="Path2D" parent="." unique_id=1228093963]
+curve = SubResource("wira_0")
+script = ExtResource("path")
+npc_id = &"wira"
+
+[node name="Zarathia_Room_0" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"zarathia"
+curve = SubResource("family_room_0")
+
+[node name="Zarathustra_Room_1" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"zarathustra"
+curve = SubResource("family_room_1")
+
+[node name="Zarathia_Room_2" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"zarathia"
+curve = SubResource("family_room_2")
+
+[node name="zarathia_entrance" type="Marker2D" parent="."]
+script = ExtResource("gateway")
+position = Vector2(234, 298)
+npc_id = &"zarathia"
+destination_maps = PackedStringArray("hill", "town")
+
+[node name="zarathustra_entrance" type="Marker2D" parent="."]
+script = ExtResource("gateway")
+position = Vector2(246, 298)
+npc_id = &"zarathustra"
+destination_maps = PackedStringArray("hill", "town")
+
+[node name="Zarathia_Door" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"zarathia"
+curve = SubResource("zarathia_door")
+
+[node name="Zarathustra_Door" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"zarathustra"
+curve = SubResource("zarathustra_door")

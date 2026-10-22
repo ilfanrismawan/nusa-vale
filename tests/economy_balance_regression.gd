@@ -26,7 +26,9 @@ func _ready() -> void:
 		count += 1
 	check(count == 39, "all 39 crop economies covered")
 	var starter_gross := 5 * GameState._resolve_item("strawberry").sell_price * 2 + 3 * GameState._resolve_item("carrot").sell_price
-	check(starter_gross == 510 and starter_gross + GameState.money >= 500, "starter harvest can fund one copper order before seed reinvestment")
+	var replant := 5 * GameState._resolve_item("seed_strawberry").buy_price + 3 * GameState._resolve_item("seed_carrot").buy_price
+	var copper_cost := int(ToolUpgradeManager.get_upgrade_data("pickaxe_wood").cost)
+	check(starter_gross == 510 and starter_gross + GameState.money - copper_cost - replant >= 35, "first harvest funds copper plus all replacement seeds and a cash reserve")
 	check(DayCycle.real_seconds_per_10_game_minutes * 120 == 720, "06:00 to 02:00 lasts twelve active minutes")
 	var hoe := GameState._resolve_item("hoe_wood").action_data.tool_data
 	var water := GameState._resolve_item("watering_can_wood").action_data.tool_data

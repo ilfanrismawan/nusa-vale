@@ -19,4 +19,4 @@ item_id = "fried_egg"
 display_name = "Telur Goreng"
 icon = SubResource("FoodIcon")
 description = "Pulihkan 20 stamina. Pilih di hotbar lalu klik kiri untuk makan."
-sell_price = 45
+sell_price = 55

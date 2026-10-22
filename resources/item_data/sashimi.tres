@@ -19,4 +19,4 @@ item_id = "sashimi"
 display_name = "Sashimi"
 icon = SubResource("Icon")
 description = "Masakan dari dapur. Pilih di hotbar untuk dimakan."
-sell_price = 35
+sell_price = 77

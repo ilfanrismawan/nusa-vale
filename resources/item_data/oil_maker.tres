@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_oil_maker.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_id = "oil_maker"
+display_name = "Pembuat Minyak (Oil Maker)"
+icon = ExtResource("2")
+sell_price = 200
+buy_price = 600
+description = "Peras jagung, bunga matahari, bawang, atau truffle menjadi minyak berharga."
+placeable = true
+category = 8
+placement_size = Vector2i(2, 2)
+stackable = false
+max_stack = 1

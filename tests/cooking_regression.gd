@@ -108,5 +108,14 @@ func _ready() -> void:
 	get_tree().current_scene = self
 	town.queue_free()
 	await get_tree().process_frame
+	# Release audio playback before the headless process tears its audio server down.
+	if MusicManager._fade_tween != null and MusicManager._fade_tween.is_valid():
+		MusicManager._fade_tween.kill()
+	for music_player in MusicManager.get_children():
+		if music_player is AudioStreamPlayer:
+			music_player.stop()
+			music_player.stream = null
+	MusicManager._stream_cache.clear()
+	await get_tree().create_timer(0.1, true).timeout
 	print("COOKING REGRESSION COMPLETE: failures=%d" % failures)
 	get_tree().quit(1 if failures else 0)

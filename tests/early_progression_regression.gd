@@ -139,7 +139,7 @@ func _ready() -> void:
 	data.add_item_silent("wood", 25)
 	data.add_item_silent("copper_ore", 20)
 	data.add_item_silent("stone", 25)
-	GameState.money = 1700
+	GameState.money = 1350
 	var furnace_recipe: CraftingRecipe
 	for recipe in CraftingSystem.CATALOG.recipes:
 		if recipe.output_item_id == "furnace":
@@ -156,7 +156,7 @@ func _ready() -> void:
 	await smelt_five(data, "iron_bar")
 	check(ToolUpgradeManager.upgrade_tool("pickaxe_copper"), "small iron output funds the next metal tier without a circular dependency")
 	DayCycle.current_day += ToolUpgradeManager.WORK_DAYS
-	check(ToolUpgradeManager.collect_tool(data) and data.has_item("pickaxe_iron") and GameState.money == 0, "Wood to Copper to Iron chain uses exact total 1700 G")
+	check(ToolUpgradeManager.collect_tool(data) and data.has_item("pickaxe_iron") and GameState.money == 0, "Wood to Copper to Iron chain uses exact total 1350 G")
 	var big := load("res://scenes/objects/RockIron.tscn").instantiate() as Choppable
 	check(big.accepts_tool(GameState._resolve_item("pickaxe_iron").action_data.tool_data) and not big.accepts_tool(copper_action.tool_data), "large iron still rewards the completed iron upgrade")
 	big.free()

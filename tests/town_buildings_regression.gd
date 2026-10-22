@@ -26,15 +26,29 @@ func _ready() -> void:
 	check(buildings.get_child_count() == 14, "town keeps all 14 existing building positions as scene instances")
 	for building in buildings.get_children():
 		check(building.scene_file_path.begins_with("res://scenes/world/exterior/town/"), "instanced exterior " + building.name)
-		check(building.has_node("Door/CollisionShape2D") and building.has_node("Sign") and building.has_node("ReturnSpawn") and building.has_node("CollisionShape2D"), "door, sign, return marker and physical footprint " + building.name)
+		check(building.has_node("Door/CollisionShape2D") and building.has_node("Sign") and building.has_node("ReturnSpawn") and (building.has_node("CollisionShape2D") or building.has_node("CollisionPolygon2D")), "door, sign, return marker and physical footprint " + building.name)
 		var door := building.get_node("Door")
 		check(door.get_signal_connection_list("body_entered").is_empty(), "building entry requires interaction " + building.name)
 		check(ResourceLoader.exists(door.target_scene), "interior exists " + building.name)
+		if not ResourceLoader.exists(door.target_scene):
+			continue
 		var room: Node2D = load(door.target_scene).instantiate()
+		# Static prefab inspection shares a physics world with Town; prevent unrelated
+		# Town players from triggering a temporary room exit at overlapping coordinates.
+		var inspected_exit := room.get_node_or_null("ExitDoor") as Area2D
+		if inspected_exit != null:
+			inspected_exit.monitoring = false
 		get_tree().root.add_child(room)
 		get_tree().current_scene = room
 		await get_tree().process_frame
-		check(room.has_node("ExitDoor/CollisionShape2D"), "automatic exit provided " + building.name)
+		var exit_shape := false
+		if inspected_exit != null:
+			for collider in inspected_exit.get_children():
+				if collider is CollisionShape2D and collider.shape != null and not collider.disabled:
+					exit_shape = true
+				elif collider is CollisionPolygon2D and collider.polygon.size() >= 3 and not collider.disabled:
+					exit_shape = true
+		check(exit_shape, "automatic exit provided " + building.name)
 		if room.get_script() == load("res://scripts/world/town_interior.gd"):
 			check(room.has_node("BaseLayerGround") and room.has_node("Walls"), "room floor and walls " + building.name)
 		get_tree().current_scene = town
@@ -42,12 +56,12 @@ func _ready() -> void:
 		await get_tree().process_frame
 	var player: Player = town.get_node("Player/CharacterBody2D")
 	player.set_physics_process(false)
-	var entry := buildings.get_node("HouseOrange/Door")
-	var expected_return: Vector2 = buildings.get_node("HouseOrange/ReturnSpawn").global_position
+	var entry := buildings.get_node("HerbalHouse/Door")
+	var expected_return: Vector2 = buildings.get_node("HerbalHouse/ReturnSpawn").global_position
 	entry.interact(player)
 	await settle()
 	var active := get_tree().current_scene
-	check(active.scene_file_path.ends_with("/town/house_orange.tscn"), "actual interaction enters house interior")
+	check(active.scene_file_path.ends_with("/town/herbal_house.tscn"), "actual interaction enters house interior")
 	player = active.get_node("Player/CharacterBody2D")
 	check(player.global_position.distance_to(Vector2(240, 256)) < 1, "interior entry uses configured spawn")
 	player.global_position = Vector2(240, 306)
@@ -72,12 +86,12 @@ func _ready() -> void:
 	Coop.root.move_player(second, "res://scenes/world/town.tscn", Vector2(600, 600))
 	await settle()
 	var shared_town := first.world_root()
-	var first_return: Vector2 = shared_town.get_node("YSortEntities/Buildings/HouseOrange/ReturnSpawn").global_position
+	var first_return: Vector2 = shared_town.get_node("YSortEntities/Buildings/HerbalHouse/ReturnSpawn").global_position
 	var second_return: Vector2 = shared_town.get_node("YSortEntities/Buildings/HouseBlue/ReturnSpawn").global_position
-	shared_town.get_node("YSortEntities/Buildings/HouseOrange/Door").interact(first)
+	shared_town.get_node("YSortEntities/Buildings/HerbalHouse/Door").interact(first)
 	shared_town.get_node("YSortEntities/Buildings/HouseBlue/Door").interact(second)
 	await settle()
-	check(first.world_root().scene_file_path.ends_with("/house_orange.tscn") and second.world_root().scene_file_path.ends_with("/house_blue.tscn") and first.get_world_2d() != second.get_world_2d(), "co-op players enter two independent house interiors")
+	check(first.world_root().scene_file_path.ends_with("/herbal_house.tscn") and second.world_root().scene_file_path.ends_with("/house_blue.tscn") and first.get_world_2d() != second.get_world_2d(), "co-op players enter two independent house interiors")
 	first.world_root().get_node("ExitDoor").interact(first)
 	second.world_root().get_node("ExitDoor").interact(second)
 	await settle()

@@ -19,4 +19,4 @@ item_id = "cranberry_sauce"
 display_name = "Saus Cranberry"
 icon = SubResource("Icon")
 description = "Masakan dari dapur. Pilih di hotbar untuk dimakan."
-sell_price = 75
+sell_price = 44

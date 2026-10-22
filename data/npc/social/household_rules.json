@@ -1,0 +1,56 @@
+{
+  "ceremony_delay": 1,
+  "minimum_house_level": 2,
+  "roommate_hearts": 10,
+  "roommates": [
+    "ubay",
+    "eep"
+  ],
+  "recipe_rewards": {
+    "wira": [
+      {
+        "hearts": 4,
+        "recipe": "omelet",
+        "items": {
+          "wood": 5
+        }
+      }
+    ],
+    "ubay": [
+      {
+        "hearts": 4,
+        "recipe": "pancakes",
+        "items": {
+          "wheat": 2
+        }
+      }
+    ],
+    "eep": [
+      {
+        "hearts": 4,
+        "recipe": "salad",
+        "items": {
+          "carrot": 2
+        }
+      }
+    ],
+    "zarathia": [
+      {
+        "hearts": 6,
+        "recipe": "sun_tea",
+        "items": {
+          "honey": 1
+        }
+      }
+    ],
+    "zarathustra": [
+      {
+        "hearts": 6,
+        "recipe": "vegetable_mix",
+        "items": {
+          "potato": 2
+        }
+      }
+    ]
+  }
+}

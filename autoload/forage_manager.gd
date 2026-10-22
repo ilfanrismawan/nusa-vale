@@ -48,19 +48,24 @@ func candidates(location_id: String, dig: bool = false) -> Array[ForageData]:
 
 
 ## Pilih satu barang acak sesuai bobot. null jika area/musim ini tidak punya forage.
-func pick(location_id: String, dig: bool = false) -> ForageData:
+## rare_mult: pengali bobot barang langka (bobot < 1), mis. perk Ancient Tracker.
+func pick(location_id: String, dig: bool = false, rare_mult: float = 1.0) -> ForageData:
 	var pool := candidates(location_id, dig)
 	var total := 0.0
 	for data in pool:
-		total += data.weight
+		total += _pick_weight(data, rare_mult)
 	if total <= 0.0:
 		return null
 	var roll := randf() * total
 	for data in pool:
-		roll -= data.weight
+		roll -= _pick_weight(data, rare_mult)
 		if roll <= 0.0:
 			return data
 	return pool.back()
+
+
+func _pick_weight(data: ForageData, rare_mult: float) -> float:
+	return data.weight * rare_mult if data.weight < 1.0 else data.weight
 
 
 ## Berapa barang baru yang harus ditaruh sekarang. Sekaligus mencatat hari ini sudah diproses.

@@ -37,6 +37,15 @@ func purchase_deep_forest() -> bool:
 	return unlock("deep_forest")
 
 
+## Akses permanen setelah jembatan Hutan selesai; memakai penyimpanan unlock yang ada.
+func try_unlock_cave() -> bool:
+	if is_unlocked("cave"):
+		return true
+	if not is_unlocked("forest"):
+		return false
+	return unlock("cave")
+
+
 func _ready() -> void:
 	reset()
 

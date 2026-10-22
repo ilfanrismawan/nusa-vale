@@ -34,6 +34,9 @@ func _ready() -> void:
 	title.add_theme_font_override("font", FONT)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(title)
+	var destinations := GridContainer.new()
+	destinations.columns = 3
+	box.add_child(destinations)
 	var current: int = cave.floor_number if cave != null else 0
 	for floor_number in GameState.cave.lift_floors():
 		var button := Button.new()
@@ -42,7 +45,7 @@ func _ready() -> void:
 		button.disabled = floor_number == current
 		button.focus_mode = Control.FOCUS_NONE
 		button.pressed.connect(_choose.bind(floor_number))
-		box.add_child(button)
+		destinations.add_child(button)
 		_buttons.append(button)
 		_floors.append(floor_number)
 	var close := Button.new()

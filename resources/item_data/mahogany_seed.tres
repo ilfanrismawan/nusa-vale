@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=5 format=3]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_mahogany_seed.tres" id="2_icon"]
+[ext_resource type="Script" uid="uid://babxwm68vuqeh" path="res://scripts/state/action_data.gd" id="3_action"]
+[ext_resource type="Script" path="res://scripts/effects/tree_seed_effect.gd" id="4_effect"]
+
+[sub_resource type="Resource" id="Effect_use"]
+script = ExtResource("4_effect")
+tree_kind = "mahogany"
+seed_item_id = "mahogany_seed"
+
+[sub_resource type="Resource" id="Action_use"]
+script = ExtResource("3_action")
+display_name = "Biji Mahoni"
+icon = ExtResource("2_icon")
+animation_name = &"throw"
+hit_frame = 3
+effect = SubResource("Effect_use")
+
+[resource]
+script = ExtResource("1_script")
+category = 1
+item_id = "mahogany_seed"
+display_name = "Biji Mahoni"
+icon = ExtResource("2_icon")
+description = "Tanam di tanah farm yang tidak dicangkul. Dalam 7 hari tumbuh jadi pohon besar yang bisa dipasangi tapper."
+sell_price = 5
+action_data = SubResource("Action_use")
+metadata/_custom_type_script = "uid://cm1okc20ussp3"

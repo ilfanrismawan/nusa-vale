@@ -32,7 +32,7 @@ func interact(actor: Player = null) -> void:
 	var index := player.data.index
 	if is_instance_valid(_menus.get(index)):
 		return
-	var menu := BalaiNadiUI.new()
+	var menu := load("res://scenes/ui/balai_nadi_ui.tscn").instantiate() as BalaiNadiUI
 	menu.player = player
 	_menus[index] = menu
 	Coop.ui_parent(player).add_child(menu)

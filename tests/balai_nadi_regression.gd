@@ -108,10 +108,13 @@ func _ready() -> void:
 	check(is_instance_valid(menu) and get_tree().paused, "Table interaction opens modal and pauses solo gameplay")
 	table.interact()
 	check(table._menus.get(0) == menu, "Repeated interaction keeps one UI instance")
-	check(not menu._rows.wood.button.disabled and menu._rows.stone.button.disabled, "Buttons reflect available inventory")
+	menu._select_requirement("stone")
+	check(menu.get_node("%Donate").disabled, "Missing materials cannot be donated")
+	menu._select_requirement("wood")
+	check(not menu.get_node("%Donate").disabled, "Donation action reflects the selected material inventory")
 	await capture("balai-ui.png")
-	await click(menu._rows.wood.button)
-	check(manager.contributed(ID, "wood") == 35 and menu._rows.wood.button.disabled and menu._rows.wood.label.text.contains("35 / 100"), "Contribution UI immediately updates progress and button state")
+	await click(menu.get_node("%Donate"))
+	check(manager.contributed(ID, "wood") == 35 and menu.get_node("%Donate").disabled and menu._rows.wood.label.text.contains("35 / 100"), "Contribution UI immediately updates progress and button state")
 	var escape := InputEventKey.new()
 	escape.keycode = KEY_ESCAPE
 	escape.pressed = true

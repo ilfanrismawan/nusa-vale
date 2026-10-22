@@ -15,4 +15,4 @@ item_id = "butter"
 display_name = "Mentega"
 icon = SubResource("Icon")
 description = "Bahan olahan untuk resep lanjutan."
-sell_price = 55
+sell_price = 220

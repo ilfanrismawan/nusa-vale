@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="HorrorEvent" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/horror_event.gd" id="1_event"]
+
+[resource]
+script = ExtResource("1_event")
+id = &"shadow_glimpse"
+kind = 0
+weight = 1.2
+min_fear = 0.0
+cooldown_seconds = 25.0
+duration = 1.6
+fear_add = 0.06

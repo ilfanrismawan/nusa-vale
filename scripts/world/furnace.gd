@@ -122,7 +122,8 @@ func start_furnace() -> void:
 	GameState.remove_item(selected_recipe.input_item_id, selected_recipe.input_amount)
 	current_recipe = selected_recipe
 	is_processing = true
-	timer = selected_recipe.process_time
+	# Ahli Tungku (Miner Lv7): peleburan lebih cepat.
+	timer = selected_recipe.process_time * (1.0 - clampf(SkillSystem.stat(_player.data if _player != null else null, &"smelt_speed"), 0.0, 0.9))
 
 	var item_data := GameState._resolve_item(selected_recipe.input_item_id)
 	var display_name: String = item_data.display_name if item_data != null else selected_recipe.input_item_id

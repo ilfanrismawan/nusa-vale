@@ -1,0 +1,171 @@
+[gd_scene format=3]
+[ext_resource type="Script" path="res://scripts/npc/npc_route_network.gd" id="network"]
+[ext_resource type="Script" path="res://scripts/npc/npc_route_point.gd" id="gateway"]
+[ext_resource type="Script" path="res://scripts/npc/npc_walk_path.gd" id="path"]
+
+[sub_resource type="Curve2D" id="wira_0"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 285.0, 270.0, 0, 0, 0, 0, 230.0, 274.0, 0, 0, 0, 0, 230.0, 358.0)
+}
+
+[sub_resource type="Curve2D" id="wira_1"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 285.0, 270.0, 0, 0, 0, 0, 310.0, 274.0, 0, 0, 0, 0, 370.0, 274.0)
+}
+
+[sub_resource type="Curve2D" id="wira_2"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 242.0, 462.0, 0, 0, 0, 0, 240.0, 400.0, 0, 0, 0, 0, 230.0, 358.0)
+}
+
+[sub_resource type="Curve2D" id="wira_3"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 230.0, 358.0, 0, 0, 0, 0, 10.0, 358.0, 0, 0, 0, 0, 10.0, 298.0, 0, 0, 0, 0, 26.0, 298.0, 0, 0, 0, 0, 26.0, 282.0, 0, 0, 0, 0, 34.0, 282.0, 0, 0, 0, 0, 34.0, 278.0, 0, 0, 0, 0, 74.0, 278.0, 0, 0, 0, 0, 74.0, 266.0, 0, 0, 0, 0, 90.0, 266.0, 0, 0, 0, 0, 90.0, 262.0, 0, 0, 0, 0, 94.0, 262.0, 0, 0, 0, 0, 94.0, 258.0, 0, 0, 0, 0, 98.0, 258.0, 0, 0, 0, 0, 98.0, 254.0, 0, 0, 0, 0, 102.0, 254.0, 0, 0, 0, 0, 102.0, 250.0, 0, 0, 0, 0, 106.0, 250.0, 0, 0, 0, 0, 106.0, 242.0, 0, 0, 0, 0, 110.0, 242.0, 0, 0, 0, 0, 110.0, 238.0, 0, 0, 0, 0, 118.0, 238.0, 0, 0, 0, 0, 118.0, 198.0, 0, 0, 0, 0, 158.0, 198.0, 0, 0, 0, 0, 158.0, 194.0, 0, 0, 0, 0, 162.0, 194.0, 0, 0, 0, 0, 162.0, 186.0, 0, 0, 0, 0, 170.0, 186.0, 0, 0, 0, 0, 170.0, 178.0, 0, 0, 0, 0, 174.0, 178.0, 0, 0, 0, 0, 174.0, 174.0, 0, 0, 0, 0, 180.0, 174.0)
+}
+
+[sub_resource type="Curve2D" id="zarathia_wira_0"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 285.0, 270.0, 0, 0, 0, 0, 230.0, 274.0, 0, 0, 0, 0, 230.0, 358.0)
+}
+
+[sub_resource type="Curve2D" id="zarathia_wira_1"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 285.0, 270.0, 0, 0, 0, 0, 310.0, 274.0, 0, 0, 0, 0, 370.0, 274.0)
+}
+
+[sub_resource type="Curve2D" id="zarathia_wira_2"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 242.0, 462.0, 0, 0, 0, 0, 240.0, 400.0, 0, 0, 0, 0, 230.0, 358.0)
+}
+
+[sub_resource type="Curve2D" id="zarathia_wira_3"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 230.0, 358.0, 0, 0, 0, 0, 10.0, 358.0, 0, 0, 0, 0, 10.0, 298.0, 0, 0, 0, 0, 26.0, 298.0, 0, 0, 0, 0, 26.0, 282.0, 0, 0, 0, 0, 34.0, 282.0, 0, 0, 0, 0, 34.0, 278.0, 0, 0, 0, 0, 74.0, 278.0, 0, 0, 0, 0, 74.0, 266.0, 0, 0, 0, 0, 90.0, 266.0, 0, 0, 0, 0, 90.0, 262.0, 0, 0, 0, 0, 94.0, 262.0, 0, 0, 0, 0, 94.0, 258.0, 0, 0, 0, 0, 98.0, 258.0, 0, 0, 0, 0, 98.0, 254.0, 0, 0, 0, 0, 102.0, 254.0, 0, 0, 0, 0, 102.0, 250.0, 0, 0, 0, 0, 106.0, 250.0, 0, 0, 0, 0, 106.0, 242.0, 0, 0, 0, 0, 110.0, 242.0, 0, 0, 0, 0, 110.0, 238.0, 0, 0, 0, 0, 118.0, 238.0, 0, 0, 0, 0, 118.0, 198.0, 0, 0, 0, 0, 158.0, 198.0, 0, 0, 0, 0, 158.0, 194.0, 0, 0, 0, 0, 162.0, 194.0, 0, 0, 0, 0, 162.0, 186.0, 0, 0, 0, 0, 170.0, 186.0, 0, 0, 0, 0, 170.0, 178.0, 0, 0, 0, 0, 174.0, 178.0, 0, 0, 0, 0, 174.0, 174.0, 0, 0, 0, 0, 180.0, 174.0)
+}
+
+[sub_resource type="Curve2D" id="zarathustra_wira_0"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 285.0, 270.0, 0, 0, 0, 0, 230.0, 274.0, 0, 0, 0, 0, 230.0, 358.0)
+}
+
+[sub_resource type="Curve2D" id="zarathustra_wira_1"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 285.0, 270.0, 0, 0, 0, 0, 310.0, 274.0, 0, 0, 0, 0, 370.0, 274.0)
+}
+
+[sub_resource type="Curve2D" id="zarathustra_wira_2"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 242.0, 462.0, 0, 0, 0, 0, 240.0, 400.0, 0, 0, 0, 0, 230.0, 358.0)
+}
+
+[sub_resource type="Curve2D" id="zarathustra_wira_3"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 230.0, 358.0, 0, 0, 0, 0, 10.0, 358.0, 0, 0, 0, 0, 10.0, 298.0, 0, 0, 0, 0, 26.0, 298.0, 0, 0, 0, 0, 26.0, 282.0, 0, 0, 0, 0, 34.0, 282.0, 0, 0, 0, 0, 34.0, 278.0, 0, 0, 0, 0, 74.0, 278.0, 0, 0, 0, 0, 74.0, 266.0, 0, 0, 0, 0, 90.0, 266.0, 0, 0, 0, 0, 90.0, 262.0, 0, 0, 0, 0, 94.0, 262.0, 0, 0, 0, 0, 94.0, 258.0, 0, 0, 0, 0, 98.0, 258.0, 0, 0, 0, 0, 98.0, 254.0, 0, 0, 0, 0, 102.0, 254.0, 0, 0, 0, 0, 102.0, 250.0, 0, 0, 0, 0, 106.0, 250.0, 0, 0, 0, 0, 106.0, 242.0, 0, 0, 0, 0, 110.0, 242.0, 0, 0, 0, 0, 110.0, 238.0, 0, 0, 0, 0, 118.0, 238.0, 0, 0, 0, 0, 118.0, 198.0, 0, 0, 0, 0, 158.0, 198.0, 0, 0, 0, 0, 158.0, 194.0, 0, 0, 0, 0, 162.0, 194.0, 0, 0, 0, 0, 162.0, 186.0, 0, 0, 0, 0, 170.0, 186.0, 0, 0, 0, 0, 170.0, 178.0, 0, 0, 0, 0, 174.0, 178.0, 0, 0, 0, 0, 174.0, 174.0, 0, 0, 0, 0, 180.0, 174.0)
+}
+
+
+[node name="NPCPaths" type="Node2D"]
+script = ExtResource("network")
+
+[node name="door" type="Marker2D" parent="."]
+script = ExtResource("gateway")
+position = Vector2(285, 270)
+destination_maps = PackedStringArray("wira_home")
+default_gateway = true
+
+[node name="town" type="Marker2D" parent="."]
+script = ExtResource("gateway")
+position = Vector2(242, 462)
+destination_maps = PackedStringArray("town")
+
+[node name="Wira_door_to_trail01" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"wira"
+curve = SubResource("wira_0")
+
+[node name="Wira_door_to_stock" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"wira"
+curve = SubResource("wira_1")
+
+[node name="Wira_town_to_trail01" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"wira"
+curve = SubResource("wira_2")
+
+[node name="Wira_trail01_to_trail32" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"wira"
+curve = SubResource("wira_3")
+
+[node name="Zarathia_Wira_door_to_trail01" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"zarathia"
+curve = SubResource("zarathia_wira_0")
+
+
+[node name="Zarathia_Wira_door_to_stock" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"zarathia"
+curve = SubResource("zarathia_wira_1")
+
+
+[node name="Zarathia_Wira_town_to_trail01" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"zarathia"
+curve = SubResource("zarathia_wira_2")
+
+
+[node name="Zarathia_Wira_trail01_to_trail32" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"zarathia"
+curve = SubResource("zarathia_wira_3")
+
+
+[node name="Zarathustra_Wira_door_to_trail01" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"zarathustra"
+curve = SubResource("zarathustra_wira_0")
+
+
+[node name="Zarathustra_Wira_door_to_stock" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"zarathustra"
+curve = SubResource("zarathustra_wira_1")
+
+
+[node name="Zarathustra_Wira_town_to_trail01" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"zarathustra"
+curve = SubResource("zarathustra_wira_2")
+
+
+[node name="Zarathustra_Wira_trail01_to_trail32" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"zarathustra"
+curve = SubResource("zarathustra_wira_3")
+

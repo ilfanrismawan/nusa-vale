@@ -8,6 +8,10 @@ extends Resource
 @export var id: StringName
 @export var display_name: String = ""
 
+@export_group("Scene")
+## Kosong = enemy.tscn (atau boss.tscn untuk BossData). Gunakan inherited scene untuk varian.
+@export var scene: PackedScene
+
 @export_group("Gambar")
 ## Folder berisi Idle.png, Walk.png, Attack.png, Damage.png, Dead.png
 ## (res://assets/farm_rpg/Enemy/..., huruf E besar). Sheet yang tidak ada dilewati.
@@ -30,7 +34,7 @@ extends Resource
 @export_range(0.0, 1.0, 0.05) var knockback_resist: float = 0.0
 
 @export_group("AI")
-enum AttackStyle { LUNGE, SWING }
+enum AttackStyle { LUNGE, SWING, RANGED }
 ## false = musuh target yang diam (seperti Phase 4B-1).
 @export var ai_enabled: bool = true
 ## LUNGE = melompat menerjang ke pemain (slime). SWING = memainkan Attack.png lalu memukul di depan (myconid).
@@ -59,6 +63,12 @@ enum AttackStyle { LUNGE, SWING }
 @export_range(0, 16) var attack_hit_frame: int = 3
 ## Lama musuh tertegun (berhenti) setelah terkena pukulan.
 @export_range(0.0, 2.0) var hurt_stun: float = 0.35
+
+@export_group("Jarak jauh")
+@export var projectile_speed: float = 150.0
+@export_range(16.0, 600.0) var projectile_range: float = 240.0
+@export var projectile_color: Color = Color(1, 0.7, 0.3)
+@export var preferred_distance: float = 70.0
 
 @export_group("Poise")
 ## Ketahanan benturan tersembunyi (GDD 8.2-A4). Serangan pemain mengikisnya; habis = terhuyung

@@ -14,5 +14,6 @@ func interact(player: Player = null) -> void:
 	_menu.player = player
 	_menu.vendor_name = npc_name
 	_menu.vendor_portrait = portrait
+	_menu.social_npc_id = npc_id
 	_menu.finished.connect(func(): _menu = null)
 	Coop.ui_parent(player).add_child(_menu)

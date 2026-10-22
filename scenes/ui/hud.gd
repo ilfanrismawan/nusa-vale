@@ -34,7 +34,8 @@ func _owner_input() -> PlayerInput:
 
 func _ready() -> void:
 	get_viewport().size_changed.connect(_layout_hud)
-	var night := preload("res://scripts/effects/night_horror.gd").new()
+	# Horor malam: scene node yang bisa diatur di editor (scenes/effects/night_horror.tscn).
+	var night = preload("res://scenes/effects/night_horror.tscn").instantiate()
 	night.name = "NightHorror"
 	night.player = player
 	add_child(night)
@@ -57,6 +58,7 @@ func _ready() -> void:
 	_build_hp_bar()
 	_build_water_meter()
 	_build_weather()
+	_build_action_hints()
 	_layout_hud()
 
 func _layout_hud() -> void:
@@ -71,11 +73,20 @@ func _layout_hud() -> void:
 		_place_bar(hp_bar, Vector2(stamina_left - hp_size.x - 8.0, view_size.y - hp_size.y - 16.0))
 	if water_panel != null:
 		water_panel.position = Vector2(16, view_size.y - water_panel.size.y - 88).round()
+	if action_hints != null:
+		action_hints.layout_for_viewport()
 
 ## Menaruh bar supaya sudut kiri atas yang TERLIHAT ada di top_left.
 ## Bar diskalakan dari pivot_offset (untuk goyang), jadi posisinya digeser sebesar pivot * (1 - scale).
 func _place_bar(bar: Control, top_left: Vector2) -> void:
 	bar.position = (top_left - bar.pivot_offset * (Vector2.ONE - bar.scale)).round()
+
+## Petunjuk tombol per konteks di kiri bawah (ActionHints, GDD 4.3).
+var action_hints: ActionHints
+
+func _build_action_hints() -> void:
+	action_hints = $ActionHints
+	action_hints.player = player
 
 var weather_label: Label
 var weather_icon: TextureRect
@@ -152,6 +163,8 @@ func _build_water_meter() -> void:
 func _process(_delta: float) -> void:
 	_layout_hud()
 	_update_water_meter()
+	if action_hints != null:
+		action_hints.extra_bottom = water_panel.size.y + 12.0 if water_panel != null and water_panel.visible else 0.0
 	if food_buff_label != null:
 		var lines: PackedStringArray = []
 		for active in data.active_food_effects:

@@ -19,4 +19,4 @@ item_id = "shrimp_cocktail"
 display_name = "Koktail Udang"
 icon = SubResource("Icon")
 description = "Masakan dari dapur. Pilih di hotbar untuk dimakan."
-sell_price = 75
+sell_price = 213

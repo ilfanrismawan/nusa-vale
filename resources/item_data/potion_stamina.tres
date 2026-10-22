@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_potion_stamina.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_id = "potion_stamina"
+display_name = "Ramuan Stamina"
+icon = ExtResource("2")
+description = "Ramuan hijau dari meja alkimia. Memulihkan 80 stamina."
+category = 9
+stamina_restore = 80
+hp_restore = 0
+sell_price = 70
+rarity = 1

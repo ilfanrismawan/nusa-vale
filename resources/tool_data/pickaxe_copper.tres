@@ -18,7 +18,7 @@ tool_type = 2
 tier = 1
 damage = 2
 action_speed = 1.1
-upgrade_cost_money = 500
+upgrade_cost_money = 350
 required_items = {
 "copper_bar": 5,
 "wood": 10

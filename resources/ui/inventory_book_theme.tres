@@ -1,0 +1,149 @@
+[gd_resource type="Theme" format=3 uid="uid://cl73ou0e04t25"]
+
+[ext_resource type="FontVariation" path="res://resources/ui/readable_font.tres" id="font"]
+
+[sub_resource type="StyleBoxTexture" id="Paper"]
+content_margin_left = 6.0
+content_margin_top = 5.0
+content_margin_right = 6.0
+content_margin_bottom = 5.0
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="Disabled"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+bg_color = Color(0.5, 0.4, 0.3, 0.45)
+
+[sub_resource type="StyleBoxFlat" id="Focus"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 0.9, 0.55, 1)
+
+[sub_resource type="StyleBoxFlat" id="Hover"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+bg_color = Color(0.5, 0.3, 0.18, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9, 0.7, 0.3, 1)
+
+[sub_resource type="StyleBoxFlat" id="Pressed"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+bg_color = Color(0.25, 0.14, 0.08, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9, 0.7, 0.3, 1)
+
+[sub_resource type="StyleBoxFlat" id="Button"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+bg_color = Color(0.35, 0.2, 0.12, 0.94)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.6, 0.4, 0.25, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="Track"]
+bg_color = Color(0.52, 0.35, 0.2, 0.35)
+
+[sub_resource type="Gradient" id="SliderGradient"]
+colors = PackedColorArray(0.95, 0.77, 0.45, 1, 0.55, 0.32, 0.17, 1)
+
+[sub_resource type="GradientTexture2D" id="SliderHandle"]
+gradient = SubResource("SliderGradient")
+width = 10
+height = 14
+
+[sub_resource type="StyleBoxFlat" id="SliderTrack"]
+content_margin_top = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(0.38, 0.24, 0.14, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="SliderFill"]
+content_margin_top = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(0.68, 0.47, 0.25, 1)
+
+[sub_resource type="StyleBoxFlat" id="Input"]
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
+bg_color = Color(0.96, 0.86, 0.67, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.6, 0.4, 0.25, 1)
+
+[sub_resource type="StyleBoxEmpty" id="Empty"]
+
+[sub_resource type="StyleBoxFlat" id="Fill"]
+bg_color = Color(0.35, 0.48, 0.28, 1)
+
+[resource]
+default_font = ExtResource("font")
+default_font_size = 14
+AcceptDialog/styles/panel = SubResource("Paper")
+BookCard/base_type = &"PanelContainer"
+BookCard/styles/panel = SubResource("Paper")
+Button/colors/font_color = Color(0.98, 0.9, 0.65, 1)
+Button/colors/font_disabled_color = Color(0.48, 0.38, 0.25, 1)
+Button/colors/font_hover_color = Color(1, 0.94, 0.74, 1)
+Button/colors/font_pressed_color = Color(1, 0.94, 0.74, 1)
+Button/styles/disabled = SubResource("Disabled")
+Button/styles/focus = SubResource("Focus")
+Button/styles/hover = SubResource("Hover")
+Button/styles/hover_pressed = SubResource("Pressed")
+Button/styles/normal = SubResource("Button")
+Button/styles/pressed = SubResource("Pressed")
+HSeparator/constants/separation = 4
+HSeparator/styles/separator = SubResource("Track")
+HSlider/icons/grabber = SubResource("SliderHandle")
+HSlider/icons/grabber_disabled = SubResource("SliderHandle")
+HSlider/icons/grabber_highlight = SubResource("SliderHandle")
+HSlider/styles/grabber_area = SubResource("SliderTrack")
+HSlider/styles/grabber_area_highlight = SubResource("SliderFill")
+HSlider/styles/slider = SubResource("SliderTrack")
+Label/colors/font_color = Color(0.25, 0.14, 0.08, 1)
+LineEdit/colors/font_color = Color(0.25, 0.14, 0.08, 1)
+LineEdit/colors/font_placeholder_color = Color(0.5, 0.36, 0.22, 1)
+LineEdit/styles/focus = SubResource("Input")
+LineEdit/styles/normal = SubResource("Input")
+Panel/styles/panel = SubResource("Paper")
+PanelContainer/styles/panel = SubResource("Empty")
+ProgressBar/styles/background = SubResource("Track")
+ProgressBar/styles/fill = SubResource("Fill")
+TabBar/colors/font_selected_color = Color(1, 0.94, 0.74, 1)
+TabBar/colors/font_unselected_color = Color(0.98, 0.9, 0.65, 1)
+TabBar/styles/tab_selected = SubResource("Pressed")
+TabBar/styles/tab_unselected = SubResource("Button")
+Window/colors/title_color = Color(0.25, 0.14, 0.08, 1)

@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="CaveBand" format=3]
+
+[ext_resource type="Script" uid="uid://b83ix8aqgilpf" path="res://scripts/data/cave_band.gd" id="3_band"]
+[ext_resource type="Script" uid="uid://cdshrao3ldkws" path="res://scripts/data/enemy_data.gd" id="4_enemy"]
+[ext_resource type="Resource" uid="uid://d0p2j2shqacfh" path="res://resources/enemies/slime_green.tres" id="slime_green"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_stone.tres" id="band_icon_0"]
+
+[ext_resource type="PackedScene" path="res://scenes/world/cave/layouts/branching.tscn" id="dungeon_branching"]
+[ext_resource type="PackedScene" path="res://scenes/world/cave/layouts/ring.tscn" id="dungeon_ring"]
+[ext_resource type="PackedScene" path="res://scenes/world/cave/layouts/chambers.tscn" id="dungeon_chambers"]
+
+[resource]
+script = ExtResource("3_band")
+display_name = "Gua Batu"
+icon = ExtResource("band_icon_0")
+accent = Color(0.78, 0.74, 0.66, 1)
+tint = Color(1, 1, 1, 1)
+ore_ids = PackedStringArray("stone", "coal", "copper_ore", "quartz", "earth_crystal")
+geode_ids = PackedStringArray("geode")
+geode_chances = PackedFloat32Array(0.04)
+ore_weights = PackedFloat32Array(6.0, 2.0, 2.0, 0.5, 0.3)
+last_floor = 5
+rock_max = 24
+enemies = Array[ExtResource("4_enemy")]([ExtResource("slime_green")])
+enemy_max = 2
+
+dungeon_scenes = Array[PackedScene]([ExtResource("dungeon_branching"), ExtResource("dungeon_ring"), ExtResource("dungeon_chambers")])
+enemy_min = 1

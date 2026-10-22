@@ -127,7 +127,7 @@ func deposit_selected(player: Player) -> bool:
 	slot.count -= 1
 	if slot.count <= 0:
 		player.data.inventory[slot_index] = null
-	GameState.shipping.deposit(item, 1)
+	GameState.shipping.deposit(item, 1, player.data)
 	GameState.inventory_changed.emit()
 	player.play_item_gesture(false)
 	Juice.play_sound(&"bin_close")
@@ -206,7 +206,7 @@ func sell_harvested_items() -> void:
 	for id in totals:
 		if GameState.remove_item(id, totals[id]):
 			GameState.shipping.deposit(items[id], totals[id])
-			earned += items[id].sell_price * totals[id]
+			earned += SkillSystem.sell_price(GameState.current, items[id], true) * totals[id]
 		
 	if earned > 0:
 		Notify.say("Dititipkan senilai %d G. Dibayar setelah tidur." % earned)

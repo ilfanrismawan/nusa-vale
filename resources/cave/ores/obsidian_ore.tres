@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="CaveOre" format=3 uid="uid://dh7wffdo6jfix"]
+
+[ext_resource type="Script" uid="uid://dc2me1q2qvfpx" path="res://scripts/data/cave_ore.gd" id="1_ore"]
+[ext_resource type="Texture2D" uid="uid://btif0yj7mr4gj" path="res://assets/farm_rpg/objects/mine/stone with minerals2.png" id="2_sheet"]
+
+[sub_resource type="AtlasTexture" id="hit"]
+atlas = ExtResource("2_sheet")
+region = Rect2(160, 64, 32, 16)
+
+[sub_resource type="AtlasTexture" id="sprite"]
+atlas = ExtResource("2_sheet")
+region = Rect2(128, 64, 32, 16)
+
+[resource]
+script = ExtResource("1_ore")
+item_id = "obsidian_ore"
+sprite = SubResource("sprite")
+hit_sprite = SubResource("hit")
+minimum_tool_tier = 8
+health = 11
+drop_max = 3

@@ -20,7 +20,9 @@ func _ready() -> void:
 		get_tree().quit(2)
 		return
 	DayCycle.is_running = false
-	check(CraftingSystem.CATALOG.recipes.size() >= 25 and recipe("chicken_coop") != null and recipe("preserves_jar") != null and recipe("dehydrator") != null and recipe("barn") != null, "Crafting catalog includes preserves jar, dehydrator, farm buildings, equipment, ammunition, and four chest tiers")
+	check(CraftingSystem.CATALOG.recipes.size() >= 25 and recipe("preserves_jar") != null and recipe("dehydrator") != null, "Crafting catalog includes preserves jar, dehydrator, farm buildings, equipment, ammunition, and chest tiers")
+	for id in StructureManager.CHESTS:
+		check(recipe(id) != null, "Crafting catalog includes chest tier: " + id)
 	for entry in CraftingSystem.CATALOG.recipes:
 		var fixture := PlayerData.new()
 		for id in entry.ingredients:

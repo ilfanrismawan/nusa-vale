@@ -1,0 +1,4 @@
+[gd_scene format=3]
+[node name="Empty" type="Label"]
+autowrap_mode = 3
+text = "Belum ada equipment di dalam tas."

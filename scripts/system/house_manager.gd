@@ -66,12 +66,17 @@ func status(data: PlayerData) -> String:
 	var next := next_level()
 	if next == null:
 		return "Rumahmu sudah di tingkat tertinggi."
-	if GameState.money < next.price:
+	if GameState.money < price_for(data):
 		return "Uang belum cukup."
 	for id in next.materials:
 		if data == null or data.get_item_count(id) < next.materials[id]:
 			return "Bahan bangunan belum cukup."
 	return ""
+
+## Harga upgrade berikutnya setelah diskon fasilitas Merchant (GDD 13).
+func price_for(data: PlayerData) -> int:
+	var next := next_level()
+	return SkillSystem.facility_price(data, next.price) if next != null else 0
 
 func can_order(data: PlayerData) -> bool:
 	return status(data).is_empty()
@@ -83,9 +88,11 @@ func order_upgrade(data: PlayerData) -> bool:
 		Notify.say(reason)
 		return false
 	var next := next_level()
+	var price := price_for(data)
 	for id in next.materials:
 		data.remove_item(id, next.materials[id])
-	GameState.spend_money(next.price)
+	GameState.spend_money(price)
+	SkillSystem.gain_from_value(data, &"merchant", price, SkillSystem.RULES.shop_gold_per_exp, SkillSystem.RULES.shop_exp_max)
 	order = {"level": level + 1, "ready_day": DayCycle.current_day + next.build_days}
 	order_changed.emit()
 	if next.build_days <= 0:

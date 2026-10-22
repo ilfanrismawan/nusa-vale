@@ -32,7 +32,7 @@ extends CanvasLayer
 @onready var badge_hotbar: Label = %BadgeHotbar
 @onready var detail_title: Label = %DetailTitle
 @onready var detail_sub: Label = %DetailSub
-@onready var detail_desc: Label = %DetailDesc
+@onready var detail_desc: Control = %DetailDesc
 @onready var gold_label: Label = %GoldLabel
 @onready var price_label: Label = %PriceLabel
 
@@ -47,7 +47,7 @@ extends CanvasLayer
 @onready var btn_close: TextureButton = %BtnClose
 
 ## ── Configuration & Resources ───────────────────────────────────────────────
-@export var slot_scene: PackedScene = preload("res://scenes/ui/inventory_slot.tscn")
+@export_range(1.0, 2.0) var inventory_scale := 1.5
 
 const TEX_TAB_NORMAL := preload("res://resources/ui/tab_top_normal.tres")
 const TEX_TAB_ACTIVE := preload("res://resources/ui/tab_top_active.tres")
@@ -67,7 +67,7 @@ var current_page: int = 0
 var _selected_slot_index: int = -1
 var _hovered_slot_index: int = -1
 
-## Buang item: kotak pilihan jumlah + tombol "Buang" di panel kanan (dibuat lewat kode).
+## Buang item: node scene untuk pilihan jumlah dan tombol aksi.
 var _drop_dialog: DropItemDialogScript
 var _drop_slot_index: int = -1
 var _consume_button: Button
@@ -82,12 +82,16 @@ var _rpg_menu: Control
 var _top_tabs: Array[TextureButton] = []
 var _menu_buttons: Dictionary = {}
 var _status_panel: PanelContainer
-var _status_text: Label
+var _status_text: Control
 var _btn_hotbar: Button
 var _collection_panel: PanelContainer
 var _btn_sort: Button
 var _equipment_panel: PanelContainer
+var _settings_panel: PanelContainer
 var _crafting_panel: PanelContainer
+## Tab Keahlian (Role & EXP, GDD 13).
+var _skill_tree: Control
+var _relationship_ui: Control
 
 ## Pemain pemilik UI ini (diisi Player). Kosong = P1.
 var player: Player
@@ -106,21 +110,12 @@ const HANDLE_MAX_X: float = 52.0
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	hide()
-	# Stat dan perbandingan tier tetap muat dalam bingkai buku.
-	if detail_desc != null:
-		var box := detail_desc.get_parent()
-		var position := detail_desc.get_index()
-		var scroll := ScrollContainer.new()
-		scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-		box.add_child(scroll)
-		box.move_child(scroll, position)
-		detail_desc.reparent(scroll)
-		detail_desc.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
 	if is_instance_valid(hover_tooltip):
 		hover_tooltip.hide()
 
+	get_viewport().size_changed.connect(_resize_inventory)
+	_resize_inventory()
 	_setup_top_tabs()
 	_setup_right_ribbons()
 	_setup_pagination()
@@ -142,147 +137,29 @@ func _ready() -> void:
 ## Menu tambahan menggunakan font dan warna buku inventory.
 func _setup_rpg_menus() -> void:
 	_rpg_menu = %TopTabsContainer
-	_menu_buttons["Tas"] = tab_book
-	var additions := [["Status", "Status", preload("res://resources/ui/icon_tab_person.tres")]]
-	for entry in additions:
-		var button := _rpg_menu.get_node("Tab" + entry[1]) as TextureButton
-		button.texture_normal = TEX_TAB_NORMAL
-		var icon := button.get_node("Icon") as TextureRect
-		icon.texture = entry[2]
-		_menu_buttons[entry[0]] = button
-		_setup_tab_hover(button, entry[0])
-	_menu_buttons["Koleksi"] = tab_collection
-	var equipment_tab := TextureButton.new()
-	equipment_tab.name = "TabEquipment"
-	equipment_tab.texture_normal = TEX_TAB_NORMAL
-	var equipment_icon := TextureRect.new()
-	equipment_icon.name = "Icon"
-	equipment_icon.texture = preload("res://resources/ui/icon_tab_sword.tres")
-	equipment_tab.add_child(equipment_icon)
-	_rpg_menu.add_child(equipment_tab)
-	_menu_buttons["Equipment"] = equipment_tab
-	equipment_tab.pressed.connect(_show_equipment)
-	_setup_tab_hover(equipment_tab, "Senjata dan armor yang sedang dipakai")
-	var crafting_tab := TextureButton.new()
-	crafting_tab.name = "TabCrafting"
-	crafting_tab.texture_normal = TEX_TAB_NORMAL
-	var crafting_icon := TextureRect.new()
-	crafting_icon.name = "Icon"
-	crafting_icon.texture = preload("res://resources/icons/icon_pickaxe_wood.tres")
-	crafting_tab.add_child(crafting_icon)
-	_rpg_menu.add_child(crafting_tab)
-	_menu_buttons["Crafting"] = crafting_tab
-	crafting_tab.pressed.connect(_show_crafting)
-	_setup_tab_hover(crafting_tab, "Buat perlengkapan dari bahan dalam tas")
-	_top_tabs.assign([tab_book, _menu_buttons["Status"], equipment_tab, crafting_tab, tab_collection, tab_gear])
-	var titles := ["Tas", "Status", "Equipment", "Crafting", "Koleksi", "Pengaturan"]
-	var widths := [50.0, 56.0, 78.0, 68.0, 62.0, 90.0]
-	var tab_x := 0.0
-	for i in range(_top_tabs.size()):
-		var tab_width: float = widths[i]
-		_style_top_tab(_top_tabs[i], titles[i], tab_x, tab_width)
-		tab_x += tab_width + 4.0
-	_menu_buttons["Status"].pressed.connect(_show_status)
-	_btn_sort = _make_menu_button("Rapikan Tas")
+	_menu_buttons = {"Tas": tab_book, "Status": %TabStatus, "Equipment": %TabEquipment, "Crafting": %TabCrafting, "Keahlian": %TabSkills, "NPC": %TabNPC, "Koleksi": tab_collection}
+	_top_tabs.assign([tab_book, %TabStatus, %TabEquipment, %TabCrafting, %TabSkills, %TabNPC, tab_collection, tab_gear])
+	%TabStatus.pressed.connect(_show_status)
+	%TabEquipment.pressed.connect(_show_equipment)
+	%TabCrafting.pressed.connect(_show_crafting)
+	%TabSkills.pressed.connect(_show_skills)
+	%TabNPC.pressed.connect(_show_relationships)
+	_settings_panel = %SettingsPage
+	_status_panel = %StatusPage
+	_status_text = _status_panel.get_node("%StatusText")
+	_equipment_panel = %EquipmentPage
+	_crafting_panel = %CraftingPage
+	_collection_panel = %CollectionPage
+	_skill_tree = %SkillTreePage
+	_relationship_ui = %RelationshipPage
+	for page in [_equipment_panel, _crafting_panel, _skill_tree, _relationship_ui, _settings_panel]:
+		page.inventory_ui = self
+	_btn_sort = %SortButton
 	_btn_sort.pressed.connect(_sort_bag)
-	_btn_sort.tooltip_text = "Gabungkan tumpukan dan urutkan item menurut kategori."
-	var bag_actions := book_root.get_node("LeftPage/LeftBottomPanel/Margin/VBox")
-	bag_actions.add_child(_btn_sort)
-	bag_actions.move_child(_btn_sort, 1)
-
-	_status_panel = PanelContainer.new()
-	_status_panel.position = Vector2(28, 20)
-	_status_panel.size = Vector2(420, 248)
-	_status_panel.add_theme_stylebox_override("panel", _drop_button_style(Color(0.18, 0.12, 0.08, 1)))
-	book_root.add_child(_status_panel)
-	var margin := MarginContainer.new()
-	for edge in ["left", "top", "right", "bottom"]:
-		margin.add_theme_constant_override("margin_" + edge, 16)
-	_status_panel.add_child(margin)
-	_status_text = Label.new()
-	_status_text.add_theme_font_override("font", DropItemDialogScript.FONT)
-	_status_text.add_theme_font_size_override("font_size", 20)
-	_status_text.add_theme_color_override("font_color", DropItemDialogScript.COLOR_TEXT)
-	_status_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	margin.add_child(_status_text)
-	_status_panel.hide()
-	_collection_panel = preload("res://scripts/ui/inventory_collection.gd").new()
-	_collection_panel.position = Vector2(28, 20)
-	_collection_panel.size = Vector2(420, 248)
-	_collection_panel.hide()
-	book_root.add_child(_collection_panel)
-	_equipment_panel = preload("res://scripts/ui/inventory_equipment.gd").new()
-	_equipment_panel.inventory_ui = self
-	_equipment_panel.position = Vector2(28, 20)
-	_equipment_panel.size = Vector2(420, 248)
-	_equipment_panel.hide()
-	book_root.add_child(_equipment_panel)
-	_crafting_panel = preload("res://scripts/ui/inventory_crafting.gd").new()
-	_crafting_panel.inventory_ui = self
-	_crafting_panel.position = Vector2(28, 20)
-	_crafting_panel.size = Vector2(420, 248)
-	_crafting_panel.hide()
-	book_root.add_child(_crafting_panel)
-
-	var action_row := HBoxContainer.new()
-	_btn_drop.get_parent().add_child(action_row)
-	_btn_drop.reparent(action_row)
-	_btn_drop.text = "Buang"
-	_btn_drop.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_btn_hotbar = _make_menu_button("Hotbar")
-	_btn_hotbar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_btn_hotbar.tooltip_text = "Tampilkan halaman hotbar yang memuat item terpilih."
+	_btn_hotbar = %HotbarButton
 	_btn_hotbar.pressed.connect(_activate_hotbar_item)
-	action_row.add_child(_btn_hotbar)
 	_update_hotbar_button()
 	_update_menu_highlight()
-
-
-func _style_top_tab(tab: TextureButton, title: String, tab_x: float, tab_width: float) -> void:
-	tab.ignore_texture_size = true
-	tab.stretch_mode = TextureButton.STRETCH_SCALE
-	tab.custom_minimum_size = Vector2(tab_width, 58)
-	tab.size = Vector2(tab_width, 58)
-	tab.position = Vector2(tab_x, 8)
-	tab.mouse_filter = Control.MOUSE_FILTER_STOP
-	tab.focus_mode = Control.FOCUS_ALL
-	tab.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	var focus := StyleBoxFlat.new()
-	focus.bg_color = Color.TRANSPARENT
-	focus.border_color = Color(1, 0.94, 0.64)
-	focus.set_border_width_all(2)
-	tab.add_theme_stylebox_override("focus", focus)
-	var icon := tab.get_node("Icon") as TextureRect
-	icon.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
-	icon.position = Vector2((tab_width - 24.0) / 2.0, 8)
-	icon.size = Vector2(24, 24)
-	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var label := Label.new()
-	label.name = "TabLabel"
-	label.text = title
-	label.position = Vector2(2, 32)
-	label.size = Vector2(tab_width - 4.0, 16)
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.add_theme_font_override("font", DropItemDialogScript.FONT)
-	label.add_theme_font_size_override("font_size", 16)
-	label.add_theme_color_override("font_color", Color(0.24, 0.12, 0.08))
-	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	tab.add_child(label)
-
-
-func _make_menu_button(title: String) -> Button:
-	var button := Button.new()
-	button.text = title
-	button.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	button.add_theme_font_override("font", DropItemDialogScript.FONT)
-	button.add_theme_font_size_override("font_size", 16)
-	button.add_theme_color_override("font_color", DropItemDialogScript.COLOR_TEXT)
-	button.add_theme_stylebox_override("normal", _drop_button_style(Color(0.24, 0.16, 0.1, 1)))
-	button.add_theme_stylebox_override("hover", _drop_button_style(Color(0.42, 0.29, 0.15, 1)))
-	button.add_theme_stylebox_override("pressed", _drop_button_style(Color(0.52, 0.35, 0.16, 1)))
-	return button
 
 
 func _show_bag_page() -> void:
@@ -292,6 +169,9 @@ func _show_bag_page() -> void:
 	_equipment_panel.hide()
 	_collection_panel.hide()
 	_crafting_panel.hide()
+	_skill_tree.hide()
+	_relationship_ui.hide()
+	_settings_panel.hide()
 	book_root.get_node("LeftPage").show()
 	book_root.get_node("RightPage").show()
 	book_root.get_node("RightRibbonsContainer").show()
@@ -306,6 +186,9 @@ func _show_status() -> void:
 	_collection_panel.hide()
 	_equipment_panel.hide()
 	_crafting_panel.hide()
+	_skill_tree.hide()
+	_relationship_ui.hide()
+	_settings_panel.hide()
 	book_root.get_node("LeftPage").hide()
 	book_root.get_node("RightPage").hide()
 	book_root.get_node("RightRibbonsContainer").hide()
@@ -327,7 +210,11 @@ func _update_status() -> void:
 			if item.category != ItemData.Category.TOOL:
 				value += item.sell_price * int(data.inventory[i].get("count", 1))
 	var name_text := data.player_name if not data.player_name.is_empty() else "Petani P%d" % (data.index + 1)
-	_status_text.text = "STATUS PETANI\n%s\n\nHP: %d / %d\nStamina: %d / %d\nDEF: %d\nTas: %d / %d slot\nUang: %s G\nNilai jual isi tas: %s G\n\nHari %d - %s" % [name_text, data.hp, data.max_hp, data.stamina, data.max_stamina, Combat.player_defense(data), used, data.bag_size, HUD.format_money(GameState.money), HUD.format_money(value), DayCycle.current_day, DayCycle.get_season_display_name()]
+	_status_text.text = "%s\n\nHP: %d / %d\nStamina: %d / %d\nDEF: %d\nTas: %d / %d slot\nUang: %s G\nNilai jual isi tas: %s G\n\nHari %d - %s" % [name_text, data.hp, data.max_hp, data.stamina, data.max_stamina, Combat.player_defense(data), used, data.bag_size, HUD.format_money(GameState.money), HUD.format_money(value), DayCycle.current_day, DayCycle.get_season_display_name()]
+	var levels: PackedStringArray = []
+	for role in SkillSystem.roles():
+		levels.append("%s · Lv %d\n%d EXP" % [role.title, data.skills.level(role.role_id), data.skills.get_points(role.role_id)])
+	_status_panel.get_node("%RoleLevels").text = "\n\n".join(levels)
 
 
 func _update_menu_highlight() -> void:
@@ -340,6 +227,12 @@ func _update_menu_highlight() -> void:
 		active = _menu_buttons["Equipment"]
 	elif is_instance_valid(_crafting_panel) and _crafting_panel.visible:
 		active = _menu_buttons["Crafting"]
+	elif is_instance_valid(_skill_tree) and _skill_tree.visible:
+		active = _menu_buttons["Keahlian"]
+	if is_instance_valid(_relationship_ui) and _relationship_ui.visible:
+		active = _menu_buttons["NPC"]
+	if is_instance_valid(_settings_panel) and _settings_panel.visible:
+		active = tab_gear
 	_highlight_top_tab(active)
 
 
@@ -351,6 +244,9 @@ func _show_collection() -> void:
 	_status_panel.hide()
 	_equipment_panel.hide()
 	_crafting_panel.hide()
+	_skill_tree.hide()
+	_relationship_ui.hide()
+	_settings_panel.hide()
 	book_root.get_node("LeftPage").hide()
 	book_root.get_node("RightPage").hide()
 	book_root.get_node("RightRibbonsContainer").hide()
@@ -367,6 +263,9 @@ func _show_equipment() -> void:
 	_status_panel.hide()
 	_collection_panel.hide()
 	_crafting_panel.hide()
+	_skill_tree.hide()
+	_relationship_ui.hide()
+	_settings_panel.hide()
 	for path in ["LeftPage", "RightPage", "RightRibbonsContainer"]:
 		book_root.get_node(path).hide()
 	_equipment_panel.show()
@@ -379,12 +278,34 @@ func _show_crafting() -> void:
 		return
 	_hide_tooltip()
 	_clear_item_detail()
-	for panel in [_status_panel, _equipment_panel, _collection_panel]:
+	for panel in [_status_panel, _equipment_panel, _collection_panel, _skill_tree, _relationship_ui, _settings_panel]:
 		panel.hide()
 	for path in ["LeftPage", "RightPage", "RightRibbonsContainer"]:
 		book_root.get_node(path).hide()
 	_crafting_panel.show()
 	_crafting_panel.refresh()
+	_update_menu_highlight()
+
+
+func _show_relationships() -> void:
+	_show_embedded_page(_relationship_ui)
+
+
+func _show_skills() -> void:
+	_show_embedded_page(_skill_tree)
+
+
+func _show_embedded_page(page: Control) -> void:
+	if _drop_dialog_open():
+		return
+	_hide_tooltip()
+	_clear_item_detail()
+	for panel in [_status_panel, _equipment_panel, _collection_panel, _crafting_panel, _skill_tree, _relationship_ui, _settings_panel]:
+		panel.hide()
+	for path in ["LeftPage", "RightPage", "RightRibbonsContainer"]:
+		book_root.get_node(path).hide()
+	page.show()
+	page.refresh()
 	_update_menu_highlight()
 
 
@@ -454,12 +375,7 @@ func _on_gear_pressed() -> void:
 		detail_desc.text = "Pengaturan bersama hanya dapat dibuka P1."
 		Notify.say("Pengaturan bersama hanya dapat dibuka P1.")
 		return
-	_hide_tooltip()
-	var settings = get_parent().get_node_or_null("SettingsMenu")
-	if settings:
-		# Inventory berada di layer 35; pengaturan harus muncul di atas buku.
-		settings.layer = maxi(settings.layer, layer + 1)
-		settings.toggle()
+	_show_embedded_page(_settings_panel)
 
 
 func _set_category(cat: ItemData.Category, active_tab: TextureButton = null) -> void:
@@ -496,65 +412,6 @@ func _setup_right_ribbons() -> void:
 		{"btn": ribbon_fish, "cat": ItemData.Category.FISH, "title": "Ikan", "tag": "Isi Tas"},
 		{"btn": ribbon_forage, "cat": ItemData.Category.FORAGE, "title": "Hasil Hutan", "tag": "Isi Tas"},
 	]
-	var short_titles := ["Semua", "Bibit", "Panen", "Bahan", "Alat", "Ikan", "Hutan"]
-	var colors := [Color("b55c49"), Color("70964d"), Color("d39237"), Color("9a7965"), Color("b49b76"), Color("5c91aa"), Color("698561")]
-	var rail: Control = %RightRibbonsContainer
-	rail.mouse_filter = Control.MOUSE_FILTER_PASS
-	var heading := Label.new()
-	heading.text = "FILTER TAS"
-	heading.position = Vector2(16, -18)
-	heading.add_theme_font_override("font", DropItemDialogScript.FONT)
-	heading.add_theme_font_size_override("font_size", 16)
-	heading.add_theme_color_override("font_color", Color("efd09a"))
-	heading.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	rail.add_child(heading)
-	var icons := [preload("res://resources/ui/icon_tab_book.tres"), preload("res://resources/icons/icon_seed_carrot.tres"), preload("res://resources/icons/icon_carrot.tres"), preload("res://resources/icons/icon_stone.tres"), preload("res://resources/ui/icon_tab_sword.tres"), preload("res://resources/icons/icon_catfish.tres"), preload("res://resources/icons/icon_common_mushroom.tres")]
-	for i in range(ribbon_data.size()):
-		var ribbon: TextureButton = ribbon_data[i]["btn"]
-		ribbon.position = Vector2(0, i * 34)
-		ribbon.custom_minimum_size = Vector2(120, 30)
-		ribbon.size = Vector2(120, 30)
-		ribbon.texture_normal = TEX_RIBBON
-		ribbon.texture_hover = TEX_RIBBON_ACTIVE
-		ribbon.texture_pressed = TEX_RIBBON_ACTIVE
-		ribbon.texture_focused = TEX_RIBBON_ACTIVE
-		ribbon.focus_mode = Control.FOCUS_ALL
-		ribbon.mouse_filter = Control.MOUSE_FILTER_STOP
-		ribbon.tooltip_text = ribbon_data[i]["title"] + " — filter isi tas\nAngka menunjukkan jumlah slot terisi."
-		ribbon.stretch_mode = TextureButton.STRETCH_SCALE
-		var accent := ColorRect.new()
-		accent.color = colors[i]
-		accent.position = Vector2(2, 5)
-		accent.size = Vector2(3, 20)
-		accent.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		ribbon.add_child(accent)
-		var icon := ribbon.get_node("Icon") as TextureRect
-		icon.texture = icons[i]
-		icon.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
-		icon.position = Vector2(10, 7)
-		icon.size = Vector2(16, 16)
-		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		var label := Label.new()
-		label.name = "CategoryLabel"
-		label.text = short_titles[i]
-		label.position = Vector2(32, 5)
-		label.size = Vector2(53, 20)
-		label.add_theme_font_override("font", DropItemDialogScript.FONT)
-		label.add_theme_font_size_override("font_size", 16)
-		label.add_theme_color_override("font_color", Color(0.23, 0.12, 0.08))
-		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		ribbon.add_child(label)
-		var count := Label.new()
-		count.name = "SlotCount"
-		count.position = Vector2(85, 5)
-		count.size = Vector2(22, 20)
-		count.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-		count.add_theme_font_override("font", DropItemDialogScript.FONT)
-		count.add_theme_font_size_override("font_size", 16)
-		count.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		ribbon.add_child(count)
 
 	for data in ribbon_data:
 		var btn: TextureButton = data["btn"]
@@ -642,6 +499,14 @@ func _setup_close_button() -> void:
 
 ## ── Input Handling ──────────────────────────────────────────────────────────
 func _input(event: InputEvent) -> void:
+	if visible and is_instance_valid(_settings_panel) and _settings_panel.visible:
+		if _settings_panel.capture_input(event):
+			get_viewport().set_input_as_handled()
+			return
+		var backend: SettingsMenu = _settings_panel._backend
+		if backend != null and (is_instance_valid(backend._slot_menu) or backend._exit_dialog.visible):
+			return
+
 	if StructureManager.has_menu(data.index):
 		return
 	# Selama menu pengaturan (tab gear) terbuka, Esc menutup menu itu dulu, bukan tas.
@@ -649,6 +514,8 @@ func _input(event: InputEvent) -> void:
 	if settings and settings.visible:
 		return
 	var input := _owner_input()
+	if visible and _relationship_ui.visible and _relationship_ui.get_node("%Search").has_focus() and input.is_event(event, &"inventory"):
+		return
 	if is_instance_valid(_consume_dialog) and _consume_dialog.visible:
 		if input.is_event(event, &"ui_cancel") or input.is_event(event, &"inventory"):
 			_consume_dialog.hide()
@@ -683,16 +550,7 @@ func _input(event: InputEvent) -> void:
 	elif visible and input.is_event(event, &"ui_cancel"):
 		_close()
 		get_viewport().set_input_as_handled()
-	elif visible and event is InputEventMouseButton and event.pressed and input.uses_mouse():
-		if (_status_panel.visible or _collection_panel.visible or _equipment_panel.visible or _crafting_panel.visible):
-			return
-		# Scroll mouse wheel untuk navigasi halaman tas
-		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-			_prev_page()
-			get_viewport().set_input_as_handled()
-		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			_next_page()
-			get_viewport().set_input_as_handled()
+
 
 
 ## ── Open / Close ────────────────────────────────────────────────────────────
@@ -703,11 +561,11 @@ func _can_open_now() -> bool:
 	return not (is_instance_valid(player) and player.is_input_locked())
 
 
-## Pindah ke tab atas sebelah kiri/kanan (tab Pengaturan dilewati; buka lewat klik).
+## Pindah halaman buku; Setelan hanya tersedia untuk P1 saat co-op.
 func _cycle_tab(step: int) -> void:
 	var tabs: Array[TextureButton] = []
 	for t in _top_tabs:
-		if is_instance_valid(t) and t != tab_gear:
+		if is_instance_valid(t) and (t != tab_gear or not Coop.active or data.index == 0):
 			tabs.append(t)
 	if tabs.is_empty():
 		return
@@ -720,6 +578,12 @@ func _cycle_tab(step: int) -> void:
 		current = _menu_buttons["Equipment"]
 	elif _crafting_panel.visible:
 		current = _menu_buttons["Crafting"]
+	elif _skill_tree.visible:
+		current = _menu_buttons["Keahlian"]
+	if _relationship_ui.visible:
+		current = _menu_buttons["NPC"]
+	if _settings_panel.visible:
+		current = tab_gear
 	var idx := maxi(tabs.find(current), 0)
 	tabs[posmod(idx + step, tabs.size())].pressed.emit()
 
@@ -749,6 +613,9 @@ func open_sell_mode() -> void:
 
 
 func _close() -> void:
+	_skill_tree.hide()
+	_relationship_ui.hide()
+	_settings_panel.hide()
 	if is_instance_valid(_consume_dialog):
 		_consume_dialog.hide()
 	_close_drop_dialog()
@@ -760,27 +627,18 @@ func _close() -> void:
 
 ## ── Inventory Slots Creation ────────────────────────────────────────────────
 func _create_slots() -> void:
-	if not slot_grid or not slot_scene:
-		return
-
-	for child in slot_grid.get_children():
-		child.queue_free()
 	_slots.clear()
-
-	# Buat 12 slot grid untuk halaman yang sedang aktif
-	for i in range(SLOTS_PER_PAGE):
-		var slot: InventorySlotUI = slot_scene.instantiate()
+	for i in slot_grid.get_child_count():
+		var slot := slot_grid.get_child(i) as InventorySlotUI
 		slot.slot_index = i
 		slot.owner_ui = self
 		slot.slot_clicked.connect(_on_slot_clicked)
 		slot.slot_hovered.connect(_on_slot_hovered)
 		slot.slot_unhovered.connect(_on_slot_unhovered)
 		slot.slot_swapped.connect(_on_slot_swapped)
-		slot_grid.add_child(slot)
 		_slots.append(slot)
 
 
-## ── Hover Visual & Tooltip Handling ─────────────────────────────────────────
 func _on_slot_hovered(global_idx: int, slot_ui: InventorySlotUI) -> void:
 	_hovered_slot_index = global_idx
 
@@ -1144,6 +1002,8 @@ func refresh_inventory() -> void:
 		_equipment_panel.refresh()
 	if is_instance_valid(_crafting_panel) and _crafting_panel.visible:
 		_crafting_panel.refresh()
+	if is_instance_valid(_skill_tree) and _skill_tree.visible:
+		_skill_tree.refresh()
 
 
 func _on_money_changed(new_amount: int) -> void:
@@ -1159,42 +1019,12 @@ func _on_bag_upgraded(_new_size: int) -> void:
 
 ## ── Buang Item ──────────────────────────────────────────────────────────────
 func _setup_drop_ui() -> void:
-	_drop_dialog = DropItemDialogScript.new()
-	_drop_dialog.hide()
+	_drop_dialog = %DropDialog
 	_drop_dialog.confirmed.connect(_on_drop_confirmed)
 	_drop_dialog.cancelled.connect(_close_drop_dialog)
-	add_child(_drop_dialog)
-
-	# Tombol "Buang" menggantikan teks tip di kotak bawah halaman kanan saat item dipilih.
-	_tip_label = book_root.get_node_or_null("RightPage/BottomActionBox/Margin/VBox/TipLabel") as Label if book_root else null
-	_btn_drop = Button.new()
-	_btn_drop.text = "Buang item (klik kanan)"
-	_btn_drop.focus_mode = Control.FOCUS_NONE
-	_btn_drop.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	_btn_drop.add_theme_font_override("font", DropItemDialogScript.FONT)
-	_btn_drop.add_theme_font_size_override("font_size", 16)
-	_btn_drop.add_theme_color_override("font_color", DropItemDialogScript.COLOR_TEXT)
-	_btn_drop.add_theme_stylebox_override("normal", _drop_button_style(Color(0.45, 0.16, 0.1, 0.9)))
-	_btn_drop.add_theme_stylebox_override("hover", _drop_button_style(Color(0.6, 0.22, 0.12, 0.95)))
-	_btn_drop.add_theme_stylebox_override("pressed", _drop_button_style(Color(0.35, 0.12, 0.08, 1.0)))
+	_tip_label = %TipLabel
+	_btn_drop = %DropButton
 	_btn_drop.pressed.connect(func(): _open_drop_dialog(_selected_slot_index))
-	_btn_drop.hide()
-	if _tip_label:
-		_tip_label.get_parent().add_child(_btn_drop)
-	else:
-		add_child(_btn_drop)
-
-
-func _drop_button_style(bg: Color) -> StyleBoxFlat:
-	var sb := StyleBoxFlat.new()
-	sb.bg_color = bg
-	sb.border_color = Color(0.9, 0.7, 0.3, 1.0)
-	sb.set_border_width_all(1)
-	sb.set_corner_radius_all(3)
-	sb.content_margin_left = 4
-	sb.content_margin_right = 4
-	sb.content_margin_bottom = 1
-	return sb
 
 
 ## Alat tidak bisa dibuang/dijual (supaya alat awal tidak hilang). Mode jual: harus punya sell_price.
@@ -1297,40 +1127,17 @@ func sell_from_slot(global_idx: int, amount: int) -> bool:
 	var take := clampi(amount, 1, count)
 	if not data.remove_item_at(global_idx, take):
 		return false
-	var earned := item.sell_price * take
-	GameState.shipping.deposit(item, take)
+	var earned := SkillSystem.sell_price(data, item, true) * take
+	GameState.shipping.deposit(item, take, data)
 	var item_name: String = item.display_name if item.display_name != "" else item.item_id
 	Notify.say("Dititipkan %s x%d (%s G). Dibayar setelah tidur." % [item_name, take, HUD.format_money(earned)])
 	return true
 
 
 func _setup_daya_ui() -> void:
-	_consume_dialog = ConfirmationDialog.new()
-	var daya_theme := Theme.new()
-	daya_theme.default_font = DropItemDialogScript.FONT
-	daya_theme.default_font_size = 18
-	daya_theme.set_color("font_color", "Label", DropItemDialogScript.COLOR_TEXT)
-	daya_theme.set_color("title_color", "Window", Color("3b2825"))
-	var panel := _drop_button_style(Color("3b2825"))
-	panel.set_content_margin_all(14)
-	daya_theme.set_stylebox("panel", "AcceptDialog", panel)
-	daya_theme.set_stylebox("embedded_border", "Window", panel)
-	for state in ["normal", "hover", "pressed"]:
-		daya_theme.set_stylebox(state, "Button", _drop_button_style(Color("65432d") if state == "normal" else Color("906331")))
-	daya_theme.set_color("font_color", "Button", DropItemDialogScript.COLOR_TEXT)
-	_consume_dialog.theme = daya_theme
-	_consume_dialog.title = "Konsumsi Biji Daya?"
-	_consume_dialog.dialog_text = "Stamina maksimum +10 permanen.
-Memulihkan 10 stamina. Biji hanya dapat dikonsumsi sekali."
-	_consume_dialog.ok_button_text = "Konsumsi"
-	_consume_dialog.cancel_button_text = "Batal"
+	_consume_dialog = %ConsumeDialog
 	_consume_dialog.confirmed.connect(_consume_daya)
-	add_child(_consume_dialog)
-	_consume_button = Button.new()
-	_consume_button.text = "Konsumsi Biji Daya"
-	_consume_button.add_theme_font_override("font", DropItemDialogScript.FONT)
-	_consume_button.add_theme_font_size_override("font_size", 16)
-	_consume_button.add_theme_stylebox_override("normal", _drop_button_style(Color("65432d")))
+	_consume_button = %ConsumeButton
 	_consume_button.pressed.connect(func():
 		var item := _slot_item(_selected_slot_index)
 		if item == null or not item.item_id.begins_with("biji_daya_"):
@@ -1338,8 +1145,6 @@ Memulihkan 10 stamina. Biji hanya dapat dikonsumsi sekali."
 		_consume_slot = _selected_slot_index
 		_consume_id = item.item_id.trim_prefix("biji_daya_")
 		_consume_dialog.popup_centered())
-	_consume_button.hide()
-	_tip_label.get_parent().add_child(_consume_button)
 
 func _consume_daya() -> void:
 	if not visible or _sell_mode or not GameState.daya.consume(data, _consume_slot, _consume_id):
@@ -1369,3 +1174,10 @@ func _consume_daya() -> void:
 			if is_instance_valid(player):
 				player.set_input_locked(&"daya", false)
 			glow.queue_free())
+
+
+func _resize_inventory() -> void:
+	var view := get_viewport().get_visible_rect().size
+	# Include the category ribbons and top tabs when fitting split-screen viewports.
+	var fit := minf(inventory_scale, minf((view.x - 24.0) / 620.0, (view.y - 24.0) / 420.0))
+	book_root.scale = Vector2.ONE * maxf(0.1, fit)

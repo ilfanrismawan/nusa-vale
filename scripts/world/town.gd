@@ -53,6 +53,8 @@ func _ready() -> void:
 
 	DayCycle.is_running = true
 	FarmManager.initialize(self)
+	# Serangga liar kota (GDD 7). Forage kota memakai node ForageSpawner di town.tscn.
+	preload("res://scripts/world/bug_spawner.gd").attach(self, "town", ^"YSortEntities", 4)
 
 	if DiscoveryManager.discover("town"):
 		Notify.say("Selamat datang di Kota Nusa Vale!")

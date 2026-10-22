@@ -42,7 +42,11 @@ const ALERT_COLORS := {
 	Alert.RETREAT: Color(0.4, 0.6, 1.0, 0.18),
 }
 
-var data: EnemyData
+@export var data: EnemyData
+## Aktifkan untuk memakai bentuk collision dari scene, tanpa diganti radius EnemyData.
+@export var use_scene_collision: bool = false
+## Aktifkan bila SpriteFrames sudah dibuat sendiri di scene (idle_down, walk_down, dst.).
+@export var use_scene_animations: bool = false
 var hp := 1
 ## false = AI berhenti (musuh target diam; juga dipakai tes).
 var ai_enabled := true
@@ -51,6 +55,7 @@ var target: Player
 ## Titik asal: pusat patroli dan tempat pulang.
 var home := Vector2.ZERO
 var _sprite: AnimatedSprite2D
+var _sprite_base_tint := Color.WHITE
 var _contact: Area2D
 var _invulnerable := 0.0
 var _knockback := Vector2.ZERO
@@ -101,7 +106,13 @@ var _debug_drawn := false
 static func spawn(p_data: EnemyData, parent: Node, world_pos: Vector2) -> Enemy:
 	if p_data == null or parent == null:
 		return null
-	var enemy := Enemy.new()
+	var prefab: PackedScene = p_data.scene if p_data.scene != null else load("res://scenes/combat/enemy.tscn")
+	var instance := prefab.instantiate()
+	var enemy := instance as Enemy
+	if enemy == null:
+		instance.free()
+		push_error("Scene EnemyData harus berakar Enemy: %s" % p_data.id)
+		return null
 	enemy.data = p_data
 	enemy.name = "Enemy_%s" % p_data.id
 	enemy.home = world_pos
@@ -124,17 +135,26 @@ func _ready() -> void:
 	collision_layer = 1
 	collision_mask = 1
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
-	var body_shape := CollisionShape2D.new()
-	var circle := CircleShape2D.new()
-	circle.radius = data.body_radius
-	body_shape.shape = circle
-	add_child(body_shape)
-
-	_sprite = AnimatedSprite2D.new()
-	_sprite.sprite_frames = _build_frames()
-	_sprite.offset = data.sprite_offset
+	var body_shape := get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if body_shape == null:
+		body_shape = CollisionShape2D.new()
+		body_shape.name = "CollisionShape2D"
+		add_child(body_shape)
+	if not use_scene_collision or body_shape.shape == null:
+		var circle := CircleShape2D.new()
+		circle.radius = data.body_radius
+		body_shape.shape = circle
+	_sprite = get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+	if _sprite == null:
+		_sprite = AnimatedSprite2D.new()
+		_sprite.name = "AnimatedSprite2D"
+		add_child(_sprite)
+	if not use_scene_animations or _sprite.sprite_frames == null:
+		_sprite.sprite_frames = _build_frames()
+		_sprite.position = Vector2.ZERO
+		_sprite.offset = data.sprite_offset
+	_sprite_base_tint = _sprite.modulate
 	_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	add_child(_sprite)
 	_sprite.animation_finished.connect(_on_animation_finished)
 	_sprite.frame_changed.connect(_on_frame_changed)
 	brain = EnemyBrain.build(self)
@@ -143,15 +163,22 @@ func _ready() -> void:
 	_enter(AiState.IDLE)
 	_face(LOOK_DIRECTIONS[randi() % LOOK_DIRECTIONS.size()])
 
-	_contact = Area2D.new()
+	_contact = get_node_or_null("Contact") as Area2D
+	if _contact == null:
+		_contact = Area2D.new()
+		_contact.name = "Contact"
+		add_child(_contact)
 	_contact.monitorable = false
 	_contact.collision_mask = 0xFFFFFFFF
-	var contact_shape := CollisionShape2D.new()
-	var contact_circle := CircleShape2D.new()
-	contact_circle.radius = data.body_radius + 3.0
-	contact_shape.shape = contact_circle
-	_contact.add_child(contact_shape)
-	add_child(_contact)
+	var contact_shape := _contact.get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if contact_shape == null:
+		contact_shape = CollisionShape2D.new()
+		contact_shape.name = "CollisionShape2D"
+		_contact.add_child(contact_shape)
+	if not use_scene_collision or contact_shape.shape == null:
+		var contact_circle := CircleShape2D.new()
+		contact_circle.radius = data.body_radius + 3.0
+		contact_shape.shape = contact_circle
 	_contact.body_entered.connect(func(body: Node2D):
 		if body is Player and not _touching.has(body):
 			_touching.append(body)
@@ -321,6 +348,12 @@ func _think(delta: float) -> Vector2:
 			_finish_attack()
 			return Vector2.ZERO
 		AiState.ATTACK:
+			if data.attack_style == EnemyData.AttackStyle.RANGED:
+				if not _attack_landed:
+					_attack_landed = true
+					EnemyProjectile.launch(self, _attack_dir)
+				_enter(AiState.RECOVER)
+				return Vector2.ZERO
 			if _swings():
 				return Vector2.ZERO
 			if not _attack_landed and target != null and _target_distance() <= data.body_radius + 8.0:
@@ -365,9 +398,21 @@ func _walk_to(point: Vector2, speed: float) -> Vector2:
 	if offset.length() <= ARRIVE_DISTANCE or _stuck():
 		_enter(AiState.IDLE)
 		return Vector2.ZERO
-	var dir := offset.normalized()
+	var dir := _travel_direction(point)
+	if dir.is_zero_approx():
+		_enter(AiState.IDLE)
+		return Vector2.ZERO
 	_face(dir)
 	return dir * speed
+
+## Dunia biasa tetap memakai arah langsung; dungeon menyediakan rute dari TileMap.
+func _travel_direction(point: Vector2) -> Vector2:
+	var world := get_parent()
+	while world != null:
+		if world.has_method("dungeon_navigation_direction"):
+			return world.dungeon_navigation_direction(global_position, point)
+		world = world.get_parent()
+	return (point - global_position).normalized()
 
 func _stuck() -> bool:
 	return _state_time > 0.5 and get_slide_collision_count() > 0 and get_real_velocity().length() < 1.0
@@ -549,7 +594,7 @@ func bt_has_target(_bb = null) -> bool:
 	return true
 
 func bt_in_attack_range(_bb = null) -> bool:
-	return target != null and _target_distance() <= data.attack_range
+	return target != null and _target_distance() <= data.attack_range and (data.attack_style != EnemyData.AttackStyle.RANGED or Perception.line_of_sight(self, global_position, target.global_position + Player.FEET_OFFSET, target))
 
 ## Minta token serang. Baru selesai menyerang dan ada kawan yang menunggu = beri giliran.
 func bt_take_ticket(_bb = null) -> bool:
@@ -576,6 +621,10 @@ func bt_feint(_bb = null) -> int:
 	return BehaviorTree.SUCCESS
 
 func bt_attack(_bb = null) -> int:
+	if data.attack_style == EnemyData.AttackStyle.RANGED and _target_distance() < data.preferred_distance:
+		_move = -_direction_to_target() * data.chase_speed
+		_face(_direction_to_target())
+		return BehaviorTree.RUNNING
 	_set_alert(Alert.AGGRO)
 	_enter(AiState.WINDUP)
 	return BehaviorTree.SUCCESS
@@ -584,7 +633,7 @@ func bt_chase(_bb = null) -> int:
 	_set_alert(Alert.AGGRO)
 	if ai_state != AiState.CHASE:
 		_enter(AiState.CHASE)
-	var dir := _direction_to_target()
+	var dir := _travel_direction(_target_point(target))
 	_face(dir)
 	_move = dir * data.chase_speed
 	return BehaviorTree.RUNNING
@@ -631,8 +680,8 @@ func bt_investigate(bb: BehaviorTree.Blackboard = null) -> int:
 	if ai_state != AiState.INVESTIGATE:
 		_enter(AiState.INVESTIGATE)
 	var offset := _suspicion_point - global_position
-	if offset.length() > ARRIVE_DISTANCE * 2.0 and not _stuck():
-		var dir := offset.normalized()
+	var dir := _travel_direction(_suspicion_point)
+	if offset.length() > ARRIVE_DISTANCE * 2.0 and not _stuck() and not dir.is_zero_approx():
 		_face(dir)
 		_play("walk")
 		_move = dir * data.patrol_speed * INVESTIGATE_SPEED_SCALE
@@ -940,7 +989,7 @@ func _apply_status_tint() -> void:
 func _flash() -> void:
 	_sprite.modulate = Color(3, 3, 3)
 	var tw := create_tween()
-	tw.tween_property(_sprite, "modulate", Color.WHITE, 0.15)
+	tw.tween_property(_sprite, "modulate", _sprite_base_tint, 0.15)
 
 func _on_animation_finished() -> void:
 	if _dead:

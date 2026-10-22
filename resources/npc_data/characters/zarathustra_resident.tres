@@ -1,0 +1,10 @@
+[gd_resource type="Resource" format=3]
+[ext_resource type="Script" path="res://scripts/npc/data/resident_profile.gd" id="1"]
+[resource]
+script = ExtResource("1")
+source_json = "res://data/npc/npc_zarathustra.json"
+npc_id = "zarathustra"
+display_name = "Zarathustra"
+role_title = "Asisten Tukang Kayu"
+move_speed = 40.0
+schedule_source = 1

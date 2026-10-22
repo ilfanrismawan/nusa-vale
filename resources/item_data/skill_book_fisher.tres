@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Texture2D" path="res://resources/icons/icon_skill_book_fisher.tres" id="1_icon"]
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="2_script"]
+
+[resource]
+script = ExtResource("2_script")
+category = 4
+item_id = "skill_book_fisher"
+display_name = "Angler's Logbook"
+icon = ExtResource("1_icon")
+description = "Buku riset dari Perpustakaan. Pegang lalu pakai untuk membaca: +250 EXP Nelayan."
+max_stack = 20
+buy_price = 1500
+sell_price = 0
+skill_book_role = "fisher"
+skill_book_exp = 250
