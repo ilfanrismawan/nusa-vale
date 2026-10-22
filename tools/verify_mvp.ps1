@@ -229,7 +229,7 @@ try {
     Invoke-GodotCheck 'Right-click doors and livestock shop purchases' @('tests/doors_livestock_shop_regression.tscn')
     Invoke-GodotCheck 'Automatic outdoor boundaries in solo and co-op' @('tests/outdoor_transition_regression.tscn')
     Invoke-GodotCheck 'Daily weather and outdoor rain watering' @('tests/weather_regression.tscn')
-    Invoke-GodotCheck 'Artisan production, fruit trees, quality, keg, oil maker, smoker, lightning rod' @('tests/artisan_production_regression.tscn')
+    Invoke-GodotCheck 'Artisan production, fruit trees, quality, keg, oil maker, smoker, lightning rod' @('tests/artisan_production_regression.tscn') $true
     Invoke-GodotCheck 'Television, weather forecast, living tips and cooking broadcast' @('tests/television_regression.tscn')
     Invoke-GodotCheck 'Forest river fishing, land and bridge boundaries' @('tests/forest_fishing_regression.tscn')
     Invoke-GodotCheck 'Instanced town buildings, interiors, doors and return spawns' @('tests/town_buildings_regression.tscn')

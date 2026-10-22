@@ -14,8 +14,15 @@ var _audio_loop: AudioStreamPlayer2D
 var _was_running := false
 var _ready_bounce_time := 0.0
 
+# ── Stardew Valley Style Juice & Ready Bubble ──
+var _ready_bubble: Node2D
+var _bubble_bg: Sprite2D
+var _bubble_icon: Sprite2D
+var _squash_tween: Tween
+
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	set_meta("player_interaction", true)
 	_sprite = Sprite2D.new()
 	add_child(_sprite)
 	_collision = CollisionShape2D.new()
@@ -74,8 +81,76 @@ func _ready() -> void:
 	_audio_loop.attenuation = 1.5
 	add_child(_audio_loop)
 
+	# ── Stardew Style Ready Product Floating Bubble ──
+	_ready_bubble = Node2D.new()
+	_ready_bubble.visible = false
+	_ready_bubble.z_index = 8
+	add_child(_ready_bubble)
+
+	_bubble_bg = Sprite2D.new()
+	var bubble_texture: Texture2D = preload("res://assets/farm_rpg/ui/speech bubble, emojis, reaction.png")
+	_bubble_bg.texture = bubble_texture
+	_bubble_bg.region_enabled = true
+	_bubble_bg.region_rect = Rect2(3, 2, 21, 22)
+	_bubble_bg.offset = Vector2(0, -4)
+	_ready_bubble.add_child(_bubble_bg)
+
+	_bubble_icon = Sprite2D.new()
+	_bubble_icon.position = Vector2(0, -5)
+	_ready_bubble.add_child(_bubble_icon)
+
 	_quiet_until_ms = Time.get_ticks_msec() + 400
 	refresh()
+
+func interact(actor: Player = null) -> void:
+	if actor == null:
+		actor = Coop.current_player()
+	StructureManager.interact_with(actor, uid)
+
+## Juicy: Squash and stretch bounce saat bahan berhasil dimasukkan ke mesin
+func bounce_insert() -> void:
+	if _squash_tween != null and _squash_tween.is_valid():
+		_squash_tween.kill()
+	_squash_tween = create_tween()
+	_sprite.scale = Vector2(1.35, 0.7)
+	_squash_tween.tween_property(_sprite, "scale", Vector2(0.85, 1.25), 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	_squash_tween.tween_property(_sprite, "scale", Vector2(1.08, 0.95), 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+	_squash_tween.tween_property(_sprite, "scale", Vector2.ONE, 0.1).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	Juice.play(&"building_place", global_position + Vector2(0, -8))
+
+## Juicy: Pop recoil bounce saat produk siap diambil / dipanen
+func bounce_harvest() -> void:
+	if _squash_tween != null and _squash_tween.is_valid():
+		_squash_tween.kill()
+	_squash_tween = create_tween()
+	_sprite.scale = Vector2(0.8, 1.3)
+	_squash_tween.tween_property(_sprite, "scale", Vector2(1.2, 0.85), 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_squash_tween.tween_property(_sprite, "scale", Vector2.ONE, 0.15).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	Juice.play(&"sparkle", global_position + Vector2(0, -12))
+
+## Juicy: Goyang saat mesin sedang sibuk memproses
+func wobble_busy() -> void:
+	if _squash_tween != null and _squash_tween.is_valid():
+		_squash_tween.kill()
+	_squash_tween = create_tween()
+	var orig_x := _sprite.position.x
+	_squash_tween.tween_property(_sprite, "position:x", orig_x - 3.0, 0.05)
+	_squash_tween.tween_property(_sprite, "position:x", orig_x + 3.0, 0.05)
+	_squash_tween.tween_property(_sprite, "position:x", orig_x - 2.0, 0.05)
+	_squash_tween.tween_property(_sprite, "position:x", orig_x + 1.0, 0.05)
+	_squash_tween.tween_property(_sprite, "position:x", orig_x, 0.05)
+	Juice.play(&"plant", global_position + Vector2(0, -10))
+
+## Juicy: Goyang halus tanda bahan tidak cocok
+func wobble_reject() -> void:
+	if _squash_tween != null and _squash_tween.is_valid():
+		_squash_tween.kill()
+	_squash_tween = create_tween()
+	var orig_x := _sprite.position.x
+	_squash_tween.tween_property(_sprite, "position:x", orig_x - 2.0, 0.05)
+	_squash_tween.tween_property(_sprite, "position:x", orig_x + 2.0, 0.05)
+	_squash_tween.tween_property(_sprite, "position:x", orig_x - 1.0, 0.04)
+	_squash_tween.tween_property(_sprite, "position:x", orig_x, 0.04)
 
 func refresh() -> void:
 	if _sprite == null:
@@ -241,18 +316,35 @@ func _process(delta: float) -> void:
 		Juice.sfx(load("res://assets/audio/sfx/machines/machine_ready.wav"), -4.0)
 		Juice.play(&"sparkle", global_position)
 
-	# Animasi lembut saat produk siap diambil
-	if is_running:
-		_ready_bounce_time += delta
-		var motion := sin(_ready_bounce_time * 9.0) * 0.025
-		_sprite.scale = Vector2(1 + motion, 1 - motion)
-	elif is_ready:
-		_ready_bounce_time += delta
-		var pulse := sin(_ready_bounce_time * 5.0) * 0.05
-		_sprite.scale = Vector2(1.0 + pulse, 1.0 - pulse)
-	elif not (record.get("item") in StructureManager.RANCHES or record.get("item") == "pasture_grass" or (record.get("item") in StructureManager.CHESTS and _lid_tween != null and _lid_tween.is_valid())):
-		_sprite.scale = Vector2.ONE
-		_ready_bounce_time = 0.0
+	# ── Stardew-Style Ready Product Floating Bubble ──
+	if is_ready and not record.ready.is_empty():
+		_ready_bubble.visible = true
+		var pid := str(record.ready.get("id", ""))
+		var pitem := GameState._resolve_item(pid)
+		if pitem != null and pitem.icon != null:
+			_bubble_icon.texture = pitem.icon
+			var max_dim := maxf(float(pitem.icon.get_width()), float(pitem.icon.get_height()))
+			_bubble_icon.scale = Vector2.ONE * (14.0 / maxf(1.0, max_dim))
+		var bob := sin(Time.get_ticks_msec() * 0.006) * 3.0
+		var h: float = _sprite.texture.get_height() if _sprite.texture != null else 32.0
+		_ready_bubble.position = Vector2(0, _sprite.position.y - (h * 0.4) - 12.0 + bob)
+	else:
+		_ready_bubble.visible = false
+
+	# Animasi lembut saat produk sedang diproses atau siap diambil
+	var is_tweening: bool = _squash_tween != null and _squash_tween.is_valid()
+	if not is_tweening:
+		if is_running:
+			_ready_bounce_time += delta
+			var motion := sin(_ready_bounce_time * 9.0) * 0.025
+			_sprite.scale = Vector2(1 + motion, 1 - motion)
+		elif is_ready:
+			_ready_bounce_time += delta
+			var pulse := sin(_ready_bounce_time * 5.0) * 0.05
+			_sprite.scale = Vector2(1.0 + pulse, 1.0 - pulse)
+		elif not (record.get("item") in StructureManager.RANCHES or record.get("item") == "pasture_grass" or (record.get("item") in StructureManager.CHESTS and _lid_tween != null and _lid_tween.is_valid())):
+			_sprite.scale = Vector2.ONE
+			_ready_bounce_time = 0.0
 
 	_was_running = is_running
 

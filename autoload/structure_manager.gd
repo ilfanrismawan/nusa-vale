@@ -4,7 +4,7 @@ signal changed
 const FURNITURE := ["wooden_chair", "wooden_bench"]
 const PreservesJarRecipe = preload("res://scripts/resources/preserves_jar_recipe.gd")
 const DehydratorRecipe = preload("res://scripts/resources/dehydrator_recipe.gd")
-const IDS := ["furnace", "wooden_chest", "wooden_fence", "crafting_workbench", "stone_fence", "wooden_gate", "copper_chest", "iron_chest", "gold_chest", "platinum_chest", "crimson_chest", "frost_chest", "shadow_chest", "chicken_coop", "preserves_jar", "barn", "dehydrator", "silo", "pasture_grass", "mayonnaise_maker", "cheese_press", "loom", "wooden_chair", "wooden_bench", "fairy_chest", "obsidian_chest", "beehive", "sawmill", "alchemy_table", "anvil", "scarecrow", "birdhouse", "street_lamp", "hay_bale", "wooden_bucket", "village_barrel", "mailbox_decor", "stone_statue", "snowman", "feed_trough", "bonfire", "candle", "stacked_barrels", "notice_board", "garden_well", "water_fountain", "garden_swing", "seesaw", "signpost", "picnic_blanket", "twin_lamp", "clothesline", "dog_house", "cow_weathervane", "chicken_weathervane", "hanging_lantern", "xmas_tree", "sandbox", "wooden_broom", "keg", "oil_maker", "fish_smoker", "lightning_rod"]
+const IDS := ["furnace", "wooden_chest", "wooden_fence", "crafting_workbench", "stone_fence", "wooden_gate", "copper_chest", "iron_chest", "gold_chest", "platinum_chest", "crimson_chest", "frost_chest", "shadow_chest", "chicken_coop", "preserves_jar", "barn", "dehydrator", "silo", "pasture_grass", "mayonnaise_maker", "cheese_press", "loom", "wooden_chair", "wooden_bench", "fairy_chest", "obsidian_chest", "beehive", "sawmill", "alchemy_table", "anvil", "scarecrow", "birdhouse", "street_lamp", "hay_bale", "wooden_bucket", "village_barrel", "mailbox_decor", "stone_statue", "snowman", "feed_trough", "bonfire", "candle", "stacked_barrels", "notice_board", "garden_well", "water_fountain", "garden_swing", "seesaw", "signpost", "picnic_blanket", "twin_lamp", "clothesline", "dog_house", "cow_weathervane", "chicken_weathervane", "hanging_lantern", "xmas_tree", "sandbox", "wooden_broom", "keg", "oil_maker", "fish_smoker", "lightning_rod", "single_bed_wood", "double_bed_wood", "single_bed_blue", "bunk_bed", "baby_crib", "classic_chair", "stool_wood", "armchair_cozy", "sofa_living", "sofa_large", "study_desk", "dining_table_wood", "round_table", "nightstand", "wardrobe_classic", "bookshelf_tall", "kitchen_cabinet", "dresser_mirror", "dresser_drawers", "fireplace_stone", "fireplace_brick", "candle_stand", "floor_lamp", "cat_tree_tall", "cat_bed", "cat_bowl", "grandfather_clock", "indoor_plant_large", "indoor_plant_small", "painting_wall", "gramophone", "wall_mirror", "carpet_rug", "wall_shelf", "umbrella_stand", "school_blackboard", "school_desk", "grand_bookshelf", "lab_alchemy_desk", "weapon_rack", "temple_bell"]
 ## Dekorasi pasang (GDD 4.13). frames = jumlah frame animasi di atlas ikon, night_frame = frame saat malam, light = menyala saat malam.
 const DECOR := {
 	"scarecrow": {}, "birdhouse": {}, "street_lamp": {"frames": 2, "night_frame": 1, "light": true}, "hay_bale": {}, "wooden_bucket": {},
@@ -13,6 +13,15 @@ const DECOR := {
 	"garden_well": {}, "water_fountain": {}, "garden_swing": {}, "seesaw": {}, "signpost": {}, "picnic_blanket": {},
 	"twin_lamp": {"frames": 2, "night_frame": 1, "light": true}, "clothesline": {}, "dog_house": {}, "cow_weathervane": {},
 	"chicken_weathervane": {}, "hanging_lantern": {"light": true}, "xmas_tree": {}, "sandbox": {}, "wooden_broom": {},
+	"single_bed_wood": {}, "double_bed_wood": {}, "single_bed_blue": {}, "bunk_bed": {}, "baby_crib": {},
+	"classic_chair": {}, "stool_wood": {}, "armchair_cozy": {}, "sofa_living": {}, "sofa_large": {},
+	"study_desk": {}, "dining_table_wood": {}, "round_table": {}, "nightstand": {},
+	"wardrobe_classic": {}, "bookshelf_tall": {}, "kitchen_cabinet": {}, "dresser_mirror": {}, "dresser_drawers": {},
+	"fireplace_stone": {"light": true}, "fireplace_brick": {"light": true}, "candle_stand": {"light": true}, "floor_lamp": {"light": true},
+	"cat_tree_tall": {}, "cat_bed": {}, "cat_bowl": {},
+	"grandfather_clock": {}, "indoor_plant_large": {}, "indoor_plant_small": {}, "painting_wall": {},
+	"gramophone": {}, "wall_mirror": {}, "carpet_rug": {}, "wall_shelf": {}, "umbrella_stand": {},
+	"school_blackboard": {}, "school_desk": {}, "grand_bookshelf": {}, "lab_alchemy_desk": {}, "weapon_rack": {}, "temple_bell": {},
 }
 ## Mesin crafting baru (GDD 4.13): sprite dirapatkan ke bawah tapak seperti dekorasi.
 const WORKSHOPS := {"beehive": {"frames": 7}, "sawmill": {}, "alchemy_table": {}, "anvil": {}, "keg": {}, "oil_maker": {}, "fish_smoker": {}, "lightning_rod": {}}
@@ -42,6 +51,24 @@ const ARTISANS := {
 		"smoked_fish": "smoked_fish"
 	},
 }
+const PROCESSING_MACHINES := [
+	"keg",
+	"oil_maker",
+	"fish_smoker",
+	"mayonnaise_maker",
+	"cheese_press",
+	"loom",
+	"preserves_jar",
+	"dehydrator",
+	"furnace",
+	"sawmill",
+	"beehive",
+	"lightning_rod"
+]
+
+static func is_processing_machine(item_id: String) -> bool:
+	return item_id in PROCESSING_MACHINES or ARTISANS.has(item_id)
+
 const ARTISAN_SECONDS := 20.0
 const CHESTS := ["wooden_chest", "copper_chest", "iron_chest", "gold_chest", "platinum_chest", "crimson_chest", "frost_chest", "shadow_chest", "fairy_chest", "obsidian_chest"]
 var records: Array[Dictionary] = []
@@ -602,12 +629,179 @@ func interact_near(player: Player) -> bool:
 	if selected.item in RANCHES:
 		enter_ranch(player, int(selected.uid))
 		return true
+	if is_processing_machine(str(selected.item)):
+		return interact_machine(player, int(selected.uid))
 	var menu = load("res://scenes/ui/chest_ui.tscn").instantiate() if selected.item in CHESTS else load("res://scripts/ui/structure_menu.gd").new()
 	menu.player = player
 	menu.uid = selected.uid
 	_menus[player.data.index] = menu
 	Coop.ui_parent(player).add_child(menu)
 	return true
+
+func interact_with(player: Node, uid: int) -> bool:
+	var record := record_for(uid)
+	if record.is_empty():
+		return false
+	if is_furniture(record.item):
+		var world = player.world_root() if player != null and player.has_method("world_root") else null
+		var seat := furniture_node(world, uid)
+		if seat != null:
+			seat.interact(player)
+			return true
+		return false
+	if record.item in RANCHES:
+		enter_ranch(player, uid)
+		return true
+	if is_processing_machine(str(record.item)):
+		return interact_machine(player, uid)
+	var menu = load("res://scenes/ui/chest_ui.tscn").instantiate() if record.item in CHESTS else load("res://scripts/ui/structure_menu.gd").new()
+	menu.player = player
+	menu.uid = uid
+	var p_data = player.get("data")
+	var idx: int = p_data.index if p_data != null and "index" in p_data else 0
+	_menus[idx] = menu
+	Coop.ui_parent(player).add_child(menu)
+	return true
+
+func interact_machine(player: Node, uid: int) -> bool:
+	var record := record_for(uid)
+	if record.is_empty() or not is_processing_machine(str(record.item)):
+		return false
+	
+	var data: PlayerData = player.get("data") if is_instance_valid(player) and player.get("data") is PlayerData else GameState.current
+	var world = player.world_root() if is_instance_valid(player) and player.has_method("world_root") else null
+	var placed := structure_node(world, uid) if world != null else null
+	var machine_item := GameState._resolve_item(str(record.item))
+	var machine_name := machine_item.display_name if machine_item != null else str(record.item)
+
+	# 1. HAS READY PRODUCT -> COLLECT DIRECTLY (Stardew style!)
+	if not record.ready.is_empty():
+		var ready_id := str(record.ready.get("id", ""))
+		var ready_count := int(record.ready.get("count", 1))
+		var item := GameState._resolve_item(ready_id)
+		var item_name := item.display_name if item != null else ready_id
+		var res := collect(data, uid)
+		if res.ok:
+			if placed != null and placed.has_method("bounce_harvest"):
+				placed.bounce_harvest()
+			Juice.play_sound(&"harvest")
+			Notify.say("Mengambil %s x%d!" % [item_name, ready_count])
+			return true
+		else:
+			Notify.say(res.message)
+			return true
+
+	# 2. CURRENTLY PROCESSING -> WOBBLE / NOTIFY
+	if not record.job.is_empty() and record.item != "beehive":
+		if placed != null and placed.has_method("wobble_busy"):
+			placed.wobble_busy()
+		var secs := int(ceil(float(record.job.get("seconds", 0.0))))
+		Notify.say("%s sedang memproses... (%d detik lagi)" % [machine_name, secs])
+		return true
+
+	# 3. BEEHIVE & LIGHTNING ROD PASSIVE LOGIC
+	if record.item == "beehive":
+		var days_left := maxi(0, int(record.job.get("day", DayCycle.current_day)) - DayCycle.current_day)
+		Notify.say("Sarang lebah sedang memproduksi madu (%d hari lagi)." % days_left)
+		return true
+	if record.item == "lightning_rod":
+		Notify.say("Penangkal petir siap menyerap kilat saat badai petir.")
+		return true
+
+	# 4. IDLE MACHINE -> CHECK HELD ITEM!
+	var tool_ctrl = player.get("tool_controller") if is_instance_valid(player) else null
+	var held: ItemData = tool_ctrl.get("current_item") if tool_ctrl != null and tool_ctrl.get("current_item") is ItemData else null
+
+	# If holding Axe or Pickaxe on an empty machine -> PACK IT!
+	var tool_data: ToolData = held.action_data.tool_data if held != null and held.action_data != null and held.action_data.tool_data != null else null
+	if tool_data != null and (tool_data.tool_type == ToolData.ToolType.AXE or tool_data.tool_type == ToolData.ToolType.PICKAXE):
+		var pack_res := pack(data, uid)
+		if pack_res.ok:
+			Juice.play_sound(&"hit")
+			Notify.say("Mengemas kembali %s." % machine_name)
+			return true
+
+	# If empty hand -> notify what to do!
+	if held == null:
+		if placed != null and placed.has_method("wobble_reject"):
+			placed.wobble_reject()
+		Notify.say("%s siap digunakan. Pegang bahan di hotbar untuk mengolah." % machine_name)
+		return true
+
+	var held_id := held.item_id
+	var job_started := false
+	var product_name := ""
+
+	# Check machine recipes:
+	if record.item in ARTISANS:
+		var out_id := artisan_output(str(record.item), held_id)
+		if not out_id.is_empty():
+			var res := process_animal_product(data, uid, held_id)
+			if res.ok:
+				job_started = true
+				product_name = GameState._resolve_item(out_id).display_name if GameState._resolve_item(out_id) != null else out_id
+	elif record.item == "preserves_jar":
+		for recipe in preserves_jar_recipes():
+			if recipe.input_item_id == held_id or held_id.begins_with(recipe.input_item_id):
+				if data.get_item_count(held_id) >= recipe.input_amount:
+					var res := preserve(data, uid, recipe)
+					if res.ok:
+						job_started = true
+						product_name = GameState._resolve_item(recipe.output_item_id).display_name
+						break
+				else:
+					Notify.say("Butuh %d %s untuk Preserves Jar." % [recipe.input_amount, held.display_name])
+					return true
+	elif record.item == "dehydrator":
+		for recipe in dehydrator_recipes():
+			if recipe.input_item_id == held_id or held_id.begins_with(recipe.input_item_id):
+				if data.get_item_count(held_id) >= recipe.input_amount:
+					var res := dehydrate(data, uid, recipe)
+					if res.ok:
+						job_started = true
+						product_name = GameState._resolve_item(recipe.output_item_id).display_name
+						break
+				else:
+					Notify.say("Butuh %d %s untuk Dehydrator." % [recipe.input_amount, held.display_name])
+					return true
+	elif record.item == "furnace":
+		for recipe in furnace_recipes():
+			if recipe.input_item_id == held_id:
+				if data.get_item_count(held_id) >= recipe.input_amount:
+					var res := smelt(data, uid, recipe)
+					if res.ok:
+						job_started = true
+						product_name = GameState._resolve_item(recipe.output_item_id).display_name
+						break
+				else:
+					Notify.say("Butuh %d %s untuk melebur di Furnace." % [recipe.input_amount, held.display_name])
+					return true
+	elif record.item == "sawmill":
+		for recipe in sawmill_recipes():
+			if recipe.input_item_id == held_id:
+				if data.get_item_count(held_id) >= recipe.input_amount:
+					var res := saw(data, uid, recipe)
+					if res.ok:
+						job_started = true
+						product_name = GameState._resolve_item(recipe.output_item_id).display_name
+						break
+				else:
+					Notify.say("Butuh %d %s untuk diproses di Sawmill." % [recipe.input_amount, held.display_name])
+					return true
+
+	if job_started:
+		if placed != null and placed.has_method("bounce_insert"):
+			placed.bounce_insert()
+		Juice.sfx(load("res://assets/audio/sfx/machines/machine_start.wav"), -3.0, 0.08)
+		Notify.say("Memasukkan %s ke %s..." % [held.display_name, machine_name])
+		if is_instance_valid(player) and player.has_method("_sync_carried_item"):
+			player._sync_carried_item()
+		return true
+	else:
+		if placed != null and placed.has_method("wobble_reject"):
+			placed.wobble_reject()
+		Notify.say("%s tidak dapat diolah di %s." % [held.display_name, machine_name])
+		return true
 
 func closest_structure(player: Player) -> Dictionary:
 	var feet := player.global_position + Player.FEET_OFFSET
@@ -956,8 +1150,10 @@ func _process(delta: float) -> void:
 					record.ready = {"id": recipe.output_item_id, "count": recipe.output_amount}
 					break
 		elif record.item in ARTISANS:
-			var output := artisan_output(str(record.item), str(record.job.input))
-			record.ready = {"id": output, "count": 1}
+			var in_id := str(record.job.get("input", ""))
+			var output := artisan_output(str(record.item), in_id)
+			if not output.is_empty():
+				record.ready = {"id": output, "count": 1}
 		record.job = {}
 		changed.emit()
 
@@ -1091,12 +1287,15 @@ func is_furniture(item_id: String) -> bool:
 	var item := GameState._resolve_item(item_id)
 	return item != null and item.placeable and item.seat_definition != null
 
-func furniture_node(world: Node, uid: int) -> Node2D:
+func structure_node(world: Node, uid: int) -> Node2D:
 	for ref in _views:
 		var view: Node2D = ref.get_ref()
-		if is_instance_valid(view) and view.get_meta("world").get_ref() == world:
+		if is_instance_valid(view) and (world == null or (view.has_meta("world") and view.get_meta("world").get_ref() == world)):
 			return view.get_node_or_null("Structure_%d" % uid)
 	return null
+
+func furniture_node(world: Node, uid: int) -> Node2D:
+	return structure_node(world, uid)
 
 func check_furniture_placement(player: Player, item: ItemData, cell: Vector2i) -> Dictionary:
 	if item == null or not is_furniture(item.item_id) or records.size() >= 512:

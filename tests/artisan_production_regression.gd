@@ -111,5 +111,64 @@ func _ready() -> void:
 	var col_bat := StructureManager.collect(player, 888)
 	check(col_bat.ok and player.has_item("battery_pack"), "Battery Pack collected into player bag")
 
+	print("=== Test 5: Stardew-Style Direct In-World Interaction ===")
+	check(StructureManager.is_processing_machine("keg"), "is_processing_machine recognizes keg")
+	check(StructureManager.is_processing_machine("oil_maker"), "is_processing_machine recognizes oil_maker")
+	check(StructureManager.is_processing_machine("preserves_jar"), "is_processing_machine recognizes preserves_jar")
+
+	# Mock Player setup with corn in hand
+	var player_node := MockTestPlayer.new()
+	player_node.data = player
+	var tool_ctrl := MockTestToolController.new()
+	var corn_item := GameState._resolve_item("corn")
+	tool_ctrl.current_item = corn_item
+	player_node.tool_controller = tool_ctrl
+	player.load_inventory([])
+	player.add_item_silent("corn", 1)
+
+	var om_record := {
+		"uid": 999,
+		"item": "oil_maker",
+		"cell": [15, 15],
+		"storage": [],
+		"open": false,
+		"job": {},
+		"ready": {}
+	}
+	StructureManager.records.append(om_record)
+
+	# Direct insert (Stardew style: hold item -> interact machine -> job starts!)
+	var direct_res := StructureManager.interact_machine(player_node, 999)
+	check(direct_res, "interact_machine returns true on direct insert")
+	check(not om_record.job.is_empty() and om_record.job.input == "corn", "Corn inserted into oil maker directly")
+	check(not player.has_item("corn"), "Corn consumed from player inventory on direct insert")
+
+	# Interacting while busy wobbles and returns true
+	var busy_res := StructureManager.interact_machine(player_node, 999)
+	check(busy_res, "interact_machine handles busy state gracefully")
+
+	# Fast forward to finish
+	om_record.job.seconds = 0.05
+	StructureManager._process(0.1)
+	check(not om_record.ready.is_empty() and om_record.ready.id == "oil", "Oil maker finishes and ready has oil")
+
+	# Direct harvest (Stardew style: interact on ready machine -> collects item!)
+	var harvest_res := StructureManager.interact_machine(player_node, 999)
+	check(harvest_res, "interact_machine returns true on harvest")
+	check(om_record.ready.is_empty(), "Ready record cleared on harvest")
+	check(player.has_item("oil"), "Oil collected directly into player inventory")
+
+	tool_ctrl.free()
+	player_node.free()
+	FarmManager.farm_data.clear()
+	StructureManager.reset()
+
 	print("ARTISAN PRODUCTION REGRESSION COMPLETE: failures=%d" % failures)
 	get_tree().quit(1 if failures else 0)
+
+class MockTestPlayer extends Node:
+	var data: PlayerData
+	var tool_controller: Node
+
+class MockTestToolController extends Node:
+	var current_item: ItemData

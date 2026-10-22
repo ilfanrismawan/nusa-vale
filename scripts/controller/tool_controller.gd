@@ -117,6 +117,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			if bin.get_world_2d() == player.get_world_2d() and bin.deposit_selected(player):
 				get_viewport().set_input_as_handled()
 				return
+		var near_structure := StructureManager.closest_structure(player)
+		if not near_structure.is_empty() and StructureManager.is_processing_machine(str(near_structure.item)):
+			if StructureManager.interact_machine(player, int(near_structure.uid)):
+				get_viewport().set_input_as_handled()
+				return
 		if current_item != null and current_item.placeable:
 			if current_item.seat_definition != null and not furniture_preview.can_place():
 				get_viewport().set_input_as_handled()
