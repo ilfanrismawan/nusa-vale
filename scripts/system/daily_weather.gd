@@ -39,6 +39,12 @@ func is_raining() -> bool:
 func is_storm() -> bool:
 	return current == "storm"
 
+func display_name_for(day: int) -> String:
+	var w := weather_for(day)
+	if w == "storm":
+		return "Badai Petir"
+	return "Hujan" if (w == "rain" or w == "storm") else "Cerah"
+
 func display_name() -> String:
 	if is_storm():
 		return "Badai Petir"

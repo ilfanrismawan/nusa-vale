@@ -1,0 +1,32 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/television.gd" id="1_tv"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/interior/Part 2 copiar.png" id="2_part2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tv"]
+atlas = ExtResource("2_part2")
+region = Rect2(36, 75, 23, 35)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(22, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_area"]
+size = Vector2(36, 36)
+
+[node name="Television" type="StaticBody2D"]
+y_sort_enabled = true
+script = ExtResource("1_tv")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_tv")
+offset = Vector2(0, -6)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 4)
+shape = SubResource("RectangleShape2D_body")
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(0, 10)
+shape = SubResource("RectangleShape2D_area")

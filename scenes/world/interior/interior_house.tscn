@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://bubk6r06ryn05" path="res://scripts/world/bed.gd" id="6_4cxdx"]
 [ext_resource type="Texture2D" uid="uid://jy6e75i02lwh" path="res://scenes/world/interior/objects/Beds.png" id="7_cnadn"]
 [ext_resource type="PackedScene" path="res://scenes/objects/Wardrobe.tscn" id="8_wardrobe"]
+[ext_resource type="PackedScene" path="res://scenes/objects/television.tscn" id="9_television"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fasb7"]
 texture = ExtResource("2_gvyf1")
@@ -2577,3 +2578,6 @@ position = Vector2(336, 126)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1103239699]
 position = Vector2(311, 221)
 shape = SubResource("RectangleShape2D_w5a0g")
+
+[node name="Television" parent="." instance=ExtResource("9_television")]
+position = Vector2(360, 128)
