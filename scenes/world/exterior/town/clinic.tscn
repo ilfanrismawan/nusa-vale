@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://1fclomcktd6f" path="res://assets/farm_rpg/objects/interior/hospital wing.png" id="5_0h0mm"]
 [ext_resource type="Texture2D" uid="uid://bi6e8sg4fs5yh" path="res://assets/farm_rpg/objects/interior/Part 1 copiar.png" id="7_j5qrq"]
 [ext_resource type="Texture2D" uid="uid://bgsc3yl2pss6j" path="res://assets/farm_rpg/objects/exterior/Base houses.png" id="9_twn"]
-[ext_resource type="PackedScene" path="res://scenes/objects/building_sign.tscn" id="BuildingSign"]
+[ext_resource type="PackedScene" uid="uid://l3wp4bi5elun" path="res://scenes/objects/building_sign.tscn" id="BuildingSign"]
 [ext_resource type="Script" uid="uid://xi8t0k3337vc" path="res://scripts/world/town_building_door.gd" id="TownDoor"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_j5qrq"]
@@ -80,11 +80,12 @@ region_enabled = true
 region_rect = Rect2(1, 40, 15, 23)
 
 [node name="HospitalWing2" type="Sprite2D" parent="." unique_id=1787238646]
+modulate = Color(0.98274976, 6.08854e-06, 1.540184e-06, 1)
 z_index = 1
 position = Vector2(37, -25)
 texture = ExtResource("5_0h0mm")
 region_enabled = true
-region_rect = Rect2(2, 2, 29, 23)
+region_rect = Rect2(5, 5, 23, 18)
 
 [node name="Part1Copiar" type="Sprite2D" parent="." unique_id=2052494036]
 position = Vector2(36, -8.75)

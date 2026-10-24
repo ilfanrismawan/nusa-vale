@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://nl1l1bhh5soy" path="res://scripts/ui/inventory_slot.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://buaio0hwlbw0i" path="res://resources/ui/slot_normal.tres" id="2_slot_tex"]
-[ext_resource type="Font" path="res://resources/ui/readable_font.tres" id="3_font"]
+[ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="3_r4ab7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hover"]
 bg_color = Color(1, 0.92, 0.55, 0.22)
@@ -17,12 +17,11 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
 [sub_resource type="LabelSettings" id="LabelSettings_count"]
-font = ExtResource("3_font")
-font_color = Color(1, 0.98, 0.9, 1)
+font = ExtResource("3_r4ab7")
+font_color = Color(0.13443616, 0.070290215, 0.019135073, 1)
 outline_size = 1
-outline_color = Color(0.18, 0.08, 0.04, 1)
-shadow_size = 2
-shadow_color = Color(0, 0, 0, 0.7)
+outline_color = Color(0.96862745, 0.85882354, 0.7764706, 1)
+shadow_color = Color(0.96862745, 0.85882354, 0.7764706, 1)
 
 [node name="InventorySlot" type="TextureRect" unique_id=1118636497]
 texture_filter = 1
@@ -78,15 +77,17 @@ mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_hover")
 
 [node name="CountLabel" type="Label" parent="." unique_id=1532277043]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -22.0
-offset_top = -16.0
-offset_right = -2.0
+offset_left = -17.0
+offset_top = -17.7
+offset_right = -4.0
+offset_bottom = -3.4000015
 grow_horizontal = 0
 grow_vertical = 0
 label_settings = SubResource("LabelSettings_count")

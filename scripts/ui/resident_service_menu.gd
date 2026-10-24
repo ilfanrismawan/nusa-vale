@@ -9,6 +9,7 @@ var service := ""
 var romance_action := ""
 var letter_available := false
 var household_action := ""
+var supplies_available := false
 @onready var panel: PanelContainer = $Panel
 
 func _ready() -> void:
@@ -17,12 +18,19 @@ func _ready() -> void:
 	%Speaker.text = npc_name
 	%Role.text = role_title
 	%Portrait.texture = FarmServiceTheme.portrait(portrait)
-	%Service.text = {"carpenter": "Bangun / Upgrade", "shipping": "Info Pengiriman", "livestock": "Beli Hewan Ternak"}.get(service, "Layanan")
-	%Service.visible = service in ["carpenter", "shipping", "livestock"]
+	%Service.text = {"carpenter": "Bangun / Upgrade", "shipping": "Info Pengiriman", "livestock": "Beli Hewan Ternak", "blacksmith": "Tempa / Pecah Geoda", "shop": "Beli Makanan / Minuman"}.get(service, "Layanan")
+	%Service.visible = service in ["carpenter", "shipping", "livestock", "blacksmith", "shop"]
 	%Talk.pressed.connect(func(): selected.emit(0))
 	%Service.pressed.connect(func(): selected.emit(1))
 	%Close.pressed.connect(func(): selected.emit(2))
 	var box := %Talk.get_parent()
+	if supplies_available:
+		var button := Button.new()
+		button.text = "Beli Pakan / Peralatan"
+		button.custom_minimum_size.y = 52
+		button.pressed.connect(func(): selected.emit(6))
+		box.add_child(button)
+		box.move_child(button, %Close.get_index())
 	if not romance_action.is_empty():
 		var button := Button.new()
 		button.text = "Nyatakan Perasaan" if romance_action == "dating" else "Melamar"

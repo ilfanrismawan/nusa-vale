@@ -1,0 +1,366 @@
+{
+  "schema_version": 1,
+  "id": "joko",
+  "name": "Pak Joko",
+  "age": 46,
+  "gender": "male",
+  "role": "Koki Warung Nusa",
+  "birthday": {
+    "season": "summer",
+    "day": 21
+  },
+  "home_map": "town",
+  "residence": "Tempat tinggal di luar area yang dapat dimasuki; titik malam memakai lokasi kerja/istirahat sementara.",
+  "romanceable": false,
+  "personality": [
+    "hangat",
+    "tekun",
+    "murah_hati"
+  ],
+  "biography": "Joko menjaga rasa masakan rumahan sambil belajar menerima bantuan tetangga.",
+  "move_speed": 36.0,
+  "friendship": {
+    "start": 0,
+    "max_hearts": 10
+  },
+  "offscreen_activities": [
+    "sleeping"
+  ],
+  "anchored": false,
+  "service": {
+    "type": "shop",
+    "available_activities": [
+      "working",
+      "lunch"
+    ],
+    "closed_days": [],
+    "name": "Warung Rasa Nusa",
+    "greeting": "Selamat datang! Semua disiapkan dengan perhatian.",
+    "stock": [
+      {
+        "item": "vegetable_soup",
+        "price": 290
+      },
+      {
+        "item": "boiled_egg",
+        "price": 110
+      },
+      {
+        "item": "rice_ball",
+        "price": 60
+      }
+    ]
+  },
+  "visual": {
+    "sprite_frames": "res://resources/npc_data/npc_animation/joko_resident_frame.tres",
+    "portrait": "res://assets/farm_rpg/Character/NPC'S/Chef/Premade/Gaston/Chef Portrait.png",
+    "portrait_cell_size": 64,
+    "portrait_columns": 4,
+    "expressions": {
+      "neutral": 0,
+      "sparkle": 1,
+      "angry": 3,
+      "happy": 5,
+      "annoyed": 7
+    }
+  },
+  "gift_tastes": {
+    "loved": [
+      "vegetable_soup",
+      "pumpkin_soup",
+      "complete_breakfast",
+      "cake"
+    ],
+    "liked": [
+      "fish_mas",
+      "cow_milk",
+      "chicken_egg",
+      "flour",
+      "pepper"
+    ],
+    "neutral": [
+      "wood",
+      "apple",
+      "corn",
+      "rice"
+    ],
+    "disliked": [
+      "clay",
+      "fiber",
+      "stone"
+    ],
+    "hated": [
+      "slime_gel",
+      "old_bone",
+      "worm"
+    ]
+  },
+  "schedules": {
+    "default": [
+      {
+        "time": "06:00",
+        "map": "town",
+        "point": "joko_work",
+        "activity": "preparing"
+      },
+      {
+        "time": "08:00",
+        "map": "town",
+        "point": "joko_work",
+        "activity": "working"
+      },
+      {
+        "time": "12:00",
+        "map": "town",
+        "point": "joko_rest",
+        "activity": "lunch"
+      },
+      {
+        "time": "14:00",
+        "map": "town",
+        "point": "joko_work",
+        "activity": "working"
+      },
+      {
+        "time": "18:00",
+        "map": "town",
+        "point": "joko_rest",
+        "activity": "resting"
+      },
+      {
+        "time": "22:00",
+        "map": "town",
+        "point": "joko_rest",
+        "activity": "sleeping"
+      }
+    ],
+    "rainy": [
+      {
+        "time": "06:00",
+        "map": "town",
+        "point": "joko_work",
+        "activity": "preparing"
+      },
+      {
+        "time": "08:00",
+        "map": "town",
+        "point": "joko_work",
+        "activity": "working"
+      },
+      {
+        "time": "12:00",
+        "map": "town",
+        "point": "joko_rest",
+        "activity": "lunch"
+      },
+      {
+        "time": "14:00",
+        "map": "town",
+        "point": "joko_work",
+        "activity": "working"
+      },
+      {
+        "time": "18:00",
+        "map": "town",
+        "point": "joko_rest",
+        "activity": "resting"
+      },
+      {
+        "time": "22:00",
+        "map": "town",
+        "point": "joko_rest",
+        "activity": "sleeping"
+      }
+    ]
+  },
+  "dialogue": {
+    "default": [
+      "Joko menjaga rasa masakan rumahan sambil belajar menerima bantuan tetangga."
+    ],
+    "preparing": [
+      "Aku sedang menyiapkan pekerjaan hari ini."
+    ],
+    "working": [
+      "Aku sedang menyiapkan masakan. Dapur warung bisa kamu gunakan sesuai akses yang sudah terbuka."
+    ],
+    "lunch": [
+      "Aku beristirahat sebentar sebelum melanjutkan pekerjaan."
+    ],
+    "resting": [
+      "Senang bisa mengobrol setelah bekerja. Bagaimana harimu?"
+    ],
+    "sleeping": [
+      "Sudah waktunya beristirahat. Sampai besok."
+    ]
+  },
+  "content_status": {
+    "biography": "baseline_2026_10_24",
+    "birthday": "baseline_2026_10_24",
+    "residence": "offscreen_temporary",
+    "visual": "legacy_placeholder",
+    "schedule": "baseline_local",
+    "story": "baseline_2026_10_24",
+    "story_expansion": "baseline_2026_10_24"
+  },
+  "gift_dialogue": {
+    "loved": [
+      "Terima kasih! Ini salah satu kesukaanku."
+    ],
+    "liked": [
+      "Aku menyukainya. Terima kasih sudah mengingatku."
+    ],
+    "neutral": [
+      "Terima kasih sudah membawakannya."
+    ],
+    "disliked": [
+      "Terima kasih, meskipun ini kurang cocok untukku."
+    ],
+    "hated": [
+      "Maaf, aku benar-benar tidak menyukai benda ini."
+    ]
+  },
+  "heart_events": [
+    {
+      "id": "joko_friendship_2",
+      "hearts": 2,
+      "requires_flags": [],
+      "sets_flags": [
+        "joko_friendship_2_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "joko_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Sebelum mulai memasak, aku selalu merapikan bumbu.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Dapur yang teratur membuat tanganku lebih tenang.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "joko_friendship_4",
+      "hearts": 4,
+      "requires_flags": [],
+      "sets_flags": [
+        "joko_friendship_4_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "joko_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Resep keluarga tidak selalu punya takaran tertulis.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Aku sedang mencatatnya agar orang lain tidak perlu menebak seperti aku dulu.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "joko_friendship_6",
+      "hearts": 6,
+      "requires_flags": [],
+      "sets_flags": [
+        "joko_friendship_6_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "joko_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Pernah aku menolak bantuan karena merasa harus mengerjakan semua sendiri.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Hasilnya aku kelelahan dan masakan justru terlambat.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "joko_friendship_8",
+      "hearts": 8,
+      "requires_flags": [],
+      "sets_flags": [
+        "joko_friendship_8_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "joko_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Sekarang aku senang kalau warga membawa cerita sambil menunggu makan.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Warung ini terasa hidup karena orang-orangnya, bukan karena pancinya.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "joko_friendship_10",
+      "hearts": 10,
+      "requires_flags": [],
+      "sets_flags": [
+        "joko_friendship_10_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "joko_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Kalau suatu hari kamu memasak untuk orang lain, jangan takut rasanya belum sempurna.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Perhatianmu akan terasa. Terima kasih sudah menjadi bagian dari meja makan desa.",
+          "expression": "happy"
+        }
+      ]
+    }
+  ],
+  "dialogue_by_hearts": {
+    "2": [
+      "Dapur yang teratur membuat tanganku lebih tenang."
+    ],
+    "4": [
+      "Aku sedang mencatatnya agar orang lain tidak perlu menebak seperti aku dulu."
+    ],
+    "6": [
+      "Hasilnya aku kelelahan dan masakan justru terlambat."
+    ],
+    "8": [
+      "Warung ini terasa hidup karena orang-orangnya, bukan karena pancinya."
+    ],
+    "10": [
+      "Perhatianmu akan terasa. Terima kasih sudah menjadi bagian dari meja makan desa."
+    ]
+  }
+}

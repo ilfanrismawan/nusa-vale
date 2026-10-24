@@ -34,10 +34,11 @@ func _ready() -> void:
 	var player: Player = town.get_node("Player/CharacterBody2D")
 	player.global_position = Vector2(935, 447)
 	var origin := player.global_position
-	var npc = town.get_node("YSortEntities/CarpenterNPC")
+	var npc = town.get_node("NPCMapPresenter").actors["damar"]
 	npc.interact(player)
-	check(is_instance_valid(npc._menu), "town carpenter opens building service")
-	npc._menu._choose("barn")
+	npc._choose_service(1, player)
+	check(is_instance_valid(npc._service_menu), "town carpenter opens building service")
+	npc._service_menu._choose("barn")
 	await get_tree().create_timer(1.3, true).timeout
 	var farm := get_tree().current_scene
 	var planner := await wait_for_planner(farm)
@@ -57,9 +58,10 @@ func _ready() -> void:
 	Coop.root.move_player(player, "res://scenes/world/town.tscn", origin)
 	await get_tree().create_timer(1.0, true).timeout
 	town = player.world_root()
-	npc = town.get_node("YSortEntities/CarpenterNPC")
+	npc = town.get_node("NPCMapPresenter").actors["damar"]
 	npc.interact(player)
-	npc._menu._choose("chicken_coop")
+	npc._choose_service(1, player)
+	npc._service_menu._choose("chicken_coop")
 	planner = await wait_for_planner(Coop.root.view_of(1))
 	check(planner != null and Coop.root.body_of(0).world_root() == player.world_root(), "co-op carpenter opens planner only in purchasing player's viewport")
 	if planner != null:

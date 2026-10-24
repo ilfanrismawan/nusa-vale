@@ -1,0 +1,341 @@
+{
+  "schema_version": 1,
+  "id": "kirana",
+  "name": "Kirana",
+  "age": 29,
+  "gender": "female",
+  "role": "Perangkai Bunga",
+  "birthday": {
+    "season": "spring",
+    "day": 17
+  },
+  "home_map": "town",
+  "residence": "Tempat tinggal di luar area yang dapat dimasuki; titik malam memakai lokasi kerja/istirahat sementara.",
+  "romanceable": false,
+  "personality": [
+    "ramah",
+    "kreatif",
+    "peduli_tetangga"
+  ],
+  "biography": "Kirana merawat bunga dan belajar mempercayai hasil karyanya.",
+  "move_speed": 36.0,
+  "friendship": {
+    "start": 0,
+    "max_hearts": 10
+  },
+  "offscreen_activities": [
+    "sleeping"
+  ],
+  "anchored": false,
+  "service": null,
+  "visual": {
+    "sprite_frames": "res://resources/npc_data/npc_animation/kirana_resident_frame.tres",
+    "portrait": "res://assets/farm_rpg/Character/NPC'S/Portrait (3).png",
+    "portrait_cell_size": 64,
+    "portrait_columns": 5,
+    "expressions": {
+      "neutral": 0,
+      "sparkle": 5,
+      "angry": 7,
+      "happy": 10,
+      "annoyed": 12
+    }
+  },
+  "gift_tastes": {
+    "loved": [
+      "sunflower",
+      "cake",
+      "strawberry"
+    ],
+    "liked": [
+      "apple",
+      "honey",
+      "green_tea",
+      "sweet_pea"
+    ],
+    "neutral": [
+      "wood",
+      "stone",
+      "rice",
+      "bread"
+    ],
+    "disliked": [
+      "coal",
+      "clay",
+      "fiber"
+    ],
+    "hated": [
+      "slime_gel",
+      "old_bone",
+      "worm"
+    ]
+  },
+  "schedules": {
+    "default": [
+      {
+        "time": "06:00",
+        "map": "town",
+        "point": "kirana_work",
+        "activity": "preparing"
+      },
+      {
+        "time": "08:00",
+        "map": "town",
+        "point": "kirana_work",
+        "activity": "working"
+      },
+      {
+        "time": "12:00",
+        "map": "town",
+        "point": "kirana_rest",
+        "activity": "lunch"
+      },
+      {
+        "time": "14:00",
+        "map": "town",
+        "point": "kirana_work",
+        "activity": "working"
+      },
+      {
+        "time": "18:00",
+        "map": "town",
+        "point": "kirana_rest",
+        "activity": "resting"
+      },
+      {
+        "time": "22:00",
+        "map": "town",
+        "point": "kirana_rest",
+        "activity": "sleeping"
+      }
+    ],
+    "rainy": [
+      {
+        "time": "06:00",
+        "map": "town",
+        "point": "kirana_work",
+        "activity": "preparing"
+      },
+      {
+        "time": "08:00",
+        "map": "town",
+        "point": "kirana_work",
+        "activity": "working"
+      },
+      {
+        "time": "12:00",
+        "map": "town",
+        "point": "kirana_rest",
+        "activity": "lunch"
+      },
+      {
+        "time": "14:00",
+        "map": "town",
+        "point": "kirana_work",
+        "activity": "working"
+      },
+      {
+        "time": "18:00",
+        "map": "town",
+        "point": "kirana_rest",
+        "activity": "resting"
+      },
+      {
+        "time": "22:00",
+        "map": "town",
+        "point": "kirana_rest",
+        "activity": "sleeping"
+      }
+    ]
+  },
+  "dialogue": {
+    "default": [
+      "Kirana merawat bunga dan belajar mempercayai hasil karyanya."
+    ],
+    "preparing": [
+      "Aku sedang menyiapkan pekerjaan hari ini."
+    ],
+    "working": [
+      "Aku sering merangkai bunga di sela mengurus rumah."
+    ],
+    "lunch": [
+      "Aku beristirahat sebentar sebelum melanjutkan pekerjaan."
+    ],
+    "resting": [
+      "Senang bisa mengobrol setelah bekerja. Bagaimana harimu?"
+    ],
+    "sleeping": [
+      "Sudah waktunya beristirahat. Sampai besok."
+    ]
+  },
+  "content_status": {
+    "biography": "baseline_2026_10_24",
+    "birthday": "baseline_2026_10_24",
+    "residence": "offscreen_temporary",
+    "visual": "legacy_placeholder",
+    "schedule": "baseline_local",
+    "story": "baseline_2026_10_24",
+    "story_expansion": "baseline_2026_10_24"
+  },
+  "gift_dialogue": {
+    "loved": [
+      "Terima kasih! Ini salah satu kesukaanku."
+    ],
+    "liked": [
+      "Aku menyukainya. Terima kasih sudah mengingatku."
+    ],
+    "neutral": [
+      "Terima kasih sudah membawakannya."
+    ],
+    "disliked": [
+      "Terima kasih, meskipun ini kurang cocok untukku."
+    ],
+    "hated": [
+      "Maaf, aku benar-benar tidak menyukai benda ini."
+    ]
+  },
+  "heart_events": [
+    {
+      "id": "kirana_friendship_2",
+      "hearts": 2,
+      "requires_flags": [],
+      "sets_flags": [
+        "kirana_friendship_2_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "kirana_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Aku sering merangkai bunga di sela mengurus rumah.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Kadang aku malu memperlihatkannya. Senang ada yang mau berhenti dan melihat.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "kirana_friendship_4",
+      "hearts": 4,
+      "requires_flags": [],
+      "sets_flags": [
+        "kirana_friendship_4_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "kirana_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Waktu kecil aku mengira bunga yang indah harus selalu mahal.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Sekarang aku justru suka bunga sederhana yang tumbuh di tepi jalan desa.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "kirana_friendship_6",
+      "hearts": 6,
+      "requires_flags": [],
+      "sets_flags": [
+        "kirana_friendship_6_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "kirana_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Rangkaian pertamaku pernah layu sebelum sempat diberikan.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Sejak itu aku belajar memperhatikan air dan tempatnya, bukan hanya warnanya.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "kirana_friendship_8",
+      "hearts": 8,
+      "requires_flags": [],
+      "sets_flags": [
+        "kirana_friendship_8_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "kirana_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Aku mulai berani menunjukkan rangkaianku kepada tetangga.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Terima kasih sudah membuatku merasa bahwa hasil kerja kecil juga berarti.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "kirana_friendship_10",
+      "hearts": 10,
+      "requires_flags": [],
+      "sets_flags": [
+        "kirana_friendship_10_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "kirana_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Aku ingin desa ini selalu punya sudut yang mengingatkan orang untuk berhenti sejenak.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Kalau harimu berat, kamu selalu boleh datang bercerita.",
+          "expression": "happy"
+        }
+      ]
+    }
+  ],
+  "dialogue_by_hearts": {
+    "2": [
+      "Kadang aku malu memperlihatkannya. Senang ada yang mau berhenti dan melihat."
+    ],
+    "4": [
+      "Sekarang aku justru suka bunga sederhana yang tumbuh di tepi jalan desa."
+    ],
+    "6": [
+      "Sejak itu aku belajar memperhatikan air dan tempatnya, bukan hanya warnanya."
+    ],
+    "8": [
+      "Terima kasih sudah membuatku merasa bahwa hasil kerja kecil juga berarti."
+    ],
+    "10": [
+      "Kalau harimu berat, kamu selalu boleh datang bercerita."
+    ]
+  }
+}

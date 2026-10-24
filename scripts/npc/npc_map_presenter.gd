@@ -67,14 +67,17 @@ func refresh() -> void:
 			actor.npc_id = id
 			actor.name = id.capitalize()
 			root.add_child(actor)
-			if network != null:
+			if bool(NPCDatabase.residents[id].get("anchored", false)):
+				actor.global_position = marker.global_position
+			elif network != null:
 				actor.global_position = network.gateway(NPCDatabase.arrival_from(id, entry, GameState.weather.is_raining()), id)
 			actors[id] = actor
 		if not initial and not departures.has(id) and active_entries.get(id) == entry:
 			continue
 		var npc: VillageNPC = actors[id]
 		departures.erase(id)
-		var path: Array = network.route(npc.global_position, marker.global_position, id) if network != null else []
+		var anchored := bool(NPCDatabase.residents[id].get("anchored", false))
+		var path: Array = [marker.global_position] if anchored else (network.route(npc.global_position, marker.global_position, id) if network != null else [])
 		if path.is_empty():
 			continue
 		npc.schedule = [

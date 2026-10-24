@@ -31,6 +31,8 @@ func _ready() -> void:
 	_summary = %Summary
 	_materials = %Materials
 	_quantity = %Quantity
+	# SpinBox owns an internal LineEdit; size that text explicitly for this paper row.
+	_quantity.get_line_edit().add_theme_font_size_override("font_size", 11)
 	_craft_button = %CraftButton
 	_message = %Message
 	_filters.assign(find_children("Filter*", "Button", true, false))

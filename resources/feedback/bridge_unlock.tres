@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ActionFeedback" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/action_feedback.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+particle_count = 12
+particle_color = Color(1, 0.82, 0.35, 1)
+particle_color_alt = Color(1, 0.97, 0.78, 1)
+particle_speed = 36.0
+particle_gravity = 45.0
+particle_lifetime = 0.85
+particle_spread = 100.0
+particle_size = 2

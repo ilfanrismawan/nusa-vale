@@ -1,0 +1,350 @@
+{
+  "schema_version": 1,
+  "id": "bima",
+  "name": "Empu Bima",
+  "age": 43,
+  "gender": "male",
+  "role": "Pandai Besi",
+  "birthday": {
+    "season": "winter",
+    "day": 15
+  },
+  "home_map": "town",
+  "residence": "Tempat tinggal di luar area yang dapat dimasuki; titik malam memakai lokasi kerja/istirahat sementara.",
+  "romanceable": false,
+  "personality": [
+    "disiplin",
+    "jujur",
+    "sabar"
+  ],
+  "biography": "Bima mengutamakan keselamatan dan ketelitian saat menempa perkakas warga.",
+  "move_speed": 36.0,
+  "friendship": {
+    "start": 0,
+    "max_hearts": 10
+  },
+  "offscreen_activities": [
+    "sleeping"
+  ],
+  "anchored": true,
+  "service": {
+    "type": "blacksmith",
+    "available_activities": [
+      "preparing",
+      "working",
+      "lunch",
+      "resting"
+    ],
+    "closed_days": []
+  },
+  "visual": {
+    "sprite_frames": "res://resources/npc_data/npc_animation/bima_resident_frame.tres",
+    "portrait": "res://assets/farm_rpg/Character/NPC'S/Portrait (2).png",
+    "portrait_cell_size": 64,
+    "portrait_columns": 5,
+    "expressions": {
+      "neutral": 0,
+      "sparkle": 5,
+      "angry": 7,
+      "happy": 10,
+      "annoyed": 12
+    }
+  },
+  "gift_tastes": {
+    "loved": [
+      "iron_bar",
+      "gold_bar",
+      "coffee"
+    ],
+    "liked": [
+      "copper_bar",
+      "coal",
+      "iron_ore",
+      "baked_potato"
+    ],
+    "neutral": [
+      "wood",
+      "stone",
+      "rice",
+      "bread"
+    ],
+    "disliked": [
+      "daffodil",
+      "sweet_pea",
+      "clay"
+    ],
+    "hated": [
+      "slime_gel",
+      "old_bone",
+      "worm"
+    ]
+  },
+  "schedules": {
+    "default": [
+      {
+        "time": "06:00",
+        "map": "town",
+        "point": "bima_work",
+        "activity": "preparing"
+      },
+      {
+        "time": "08:00",
+        "map": "town",
+        "point": "bima_work",
+        "activity": "working"
+      },
+      {
+        "time": "12:00",
+        "map": "town",
+        "point": "bima_work",
+        "activity": "lunch"
+      },
+      {
+        "time": "14:00",
+        "map": "town",
+        "point": "bima_work",
+        "activity": "working"
+      },
+      {
+        "time": "18:00",
+        "map": "town",
+        "point": "bima_work",
+        "activity": "resting"
+      },
+      {
+        "time": "22:00",
+        "map": "town",
+        "point": "bima_work",
+        "activity": "sleeping"
+      }
+    ],
+    "rainy": [
+      {
+        "time": "06:00",
+        "map": "town",
+        "point": "bima_work",
+        "activity": "preparing"
+      },
+      {
+        "time": "08:00",
+        "map": "town",
+        "point": "bima_work",
+        "activity": "working"
+      },
+      {
+        "time": "12:00",
+        "map": "town",
+        "point": "bima_work",
+        "activity": "lunch"
+      },
+      {
+        "time": "14:00",
+        "map": "town",
+        "point": "bima_work",
+        "activity": "working"
+      },
+      {
+        "time": "18:00",
+        "map": "town",
+        "point": "bima_work",
+        "activity": "resting"
+      },
+      {
+        "time": "22:00",
+        "map": "town",
+        "point": "bima_work",
+        "activity": "sleeping"
+      }
+    ]
+  },
+  "dialogue": {
+    "default": [
+      "Bima mengutamakan keselamatan dan ketelitian saat menempa perkakas warga."
+    ],
+    "preparing": [
+      "Aku sedang menyiapkan pekerjaan hari ini."
+    ],
+    "working": [
+      "Bawa perkakas dan bahanmu ke bengkel. Aku juga bisa memecahkan geoda."
+    ],
+    "lunch": [
+      "Aku beristirahat sebentar sebelum melanjutkan pekerjaan."
+    ],
+    "resting": [
+      "Senang bisa mengobrol setelah bekerja. Bagaimana harimu?"
+    ],
+    "sleeping": [
+      "Sudah waktunya beristirahat. Sampai besok."
+    ]
+  },
+  "content_status": {
+    "biography": "baseline_2026_10_24",
+    "birthday": "baseline_2026_10_24",
+    "residence": "offscreen_temporary",
+    "visual": "legacy_placeholder",
+    "schedule": "baseline_local",
+    "story": "baseline_2026_10_24",
+    "story_expansion": "baseline_2026_10_24"
+  },
+  "gift_dialogue": {
+    "loved": [
+      "Terima kasih! Ini salah satu kesukaanku."
+    ],
+    "liked": [
+      "Aku menyukainya. Terima kasih sudah mengingatku."
+    ],
+    "neutral": [
+      "Terima kasih sudah membawakannya."
+    ],
+    "disliked": [
+      "Terima kasih, meskipun ini kurang cocok untukku."
+    ],
+    "hated": [
+      "Maaf, aku benar-benar tidak menyukai benda ini."
+    ]
+  },
+  "heart_events": [
+    {
+      "id": "bima_friendship_2",
+      "hearts": 2,
+      "requires_flags": [],
+      "sets_flags": [
+        "bima_friendship_2_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "bima_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Palu yang berat tidak selalu membuat hasil tempa lebih baik.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Gerakan yang tepat dan bahan yang siap lebih penting.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "bima_friendship_4",
+      "hearts": 4,
+      "requires_flags": [],
+      "sets_flags": [
+        "bima_friendship_4_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "bima_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Aku belajar menempa dengan mengulang pekerjaan kecil berkali-kali.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Ketelitian tumbuh dari kebiasaan, bukan dari sekali berhasil.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "bima_friendship_6",
+      "hearts": 6,
+      "requires_flags": [],
+      "sets_flags": [
+        "bima_friendship_6_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "bima_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Sebuah perkakas pernah retak saat kuperiksa sebelum diserahkan.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Aku lega menemukannya di bengkel, bukan ketika sudah dipakai orang.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "bima_friendship_8",
+      "hearts": 8,
+      "requires_flags": [],
+      "sets_flags": [
+        "bima_friendship_8_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "bima_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Aku senang melihat warga kembali dengan alat yang terawat.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Pekerjaan kita saling menyambung: aku menempa, kamu menggunakannya untuk menumbuhkan kehidupan.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "bima_friendship_10",
+      "hearts": 10,
+      "requires_flags": [],
+      "sets_flags": [
+        "bima_friendship_10_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "bima_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Kepercayaan warga lebih berharga daripada kilau logam di rak ini.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Terima kasih sudah menjadi sahabat yang menghargai pekerjaan tanganku.",
+          "expression": "happy"
+        }
+      ]
+    }
+  ],
+  "dialogue_by_hearts": {
+    "2": [
+      "Gerakan yang tepat dan bahan yang siap lebih penting."
+    ],
+    "4": [
+      "Ketelitian tumbuh dari kebiasaan, bukan dari sekali berhasil."
+    ],
+    "6": [
+      "Aku lega menemukannya di bengkel, bukan ketika sudah dipakai orang."
+    ],
+    "8": [
+      "Pekerjaan kita saling menyambung: aku menempa, kamu menggunakannya untuk menumbuhkan kehidupan."
+    ],
+    "10": [
+      "Terima kasih sudah menjadi sahabat yang menghargai pekerjaan tanganku."
+    ]
+  }
+}

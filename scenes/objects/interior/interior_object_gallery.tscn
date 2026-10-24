@@ -1,0 +1,169 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/single_bed_wood.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/double_bed_wood.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/single_bed_blue.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/bunk_bed.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/baby_crib.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/classic_chair.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/stool_wood.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/armchair_cozy.tscn" id="8"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/sofa_living.tscn" id="9"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/sofa_large.tscn" id="10"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/study_desk.tscn" id="11"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/dining_table_wood.tscn" id="12"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/round_table.tscn" id="13"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/nightstand.tscn" id="14"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/wardrobe_classic.tscn" id="15"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/bookshelf_tall.tscn" id="16"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/kitchen_cabinet.tscn" id="17"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/dresser_mirror.tscn" id="18"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/dresser_drawers.tscn" id="19"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/fireplace_stone.tscn" id="20"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/fireplace_brick.tscn" id="21"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/candle_stand.tscn" id="22"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/floor_lamp.tscn" id="23"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/cat_tree_tall.tscn" id="24"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/cat_bed.tscn" id="25"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/cat_bowl.tscn" id="26"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/grandfather_clock.tscn" id="27"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/indoor_plant_large.tscn" id="28"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/indoor_plant_small.tscn" id="29"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/painting_wall.tscn" id="30"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/gramophone.tscn" id="31"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/wall_mirror.tscn" id="32"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/carpet_rug.tscn" id="33"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/wall_shelf.tscn" id="34"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/umbrella_stand.tscn" id="35"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/school_blackboard.tscn" id="36"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/school_desk.tscn" id="37"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/grand_bookshelf.tscn" id="38"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/lab_alchemy_desk.tscn" id="39"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/weapon_rack.tscn" id="40"]
+[ext_resource type="PackedScene" path="res://scenes/objects/interior/temple_bell.tscn" id="41"]
+
+[node name="InteriorObjectGallery" type="Node2D"]
+y_sort_enabled = true
+
+[node name="single_bed_wood" parent="." instance=ExtResource("1")]
+position = Vector2(60, 60)
+
+[node name="double_bed_wood" parent="." instance=ExtResource("2")]
+position = Vector2(150, 60)
+
+[node name="single_bed_blue" parent="." instance=ExtResource("3")]
+position = Vector2(240, 60)
+
+[node name="bunk_bed" parent="." instance=ExtResource("4")]
+position = Vector2(330, 60)
+
+[node name="baby_crib" parent="." instance=ExtResource("5")]
+position = Vector2(420, 60)
+
+[node name="classic_chair" parent="." instance=ExtResource("6")]
+position = Vector2(510, 60)
+
+[node name="stool_wood" parent="." instance=ExtResource("7")]
+position = Vector2(60, 150)
+
+[node name="armchair_cozy" parent="." instance=ExtResource("8")]
+position = Vector2(150, 150)
+
+[node name="sofa_living" parent="." instance=ExtResource("9")]
+position = Vector2(240, 150)
+
+[node name="sofa_large" parent="." instance=ExtResource("10")]
+position = Vector2(330, 150)
+
+[node name="study_desk" parent="." instance=ExtResource("11")]
+position = Vector2(420, 150)
+
+[node name="dining_table_wood" parent="." instance=ExtResource("12")]
+position = Vector2(510, 150)
+
+[node name="round_table" parent="." instance=ExtResource("13")]
+position = Vector2(60, 240)
+
+[node name="nightstand" parent="." instance=ExtResource("14")]
+position = Vector2(150, 240)
+
+[node name="wardrobe_classic" parent="." instance=ExtResource("15")]
+position = Vector2(240, 240)
+
+[node name="bookshelf_tall" parent="." instance=ExtResource("16")]
+position = Vector2(330, 240)
+
+[node name="kitchen_cabinet" parent="." instance=ExtResource("17")]
+position = Vector2(420, 240)
+
+[node name="dresser_mirror" parent="." instance=ExtResource("18")]
+position = Vector2(510, 240)
+
+[node name="dresser_drawers" parent="." instance=ExtResource("19")]
+position = Vector2(60, 330)
+
+[node name="fireplace_stone" parent="." instance=ExtResource("20")]
+position = Vector2(150, 330)
+
+[node name="fireplace_brick" parent="." instance=ExtResource("21")]
+position = Vector2(240, 330)
+
+[node name="candle_stand" parent="." instance=ExtResource("22")]
+position = Vector2(330, 330)
+
+[node name="floor_lamp" parent="." instance=ExtResource("23")]
+position = Vector2(420, 330)
+
+[node name="cat_tree_tall" parent="." instance=ExtResource("24")]
+position = Vector2(510, 330)
+
+[node name="cat_bed" parent="." instance=ExtResource("25")]
+position = Vector2(60, 420)
+
+[node name="cat_bowl" parent="." instance=ExtResource("26")]
+position = Vector2(150, 420)
+
+[node name="grandfather_clock" parent="." instance=ExtResource("27")]
+position = Vector2(240, 420)
+
+[node name="indoor_plant_large" parent="." instance=ExtResource("28")]
+position = Vector2(330, 420)
+
+[node name="indoor_plant_small" parent="." instance=ExtResource("29")]
+position = Vector2(420, 420)
+
+[node name="painting_wall" parent="." instance=ExtResource("30")]
+position = Vector2(510, 420)
+
+[node name="gramophone" parent="." instance=ExtResource("31")]
+position = Vector2(60, 510)
+
+[node name="wall_mirror" parent="." instance=ExtResource("32")]
+position = Vector2(150, 510)
+
+[node name="carpet_rug" parent="." instance=ExtResource("33")]
+position = Vector2(240, 510)
+
+[node name="wall_shelf" parent="." instance=ExtResource("34")]
+position = Vector2(330, 510)
+
+[node name="umbrella_stand" parent="." instance=ExtResource("35")]
+position = Vector2(420, 510)
+
+[node name="school_blackboard" parent="." instance=ExtResource("36")]
+position = Vector2(510, 510)
+
+[node name="school_desk" parent="." instance=ExtResource("37")]
+position = Vector2(60, 600)
+
+[node name="grand_bookshelf" parent="." instance=ExtResource("38")]
+position = Vector2(150, 600)
+
+[node name="lab_alchemy_desk" parent="." instance=ExtResource("39")]
+position = Vector2(240, 600)
+
+[node name="weapon_rack" parent="." instance=ExtResource("40")]
+position = Vector2(330, 600)
+
+[node name="temple_bell" parent="." instance=ExtResource("41")]
+position = Vector2(420, 600)

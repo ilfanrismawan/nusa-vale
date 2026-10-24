@@ -1,390 +1,549 @@
-[gd_scene format=3]
-[ext_resource type="Theme" path="res://resources/ui/inventory_book_theme.tres" id="theme"]
-[ext_resource type="PackedScene" path="res://scenes/ui/book_pager.tscn" id="pager"]
-[ext_resource type="PackedScene" path="res://scenes/ui/book_text.tscn" id="text"]
-[ext_resource type="Script" path="res://scripts/ui/npc_relationship_ui.gd" id="script"]
+[gd_scene format=3 uid="uid://dtfmpcp3erfgl"]
 
-[node name="NPCRelationshipUI" type="Control"]
+[ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="4_lij5a"]
+[ext_resource type="Script" uid="uid://bxklgynuxb0g1" path="res://scripts/ui/relationship_card_grid.gd" id="card_grid"]
+[ext_resource type="PackedScene" uid="uid://bhnf8yfj1vm28" path="res://scenes/ui/book_pager.tscn" id="pager"]
+[ext_resource type="Texture2D" uid="uid://pwp5w2cnmdl6" path="res://assets/ui/vintage_crumpled_paper.png" id="paper"]
+[ext_resource type="Script" uid="uid://klodon5eajm5" path="res://scripts/ui/npc_relationship_ui.gd" id="script"]
+[ext_resource type="StyleBox" path="res://resources/ui/style_book_subpanel.tres" id="subpanel"]
+[ext_resource type="PackedScene" uid="uid://xnf0q80w3yh0" path="res://scenes/ui/book_text.tscn" id="text"]
+[ext_resource type="Theme" uid="uid://cl73ou0e04t25" path="res://resources/ui/inventory_book_theme.tres" id="theme"]
+
+[sub_resource type="FontVariation" id="GiftBackFont"]
+resource_local_to_scene = true
+base_font = ExtResource("4_lij5a")
+spacing_top = -4
+
+[sub_resource type="FontVariation" id="BackResidentFont"]
+resource_local_to_scene = true
+base_font = ExtResource("4_lij5a")
+spacing_top = -4
+spacing_bottom = 4
+
+[sub_resource type="FontVariation" id="ActivityFont"]
+resource_local_to_scene = true
+base_font = ExtResource("4_lij5a")
+spacing_top = -5
+
+[node name="NPCRelationshipUI" type="Control" unique_id=1033285084]
+layout_mode = 3
+anchors_preset = 0
 script = ExtResource("script")
-design_size = Vector2(420, 224)
 
-[node name="Backdrop" type="ColorRect" parent="."]
+[node name="Design" type="Control" parent="." unique_id=1400117414]
 unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 0
+offset_right = 420.0
+offset_bottom = 224.0
+mouse_filter = 2
+theme = ExtResource("theme")
+
+[node name="Paper" type="Control" parent="Design" unique_id=165301684]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="LeftSheet" type="TextureRect" parent="Design/Paper" unique_id=1905148089]
+visible = false
+modulate = Color(1, 1, 1, 0.34117648)
+texture_filter = 2
+layout_mode = 0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 200.0
+offset_bottom = 220.0
+mouse_filter = 2
+texture = ExtResource("paper")
+expand_mode = 1
+
+[node name="RightSheet" type="TextureRect" parent="Design/Paper" unique_id=495756190]
+visible = false
+texture_filter = 2
+layout_mode = 0
+offset_left = 220.0
+offset_top = 4.0
+offset_right = 416.0
+offset_bottom = 220.0
+mouse_filter = 2
+texture = ExtResource("paper")
+expand_mode = 1
+
+[node name="Left" type="Control" parent="Design" unique_id=895639206]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 1
+anchors_preset = 0
+offset_right = 420.0
+offset_bottom = 224.0
+mouse_filter = 2
+
+[node name="GalleryBackground" type="ColorRect" parent="Design/Left" unique_id=855206533]
+visible = false
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color(0.2, 0.11, 0.06, 0.95)
-
-[node name="Design" type="Control" parent="."]
-unique_name_in_owner = true
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 420.0
-offset_bottom = 224.0
-theme = ExtResource("theme")
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
+color = Color(0.28, 0.33, 0.23, 0.97)
 
-[node name="Left" type="Control" parent="Design"]
+[node name="Heading" type="Label" parent="Design/Left" unique_id=1258437342]
 unique_name_in_owner = true
-offset_left = 4.0
-offset_top = 0.0
-offset_right = 200.0
-offset_bottom = 224.0
-clip_contents = true
-mouse_filter = 2
-
-[node name="Right" type="Control" parent="Design"]
-unique_name_in_owner = true
-offset_left = 220.0
-offset_top = 0.0
-offset_right = 420.0
-offset_bottom = 224.0
-clip_contents = true
-mouse_filter = 2
-
-[node name="Heading" type="Label" parent="Design/Left"]
-unique_name_in_owner = true
-offset_left = 4.0
-offset_top = 0.0
-offset_right = 196.0
-offset_bottom = 20.0
-mouse_filter = 2
+texture_filter = 1
+layout_mode = 0
+offset_left = 26.0
+offset_top = -4.0
+offset_right = 210.0
+offset_bottom = 9.0
+theme_override_fonts/font = ExtResource("4_lij5a")
 theme_override_font_sizes/font_size = 16
-text = "WARGA & HUBUNGAN"
+text = "Warga & Hubungan"
 clip_text = true
 
-
-[node name="Search" type="LineEdit" parent="Design/Left"]
+[node name="Search" type="LineEdit" parent="Design/Left" unique_id=1245075981]
 unique_name_in_owner = true
-offset_left = 4.0
-offset_top = 23.0
+texture_filter = 1
+layout_mode = 0
+offset_left = 12.0
+offset_top = 13.0
 offset_right = 196.0
-offset_bottom = 45.0
-placeholder_text = "Cari warga / profesi"
-theme_override_font_sizes/font_size = 12
+offset_bottom = 34.0
+theme_override_fonts/font = ExtResource("4_lij5a")
+theme_override_font_sizes/font_size = 15
+placeholder_text = "Cari warga / profesi..."
 
-[node name="Filter" type="OptionButton" parent="Design/Left"]
+[node name="Filter" type="OptionButton" parent="Design/Left" unique_id=762231984]
 unique_name_in_owner = true
-offset_left = 4.0
-offset_top = 48.0
-offset_right = 196.0
-offset_bottom = 70.0
+texture_filter = 2
+layout_mode = 0
+offset_left = 228.0
+offset_top = 19.0
+offset_right = 412.0
+offset_bottom = 35.0
+theme_override_font_sizes/font_size = 9
+selected = 0
 fit_to_longest_item = false
 item_count = 5
-selected = 0
-theme_override_font_sizes/font_size = 12
 popup/item_0/text = "Semua warga"
 popup/item_0/id = 0
 popup/item_1/text = "Akrab (1+ hati)"
 popup/item_1/id = 1
-popup/item_2/text = "Bisa romance"
+popup/item_2/text = "Bisa dinikahi"
 popup/item_2/id = 2
 popup/item_3/text = "Berpacaran"
 popup/item_3/id = 3
 popup/item_4/text = "Menikah"
 popup/item_4/id = 4
 
-[node name="Count" type="Label" parent="Design/Left"]
+[node name="Count" type="Label" parent="Design/Left" unique_id=122143766]
 unique_name_in_owner = true
-offset_left = 4.0
-offset_top = 73.0
-offset_right = 196.0
-offset_bottom = 87.0
-mouse_filter = 2
-theme_override_font_sizes/font_size = 11
-text = ""
+visible = false
+texture_filter = 1
+layout_mode = 0
+offset_left = 2.0
+offset_top = 22.0
+offset_right = 406.0
+offset_bottom = 34.0
+theme_override_colors/font_color = Color(0.52, 0.35, 0.22, 1)
+theme_override_fonts/font = ExtResource("4_lij5a")
+theme_override_font_sizes/font_size = 10
 clip_text = true
 
-
-[node name="Residents" type="VBoxContainer" parent="Design/Left"]
+[node name="Residents" type="Container" parent="Design/Left" unique_id=65394986]
 unique_name_in_owner = true
-offset_left = 4.0
-offset_top = 90.0
-offset_right = 196.0
-offset_bottom = 200.0
-theme_override_constants/separation = 4
+layout_mode = 0
+offset_left = 9.0
+offset_top = 38.0
+offset_right = 413.0
+offset_bottom = 194.0
+script = ExtResource("card_grid")
+horizontal_gap = 6.0
 
-[node name="ResidentsPager" parent="Design/Left" instance=ExtResource("pager")]
+[node name="ResidentsPager" parent="Design/Left" unique_id=640698459 instance=ExtResource("pager")]
 unique_name_in_owner = true
-offset_left = 4.0
-offset_top = 202.0
-offset_right = 196.0
-offset_bottom = 224.0
+texture_filter = 1
+layout_mode = 0
+offset_left = 8.0
+offset_top = 198.0
+offset_right = 192.0
+offset_bottom = 218.0
 content_path = NodePath("../Residents")
-page_size = 3
+page_size = 8
+turn_pages = true
+paper_path = NodePath("../../Paper")
 
-[node name="Empty" type="Label" parent="Design/Right"]
+[node name="DetailsLeft" type="Control" parent="Design" unique_id=1012563260]
 unique_name_in_owner = true
-offset_left = 4.0
-offset_top = 28.0
-offset_right = 196.0
-offset_bottom = 220.0
-mouse_filter = 2
-theme_override_font_sizes/font_size = 13
-text = "Tidak ada warga yang cocok.\nCoba pencarian lainnya."
-clip_text = true
-autowrap_mode = 3
-
-[node name="Details" type="Control" parent="Design/Right"]
-unique_name_in_owner = true
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 200.0
-offset_bottom = 224.0
+clip_contents = true
+anchors_preset = 0
+offset_left = 15.0
+offset_right = 211.0
+offset_bottom = 216.0
 mouse_filter = 2
 
-[node name="Section" type="OptionButton" parent="Design/Right/Details"]
+[node name="ProfileBackground" type="Panel" parent="Design/DetailsLeft" unique_id=1671161924]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("subpanel")
+
+[node name="ProfileTitle" type="Label" parent="Design/DetailsLeft" unique_id=994798514]
 unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
 offset_left = 4.0
-offset_top = 0.0
-offset_right = 196.0
+offset_top = 2.0
+offset_right = 188.0
 offset_bottom = 22.0
-fit_to_longest_item = false
-item_count = 4
-selected = 0
-theme_override_font_sizes/font_size = 12
-popup/item_0/text = "Profil"
-popup/item_0/id = 0
-popup/item_1/text = "Aktivitas"
-popup/item_1/id = 1
-popup/item_2/text = "Hadiah"
-popup/item_2/id = 2
-popup/item_3/text = "Detail hadiah"
-popup/item_3/id = 3
+theme_override_colors/font_color = Color(0.24, 0.12, 0.06, 1)
+theme_override_font_sizes/font_size = 16
+text = "Profil & Hubungan"
 
-[node name="Profile" type="Control" parent="Design/Right/Details"]
+[node name="Profile" type="Control" parent="Design/DetailsLeft" unique_id=1483020512]
 unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 0
 offset_left = 4.0
-offset_top = 28.0
-offset_right = 196.0
-offset_bottom = 222.0
-visible = true
+offset_top = 24.0
+offset_right = 188.0
+offset_bottom = 188.0
 mouse_filter = 2
 
-[node name="Activity" type="Control" parent="Design/Right/Details"]
-unique_name_in_owner = true
-offset_left = 4.0
-offset_top = 28.0
-offset_right = 196.0
-offset_bottom = 222.0
-visible = false
+[node name="PortraitFrame" type="Panel" parent="Design/DetailsLeft/Profile" unique_id=644595452]
+texture_filter = 1
+layout_mode = 0
+offset_right = 44.0
+offset_bottom = 54.0
 mouse_filter = 2
+theme_override_styles/panel = ExtResource("subpanel")
 
-[node name="GiftList" type="Control" parent="Design/Right/Details"]
+[node name="Portrait" type="TextureRect" parent="Design/DetailsLeft/Profile" unique_id=484877956]
 unique_name_in_owner = true
-offset_left = 4.0
-offset_top = 28.0
-offset_right = 196.0
-offset_bottom = 222.0
-visible = false
+texture_filter = 1
+layout_mode = 0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 42.0
+offset_bottom = 52.0
 mouse_filter = 2
-
-[node name="GiftDetail" type="Control" parent="Design/Right/Details"]
-unique_name_in_owner = true
-offset_left = 4.0
-offset_top = 28.0
-offset_right = 196.0
-offset_bottom = 222.0
-visible = false
-mouse_filter = 2
-
-[node name="Portrait" type="TextureRect" parent="Design/Right/Details/Profile"]
-unique_name_in_owner = true
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 40.0
-offset_bottom = 44.0
 expand_mode = 1
 stretch_mode = 5
-mouse_filter = 2
 
-[node name="Initial" type="Label" parent="Design/Right/Details/Profile"]
+[node name="Initial" type="Label" parent="Design/DetailsLeft/Profile" unique_id=331561445]
 unique_name_in_owner = true
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 40.0
-offset_bottom = 44.0
-mouse_filter = 2
-theme_override_font_sizes/font_size = 22
-text = ""
-clip_text = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 42.0
+offset_bottom = 52.0
+theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 vertical_alignment = 1
+clip_text = true
 
-[node name="Name" type="Label" parent="Design/Right/Details/Profile"]
+[node name="Name" type="Label" parent="Design/DetailsLeft/Profile" unique_id=77661819]
 unique_name_in_owner = true
-offset_left = 46.0
-offset_top = 0.0
-offset_right = 192.0
-offset_bottom = 20.0
-mouse_filter = 2
+texture_filter = 1
+layout_mode = 0
+offset_left = 50.0
+offset_right = 184.0
+offset_bottom = 30.0
+theme_override_colors/font_color = Color(0.24, 0.12, 0.06, 1)
 theme_override_font_sizes/font_size = 16
-text = ""
-clip_text = true
-
-
-[node name="Role" type="Label" parent="Design/Right/Details/Profile"]
-unique_name_in_owner = true
-offset_left = 46.0
-offset_top = 24.0
-offset_right = 192.0
-offset_bottom = 56.0
-mouse_filter = 2
-theme_override_font_sizes/font_size = 12
-text = ""
-clip_text = true
+text = "Nama Warga"
 autowrap_mode = 3
+clip_text = true
+
+[node name="Role" type="Label" parent="Design/DetailsLeft/Profile" unique_id=1724692904]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 50.0
+offset_top = 31.0
+offset_right = 184.0
+offset_bottom = 55.0
+theme_override_colors/font_color = Color(0.55, 0.38, 0.25, 1)
+theme_override_font_sizes/font_size = 16
+text = "Profesi"
+autowrap_mode = 3
+clip_text = true
 max_lines_visible = 2
 
-[node name="Hearts" type="HFlowContainer" parent="Design/Right/Details/Profile"]
+[node name="Hearts" type="HFlowContainer" parent="Design/DetailsLeft/Profile" unique_id=1139776106]
 unique_name_in_owner = true
-offset_left = 0.0
-offset_top = 64.0
-offset_right = 192.0
-offset_bottom = 92.0
+texture_filter = 1
+layout_mode = 0
+offset_top = 58.0
+offset_right = 184.0
+offset_bottom = 76.0
 theme_override_constants/h_separation = 2
 theme_override_constants/v_separation = 2
 
-[node name="Progress" type="ProgressBar" parent="Design/Right/Details/Profile"]
+[node name="Progress" type="ProgressBar" parent="Design/DetailsLeft/Profile" unique_id=1053152956]
 unique_name_in_owner = true
-offset_left = 0.0
-offset_top = 96.0
-offset_right = 192.0
-offset_bottom = 100.0
+texture_filter = 1
+layout_mode = 0
+offset_top = 80.0
+offset_right = 184.0
+offset_bottom = 85.0
 show_percentage = false
 
-[node name="Points" type="Label" parent="Design/Right/Details/Profile"]
+[node name="Points" type="Label" parent="Design/DetailsLeft/Profile" unique_id=854854827]
 unique_name_in_owner = true
-offset_left = 0.0
+texture_filter = 1
+layout_mode = 0
+offset_top = 88.0
+offset_right = 184.0
+offset_bottom = 102.0
+theme_override_colors/font_color = Color(0.48, 0.32, 0.2, 1)
+theme_override_font_sizes/font_size = 16
+text = "0 / 2500 poin persahabatan"
+clip_text = true
+
+[node name="Status" type="Label" parent="Design/DetailsLeft/Profile" unique_id=2082310512]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
 offset_top = 106.0
-offset_right = 192.0
+offset_right = 184.0
 offset_bottom = 122.0
-mouse_filter = 2
-theme_override_font_sizes/font_size = 11
-text = ""
+theme_override_colors/font_color = Color(0.24, 0.12, 0.06, 1)
+theme_override_font_sizes/font_size = 16
+text = "Status: Sahabat"
 clip_text = true
 
-
-[node name="Status" type="Label" parent="Design/Right/Details/Profile"]
+[node name="Romance" type="Label" parent="Design/DetailsLeft/Profile" unique_id=453971383]
 unique_name_in_owner = true
-offset_left = 0.0
-offset_top = 128.0
-offset_right = 192.0
-offset_bottom = 148.0
-mouse_filter = 2
-theme_override_font_sizes/font_size = 14
-text = ""
+texture_filter = 1
+layout_mode = 0
+offset_top = 124.0
+offset_right = 184.0
+offset_bottom = 138.0
+theme_override_colors/font_color = Color(0.55, 0.38, 0.25, 1)
+theme_override_font_sizes/font_size = 16
+text = "Bisa dinikahi"
 clip_text = true
 
-
-[node name="Romance" type="Label" parent="Design/Right/Details/Profile"]
+[node name="Birthday" type="Label" parent="Design/DetailsLeft/Profile" unique_id=2147227778]
 unique_name_in_owner = true
-offset_left = 0.0
-offset_top = 153.0
-offset_right = 192.0
-offset_bottom = 169.0
-mouse_filter = 2
-theme_override_font_sizes/font_size = 12
-text = ""
+texture_filter = 1
+layout_mode = 0
+offset_top = 140.0
+offset_right = 184.0
+offset_bottom = 164.0
+theme_override_colors/font_color = Color(0.42, 0.26, 0.15, 1)
+theme_override_font_sizes/font_size = 16
+text = "Ulang tahun: belum tercatat"
+autowrap_mode = 3
 clip_text = true
 
-
-[node name="Birthday" type="Label" parent="Design/Right/Details/Profile"]
+[node name="Activity" type="Control" parent="Design/DetailsLeft" unique_id=2060358967]
 unique_name_in_owner = true
-offset_left = 0.0
-offset_top = 176.0
-offset_right = 192.0
-offset_bottom = 194.0
+visible = false
+layout_mode = 1
+anchors_preset = 0
+offset_left = 4.0
+offset_top = 24.0
+offset_right = 188.0
+offset_bottom = 188.0
 mouse_filter = 2
-theme_override_font_sizes/font_size = 11
-text = ""
-clip_text = true
 
-
-[node name="Journal" parent="Design/Right/Details/Activity" instance=ExtResource("text")]
+[node name="Journal" parent="Design/DetailsLeft/Activity" unique_id=1414931531 instance=ExtResource("text")]
 unique_name_in_owner = true
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 192.0
-offset_bottom = 194.0
+layout_mode = 1
+offset_right = 184.0
+offset_bottom = 164.0
 
-
-[node name="GiftTabs" type="OptionButton" parent="Design/Right/Details/GiftList"]
+[node name="Right" type="Control" parent="Design" unique_id=498754199]
 unique_name_in_owner = true
-offset_left = 0.0
-offset_top = 0.0
+clip_contents = true
+layout_mode = 1
+anchors_preset = 0
+offset_left = 217.0
+offset_right = 413.0
+offset_bottom = 220.0
+mouse_filter = 2
+
+[node name="DetailBackground" type="Panel" parent="Design/Right" unique_id=1969157966]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("subpanel")
+
+[node name="Details" type="Control" parent="Design/Right" unique_id=2017545900]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="GiftTitle" type="Label" parent="Design/Right/Details" unique_id=883463479]
+texture_filter = 1
+layout_mode = 0
+offset_left = 8.0
+offset_top = 2.0
 offset_right = 192.0
-offset_bottom = 22.0
+offset_bottom = 26.0
+theme_override_colors/font_color = Color(0.24, 0.12, 0.06, 1)
+theme_override_fonts/font = ExtResource("4_lij5a")
+theme_override_font_sizes/font_size = 16
+text = "Catatan Hadiah"
+
+[node name="GiftList" type="Control" parent="Design/Right/Details" unique_id=293066009]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 0
+offset_left = 8.0
+offset_top = 28.0
+offset_right = 192.0
+offset_bottom = 216.0
+mouse_filter = 2
+
+[node name="GiftTabs" type="OptionButton" parent="Design/Right/Details/GiftList" unique_id=2106915619]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_right = 184.0
+offset_bottom = 28.0
+theme_override_fonts/font = ExtResource("4_lij5a")
+theme_override_font_sizes/font_size = 16
+selected = 0
 fit_to_longest_item = false
 item_count = 5
-selected = 0
-theme_override_font_sizes/font_size = 12
-popup/item_0/text = "Love"
+popup/item_0/text = "Favorit (+80)"
 popup/item_0/id = 0
-popup/item_1/text = "Like"
+popup/item_1/text = "Disukai (+45)"
 popup/item_1/id = 1
-popup/item_2/text = "Netral"
+popup/item_2/text = "Netral (+20)"
 popup/item_2/id = 2
-popup/item_3/text = "Dislike"
+popup/item_3/text = "Kurang Suka (-20)"
 popup/item_3/id = 3
-popup/item_4/text = "Hate"
+popup/item_4/text = "Benci (-40)"
 popup/item_4/id = 4
 
-[node name="GiftHeading" type="Label" parent="Design/Right/Details/GiftList"]
+[node name="GiftHeading" type="Label" parent="Design/Right/Details/GiftList" unique_id=1118754825]
 unique_name_in_owner = true
-offset_left = 0.0
-offset_top = 26.0
-offset_right = 192.0
-offset_bottom = 44.0
-mouse_filter = 2
-theme_override_font_sizes/font_size = 13
-text = ""
+texture_filter = 1
+layout_mode = 0
+offset_top = 30.0
+offset_right = 184.0
+offset_bottom = 54.0
+theme_override_colors/font_color = Color(0.24, 0.12, 0.06, 1)
+theme_override_fonts/font = ExtResource("4_lij5a")
+theme_override_font_sizes/font_size = 16
 clip_text = true
 
-
-[node name="GiftHint" type="Label" parent="Design/Right/Details/GiftList"]
+[node name="GiftHint" type="Label" parent="Design/Right/Details/GiftList" unique_id=1846416597]
 unique_name_in_owner = true
-offset_left = 0.0
-offset_top = 47.0
-offset_right = 192.0
-offset_bottom = 75.0
-mouse_filter = 2
-theme_override_font_sizes/font_size = 11
-text = ""
-clip_text = true
+texture_filter = 1
+layout_mode = 0
+offset_top = 56.0
+offset_right = 184.0
+offset_bottom = 84.0
+theme_override_colors/font_color = Color(0.55, 0.38, 0.25, 1)
+theme_override_fonts/font = ExtResource("4_lij5a")
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
+clip_text = true
 max_lines_visible = 2
 
-[node name="Gifts" type="VBoxContainer" parent="Design/Right/Details/GiftList"]
+[node name="Gifts" type="VBoxContainer" parent="Design/Right/Details/GiftList" unique_id=87230518]
 unique_name_in_owner = true
-offset_left = 0.0
-offset_top = 80.0
-offset_right = 192.0
-offset_bottom = 166.0
+texture_filter = 1
+layout_mode = 0
+offset_top = 88.0
+offset_right = 184.0
+offset_bottom = 146.0
 theme_override_constants/separation = 3
 
-[node name="GiftsPager" parent="Design/Right/Details/GiftList" instance=ExtResource("pager")]
+[node name="GiftsPager" parent="Design/Right/Details/GiftList" unique_id=1170658934 instance=ExtResource("pager")]
 unique_name_in_owner = true
-offset_left = 0.0
-offset_top = 172.0
-offset_right = 192.0
-offset_bottom = 194.0
+texture_filter = 1
+layout_mode = 0
+offset_top = 150.0
+offset_right = 184.0
+offset_bottom = 178.0
 content_path = NodePath("../Gifts")
-page_size = 3
+page_size = 2
 
-[node name="GiftInfo" parent="Design/Right/Details/GiftDetail" instance=ExtResource("text")]
+[node name="GiftDetail" type="Control" parent="Design/Right/Details" unique_id=1020761283]
 unique_name_in_owner = true
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 192.0
-offset_bottom = 194.0
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 0
+offset_left = 7.0
+offset_top = 26.0
+offset_right = 191.0
+offset_bottom = 214.0
+mouse_filter = 2
 
-
-[node name="Close" type="Button" parent="Design"]
+[node name="GiftInfo" parent="Design/Right/Details/GiftDetail" unique_id=410168313 instance=ExtResource("text")]
 unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 1
+offset_top = 32.0
+offset_right = 184.0
+offset_bottom = 186.0
+text_font_size = 16
+text_font = ExtResource("4_lij5a")
+nearest_textures = true
+
+[node name="GiftBack" type="Button" parent="Design/Right/Details/GiftDetail" unique_id=477027400]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_right = 184.0
+offset_bottom = 28.0
+theme_override_fonts/font = SubResource("GiftBackFont")
+theme_override_font_sizes/font_size = 16
+text = "‹ Daftar hadiah"
+
+[node name="Close" type="Button" parent="Design" unique_id=42530935]
+unique_name_in_owner = true
+visible = false
+texture_filter = 2
+layout_mode = 0
 offset_left = 320.0
-offset_top = 0.0
 offset_right = 420.0
 offset_bottom = 20.0
-visible = false
 text = "Kembali"
+
+[node name="BackToResidents" type="Button" parent="Design" unique_id=893386337]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 23.0
+offset_top = 182.0
+offset_right = 120.0
+offset_bottom = 209.0
+theme_override_constants/h_separation = 0
+theme_override_fonts/font = SubResource("BackResidentFont")
+theme_override_font_sizes/font_size = 16
+text = "‹ Semua warga"
+
+[node name="ActivityToggle" type="Button" parent="Design" unique_id=857294470]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 123.0
+offset_top = 188.0
+offset_right = 203.0
+offset_bottom = 208.0
+theme_override_fonts/font = SubResource("ActivityFont")
+theme_override_font_sizes/font_size = 16
+text = "Catatan"

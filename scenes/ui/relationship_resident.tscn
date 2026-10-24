@@ -1,10 +1,170 @@
-[gd_scene format=3]
-[node name="Resident" type="Button"]
-custom_minimum_size = Vector2(0, 34)
+[gd_scene format=3 uid="uid://dyewfp15smm7e"]
+
+[ext_resource type="Script" uid="uid://dx74t50hcfuao" path="res://scripts/ui/relationship_resident.gd" id="1_script"]
+[ext_resource type="StyleBox" uid="uid://b46x2crslgi3b" path="res://resources/ui/style_resident_card_normal.tres" id="2_normal"]
+[ext_resource type="StyleBox" uid="uid://bcsqilgingklv" path="res://resources/ui/style_resident_card_hover.tres" id="3_hover"]
+[ext_resource type="StyleBox" uid="uid://bsrx56th8vhnf" path="res://resources/ui/style_resident_card_selected.tres" id="4_selected"]
+[ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="6_gbqgw"]
+[ext_resource type="SystemFont" uid="uid://cc5l8ign8cs06" path="res://resources/ui/menu_vector_font.tres" id="font"]
+[ext_resource type="Texture2D" uid="uid://de5sv84qsxww7" path="res://assets/ui/relationship_gift.svg" id="gift_icon"]
+[ext_resource type="Texture2D" uid="uid://co1idpiu14lph" path="res://assets/ui/relationship_talk.svg" id="talk_icon"]
+
+[sub_resource type="Theme" id="CardTheme"]
+default_font = ExtResource("font")
+default_font_size = 7
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_x5ddy"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_4y4w3"]
+
+[node name="ResidentRow" type="Button" unique_id=1132313397]
+texture_filter = 2
+custom_minimum_size = Vector2(88, 72)
 size_flags_horizontal = 3
+theme = SubResource("CardTheme")
+theme_override_styles/normal = ExtResource("2_normal")
+theme_override_styles/pressed = ExtResource("4_selected")
+theme_override_styles/hover_pressed = ExtResource("4_selected")
+theme_override_styles/hover = ExtResource("3_hover")
 toggle_mode = true
 alignment = 0
-expand_icon = true
-theme_override_constants/icon_max_width = 24
-theme_override_font_sizes/font_size = 12
+script = ExtResource("1_script")
+
+[node name="Portrait" type="TextureRect" parent="." unique_id=712396752]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 1.0
+offset_right = 42.0
+offset_bottom = 72.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="NameLabel" type="Label" parent="." unique_id=1731789374]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 41.0
+offset_top = 9.0
+offset_right = 83.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(0.29, 0.18, 0.12, 1)
+theme_override_constants/line_spacing = -1
+theme_override_fonts/font = ExtResource("6_gbqgw")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxTexture_x5ddy")
+theme_override_styles/focus = SubResource("StyleBoxLine_4y4w3")
+autowrap_mode = 3
+autowrap_trim_flags = 0
+justification_flags = 131
+
+[node name="StatusLabel" type="Label" parent="." unique_id=262381979]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 41.0
+offset_top = 1.0
+offset_right = 84.0
+offset_bottom = 11.833333
+theme_override_colors/font_color = Color(0.48, 0.34, 0.23, 1)
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 2
 clip_text = true
+
+[node name="HeartsContainer" type="GridContainer" parent="." unique_id=1812443465]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 42.0
+offset_top = 38.0
+offset_right = 84.0
+offset_bottom = 50.0
+mouse_filter = 2
+theme_override_constants/h_separation = 1
+theme_override_constants/v_separation = 0
+columns = 5
+
+[node name="GiftCheck1" type="Label" parent="." unique_id=899408361]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 48.0
+offset_top = 56.0
+offset_right = 61.0
+offset_bottom = 66.0
+theme_override_font_sizes/font_size = 7
+
+[node name="GiftCheck2" type="Label" parent="." unique_id=1156198774]
+unique_name_in_owner = true
+visible = false
+texture_filter = 2
+layout_mode = 0
+offset_left = 75.0
+offset_top = 43.0
+offset_right = 96.0
+offset_bottom = 52.0
+theme_override_font_sizes/font_size = 7
+
+[node name="TalkCheck" type="Label" parent="." unique_id=1612855084]
+unique_name_in_owner = true
+texture_filter = 2
+layout_mode = 0
+offset_left = 71.0
+offset_top = 56.0
+offset_right = 82.0
+offset_bottom = 66.0
+theme_override_font_sizes/font_size = 7
+
+[node name="EventBadge" type="Label" parent="." unique_id=1426489618]
+unique_name_in_owner = true
+visible = false
+texture_filter = 2
+layout_mode = 0
+offset_left = 2.0
+offset_top = 57.0
+offset_right = 39.0
+offset_bottom = 69.0
+theme_override_colors/font_color = Color(0.22, 0.34, 0.2, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 0.82, 1)
+theme_override_constants/shadow_outline_size = 2
+theme_override_font_sizes/font_size = 6
+text = "♥ Cerita baru!"
+
+[node name="PortraitInitial" type="Label" parent="." unique_id=553990307]
+unique_name_in_owner = true
+visible = false
+texture_filter = 2
+layout_mode = 0
+offset_left = 1.0
+offset_right = 42.0
+offset_bottom = 72.0
+theme_override_colors/font_color = Color(0.57, 0.39, 0.25, 1)
+theme_override_font_sizes/font_size = 19
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GiftIcon" type="TextureRect" parent="." unique_id=303926000]
+unique_name_in_owner = true
+texture_filter = 2
+layout_mode = 0
+offset_left = 39.0
+offset_top = 57.0
+offset_right = 47.0
+offset_bottom = 65.0
+mouse_filter = 2
+texture = ExtResource("gift_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TalkIcon" type="TextureRect" parent="." unique_id=1871253332]
+unique_name_in_owner = true
+texture_filter = 2
+layout_mode = 0
+offset_left = 62.0
+offset_top = 57.0
+offset_right = 70.0
+offset_bottom = 65.0
+mouse_filter = 2
+texture = ExtResource("talk_icon")
+expand_mode = 1
+stretch_mode = 5

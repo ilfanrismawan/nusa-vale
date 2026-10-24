@@ -1,13 +1,15 @@
 """Run from any directory: python tools/validate_npc_data.py. No dependencies."""
 import json
 import re
+import struct
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ERRORS = []
 WARNINGS = []
 MAPS = {name: ROOT / f"scenes/world/{'interior/' if name.endswith('_home') else ''}{name}.tscn"
-        for name in ('farm', 'town', 'hill', 'wira_home', 'ubay_home')}
+        for name in ('farm', 'town', 'hill', 'wira_home', 'ubay_home', 'eep_ranch', 'eep_home')}
+MAPS['university'] = ROOT / 'scenes/world/interior/university.tscn'
 
 
 def require(ok, location, message):
@@ -78,6 +80,9 @@ def dialogue(value, location, expressions):
 
 def main():
     items = set()
+    recipe_ids = set()
+    for path in (ROOT / 'resources/cooking/recipes').glob('*.tres'):
+        recipe_ids.update(re.findall(r'^id = "([^"]+)"', path.read_text(encoding='utf-8-sig'), re.M))
     for path in (ROOT / 'resources').rglob('*.tres'):
         items.update(re.findall(r'^item_id = "([^"]+)"', path.read_text(encoding='utf-8-sig'), re.M))
     markers = {name: set(re.findall(r'\[node name="([^"]+)"[^\n]*parent="NPCPoints"', path.read_text(encoding='utf-8-sig')))
@@ -99,14 +104,28 @@ def main():
             require(isinstance(npc_id, str) and bool(npc_id), loc, 'id required')
             require(npc_id not in residents, loc, 'duplicate NPC id')
             residents[npc_id] = data
+            for field in ('name', 'role', 'biography', 'gender', 'home_map'):
+                require(isinstance(data.get(field), str) and bool(data[field]), loc, f'missing {field}')
+            require(type(data.get('age')) is int and data['age'] > 0, loc, 'age must be positive')
+            require(strings(data.get('personality', [])) and bool(data.get('personality')), loc, 'personality required')
             service = data.get('service')
             service_type = service.get('type') if isinstance(service, dict) else service
-            require(service_type in (None, '', 'shipping', 'carpenter', 'livestock'), loc, 'unsupported service.type')
+            require(service_type in (None, '', 'shipping', 'carpenter', 'livestock', 'blacksmith', 'shop'), loc, 'unsupported service.type')
             if isinstance(service, dict):
                 require(strings(service.get('available_activities', [])), loc, 'available_activities must be an array of strings')
                 require(strings(service.get('closed_days', [])), loc, 'closed_days must be an array of strings')
                 if service.get('presentation'):
                     require((ROOT / service['presentation'].removeprefix('res://')).is_file(), loc, 'missing service presentation resource')
+                if service.get('supplies_shop'):
+                    require((ROOT / service['supplies_shop'].removeprefix('res://')).is_file(), loc, 'missing supplies shop resource')
+                if service_type == 'shop':
+                    require(bool(service.get('stock')), loc, 'shop stock required')
+                    for offer in service.get('stock', []):
+                        require(offer.get('item') in items and type(offer.get('price')) is int and offer['price'] > 0, loc, 'invalid shop offer')
+                        item_path = ROOT / 'resources/item_data' / (str(offer.get('item')) + '.tres')
+                        if item_path.is_file():
+                            price = re.search(r'^sell_price = (\d+)', item_path.read_text(encoding='utf-8-sig'), re.M)
+                            require(not price or offer['price'] > int(price[1]), loc, 'shop offer must cost more than resale value')
             require(strings(data.get('offscreen_activities', [])), loc, 'offscreen_activities must be an array of strings')
             birthday = data.get('birthday', {'season': data.get('birthday_season'), 'day': data.get('birthday_day')})
             require(birthday.get('season') in ('spring', 'summer', 'fall', 'autumn', 'winter'), loc, 'invalid birthday season')
@@ -119,8 +138,14 @@ def main():
             for field in ('sprite_frames', 'portrait'):
                 require((ROOT / visual[field].removeprefix('res://')).is_file(), loc, f'missing visual.{field}: {visual[field]}')
             expressions = visual.get('expressions', visual.get('expression', {}))
+            portrait_path = ROOT / visual['portrait'].removeprefix('res://')
+            portrait_size = struct.unpack('>II', portrait_path.read_bytes()[16:24]) if portrait_path.is_file() and portrait_path.suffix == '.png' else None
             for key, value in expressions.items():
                 require((type(value) is int and value >= 0) or (isinstance(value, list) and len(value) == 2 and all(type(n) is int and n >= 0 for n in value)), loc, f'invalid expression index {key}')
+                if portrait_size:
+                    columns, cell_size = visual.get('portrait_columns', 5), visual.get('portrait_cell_size', 64)
+                    x, y = (value % columns, value // columns) if type(value) is int else value
+                    require((x + 1) * cell_size <= portrait_size[0] and (y + 1) * cell_size <= portrait_size[1], loc, f'portrait expression outside sheet: {key}')
             for section in ('dialogue', 'dialogue_by_hearts', 'gift_dialogue', 'romance_dialogue'):
                 for key, lines in data.get(section, {}).items():
                     if section == 'dialogue_by_hearts':
@@ -149,6 +174,11 @@ def main():
                 window = event.get('time_range', [])
                 require(isinstance(window, list) and len(window) == 2 and all(time(t) for t in window), loc, 'invalid event time_range')
                 dialogue(event.get('lines', []), loc + '/heart_events', expressions)
+            require({2, 4, 6, 8, 10}.issubset({event.get('hearts') for event in data.get('heart_events', [])}), loc, 'missing heart milestone')
+            require(all(str(hearts) in data.get('dialogue_by_hearts', {}) for hearts in (2, 4, 6, 8, 10)), loc, 'missing heart dialogue tier')
+            require(all(key in data.get('schedules', {}) for key in ('default', 'rainy')), loc, 'default and rainy schedules required')
+            if data.get('anchored'):
+                require(len({(entry['map'], entry['point']) for entries in data['schedules'].values() for entry in entries}) == 1, loc, 'anchored residents must keep one physical location')
         except (ValueError, KeyError, TypeError, AttributeError) as exc:
             ERRORS.append(f'{loc}: {exc}')
     social = load(ROOT / 'data/npc/social/gift_profiles.json')
@@ -169,9 +199,20 @@ def main():
         require(npc_id in residents, household_path.name, f'unknown recipe sender: {npc_id}')
         for reward in rewards:
             require(type(reward.get('hearts')) is int and 1 <= reward['hearts'] <= 10, household_path.name, 'invalid reward heart threshold')
-            require((ROOT / 'resources/cooking/recipes' / (str(reward.get('recipe')) + '.tres')).is_file(), household_path.name, f'unknown recipe: {reward.get("recipe")}')
+            require(reward.get('recipe') in recipe_ids, household_path.name, f'unknown recipe ID: {reward.get("recipe")}')
             for item_id, count in reward.get('items', {}).items():
                 require(item_id in items and type(count) is int and 1 <= count <= 999, household_path.name, f'invalid reward item/count: {item_id}')
+    require(set(household.get('recipe_rewards', {})) == set(residents), household_path.name, 'every resident must have social mail rewards')
+    database = (ROOT / 'scenes/npc/npc_database.tscn').read_text(encoding='utf-8-sig')
+    registered = {}
+    for source in re.findall(r'path="res://(resources/npc_data/characters/[^\"]+_resident.tres)"', database):
+        profile = (ROOT / source).read_text(encoding='utf-8-sig')
+        match = re.search(r'^npc_id = "([^"]+)"', profile, re.M)
+        require(match is not None, source, 'resident profile ID required')
+        if match:
+            require(match[1] not in registered, source, 'duplicate resident registration')
+            registered[match[1]] = source
+    require(set(registered) == set(residents), 'NPCDatabase', 'JSON residents and registered profiles must match')
     for message in ERRORS:
         print('ERROR:', message)
     for message in WARNINGS:

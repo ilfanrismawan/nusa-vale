@@ -21,9 +21,9 @@ func _ready() -> void:
 	var data := GameState.p1()
 	var other := GameState.new_coop_character()
 	other.story_flags.p2_only = true
-	check(NPCDatabase.residents.size() == 5, "all five resident profiles registered")
+	check(NPCDatabase.residents.size() == 13, "all thirteen resident profiles registered")
 	check(NPCSocialService.taste("ubay", "coffee") == "loved", "Ubay gift preferences use recognized JSON field")
-	check(NPCDatabase.residents.zarathia.service == "" and NPCDatabase.residents.wira.service == "carpenter", "object and null services normalized")
+	check(NPCDatabase.residents.zarathia.service == "shop" and NPCDatabase.residents.wira.service == "carpenter", "shop and carpenter services normalized")
 	check(NPCDatabase.residents.zarathia.visual.expressions.happy == [0, 2], "numeric portrait index converted")
 	var original: Dictionary = NPCDatabase.residents.wira.friendship.duplicate(true)
 	NPCDatabase.residents.wira.friendship = {"start": 500, "max_hearts": 3}
@@ -67,7 +67,7 @@ func _ready() -> void:
 	var actor: VillageNPC = load("res://scenes/npc/ScheduledNPC.tscn").instantiate()
 	actor.npc_id = "zarathia"
 	add_child(actor)
-	check(not actor._service_available(), "null service never falls through to shipping")
+	check(not actor._service_available(), "shop remains closed outside configured activities")
 	actor.definition = NPCDatabase.residents.wira
 	actor._current_activity = "resting"
 	check(not actor._service_available(), "service closed outside configured activities")

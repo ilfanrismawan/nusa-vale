@@ -1,0 +1,10 @@
+[gd_resource type="Resource" format=3]
+[ext_resource type="Script" path="res://scripts/npc/data/resident_profile.gd" id="profile"]
+[resource]
+script = ExtResource("profile")
+source_json = "res://data/npc/baskoro.json"
+npc_id = "baskoro"
+display_name = "Prof. Baskoro"
+role_title = "Peneliti dan Pengajar"
+move_speed = 36.0
+schedule_source = 1

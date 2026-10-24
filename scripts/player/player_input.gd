@@ -77,6 +77,8 @@ var _variants: Dictionary = {}
 var _last_pad := false
 ## Waktu (msec) interaksi terakhir lewat tombol interaksi; dipakai untuk A = interaksi atau lompat.
 var interacted_ms := -100000
+## Tekanan yang dimulai di hotbar tetap milik UI selama tombol ditahan/di-drag.
+var _hotbar_mouse_buttons: Dictionary = {}
 
 static var _solo: PlayerInput
 static var _overrides: Dictionary = {}
@@ -349,13 +351,13 @@ func active_actions(base: StringName) -> Array[StringName]:
 
 func pressed(base: StringName) -> bool:
 	for a in active_actions(base):
-		if Input.is_action_pressed(a):
+		if Input.is_action_pressed(a) and not _hotbar_blocks_action(a):
 			return true
 	return false
 
 func just_pressed(base: StringName) -> bool:
 	for a in active_actions(base):
-		if Input.is_action_just_pressed(a):
+		if Input.is_action_just_pressed(a) and not _hotbar_blocks_action(a):
 			return true
 	return false
 
@@ -376,9 +378,27 @@ func get_vector() -> Vector2:
 func is_event(event: InputEvent, base: StringName, allow_echo: bool = false) -> bool:
 	if event == null:
 		return false
+	if event is InputEventMouseButton and _pointer_on_hotbar(event.position):
+		return false
 	for a in active_actions(base):
 		if event.is_action_pressed(a, allow_echo):
 			return not _excluded(event, base)
+	return false
+
+func _pointer_on_hotbar(position: Vector2) -> bool:
+	var tree := Engine.get_main_loop() as SceneTree
+	if tree == null:
+		return false
+	for hotbar in tree.get_nodes_in_group(&"hotbar_ui"):
+		if hotbar.contains_pointer(position):
+			return true
+	return false
+
+func _hotbar_blocks_action(action_name: StringName) -> bool:
+	for binding in InputMap.action_get_events(action_name):
+		if binding is InputEventMouseButton and _hotbar_mouse_buttons.has(binding.button_index):
+			if Input.is_mouse_button_pressed(binding.button_index):
+				return true
 	return false
 
 ## Pengecualian untuk aksi bawaan Godot yang dipakai GUI (tidak bisa dipecah per konteks).
@@ -426,6 +446,11 @@ func prefers_pad() -> bool:
 
 ## Catat perangkat terakhir (dipanggil Player._input untuk setiap event).
 func note_event(event: InputEvent) -> void:
+	if event is InputEventMouseButton and owns_event(event) and event.pressed:
+		if _pointer_on_hotbar(event.position):
+			_hotbar_mouse_buttons[event.button_index] = true
+		else:
+			_hotbar_mouse_buttons.erase(event.button_index)
 	if device != DEVICE_KEYBOARD:
 		return
 	var pad := _last_pad

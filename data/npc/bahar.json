@@ -1,0 +1,343 @@
+{
+  "schema_version": 1,
+  "id": "bahar",
+  "name": "Pak Bahar",
+  "age": 67,
+  "gender": "male",
+  "role": "Nelayan Sepuh",
+  "birthday": {
+    "season": "fall",
+    "day": 6
+  },
+  "home_map": "town",
+  "residence": "Tempat tinggal di luar area yang dapat dimasuki; titik malam memakai lokasi kerja/istirahat sementara.",
+  "romanceable": false,
+  "personality": [
+    "sabar",
+    "pengamat",
+    "suka_bercerita"
+  ],
+  "biography": "Bahar ingin mewariskan kebiasaan menangkap ikan secukupnya kepada generasi baru.",
+  "move_speed": 36.0,
+  "friendship": {
+    "start": 0,
+    "max_hearts": 10
+  },
+  "offscreen_activities": [
+    "sleeping"
+  ],
+  "anchored": false,
+  "service": null,
+  "visual": {
+    "sprite_frames": "res://resources/npc_data/npc_animation/bahar_resident_frame.tres",
+    "portrait": "res://assets/farm_rpg/Character/NPC'S/Pirate/Premade/Jack/Pirate Portrait.png",
+    "portrait_cell_size": 64,
+    "portrait_columns": 4,
+    "expressions": {
+      "neutral": 0,
+      "sparkle": 1,
+      "angry": 3,
+      "happy": 5,
+      "annoyed": 7
+    }
+  },
+  "gift_tastes": {
+    "loved": [
+      "grilled_catfish",
+      "fish_red_snapper",
+      "fish_stew",
+      "spice_tea"
+    ],
+    "liked": [
+      "rice_ball",
+      "baked_fish",
+      "fish_mas",
+      "bait",
+      "worm"
+    ],
+    "neutral": [
+      "bread",
+      "wood",
+      "stone",
+      "carrot"
+    ],
+    "disliked": [
+      "chili",
+      "pepper",
+      "espresso"
+    ],
+    "hated": [
+      "slime_gel",
+      "old_bone",
+      "coal"
+    ]
+  },
+  "schedules": {
+    "default": [
+      {
+        "time": "06:00",
+        "map": "town",
+        "point": "bahar_work",
+        "activity": "preparing"
+      },
+      {
+        "time": "08:00",
+        "map": "town",
+        "point": "bahar_work",
+        "activity": "working"
+      },
+      {
+        "time": "12:00",
+        "map": "town",
+        "point": "bahar_rest",
+        "activity": "lunch"
+      },
+      {
+        "time": "14:00",
+        "map": "town",
+        "point": "bahar_work",
+        "activity": "working"
+      },
+      {
+        "time": "18:00",
+        "map": "town",
+        "point": "bahar_rest",
+        "activity": "resting"
+      },
+      {
+        "time": "22:00",
+        "map": "town",
+        "point": "bahar_rest",
+        "activity": "sleeping"
+      }
+    ],
+    "rainy": [
+      {
+        "time": "06:00",
+        "map": "town",
+        "point": "bahar_work",
+        "activity": "preparing"
+      },
+      {
+        "time": "08:00",
+        "map": "town",
+        "point": "bahar_work",
+        "activity": "working"
+      },
+      {
+        "time": "12:00",
+        "map": "town",
+        "point": "bahar_rest",
+        "activity": "lunch"
+      },
+      {
+        "time": "14:00",
+        "map": "town",
+        "point": "bahar_work",
+        "activity": "working"
+      },
+      {
+        "time": "18:00",
+        "map": "town",
+        "point": "bahar_rest",
+        "activity": "resting"
+      },
+      {
+        "time": "22:00",
+        "map": "town",
+        "point": "bahar_rest",
+        "activity": "sleeping"
+      }
+    ]
+  },
+  "dialogue": {
+    "default": [
+      "Bahar ingin mewariskan kebiasaan menangkap ikan secukupnya kepada generasi baru."
+    ],
+    "preparing": [
+      "Aku sedang menyiapkan pekerjaan hari ini."
+    ],
+    "working": [
+      "Memancing mengajariku menunggu tanpa memaksa."
+    ],
+    "lunch": [
+      "Aku beristirahat sebentar sebelum melanjutkan pekerjaan."
+    ],
+    "resting": [
+      "Senang bisa mengobrol setelah bekerja. Bagaimana harimu?"
+    ],
+    "sleeping": [
+      "Sudah waktunya beristirahat. Sampai besok."
+    ]
+  },
+  "content_status": {
+    "biography": "baseline_2026_10_24",
+    "birthday": "baseline_2026_10_24",
+    "residence": "offscreen_temporary",
+    "visual": "legacy_placeholder",
+    "schedule": "baseline_local",
+    "story": "baseline_2026_10_24",
+    "story_expansion": "baseline_2026_10_24"
+  },
+  "gift_dialogue": {
+    "loved": [
+      "Terima kasih! Ini salah satu kesukaanku."
+    ],
+    "liked": [
+      "Aku menyukainya. Terima kasih sudah mengingatku."
+    ],
+    "neutral": [
+      "Terima kasih sudah membawakannya."
+    ],
+    "disliked": [
+      "Terima kasih, meskipun ini kurang cocok untukku."
+    ],
+    "hated": [
+      "Maaf, aku benar-benar tidak menyukai benda ini."
+    ]
+  },
+  "heart_events": [
+    {
+      "id": "bahar_friendship_2",
+      "hearts": 2,
+      "requires_flags": [],
+      "sets_flags": [
+        "bahar_friendship_2_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "bahar_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Memancing mengajariku menunggu tanpa memaksa.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Tidak setiap hari membawa pulang ikan banyak, dan itu tidak apa-apa.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "bahar_friendship_4",
+      "hearts": 4,
+      "requires_flags": [],
+      "sets_flags": [
+        "bahar_friendship_4_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "bahar_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Dulu aku bangga kalau keranjang selalu penuh.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Belakangan aku belajar menyisakan ikan kecil supaya perairan tetap hidup.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "bahar_friendship_6",
+      "hearts": 6,
+      "requires_flags": [],
+      "sets_flags": [
+        "bahar_friendship_6_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "bahar_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Ada musim ketika aku pulang dengan jala hampir kosong.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Tetangga berbagi makan denganku. Sejak itu aku tidak menghitung keberuntungan dari tangkapan saja.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "bahar_friendship_8",
+      "hearts": 8,
+      "requires_flags": [],
+      "sets_flags": [
+        "bahar_friendship_8_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "bahar_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Catatan lama tentang air dan angin kusimpan baik-baik.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Aku ingin anak muda belajar mengamati, bukan sekadar percaya cerita nelayan tua.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "bahar_friendship_10",
+      "hearts": 10,
+      "requires_flags": [],
+      "sets_flags": [
+        "bahar_friendship_10_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "bahar_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Sekarang aku lebih tenang melihat orang muda merawat sungai.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Kamu sudah menjadi teman yang bisa kupercaya, di darat maupun saat bicara tentang air.",
+          "expression": "happy"
+        }
+      ]
+    }
+  ],
+  "dialogue_by_hearts": {
+    "2": [
+      "Tidak setiap hari membawa pulang ikan banyak, dan itu tidak apa-apa."
+    ],
+    "4": [
+      "Belakangan aku belajar menyisakan ikan kecil supaya perairan tetap hidup."
+    ],
+    "6": [
+      "Tetangga berbagi makan denganku. Sejak itu aku tidak menghitung keberuntungan dari tangkapan saja."
+    ],
+    "8": [
+      "Aku ingin anak muda belajar mengamati, bukan sekadar percaya cerita nelayan tua."
+    ],
+    "10": [
+      "Kamu sudah menjadi teman yang bisa kupercaya, di darat maupun saat bicara tentang air."
+    ]
+  }
+}

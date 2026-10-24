@@ -65,6 +65,8 @@
 [ext_resource type="Material" path="res://resources/soil_detail_material.tres" id="soil_detail"]
 [ext_resource type="Material" uid="uid://ci3yasder0uu3" path="res://resources/water_detail_material.tres" id="water_detail"]
 
+[ext_resource type="PackedScene" path="res://scenes/objects/building_sign.tscn" id="EepRanchSign"]
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7od4w"]
 texture = ExtResource("2_x1w4o")
 0:0/0 = 0
@@ -16090,6 +16092,9 @@ _data = {
 }
 point_count = 8
 
+[sub_resource type="RectangleShape2D" id="EepRanchExitShape"]
+size = Vector2(80, 24)
+
 [node name="Farm" type="Node2D" unique_id=232664316]
 y_sort_enabled = true
 script = ExtResource("1_mrr1a")
@@ -18983,3 +18988,16 @@ map_id = "farm"
 curve = SubResource("Curve2D_6mmg0")
 
 [editable path="NPCPaths"]
+
+[node name="EnterEepRanch" type="Area2D" parent="."]
+position = Vector2(992, 976)
+script = ExtResource("outdoor_boundary")
+scene_target = "res://scenes/world/eep_ranch.tscn"
+spawn_position = Vector2(608, 64)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnterEepRanch"]
+shape = SubResource("EepRanchExitShape")
+
+[node name="RanchDirection" parent="." instance=ExtResource("EepRanchSign")]
+position = Vector2(1040, 944)
+caption = "Ranch Eep: selatan"

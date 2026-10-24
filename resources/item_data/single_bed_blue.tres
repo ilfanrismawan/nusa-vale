@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1_item"]
+[ext_resource type="Texture2D" path="res://resources/interior/atlas/single_bed_blue.tres" id="2_icon"]
+
+[resource]
+script = ExtResource("1_item")
+item_id = "single_bed_blue"
+display_name = "Tempat Tidur Biru"
+category = 8
+icon = ExtResource("2_icon")
+description = "Tempat tidur berseprai biru cerah dengan bantal empuk."
+placeable = true
+placement_size = Vector2i(2, 2)
+sell_price = 400

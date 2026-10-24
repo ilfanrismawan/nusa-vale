@@ -31,10 +31,36 @@
     "marriage_hearts": 10,
     "spouse_home_map": "player_farm_house"
   },
-  "service": null,
+  "service": {
+    "type": "shop",
+    "available_activities": [
+      "tea_stall"
+    ],
+    "closed_days": [],
+    "name": "Kedai Teh Zarathia",
+    "greeting": "Selamat datang! Semua disiapkan dengan perhatian.",
+    "stock": [
+      {
+        "item": "green_tea",
+        "price": 40
+      },
+      {
+        "item": "chamomile_tea",
+        "price": 100
+      },
+      {
+        "item": "cake",
+        "price": 350
+      },
+      {
+        "item": "banana_bread",
+        "price": 1000
+      }
+    ]
+  },
   "visual": {
     "sprite_frames": "res://resources/npc_data/npc_animation/npc_zarathia_frame.tres",
-    "portrait": "res://assets/farm_rpg/Character/NPC'S/Tori/Portrait Tori.png",
+    "portrait": "res://assets/farm_rpg/Character/NPC'S/Zarathia/npc_portrait_zarathia.png",
     "portrait_cell_size": 64,
     "portrait_columns": 5,
     "expressions": {
@@ -42,14 +68,17 @@
       "sparkle": 5,
       "angry": 7,
       "happy": 10,
-      "annoyed": 12
+	  "smile": 4,
+      "annoyed": 8,
+	  "sad": 14,
+	  "cry": 13
     }
   },
   "dialogue": {
     "default": [
       {
         "text": "Mau mampir minum teh? Hari ini aku buat yang agak manis.",
-        "expression": "happy"
+        "expression": "smile"
       }
     ],
     "breakfast": [
@@ -59,7 +88,7 @@
       },
       {
         "text": "Zarathustra makannya cepat sekali. Aku selalu harus menyisakan bagian untukku.",
-        "expression": "neutral"
+        "expression": "annoyed"
       }
     ],
     "tea_stall": [
@@ -108,7 +137,7 @@
       },
       {
         "text": "Kursi di ujung meja itu dulu tempat Ibu. Sekarang tidak ada yang mau duduk di sana.",
-        "expression": "neutral",
+        "expression": "sad",
         "requires_flags": [
           "story_zarathia_told"
         ]
@@ -139,6 +168,25 @@
       {
         "text": "Kadang aku menggambar sesuatu, lalu sadar wajahnya mirip kamu. Aneh, ya?",
         "expression": "sparkle"
+      }
+    ],
+    "2": [
+      "Ada hari ketika aku lebih mudah bercerita lewat gambar daripada kata-kata."
+    ],
+    "6": [
+      {
+        "text": "Ternyata bersabar pada diri sendiri juga perlu latihan.",
+        "requires_flags": [
+          "story_zarathia_told"
+        ]
+      }
+    ],
+    "10": [
+      {
+        "text": "Bersamamu, rasanya aku boleh tumbuh dengan langkahku sendiri.",
+        "requires_flags": [
+          "story_zarathia_told"
+        ]
       }
     ]
   },
@@ -321,13 +369,137 @@
       "lines": [
         {
           "text": "Dulu rumah kami kecil sekali. Aku ingat Ibu sering duduk diam di dekat jendela.",
-          "expression": "neutral"
+          "expression": "sad"
         },
         {
           "text": "Aku tidak pernah benci Ibu. Aku cuma ingin tahu apa yang ada di kepalanya waktu itu.",
-          "expression": "annoyed"
+          "expression": "cry"
+        }
+      ]
+    },
+    {
+      "id": "zarathia_friendship_2",
+      "hearts": 2,
+      "requires_flags": [],
+      "sets_flags": [
+        "zarathia_friendship_2_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "zarathia_tea_stall",
+      "time_range": [
+        "10:00",
+        "12:00"
+      ],
+      "lines": [
+		{
+          "text": "Aku sudah bisa mengepang rambut sendiri…",
+          "expression": "smile"
+        },
+		{
+          "text": "tapi yang belakang masih berantakan. Dulu Ibu yang rapikan.",
+          "expression": "sad"
+        },
+        {
+          "text": "Aku suka menyiapkan teh sambil mendengarkan suasana pagi.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Ada hari ketika aku lebih mudah bercerita lewat gambar daripada kata-kata.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "zarathia_friendship_6",
+      "hearts": 6,
+      "requires_flags": [
+        "story_zarathia_told"
+      ],
+      "sets_flags": [
+        "zarathia_friendship_6_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "zarathia_tea_stall",
+      "time_range": [
+        "10:00",
+        "12:00"
+      ],
+      "lines": [
+        {
+          "text": "Aku sedang mencatat resep kue agar hasilnya tidak berubah setiap kali dibuat.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Ternyata bersabar pada diri sendiri juga perlu latihan.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "zarathia_friendship_8",
+      "hearts": 8,
+      "requires_flags": [
+        "story_zarathia_told"
+      ],
+      "sets_flags": [
+        "zarathia_friendship_8_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "zarathia_tea_stall",
+      "time_range": [
+        "10:00",
+        "12:00"
+      ],
+      "lines": [
+        {
+          "text": "Aku mulai berani memperlihatkan sketsaku kepada orang lain.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Terima kasih sudah mendengarkan tanpa memintaku buru-buru selesai.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "zarathia_friendship_10",
+      "hearts": 10,
+      "requires_flags": [
+        "story_zarathia_told"
+      ],
+      "sets_flags": [
+        "zarathia_friendship_10_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "zarathia_tea_stall",
+      "time_range": [
+        "10:00",
+        "12:00"
+      ],
+      "lines": [
+        {
+          "text": "Kalau aku mimpi ketemu Ibu, aku suka buru-buru peluk. Takut keburu bangun.",
+          "expression": "sad"
+        },{
+          "text": "Kalau Ibu datang, panggil aku, ya. Walaupun aku lagi tidur.",
+          "expression": "smile"
+        },{
+          "text": "Aku ingin terus membuat kenangan baru tanpa menghapus yang lama.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Bersamamu, rasanya aku boleh tumbuh dengan langkahku sendiri.",
+          "expression": "happy"
         }
       ]
     }
-  ]
+  ],
+  "content_status": {
+    "story_expansion": "baseline_2026_10_24"
+  },
+  "biography": "Penjual teh dan kue yang menyukai seni dan keluarganya."
 }

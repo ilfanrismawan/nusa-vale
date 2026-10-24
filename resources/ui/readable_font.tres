@@ -1,7 +1,7 @@
-[gd_resource type="FontVariation" load_steps=2 format=3]
+[gd_resource type="FontVariation" format=3 uid="uid://bw6sa2q375h63"]
 
-[ext_resource type="FontFile" path="res://assets/fonts/m5x7.ttf" id="1_pixel"]
+[ext_resource type="SystemFont" path="res://resources/ui/menu_vector_font.tres" id="font"]
 
 [resource]
-resource_name = "Nusa Vale Pixel UI"
-base_font = ExtResource("1_pixel")
+resource_name = "Nusa Vale Readable Menu"
+base_font = ExtResource("font")

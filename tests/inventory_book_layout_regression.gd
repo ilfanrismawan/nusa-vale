@@ -17,6 +17,50 @@ func _ready() -> void:
 	var inv = load("res://scenes/ui/ui_inventory.tscn").instantiate()
 	add_child(inv)
 	inv._open()
+	if "--npc-details-only" in OS.get_cmdline_user_args():
+		inv._show_relationships()
+		inv._relationship_ui._open_npc("zarathia")
+		for section in 4:
+			inv._relationship_ui._select_section(section)
+			await get_tree().process_frame
+			check_area(inv._relationship_ui.get_node("%DetailsLeft"), "NPC profile/journal %d" % section)
+			check_area(inv._relationship_ui.get_node("Design/Right"), "NPC gift panel %d" % section)
+		inv._relationship_ui._select_section(2)
+		for category in 5:
+			inv._relationship_ui._select_category(category)
+			await get_tree().process_frame
+			check_area(inv._relationship_ui.get_node("Design/Right"), "NPC gift category %d" % category)
+		inv._relationship_ui._select_section(3)
+		var gift_info: Control = inv._relationship_ui.get_node("%GiftInfo")
+		var long_gift_note := "Catatan hadiah panjang untuk memeriksa font piksel enam belas. ".repeat(24)
+		gift_info.text = long_gift_note
+		await get_tree().process_frame
+		await get_tree().process_frame
+		check(gift_info._pages.size() > 1, "16px gift detail paginates long descriptions")
+		check_area(inv._relationship_ui.get_node("Design/Right"), "long 16px gift detail")
+		check("".join(gift_info._pages).replace(" ", "").replace("\n", "") == long_gift_note.replace(" ", ""), "16px gift pagination preserves all text")
+		inv._close()
+		inv.queue_free()
+		print("NPC DETAIL LAYOUT COMPLETE: failures=%d" % failures)
+		get_tree().quit(1 if failures else 0)
+		return
+	var top_tabs: Control = inv.get_node("%TopTabsContainer")
+	check(top_tabs.position == Vector2(44, -40), "compact tabs match reference book inset and top margin")
+	check(inv._top_tabs.size() == 8 and top_tabs.find_children("*", "Label", true, false).is_empty(), "all eight top tabs are icon-only")
+	for index in inv._top_tabs.size():
+		var tab: TextureButton = inv._top_tabs[index]
+		check(tab.position.x == index * 44 and tab.size.x == 38, "tab %d uses equal width and six-unit spacing" % index)
+		check(is_equal_approx(tab.position.y + tab.size.y, 42.0), "tab %d stays attached to book edge" % index)
+		check(not tab.tooltip_text.is_empty() and tab.get_node("Icon").get_rect() == Rect2(7, 4, 24, 24), "tab %d has centred icon padding and accessible name" % index)
+		tab.mouse_entered.emit()
+		check(is_equal_approx(tab.position.y + tab.size.y, 42.0), "hover keeps tab %d attached" % index)
+		tab.mouse_exited.emit()
+	inv._show_bag_page()
+	if DisplayServer.get_name() != "headless":
+		await get_tree().process_frame
+		await get_tree().process_frame
+		RenderingServer.force_draw(false)
+		get_viewport().get_texture().get_image().save_png("res://scratch/inventory_top_tabs_preview.png")
 	# Native dropdown internals have no scene owner; page content must have no scrollers.
 	check(inv.book_root.find_children("*", "ScrollContainer", true, true).is_empty(), "inventory contains no scroll containers")
 	for method: String in ["_show_bag_page", "_show_status", "_show_equipment", "_show_crafting", "_show_skills", "_show_relationships", "_show_collection", "_on_gear_pressed"]:
@@ -47,9 +91,11 @@ func _ready() -> void:
 		await get_tree().process_frame
 		check_area(inv._settings_panel.get_node("Pages/Left"), "settings section %d" % index)
 	inv._show_relationships()
+	inv._relationship_ui._open_npc("zarathia")
 	for index in 4:
 		inv._relationship_ui._select_section(index)
 		await get_tree().process_frame
+		check_area(inv._relationship_ui.get_node("%DetailsLeft"), "NPC left section %d" % index)
 		check_area(inv._relationship_ui.get_node("Design/Right"), "NPC section %d" % index)
 	inv._relationship_ui._select_section(2)
 	for index in 5:

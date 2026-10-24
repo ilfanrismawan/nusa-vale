@@ -1,0 +1,17 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://resources/interior/atlas/classic_chair.tres" id="1_tex"]
+
+[sub_resource type="RectangleShape2D" id="BodyShape"]
+size = Vector2(12, 8)
+
+[node name="classic_chair" type="StaticBody2D"]
+y_sort_enabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -10)
+texture = ExtResource("1_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -4)
+shape = SubResource("BodyShape")

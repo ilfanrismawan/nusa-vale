@@ -2,7 +2,7 @@ class_name FarmServiceTheme
 extends RefCounted
 
 const PAPER := preload("res://assets/farm_rpg/ui/inventory/inventory.png")
-const BANNER := preload("res://assets/farm_rpg/ui/inventory/Banner.png")
+const BANNER := preload("res://assets/farm_rpg/ui/Banner.png")
 const DIALOG := preload("res://assets/farm_rpg/ui/dialogue box.png")
 const FONT := preload("res://resources/ui/readable_font.tres")
 const INK := Color("50321f")

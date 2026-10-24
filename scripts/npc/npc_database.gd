@@ -10,13 +10,27 @@ var gift_profiles: Dictionary = {}
 func social_definition(id: String) -> Dictionary:
 	return residents.get(id, gift_profiles.get(id, {}))
 
-const DEFINITIONS := {
-	&"kirana": preload
-	("res://resources/npc_data/characters/npc_kirana.tres")
-}
-
+# Compatibility for callers that still consume NPCDefinition resources.
+# Values come from the same resident profile as dialogue, gifts and schedules.
 func get_definition(id: StringName) -> NPCDefinition:
-	return DEFINITIONS.get(id) as NPCDefinition
+	var data: Dictionary = residents.get(str(id), {})
+	if data.is_empty():
+		return null
+	var result := NPCDefinition.new()
+	result.id = id
+	result.display_name = str(data.name)
+	result.age = int(data.age)
+	result.profession = str(data.role)
+	result.home_map = StringName(data.home_map)
+	result.personality = PackedStringArray(data.personality)
+	result.romanceable = bool(data.romanceable)
+	result.sprite_frames = load(data.visual.sprite_frames)
+	result.portrait = load(data.visual.portrait)
+	result.birthday_season = str(data.get("birthday_season", ""))
+	result.birthday_day = int(data.get("birthday_day", 0))
+	for category in ["loved", "liked", "neutral", "disliked", "hated"]:
+		result.set(category + "_items", PackedStringArray(data.get(category + "_items", [])))
+	return result
 
 # JSON definitions are shared by every loaded map, including co-op rooms.
 var residents: Dictionary = {}

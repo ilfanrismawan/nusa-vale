@@ -1,77 +1,106 @@
 @tool
 class_name BuildingSign
 extends Node2D
-## Local origin is the mounting point (wall/hanging) or foot of the posts.
-
+## Artwork lives in the scene. These exports preserve existing placed sign presets.
 enum Mount { WALL, HANGING, POSTS }
-const FONT = preload("res://assets/fonts/m5x7.ttf")
+var _pending: Dictionary = {}
+var _nodes_ready := false
+var _layout_pending := false
 
+@export var use_preset_overrides := true
+
+@export var auto_layout := true:
+	set(value):
+		auto_layout = value
+		_schedule_layout()
 @export var caption := "Sekolah":
 	set(value):
 		caption = value
-		queue_redraw()
+		_change("caption", value)
 @export var mount: Mount = Mount.WALL:
 	set(value):
 		mount = value
-		queue_redraw()
+		_schedule_layout()
 @export_range(32, 192, 1) var minimum_width: int = 56:
 	set(value):
 		minimum_width = value
-		queue_redraw()
-@export_range(8, 24, 1) var font_size: int = 12:
+		_change("width", value)
+@export_range(8, 24, 1) var font_size: int = 16:
 	set(value):
 		font_size = value
-		queue_redraw()
+		_change("font_size", value)
 @export var icon: Texture2D:
 	set(value):
 		icon = value
-		queue_redraw()
+		_change("icon", value)
 @export_range(12, 32, 1) var minimum_height: int = 20:
 	set(value):
 		minimum_height = value
-		queue_redraw()
+		_change("height", value)
 @export var wood_color := Color("7d452b"):
 	set(value):
 		wood_color = value
-		queue_redraw()
+		_change("wood_color", value)
 @export var text_color := Color("ffe6aa"):
 	set(value):
 		text_color = value
-		queue_redraw()
+		_change("text_color", value)
 
 func _ready() -> void:
-	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	queue_redraw()
+	_nodes_ready = true
+	%Content.minimum_size_changed.connect(_schedule_layout)
+	_apply_pending()
+	_schedule_layout()
+
+func _change(key: String, value: Variant) -> void:
+	_pending[key] = value
+	if _nodes_ready:
+		_apply_pending()
+	_schedule_layout()
+
+func _apply_pending() -> void:
+	if not use_preset_overrides:
+		_pending.clear()
+		return
+	for key: String in _pending:
+		var value: Variant = _pending[key]
+		match key:
+			"caption": %Caption.text = str(value)
+			"width": %Board.custom_minimum_size.x = float(value)
+			"height": %Board.custom_minimum_size.y = float(value)
+			"font_size": %Caption.add_theme_font_size_override("font_size", int(value))
+			"icon":
+				%Icon.texture = value as Texture2D
+				%Icon.visible = value != null
+			"wood_color":
+				var panel := %Frame.get_theme_stylebox("panel").duplicate() as StyleBoxFlat
+				panel.bg_color = value
+				%Frame.add_theme_stylebox_override("panel", panel)
+				%BottomGrain.color = (value as Color).darkened(0.25)
+			"text_color": %Caption.add_theme_color_override("font_color", value)
+	_pending.clear()
+
+func _schedule_layout() -> void:
+	if not _nodes_ready or _layout_pending:
+		return
+	_layout_pending = true
+	_layout.call_deferred()
+
+func _layout() -> void:
+	_layout_pending = false
+	if not is_inside_tree():
+		return
+	%Posts.visible = mount == Mount.POSTS
+	%Hanging.visible = mount == Mount.HANGING
+	if not auto_layout:
+		return
+	var board := %Board as Control
+	board.size = board.custom_minimum_size.max(%Content.get_combined_minimum_size()).ceil()
+	var mounting_point: Marker2D = %PostMount if mount == Mount.POSTS else %WallMount
+	board.position = mounting_point.position - board.size * 0.5
+	for post: ColorRect in [%LeftPost, %RightPost]:
+		post.offset_bottom = %Ground.position.y - board.position.y - board.size.y
 
 func board_rect() -> Rect2:
-	var text_width := FONT.get_string_size(caption, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
-	var width := ceilf(maxf(minimum_width, text_width + 16 + (20 if icon != null else 0)))
-	var height := ceilf(maxf(minimum_height, FONT.get_height(font_size) + 6))
-	return Rect2(Vector2(-width * 0.5, -height * 0.5 - (20 if mount == Mount.POSTS else 0)), Vector2(width, height))
-
-func _draw() -> void:
-	var board := board_rect()
-	var dark := Color("3c2521")
-	var light := Color("b97943")
-	for x in [board.position.x + 7, board.end.x - 9]:
-		if mount == Mount.POSTS:
-			draw_rect(Rect2(x, board.position.y + 4, 3, -board.position.y + 4), dark)
-			draw_rect(Rect2(x + 1, board.position.y + 4, 1, -board.position.y + 3), light)
-		elif mount == Mount.HANGING:
-			draw_line(Vector2(x + 1, board.position.y - 9), Vector2(x + 1, board.position.y + 1), Color("c5b69b"), 1)
-			draw_rect(Rect2(x - 1, board.position.y - 10, 5, 2), dark)
-	draw_rect(board, dark)
-	draw_rect(board.grow(-1), wood_color)
-	draw_rect(Rect2(board.position + Vector2(1, 1), Vector2(board.size.x - 2, 1)), light)
-	draw_rect(Rect2(board.position + Vector2(2, board.size.y - 3), Vector2(board.size.x - 4, 1)), wood_color.darkened(0.25))
-	for corner in [board.position + Vector2(3, 3), Vector2(board.end.x - 4, board.position.y + 3), Vector2(board.position.x + 3, board.end.y - 4), board.end - Vector2(4, 4)]:
-		draw_rect(Rect2(corner, Vector2.ONE), Color("dac389"))
-	var text_width := FONT.get_string_size(caption, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
-	var content_width := text_width + (20 if icon != null else 0)
-	var text_position := Vector2(-content_width * 0.5, board.get_center().y - FONT.get_height(font_size) * 0.5 + FONT.get_ascent(font_size))
-	text_position = text_position.round()
-	if icon != null:
-		draw_texture_rect(icon, Rect2(Vector2(text_position.x, board.get_center().y - 8), Vector2(16, 16)), false)
-		text_position.x += 20
-	draw_string_outline(FONT, text_position, caption, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, 1, dark)
-	draw_string(FONT, text_position, caption, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, text_color)
+	var board := get_node_or_null("Board") as Control
+	return board.get_rect() if board != null else Rect2()

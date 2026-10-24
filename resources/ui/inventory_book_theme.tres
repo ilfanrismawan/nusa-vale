@@ -1,6 +1,6 @@
 [gd_resource type="Theme" format=3 uid="uid://cl73ou0e04t25"]
 
-[ext_resource type="FontVariation" path="res://resources/ui/readable_font.tres" id="font"]
+[ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="1_ttb6f"]
 
 [sub_resource type="StyleBoxTexture" id="Paper"]
 content_margin_left = 6.0
@@ -11,6 +11,7 @@ texture_margin_left = 8.0
 texture_margin_top = 8.0
 texture_margin_right = 8.0
 texture_margin_bottom = 8.0
+modulate_color = Color(0.32941177, 0.1882353, 0.11372549, 1)
 
 [sub_resource type="StyleBoxFlat" id="Disabled"]
 content_margin_left = 4.0
@@ -110,8 +111,7 @@ border_color = Color(0.6, 0.4, 0.25, 1)
 bg_color = Color(0.35, 0.48, 0.28, 1)
 
 [resource]
-default_font = ExtResource("font")
-default_font_size = 14
+default_font = ExtResource("1_ttb6f")
 AcceptDialog/styles/panel = SubResource("Paper")
 BookCard/base_type = &"PanelContainer"
 BookCard/styles/panel = SubResource("Paper")
@@ -136,6 +136,7 @@ HSlider/styles/slider = SubResource("SliderTrack")
 Label/colors/font_color = Color(0.25, 0.14, 0.08, 1)
 LineEdit/colors/font_color = Color(0.25, 0.14, 0.08, 1)
 LineEdit/colors/font_placeholder_color = Color(0.5, 0.36, 0.22, 1)
+LineEdit/font_sizes/font_size = 11
 LineEdit/styles/focus = SubResource("Input")
 LineEdit/styles/normal = SubResource("Input")
 Panel/styles/panel = SubResource("Paper")

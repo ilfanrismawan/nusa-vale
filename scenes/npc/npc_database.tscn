@@ -9,6 +9,15 @@
 
 [ext_resource type="Resource" path="res://resources/npc_data/characters/eep_resident.tres" id="eep"]
 
+[ext_resource type="Resource" path="res://resources/npc_data/characters/kirana_resident.tres" id="kirana_new"]
+[ext_resource type="Resource" path="res://resources/npc_data/characters/bahar_resident.tres" id="bahar_new"]
+[ext_resource type="Resource" path="res://resources/npc_data/characters/joko_resident.tres" id="joko_new"]
+[ext_resource type="Resource" path="res://resources/npc_data/characters/ratih_resident.tres" id="ratih_new"]
+[ext_resource type="Resource" path="res://resources/npc_data/characters/rian_resident.tres" id="rian_new"]
+[ext_resource type="Resource" path="res://resources/npc_data/characters/damar_resident.tres" id="damar_new"]
+[ext_resource type="Resource" path="res://resources/npc_data/characters/bima_resident.tres" id="bima_new"]
+[ext_resource type="Resource" path="res://resources/npc_data/characters/baskoro_resident.tres" id="baskoro_new"]
+
 [node name="NPCDatabase" type="Node" unique_id=155323052]
 script = ExtResource("script")
-resident_profiles = Array[ExtResource("profile")]([ExtResource("wira"), ExtResource("ubay"), ExtResource("5_gnvdn"), ExtResource("6_e1rpp"), ExtResource("eep")])
+resident_profiles = Array[ExtResource("profile")]([ExtResource("wira"), ExtResource("ubay"), ExtResource("5_gnvdn"), ExtResource("6_e1rpp"), ExtResource("eep"), ExtResource("kirana_new"), ExtResource("bahar_new"), ExtResource("joko_new"), ExtResource("ratih_new"), ExtResource("rian_new"), ExtResource("damar_new"), ExtResource("bima_new"), ExtResource("baskoro_new")])

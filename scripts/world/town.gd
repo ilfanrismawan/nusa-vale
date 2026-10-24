@@ -2,7 +2,7 @@ extends Node2D
 
 ## Town buildings are independent scene instances under YSortEntities/Buildings.
 
-@onready var modulate_light: CanvasModulate = $CanvasModulate
+@onready var modulate_light: CanvasModulate = get_node_or_null("CanvasModulate")
 
 func update_camera_limits() -> void:
 	# Co-op also calls this before copying the embedded camera's limits.

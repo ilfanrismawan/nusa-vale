@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1_item"]
+[ext_resource type="Texture2D" path="res://resources/interior/atlas/dining_table_wood.tres" id="2_icon"]
+
+[resource]
+script = ExtResource("1_item")
+item_id = "dining_table_wood"
+display_name = "Meja Makan Kayu"
+category = 8
+icon = ExtResource("2_icon")
+description = "Meja makan kayu panjang untuk jamuan makan keluarga."
+placeable = true
+placement_size = Vector2i(3, 1)
+sell_price = 380

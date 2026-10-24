@@ -1,0 +1,340 @@
+{
+  "schema_version": 1,
+  "id": "baskoro",
+  "name": "Prof. Baskoro",
+  "age": 58,
+  "gender": "male",
+  "role": "Peneliti dan Pengajar",
+  "birthday": {
+    "season": "fall",
+    "day": 25
+  },
+  "home_map": "university",
+  "residence": "Tempat tinggal di luar area yang dapat dimasuki; titik malam memakai lokasi kerja/istirahat sementara.",
+  "romanceable": false,
+  "personality": [
+    "ingin_tahu",
+    "teliti",
+    "terbuka"
+  ],
+  "biography": "Baskoro belajar menyeimbangkan catatan ilmiah dengan pengetahuan warga desa.",
+  "move_speed": 36.0,
+  "friendship": {
+    "start": 0,
+    "max_hearts": 10
+  },
+  "offscreen_activities": [
+    "sleeping"
+  ],
+  "anchored": true,
+  "service": null,
+  "visual": {
+    "sprite_frames": "res://resources/npc_data/npc_animation/baskoro_resident_frame.tres",
+    "portrait": "res://assets/farm_rpg/Character/NPC'S/Portrait (2).png",
+    "portrait_cell_size": 64,
+    "portrait_columns": 5,
+    "expressions": {
+      "neutral": 0,
+      "sparkle": 5,
+      "angry": 7,
+      "happy": 10,
+      "annoyed": 12
+    }
+  },
+  "gift_tastes": {
+    "loved": [
+      "green_tea",
+      "honey",
+      "vegetable_soup"
+    ],
+    "liked": [
+      "apple",
+      "coffee",
+      "sweet_pea"
+    ],
+    "neutral": [
+      "wood",
+      "stone",
+      "rice",
+      "bread"
+    ],
+    "disliked": [
+      "coal",
+      "clay",
+      "fiber"
+    ],
+    "hated": [
+      "slime_gel",
+      "old_bone",
+      "worm"
+    ]
+  },
+  "schedules": {
+    "default": [
+      {
+        "time": "06:00",
+        "map": "university",
+        "point": "baskoro_work",
+        "activity": "preparing"
+      },
+      {
+        "time": "08:00",
+        "map": "university",
+        "point": "baskoro_work",
+        "activity": "working"
+      },
+      {
+        "time": "12:00",
+        "map": "university",
+        "point": "baskoro_work",
+        "activity": "lunch"
+      },
+      {
+        "time": "14:00",
+        "map": "university",
+        "point": "baskoro_work",
+        "activity": "working"
+      },
+      {
+        "time": "18:00",
+        "map": "university",
+        "point": "baskoro_work",
+        "activity": "resting"
+      },
+      {
+        "time": "22:00",
+        "map": "university",
+        "point": "baskoro_work",
+        "activity": "sleeping"
+      }
+    ],
+    "rainy": [
+      {
+        "time": "06:00",
+        "map": "university",
+        "point": "baskoro_work",
+        "activity": "preparing"
+      },
+      {
+        "time": "08:00",
+        "map": "university",
+        "point": "baskoro_work",
+        "activity": "working"
+      },
+      {
+        "time": "12:00",
+        "map": "university",
+        "point": "baskoro_work",
+        "activity": "lunch"
+      },
+      {
+        "time": "14:00",
+        "map": "university",
+        "point": "baskoro_work",
+        "activity": "working"
+      },
+      {
+        "time": "18:00",
+        "map": "university",
+        "point": "baskoro_work",
+        "activity": "resting"
+      },
+      {
+        "time": "22:00",
+        "map": "university",
+        "point": "baskoro_work",
+        "activity": "sleeping"
+      }
+    ]
+  },
+  "dialogue": {
+    "default": [
+      "Baskoro belajar menyeimbangkan catatan ilmiah dengan pengetahuan warga desa."
+    ],
+    "preparing": [
+      "Aku sedang menyiapkan pekerjaan hari ini."
+    ],
+    "working": [
+      "Aku mencatat pertanyaan sebelum mulai meneliti."
+    ],
+    "lunch": [
+      "Aku beristirahat sebentar sebelum melanjutkan pekerjaan."
+    ],
+    "resting": [
+      "Senang bisa mengobrol setelah bekerja. Bagaimana harimu?"
+    ],
+    "sleeping": [
+      "Sudah waktunya beristirahat. Sampai besok."
+    ]
+  },
+  "content_status": {
+    "biography": "baseline_2026_10_24",
+    "birthday": "baseline_2026_10_24",
+    "residence": "offscreen_temporary",
+    "visual": "legacy_placeholder",
+    "schedule": "baseline_local",
+    "story": "baseline_2026_10_24",
+    "story_expansion": "baseline_2026_10_24"
+  },
+  "gift_dialogue": {
+    "loved": [
+      "Terima kasih! Ini salah satu kesukaanku."
+    ],
+    "liked": [
+      "Aku menyukainya. Terima kasih sudah mengingatku."
+    ],
+    "neutral": [
+      "Terima kasih sudah membawakannya."
+    ],
+    "disliked": [
+      "Terima kasih, meskipun ini kurang cocok untukku."
+    ],
+    "hated": [
+      "Maaf, aku benar-benar tidak menyukai benda ini."
+    ]
+  },
+  "heart_events": [
+    {
+      "id": "baskoro_friendship_2",
+      "hearts": 2,
+      "requires_flags": [],
+      "sets_flags": [
+        "baskoro_friendship_2_told"
+      ],
+      "weather": "any",
+      "map": "university",
+      "point": "baskoro_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Aku mencatat pertanyaan sebelum mulai meneliti.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Sering kali pertanyaan yang sederhana justru membuka pengamatan paling menarik.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "baskoro_friendship_4",
+      "hearts": 4,
+      "requires_flags": [],
+      "sets_flags": [
+        "baskoro_friendship_4_told"
+      ],
+      "weather": "any",
+      "map": "university",
+      "point": "baskoro_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Catatan warga tentang hutan kadang lebih rinci daripada buku yang kubawa.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Aku belajar mendengarkan sebelum memberi penjelasan.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "baskoro_friendship_6",
+      "hearts": 6,
+      "requires_flags": [],
+      "sets_flags": [
+        "baskoro_friendship_6_told"
+      ],
+      "weather": "any",
+      "map": "university",
+      "point": "baskoro_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Dulu aku terlalu cepat menyimpulkan sesuatu dari satu pengamatan.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Sekarang aku menulis apa yang belum kuketahui, supaya tidak tertukar dengan fakta.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "baskoro_friendship_8",
+      "hearts": 8,
+      "requires_flags": [],
+      "sets_flags": [
+        "baskoro_friendship_8_told"
+      ],
+      "weather": "any",
+      "map": "university",
+      "point": "baskoro_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Aku ingin penelitian di sini berguna bagi orang yang merawat tanah setiap hari.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Pengalamanmu di kebun membantu melihat hal yang luput dari mejaku.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "baskoro_friendship_10",
+      "hearts": 10,
+      "requires_flags": [],
+      "sets_flags": [
+        "baskoro_friendship_10_told"
+      ],
+      "weather": "any",
+      "map": "university",
+      "point": "baskoro_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Desa ini mengajarkanku bahwa pengetahuan tumbuh lewat percakapan.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Terima kasih sudah menjadi teman berpikir. Masih banyak yang bisa kita pelajari bersama.",
+          "expression": "happy"
+        }
+      ]
+    }
+  ],
+  "dialogue_by_hearts": {
+    "2": [
+      "Sering kali pertanyaan yang sederhana justru membuka pengamatan paling menarik."
+    ],
+    "4": [
+      "Aku belajar mendengarkan sebelum memberi penjelasan."
+    ],
+    "6": [
+      "Sekarang aku menulis apa yang belum kuketahui, supaya tidak tertukar dengan fakta."
+    ],
+    "8": [
+      "Pengalamanmu di kebun membantu melihat hal yang luput dari mejaku."
+    ],
+    "10": [
+      "Terima kasih sudah menjadi teman berpikir. Masih banyak yang bisa kita pelajari bersama."
+    ]
+  }
+}

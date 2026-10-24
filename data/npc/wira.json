@@ -36,7 +36,7 @@
 	"portrait_cell_size": 64,
 	"portrait_columns": 5,
 	"expressions": {
-	  "neutral": 0,
+	  "neutral": 4,
 	  "sparkle": 5,
 	  "angry": 7,
 	  "happy": 10,
@@ -337,6 +337,135 @@
 		  "expression": "happy"
 		}
 	  ]
+	},
+	{
+	  "id": "wira_friendship_2",
+	  "hearts": 2,
+	  "requires_flags": [],
+	  "sets_flags": [
+        "wira_friendship_2_told"
+	  ],
+	  "weather": "any",
+	  "map": "hill",
+	  "point": "wira_workshop",
+	  "time_range": [
+		"09:00",
+        "11:30"
+	  ],
+	  "lines": [
+		{
+		  "text": "Aku biasanya memeriksa serat kayu sebelum mulai bekerja.",
+		  "expression": "neutral"
+		},
+		{
+		  "text": "Bahan yang sama bisa membutuhkan perlakuan berbeda.",
+		  "expression": "happy"
+		}
+	  ]
+	},
+	{
+	  "id": "wira_friendship_4",
+	  "hearts": 4,
+	  "requires_flags": [],
+	  "sets_flags": [
+        "wira_friendship_4_told"
+	  ],
+	  "weather": "any",
+	  "map": "hill",
+	  "point": "wira_workshop",
+	  "time_range": [
+		"09:00",
+        "11:30"
+	  ],
+	  "lines": [
+		{
+		  "text": "Saat anak-anak masih kecil, aku sering membawa pekerjaan pulang.",
+		  "expression": "neutral"
+		},
+		{
+		  "text": "Sekarang aku mencoba menyisakan waktu untuk duduk bersama mereka.",
+		  "expression": "happy"
+		}
+	  ]
+	},
+	{
+	  "id": "wira_friendship_6",
+	  "hearts": 6,
+	  "requires_flags": [],
+	  "sets_flags": [
+        "wira_friendship_6_told"
+	  ],
+	  "weather": "any",
+	  "map": "hill",
+	  "point": "wira_workshop",
+	  "time_range": [
+		"09:00",
+        "11:30"
+	  ],
+	  "lines": [
+		{
+		  "text": "Aku belajar meminta bantuan ketika pesanan menumpuk.",
+		  "expression": "neutral"
+		},
+		{
+		  "text": "Bekerja keras tetap perlu, tetapi tidak harus selalu sendirian.",
+		  "expression": "happy"
+		}
+	  ]
+	},
+	{
+	  "id": "wira_friendship_10",
+	  "hearts": 10,
+	  "requires_flags": [
+        "story_wira_told"
+	  ],
+	  "sets_flags": [
+        "wira_friendship_10_told"
+	  ],
+	  "weather": "any",
+	  "map": "hill",
+	  "point": "wira_workshop",
+	  "time_range": [
+		"09:00",
+        "11:30"
+	  ],
+	  "lines": [
+		{
+		  "text": "Rumah terasa lebih hangat ketika kami mau saling mendengarkan.",
+		  "expression": "neutral"
+		},
+		{
+		  "text": "Terima kasih sudah menemani keluargaku melewati percakapan yang tidak mudah.",
+		  "expression": "happy"
+		}
+	  ]
 	}
-  ]
+  ],
+  "content_status": {
+	"story_expansion": "baseline_2026_10_24"
+  },
+  "gender": "male",
+  "biography": "Tukang kayu dan ayah si kembar yang belajar menyeimbangkan kerja dengan keluarga.",
+  "dialogue_by_hearts": {
+	"2": [
+      "Bahan yang sama bisa membutuhkan perlakuan berbeda."
+	],
+	"4": [
+      "Sekarang aku mencoba menyisakan waktu untuk duduk bersama mereka."
+	],
+	"6": [
+      "Bekerja keras tetap perlu, tetapi tidak harus selalu sendirian."
+	],
+	"10": [
+	  {
+		"text": "Terima kasih sudah menemani keluargaku melewati percakapan yang tidak mudah.",
+		"requires_flags": [
+          "story_wira_told"
+		]
+	  }
+	],
+	"8": [
+      "Senang bisa berbagi cerita denganmu."
+	]
+  }
 }

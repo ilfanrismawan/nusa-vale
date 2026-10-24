@@ -51,6 +51,78 @@
           "potato": 2
         }
       }
+    ],
+    "kirana": [
+      {
+        "hearts": 4,
+        "recipe": "fruit_salad",
+        "items": {
+          "apple": 1
+        }
+      }
+    ],
+    "bahar": [
+      {
+        "hearts": 4,
+        "recipe": "baked_fish",
+        "items": {
+          "fish_mas": 1
+        }
+      }
+    ],
+    "joko": [
+      {
+        "hearts": 4,
+        "recipe": "vegetable_soup",
+        "items": {
+          "carrot": 2
+        }
+      }
+    ],
+    "ratih": [
+      {
+        "hearts": 4,
+        "recipe": "chamomile_tea",
+        "items": {
+          "honey": 1
+        }
+      }
+    ],
+    "rian": [
+      {
+        "hearts": 4,
+        "recipe": "boiled_egg",
+        "items": {
+          "chicken_egg": 1
+        }
+      }
+    ],
+    "damar": [
+      {
+        "hearts": 4,
+        "recipe": "baked_potato",
+        "items": {
+          "potato": 2
+        }
+      }
+    ],
+    "bima": [
+      {
+        "hearts": 4,
+        "recipe": "rice_ball",
+        "items": {
+          "rice": 2
+        }
+      }
+    ],
+    "baskoro": [
+      {
+        "hearts": 4,
+        "recipe": "green_tea",
+        "items": {
+          "honey": 1
+        }
+      }
     ]
   }
 }

@@ -1,6 +1,6 @@
 # Nusa Vale — Game Design Document (GDD)
 
-Versi dokumen: 3.30 (22 Oktober 2026).
+Versi dokumen: 3.31 (24 Oktober 2026).
 Dokumen ini adalah **sumber kebenaran desain** proyek `E:\nusa-vale` (Game Design Document resmi).
 Pada versi 1.9, ditambahkan 4 pilar fundamental Life-Sim / Farming RPG: **Sistem Peternakan & Satwa** (kandang Barn/Coop, sapi, kambing, domba, ayam, bebek, kuda, pakan & affection), **Mesin Pengolah Pasca-Panen (Artisan Goods)** (mayones, keju, selai, fermentasi keg, tenun, pengasap ikan), **Sistem Cuaca Harian Dinamis** (cerah, hujan penyiram otomatis, badai petir penangkal baterai, salju), serta **Sistem Sosial, Persahabatan, & Jadwal Harian NPC** (hati 0-10, sistem hadiah loved/hated, rutinitas harian, heart events, dan romansa/teman sekamar).
 
@@ -15,6 +15,10 @@ Setiap angka atau aturan desain diberi label:
 ---
 
 ## Status implementasi hasil audit — 22 Oktober 2026
+
+**Area Ranch Eep — 24 Oktober 2026 [terpasang]:** `scenes/world/eep_ranch.tscn` menghubungkan Farm di utara dan Town di barat. Rumah sekaligus toko Eep tersedia di `scenes/world/interior/eep_home.tscn`, dengan jadwal merawat padang saat cerah, berteduh saat hujan, berjualan, makan dan tidur di rumah. Toko melayani pembelian ternak serta pakan/peralatan; ID sosial dan flag cerita Eep dipertahankan. Rincian scene, akses dan verifikasi: [EEP_RANCH.md](EEP_RANCH.md).
+
+**Tindak lanjut NPC — 24 Oktober 2026 [terpasang sebagai baseline konten]:** seluruh 13 warga (termasuk tujuh profil sosial lama dan Prof. Baskoro) kini memakai database resident terpusat. Data dasar, ulang tahun, hadiah, jadwal default/hujan, dialog hati, lima milestone dialog per NPC (65 total), serta reward surat untuk seluruh warga tersedia. Instance lama yang menduplikasi Wira/Bima di Town dilepas; Baskoro memakai presenter Universitas. Kedai Zarathia dan makanan Joko terhubung ke sistem toko. Portrait khusus si kembar/Ubay sudah digunakan; artwork lain, rumah pribadi, rutinitas musim/festival, pilihan dialog/sinematik dan romansa lanjutan tetap belum lengkap. Metadata/kisah baru adalah baseline editorial yang dapat ditinjau, bukan konfirmasi kanon pemilik. Rincian perubahan, verifikasi dan kekurangan terkini: [NPC_CENTRALIZATION_2026-10-24.md](NPC_CENTRALIZATION_2026-10-24.md). Ringkasan audit 22 Oktober berikut tetap menjadi riwayat baseline sistem lain; status NPC terbaru mengikuti laporan tindak lanjut ini.
 
 Proyek berada pada **alpha dengan banyak sistem inti terpasang**. Audit ini membaca kode, scene, Resource, konfigurasi proyek, data NPC, runner dan tes pada workspace aktif, termasuk perubahan yang belum di-commit. Jumlah file/data tidak menunjukkan persentase penyelesaian atau kesiapan rilis.
 
@@ -45,9 +49,9 @@ Panduan editor resep, karakter, animasi dan syarat objek: [EDITOR_GUIDE.md](EDIT
 | Peternakan | Ayam, bebek, sapi, kambing, domba; perawatan, kualitas, merumput, interior, upgrade | Kuda, pembiakan, satwa tambahan belum selesai |
 | Pengolahan | Furnace, Mayonnaise Maker, Cheese Press, Loom, Preserves Jar, Dehydrator, Beehive, Sawmill, Keg, Oil Maker, Fish Smoker, Penangkal Petir; stasiun Alchemy Table dan Anvil | Mesin olahan artisan lengkap dan teruji di runner; penuaan Cellar masih target |
 | Dunia | Farm, rumah, Forest, Deep Forest, Town, Balai Nadi, Greenhouse, Gunung dan Gua Tambang 1–100 | Pohon buah permanen lintas musim terpasang; Pantai dan Modern City masih target |
-| Town/NPC | Bangunan/interior, jadwal/rute, layanan, hadiah, panel hubungan, dialog bersyarat hati/flag; heart event, surat cerita, status dating/married, upacara dasar, pasangan/roommate tinggal di rumah, bantuan harian, surat resep/bingkisan | Upacara dasar berupa dialog di rumah; sinematik khusus, bouquet/pendant dan reward untuk seluruh warga masih target |
+| Town/NPC | Bangunan/interior, jadwal/rute, layanan, hadiah, panel hubungan, dialog bersyarat hati/flag; heart event, surat cerita, status dating/married, upacara dasar, pasangan/roommate tinggal di rumah, bantuan harian, surat resep/bingkisan | Upacara dasar berupa dialog di rumah; sinematik khusus dan bouquet/pendant masih target; reward seluruh 13 warga terpasang sebagai baseline 24 Oktober |
 | Cuaca | Cerah, Hujan, Badai Petir (Thunderstorm) dengan kilat prosedural & penangkal petir Battery Pack; menyiram outdoor otomatis | Salju/blizzard dan prakiraan TV masih target |
-| Cooking | 137 Resource resep, 22 Resource alat masak, database resep, buku per pemain, dapur rumah, stamina/HP, buff laju dan regenerasi HP | Hitungan data bukan bukti semua resep bisa diakses; resep TV dan buff lanjutan perlu implementasi/verifikasi; hadiah resep sosial terpasang untuk lima resident |
+| Cooking | 137 Resource resep, 22 Resource alat masak, database resep, buku per pemain, dapur rumah, stamina/HP, buff laju dan regenerasi HP | Hitungan data bukan bukti semua resep bisa diakses; resep TV dan buff lanjutan perlu implementasi/verifikasi; hadiah resep sosial terpasang untuk 13 resident |
 | Biji Daya | Tiga sumber unik memberi +30 stamina; rumah Lv2 +30 dan Lv3 +40, maksimum individu 200 | Biji tetap per karakter; penghuni tanpa Biji Daya mencapai 170 dengan rumah penuh |
 | Fishing | Minigame, lokasi, jam, musim ikan, air beku musim dingin, kolam air panas Gunung, danau gua lantai 10 | Pantai (`beach_sea`) belum punya scene |
 | Co-op | Lokal split-screen 2–4 pemain | Playtest solo/co-op lulus menurut pemilik; perubahan baru diuji sesuai dampaknya |
@@ -144,6 +148,7 @@ Spesifikasi terperinci dan batas antara fitur terpasang dengan rancangan lanjuta
 | Gunung (Mountain) | `scenes/world/mountain.tscn` | Akses dari Hill, pintu Gua, forage dan kolam air panas; jalur Modern City masih keputusan | [terpasang sebagian + keputusan] |
 | Gua / Dungeon | `scenes/world/cave/cave.tscn` | Konfigurasi 1–100, bijih, musuh, lima boss, tangga/lift dan Toko Combat; layout/tier di `resources/cave/` dan `scenes/world/cave/` | [terpasang sebagian] |
 | Bukit (Hill) | `scenes/world/hill.tscn` | Rumah warga, akses Gunung dan rute NPC | [terpasang] |
+| Ranch Eep | `scenes/world/eep_ranch.tscn`, `scenes/world/interior/eep_home.tscn` | Kolam, padang berpagar, rumah/toko ternak, pakan dan peralatan; utara Farm, barat Town | [terpasang 24 Oktober 2026] |
 | Deep Forest | `scenes/world/DeepForest.tscn` | Gathering lanjutan; unlock permanen dari Forest | [terpasang] |
 | Pantai (Beach) | scene baru | Spot memancing laut (`beach_sea`), hasil laut, forage pantai (harus di-unlock) | [keputusan] |
 | Modern City | scene baru | Area perkotaan metropolitan late-game, teknologi modern, kendaraan canggih (harus di-unlock setelah Nusa Vale makmur) | [keputusan] |
@@ -577,7 +582,7 @@ Pemain lain bisa ikut atau keluar di tengah permainan tanpa kembali ke main menu
 
 **Cakupan saat audit 22 Oktober 2026 [terpasang, kode/data]:** 137 Resource resep di `resources/cooking/recipes/`, 22 Resource alat di `resources/cooking/equipment/`, database `resources/cooking/data/recipe_database.tres`, dan `CookingManager`. Lima resep adalah cakupan tahap awal 14 Oktober, bukan jumlah konten saat ini. Resep yang dapat dimasak bergantung pada entri database, buku yang dipelajari karakter, alat yang tersedia, dan bahan. Jumlah Resource tidak membuktikan seluruh resep sudah dapat dibuat dalam permainan.
 
-Dapur rumah setelah upgrade tingkat 1 di Wira, buku per pemain, pemulihan stamina/HP, buff laju dan regenerasi HP sudah memiliki implementasi. Hadiah resep sosial kini tersedia untuk lima resident melalui kotak surat (12.4); TV dan kelengkapan buff lanjutan masih memerlukan implementasi/verifikasi. Lihat `COOKING.md` untuk riwayat tahap dasar.
+Dapur rumah setelah upgrade tingkat 1 di Wira, buku per pemain, pemulihan stamina/HP, buff laju dan regenerasi HP sudah memiliki implementasi. Hadiah resep sosial kini tersedia untuk 13 resident melalui kotak surat (12.4); TV dan kelengkapan buff lanjutan masih memerlukan implementasi/verifikasi. Lihat `COOKING.md` untuk riwayat tahap dasar.
 
 - **Status**: Disetujui untuk diimplementasikan [keputusan].
 - **Fasilitas**: Dapur di interior rumah (setelah upgrade rumah) serta kompor/panci di Warung Makan kota.
@@ -950,7 +955,7 @@ Semua arena memakai fog gate, tiga fase, anti-kiting, murka, reset saat kosong, 
 
 ## 12. Hubungan Sosial, Persahabatan, & Warga Desa (NPC Schedules & Friendship) [terpasang sebagian + keputusan]
 
-**Status 22 Oktober 2026:** Wira, Ubay, Eep, Zarathia dan Zarathustra memiliki profil resident. Dialog hati/flag/ekspresi, hadiah, event, surat cerita dan panel hubungan sudah tersedia. Tindak lanjut menambahkan kunci hati permanen, upacara dasar, household per karakter, pasangan/teman sekamar di rumah, bantuan harian, serta surat resep dan bahan. Detail implementasi/pengujian: [IMPLEMENTATION_SOCIAL_ROLE_2026-10-22.md](IMPLEMENTATION_SOCIAL_ROLE_2026-10-22.md). Bagian berikut tetap memuat target lanjutan yang belum seluruhnya selesai.
+**Status 24 Oktober 2026:** Wira, Ubay, Eep, Zarathia, Zarathustra, Kirana, Bahar, Joko, Ratih, Rian, Damar, Bima dan Baskoro memiliki profil resident terpusat. Seluruhnya memiliki data sosial dasar, jadwal default/hujan, dialog hati dan lima milestone event dialog; reward resep/material mencakup 13 warga. Sebagian jadwal hujan masih mengikuti jadwal normal. Kunci hati permanen, upacara dasar, household per karakter, pasangan/roommate, bantuan harian dan surat tetap tersedia. Biografi/tanggal ulang tahun/kisah yang baru diisi merupakan baseline editorial yang dapat ditinjau. Lihat [laporan migrasi dan kekurangan](NPC_CENTRALIZATION_2026-10-24.md), serta [implementasi household sebelumnya](IMPLEMENTATION_SOCIAL_ROLE_2026-10-22.md). Target sinematik, pilihan bercabang dan fitur lanjutan di bawah belum seluruhnya selesai.
 
 ### 12.1 Filosofi Desain: Desa yang Hidup, Bernyawa, dan Personal
 - **Bukan Boneka Statis**: Warga desa Nusa Vale memiliki kepribadian yang khas, rutinitas harian yang berubah sesuai cuaca dan musim (*Daily Schedules*), preferensi makanan/barang kesukaan yang unik, serta cerita kehidupan masa lalu yang terungkap seiring meningkatnya rasa percaya mereka kepada pemain.

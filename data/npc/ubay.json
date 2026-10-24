@@ -24,7 +24,7 @@
   "service": "shipping",
   "visual": {
 	"sprite_frames": "res://resources/npc_data/npc_animation/ubay_frame.tres",
-	"portrait": "res://assets/farm_rpg/Character/NPC'S/Josh/Portrait Josh.png",
+	"portrait": "res://assets/farm_rpg/Character/NPC'S/Ubay/npc_portrait_ubay.png",
 	"portrait_cell_size": 64,
 	"portrait_columns": 5,
 	"expressions": {
@@ -74,6 +74,62 @@
   },
   "schedules": {
 	"default": [
+	  {
+		"time": "06:00",
+		"map": "ubay_home",
+		"point": "ubay_home",
+		"activity": "breakfast"
+	  },
+	  {
+		"time": "07:00",
+		"map": "town",
+		"point": "ubay_depot",
+		"activity": "sorting"
+	  },
+	  {
+		"time": "09:00",
+		"map": "town",
+		"point": "ubay_delivery",
+		"activity": "delivering"
+	  },
+	  {
+		"time": "12:00",
+		"map": "town",
+		"point": "ubay_lunch",
+		"activity": "lunch"
+	  },
+	  {
+		"time": "13:00",
+		"map": "town",
+		"point": "ubay_depot",
+		"activity": "checking_route"
+	  },
+	  {
+		"time": "17:00",
+		"map": "farm",
+		"point": "shipping_pickup",
+		"activity": "collecting"
+	  },
+	  {
+		"time": "17:30",
+		"map": "town",
+		"point": "ubay_depot",
+		"activity": "dispatching"
+	  },
+	  {
+		"time": "19:00",
+		"map": "town",
+		"point": "ubay_rest",
+		"activity": "resting"
+	  },
+	  {
+		"time": "22:00",
+		"map": "ubay_home",
+		"point": "ubay_home",
+		"activity": "sleeping"
+	  }
+	],
+	"rainy": [
 	  {
 		"time": "06:00",
 		"map": "ubay_home",
@@ -191,6 +247,155 @@
 		"text": "Maaf, aku benar-benar tidak menyukai hadiah ini.",
 		"expression": "angry"
 	  }
+	]
+  },
+  "content_status": {
+	"story_expansion": "baseline_2026_10_24"
+  },
+  "gender": "male",
+  "biography": "Kurir koperasi yang belajar menjaga janji tanpa mengabaikan batas tenaganya.",
+  "heart_events": [
+	{
+	  "id": "ubay_friendship_2",
+	  "hearts": 2,
+	  "requires_flags": [],
+	  "sets_flags": [
+        "ubay_friendship_2_told"
+	  ],
+	  "weather": "any",
+	  "map": "town",
+	  "point": "ubay_depot",
+	  "time_range": [
+		"07:30",
+        "09:00"
+	  ],
+	  "lines": [
+		{
+		  "text": "Aku biasanya menyusun kiriman sebelum jalanan ramai.",
+		  "expression": "neutral"
+		},
+		{
+		  "text": "Rute yang rapi membuatku punya waktu menyapa orang di perjalanan.",
+		  "expression": "happy"
+		}
+	  ]
+	},
+	{
+	  "id": "ubay_friendship_4",
+	  "hearts": 4,
+	  "requires_flags": [],
+	  "sets_flags": [
+        "ubay_friendship_4_told"
+	  ],
+	  "weather": "any",
+	  "map": "town",
+	  "point": "ubay_depot",
+	  "time_range": [
+		"07:30",
+        "09:00"
+	  ],
+	  "lines": [
+		{
+		  "text": "Dulu aku sulit menolak titipan tambahan.",
+		  "expression": "neutral"
+		},
+		{
+		  "text": "Aku baru sadar bahwa menepati janji juga berarti tahu batas tenaga sendiri.",
+		  "expression": "happy"
+		}
+	  ]
+	},
+	{
+	  "id": "ubay_friendship_6",
+	  "hearts": 6,
+	  "requires_flags": [],
+	  "sets_flags": [
+        "ubay_friendship_6_told"
+	  ],
+	  "weather": "any",
+	  "map": "town",
+	  "point": "ubay_depot",
+	  "time_range": [
+		"07:30",
+        "09:00"
+	  ],
+	  "lines": [
+		{
+		  "text": "Pernah aku hampir salah menaruh catatan pengiriman karena terburu-buru.",
+		  "expression": "neutral"
+		},
+		{
+		  "text": "Sejak itu aku memeriksa nama dan tujuan sekali lagi sebelum berangkat.",
+		  "expression": "happy"
+		}
+	  ]
+	},
+	{
+	  "id": "ubay_friendship_8",
+	  "hearts": 8,
+	  "requires_flags": [],
+	  "sets_flags": [
+        "ubay_friendship_8_told"
+	  ],
+	  "weather": "any",
+	  "map": "town",
+	  "point": "ubay_depot",
+	  "time_range": [
+		"07:30",
+        "09:00"
+	  ],
+	  "lines": [
+		{
+		  "text": "Sekarang aku lebih berani bilang kalau perlu waktu tambahan.",
+		  "expression": "neutral"
+		},
+		{
+		  "text": "Warga ternyata lebih menghargai kabar yang jujur daripada janji yang kupaksakan.",
+		  "expression": "happy"
+		}
+	  ]
+	},
+	{
+	  "id": "ubay_friendship_10",
+	  "hearts": 10,
+	  "requires_flags": [],
+	  "sets_flags": [
+        "ubay_friendship_10_told"
+	  ],
+	  "weather": "any",
+	  "map": "town",
+	  "point": "ubay_depot",
+	  "time_range": [
+		"07:30",
+        "09:00"
+	  ],
+	  "lines": [
+		{
+		  "text": "Rute harian ini terasa berbeda sejak aku mengenalmu lebih dekat.",
+		  "expression": "neutral"
+		},
+		{
+		  "text": "Terima kasih sudah menjadi tempat singgah yang membuatku merasa diterima.",
+		  "expression": "happy"
+		}
+	  ]
+	}
+  ],
+  "dialogue_by_hearts": {
+	"2": [
+      "Rute yang rapi membuatku punya waktu menyapa orang di perjalanan."
+	],
+	"4": [
+      "Aku baru sadar bahwa menepati janji juga berarti tahu batas tenaga sendiri."
+	],
+	"6": [
+      "Sejak itu aku memeriksa nama dan tujuan sekali lagi sebelum berangkat."
+	],
+	"8": [
+      "Warga ternyata lebih menghargai kabar yang jujur daripada janji yang kupaksakan."
+	],
+	"10": [
+      "Terima kasih sudah menjadi tempat singgah yang membuatku merasa diterima."
 	]
   }
 }

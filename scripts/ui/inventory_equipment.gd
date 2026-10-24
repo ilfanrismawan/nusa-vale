@@ -109,4 +109,4 @@ func _equip(slot: int) -> void:
 
 func _unequip(key: String) -> void:
 	if not inventory_ui.data.unequip(key):
-		_message.text = "Tas penuh. Kosongkan satu slot sebelum melepas equipment."
+		_message.text = "Tas penuh. Kosongkan satu slot sebelum melepas perlengkapan."

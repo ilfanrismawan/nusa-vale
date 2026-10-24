@@ -1,9 +1,14 @@
-[gd_scene format=3]
-[node name="Gift" type="Button"]
+[gd_scene format=3 uid="uid://ditwodkyvxj3e"]
+
+[ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="pixel"]
+
+[node name="Gift" type="Button" unique_id=49993597]
+texture_filter = 1
 custom_minimum_size = Vector2(0, 26)
 size_flags_horizontal = 3
-expand_icon = true
 theme_override_constants/icon_max_width = 20
-theme_override_font_sizes/font_size = 12
-text_overrun_behavior = 3
+theme_override_fonts/font = ExtResource("pixel")
+theme_override_font_sizes/font_size = 16
 alignment = 0
+text_overrun_behavior = 3
+expand_icon = true

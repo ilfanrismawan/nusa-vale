@@ -4,8 +4,8 @@ Seluruh daftar menggunakan item yang sudah tersedia di `resources/item_data/`, b
 
 ## Lokasi pengaturan
 
-- Wira, Ubay, Zarathia, Zarathustra dan Eep: `gift_tastes` dan `gift_dialogue` pada masing-masing JSON di `data/npc/`.
-- Kirana, Pak Bahar, Pak Joko, dr. Ratih, Rian, Pak Damar, Empu Bima: `data/npc/social/gift_profiles.json`. File ini hanya menambah profil sosial; tidak menambah aktor atau mengubah jadwal peta.
+- Seluruh 13 resident: `gift_tastes` dan `gift_dialogue` pada masing-masing JSON di `data/npc/`. Wira/Ubay/Eep tetap memakai nama file sebelumnya; si kembar tetap `npc_zarathia.json`/`npc_zarathustra.json`; delapan tambahan memakai `<id>.json`, termasuk `baskoro.json`.
+- `data/npc/social/gift_profiles.json` kini kosong untuk kompatibilitas loader; jangan menambahkan salinan profil di sana. Pendaftaran aktif melalui `scenes/npc/npc_database.tscn` dan resource `*_resident.tres`. Lihat [laporan migrasi 24 Oktober](NPC_CENTRALIZATION_2026-10-24.md).
 - Path file profil sosial dapat diubah lewat **Gift Profiles File** pada root `scenes/npc/npc_database.tscn`.
 - Lima nama kategori yang dipakai: `loved`, `liked`, `neutral`, `disliked`, `hated`. Alias lama `love`, `like`, `dislike`, `hate` tetap diterima; gunakan satu gaya saja dalam satu profil.
 - Satu ID item hanya boleh berada pada satu kategori per NPC. Item yang tidak tercantum tetap dianggap **neutral**. Daftar neutral disediakan untuk menegaskan pilihan yang bisa diedit.

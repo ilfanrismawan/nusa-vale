@@ -4,8 +4,11 @@ var definition: Dictionary = {}
 var _service_menu: CanvasLayer
 var waypoint_radius := 2.0
 var _offscreen := false
+var _geode_ui: AcceptDialog
 
 func _exit_tree() -> void:
+	if is_instance_valid(_geode_ui):
+		_geode_ui.queue_free()
 	if is_instance_valid(_service_menu):
 		_service_menu.queue_free()
 	if is_instance_valid(_dialog_ui):
@@ -13,7 +16,7 @@ func _exit_tree() -> void:
 
 func _service_available() -> bool:
 	var service := str(definition.get("service", ""))
-	if service not in ["carpenter", "shipping", "livestock"]:
+	if service not in ["carpenter", "shipping", "livestock", "blacksmith", "shop"]:
 		return false
 	var rules: Dictionary = definition.get("service_rules", {})
 	var activities: Array = rules.get("available_activities", [])
@@ -125,7 +128,7 @@ func _physics_process(delta: float) -> void:
 	if _offscreen:
 		velocity = Vector2.ZERO
 		return
-	if is_instance_valid(_service_menu) or is_instance_valid(_dialog_ui):
+	if is_instance_valid(_service_menu) or is_instance_valid(_dialog_ui) or is_instance_valid(_geode_ui):
 		velocity = Vector2.ZERO
 		return
 	# Follow authored roads without VillageNPC's five-second teleport fallback.
@@ -147,7 +150,7 @@ func _physics_process(delta: float) -> void:
 func interact(player: Player = null) -> void:
 	if not visible:
 		return
-	if is_instance_valid(_dialog_ui) or is_instance_valid(_service_menu):
+	if is_instance_valid(_dialog_ui) or is_instance_valid(_service_menu) or is_instance_valid(_geode_ui):
 		return
 	if player == null:
 		player = RoomDoor.player()
@@ -160,6 +163,7 @@ func interact(player: Player = null) -> void:
 	_service_menu.role_title = role_title
 	_service_menu.portrait = portrait
 	_service_menu.service = str(definition.get("service", "")) if _service_available() else ""
+	_service_menu.supplies_available = _service_available() and not str(definition.get("service_rules", {}).get("supplies_shop", "")).is_empty()
 	_service_menu.romance_action = NPCSocialService.relationship_action(player.data, npc_id)
 	if _current_activity == "at_home" and NPCHousehold.ceremony_ready(player.data, npc_id):
 		_service_menu.household_action = "Rayakan Tinggal Bersama" if player.data.household.mode == "roommate" else "Mulai Upacara Pernikahan"
@@ -204,6 +208,18 @@ func _choose_service(index: int, player: Player) -> void:
 		var letter := NPCEventService.pending_letter(player.data, npc_id)
 		if not letter.is_empty():
 			_show_packet(NPCDialogueResolver.packet([str(letter.subject), str(letter.body)], player.data), player, {"letter_id": letter.id})
+	elif index == 6 and _service_available():
+		var path := str(definition.get("service_rules", {}).get("supplies_shop", ""))
+		if path.is_empty():
+			return
+		var shop := ShopUI.new()
+		shop.player = player
+		shop.shop_data = load(path).duplicate() as ShopData
+		shop.shop_data.keeper_name = npc_name
+		shop.shop_data.portrait = portrait
+		_service_menu = shop
+		shop.tree_exited.connect(func(): _service_menu = null)
+		Coop.ui_parent(player).add_child(shop)
 	elif index == 1 and _service_available():
 		var service := str(definition.get("service", ""))
 		if service == "carpenter":
@@ -231,3 +247,37 @@ func _choose_service(index: int, player: Player) -> void:
 			"Untuk saat ini, hasil jualan tetap diproses saat kamu tidur. Kunjunganku belum mengubah waktu penjualan."
 			], player.data)
 			_show_packet(packet, player)
+		elif service == "blacksmith":
+			var geodes := preload("res://scripts/ui/geode_crack_dialog.gd")
+			if geodes.has_geodes(player):
+				_geode_ui = geodes.open(player, npc_name)
+				_geode_ui.upgrade_requested.connect(_open_upgrade.bind(player))
+			else:
+				_open_upgrade(player)
+		elif service == "shop":
+			var stock := ShopData.new()
+			stock.shop_id = npc_id
+			stock.shop_name = str(definition.service_rules.get("name", "Warung"))
+			stock.keeper_name = npc_name
+			stock.portrait = portrait
+			stock.greeting = str(definition.service_rules.get("greeting", "Silakan pilih."))
+			stock.buys_items = false
+			for offer: Dictionary in definition.service_rules.get("stock", []):
+				var item := GameState._resolve_item(str(offer.item))
+				if item == null:
+					continue
+				var merchandise := item.duplicate() as ItemData
+				merchandise.buy_price = int(offer.price)
+				stock.stock.append(merchandise)
+			_service_menu = ShopUI.new()
+			_service_menu.player = player
+			_service_menu.shop_data = stock
+			_service_menu.tree_exited.connect(func(): _service_menu = null)
+			Coop.ui_parent(player).add_child(_service_menu)
+
+func _open_upgrade(player: Player) -> void:
+	_service_menu = load("res://scenes/ui/tool_upgrade_ui.tscn").instantiate()
+	_service_menu.player = player
+	_service_menu.social_npc_id = npc_id
+	_service_menu.finished.connect(func(): _service_menu = null)
+	Coop.ui_parent(player).add_child(_service_menu)

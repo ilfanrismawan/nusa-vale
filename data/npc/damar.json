@@ -1,0 +1,350 @@
+{
+  "schema_version": 1,
+  "id": "damar",
+  "name": "Pak Damar",
+  "age": 51,
+  "gender": "male",
+  "role": "Tukang Bangunan",
+  "birthday": {
+    "season": "fall",
+    "day": 19
+  },
+  "home_map": "town",
+  "residence": "Tempat tinggal di luar area yang dapat dimasuki; titik malam memakai lokasi kerja/istirahat sementara.",
+  "romanceable": false,
+  "personality": [
+    "praktis",
+    "rapi",
+    "suka_membantu"
+  ],
+  "biography": "Damar menangani konstruksi bangunan dan kandang, sedangkan Wira mengelola bengkel kayu serta renovasi rumah.",
+  "move_speed": 36.0,
+  "friendship": {
+    "start": 0,
+    "max_hearts": 10
+  },
+  "offscreen_activities": [
+    "sleeping"
+  ],
+  "anchored": false,
+  "service": {
+    "type": "carpenter",
+    "available_activities": [
+      "preparing",
+      "working",
+      "lunch",
+      "resting"
+    ],
+    "closed_days": []
+  },
+  "visual": {
+    "sprite_frames": "res://resources/npc_data/npc_animation/damar_resident_frame.tres",
+    "portrait": "res://assets/farm_rpg/Character/NPC'S/Portrait (2).png",
+    "portrait_cell_size": 64,
+    "portrait_columns": 5,
+    "expressions": {
+      "neutral": 0,
+      "sparkle": 5,
+      "angry": 7,
+      "happy": 10,
+      "annoyed": 12
+    }
+  },
+  "gift_tastes": {
+    "loved": [
+      "plank",
+      "iron_bar",
+      "complete_breakfast"
+    ],
+    "liked": [
+      "wood",
+      "copper_bar",
+      "coffee",
+      "vegetable_soup"
+    ],
+    "neutral": [
+      "stone",
+      "rice",
+      "bread",
+      "apple"
+    ],
+    "disliked": [
+      "clay",
+      "fiber",
+      "fish_carp"
+    ],
+    "hated": [
+      "slime_gel",
+      "old_bone",
+      "worm"
+    ]
+  },
+  "schedules": {
+    "default": [
+      {
+        "time": "06:00",
+        "map": "town",
+        "point": "damar_work",
+        "activity": "preparing"
+      },
+      {
+        "time": "08:00",
+        "map": "town",
+        "point": "damar_work",
+        "activity": "working"
+      },
+      {
+        "time": "12:00",
+        "map": "town",
+        "point": "damar_rest",
+        "activity": "lunch"
+      },
+      {
+        "time": "14:00",
+        "map": "town",
+        "point": "damar_work",
+        "activity": "working"
+      },
+      {
+        "time": "18:00",
+        "map": "town",
+        "point": "damar_rest",
+        "activity": "resting"
+      },
+      {
+        "time": "22:00",
+        "map": "town",
+        "point": "damar_rest",
+        "activity": "sleeping"
+      }
+    ],
+    "rainy": [
+      {
+        "time": "06:00",
+        "map": "town",
+        "point": "damar_work",
+        "activity": "preparing"
+      },
+      {
+        "time": "08:00",
+        "map": "town",
+        "point": "damar_work",
+        "activity": "working"
+      },
+      {
+        "time": "12:00",
+        "map": "town",
+        "point": "damar_rest",
+        "activity": "lunch"
+      },
+      {
+        "time": "14:00",
+        "map": "town",
+        "point": "damar_work",
+        "activity": "working"
+      },
+      {
+        "time": "18:00",
+        "map": "town",
+        "point": "damar_rest",
+        "activity": "resting"
+      },
+      {
+        "time": "22:00",
+        "map": "town",
+        "point": "damar_rest",
+        "activity": "sleeping"
+      }
+    ]
+  },
+  "dialogue": {
+    "default": [
+      "Damar menangani konstruksi bangunan dan kandang, sedangkan Wira mengelola bengkel kayu serta renovasi rumah."
+    ],
+    "preparing": [
+      "Aku sedang menyiapkan pekerjaan hari ini."
+    ],
+    "working": [
+      "Aku membantu pembangunan kandang dan bangunan kebun. Wira juga melayani renovasi rumah."
+    ],
+    "lunch": [
+      "Aku beristirahat sebentar sebelum melanjutkan pekerjaan."
+    ],
+    "resting": [
+      "Senang bisa mengobrol setelah bekerja. Bagaimana harimu?"
+    ],
+    "sleeping": [
+      "Sudah waktunya beristirahat. Sampai besok."
+    ]
+  },
+  "content_status": {
+    "biography": "baseline_2026_10_24",
+    "birthday": "baseline_2026_10_24",
+    "residence": "offscreen_temporary",
+    "visual": "legacy_placeholder",
+    "schedule": "baseline_local",
+    "story": "baseline_2026_10_24",
+    "story_expansion": "baseline_2026_10_24"
+  },
+  "gift_dialogue": {
+    "loved": [
+      "Terima kasih! Ini salah satu kesukaanku."
+    ],
+    "liked": [
+      "Aku menyukainya. Terima kasih sudah mengingatku."
+    ],
+    "neutral": [
+      "Terima kasih sudah membawakannya."
+    ],
+    "disliked": [
+      "Terima kasih, meskipun ini kurang cocok untukku."
+    ],
+    "hated": [
+      "Maaf, aku benar-benar tidak menyukai benda ini."
+    ]
+  },
+  "heart_events": [
+    {
+      "id": "damar_friendship_2",
+      "hearts": 2,
+      "requires_flags": [],
+      "sets_flags": [
+        "damar_friendship_2_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "damar_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Sebelum membangun, aku memeriksa ukuran dua kali.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Memperbaiki garis di kertas lebih mudah daripada memindahkan tiang.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "damar_friendship_4",
+      "hearts": 4,
+      "requires_flags": [],
+      "sets_flags": [
+        "damar_friendship_4_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "damar_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Wira ahli mengurus kayu dan renovasi rumah. Aku lebih sering menangani bangunan serta kandang.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Kami tetap berbagi pengetahuan ketika pekerjaan saling bersinggungan.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "damar_friendship_6",
+      "hearts": 6,
+      "requires_flags": [],
+      "sets_flags": [
+        "damar_friendship_6_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "damar_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Dulu aku pernah tergesa memasang sambungan agar pekerjaan cepat selesai.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Sejak itu aku memilih bekerja rapi meski harus sedikit lebih lama.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "damar_friendship_8",
+      "hearts": 8,
+      "requires_flags": [],
+      "sets_flags": [
+        "damar_friendship_8_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "damar_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Bangunan yang baik memberi ruang bagi kebiasaan penghuninya.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Aku senang mendengar bagaimana kamu memakai kandang dan bangunan kebunmu.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "damar_friendship_10",
+      "hearts": 10,
+      "requires_flags": [],
+      "sets_flags": [
+        "damar_friendship_10_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "damar_work",
+      "time_range": [
+        "08:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Aku tidak ingin desa ini hanya punya bangunan yang tampak bagus.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Aku ingin orang merasa aman di dalamnya. Terima kasih sudah mempercayakan pekerjaanmu kepadaku.",
+          "expression": "happy"
+        }
+      ]
+    }
+  ],
+  "dialogue_by_hearts": {
+    "2": [
+      "Memperbaiki garis di kertas lebih mudah daripada memindahkan tiang."
+    ],
+    "4": [
+      "Kami tetap berbagi pengetahuan ketika pekerjaan saling bersinggungan."
+    ],
+    "6": [
+      "Sejak itu aku memilih bekerja rapi meski harus sedikit lebih lama."
+    ],
+    "8": [
+      "Aku senang mendengar bagaimana kamu memakai kandang dan bangunan kebunmu."
+    ],
+    "10": [
+      "Aku ingin orang merasa aman di dalamnya. Terima kasih sudah mempercayakan pekerjaanmu kepadaku."
+    ]
+  }
+}

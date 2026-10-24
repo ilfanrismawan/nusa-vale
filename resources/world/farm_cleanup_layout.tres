@@ -1379,7 +1379,7 @@ metadata/cleanup_objects = [{
 "group": "choppable",
 "id": "farm:cleanup:MahoganyTree18",
 "name": "MahoganyTree18",
-"position": Vector2(990, 967),
+"position": Vector2(944, 967),
 "scene": "res://scenes/objects/mahogany_tree.tscn"
 }, {
 "group": "choppable",

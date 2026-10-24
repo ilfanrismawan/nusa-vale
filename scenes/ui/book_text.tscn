@@ -1,34 +1,53 @@
-[gd_scene format=3]
-[ext_resource type="Script" path="res://scripts/ui/book_text.gd" id="script"]
-[node name="BookText" type="Control"]
-script = ExtResource("script")
+[gd_scene format=3 uid="uid://xnf0q80w3yh0"]
+
+[ext_resource type="Script" uid="uid://dyf35a1i2k8u3" path="res://scripts/ui/book_text.gd" id="script"]
+
+[node name="BookText" type="Control" unique_id=1238263754]
+layout_mode = 3
+anchors_preset = 0
 mouse_filter = 1
-[node name="Body" type="Label" parent="."]
-anchors_preset = 15
+script = ExtResource("script")
+
+[node name="Body" type="Label" parent="." unique_id=1485525573]
+texture_filter = 1
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_bottom = -22.0
-mouse_filter = 2
-theme_override_font_sizes/font_size = 13
+theme_override_constants/line_spacing = -2
+theme_override_font_sizes/font_size = 16
 clip_text = true
-[node name="Navigation" type="HBoxContainer" parent="."]
+
+[node name="Navigation" type="HBoxContainer" parent="." unique_id=930719065]
+layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -20.0
+offset_left = -26.5
+offset_top = -6.0
+offset_right = 26.5
+offset_bottom = 19.0
+grow_horizontal = 2
+grow_vertical = 0
 theme_override_constants/separation = 4
-[node name="Previous" type="Button" parent="Navigation"]
+
+[node name="Previous" type="Button" parent="Navigation" unique_id=2061009631]
 custom_minimum_size = Vector2(22, 20)
+layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "‹"
-[node name="Page" type="Label" parent="Navigation"]
+
+[node name="Page" type="Label" parent="Navigation" unique_id=1448731205]
+texture_filter = 1
+layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 vertical_alignment = 1
-theme_override_font_sizes/font_size = 11
-mouse_filter = 2
-[node name="Next" type="Button" parent="Navigation"]
+
+[node name="Next" type="Button" parent="Navigation" unique_id=1426952371]
 custom_minimum_size = Vector2(22, 20)
+layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "›"

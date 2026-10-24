@@ -1,5 +1,7 @@
 # Eep — penjual hewan ternak
 
+**Lokasi aktif 24 Oktober 2026:** rumah dan toko berada di Ranch Eep, di selatan Farm dan timur Town. Eep kini berjualan ternak serta pakan/peralatan di dalam rumah, dan merawat padang saat cerah. Lihat [EEP_RANCH.md](EEP_RANCH.md) untuk scene, jadwal dan pengujian terbaru. Uraian lapak Town di bawah adalah riwayat sebelum pemindahan.
+
 Eep berjualan di sisi barat Kota, dekat jalan menuju gerbang kebun. Pilih **Beli Hewan Ternak** saat berinteraksi pada jam buka. Ia menggunakan sistem ternak proyek: ayam, bebek, sapi, kambing dan domba. Harga, kandang yang sesuai, kapasitas, nama dan variasi hewan mengikuti sistem yang sudah ada. Hewan langsung tercatat di kandang pilihan setelah pembelian berhasil.
 
 ## Profil dan jadwal

@@ -30,6 +30,11 @@ var data: PlayerData:
 func _owner_input() -> PlayerInput:
 	return player.input if is_instance_valid(player) else PlayerInput.solo()
 
+## Koordinat viewport, termasuk bingkai dan celah antar-slot.
+func contains_pointer(position: Vector2) -> bool:
+	var background := $MarginContainer/HudBg as Control
+	return background.is_visible_in_tree() and background.get_global_rect().has_point(position)
+
 func _ready() -> void:
 	add_to_group(&"hotbar_ui")
 	_build_name_label()

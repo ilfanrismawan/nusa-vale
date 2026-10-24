@@ -9,8 +9,8 @@
     "season": "summer",
     "day": 14
   },
-  "home_map": "town",
-  "residence": "Peternakan di luar gerbang barat kota",
+  "home_map": "eep_home",
+  "residence": "Rumah dan Toko Ranch Eep, selatan Farm dan timur Town",
   "romanceable": false,
   "personality": [
     "patient",
@@ -23,9 +23,7 @@
     "start": 0,
     "max_hearts": 10
   },
-  "offscreen_activities": [
-    "sleeping"
-  ],
+  "offscreen_activities": [],
   "service": {
     "type": "livestock",
     "available_activities": [
@@ -34,7 +32,8 @@
     "closed_days": [
       "wednesday"
     ],
-    "presentation": "res://resources/ui/eep_livestock_shop_presentation.tres"
+    "presentation": "res://resources/ui/eep_livestock_shop_presentation.tres",
+    "supplies_shop": "res://resources/shop/eep_supplies.tres"
   },
   "visual": {
     "sprite_frames": "res://resources/npc_data/npc_animation/eep_frame.tres",
@@ -62,7 +61,7 @@
     ],
     "checking_feed": [
       {
-        "text": "Aku sedang memeriksa pakan dan kondisi hewan. Lapak buka pukul sembilan.",
+        "text": "Aku sedang memeriksa pakan dan kondisi hewan. Toko di rumahku buka pukul sembilan.",
         "expression": "happy"
       },
       {
@@ -72,7 +71,7 @@
     ],
     "selling": [
       {
-        "text": "Mau mencari teman baru untuk peternakanmu? Semua hewan di lapakku sudah dewasa.",
+        "text": "Mau mencari teman baru untuk peternakanmu? Semua hewan di ranch-ku sudah dewasa.",
         "expression": "happy"
       },
       {
@@ -96,7 +95,7 @@
     ],
     "resting": [
       {
-        "text": "Lapak sudah tutup. Aku memeriksa catatan pesanan sebelum pulang.",
+        "text": "Toko sudah tutup. Aku memeriksa padang dan catatan pesanan sebelum beristirahat.",
         "expression": "neutral"
       },
       {
@@ -106,7 +105,7 @@
     ],
     "sleeping": [
       {
-        "text": "Aku pulang ke ranch di luar gerbang barat. Sampai besok pagi!",
+        "text": "Ini rumahku sekaligus toko ranch. Sudah waktunya istirahat; sampai besok pagi!",
         "expression": "happy"
       }
     ]
@@ -130,6 +129,15 @@
         "text": "Kalau hewan-hewan itu betah di kebunmu, aku ikut merasa senang. Terima kasih sudah menjaga mereka.",
         "expression": "sparkle"
       }
+    ],
+    "2": [
+      "Perjalanan hewan harus dimulai dengan keadaan yang nyaman."
+    ],
+    "6": [
+      "Sekarang aku memilih berbagi cara merawat dan memberi kesempatan orang belajar."
+    ],
+    "10": [
+      "Terima kasih sudah menjadi sahabat yang peduli pada hewan-hewan desa."
     ]
   },
   "gift_tastes": {
@@ -198,93 +206,95 @@
     "default": [
       {
         "time": "06:00",
-        "map": "town",
+        "map": "eep_home",
         "point": "eep_home",
-        "activity": "sleeping",
-        "location": "Ranch di luar gerbang barat"
+        "activity": "sleeping"
       },
       {
         "time": "07:00",
-        "map": "town",
-        "point": "eep_stall",
+        "map": "eep_ranch",
+        "point": "eep_feed",
         "activity": "checking_feed"
       },
       {
         "time": "09:00",
-        "map": "town",
+        "map": "eep_home",
         "point": "eep_stall",
         "activity": "selling"
       },
       {
         "time": "12:00",
-        "map": "town",
+        "map": "eep_home",
         "point": "eep_lunch",
         "activity": "lunch"
       },
       {
         "time": "13:00",
-        "map": "town",
+        "map": "eep_home",
         "point": "eep_stall",
         "activity": "selling"
       },
       {
         "time": "17:00",
-        "map": "town",
+        "map": "eep_ranch",
         "point": "eep_rest",
         "activity": "resting"
       },
       {
         "time": "19:00",
-        "map": "town",
+        "map": "eep_home",
+        "point": "eep_rest",
+        "activity": "resting"
+      },
+      {
+        "time": "22:00",
+        "map": "eep_home",
         "point": "eep_home",
-        "activity": "sleeping",
-        "location": "Ranch di luar gerbang barat"
+        "activity": "sleeping"
       }
     ],
     "rainy": [
       {
         "time": "06:00",
-        "map": "town",
+        "map": "eep_home",
         "point": "eep_home",
-        "activity": "sleeping",
-        "location": "Ranch di luar gerbang barat"
+        "activity": "sleeping"
       },
       {
         "time": "07:00",
-        "map": "town",
+        "map": "eep_home",
         "point": "eep_stall",
         "activity": "checking_feed"
       },
       {
         "time": "09:00",
-        "map": "town",
+        "map": "eep_home",
         "point": "eep_stall",
         "activity": "selling"
       },
       {
         "time": "12:00",
-        "map": "town",
-        "point": "eep_stall",
+        "map": "eep_home",
+        "point": "eep_lunch",
         "activity": "lunch"
       },
       {
         "time": "13:00",
-        "map": "town",
+        "map": "eep_home",
         "point": "eep_stall",
         "activity": "selling"
       },
       {
         "time": "17:00",
-        "map": "town",
+        "map": "eep_home",
         "point": "eep_rest",
         "activity": "resting"
       },
       {
-        "time": "19:00",
-        "map": "town",
+        "time": "22:00",
+        "map": "eep_home",
         "point": "eep_home",
-        "activity": "sleeping",
-        "location": "Ranch di luar gerbang barat"
+        "activity": "sleeping"
       }
     ]
   },
@@ -296,7 +306,7 @@
       "sets_flags": [
         "eep_ranch_trust"
       ],
-      "map": "town",
+      "map": "eep_home",
       "point": "eep_stall",
       "weather": "any",
       "time_range": [
@@ -317,6 +327,111 @@
           "expression": "sparkle"
         }
       ]
+    },
+    {
+      "id": "eep_friendship_2",
+      "hearts": 2,
+      "requires_flags": [],
+      "sets_flags": [
+        "eep_friendship_2_told"
+      ],
+      "weather": "any",
+      "map": "eep_home",
+      "point": "eep_stall",
+      "time_range": [
+        "09:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Sebelum membuka lapak aku memeriksa pakan dan air.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Perjalanan hewan harus dimulai dengan keadaan yang nyaman.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "eep_friendship_6",
+      "hearts": 6,
+      "requires_flags": [],
+      "sets_flags": [
+        "eep_friendship_6_told"
+      ],
+      "weather": "any",
+      "map": "eep_home",
+      "point": "eep_stall",
+      "time_range": [
+        "09:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Aku pernah terlalu khawatir melepas hewan ke pemilik baru.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Sekarang aku memilih berbagi cara merawat dan memberi kesempatan orang belajar.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "eep_friendship_8",
+      "hearts": 8,
+      "requires_flags": [],
+      "sets_flags": [
+        "eep_friendship_8_told"
+      ],
+      "weather": "any",
+      "map": "eep_home",
+      "point": "eep_stall",
+      "time_range": [
+        "09:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Melihat warga telaten merawat hewan membuat pekerjaanku terasa berarti.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Bukan hanya kandangnya yang penting, tetapi perhatian setiap harinya.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "eep_friendship_10",
+      "hearts": 10,
+      "requires_flags": [],
+      "sets_flags": [
+        "eep_friendship_10_told"
+      ],
+      "weather": "any",
+      "map": "eep_home",
+      "point": "eep_stall",
+      "time_range": [
+        "09:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Aku semakin yakin bahwa rumah yang baik dibangun lewat kebiasaan kecil.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Terima kasih sudah menjadi sahabat yang peduli pada hewan-hewan desa.",
+          "expression": "happy"
+        }
+      ]
     }
-  ]
+  ],
+  "content_status": {
+    "story_expansion": "baseline_2026_10_24",
+    "residence": "implemented_eep_ranch_2026_10_24"
+  },
+  "biography": "Penjual ternak yang mengutamakan kenyamanan hewan."
 }

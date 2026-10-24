@@ -11,6 +11,9 @@
 [ext_resource type="Texture2D" path="res://assets/farm_rpg/tileset/int/University Tiles.png" id="9_un"]
 [ext_resource type="Texture2D" path="res://assets/farm_rpg/Character/Pre-made/Adrian/Idle.png" id="10_un"]
 
+
+[ext_resource type="Script" path="res://scripts/npc/npc_map_presenter.gd" id="residents"]
+
 [sub_resource type="TileSetAtlasSource" id="Atlas_0"]
 texture = ExtResource("1_un")
 0:0/0 = 0
@@ -2293,20 +2296,6 @@ region_rect = Rect2(40, 71, 16, 18)
 position = Vector2(0, -3)
 shape = SubResource("Rect_08")
 
-[node name="ProfAdrian" type="StaticBody2D" parent="Furniture"]
-position = Vector2(524, 190)
-script = ExtResource("8_un")
-npc_name = "Prof. Baskoro"
-lines = PackedStringArray("Kalau kamu tertarik dengan penelitian hutan, aku punya beberapa dokumen menarik di perpustakaan.", "Rasa ingin tahu adalah langkah pertama untuk memajukan peradaban pulau ini.", "Hutan di seberang jembatan menyimpan keanekaragaman flora dan fauna yang belum kita teliti.")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Furniture/ProfAdrian"]
-sprite_frames = SubResource("SpriteFrames_adrian")
-animation = &"idle_down"
-autoplay = "idle_down"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Furniture/ProfAdrian"]
-position = Vector2(0, -2)
-shape = SubResource("Rect_22")
 
 [node name="Player" parent="Furniture" instance=ExtResource("4_un")]
 
@@ -2478,3 +2467,12 @@ limit_right = 960
 limit_bottom = 960
 
 [editable path="Furniture/Player"]
+
+[node name="NPCPoints" type="Node2D" parent="."]
+[node name="baskoro_work" type="Marker2D" parent="NPCPoints"]
+position = Vector2(524, 190)
+[node name="NPCActors" type="Node2D" parent="."]
+y_sort_enabled = true
+[node name="NPCMapPresenter" type="Node" parent="."]
+script = ExtResource("residents")
+map_id = "university"

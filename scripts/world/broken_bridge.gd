@@ -7,6 +7,7 @@ const REQUIRED_WOOD: int = 100
 const REQUIRED_STONE: int = 50
 
 const WARNING_COOLDOWN: float = 2.0
+const UNLOCK_FEEDBACK: ActionFeedback = preload("res://resources/feedback/bridge_unlock.tres")
 
 @export var water_layer: PassableTileLayer
 @export var walkaway: Rect2 = Rect2(-62, -16, 124, 23)
@@ -120,10 +121,34 @@ func repair_bridge() -> bool:
 	
 func _play_repair_transition() -> void:
 	await Transition.fade_action(_finish_repair)
-	
+	# Celebrate after the fade: particles and sound should not disappear behind black.
+	_play_unlock_celebration()
+	_repair_in_progress = false
 	Notify.say("Jembatan berhasil diperbaiki!")
 	
 func _finish_repair() -> void:
 	WorldState.set_flag(BRIDGE_FLAG, true)
 	UnlockManager.unlock("forest")
-	_repair_in_progress = false
+
+func _play_unlock_celebration() -> void:
+	Juice.play_upgrade_reward(1)
+	Juice.shake(1.5, 0.22)
+	Juice.float_text("Hutan terbuka!", to_global(Vector2(0, -34)), Color("ffe6a3"), 1.5)
+
+	var base_scale := repaired_sprite.scale
+	var base_modulate := repaired_sprite.modulate
+	repaired_sprite.scale = base_scale * Vector2(1.04, 0.94)
+	repaired_sprite.modulate = Color(1.5, 1.35, 1.05, base_modulate.a)
+	var reveal := create_tween().set_parallel(true)
+	reveal.tween_property(repaired_sprite, "scale", base_scale, 0.45) \
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	reveal.tween_property(repaired_sprite, "modulate", base_modulate, 0.65)
+
+	# World-space bursts are visible to both players sharing this area.
+	var sweep := create_tween()
+	for x in [-48.0, -24.0, 0.0, 24.0, 48.0]:
+		sweep.tween_callback(_unlock_sparkle.bind(Vector2(x, -6)))
+		sweep.tween_interval(0.09)
+
+func _unlock_sparkle(local_pos: Vector2) -> void:
+	Juice.burst(to_global(local_pos), UNLOCK_FEEDBACK)

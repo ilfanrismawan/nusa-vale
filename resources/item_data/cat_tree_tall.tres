@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1_item"]
+[ext_resource type="Texture2D" path="res://resources/interior/atlas/cat_tree_tall.tres" id="2_icon"]
+
+[resource]
+script = ExtResource("1_item")
+item_id = "cat_tree_tall"
+display_name = "Pohon Garukan Kucing"
+category = 8
+icon = ExtResource("2_icon")
+description = "Taman bermain panjat kucing bertingkat kesayangan anabul."
+placeable = true
+placement_size = Vector2i(2, 1)
+sell_price = 320

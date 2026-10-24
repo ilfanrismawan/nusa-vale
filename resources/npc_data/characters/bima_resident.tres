@@ -1,0 +1,10 @@
+[gd_resource type="Resource" format=3]
+[ext_resource type="Script" path="res://scripts/npc/data/resident_profile.gd" id="profile"]
+[resource]
+script = ExtResource("profile")
+source_json = "res://data/npc/bima.json"
+npc_id = "bima"
+display_name = "Empu Bima"
+role_title = "Pandai Besi"
+move_speed = 36.0
+schedule_source = 1

@@ -4,20 +4,21 @@
 [ext_resource type="Texture2D" uid="uid://bjqa0akh2pva5" path="res://assets/farm_rpg/Clock/Clock.png" id="1_bo48s"]
 [ext_resource type="Texture2D" uid="uid://hun4udw71hlk" path="res://assets/farm_rpg/Clock/clock hand.png" id="2_8qguk"]
 [ext_resource type="Texture2D" uid="uid://dcvh6rh0mven1" path="res://assets/farm_rpg/Clock/Extras.png" id="2_136eg"]
-[ext_resource type="Font" path="res://resources/ui/readable_font.tres" id="3_136eg"]
+[ext_resource type="FontVariation" uid="uid://bw6sa2q375h63" path="res://resources/ui/readable_font.tres" id="3_136eg"]
+[ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="6_h022r"]
 [ext_resource type="Texture2D" uid="uid://c8stes0isa8kg" path="res://assets/farm_rpg/ui/Bars.png" id="6_oj5la"]
 [ext_resource type="PackedScene" path="res://scenes/ui/action_hints.tscn" id="action_hints"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ywce2"]
-font = ExtResource("3_136eg")
-font_size = 16
+font = ExtResource("6_h022r")
 font_color = Color(0.13333334, 0.06666667, 0.13333334, 1)
+shadow_size = 0
 shadow_color = Color(0, 0, 0, 0.30588236)
 
 [sub_resource type="LabelSettings" id="LabelSettings_ajcru"]
-font = ExtResource("3_136eg")
-font_size = 16
+font = ExtResource("6_h022r")
 font_color = Color(0.13333334, 0.06666667, 0.13333334, 1)
+shadow_size = 0
 shadow_color = Color(0, 0, 0, 0.24705882)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ovsut"]
@@ -31,17 +32,16 @@ region = Rect2(132, 50, 10, 42)
 [node name="HUD" type="CanvasLayer" unique_id=1575410842]
 script = ExtResource("1_8qguk")
 
-[node name="FoodEffectsLabel" type="Label" parent="."]
+[node name="FoodEffectsLabel" type="Label" parent="." unique_id=1957896146]
 unique_name_in_owner = true
 offset_left = 12.0
 offset_top = 46.0
 offset_right = 312.0
 offset_bottom = 70.0
-mouse_filter = 2
-theme_override_fonts/font = ExtResource("3_136eg")
-theme_override_font_sizes/font_size = 16
 theme_override_colors/font_outline_color = Color(0.16, 0.17, 0.24, 1)
 theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("3_136eg")
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 [node name="HUDAnchor" type="Control" parent="." unique_id=1583726190]
@@ -54,18 +54,6 @@ offset_top = 64.0
 offset_right = -82.0
 offset_bottom = 64.0
 grow_horizontal = 0
-
-[node name="BtnSettings" type="Button" parent="HUDAnchor" unique_id=748291034]
-unique_name_in_owner = true
-texture_filter = 1
-layout_mode = 0
-offset_left = 9.0
-offset_top = 52.0
-offset_right = 53.0
-offset_bottom = 70.0
-theme_override_fonts/font = ExtResource("3_136eg")
-theme_override_font_sizes/font_size = 16
-text = "Menu"
 
 [node name="Sprite2D" type="Sprite2D" parent="HUDAnchor" unique_id=13787984]
 texture_filter = 1
@@ -100,9 +88,10 @@ texture_filter = 1
 clip_contents = true
 layout_mode = 0
 offset_left = -9.0
-offset_top = -40.0
+offset_top = -45.0
 offset_right = 53.0
-offset_bottom = -24.0
+offset_bottom = -19.0
+theme_override_fonts/font = ExtResource("6_h022r")
 text = "Hari 1"
 label_settings = SubResource("LabelSettings_ywce2")
 horizontal_alignment = 1
@@ -127,12 +116,13 @@ clip_text = true
 [node name="MoneyLabel" type="Control" parent="HUDAnchor" unique_id=2106462979]
 unique_name_in_owner = true
 texture_filter = 1
-layout_mode = 0
+anchors_preset = 0
 offset_left = -29.0
-offset_top = 21.0
+offset_top = 20.0
 offset_right = 53.0
-offset_bottom = 35.0
+offset_bottom = 34.0
 mouse_filter = 2
+theme_type_variation = &"bold"
 
 [node name="PlayerStatus" type="Control" parent="." unique_id=989920960]
 layout_mode = 3
@@ -144,8 +134,6 @@ offset_bottom = 40.0
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 0
-offset_left = 0.0
-offset_top = 0.0
 offset_right = 10.0
 offset_bottom = 42.0
 scale = Vector2(3, 3)
@@ -154,4 +142,6 @@ fill_mode = 3
 texture_under = SubResource("AtlasTexture_ovsut")
 texture_progress = SubResource("AtlasTexture_qn2nl")
 
-[node name="ActionHints" parent="." instance=ExtResource("action_hints")]
+[node name="ActionHints" parent="." unique_id=2097069238 instance=ExtResource("action_hints")]
+layout_mode = 3
+anchors_preset = 0

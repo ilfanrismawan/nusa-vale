@@ -1,0 +1,17 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://resources/interior/atlas/bunk_bed.tres" id="1_tex"]
+
+[sub_resource type="RectangleShape2D" id="BodyShape"]
+size = Vector2(28, 16)
+
+[node name="bunk_bed" type="StaticBody2D"]
+y_sort_enabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -32)
+texture = ExtResource("1_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -8)
+shape = SubResource("BodyShape")

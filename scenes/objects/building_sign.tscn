@@ -1,6 +1,270 @@
-[gd_scene load_steps=2 format=3]
-[ext_resource type="Script" path="res://scripts/world/building_sign.gd" id="1"]
-[node name="BuildingSign" type="Node2D"]
-texture_filter = 1
+[gd_scene format=3 uid="uid://l3wp4bi5elun"]
+
+[ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="font"]
+[ext_resource type="Script" uid="uid://din4ngfuqwffn" path="res://scripts/world/building_sign.gd" id="script"]
+
+[sub_resource type="StyleBoxFlat" id="Wood"]
+resource_local_to_scene = true
+bg_color = Color(0.490196, 0.270588, 0.168627, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.235294, 0.145098, 0.129412, 1)
+
+[node name="BuildingSign" type="Node2D" unique_id=201779144]
 z_index = 2
-script = ExtResource("1")
+texture_filter = 1
+script = ExtResource("script")
+
+[node name="WallMount" type="Marker2D" parent="." unique_id=1542491364]
+unique_name_in_owner = true
+
+[node name="PostMount" type="Marker2D" parent="." unique_id=1282550179]
+unique_name_in_owner = true
+position = Vector2(0, -20)
+
+[node name="Ground" type="Marker2D" parent="." unique_id=56667400]
+unique_name_in_owner = true
+position = Vector2(0, 4)
+
+[node name="Board" type="Control" parent="." unique_id=1199681524]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 20)
+layout_mode = 3
+anchors_preset = 0
+offset_left = -28.0
+offset_top = -10.0
+offset_right = 28.0
+offset_bottom = 10.0
+mouse_filter = 2
+
+[node name="Posts" type="Control" parent="Board" unique_id=644522095]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="LeftPost" type="ColorRect" parent="Board/Posts" unique_id=1985933926]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_bottom = 1.0
+offset_left = 7.0
+offset_top = 4.0
+offset_right = 10.0
+offset_bottom = -6.0
+mouse_filter = 2
+color = Color(0.235294, 0.145098, 0.129412, 1)
+
+[node name="LeftPostHighlight" type="ColorRect" parent="Board/Posts/LeftPost" unique_id=1923502647]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_right = 2.0
+offset_bottom = -1.0
+mouse_filter = 2
+color = Color(0.72549, 0.47451, 0.262745, 1)
+
+[node name="RightPost" type="ColorRect" parent="Board/Posts" unique_id=8433196]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -9.0
+offset_top = 4.0
+offset_right = -6.0
+offset_bottom = -6.0
+mouse_filter = 2
+color = Color(0.235294, 0.145098, 0.129412, 1)
+
+[node name="RightPostHighlight" type="ColorRect" parent="Board/Posts/RightPost" unique_id=1848296131]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_right = 2.0
+offset_bottom = -1.0
+mouse_filter = 2
+color = Color(0.72549, 0.47451, 0.262745, 1)
+
+[node name="Hanging" type="Control" parent="Board" unique_id=62557992]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="LeftChain" type="ColorRect" parent="Board/Hanging" unique_id=1841554267]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 8.0
+offset_top = -9.0
+offset_right = 9.0
+offset_bottom = 1.0
+mouse_filter = 2
+color = Color(0.772549, 0.713725, 0.607843, 1)
+
+[node name="RightChain" type="ColorRect" parent="Board/Hanging" unique_id=2087154130]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -8.0
+offset_top = -9.0
+offset_right = -7.0
+offset_bottom = 1.0
+mouse_filter = 2
+color = Color(0.772549, 0.713725, 0.607843, 1)
+
+[node name="LeftHook" type="ColorRect" parent="Board/Hanging" unique_id=1640372191]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 6.0
+offset_top = -10.0
+offset_right = 11.0
+offset_bottom = -8.0
+mouse_filter = 2
+color = Color(0.235294, 0.145098, 0.129412, 1)
+
+[node name="RightHook" type="ColorRect" parent="Board/Hanging" unique_id=1185056122]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -10.0
+offset_top = -10.0
+offset_right = -5.0
+offset_bottom = -8.0
+mouse_filter = 2
+color = Color(0.235294, 0.145098, 0.129412, 1)
+
+[node name="Frame" type="Panel" parent="Board" unique_id=2106215583]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("Wood")
+
+[node name="TopGrain" type="ColorRect" parent="Board" unique_id=1471134738]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = -1.0
+offset_bottom = 2.0
+mouse_filter = 2
+color = Color(0.72549, 0.47451, 0.262745, 1)
+
+[node name="BottomGrain" type="ColorRect" parent="Board" unique_id=1366426456]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = -3.0
+offset_right = -2.0
+offset_bottom = -2.0
+mouse_filter = 2
+color = Color(0.367647, 0.202941, 0.126471, 1)
+
+[node name="TopLeftRivet" type="ColorRect" parent="Board" unique_id=891386517]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 4.0
+offset_bottom = 4.0
+mouse_filter = 2
+color = Color(0.854902, 0.764706, 0.537255, 1)
+
+[node name="TopRightRivet" type="ColorRect" parent="Board" unique_id=96537849]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -4.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = 4.0
+mouse_filter = 2
+color = Color(0.854902, 0.764706, 0.537255, 1)
+
+[node name="BottomLeftRivet" type="ColorRect" parent="Board" unique_id=416472507]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 3.0
+offset_top = -4.0
+offset_right = 4.0
+offset_bottom = -3.0
+mouse_filter = 2
+color = Color(0.854902, 0.764706, 0.537255, 1)
+
+[node name="BottomRightRivet" type="ColorRect" parent="Board" unique_id=1561021897]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -4.0
+offset_top = -4.0
+offset_right = -3.0
+offset_bottom = -3.0
+mouse_filter = 2
+color = Color(0.854902, 0.764706, 0.537255, 1)
+
+[node name="Content" type="MarginContainer" parent="Board" unique_id=12989169]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = -2.0
+offset_right = 1.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 3
+
+[node name="Row" type="HBoxContainer" parent="Board/Content" unique_id=841684192]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="Board/Content/Row" unique_id=619762110]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Caption" type="Label" parent="Board/Content/Row" unique_id=149572031]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.901961, 0.666667, 1)
+theme_override_colors/font_outline_color = Color(0.235294, 0.145098, 0.129412, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "Sekolah"
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1_item"]
+[ext_resource type="Texture2D" path="res://resources/interior/atlas/sofa_living.tres" id="2_icon"]
+
+[resource]
+script = ExtResource("1_item")
+item_id = "sofa_living"
+display_name = "Sofa Ruang Tamu"
+category = 8
+icon = ExtResource("2_icon")
+description = "Sofa dua dudukan berlapis busa empuk yang cocok untuk ruang santai."
+placeable = true
+placement_size = Vector2i(3, 1)
+sell_price = 450

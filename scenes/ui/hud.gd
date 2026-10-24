@@ -5,7 +5,7 @@ extends CanvasLayer
 @onready var clock_bg: TextureRect = $HUDAnchor/Sprite2D/ClockDisplay/ClockBg
 @onready var day_label: Label = %DayLabel
 @onready var money_label: Control = %MoneyLabel
-@onready var btn_settings: Button = %BtnSettings
+@onready var btn_settings: Button = get_node_or_null("%BtnSettings")
 @onready var stamina_bar: TextureProgressBar = %StaminaBar
 var _stamina_capacity_tween: Tween
 var _displayed_stamina_max := 0

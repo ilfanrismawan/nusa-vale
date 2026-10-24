@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1_item"]
+[ext_resource type="Texture2D" path="res://resources/interior/atlas/round_table.tres" id="2_icon"]
+
+[resource]
+script = ExtResource("1_item")
+item_id = "round_table"
+display_name = "Meja Bundar"
+category = 8
+icon = ExtResource("2_icon")
+description = "Meja bundar kayu mungil yang manis untuk teh sore."
+placeable = true
+placement_size = Vector2i(2, 1)
+sell_price = 180

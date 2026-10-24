@@ -172,29 +172,282 @@ _data = {
 }
 
 
-[sub_resource type="Curve2D" id="eep_west_gate_to_ranch"]
-resource_local_to_scene = true
-bake_interval = 4.0
-_data = {"points": PackedVector2Array(0, 0, 0, 0, 32, 408, 0, 0, 0, 0, 300, 408, 0, 0, 0, 0, 340, 408, 0, 0, 0, 0, 550, 440, 0, 0, 0, 0, 600, 440, 0, 0, 0, 0, 650, 440)}
-point_count = 6
 
-[sub_resource type="Curve2D" id="eep_stall"]
-resource_local_to_scene = true
-bake_interval = 4.0
-_data = {"points": PackedVector2Array(0, 0, 0, 0, 550, 440, 0, 0, 0, 0, 520, 440, 0, 0, 0, 0, 520, 456)}
-point_count = 3
 
-[sub_resource type="Curve2D" id="eep_lunch"]
-resource_local_to_scene = true
-bake_interval = 4.0
-_data = {"points": PackedVector2Array(0, 0, 0, 0, 600, 440, 0, 0, 0, 0, 620, 440, 0, 0, 0, 0, 620, 456)}
-point_count = 3
 
-[sub_resource type="Curve2D" id="eep_rest"]
+
+[sub_resource type="Curve2D" id="kirana_route_0"]
 resource_local_to_scene = true
 bake_interval = 4.0
-_data = {"points": PackedVector2Array(0, 0, 0, 0, 650, 440, 0, 0, 0, 0, 650, 456)}
-point_count = 2
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 960.0, 300.0, 0, 0, 0, 0, 780.0, 300.0, 0, 0, 0, 0, 780.0, 430.0)
+}
+
+[sub_resource type="Curve2D" id="kirana_route_1"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 970.0, 430.0, 0, 0, 0, 0, 920.0, 430.0, 0, 0, 0, 0, 920.0, 470.0, 0, 0, 0, 0, 900.0, 498.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="kirana_route_2"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 1232.0, 344.0, 0, 0, 0, 0, 1232.0, 200.0, 0, 0, 0, 0, 1232.0, 24.0)
+}
+
+[sub_resource type="Curve2D" id="kirana_route_3"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 780.0, 430.0, 0, 0, 0, 0, 780.0, 500.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="kirana_route_4"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 780.0, 430.0, 0, 0, 0, 0, 700.0, 440.0, 0, 0, 0, 0, 550.0, 440.0, 0, 0, 0, 0, 340.0, 408.0, 0, 0, 0, 0, 300.0, 408.0, 0, 0, 0, 0, 32.0, 408.0)
+}
+
+[sub_resource type="Curve2D" id="kirana_route_5"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 840.0, 470.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="bahar_route_0"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 960.0, 300.0, 0, 0, 0, 0, 780.0, 300.0, 0, 0, 0, 0, 780.0, 430.0)
+}
+
+[sub_resource type="Curve2D" id="bahar_route_1"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 970.0, 430.0, 0, 0, 0, 0, 920.0, 430.0, 0, 0, 0, 0, 920.0, 470.0, 0, 0, 0, 0, 900.0, 498.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="bahar_route_2"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 1232.0, 344.0, 0, 0, 0, 0, 1232.0, 200.0, 0, 0, 0, 0, 1232.0, 24.0)
+}
+
+[sub_resource type="Curve2D" id="bahar_route_3"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 780.0, 430.0, 0, 0, 0, 0, 780.0, 500.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="bahar_route_4"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 780.0, 430.0, 0, 0, 0, 0, 700.0, 440.0, 0, 0, 0, 0, 550.0, 440.0, 0, 0, 0, 0, 340.0, 408.0, 0, 0, 0, 0, 300.0, 408.0, 0, 0, 0, 0, 32.0, 408.0)
+}
+
+[sub_resource type="Curve2D" id="bahar_route_5"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 840.0, 470.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="joko_route_0"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 960.0, 300.0, 0, 0, 0, 0, 780.0, 300.0, 0, 0, 0, 0, 780.0, 430.0)
+}
+
+[sub_resource type="Curve2D" id="joko_route_1"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 970.0, 430.0, 0, 0, 0, 0, 920.0, 430.0, 0, 0, 0, 0, 920.0, 470.0, 0, 0, 0, 0, 900.0, 498.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="joko_route_2"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 1232.0, 344.0, 0, 0, 0, 0, 1232.0, 200.0, 0, 0, 0, 0, 1232.0, 24.0)
+}
+
+[sub_resource type="Curve2D" id="joko_route_3"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 780.0, 430.0, 0, 0, 0, 0, 780.0, 500.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="joko_route_4"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 780.0, 430.0, 0, 0, 0, 0, 700.0, 440.0, 0, 0, 0, 0, 550.0, 440.0, 0, 0, 0, 0, 340.0, 408.0, 0, 0, 0, 0, 300.0, 408.0, 0, 0, 0, 0, 32.0, 408.0)
+}
+
+[sub_resource type="Curve2D" id="joko_route_5"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 840.0, 470.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="ratih_route_0"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 960.0, 300.0, 0, 0, 0, 0, 780.0, 300.0, 0, 0, 0, 0, 780.0, 430.0)
+}
+
+[sub_resource type="Curve2D" id="ratih_route_1"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 970.0, 430.0, 0, 0, 0, 0, 920.0, 430.0, 0, 0, 0, 0, 920.0, 470.0, 0, 0, 0, 0, 900.0, 498.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="ratih_route_2"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 1232.0, 344.0, 0, 0, 0, 0, 1232.0, 200.0, 0, 0, 0, 0, 1232.0, 24.0)
+}
+
+[sub_resource type="Curve2D" id="ratih_route_3"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 780.0, 430.0, 0, 0, 0, 0, 780.0, 500.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="ratih_route_4"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 780.0, 430.0, 0, 0, 0, 0, 700.0, 440.0, 0, 0, 0, 0, 550.0, 440.0, 0, 0, 0, 0, 340.0, 408.0, 0, 0, 0, 0, 300.0, 408.0, 0, 0, 0, 0, 32.0, 408.0)
+}
+
+[sub_resource type="Curve2D" id="ratih_route_5"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 840.0, 470.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="rian_route_0"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 960.0, 300.0, 0, 0, 0, 0, 780.0, 300.0, 0, 0, 0, 0, 780.0, 430.0)
+}
+
+[sub_resource type="Curve2D" id="rian_route_1"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 970.0, 430.0, 0, 0, 0, 0, 920.0, 430.0, 0, 0, 0, 0, 920.0, 470.0, 0, 0, 0, 0, 900.0, 498.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="rian_route_2"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 1232.0, 344.0, 0, 0, 0, 0, 1232.0, 200.0, 0, 0, 0, 0, 1232.0, 24.0)
+}
+
+[sub_resource type="Curve2D" id="rian_route_3"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 780.0, 430.0, 0, 0, 0, 0, 780.0, 500.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="rian_route_4"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 780.0, 430.0, 0, 0, 0, 0, 700.0, 440.0, 0, 0, 0, 0, 550.0, 440.0, 0, 0, 0, 0, 340.0, 408.0, 0, 0, 0, 0, 300.0, 408.0, 0, 0, 0, 0, 32.0, 408.0)
+}
+
+[sub_resource type="Curve2D" id="rian_route_5"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 840.0, 470.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="damar_route_0"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 960.0, 300.0, 0, 0, 0, 0, 780.0, 300.0, 0, 0, 0, 0, 780.0, 430.0)
+}
+
+[sub_resource type="Curve2D" id="damar_route_1"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 970.0, 430.0, 0, 0, 0, 0, 920.0, 430.0, 0, 0, 0, 0, 920.0, 470.0, 0, 0, 0, 0, 900.0, 498.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="damar_route_2"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970.0, 344.0, 0, 0, 0, 0, 1232.0, 344.0, 0, 0, 0, 0, 1232.0, 200.0, 0, 0, 0, 0, 1232.0, 24.0)
+}
+
+[sub_resource type="Curve2D" id="damar_route_3"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 780.0, 430.0, 0, 0, 0, 0, 780.0, 500.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+[sub_resource type="Curve2D" id="damar_route_4"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 780.0, 430.0, 0, 0, 0, 0, 700.0, 440.0, 0, 0, 0, 0, 550.0, 440.0, 0, 0, 0, 0, 340.0, 408.0, 0, 0, 0, 0, 300.0, 408.0, 0, 0, 0, 0, 32.0, 408.0)
+}
+
+[sub_resource type="Curve2D" id="damar_route_5"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 840.0, 470.0, 0, 0, 0, 0, 840.0, 497.0)
+}
+
+
+[sub_resource type="Curve2D" id="bahar_work_branch"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {"points": PackedVector2Array(0, 0, 0, 0, 550, 440, 0, 0, 0, 0, 520, 430, 0, 0, 0, 0, 560, 450, 0, 0, 0, 0, 680, 600, 0, 0, 0, 0, 680, 770)}
+
+[sub_resource type="Curve2D" id="joko_work_branch"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {"points": PackedVector2Array(0, 0, 0, 0, 920, 430, 0, 0, 0, 0, 895, 430, 0, 0, 0, 0, 895, 400, 0, 0, 0, 0, 895, 388)}
+
+[sub_resource type="Curve2D" id="ratih_work_branch"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {"points": PackedVector2Array(0, 0, 0, 0, 550, 440, 0, 0, 0, 0, 510, 415, 0, 0, 0, 0, 519, 380, 0, 0, 0, 0, 519, 340)}
+
+[sub_resource type="Curve2D" id="rian_work_branch"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {"points": PackedVector2Array(0, 0, 0, 0, 550, 440, 0, 0, 0, 0, 500, 460, 0, 0, 0, 0, 450, 490)}
 
 [node name="NPCPaths" type="Node2D"]
 script = ExtResource("network")
@@ -347,28 +600,207 @@ npc_id = &"zarathustra"
 curve = SubResource("zarathustra_ubay_5")
 
 
-[node name="Eep_west_gate_to_ranch" type="Path2D" parent="."]
-script = ExtResource("path")
-npc_id = &"eep"
-curve = SubResource("eep_west_gate_to_ranch")
 
-[node name="Eep_stall" type="Path2D" parent="."]
-script = ExtResource("path")
-npc_id = &"eep"
-curve = SubResource("eep_stall")
 
-[node name="Eep_lunch" type="Path2D" parent="."]
-script = ExtResource("path")
-npc_id = &"eep"
-curve = SubResource("eep_lunch")
 
-[node name="Eep_rest" type="Path2D" parent="."]
-script = ExtResource("path")
-npc_id = &"eep"
-curve = SubResource("eep_rest")
 
-[node name="eep_west_gate" type="Marker2D" parent="."]
-script = ExtResource("gateway")
-position = Vector2(32, 408)
-npc_id = &"eep"
-destination_maps = PackedStringArray("town")
+
+[node name="kirana_route_0" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"kirana"
+curve = SubResource("kirana_route_0")
+
+[node name="kirana_route_1" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"kirana"
+curve = SubResource("kirana_route_1")
+
+[node name="kirana_route_2" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"kirana"
+curve = SubResource("kirana_route_2")
+
+[node name="kirana_route_3" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"kirana"
+curve = SubResource("kirana_route_3")
+
+[node name="kirana_route_4" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"kirana"
+curve = SubResource("kirana_route_4")
+
+[node name="kirana_route_5" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"kirana"
+curve = SubResource("kirana_route_5")
+
+[node name="bahar_route_0" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"bahar"
+curve = SubResource("bahar_route_0")
+
+[node name="bahar_route_1" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"bahar"
+curve = SubResource("bahar_route_1")
+
+[node name="bahar_route_2" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"bahar"
+curve = SubResource("bahar_route_2")
+
+[node name="bahar_route_3" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"bahar"
+curve = SubResource("bahar_route_3")
+
+[node name="bahar_route_4" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"bahar"
+curve = SubResource("bahar_route_4")
+
+[node name="bahar_route_5" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"bahar"
+curve = SubResource("bahar_route_5")
+
+[node name="joko_route_0" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"joko"
+curve = SubResource("joko_route_0")
+
+[node name="joko_route_1" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"joko"
+curve = SubResource("joko_route_1")
+
+[node name="joko_route_2" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"joko"
+curve = SubResource("joko_route_2")
+
+[node name="joko_route_3" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"joko"
+curve = SubResource("joko_route_3")
+
+[node name="joko_route_4" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"joko"
+curve = SubResource("joko_route_4")
+
+[node name="joko_route_5" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"joko"
+curve = SubResource("joko_route_5")
+
+[node name="ratih_route_0" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"ratih"
+curve = SubResource("ratih_route_0")
+
+[node name="ratih_route_1" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"ratih"
+curve = SubResource("ratih_route_1")
+
+[node name="ratih_route_2" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"ratih"
+curve = SubResource("ratih_route_2")
+
+[node name="ratih_route_3" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"ratih"
+curve = SubResource("ratih_route_3")
+
+[node name="ratih_route_4" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"ratih"
+curve = SubResource("ratih_route_4")
+
+[node name="ratih_route_5" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"ratih"
+curve = SubResource("ratih_route_5")
+
+[node name="rian_route_0" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"rian"
+curve = SubResource("rian_route_0")
+
+[node name="rian_route_1" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"rian"
+curve = SubResource("rian_route_1")
+
+[node name="rian_route_2" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"rian"
+curve = SubResource("rian_route_2")
+
+[node name="rian_route_3" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"rian"
+curve = SubResource("rian_route_3")
+
+[node name="rian_route_4" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"rian"
+curve = SubResource("rian_route_4")
+
+[node name="rian_route_5" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"rian"
+curve = SubResource("rian_route_5")
+
+[node name="damar_route_0" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"damar"
+curve = SubResource("damar_route_0")
+
+[node name="damar_route_1" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"damar"
+curve = SubResource("damar_route_1")
+
+[node name="damar_route_2" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"damar"
+curve = SubResource("damar_route_2")
+
+[node name="damar_route_3" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"damar"
+curve = SubResource("damar_route_3")
+
+[node name="damar_route_4" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"damar"
+curve = SubResource("damar_route_4")
+
+[node name="damar_route_5" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"damar"
+curve = SubResource("damar_route_5")
+
+[node name="bahar_work_branch" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"bahar"
+curve = SubResource("bahar_work_branch")
+
+[node name="joko_work_branch" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"joko"
+curve = SubResource("joko_work_branch")
+
+[node name="ratih_work_branch" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"ratih"
+curve = SubResource("ratih_work_branch")
+
+[node name="rian_work_branch" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"rian"
+curve = SubResource("rian_work_branch")

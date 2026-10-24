@@ -1,21 +1,33 @@
-[gd_scene format=3]
-[ext_resource type="Script" path="res://scripts/ui/book_pager.gd" id="script"]
-[node name="BookPager" type="HBoxContainer"]
-script = ExtResource("script")
-alignment = 1
+[gd_scene format=3 uid="uid://bhnf8yfj1vm28"]
+
+[ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="2_a6uqa"]
+[ext_resource type="Script" uid="uid://bh6naj884bm3t" path="res://scripts/ui/book_pager.gd" id="script"]
+
+[node name="BookPager" type="HBoxContainer" unique_id=807463455]
 theme_override_constants/separation = 4
-[node name="Previous" type="Button" parent="."]
+alignment = 1
+script = ExtResource("script")
+
+[node name="Previous" type="Button" parent="." unique_id=224919849]
+texture_filter = 2
 custom_minimum_size = Vector2(24, 20)
+layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "‹"
-[node name="Page" type="Label" parent="."]
+
+[node name="Page" type="Label" parent="." unique_id=2086988890]
+texture_filter = 1
+layout_mode = 2
 size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("2_a6uqa")
+theme_override_font_sizes/font_size = 15
+text = "1 / 1"
 horizontal_alignment = 1
 vertical_alignment = 1
-theme_override_font_sizes/font_size = 12
-text = "1 / 1"
-mouse_filter = 2
-[node name="Next" type="Button" parent="."]
+
+[node name="Next" type="Button" parent="." unique_id=1925740867]
+texture_filter = 2
 custom_minimum_size = Vector2(24, 20)
+layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "›"

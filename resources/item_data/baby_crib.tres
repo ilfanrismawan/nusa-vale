@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1_item"]
+[ext_resource type="Texture2D" path="res://resources/interior/atlas/baby_crib.tres" id="2_icon"]
+
+[resource]
+script = ExtResource("1_item")
+item_id = "baby_crib"
+display_name = "Boks Bayi"
+category = 8
+icon = ExtResource("2_icon")
+description = "Tempat tidur bayi dari kayu halus dengan jeruji pengaman."
+placeable = true
+placement_size = Vector2i(2, 1)
+sell_price = 300

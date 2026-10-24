@@ -1,5 +1,7 @@
 # Integrasi NPC dan pemeriksaan data
 
+**Pembaruan 24 Oktober 2026:** roster aktif sekarang 13 resident terpusat, bukan lima. Profil hadiah lama sudah dipindahkan ke JSON masing-masing; Baskoro ikut sistem sosial/presenter Universitas. Seluruh warga mempunyai lima milestone event dialog dan reward resep. Kedai Zarathia/Joko sudah terhubung; portrait khusus si kembar/Ubay sudah dipakai. Status, lokasi pengaturan dan batas implementasi terbaru: [NPC_CENTRALIZATION_2026-10-24.md](NPC_CENTRALIZATION_2026-10-24.md). Uraian lima resident dan placeholder di bawah merupakan riwayat sebelum migrasi bila bertentangan dengan pembaruan ini.
+
 ## Yang sudah terpasang
 
 - Wira, Ubay, Zarathia, Zarathustra dan Eep terdaftar di `scenes/npc/npc_database.tscn`.

@@ -177,6 +177,8 @@ func _input(event: InputEvent) -> void:
 		input.note_event(event)
 	# HUD controls cover the viewport; handle world right-clicks before GUI routing.
 	if event is InputEventMouseButton:
+		if input._pointer_on_hotbar(event.position):
+			return
 		_unhandled_input(event)
 
 func _unhandled_input(event: InputEvent) -> void:

@@ -49,8 +49,8 @@ extends CanvasLayer
 ## ── Configuration & Resources ───────────────────────────────────────────────
 @export_range(1.0, 2.0) var inventory_scale := 1.5
 
-const TEX_TAB_NORMAL := preload("res://resources/ui/tab_top_normal.tres")
-const TEX_TAB_ACTIVE := preload("res://resources/ui/tab_top_active.tres")
+const TEX_TAB_NORMAL := preload("res://assets/ui/inventory_top_tab_normal.svg")
+const TEX_TAB_ACTIVE := preload("res://assets/ui/inventory_top_tab_active.svg")
 const TEX_RIBBON := preload("res://resources/ui/ribbon_category.svg")
 const TEX_RIBBON_ACTIVE := preload("res://resources/ui/ribbon_category_active.svg")
 
@@ -138,7 +138,9 @@ func _ready() -> void:
 func _setup_rpg_menus() -> void:
 	_rpg_menu = %TopTabsContainer
 	_menu_buttons = {"Tas": tab_book, "Status": %TabStatus, "Equipment": %TabEquipment, "Crafting": %TabCrafting, "Keahlian": %TabSkills, "NPC": %TabNPC, "Koleksi": tab_collection}
-	_top_tabs.assign([tab_book, %TabStatus, %TabEquipment, %TabCrafting, %TabSkills, %TabNPC, tab_collection, tab_gear])
+	_top_tabs.assign([%TabEquipment, tab_book, tab_gear, tab_collection, %TabStatus, %TabCrafting, %TabSkills, %TabNPC])
+	for tab in _top_tabs:
+		_setup_tab_hover(tab, tab.tooltip_text)
 	%TabStatus.pressed.connect(_show_status)
 	%TabEquipment.pressed.connect(_show_equipment)
 	%TabCrafting.pressed.connect(_show_crafting)
@@ -355,17 +357,22 @@ func _setup_top_tabs() -> void:
 
 func _setup_tab_hover(tab: TextureButton, hover_hint: String) -> void:
 	tab.tooltip_text = hover_hint
+	if tab.has_meta("compact_tab_hover"):
+		return
+	tab.set_meta("compact_tab_hover", true)
 	tab.mouse_entered.connect(func():
-		if tab.texture_normal != TEX_TAB_ACTIVE:
-			tab.position.y = 4.0
-		tab.modulate = Color(1.15, 1.1, 1.0)
-	)
+		_layout_top_tab(tab, tab.texture_normal == TEX_TAB_ACTIVE, true)
+		tab.modulate = Color(1.08, 1.05, 1.0))
 	tab.mouse_exited.connect(func():
-		if tab.texture_normal != TEX_TAB_ACTIVE:
-			tab.position.y = 8.0
+		_layout_top_tab(tab, tab.texture_normal == TEX_TAB_ACTIVE)
 		tab.modulate = Color.WHITE
-		_hide_tooltip()
-	)
+		_hide_tooltip())
+
+func _layout_top_tab(tab: TextureButton, active: bool, hovered := false) -> void:
+	var top := 0.0 if active else (3.0 if hovered else 6.0)
+	tab.position.y = top
+	tab.size = Vector2(38, 42 - top)
+	tab.z_index = 1 if active else 0
 
 
 func _on_gear_pressed() -> void:
@@ -391,14 +398,12 @@ func _set_category(cat: ItemData.Category, active_tab: TextureButton = null) -> 
 
 
 func _highlight_top_tab(active_tab: TextureButton) -> void:
-	for t in _top_tabs:
-		if is_instance_valid(t):
-			if t == active_tab:
-				t.position.y = 0.0 # Menonjol ke atas
-				t.texture_normal = TEX_TAB_ACTIVE
-			else:
-				t.position.y = 8.0
-				t.texture_normal = TEX_TAB_NORMAL
+	for tab in _top_tabs:
+		if is_instance_valid(tab):
+			var active := tab == active_tab
+			tab.texture_normal = TEX_TAB_ACTIVE if active else TEX_TAB_NORMAL
+			tab.modulate = Color.WHITE
+			_layout_top_tab(tab, active)
 
 
 ## ── Right Ribbons Setup ─────────────────────────────────────────────────────
@@ -514,6 +519,10 @@ func _input(event: InputEvent) -> void:
 	if settings and settings.visible:
 		return
 	var input := _owner_input()
+	if visible and _relationship_ui.visible and _relationship_ui._detail_open and input.is_event(event, &"ui_cancel"):
+		_relationship_ui._show_residents()
+		get_viewport().set_input_as_handled()
+		return
 	if visible and _relationship_ui.visible and _relationship_ui.get_node("%Search").has_focus() and input.is_event(event, &"inventory"):
 		return
 	if is_instance_valid(_consume_dialog) and _consume_dialog.visible:
@@ -1022,7 +1031,7 @@ func _setup_drop_ui() -> void:
 	_drop_dialog = %DropDialog
 	_drop_dialog.confirmed.connect(_on_drop_confirmed)
 	_drop_dialog.cancelled.connect(_close_drop_dialog)
-	_tip_label = %TipLabel
+	_tip_label = get_node_or_null("%TipLabel")
 	_btn_drop = %DropButton
 	_btn_drop.pressed.connect(func(): _open_drop_dialog(_selected_slot_index))
 

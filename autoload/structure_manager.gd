@@ -804,15 +804,22 @@ func interact_machine(player: Node, uid: int) -> bool:
 		return true
 
 func closest_structure(player: Player) -> Dictionary:
+	if not is_instance_valid(player):
+		return {}
+	var world := player.world_root()
+	var ground := player.base_layer_ground
+	# Records menyimpan struktur farm; interior/transisi bisa tidak memiliki ground.
+	if not is_instance_valid(world) or world.get_meta("structure_area", "") != "farm" or not is_instance_valid(ground):
+		return {}
 	var feet := player.global_position + Player.FEET_OFFSET
 	var nearest := 33.0
 	var selected := {}
 	for record in records:
 		var item := GameState._resolve_item(record.item)
-		var center := player.base_layer_ground.to_global(player.base_layer_ground.map_to_local(Vector2i(int(record.cell[0]), int(record.cell[1])))) + Vector2(item.placement_size - Vector2i.ONE) * 8
+		var center := ground.to_global(ground.map_to_local(Vector2i(int(record.cell[0]), int(record.cell[1])))) + Vector2(item.placement_size - Vector2i.ONE) * 8
 		var distance := feet.distance_to(center)
 		if record.item in CONSTRUCTION:
-			center = player.base_layer_ground.to_global(player.base_layer_ground.map_to_local(Vector2i(int(record.cell[0]), int(record.cell[1])) + Vector2i(item.placement_size.x / 2, item.placement_size.y)))
+			center = ground.to_global(ground.map_to_local(Vector2i(int(record.cell[0]), int(record.cell[1])) + Vector2i(item.placement_size.x / 2, item.placement_size.y)))
 			distance = feet.distance_to(center)
 		if distance < nearest and (center - feet).dot(player.facing_direction) >= -1:
 			selected = record

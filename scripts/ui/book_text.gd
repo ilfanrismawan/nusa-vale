@@ -1,4 +1,7 @@
 extends Control
+@export var text_font_size := 0
+@export var text_font: Font
+@export var nearest_textures := false
 ## All text stays accessible through discrete pages, without scroll or truncation.
 var text := "":
 	set(value):
@@ -10,6 +13,18 @@ var _pages: Array[String] = []
 var _page := 0
 
 func _ready() -> void:
+	for path: String in ["Body", "Navigation/Previous", "Navigation/Page", "Navigation/Next"]:
+		var control := get_node(path) as Control
+		if text_font_size > 0:
+			control.add_theme_font_size_override("font_size", text_font_size)
+		if text_font != null:
+			control.add_theme_font_override("font", text_font)
+		if nearest_textures:
+			control.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	if text_font_size > 0:
+		var navigation_height := maxf(20.0, $Navigation.get_combined_minimum_size().y)
+		$Navigation.offset_top = -navigation_height
+		$Body.offset_bottom = -navigation_height - 2.0
 	$Navigation/Previous.pressed.connect(_change.bind(-1))
 	$Navigation/Next.pressed.connect(_change.bind(1))
 	resized.connect(_paginate)
@@ -22,7 +37,7 @@ func _paginate() -> void:
 	var font_size := body.get_theme_font_size("font_size")
 	var width := maxf(1.0, size.x)
 	var line_height := font.get_height(font_size) + body.get_theme_constant("line_spacing")
-	var capacity := maxi(1, floori(maxf(1.0, size.y - 22.0) / maxf(1.0, line_height)))
+	var capacity := maxi(1, floori(maxf(1.0, body.size.y) / maxf(1.0, line_height)))
 	var lines: PackedStringArray = []
 	for paragraph in text.split("\n"):
 		var line := ""

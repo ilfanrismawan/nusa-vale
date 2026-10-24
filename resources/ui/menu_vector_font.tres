@@ -1,0 +1,7 @@
+[gd_resource type="SystemFont" format=3 uid="uid://cc5l8ign8cs06"]
+
+[resource]
+resource_name = "Nusa Vale Scalable Menu Font"
+font_names = PackedStringArray("Segoe UI", "Noto Sans", "Arial")
+multichannel_signed_distance_field = true
+msdf_pixel_range = 8

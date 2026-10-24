@@ -34,28 +34,28 @@
   "service": null,
   "visual": {
     "sprite_frames": "res://resources/npc_data/npc_animation/npc_zarathustra_frame.tres",
-    "portrait": "res://assets/farm_rpg/Character/NPC'S/Manu/Portrait Manu.png",
+    "portrait": "res://assets/farm_rpg/Character/NPC'S/Zarathustra/npc_portrait_zarathustra.png",
     "portrait_cell_size": 64,
     "portrait_columns": 5,
     "expressions": {
-      "neutral": 0,
+      "neutral": 3,
       "sparkle": 5,
-      "angry": 7,
+      "angry": 8,
       "happy": 10,
-      "annoyed": 12
+      "annoyed": 13
     }
   },
   "dialogue": {
     "default": [
       {
         "text": "Oh, hai! Aku lagi belajar bikin sambungan kayu yang rapi seperti punya Ayah.",
-        "expression": "happy"
+        "expression": "annoyed"
       }
     ],
     "breakfast": [
       {
         "text": "Ayah bikin teh lagi. Aku kebagian yang pahit, hehe.",
-        "expression": "happy"
+        "expression": "neutral"
       },
       {
         "text": "Hari ini aku janji tidak menjatuhkan papan lagi.",
@@ -65,7 +65,7 @@
     "carrying_wood": [
       {
         "text": "Awas, awas! Kayunya panjang, jangan sampai kena kepalamu.",
-        "expression": "sparkle"
+        "expression": "angry"
       }
     ],
     "apprenticing": [
@@ -88,13 +88,13 @@
     "lunch": [
       {
         "text": "Nasi dan sambal selalu jadi bahan bakar terbaik.",
-        "expression": "happy"
+        "expression": "neutral"
       }
     ],
     "hanging_out": [
       {
         "text": "Habis kerja memang paling enak jalan-jalan sebentar di kota.",
-        "expression": "happy"
+        "expression": "neutral"
       },
       {
         "text": "Kamu sering lewat sini? Kita bisa ngobrol kapan-kapan.",
@@ -104,7 +104,7 @@
     "family_time": [
       {
         "text": "Rumah ramai kalau Zarathia sudah pulang. Dia cerewet, tapi aku sayang.",
-        "expression": "happy"
+        "expression": "annoyed"
       },
       {
         "text": "Aku masih sedikit marah soal Ibu. Tapi sekarang aku mengerti kenapa Ayah selalu diam.",
@@ -140,6 +140,20 @@
         "text": "Kalau sedang bersamamu, aku lupa kalau tanganku penuh serbuk kayu.",
         "expression": "sparkle"
       }
+    ],
+    "2": [
+      "Ayah bilang mulai pelan bukan berarti tidak mampu."
+    ],
+    "10": [
+      {
+        "text": "Tetapi sekarang aku tahu ada orang yang bisa kupercaya saat ingin bercerita.",
+        "requires_flags": [
+          "story_zarathustra_told"
+        ]
+      }
+    ],
+    "6": [
+      "Senang bisa berbagi cerita denganmu."
     ]
   },
   "romance_dialogue": {
@@ -357,6 +371,114 @@
           "expression": "annoyed"
         }
       ]
+    },
+    {
+      "id": "zarathustra_friendship_2",
+      "hearts": 2,
+      "requires_flags": [],
+      "sets_flags": [
+        "zarathustra_friendship_2_told"
+      ],
+      "weather": "any",
+      "map": "hill",
+      "point": "zarathustra_workbench",
+      "time_range": [
+        "09:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Kadang aku terlalu bersemangat sampai lupa menghitung papan yang kubawa.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Ayah bilang mulai pelan bukan berarti tidak mampu.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "zarathustra_friendship_4",
+      "hearts": 4,
+      "requires_flags": [],
+      "sets_flags": [
+        "zarathustra_friendship_4_told"
+      ],
+      "weather": "any",
+      "map": "hill",
+      "point": "zarathustra_workbench",
+      "time_range": [
+        "09:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Aku ingin punya hasil kerja yang bisa kubanggakan sendiri.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Sekarang aku berlatih menyelesaikan satu sambungan dengan rapi dulu.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "zarathustra_friendship_8",
+      "hearts": 8,
+      "requires_flags": [
+        "story_zarathustra_told"
+      ],
+      "sets_flags": [
+        "zarathustra_friendship_8_told"
+      ],
+      "weather": "any",
+      "map": "hill",
+      "point": "zarathustra_workbench",
+      "time_range": [
+        "09:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Aku belajar mendengarkan adikku meski kami tidak selalu merasa sama.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Marah memang mudah. Menjelaskan apa yang kurasakan ternyata lebih sulit.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "zarathustra_friendship_10",
+      "hearts": 10,
+      "requires_flags": [
+        "story_zarathustra_told"
+      ],
+      "sets_flags": [
+        "zarathustra_friendship_10_told"
+      ],
+      "weather": "any",
+      "map": "hill",
+      "point": "zarathustra_workbench",
+      "time_range": [
+        "09:30",
+        "11:30"
+      ],
+      "lines": [
+        {
+          "text": "Aku belum punya jawaban untuk semua hal tentang keluarga kami.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Tetapi sekarang aku tahu ada orang yang bisa kupercaya saat ingin bercerita.",
+          "expression": "happy"
+        }
+      ]
     }
-  ]
+  ],
+  "content_status": {
+    "story_expansion": "baseline_2026_10_24"
+  },
+  "biography": "Asisten tukang kayu yang ingin menemukan kepercayaan dirinya sendiri."
 }

@@ -81,6 +81,15 @@ func _ready() -> void:
 	player.data.bag_level = 1
 	var ground := player.base_layer_ground
 	var placed := false
+	var probe := _record("wooden_chest", Vector2i.ZERO)
+	check(StructureManager.closest_structure(null).is_empty(), "Missing player has no nearby structure")
+	player.base_layer_ground = null
+	check(StructureManager.closest_structure(player).is_empty(), "Missing ground safely skips structure lookup")
+	player.base_layer_ground = ground
+	farm.set_meta("structure_area", "interior")
+	check(StructureManager.closest_structure(player).is_empty(), "Other areas do not query farm structures")
+	farm.set_meta("structure_area", "farm")
+	StructureManager.records.erase(probe)
 	var placed_uid := 0
 	var cell := Vector2i.ZERO
 	player.data.add_item("wooden_chest", 1)

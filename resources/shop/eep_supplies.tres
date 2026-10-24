@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ShopData" format=3]
+[ext_resource type="Script" path="res://scripts/resources/shop_data.gd" id="shop"]
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="item"]
+[ext_resource type="Resource" path="res://resources/item_data/animal_feed.tres" id="animal_feed"]
+[ext_resource type="Resource" path="res://resources/item_data/hay.tres" id="hay"]
+[ext_resource type="Resource" path="res://resources/item_data/animal_brush.tres" id="animal_brush"]
+[ext_resource type="Resource" path="res://resources/item_data/milk_pail.tres" id="milk_pail"]
+[ext_resource type="Resource" path="res://resources/item_data/shears.tres" id="shears"]
+
+[resource]
+script = ExtResource("shop")
+shop_id = "eep_supplies"
+shop_name = "Perlengkapan Ranch Eep"
+keeper_name = "Eep"
+greeting = "Pakan, jerami, dan alat perawatan untuk hewan di kebunmu."
+buys_items = false
+stock = Array[ExtResource("item")]([ExtResource("animal_feed"), ExtResource("hay"), ExtResource("animal_brush"), ExtResource("milk_pail"), ExtResource("shears")])

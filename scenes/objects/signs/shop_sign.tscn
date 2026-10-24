@@ -1,5 +1,85 @@
-[gd_scene load_steps=2 format=3]
-[ext_resource type="PackedScene" path="res://scenes/objects/building_sign.tscn" id="1"]
-[node name="ShopSign" instance=ExtResource("1")]
+[gd_scene format=3 uid="uid://cdc725jkbjjex"]
+
+[ext_resource type="PackedScene" uid="uid://l3wp4bi5elun" path="res://scenes/objects/building_sign.tscn" id="1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dd57k"]
+resource_local_to_scene = true
+bg_color = Color(0.490196, 0.270588, 0.168627, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.235294, 0.145098, 0.129412, 1)
+
+[node name="ShopSign" unique_id=1116785940 instance=ExtResource("1")]
 caption = "Toko"
 mount = 1
+
+[node name="Board" parent="." index="3"]
+layout_mode = 3
+anchors_preset = 0
+offset_top = -10.0
+offset_bottom = 10.0
+
+[node name="Posts" parent="Board" index="0"]
+anchors_preset = 0
+
+[node name="LeftPost" parent="Board/Posts" index="0"]
+layout_mode = 0
+offset_bottom = -6.0
+
+[node name="LeftPostHighlight" parent="Board/Posts/LeftPost" index="0"]
+layout_mode = 0
+
+[node name="RightPost" parent="Board/Posts" index="1"]
+layout_mode = 0
+offset_bottom = -6.0
+
+[node name="RightPostHighlight" parent="Board/Posts/RightPost" index="0"]
+layout_mode = 0
+
+[node name="Hanging" parent="Board" index="1"]
+visible = true
+anchors_preset = 0
+
+[node name="LeftChain" parent="Board/Hanging" index="0"]
+layout_mode = 0
+
+[node name="RightChain" parent="Board/Hanging" index="1"]
+layout_mode = 0
+
+[node name="LeftHook" parent="Board/Hanging" index="2"]
+layout_mode = 0
+
+[node name="RightHook" parent="Board/Hanging" index="3"]
+layout_mode = 0
+
+[node name="Frame" parent="Board" index="2"]
+layout_mode = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_dd57k")
+
+[node name="TopGrain" parent="Board" index="3"]
+layout_mode = 0
+
+[node name="BottomGrain" parent="Board" index="4"]
+layout_mode = 0
+
+[node name="TopLeftRivet" parent="Board" index="5"]
+layout_mode = 0
+
+[node name="TopRightRivet" parent="Board" index="6"]
+layout_mode = 0
+
+[node name="BottomLeftRivet" parent="Board" index="7"]
+layout_mode = 0
+
+[node name="BottomRightRivet" parent="Board" index="8"]
+layout_mode = 0
+
+[node name="Content" parent="Board" index="9"]
+layout_mode = 1
+anchors_preset = 15
+
+[node name="Caption" parent="Board/Content/Row" index="1"]
+theme_override_constants/line_spacing = 0
+text = "Toko"

@@ -40,18 +40,8 @@
 [ext_resource type="Resource" path="res://resources/seasons/water_tile.tres" id="37_vylga"]
 [ext_resource type="Script" uid="uid://da62xubh24afr" path="res://scripts/world/forage_spawner.gd" id="38_gymkd"]
 [ext_resource type="Script" uid="uid://c74xqxwwjr6m7" path="res://scripts/world/weed_spawner.gd" id="42_hpy6l"]
-[ext_resource type="PackedScene" uid="uid://bnpe8laric001" path="res://scenes/npc/BlacksmithNPC.tscn" id="43_blacksmith"]
-[ext_resource type="PackedScene" uid="uid://f3dt440t1jlg" path="res://scenes/npc/ChefNPC.tscn" id="44_chefgaston"]
-[ext_resource type="PackedScene" uid="uid://xbqwx73e0plg" path="res://scenes/npc/ToriNPC.tscn" id="45_tori"]
-[ext_resource type="PackedScene" path="res://scenes/npc/CarpenterNPC.tscn" id="46_carpenter"]
-[ext_resource type="PackedScene" uid="uid://cvriannpc001" path="res://scenes/npc/RianNPC.tscn" id="47_rian"]
-[ext_resource type="PackedScene" uid="uid://cvbaharnpc001" path="res://scenes/npc/BaharNPC.tscn" id="48_bahar"]
 [ext_resource type="Texture2D" uid="uid://b0cp0d7yih72p" path="res://assets/farm_rpg/objects/exterior/Deep Forest/Bridge Wood.png" id="48_dyt2u"]
-[ext_resource type="PackedScene" uid="uid://cvratihnpc001" path="res://scenes/npc/RatihNPC.tscn" id="49_ratih"]
 [ext_resource type="Texture2D" uid="uid://bwvb6thirrj8w" path="res://assets/farm_rpg/tileset/ext/Bridge.png" id="55_ke4m0"]
-[ext_resource type="PackedScene" uid="uid://xsan77bt3kkq" path="res://scenes/npc/npc.tscn" id="73_njmhf"]
-[ext_resource type="SpriteFrames" uid="uid://dj4o7i407wtft" path="res://resources/npc_data/npc_animation/kirana_frame.tres" id="74_j11rb"]
-[ext_resource type="SpriteFrames" uid="uid://c37yjnanbrsnm" path="res://resources/npc_data/npc_animation/empu_bima_frame.tres" id="75_duxtq"]
 [ext_resource type="Script" uid="uid://cqplc8y2i0q4t" path="res://scripts/world/scene_entrance.gd" id="90_m3h2c"]
 [ext_resource type="Texture2D" uid="uid://bhtflnawvcu7n" path="res://assets/farm_rpg/objects/Props/Spring/props water.png" id="113_m3us6"]
 [ext_resource type="Texture2D" uid="uid://i56aqpuh0syp" path="res://assets/farm_rpg/objects/Props/Water props.png" id="114_pirog"]
@@ -79,6 +69,8 @@
 [ext_resource type="Material" uid="uid://ci3yasder0uu3" path="res://resources/water_detail_material.tres" id="water_detail"]
 
 [ext_resource type="PackedScene" path="res://scenes/npc/routes/town_paths.tscn" id="ResidentPaths"]
+
+[ext_resource type="PackedScene" path="res://scenes/objects/building_sign.tscn" id="EepRanchSign"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tw001"]
 texture = ExtResource("1_twn")
@@ -1321,6 +1313,9 @@ size = Vector2(29, 17)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w5a0g"]
 size = Vector2(27, 16)
+
+[sub_resource type="RectangleShape2D" id="EepRanchExitShape"]
+size = Vector2(24, 80)
 
 [node name="Town" type="Node2D" unique_id=1220380912]
 y_sort_enabled = true
@@ -8229,28 +8224,11 @@ offset = Vector2(0, -14)
 position = Vector2(0, -4)
 shape = SubResource("RectangleShape2D_tw070")
 
-[node name="BlacksmithNPC" parent="YSortEntities" unique_id=319433569 instance=ExtResource("43_blacksmith")]
-position = Vector2(1240, 916)
 
-[node name="ChefNPC" parent="YSortEntities" unique_id=319433570 instance=ExtResource("44_chefgaston")]
-position = Vector2(623, 258)
-dialog_lines = ["Halo! Selamat menikmati harimu di Nusa Vale."]
 
-[node name="ToriNPC" parent="YSortEntities" unique_id=319433571 instance=ExtResource("45_tori")]
-position = Vector2(748, 436)
-dialog_lines = ["Halo! Selamat menikmati harimu di Nusa Vale."]
 
-[node name="RianNPC" parent="YSortEntities" unique_id=319433572 instance=ExtResource("47_rian")]
-position = Vector2(450, 490)
-dialog_lines = ["Halo! Selamat menikmati harimu di Nusa Vale."]
 
-[node name="BaharNPC" parent="YSortEntities" unique_id=319433573 instance=ExtResource("48_bahar")]
-position = Vector2(680, 770)
-dialog_lines = ["Halo! Selamat menikmati harimu di Nusa Vale."]
 
-[node name="RatihNPC" parent="YSortEntities" unique_id=319433574 instance=ExtResource("49_ratih")]
-position = Vector2(519, 340)
-dialog_lines = ["Halo! Selamat menikmati harimu di Nusa Vale."]
 
 [node name="BarrelSmith" type="StaticBody2D" parent="YSortEntities" unique_id=2048742799]
 position = Vector2(655, 400)
@@ -8457,9 +8435,6 @@ position = Vector2(550, 408)
 texture = SubResource("AtlasTexture_tw083")
 offset = Vector2(0, -14)
 
-[node name="CarpenterNPC" parent="YSortEntities" unique_id=1451709294 instance=ExtResource("46_carpenter")]
-position = Vector2(764, 388)
-dialog_lines = ["Halo! Selamat menikmati harimu di Nusa Vale."]
 
 [node name="CourierDepot" parent="YSortEntities" unique_id=1063593078 instance=ExtResource("ResidentDepot")]
 position = Vector2(900, 470)
@@ -9003,16 +8978,7 @@ position = Vector2(920, 430)
 [node name="ubay_rest" type="Marker2D" parent="NPCPoints" unique_id=701522841]
 position = Vector2(550, 456)
 
-[node name="Kirana" parent="." unique_id=1298459142 instance=ExtResource("73_njmhf")]
-position = Vector2(874, 779)
-npc_sprite_frames = ExtResource("74_j11rb")
 
-[node name="EmpuBima" parent="." unique_id=1346678843 instance=ExtResource("73_njmhf")]
-position = Vector2(1278, 939)
-npc_id = "empu_bima"
-npc_name = "Empu Bima"
-move_speed = 35.0
-npc_sprite_frames = ExtResource("75_duxtq")
 
 [node name="NPCActors" type="Node2D" parent="." unique_id=983647512]
 z_index = 1
@@ -9034,14 +9000,58 @@ position = Vector2(580, 456)
 [node name="town_square" type="Marker2D" parent="NPCPoints"]
 position = Vector2(732, 456)
 
-[node name="eep_stall" type="Marker2D" parent="NPCPoints"]
-position = Vector2(520, 456)
 
-[node name="eep_lunch" type="Marker2D" parent="NPCPoints"]
-position = Vector2(620, 456)
 
-[node name="eep_rest" type="Marker2D" parent="NPCPoints"]
-position = Vector2(650, 456)
 
-[node name="eep_home" type="Marker2D" parent="NPCPoints"]
-position = Vector2(32, 408)
+
+[node name="kirana_work" type="Marker2D" parent="NPCPoints"]
+position = Vector2(700, 440)
+
+[node name="kirana_rest" type="Marker2D" parent="NPCPoints"]
+position = Vector2(550, 440)
+
+[node name="bahar_work" type="Marker2D" parent="NPCPoints"]
+position = Vector2(680, 770)
+
+[node name="bahar_rest" type="Marker2D" parent="NPCPoints"]
+position = Vector2(700, 440)
+
+[node name="joko_work" type="Marker2D" parent="NPCPoints"]
+position = Vector2(895, 388)
+
+[node name="joko_rest" type="Marker2D" parent="NPCPoints"]
+position = Vector2(970, 430)
+
+[node name="ratih_work" type="Marker2D" parent="NPCPoints"]
+position = Vector2(519, 340)
+
+[node name="ratih_rest" type="Marker2D" parent="NPCPoints"]
+position = Vector2(700, 440)
+
+[node name="rian_work" type="Marker2D" parent="NPCPoints"]
+position = Vector2(450, 490)
+
+[node name="rian_rest" type="Marker2D" parent="NPCPoints"]
+position = Vector2(700, 440)
+
+[node name="damar_work" type="Marker2D" parent="NPCPoints"]
+position = Vector2(700, 440)
+
+[node name="damar_rest" type="Marker2D" parent="NPCPoints"]
+position = Vector2(780, 430)
+
+[node name="bima_work" type="Marker2D" parent="NPCPoints"]
+position = Vector2(1240, 916)
+
+[node name="RanchEntrance" type="Area2D" parent="."]
+position = Vector2(1296, 640)
+script = ExtResource("90_m3h2c")
+scene_target = "res://scenes/world/eep_ranch.tscn"
+spawn_position = Vector2(48, 320)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RanchEntrance"]
+shape = SubResource("EepRanchExitShape")
+
+[node name="RanchDirection" parent="." instance=ExtResource("EepRanchSign")]
+position = Vector2(1216, 608)
+caption = "Ranch Eep: timur"
