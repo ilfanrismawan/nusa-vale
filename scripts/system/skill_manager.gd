@@ -30,10 +30,18 @@ func _on_day_passed(_day: int) -> void:
 		for row in data.skills.apply_levels():
 			row["data"] = data
 			last_levels.append(row)
+	_check_cave_unlock()
 	_pay_interest()
 	if last_levels.is_empty() and not _has_pending_choice():
 		return
 	get_tree().create_timer(RECAP_DELAY).timeout.connect(_show_recap_after_report)
+
+## Penambang Lv 2 membuka Gua Tambang (UnlockManager.try_unlock_cave).
+func _check_cave_unlock() -> void:
+	if UnlockManager.is_unlocked("cave"):
+		return
+	if UnlockManager.try_unlock_cave():
+		Notify.say("Penambang Lv %d! Gua Tambang di Gunung kini terbuka." % UnlockManager.CAVE_MINER_LEVEL)
 
 ## Smart Investor (Economist Lv5 B): bunga harian dari uang bersama.
 func _pay_interest() -> void:

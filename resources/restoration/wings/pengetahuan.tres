@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="BalaiWing" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/balai_wing.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+wing_id = "pengetahuan"
+display_name = "Sayap Pengetahuan"
+description = "Ikan, permata, mineral, dan artefak dunia Nusa Vale."
+effects = Dictionary[StringName, float]({
+&"geode_chance": 0.25
+})
+bonus_text = "geoda 25% lebih sering di gua"
+reward_tokens = 2
+completion_flag = "balai_wing_pengetahuan_done"
+completion_message = "Sayap Pengetahuan pulih sepenuhnya! Kamu makin jeli menemukan geoda."

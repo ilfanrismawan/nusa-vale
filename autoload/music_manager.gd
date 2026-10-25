@@ -15,6 +15,7 @@ const TRACK_DEEP_FOREST := "res://assets/audio/music/deep_forest_enchanted.wav"
 const TRACK_SHOP := "res://assets/audio/music/cozy_shop_warung.wav"
 const TRACK_RAIN := "res://assets/audio/music/rainy_day_solitude.wav"
 const TRACK_MIDNIGHT_HORROR := "res://assets/audio/music/midnight_horror_nightmare.wav"
+const TRACK_BOSS_ORCHESTRA := "res://assets/audio/music/boss_exclusive_orchestra.wav"
 
 var _player_a: AudioStreamPlayer
 var _player_b: AudioStreamPlayer
@@ -179,6 +180,10 @@ func play_rain(fade_time: float = DEFAULT_FADE) -> void:
 
 func play_midnight_horror(fade_time: float = DEFAULT_FADE) -> void:
 	play_track(TRACK_MIDNIGHT_HORROR, fade_time, -5.5)
+
+
+func play_boss_orchestra(fade_time: float = 0.8) -> void:
+	play_track(TRACK_BOSS_ORCHESTRA, fade_time, -5.0)
 
 
 func play_track(track_path: String, fade_time: float = DEFAULT_FADE, target_volume_db: float = -6.0) -> void:

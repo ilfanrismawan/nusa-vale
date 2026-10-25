@@ -37,13 +37,34 @@ func purchase_deep_forest() -> bool:
 	return unlock("deep_forest")
 
 
-## Akses permanen setelah jembatan Hutan selesai; memakai penyimpanan unlock yang ada.
+## Level role Penambang (aktif, bukan sekadar EXP) yang membuka Gua Tambang.
+const CAVE_MINER_LEVEL := 2
+
+
+## Akses permanen setelah salah satu pemain mencapai Penambang Lv 2 (EXP dari memecahkan batu).
 func try_unlock_cave() -> bool:
 	if is_unlocked("cave"):
 		return true
-	if not is_unlocked("forest"):
+	if best_miner_level() < CAVE_MINER_LEVEL:
 		return false
 	return unlock("cave")
+
+
+## Level Penambang aktif tertinggi di antara pemain (co-op: cukup satu pemain).
+func best_miner_level() -> int:
+	var best := 0
+	for data in GameState.players:
+		if data != null and data.skills != null:
+			best = maxi(best, data.skills.level(&"miner"))
+	return best
+
+
+## Penambang tertinggi sudah punya EXP Lv 2 tetapi belum tidur untuk mengaktifkannya.
+func miner_level_waiting_for_sleep() -> bool:
+	for data in GameState.players:
+		if data != null and data.skills != null and data.skills.earned_level(&"miner") >= CAVE_MINER_LEVEL:
+			return true
+	return false
 
 
 func _ready() -> void:

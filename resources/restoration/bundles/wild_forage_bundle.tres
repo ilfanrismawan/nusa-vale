@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="RestorationProject" format=3]
+
+[ext_resource type="Script" uid="uid://dexc7jaawor5t" path="res://scripts/resources/restoration_project.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+project_id = "wild_forage_bundle"
+display_name = "Sayap Alam — Hasil Hutan Liar"
+ui_short_name = "Hasil Liar"
+description = "Temuan dari hutan, kota, dan gunung di setiap musim. Bawa enam jenis."
+requirements = Dictionary[String, int]({
+"daffodil": 1,
+"spring_onion": 1,
+"sweet_pea": 1,
+"wild_berry": 1,
+"common_mushroom": 1,
+"hazelnut": 1,
+"holly": 1,
+"winter_root": 1,
+"mooncap": 1
+})
+slots_required = 6
+wing_id = "alam"
+completion_flag = "wild_forage_bundle_done"
+completion_message = "Para tetua tersenyum melihat hasil alam liar. Ini umpan serangga untukmu."
+reward_items = Dictionary[String, int]({
+"bug_bait": 20
+})

@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="RestorationProject" format=3]
+
+[ext_resource type="Script" uid="uid://dexc7jaawor5t" path="res://scripts/resources/restoration_project.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+project_id = "smith_bundle"
+display_name = "Sayap Karya — Paket Pandai Besi"
+ui_short_name = "Pandai Besi"
+description = "Logam dan bahan bakar untuk tungku desa."
+requirements = Dictionary[String, int]({
+"copper_bar": 5,
+"iron_bar": 5,
+"gold_bar": 3,
+"coal": 20
+})
+slots_required = 0
+wing_id = "karya"
+completion_flag = "smith_bundle_done"
+completion_message = "Tungku desa menyala kembali! Ini furnace untuk rumahmu."
+reward_items = Dictionary[String, int]({
+"furnace": 1
+})

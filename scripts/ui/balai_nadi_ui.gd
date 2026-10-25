@@ -199,14 +199,12 @@ func _update_bundle_progress() -> void:
 	for card in %Bundles.get_children():
 		var id: String = card.get_meta("project_id")
 		var project := manager.definition(id)
-		var filled := 0
-		for item_id in project.requirements:
-			if manager.remaining(id, item_id) <= 0:
-				filled += 1
+		var needed := manager.slots_needed(project)
+		var filled := mini(manager.filled_slots(project), needed)
 		card.set_pressed_no_signal(id == project_id)
-		card.get_node("Progress").max_value = maxi(1, project.requirements.size())
+		card.get_node("Progress").max_value = maxi(1, needed)
 		card.get_node("Progress").value = filled
-		card.get_node("ProgressText").text = "Lengkap ✓" if manager.completed(id) else "%d / %d terpenuhi" % [filled, project.requirements.size()]
+		card.get_node("ProgressText").text = "Lengkap ✓" if manager.completed(id) else "%d / %d terpenuhi" % [filled, needed]
 
 func _refresh() -> void:
 	if not _opened or _submitting:
@@ -253,13 +251,26 @@ func _refresh() -> void:
 	var selected := GameState._resolve_item(_selected_item) if _selected_item != "money" else null
 	if selected != null:
 		title = selected.display_name
-	_status.text = "Tahap: %s\n%s" % [manager.restoration_stage(), project.completion_message if finished else "%s · Sisa %d · Tersedia %d. Pilih jumlah sebelum menyumbang." % [title, left, available]]
+	var choice := ""
+	if manager.slots_needed(project) < project.requirements.size():
+		choice = "Isi %d dari %d kebutuhan. " % [manager.slots_needed(project), project.requirements.size()]
+	_status.text = "Tahap: %s\n%s" % [manager.restoration_stage(), project.completion_message if finished else "%s%s · Sisa %d · Tersedia %d. Pilih jumlah sebelum menyumbang." % [choice, title, left, available]]
+	var project_wing := manager.wing(project.wing_id)
+	if project_wing != null:
+		_status.text += "\nBonus %s: %s (%s)" % [project_wing.display_name, project_wing.bonus_text, "aktif ✓" if manager.wing_completed(project_wing.wing_id) else "%d/%d paket" % [_wing_done_count(project_wing.wing_id), manager.wing_projects(project_wing.wing_id).size()]]
 	%Reward.text = _reward_text(project)
 	%RewardIcon.texture = _project_icon(project)
 	if not project.reward_items.is_empty():
 		var reward := GameState._resolve_item(str(project.reward_items.keys()[0]))
 		if reward != null:
 			%RewardIcon.texture = reward.icon
+
+func _wing_done_count(wing_id: String) -> int:
+	var done := 0
+	for entry in GameState.balai_nadi.wing_projects(wing_id):
+		if GameState.balai_nadi.completed(entry.project_id):
+			done += 1
+	return done
 
 func _reward_text(project: RestorationProject) -> String:
 	var rewards := PackedStringArray()

@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="RestorationProject" format=3]
+
+[ext_resource type="Script" uid="uid://dexc7jaawor5t" path="res://scripts/resources/restoration_project.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+project_id = "cave_lake_bundle"
+display_name = "Sayap Pengetahuan — Danau Gua"
+ui_short_name = "Danau Gua"
+description = "Ikan aneh dari danau bawah tanah lantai 10. Bawa empat jenis."
+requirements = Dictionary[String, int]({
+"fish_ghost_catfish": 1,
+"fish_bone_fish": 1,
+"fish_zombie_fish": 1,
+"fish_crayfish": 1,
+"fish_dynamite_fish": 1
+})
+slots_required = 4
+wing_id = "pengetahuan"
+completion_flag = "cave_lake_bundle_done"
+completion_message = "Misteri danau gua mulai terungkap. Ini umpan berpendar."
+reward_items = Dictionary[String, int]({
+"glow_bait": 15
+})

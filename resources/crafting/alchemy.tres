@@ -59,6 +59,18 @@ ingredients = {
 }
 group = "Ramuan"
 
+[sub_resource type="Resource" id="Recipe_flying_broom"]
+script = ExtResource("2")
+recipe_id = "flying_broom"
+output_item_id = "flying_broom"
+ingredients = {
+"wooden_broom": 1,
+"fairy_bar": 2,
+"fairy_crystal": 3,
+"slime_gel": 10
+}
+group = "Kendaraan"
+
 [resource]
 script = ExtResource("1")
-recipes = Array[ExtResource("2")]([SubResource("Recipe_potion_health"), SubResource("Recipe_potion_stamina"), SubResource("Recipe_potion_speed"), SubResource("Recipe_potion_regen"), SubResource("Recipe_potion_greater")])
+recipes = Array[ExtResource("2")]([SubResource("Recipe_potion_health"), SubResource("Recipe_potion_stamina"), SubResource("Recipe_potion_speed"), SubResource("Recipe_potion_regen"), SubResource("Recipe_potion_greater"), SubResource("Recipe_flying_broom")])

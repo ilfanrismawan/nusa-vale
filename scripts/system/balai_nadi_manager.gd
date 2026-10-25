@@ -3,6 +3,7 @@ extends Node
 
 signal contribution_added(project_id: String, item_id: String, amount: int)
 signal project_completed(project_id: String)
+signal wing_finished(wing_id: String)
 signal state_changed
 
 const RESTORATION = preload("res://resources/restoration/balai_nadi_restoration.tres")
@@ -22,6 +23,8 @@ const WINGS := {
 }
 
 func restoration_stage() -> String:
+	if all_wings_completed():
+		return "Jantung Desa"
 	if completed(RESTORATION.project_id) and completed(GREENHOUSE.project_id):
 		return "Kehidupan Kembali"
 	for project in definitions:
@@ -29,6 +32,63 @@ func restoration_stage() -> String:
 			if contributed(project.project_id, item_id) > 0:
 				return "Pemulihan"
 	return "Terbengkalai"
+
+# ── Sayap (GDD 4.9): bonus permanen saat semua paket satu sayap selesai ──
+
+func wings() -> Array[BalaiWing]:
+	return CATALOG.wings
+
+func wing(wing_id: String) -> BalaiWing:
+	for entry in CATALOG.wings:
+		if entry.wing_id == wing_id:
+			return entry
+	return null
+
+func wing_projects(wing_id: String) -> Array[RestorationProject]:
+	var result: Array[RestorationProject] = []
+	for project in definitions:
+		if project.wing_id == wing_id:
+			result.append(project)
+	return result
+
+func wing_completed(wing_id: String) -> bool:
+	if wing(wing_id) == null:
+		return false
+	var projects := wing_projects(wing_id)
+	if projects.is_empty():
+		return false
+	for project in projects:
+		if not completed(project.project_id):
+			return false
+	return true
+
+func all_wings_completed() -> bool:
+	if CATALOG.wings.is_empty():
+		return false
+	for entry in CATALOG.wings:
+		if not wing_completed(entry.wing_id):
+			return false
+	return true
+
+## Jumlah bonus stat dari sayap yang sudah lengkap; ditambahkan SkillSystem.stat/household.
+func wing_stat(key: StringName) -> float:
+	var total := 0.0
+	for entry in CATALOG.wings:
+		if entry.effects.has(key) and wing_completed(entry.wing_id):
+			total += float(entry.effects[key])
+	return total
+
+## Kebutuhan yang harus lengkap: slots_required (ala Stardew) atau semua.
+func slots_needed(project: RestorationProject) -> int:
+	var total := project.requirements.size()
+	return total if project.slots_required <= 0 else mini(project.slots_required, total)
+
+func filled_slots(project: RestorationProject) -> int:
+	var filled := 0
+	for item_id in project.requirements:
+		if contributed(project.project_id, item_id) >= required(project, item_id):
+			filled += 1
+	return filled
 
 func available_amount(donor: PlayerData, item_id: String) -> int:
 	return GameState.money if item_id == "money" else donor.get_item_count(item_id)
@@ -83,6 +143,9 @@ func contribute(donor: PlayerData, project_id: String, item_id: String, requeste
 	var old_state: Dictionary = _projects[project_id].duplicate(true)
 	var old_flag := WorldState.has_flag(project.completion_flag)
 	var old_skills := donor.skills.to_dict()
+	var project_wing := wing(project.wing_id)
+	var old_wing_done := wing_completed(project.wing_id)
+	var old_wing_flag := WorldState.has_flag(project_wing.completion_flag) if project_wing != null else false
 	var donated_value := accepted
 	if item_id != "money":
 		var donated := GameState._resolve_item(item_id)
@@ -100,12 +163,17 @@ func contribute(donor: PlayerData, project_id: String, item_id: String, requeste
 	# Save the flag in the same snapshot, but publish world/completion events only on success.
 	if not project.completion_flag.is_empty():
 		WorldState.flags[project.completion_flag] = finished
-	# Bundel serangga tidak ikut memicu Biji Daya "balai" (tetap dari restorasi lama).
-	var staged_daya := finished and project_id != BUG_BUNDLE.project_id and GameState.daya.stage_reward("balai", donor)
+	# Hanya dua proyek restorasi lama yang memicu Biji Daya "balai"; paket sayap tidak.
+	var staged_daya := finished and project_id in [RESTORATION.project_id, GREENHOUSE.project_id] and GameState.daya.stage_reward("balai", donor)
 	# Role Economist (GDD 13): EXP dari nilai sumbangan; paket selesai = Token Talenta.
 	SkillSystem.gain_from_value(donor, &"economist", donated_value, SkillSystem.RULES.balai_gold_per_exp)
 	if finished:
 		donor.skills.tokens += SkillSystem.RULES.balai_tokens
+	var wing_done := project_wing != null and not old_wing_done and wing_completed(project.wing_id)
+	if wing_done:
+		donor.skills.tokens += project_wing.reward_tokens
+		if not project_wing.completion_flag.is_empty():
+			WorldState.flags[project_wing.completion_flag] = true
 	if not SaveManager.save_game():
 		if staged_daya:
 			GameState.daya.pending.erase("balai")
@@ -117,6 +185,8 @@ func contribute(donor: PlayerData, project_id: String, item_id: String, requeste
 		_projects[project_id] = old_state
 		if not project.completion_flag.is_empty():
 			WorldState.flags[project.completion_flag] = old_flag
+		if wing_done and not project_wing.completion_flag.is_empty():
+			WorldState.flags[project_wing.completion_flag] = old_wing_flag
 		GameState.inventory_changed.emit()
 		state_changed.emit()
 		Notify.say("Kontribusi belum tersimpan. Bahan dikembalikan; coba lagi.")
@@ -138,6 +208,12 @@ func contribute(donor: PlayerData, project_id: String, item_id: String, requeste
 		project_completed.emit(project_id)
 		Notify.say(project.completion_message)
 		Notify.say("Hadiah: %d Token Talenta! Pakai di tab Keahlian." % SkillSystem.RULES.balai_tokens)
+	if wing_done:
+		if not project_wing.completion_flag.is_empty() and not old_wing_flag:
+			WorldState.flag_changed.emit(project_wing.completion_flag, true)
+		wing_finished.emit(project_wing.wing_id)
+		Notify.say(project_wing.completion_message)
+		Notify.say("Bonus permanen: %s · +%d Token Talenta." % [project_wing.bonus_text, project_wing.reward_tokens])
 	_busy = false
 	return accepted
 
@@ -156,10 +232,7 @@ func _give_rewards(donor: PlayerData, project: RestorationProject) -> void:
 					break
 
 func _requirements_met(project: RestorationProject) -> bool:
-	for item_id in project.requirements:
-		if contributed(project.project_id, item_id) < required(project, item_id):
-			return false
-	return not project.requirements.is_empty()
+	return not project.requirements.is_empty() and filled_slots(project) >= slots_needed(project)
 
 func to_save() -> Dictionary:
 	return {"projects": _projects.duplicate(true)}
@@ -185,11 +258,15 @@ func load_save(saved: Variant) -> void:
 		_projects[project.project_id] = {"contributions": progress, "completed": false}
 		var finished: bool = record.get("completed", false) == true or _requirements_met(project)
 		_projects[project.project_id].completed = finished
-		if finished:
+		# Save lama yang tercatat selesai tanpa progres lengkap: tampilkan penuh.
+		if finished and not _requirements_met(project):
 			for item_id in project.requirements:
 				progress[item_id] = project.requirements[item_id]
 		if not project.completion_flag.is_empty():
 			WorldState.set_flag(project.completion_flag, finished)
 		if not project.unlock_id.is_empty():
 			UnlockManager.set_unlock(project.unlock_id, finished)
+	for entry in CATALOG.wings:
+		if not entry.completion_flag.is_empty():
+			WorldState.set_flag(entry.completion_flag, wing_completed(entry.wing_id))
 	state_changed.emit()

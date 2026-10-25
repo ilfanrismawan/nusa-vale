@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="VehicleData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/vehicle_data.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/vehicles/pickup_truck.tscn" id="2_visual"]
+
+[resource]
+script = ExtResource("1_script")
+vehicle_id = "pickup_truck"
+display_name = "Pickup Truck"
+speed_multiplier = 3.75
+crosses_water = false
+crosses_gaps = false
+hover_height = 0.0
+hover_bob = 0.0
+hide_rider = true
+visual_scene = ExtResource("2_visual")
+required_unlock = "modern_city"

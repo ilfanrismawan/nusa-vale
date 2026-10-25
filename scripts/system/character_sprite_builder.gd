@@ -18,6 +18,13 @@ const FALLBACK_EXTRA_LAYERS := {
 const DEFAULT_EXTRA_LAYERS := {
 	&"catch_insect": ["Weapons/Bug net.png"],
 }
+## Layer kendaraan bawaan (digambar di belakang badan) untuk animasi tanpa background_layers
+## di katalog. Kendaraan GDD 10: sepeda merah, sapu terbang berkilau.
+const DEFAULT_BACKGROUND_LAYERS := {
+	&"bicycle_idle": ["Bicycle/All/Red.png"],
+	&"bicycle_run": ["Bicycle/All/Red.png"],
+	&"broomstick": ["Broomstick/3.png"],
+}
 
 const LAYER_ORDER: Array[CharacterPart.Layer] = [
 	CharacterPart.Layer.SKIN,
@@ -124,7 +131,10 @@ static func compose_sheet(
 	if _composed_cache.has(cache_key):
 		return _composed_cache[cache_key]
 	var out := Image.create_empty(size.x, size.y, false, Image.FORMAT_RGBA8)
-	for relative in sheet.background_layers:
+	var backgrounds := sheet.background_layers
+	if backgrounds.is_empty() and DEFAULT_BACKGROUND_LAYERS.has(sheet.animation_name):
+		backgrounds = PackedStringArray(DEFAULT_BACKGROUND_LAYERS[sheet.animation_name])
+	for relative in backgrounds:
 		var path := _resolve_file(sheet.part_folder, relative)
 		if not path.is_empty():
 			var background := _load_image(path)

@@ -59,6 +59,8 @@ func _refresh() -> void:
 		eggs.expand_icon = true
 		eggs.add_theme_constant_override("icon_max_width", 16)
 		actions.add_child(eggs)
+	if record.item == "chicken_coop":
+		_build_incubator(state)
 	for animal in state.chickens:
 		_build_animal(state, animal, str(record.item))
 	if state.chickens.is_empty():
@@ -81,13 +83,18 @@ func _build_animal(state: Dictionary, animal: Dictionary, home: String) -> void:
 	var kind := RanchHusbandry.species(animal)
 	sprite.sprite_frames = RanchVisual.frames(kind, str(animal.variant))
 	sprite.position = Vector2(24, 24)
-	sprite.scale = Vector2(2, 2) if kind in ["chicken", "duck"] else Vector2(1.5, 1.5)
+	sprite.scale = (Vector2(2, 2) if kind in ["chicken", "duck"] else Vector2(1.5, 1.5)) * (1.0 if RanchHusbandry.is_adult(animal) else 0.65)
 	picture.add_child(sprite)
 	sprite.play()
 	var text := VBoxContainer.new()
 	text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(text)
-	_label(text, "%s · %s" % [animal.name, RanchHusbandry.SPECIES[kind].name])
+	var stage := ""
+	if not RanchHusbandry.is_adult(animal):
+		stage = " · Anak, dewasa %d hari lagi" % int(animal.baby_days)
+	elif int(animal.pregnant) > 0:
+		stage = " · Hamil, lahir %d hari terawat lagi" % int(animal.pregnant)
+	_label(text, "%s · %s%s" % [animal.name, RanchHusbandry.SPECIES[kind].name, stage])
 	var today := int(animal.fed_day) == DayCycle.current_day
 	_label(text, "%s · Hati %d/5 (%d/100)" % ["Kenyang" if today else "Belum makan", int(animal.affection) / 20, int(animal.affection)]).add_theme_font_size_override("font_size", 14)
 	var feed := _button("Pakan", _feed.bind(int(animal.id)))
@@ -99,19 +106,34 @@ func _build_animal(state: Dictionary, animal: Dictionary, home: String) -> void:
 	row.add_child(pet)
 	_label(layout, RanchHusbandry.condition(state, animal, DayCycle.current_day)).add_theme_font_size_override("font_size", 14)
 	var info: Dictionary = RanchHusbandry.SPECIES[kind]
-	if not str(info.tool).is_empty():
+	if not RanchHusbandry.is_adult(animal):
+		_build_rename(layout, animal)
+	if kind == "duck" and RanchHusbandry.is_adult(animal):
+		_label(layout, "Bulu bebek %d/%d hari terawat (perlu 3 hati)" % [int(animal.feather), RanchHusbandry.FEATHER_DAYS]).add_theme_font_size_override("font_size", 14)
+	if not kind in ["chicken", "duck"]:
 		var extras := HBoxContainer.new()
 		layout.add_child(extras)
 		var brush := _button("Disikat" if int(animal.brush_day) == DayCycle.current_day else "Sikat", _care.bind("brush", int(animal.id)))
 		brush.disabled = int(animal.brush_day) == DayCycle.current_day or not player.data.has_item("animal_brush", 1)
 		brush.tooltip_text = "Bawa Sikat Ternak dari toko. Bonus kasih sayang sekali sehari."
 		extras.add_child(brush)
-		var harvest := _button("Cukur wol" if info.tool == "shears" else "Perah susu", _care.bind("harvest", int(animal.id)))
-		harvest.disabled = str(animal.ready).is_empty() or not player.data.has_item(info.tool, 1)
-		harvest.tooltip_text = "Bawa %s di tas. Hasil siap setelah %d hari terawat." % [GameState._resolve_item(info.tool).display_name, int(info.interval)]
-		extras.add_child(harvest)
-		var ready := "Siap: " + GameState._resolve_item(animal.ready).display_name if not str(animal.ready).is_empty() else "Produksi %d/%d hari terawat" % [int(animal.progress), int(info.interval)]
-		_label(extras, ready).add_theme_font_size_override("font_size", 14)
+		if RanchHusbandry.BREED_DAYS.has(kind) and int(animal.pregnant) == 0:
+			var reason := RanchHusbandry.can_breed(state, animal)
+			var breed := _button("Kawinkan", _care.bind("breed", int(animal.id)))
+			breed.disabled = not reason.is_empty()
+			breed.tooltip_text = reason if not reason.is_empty() else "Anak lahir setelah %d hari terawat." % int(RanchHusbandry.BREED_DAYS[kind])
+			extras.add_child(breed)
+		if kind == "horse" and RanchHusbandry.is_adult(animal):
+			_label(extras, "Ditunggangi" if StructureManager.is_ridden(uid, int(animal.id)) else "Menunggu di depan Barn; dekati lalu interaksi untuk naik").add_theme_font_size_override("font_size", 14)
+		if kind == "capybara":
+			_label(extras, "Hewan lain sekandang +1 kasih sayang saat kapibara Nyaman").add_theme_font_size_override("font_size", 14)
+		if not str(info.tool).is_empty():
+			var harvest := _button("Cukur wol" if info.tool == "shears" else "Perah susu", _care.bind("harvest", int(animal.id)))
+			harvest.disabled = str(animal.ready).is_empty() or not player.data.has_item(info.tool, 1)
+			harvest.tooltip_text = "Bawa %s di tas. Hasil siap setelah %d hari terawat." % [GameState._resolve_item(info.tool).display_name, int(info.interval)]
+			extras.add_child(harvest)
+			var ready := "Siap: " + GameState._resolve_item(animal.ready).display_name if not str(animal.ready).is_empty() else "Produksi %d/%d hari terawat" % [int(animal.progress), int(info.interval)]
+			_label(extras, ready).add_theme_font_size_override("font_size", 14)
 
 func _build_care(state: Dictionary) -> void:
 	var count: int = state.chickens.size()
@@ -141,6 +163,44 @@ func _build_care(state: Dictionary) -> void:
 		stock.add_child(upgrade)
 	else:
 		_label(_content, "Auto-feeder: cadangan kandang lalu silo setiap pagi.")
+
+func _build_rename(parent: Control, animal: Dictionary) -> void:
+	var row := HBoxContainer.new()
+	parent.add_child(row)
+	var field := LineEdit.new()
+	field.placeholder_text = "Nama anak"
+	field.max_length = 16
+	field.text = str(animal.name)
+	field.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(field)
+	row.add_child(_button("Simpan nama", func():
+		var result := StructureManager.rename_animal(uid, int(animal.id), field.text)
+		_refresh()
+		_status.text = result.message))
+
+func _build_incubator(state: Dictionary) -> void:
+	var incubator: Dictionary = state.incubator
+	var row := HBoxContainer.new()
+	row.name = "Incubator"
+	_content.add_child(row)
+	if not incubator.installed:
+		var install := _button("Pasang Inkubator", _care.bind("incubator", 0))
+		install.disabled = not player.data.has_item("incubator", 1)
+		install.tooltip_text = "Rakit Inkubator di meja crafting lalu bawa di tas."
+		row.add_child(install)
+		return
+	if not str(incubator.egg).is_empty():
+		var waiting := " (menunggu tempat kosong)" if int(incubator.days) == 0 else ""
+		_label(row, "Inkubator: %s · menetas %d hari lagi%s" % [GameState._resolve_item(str(incubator.egg)).display_name, int(incubator.days), waiting]).add_theme_font_size_override("font_size", 14)
+		return
+	var eggs := StructureManager.incubator_eggs(player.data)
+	_label(row, "Inkubator kosong" if not eggs.is_empty() else "Inkubator kosong · bawa telur ayam/bebek").add_theme_font_size_override("font_size", 14)
+	for egg in eggs:
+		var button := _button("Erami " + GameState._resolve_item(egg).display_name, func():
+			var result := StructureManager.incubate_egg(player.data, uid, egg)
+			_refresh()
+			_status.text = result.message)
+		row.add_child(button)
 
 func _feed_count(home: String) -> int:
 	return player.data.get_item_count("hay") + (player.data.get_item_count("animal_feed") if home == "chicken_coop" else 0)
@@ -177,5 +237,7 @@ func _care(action: String, animal_id: int) -> void:
 		"store": result = StructureManager.store_hay(player.data, uid)
 		"take": result = StructureManager.take_hay(player.data, uid)
 		"upgrade": result = StructureManager.upgrade_ranch(player.data, uid)
+		"breed": result = StructureManager.breed_animal(uid, animal_id)
+		"incubator": result = StructureManager.install_incubator(player.data, uid)
 	_refresh()
 	_status.text = result.message

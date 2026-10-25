@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 const Presentation = preload("res://scripts/resources/livestock_shop_presentation.gd")
+const HorseActor = preload("res://scripts/world/horse_actor.gd")
 signal closed
 
 @export var presentation: Presentation = preload("res://resources/ui/livestock_shop_presentation.tres")
@@ -37,10 +38,10 @@ func _ready() -> void:
 	StructureManager.changed.connect(_queue_refresh)
 	get_viewport().size_changed.connect(_resize)
 	for kind in presentation.species_order:
-		if RanchHusbandry.SPECIES.has(kind) and not _species_order.has(kind):
+		if RanchHusbandry.SPECIES.has(kind) and not _species_order.has(kind) and not presentation.excluded_species.has(kind):
 			_species_order.append(kind)
 	for kind in RanchHusbandry.SPECIES:
-		if not _species_order.has(kind):
+		if not _species_order.has(kind) and not presentation.excluded_species.has(kind):
 			_species_order.append(kind)
 	_build_cards()
 	Coop.set_menu_open(player, true)
@@ -79,6 +80,9 @@ func _animal_icon(kind: String) -> Texture2D:
 		return presentation.icon_overrides[variant_key]
 	if presentation.icon_overrides.has(kind):
 		return presentation.icon_overrides[kind]
+	if kind == "horse":
+		var coat := RanchHusbandry.horse_coat({"variant": _variant if kind == _species else "bay"})
+		return HorseActor.horse_frames(coat).get_frame_texture(&"idle_right", 0)
 	return RanchVisual.frames(kind, _variant if kind == _species else "white").get_frame_texture(&"default", 0)
 
 func _queue_refresh() -> void:
@@ -106,11 +110,11 @@ func _refresh() -> void:
 	%AnimalTitle.text = str(info.name)
 	%HomeType.text = presentation.home_labels.get(str(info.home), str(info.home))
 	%Description.text = presentation.descriptions.get(_species, "Hewan dewasa diantar ke kandang pilihan dan membutuhkan perawatan harian.")
-	%Production.text = "◷ Panen setiap %d hari" % int(info.interval)
-	var product := GameState._resolve_item(str(info.product))
+	%Production.text = "◷ Panen setiap %d hari" % int(info.interval) if int(info.interval) > 0 else "◷ Tidak menghasilkan barang harian"
+	var product := GameState._resolve_item(str(info.product)) if not str(info.product).is_empty() else null
 	%ProductIcon.texture = product.icon if product != null else null
-	%ProductName.text = "Menghasilkan " + (product.display_name if product != null else str(info.product))
-	%ToolHint.text = "Kualitas hasil meningkat dengan perawatan."
+	%ProductName.text = "Menghasilkan " + product.display_name if product != null else presentation.descriptions.get(_species + "_role", "Teman ladang")
+	%ToolHint.text = "Kualitas hasil meningkat dengan perawatan." if product != null else "Tetap perlu pakan, elusan, dan sikat setiap hari."
 	if not str(info.tool).is_empty():
 		var tool := GameState._resolve_item(str(info.tool))
 		%ToolHint.text = "Perlu " + (tool.display_name if tool != null else str(info.tool)) + " untuk panen."
@@ -123,6 +127,8 @@ func _refresh() -> void:
 		var state := StructureManager.coop_state(StructureManager.record_for(_target_uid))
 		if state.chickens.size() >= RanchHusbandry.capacity(state):
 			reason = "Kandang penuh. Pilih kandang lain atau upgrade kapasitasnya."
+	if reason.is_empty() and _species == "horse" and StructureManager.count_species("horse") >= RanchHusbandry.HORSE_LIMIT:
+		reason = "Kamu sudah punya kuda."
 	if reason.is_empty() and GameState.money < int(info.price):
 		reason = "Uang bersama belum cukup."
 	%Availability.text = reason

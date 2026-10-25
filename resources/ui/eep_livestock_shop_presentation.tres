@@ -34,6 +34,11 @@ atlas = ExtResource("animal_icons")
 region = Rect2(80, 16, 16, 16)
 filter_clip = true
 
+[sub_resource type="AtlasTexture" id="Buffalo"]
+atlas = ExtResource("animal_icons")
+region = Rect2(16, 16, 16, 16)
+filter_clip = true
+
 [sub_resource type="AtlasTexture" id="Vendor"]
 atlas = ExtResource("portrait")
 region = Rect2(0, 0, 64, 64)
@@ -44,14 +49,20 @@ script = ExtResource("script")
 title = "Peternakan Eep"
 vendor_name = "Eep"
 greeting = "Halo! Pilih teman baru untuk kebunmu."
-display_slots = 5
+display_slots = 8
+species_order = PackedStringArray("chicken", "duck", "cow", "goat", "sheep", "buffalo", "capybara", "horse")
 vendor_art = SubResource("Vendor")
 descriptions = Dictionary[String, String]({
 "chicken": "Ayam dewasa penghuni kandang unggas. Menghasilkan telur jika diberi pakan dan dirawat dengan baik.",
 "cow": "Sapi dewasa penghuni kandang ternak. Rawat dan perah menggunakan ember susu untuk memperoleh hasilnya.",
 "duck": "Bebek dewasa penghuni kandang unggas. Menghasilkan telur bebek setelah kebutuhan hariannya terpenuhi.",
 "goat": "Kambing dewasa penghuni kandang ternak. Perah menggunakan ember susu saat hasilnya siap.",
-"sheep": "Domba dewasa penghuni kandang ternak. Gunakan gunting cukur untuk memanen wol setelah siap."
+"sheep": "Domba dewasa penghuni kandang ternak. Gunakan gunting cukur untuk memanen wol setelah siap.",
+"buffalo": "Kerbau lumpur dewasa penghuni kandang ternak. Perah susu kerbau setiap dua hari terawat; olah menjadi Keju Kerbau.",
+"capybara": "Kapibara dewasa yang tenang. Selama ia nyaman, hewan lain sekandang lebih cepat akrab denganmu.",
+"capybara_role": "Teman ladang: +1 kasih sayang hewan sekandang",
+"horse": "Kuda tunggangan dari peternakan Eep. Tinggal di Barn, menunggu di depan kandang setiap pagi. Dekati lalu tekan interaksi untuk naik. Pilih warna kudanya. Satu kuda per peternakan.",
+"horse_role": "Tunggangan cepat di luar ruangan"
 })
 home_labels = Dictionary[String, String]({
 "barn": "Hewan kandang ternak",
@@ -64,16 +75,28 @@ icon_overrides = Dictionary[String, Texture2D]({
 "cow": SubResource("Cow"),
 "duck": SubResource("Duck"),
 "goat": SubResource("Goat"),
-"sheep": SubResource("Sheep")
+"sheep": SubResource("Sheep"),
+"buffalo": SubResource("Buffalo")
 })
 variants = Dictionary[String, PackedStringArray]({
-"chicken": PackedStringArray("white", "brown")
+"chicken": PackedStringArray("white", "brown"),
+"horse": PackedStringArray("bay", "flaxen", "cream", "chestnut", "pearl")
 })
 variant_labels = Dictionary[String, String]({
 "brown": "Cokelat",
-"white": "Putih"
+"white": "Putih",
+"bay": "Cokelat Tua",
+"flaxen": "Cokelat Surai Krem",
+"cream": "Krem",
+"chestnut": "Merah Bata",
+"pearl": "Putih Mutiara"
 })
 variant_colors = Dictionary[String, Color]({
 "brown": Color(0.59, 0.32, 0.15, 1),
-"white": Color(0.97, 0.94, 0.84, 1)
+"white": Color(0.97, 0.94, 0.84, 1),
+"bay": Color(0.54, 0.21, 0.15, 1),
+"flaxen": Color(0.86, 0.66, 0.45, 1),
+"cream": Color(0.96, 0.79, 0.6, 1),
+"chestnut": Color(0.75, 0.38, 0.23, 1),
+"pearl": Color(0.97, 0.86, 0.78, 1)
 })

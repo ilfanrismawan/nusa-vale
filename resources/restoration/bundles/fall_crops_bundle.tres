@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="RestorationProject" format=3]
+
+[ext_resource type="Script" uid="uid://dexc7jaawor5t" path="res://scripts/resources/restoration_project.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+project_id = "fall_crops_bundle"
+display_name = "Sayap Alam — Panen Musim Gugur"
+ui_short_name = "Panen Musim Gugur"
+description = "Hasil bumi musim gugur untuk persediaan musim dingin. Cukup bawa empat jenis."
+requirements = Dictionary[String, int]({
+"pumpkin": 1,
+"eggplant": 1,
+"grape": 1,
+"beet": 1,
+"broccoli": 1,
+"wheat": 1
+})
+slots_required = 4
+wing_id = "alam"
+completion_flag = "fall_crops_bundle_done"
+completion_message = "Persediaan musim gugur aman. Warga menitipkan bibit labu."
+reward_items = Dictionary[String, int]({
+"seed_pumpkin": 10
+})

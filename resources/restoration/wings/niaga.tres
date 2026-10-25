@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="BalaiWing" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/balai_wing.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+wing_id = "niaga"
+display_name = "Sayap Niaga"
+description = "Dapur, kedai, rempah, dan modal pasar desa."
+effects = Dictionary[StringName, float]({
+&"ship_bonus": 0.05,
+&"shop_sell": 0.05
+})
+bonus_text = "harga jual +5%"
+reward_tokens = 2
+completion_flag = "balai_wing_niaga_done"
+completion_message = "Sayap Niaga pulih sepenuhnya! Pedagang kini membeli hasilmu lebih mahal."

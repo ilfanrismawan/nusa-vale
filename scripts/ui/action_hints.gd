@@ -90,6 +90,8 @@ func build_entries() -> Array[Dictionary]:
 	if not entries.has(context):
 		return prompts
 	var actions: Array = entries[context].duplicate(true)
+	if player.is_riding():
+		actions = [[&"interact", "Interaksi"], [&"use_tool", "Turun"]]
 	if context == InputLayout.AIR and EquipmentContext.is_seed(player.tool_controller.current_item):
 		actions.append([&"use_tool", "Tebar benih"])
 	for entry in actions:

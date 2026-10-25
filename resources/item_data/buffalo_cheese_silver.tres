@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://autoload/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_buffalo_cheese.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_id = "buffalo_cheese_silver"
+display_name = "Keju Kerbau Perak"
+icon = ExtResource("2")
+buy_price = 0
+sell_price = 337
+description = "Olahan hasil ternak untuk dijual atau disimpan."

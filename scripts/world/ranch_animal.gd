@@ -60,6 +60,10 @@ func refresh() -> void:
 	if is_instance_valid(_carried_by):
 		return
 	visible = not StructureManager.coop_state(record).door if indoors else StructureManager.coop_state(record).door
+	# Kuda gaya Stardew berdiri di dunia sebagai HorseActor (horse_actor.gd), bukan di kandang/padang.
+	if RanchHusbandry.species(bird) == "horse" and RanchHusbandry.is_adult(bird):
+		visible = false
+	_sprite.scale = Vector2.ONE * (1.0 if RanchHusbandry.is_adult(bird) else 0.65)
 	_badge.text = "Siap" if not str(bird.ready).is_empty() else ("Lapar" if int(bird.fed_day) != DayCycle.current_day else str(bird.name))
 	if indoors:
 		_badge.text = str(bird.name) + (" !" if bird.sick or int(bird.fed_day) != DayCycle.current_day else "")

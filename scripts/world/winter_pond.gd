@@ -102,6 +102,8 @@ func _build_rim(size: Vector2i) -> void:
 func _add_body(pixel_size: Vector2) -> void:
 	var body := StaticBody2D.new()
 	body.name = "Edge"
+	# Sapu terbang boleh melintas di atas kolam (GDD 10).
+	body.add_to_group(&"vehicle_water")
 	_add_generated(body)
 	var shape := CollisionShape2D.new()
 	var box := RectangleShape2D.new()

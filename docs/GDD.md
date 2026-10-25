@@ -1,6 +1,6 @@
 # Nusa Vale — Game Design Document (GDD)
 
-Versi dokumen: 3.31 (24 Oktober 2026).
+Versi dokumen: 3.35 (25 Oktober 2026).
 Dokumen ini adalah **sumber kebenaran desain** proyek `E:\nusa-vale` (Game Design Document resmi).
 Pada versi 1.9, ditambahkan 4 pilar fundamental Life-Sim / Farming RPG: **Sistem Peternakan & Satwa** (kandang Barn/Coop, sapi, kambing, domba, ayam, bebek, kuda, pakan & affection), **Mesin Pengolah Pasca-Panen (Artisan Goods)** (mayones, keju, selai, fermentasi keg, tenun, pengasap ikan), **Sistem Cuaca Harian Dinamis** (cerah, hujan penyiram otomatis, badai petir penangkal baterai, salju), serta **Sistem Sosial, Persahabatan, & Jadwal Harian NPC** (hati 0-10, sistem hadiah loved/hated, rutinitas harian, heart events, dan romansa/teman sekamar).
 
@@ -46,7 +46,7 @@ Panduan editor resep, karakter, animasi dan syarat objek: [EDITOR_GUIDE.md](EDIT
 | Sistem | Terpasang | Batas implementasi |
 |---|---|---|
 | Loop inti | Farming, inventory, toko, shipping esok hari, crafting, alat, save | Playtest loop inti solo/co-op lulus menurut pemilik; balancing progres/ekonomi menjadi prioritas berikutnya |
-| Peternakan | Ayam, bebek, sapi, kambing, domba; perawatan, kualitas, merumput, interior, upgrade | Kuda, pembiakan, satwa tambahan belum selesai |
+| Peternakan | Ayam, bebek, sapi, kambing, domba, kerbau, kapibara, kuda tunggangan; perawatan, kualitas, merumput, interior, upgrade; pembiakan Barn, Inkubator, bulu bebek | Sprite kuda/kerbau/kapibara masih placeholder hasil recolor sapi; festival, ayam jago dan layanan kesehatan berbayar belum ada |
 | Pengolahan | Furnace, Mayonnaise Maker, Cheese Press, Loom, Preserves Jar, Dehydrator, Beehive, Sawmill, Keg, Oil Maker, Fish Smoker, Penangkal Petir; stasiun Alchemy Table dan Anvil | Mesin olahan artisan lengkap dan teruji di runner; penuaan Cellar masih target |
 | Dunia | Farm, rumah, Forest, Deep Forest, Town, Balai Nadi, Greenhouse, Gunung dan Gua Tambang 1–100 | Pohon buah permanen lintas musim terpasang; Pantai dan Modern City masih target |
 | Town/NPC | Bangunan/interior, jadwal/rute, layanan, hadiah, panel hubungan, dialog bersyarat hati/flag; heart event, surat cerita, status dating/married, upacara dasar, pasangan/roommate tinggal di rumah, bantuan harian, surat resep/bingkisan | Upacara dasar berupa dialog di rumah; sinematik khusus dan bouquet/pendant masih target; reward seluruh 13 warga terpasang sebagai baseline 24 Oktober |
@@ -373,9 +373,34 @@ Baseline terbaru: [ECONOMY_BALANCE_2026-10-22.md](ECONOMY_BALANCE_2026-10-22.md)
   - Proyek 2: Pemulihan Greenhouse (150 kayu + 75 batu + 5 batangan tembaga).
   - Proyek Berikutnya [keputusan]: Renovasi bengkel Blacksmith, Warung Makan, jembatan pegunungan, dan fasilitas desa lainnya menggunakan sistem kontribusi komunitas Balai Nadi yang sama.
 
+#### 4.9.1 Sayap dan Paket ala Community Center [terpasang 25 Oktober 2026; isi paket dan angka = usulan]
+
+- Balai Nadi bekerja seperti Community Center Stardew (paket untuk memulihkan sayap), **bukan museum** [keputusan].
+- 21 paket: Balai Utama 1, Sayap Alam 7, Karya 4, Niaga 4, Pengetahuan 5. Data `resources/restoration/bundles/*.tres` (tiga paket lama tetap di `resources/restoration/`), urutan di `balai_nadi_catalog.tres`.
+- **Pilih N dari M** [usulan, menunggu konfirmasi pemilik]: `RestorationProject.slots_required` (0 = semua item wajib). Paket selesai begitu N jenis terisi penuh; jenis lain tidak bisa disumbang lagi.
+- Tiap paket memberi 1 Token Talenta (bagian 13.4) + hadiah barang `reward_items`. Biji Daya "balai" hanya dari Restorasi Balai dan Greenhouse.
+- Item kualitas (perak/emas/besar) belum diterima sebagai pengganti item biasa.
+
+| Sayap | Paket (isi N dari M) | Hadiah paket |
+|---|---|---|
+| Balai Utama | Restorasi Balai Nadi (100 kayu, 50 batu, 500 G) | Biji Daya |
+| Alam | Kebun Sepanjang Musim (Greenhouse); Paket Serangga; Panen Semi 4/6 (parsnip, potato, cauliflower, strawberry, garlic, cabbage); Panen Panas 4/6 (tomato, corn, melon, blueberry, chili, watermelon); Panen Gugur 4/6 (pumpkin, eggplant, grape, beet, broccoli, wheat); Kebun Buah 5/7 (apple, cherry, orange, peach, mango, apricot, banana); Hasil Liar 6/9 (daffodil, spring onion, sweet pea, wild berry, common mushroom, hazelnut, holly, winter root, mooncap) | Greenhouse; 3 tapper; 10 bibit stroberi/melon/labu; 1 bibit mangga; 20 bug bait |
+| Karya | Peternak 5/7 (telur ayam/bebek, susu sapi/kambing/kerbau, wol, bulu bebek); Artisan 6/8 (keju, keju kambing, keju kerbau, mayones, kain, madu, sirup maple, selai); Tukang (20 papan, 5 tali, 10 resin, 50 serat, 10 tanah liat); Pandai Besi (5 copper bar, 5 iron bar, 3 gold bar, 20 coal) | 20 jerami; preserves jar; sawmill; furnace |
+| Niaga | Dapur Desa 6/8 (roti, omelet, sup sayur, sup ikan, pancake, nasi kepal, telur goreng, ikan panggang); Kedai Minum 5/7 (kopi, jus, teh hijau, wine, bir, mead, boba); Lumbung Rempah (5 garam, gula, tepung, minyak, shoyu); Dana Pasar (5.000 G) | cooking oven; keg; oil maker; beehive |
+| Pengetahuan | Ikan Sungai 5/7 (mas, lele, nila, carp, bullhead catfish, perch, chub); Ikan Musiman 5/7 (faeries fish, tiger trout, gurame, dorado, pike, walleye, sturgeon); Danau Gua 4/5 (ghost catfish, bone fish, zombie fish, crayfish, dynamite fish); Permata Nusa 6/8 (quartz, amethyst, topaz, emerald, ruby, sapphire, citrine, onyx); Mineral & Artefak (earth crystal, frozen tear, fire quartz, old bone, 10 slime gel) | 20 bait; 10 lure; 15 glow bait; 3 geode; omni geode |
+
+- **Hadiah sayap lengkap** [keputusan pemilik 25 Oktober 2026: bonus permanen per sayap; angka usulan]. Data `resources/restoration/wings/<id>.tres` (`BalaiWing.effects`), dibaca `SkillSystem.stat/household` lewat `BalaiNadiManager.wing_stat()` dan berlaku untuk semua pemain co-op. Penyumbang terakhir mendapat +2 Token Talenta dan flag `balai_wing_<id>_done`.
+  - Alam: `crop_growth` +0,10 (peluang +1 hari tumbuh, ±10% lebih cepat).
+  - Karya: `tool_upgrade_discount` 0,10 (biaya uang upgrade alat di Empu Bima -10%, bahan tetap).
+  - Niaga: `ship_bonus` dan `shop_sell` +0,05 (harga jual +5%).
+  - Pengetahuan: `geode_chance` 0,25 (peluang geoda di gua ×1,25).
+- Tahap restorasi baru "Jantung Desa" saat keempat sayap lengkap.
+- **Tampilan sebelum/sesudah restorasi** [terpasang 25 Oktober 2026]: Bale Agung di luar memakai `assets/balai_nadi/v4/bale_agung_ruined.png` (atap bolong, kusam, lumut, tirai sobek, kristal padam; dibuat dari v2 lewat skrip) sampai Restorasi Balai Nadi selesai, lalu `v2/bale_agung.png` (`scripts/world/balai_restoration_art.gd`). Interior memakai gambar ruangan `v1/interior_ruined.png` / `interior_restored.png` menggantikan kotak placeholder; meja kontribusi dan batas jalan disesuaikan dengan gambar.
+- Tanpa perubahan save (tetap v26): progres disimpan per `project_id`, save lama memuat paket baru dalam keadaan kosong; status dan flag sayap dihitung ulang saat load. Tes `tests/balai_bundles_regression.tscn`.
+
 ### 4.10 Sistem Peternakan & Satwa (Animal Husbandry & Ranching) [terpasang + keputusan + usulan]
 
-**Implementasi core loop (13 Oktober 2026) [terpasang]**: ayam, bebek, sapi, kambing, domba; pakan dan jerami; elusan +3 dan sikat +1 sehari; kebersihan, kesehatan/pemulihan; telur, susu, wol dengan ukuran/kualitas; petak rumput pakan dan hewan berjalan di ladang; silo 240 jatah; upgrade kandang 4/8/12 dan auto-feeder; Mesin Mayones, Mesin Keju, Alat Tenun; save/load dan perawatan bersama co-op. Panduan aturan aktual dan harga ada di **[LIVESTOCK_CORE_LOOP.md](LIVESTOCK_CORE_LOOP.md)**. Angka usulan di bawah yang sesuai panduan tersebut kini sudah terpasang. Kuda, kerbau, kapibara, inkubasi/pembiakan, bulu bebek, serta festival masih rancangan lanjutan.
+**Implementasi core loop (13 Oktober 2026) [terpasang]**: ayam, bebek, sapi, kambing, domba; pakan dan jerami; elusan +3 dan sikat +1 sehari; kebersihan, kesehatan/pemulihan; telur, susu, wol dengan ukuran/kualitas; petak rumput pakan dan hewan berjalan di ladang; silo 240 jatah; upgrade kandang 4/8/12 dan auto-feeder; Mesin Mayones, Mesin Keju, Alat Tenun; save/load dan perawatan bersama co-op. Panduan aturan aktual dan harga ada di **[LIVESTOCK_CORE_LOOP.md](LIVESTOCK_CORE_LOOP.md)**. Angka usulan di bawah yang sesuai panduan tersebut kini sudah terpasang. **Peternakan lanjutan (25 Oktober 2026) [terpasang]**: kerbau, kapibara, kuda tunggangan, pembiakan Barn, Inkubator, dan bulu bebek; aturan di bagian 4.10.9–4.10.11. Ayam jago/cemani, festival, dan layanan kesehatan berbayar masih rancangan lanjutan.
 
 - **Bangunan Kandang (Coop & Barn)**:
   - Dibangun melalui meja Crafting / pertukangan desa dan dipasang di ladang:
@@ -453,7 +478,8 @@ Interval sapi harian, kambing dua hari, dan domba tiga hari mengikuti arah desai
 | Kambing | Susu kambing | 2 | Pemeras susu pada hewan yang siap |
 | Domba | Wol | 3 | Gunting wol pada hewan yang siap |
 | Bebek | Telur bebek | 2 | Ambil stok kandang; bulu sebagai hasil lanjutan |
-| Kuda, ayam jago, kapibara | Mobilitas/festival/kedekatan | Tidak memproduksi komoditas harian | Perawatan mengikuti kebutuhan spesies |
+| Kerbau | Susu kerbau | 2 | Pemeras susu; Mesin Keju → Keju Kerbau [terpasang] |
+| Kuda, ayam jago, kapibara | Mobilitas/festival/kedekatan | Tidak memproduksi komoditas harian | Perawatan mengikuti kebutuhan spesies; kuda dan kapibara [terpasang] |
 
 - Hari terawat untuk produksi adalah hari kenyang dan tidak Kurang sehat pada evaluasi malam. Hari gagal tidak menambah penghitung, tidak mereset kemajuan sebelumnya, dan tidak membuat utang hasil.
 - Produk pagi berasal dari evaluasi hari sebelumnya. Memberi makan hari ini tidak langsung membuat produk baru. Sapi/kambing/domba menyimpan maksimum satu hasil siap per hewan; selama belum dipanen, penghitung produksi berhenti.
@@ -489,6 +515,34 @@ Interval sapi harian, kambing dua hari, dan domba tiga hari mengikuti arah desai
 | D — Perluasan | Upgrade kandang, auto-feeder, bebek dan integrasi mesin | Kapasitas sesuai tier; stok silo berkurang sesuai konsumsi; kehabisan pakan terlihat; migrasi save mempertahankan ternak |
 
 Playtest memeriksa durasi rutinitas 4 hewan, keterbacaan penyebab produksi gagal, manfaat memilih merumput/pakan, dan kemampuan meninggalkan ladang setelah kebutuhan utama selesai. Kerbau, pembiakan, festival, dan layanan kesehatan lanjutan dikerjakan setelah loop dasar stabil.
+
+#### 4.10.9 Satwa Tambahan: Kerbau, Kapibara, Kuda [keputusan + terpasang]
+
+Diputuskan pemilik 25 Oktober 2026 (memilih seluruh usulan). Data di `RanchHusbandry.SPECIES`; ketiganya tinggal di Barn dan memakai kapasitas 4/8/12, pakan, elusan, sikat, kebersihan, kesehatan, dan merumput seperti ternak lain.
+
+| Hewan | Harga | Hasil | Interval | Catatan |
+|---|---:|---|---:|---|
+| Kerbau (`buffalo`) | 4.000 G | Susu Kerbau 180 G (+ ukuran/kualitas) | 2 hari terawat | Pemeras Susu; Mesin Keju: Susu Kerbau → Keju Kerbau 270 G |
+| Kapibara (`capybara`) | 2.000 G | Tidak ada | – | Satwa ramah: selama satu kapibara Nyaman (makan, sehat, kotor < 3), hewan lain sekandang yang makan mendapat +1 kasih sayang tambahan saat pergantian hari; tidak menumpuk |
+| Kuda (`horse`) | 5.000 G | Tunggangan | – | Maksimal 1 kuda per save; tidak dibiakkan |
+
+Sprite `assets/farm_rpg/animals/{buffalo,horse,capybara}.png` memakai tata letak `cow.png` dan masih placeholder hasil recolor sapi (`scratch/gen_ternak_art.py` di folder proyek bersama); ikon toko kerbau memakai atlas `Animals farm icons.png`.
+
+#### 4.10.10 Kuda Tunggangan [keputusan + terpasang]
+
+- Tunggangi lewat tombol **Tunggangi** di menu kandang Barn (dibuka dari depan Barn) atau dengan berinteraksi pada kuda yang sedang merumput setelah dielus dan diberi pakan. Kuda harus dewasa, sudah makan hari itu, dan tidak Kurang sehat. Di dalam interior kandang kuda tidak bisa dinaiki.
+- Kecepatan 1,6× di luar ruangan, naik linear sampai 1,8× pada kasih sayang 100. Tidak bisa sambil memakai kendaraan bagian 10 (sepeda/sapu), dan sebaliknya.
+- Tombol interaksi saat berkuda = turun; kuda kembali ke kandang. Masuk interior/gua, pingsan, atau tidur menurunkan pemain otomatis. Co-op: satu kuda hanya dinaiki satu pemain.
+- Status tunggangan tidak disimpan; setelah memuat save pemain berjalan kaki.
+
+#### 4.10.11 Pembiakan, Inkubasi, dan Hasil Tambahan [keputusan + terpasang]
+
+- **Pembiakan Barn**: tombol **Kawinkan** (gratis) untuk hewan dewasa dengan kasih sayang ≥ 80 (4 hati), Nyaman, kandang punya tempat, dan belum ada kehamilan lain di kandang itu. Lama hamil dalam hari terawat: sapi 6, kambing 5, domba 5, kerbau 7, kapibara 4; hewan hamil tetap berproduksi. Bila kandang penuh saat lahir, kelahiran menunggu sampai ada tempat.
+- **Inkubator** (`incubator`): dirakit (50 kayu + 2 batang besi + 1 kuarsa), dipasang sekali di Kandang Unggas lewat menu kandang. Satu telur ayam (3 hari) atau bebek (5 hari), semua ukuran/kualitas. Ayam yang menetas berwarna putih/cokelat bergantian. Kandang penuh menunda penetasan.
+- **Anak hewan**: dewasa setelah 3 hari (unggas) atau 5 hari (Barn), ditampilkan 65% ukuran, perlu dirawat, tidak berproduksi/dibiakkan/ditunggangi. Nama awal "Anak …" dapat diganti di kartu hewan.
+- **Bulu Bebek** (`duck_feather`, 250 G): bebek dengan kasih sayang ≥ 60 dan kandang tidak penuh kotoran mengumpulkan 1 kemajuan per hari terawat; tiap 4 hari satu bulu masuk stok kandang bersama telur (batas 999). Kualitas tidak berlaku.
+- **Pupuk kandang** dari usulan tidak dibuat karena sistem pupuk dari kotoran belum ada.
+- **Save v26**: per hewan `baby_days`, `pregnant`, `feather`; per kandang `incubator` {`installed`, `egg`, `days`}. Save lama dimuat sebagai hewan dewasa tanpa kehamilan/inkubator. Regresi: `tests/ranch_expansion_regression.tscn`.
 
 ### 4.11 Mesin Pengolah Pasca-Panen (Artisan Goods & Processing) [keputusan]
 
@@ -926,15 +980,26 @@ Semua arena memakai fog gate, tiga fase, anti-kiting, murka, reset saat kosong, 
 
 ---
 
-## 10. Kendaraan & Mobilitas [keputusan]
+## 10. Kendaraan & Mobilitas [keputusan + terpasang 2026-10-25]
 
-- **Sepeda (Bicycle)**:
-  - Dibeli di toko desa sebagai peningkatan kecepatan mobilitas tanpa perlu menahan tombol Shift.
-  - Memberikan kecepatan gerak 2x lipat kecepatan jalan biasa di jalanan luar ruangan.
-- **Sapu Terbang (Broomstick)**:
-  - Item sihir / teknologi eksotis tingkat tinggi.
-  - Memberikan kecepatan 3x lipat dan kemampuan melintasi rintangan air atau jurang pendek.
-- Kendaraan tidak dapat digunakan di dalam ruangan sempit.
+Keputusan awal pemilik tetap berlaku: sepeda dibeli di toko desa, sapu terbang adalah item sihir tingkat tinggi yang melintasi air atau jurang pendek, dan kendaraan tidak dipakai di ruangan sempit. Koreksi pemilik 25 Oktober 2026 **[keputusan]**: kecepatan kendaraan = kecepatan lari (Shift) tanpa menahan Shift, ditambah sedikit supaya terasa berbeda. Angka lama "2x / 3x jalan" diganti karena lari di kode sudah 3x jalan.
+
+**Cara pakai [terpasang]:** kendaraan adalah item di tas (dibeli sekali per pemain, tidak bertumpuk). Pegang di hotbar lalu tekan tombol Alat untuk naik; tombol Alat lagi = turun. Selama menumpang: tidak ada alat, serangan, lompat, atau roll; interaksi (pintu, NPC, toko) tetap bisa; ganti slot hotbar tetap bisa tanpa turun. Petunjuk tombol HUD menampilkan "Interaksi" dan "Turun". Co-op: tiap pemain punya kendaraannya sendiri.
+
+| Kendaraan | Item | Kecepatan | Kemampuan | Cara dapat | Status |
+|---|---|---|---|---|---|
+| Sepeda | `bicycle` | 3,3x jalan (lari +10%) | darat | Toko desa 5.000 G (jual 2.500 G) | [terpasang; harga usulan] |
+| Sapu Terbang | `flying_broom` | 3,6x jalan (lari +20%) | melayang 6 px, melintasi air dan jurang pendek | Meja Alkimia: Sapu Lidi Hias 1, Fairy Bar 2, Fairy Crystal 3, Slime Gel 10 (jual 7.500 G) | [terpasang; resep usulan] |
+| Skuter Listrik | `electric_scooter` | 3,45x jalan (lari +15%) | darat | Dealer Kendaraan Modern City 25.000 G | [data terpasang, terkunci sampai `modern_city`] |
+| Mobil Bak Pengangkut | `pickup_truck` | 3,75x jalan (lari +25%) | darat, pemain di dalam kabin | Dealer Kendaraan Modern City 60.000 G | [data terpasang, terkunci sampai `modern_city`] |
+
+**Aturan area [terpasang]:** scene yang path-nya berisi `interior` atau `/cave/` melarang kendaraan (rumah, toko, gua tambang). Node `VehicleZone` (properti `allowed`) di sebuah scene menimpa aturan ini. Saat masuk ruangan, kendaraan "diparkir": pemain turun otomatis, lalu otomatis naik lagi begitu keluar ke area luar. Status menumpang tidak disimpan (tanpa perubahan save; setelah load pemain berjalan kaki).
+
+**Terbang di atas air [terpasang]:** sapu memakai tabrakan biasa kecuali air/jurang. Air dikenali dari TileMapLayer bernama "...water...", tekstur atlas tile berisi kata "water" (mis. `Water tile.png` di BaseLayerGround Farm), custom data bool `water` di TileSet, atau node tabrakan di grup `vehicle_water` (kolam air panas/danau gua sudah masuk grup ini). Jurang pendek = node di grup `vehicle_gap` atau custom data bool `gap`; belum ada jurang di peta sekarang. Turun dari sapu ditolak di atas air ("Tidak bisa turun di atas air.").
+
+**Implementasi:** `scripts/data/vehicle_data.gd` (VehicleData: kecepatan, air/jurang, tinggi melayang, sembunyikan pemain, scene tampilan, `required_unlock`), `resources/vehicles/*.tres`, `ItemData.vehicle`, `scripts/state/ride_state.gd` (RideState, dibuat ToolController), `scripts/system/vehicles.gd` (aturan area, gerak terbang), `scripts/world/vehicle_zone.gd`, `scripts/world/vehicle_visual.gd` + `scenes/vehicles/<id>.tscn` (Node2D + Sprite2D yang bisa diedit di editor; baris sheet bawah/atas/samping, offset duduk, urutan gambar), art sementara `assets/vehicles/<id>.png` dan ikon `resources/icons/icon_<id>.tres` dengan palet Paletta. Toko menampilkan "Sudah dimiliki" bila kendaraan ada di tas dan "Terkunci" bila area syarat belum terbuka. Tes: `tests/vehicle_regression.tscn`.
+
+**Usulan terbuka [usulan]:** harga sepeda dan resep sapu; kemampuan khusus Mobil Bak (bak muatan/peti berjalan) dan cara membuka `modern_city` menunggu desain Modern City; kuda tunggangan tetap bagian sistem Peternakan (4.10), belum memakai sistem kendaraan; animasi duduk khusus belum ada (pemain memakai pose diam).
 
 ---
 
@@ -1487,10 +1552,17 @@ Dengan disahkannya keputusan utama di atas, butir keputusan teknis turunan yang 
 6. **Layout Alun-Alun Pekan Bazaar**: Menentukan posisi deretan stan pemain dan rute jalan NPC pembeli di alun-alun kota pada scene `town.tscn`.
 7. **Tanggal Pasti Kalender Hari Raya**: Menetapkan tanggal kalender (1–28) per musim untuk Hari Raya Idul Fitri, Natal (25 Dingin), dan Malam Tahun Baru (28 Dingin).
 8. **Formula Numerik Fluktuasi Pasar**: Menentukan batas ambang kuantitas penjualan harian (misal: threshold > 50 item) sebelum harga pasar mengalami penurunan 10%.
+9. **Kendaraan lanjutan**: harga sepeda/resep sapu, fungsi bak muatan Mobil Bak, dan syarat membuka `modern_city` (bagian 10).
 
 ---
 
 ## 19. Changelog
+
+- **2026-10-25 (Versi 3.35)**: Balai Nadi dilengkapi (bagian 4.9.1): 18 paket baru sehingga 21 paket di Balai Utama + 4 sayap, paket "pilih N dari M" (`slots_required`), hadiah barang per paket, bonus permanen saat sayap lengkap (keputusan pemilik: Alam tumbuh ±10% lebih cepat, Karya upgrade alat -10%, Niaga jual +5%, Pengetahuan geoda ×1,25) + 2 Token Talenta, tahap "Jantung Desa". Tanpa perubahan save (tetap v26).
+
+- **2026-10-25 (Versi 3.33)**: Peternakan lanjutan (bagian 4.10.9–4.10.11, keputusan pemilik: semua usulan): kerbau (susu tiap 2 hari, Keju Kerbau), kapibara (bonus kasih sayang sekandang), kuda tunggangan 1,6–1,8× (maks 1), pembiakan Barn 4 hati, Inkubator di Kandang Unggas, anak hewan, Bulu Bebek. Sprite placeholder recolor sapi. Save v26.
+
+- **2026-10-25 (Versi 3.32)**: Kendaraan (bagian 10) terpasang: sepeda (toko desa), sapu terbang (Meja Alkimia, melayang di atas air), serta data skuter listrik dan mobil bak yang terkunci sampai Modern City. Kecepatan mengikuti keputusan pemilik: lari tanpa Shift ditambah sedikit (sepeda +10%, sapu +20%). Kendaraan diparkir otomatis saat masuk ruangan/gua. Tanpa perubahan save (tetap v25).
 
 - **2026-10-22 (Versi 3.30)**: Baseline balancing progres/ekonomi: Tembaga/Besi/Emas 350/1.000/2.300 G; tas 1.500/7.500 G; rumah 3.500/12.000/30.000 G dengan bahan bertahap dan bonus stamina +30/+40 (target 200 bersama tiga Biji Daya); 136 harga masakan dihitung dari bahan dan dibatasi terhadap arbitrase, jual kembali 39 benih menjadi 40%; EXP aktivitas diselaraskan dan siram ulang tidak memberi EXP; damage musuh/boss mengikuti armor dan kelompok awal diperkecil. Tambah audit deterministik, simulasi kas solo/co-op, serta regresi harga/EXP/stamina/gua. Format save tetap v25; status playtest umum lulus tidak diubah.
 

@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="RestorationProject" format=3]
+
+[ext_resource type="Script" uid="uid://dexc7jaawor5t" path="res://scripts/resources/restoration_project.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+project_id = "drinks_bundle"
+display_name = "Sayap Niaga — Kedai Minum"
+ui_short_name = "Kedai Minum"
+description = "Minuman untuk kedai pasar desa. Bawa lima jenis."
+requirements = Dictionary[String, int]({
+"coffee": 1,
+"juice": 1,
+"green_tea": 1,
+"wine": 1,
+"beer": 1,
+"mead": 1,
+"boba_tea": 1
+})
+slots_required = 5
+wing_id = "niaga"
+completion_flag = "drinks_bundle_done"
+completion_message = "Kedai minum dibuka kembali! Ini tong fermentasi untukmu."
+reward_items = Dictionary[String, int]({
+"keg": 1
+})

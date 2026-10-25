@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="RestorationProject" format=3]
+
+[ext_resource type="Script" uid="uid://dexc7jaawor5t" path="res://scripts/resources/restoration_project.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+project_id = "seasonal_fish_bundle"
+display_name = "Sayap Pengetahuan — Ikan Musiman"
+ui_short_name = "Ikan Musiman"
+description = "Ikan yang hanya muncul pada musim tertentu. Bawa lima jenis."
+requirements = Dictionary[String, int]({
+"fish_faeries_fish": 1,
+"fish_tiger_trout": 1,
+"fish_gurame": 1,
+"fish_dorado": 1,
+"fish_pike_fish": 1,
+"fish_walleye": 1,
+"fish_sturgeon": 1
+})
+slots_required = 5
+wing_id = "pengetahuan"
+completion_flag = "seasonal_fish_bundle_done"
+completion_message = "Catatan ikan musiman lengkap! Terimalah umpan tiruan."
+reward_items = Dictionary[String, int]({
+"lure": 10
+})

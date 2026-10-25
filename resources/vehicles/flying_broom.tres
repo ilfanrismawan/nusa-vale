@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="VehicleData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/vehicle_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+vehicle_id = "flying_broom"
+display_name = "Flying Broom"
+speed_multiplier = 3.6
+crosses_water = true
+crosses_gaps = true
+hover_height = 6.0
+hover_bob = 0.0
+hide_rider = false
+rider_idle_animation = &"broomstick"
+rider_move_animation = &"broomstick"
+required_unlock = ""

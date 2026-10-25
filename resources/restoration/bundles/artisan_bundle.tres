@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="RestorationProject" format=3]
+
+[ext_resource type="Script" uid="uid://dexc7jaawor5t" path="res://scripts/resources/restoration_project.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+project_id = "artisan_bundle"
+display_name = "Sayap Karya — Paket Artisan"
+ui_short_name = "Paket Artisan"
+description = "Barang olahan tangan terampil: keju, mayones, kain, dan manisan. Bawa enam jenis."
+requirements = Dictionary[String, int]({
+"cheese": 1,
+"goat_cheese": 1,
+"buffalo_cheese": 1,
+"mayonnaise": 1,
+"cloth": 1,
+"honey": 1,
+"maple_syrup": 1,
+"jam": 1
+})
+slots_required = 6
+wing_id = "karya"
+completion_flag = "artisan_bundle_done"
+completion_message = "Rak artisan balai kini penuh. Ini toples pengawet untukmu."
+reward_items = Dictionary[String, int]({
+"preserves_jar": 1
+})

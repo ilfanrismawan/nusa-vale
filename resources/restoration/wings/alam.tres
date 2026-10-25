@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="BalaiWing" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/balai_wing.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+wing_id = "alam"
+display_name = "Sayap Alam"
+description = "Kebun komunitas, panen musiman, buah, dan hasil alam liar."
+effects = Dictionary[StringName, float]({
+&"crop_growth": 0.1
+})
+bonus_text = "tanaman tumbuh ±10% lebih cepat"
+reward_tokens = 2
+completion_flag = "balai_wing_alam_done"
+completion_message = "Sayap Alam pulih sepenuhnya! Tanah desa terasa lebih subur."

@@ -15,6 +15,8 @@ var combat_state: CombatState
 var dodge_state: DodgeState
 ## Lompat + lompat ganda (GDD 4.3, seperti Grand Bazaar).
 var jump_state: JumpState
+## Menumpang sepeda/sapu terbang (GDD 10).
+var ride_state: RideState
 ## Combo senjata: pukulan berikutnya, jenis senjata, dan batas waktu menyambung (msec).
 var combo_step := 0
 var _combo_weapon := -1
@@ -57,6 +59,10 @@ func _ready() -> void:
 	jump_state.name = "JumpState"
 	jump_state.idle_state = combat_state.idle_state
 	state_machine.add_child(jump_state)
+	ride_state = RideState.new()
+	ride_state.name = "RideState"
+	ride_state.idle_state = combat_state.idle_state
+	state_machine.add_child(ride_state)
 	furniture_preview = load("res://scripts/player/furniture_preview.gd").new()
 	furniture_preview.player = player
 	player.add_child.call_deferred(furniture_preview)
@@ -78,6 +84,13 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if state_machine.current_state in [action_state, fishing_state, dodge_state]:
 		return
+	if state_machine.current_state == ride_state:
+		# Menumpang kendaraan: tombol Alat = turun; ganti slot hotbar tetap boleh.
+		if input.is_event(event, &"use_tool"):
+			player.bind_context()
+			player.dismount_vehicle()
+			get_viewport().set_input_as_handled()
+			return
 	if state_machine.current_state == jump_state:
 		# Di udara hanya benih yang bisa dipakai: ditebar saat mendarat (Grand Bazaar).
 		if input.is_event(event, &"use_tool") and EquipmentContext.is_seed(current_item):
@@ -98,6 +111,10 @@ func _unhandled_input(event: InputEvent) -> void:
 					animal.lift_with(player)
 					get_viewport().set_input_as_handled()
 					return
+		if current_item != null and current_item.vehicle != null:
+			player.mount_vehicle(current_item)
+			get_viewport().set_input_as_handled()
+			return
 		if Combat.is_weapon(current_item):
 			# Serangan keluar saat tombol dilepas: singkat = ringan, ditahan = berat (PlayerCombat).
 			if not player.combat.is_exhausted():
@@ -192,7 +209,7 @@ func attack(kind: CombatState.Kind = CombatState.Kind.LIGHT) -> bool:
 	var style := Combat.style_for(weapon)
 	if style == null or player.is_defeated:
 		return false
-	if state_machine.current_state in [action_state, fishing_state, combat_state, dodge_state, jump_state]:
+	if state_machine.current_state in [action_state, fishing_state, combat_state, dodge_state, jump_state, ride_state]:
 		return false
 	var combat := player.combat
 	if combat.is_exhausted():
@@ -335,7 +352,7 @@ func scatter_seeds(item: ItemData) -> int:
 func use_action(action: ActionData) -> void:
 	if action == null:
 		return
-	if state_machine.current_state in [action_state, fishing_state, combat_state, jump_state]:
+	if state_machine.current_state in [action_state, fishing_state, combat_state, jump_state, ride_state]:
 		return
 	if action.effect is FishingEffect:
 		_start_fishing(action)

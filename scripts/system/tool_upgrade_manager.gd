@@ -64,7 +64,7 @@ func get_upgrade_data(tool_id: String) -> Dictionary:
 		if tool_data != null:
 			return {
 				"next": next_tool_id,
-				"cost": tool_data.upgrade_cost_money,
+				"cost": _discounted(tool_data.upgrade_cost_money),
 				"materials": tool_data.required_items,
 				"display_name": tool_data.display_name
 			}
@@ -97,9 +97,13 @@ func _get_fallback_upgrade_data(_tool_type: String, next_tier: String, next_tool
 
 	return {
 		"next": next_tool_id,
-		"cost": costs.get(next_tier, 1000),
+		"cost": _discounted(costs.get(next_tier, 1000)),
 		"materials": materials.get(next_tier, {})
 	}
+
+## Sayap Karya Balai Nadi: potongan biaya uang upgrade (bahan tidak berubah).
+func _discounted(cost: int) -> int:
+	return roundi(cost * (1.0 - clampf(SkillSystem.household(&"tool_upgrade_discount"), 0.0, 0.9)))
 
 ## Two day boundaries must pass. Orders belong to PlayerData, including P2-P4.
 const WORK_DAYS := 2

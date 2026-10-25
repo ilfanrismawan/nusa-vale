@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/vehicle_visual.gd" id="1_visual"]
+[ext_resource type="Texture2D" path="res://assets/vehicles/flying_broom.png" id="2_sheet"]
+
+[node name="FlyingBroom" type="Node2D" node_paths=PackedStringArray("sprite")]
+script = ExtResource("1_visual")
+sprite = NodePath("Sprite")
+fps = 6.0
+animate_when_idle = true
+rider_offset_side = Vector2(0, -5)
+rider_offset_front = Vector2(0, -5)
+draw_in_front_side = 1
+draw_in_front_down = 1
+draw_in_front_up = -1
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, 0)
+texture = ExtResource("2_sheet")
+hframes = 2
+vframes = 3

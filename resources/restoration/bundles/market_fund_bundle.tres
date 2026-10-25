@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="RestorationProject" format=3]
+
+[ext_resource type="Script" uid="uid://dexc7jaawor5t" path="res://scripts/resources/restoration_project.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+project_id = "market_fund_bundle"
+display_name = "Sayap Niaga — Dana Pasar"
+ui_short_name = "Dana Pasar"
+description = "Modal bersama untuk membuka kembali lapak pasar desa."
+requirements = Dictionary[String, int]({
+"money": 5000
+})
+slots_required = 0
+wing_id = "niaga"
+completion_flag = "market_fund_bundle_done"
+completion_message = "Pasar desa punya modal lagi! Ini sarang lebah untukmu."
+reward_items = Dictionary[String, int]({
+"beehive": 1
+})

@@ -82,6 +82,10 @@ enum Quality {
 ## (0.25 = 25% lebih cepat). Umpan termurah di tas dipakai otomatis saat kail jatuh di air.
 @export_range(0.0, 0.8, 0.05) var bait_bonus: float = 0.0
 
+@export_category("Vehicle")
+## Kendaraan (GDD 10). Diisi = barang ini dinaiki dengan tombol Alat, dibeli sekali per pemain.
+@export var vehicle: VehicleData
+
 @export_category("Skill")
 ## Buku riset (GDD 13.1): role_id yang mendapat EXP saat buku dibaca (kosong = bukan buku).
 @export var skill_book_role: String = ""

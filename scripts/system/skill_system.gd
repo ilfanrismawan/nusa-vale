@@ -14,6 +14,7 @@ extends RefCounted
 ##           max_hp, iframes (detik), poise_damage, kill_heal, damage_reduction, stagger_immune
 ## Miner     pickaxe_stamina, pickaxe_power, coal_double, gem_double, ore_double, smelt_speed, stairs_chance
 ## Merchant  shop_discount, shop_sell, bulk_seed_discount, facility_discount
+## Balai Nadi (bonus sayap) tool_upgrade_discount (biaya uang upgrade alat), geode_chance (+pengali geoda)
 ## Economist ship_bonus, faint_penalty, balai_discount, daily_interest, faint_farm_free, shared_prosperity, shipping_pickups
 
 const RULES: SkillRules = preload("res://resources/skills/skill_rules.tres")
@@ -98,7 +99,11 @@ static func scaled_exp(price: int, per_price: float, low: int, high: int) -> int
 
 static func stat(data: PlayerData, key: StringName) -> float:
 	data = _data(data)
-	return data.skills.stat(key) if data != null and data.skills != null else 0.0
+	return (data.skills.stat(key) if data != null and data.skills != null else 0.0) + wing_bonus(key)
+
+## Bonus permanen sayap Balai Nadi yang lengkap (GDD 4.9), berlaku untuk semua pemain.
+static func wing_bonus(key: StringName) -> float:
+	return GameState.balai_nadi.wing_stat(key) if GameState.balai_nadi != null else 0.0
 
 static func has(data: PlayerData, key: StringName) -> bool:
 	return stat(data, key) > 0.0
@@ -113,7 +118,7 @@ static func household(key: StringName) -> float:
 	for data in GameState.players:
 		if data != null and data.skills != null:
 			best = maxf(best, data.skills.stat(key))
-	return best
+	return best + wing_bonus(key)
 
 static func household_roll(key: StringName) -> bool:
 	var chance := household(key)

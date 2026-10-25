@@ -16,7 +16,8 @@ const DEFAULT_PLAYER_NAME := "Petani"
 ## v20: slot kalung/cincin/aksesori + mesin baru (sarang lebah, penggergajian); save lama otomatis kosong.
 ## v22: Role & EXP per pemain ("skills" di blok player dan tiap karakter co-op); save lama = Lv0.
 ## v25: permanent friendship locks and per-character household/social reward letters.
-const SAVE_VERSION := 25
+## v26: peternakan lanjutan (kerbau, kapibara, kuda, anak hewan, kehamilan, inkubator, bulu bebek); save lama = hewan dewasa tanpa inkubator.
+const SAVE_VERSION := 26
 
 signal game_saved
 signal game_loaded

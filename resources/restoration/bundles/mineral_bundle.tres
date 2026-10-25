@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="RestorationProject" format=3]
+
+[ext_resource type="Script" uid="uid://dexc7jaawor5t" path="res://scripts/resources/restoration_project.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+project_id = "mineral_bundle"
+display_name = "Sayap Pengetahuan — Mineral & Artefak"
+ui_short_name = "Mineral & Artefak"
+description = "Mineral langka dan sisa masa lalu dari kedalaman gua."
+requirements = Dictionary[String, int]({
+"earth_crystal": 1,
+"frozen_tear": 1,
+"fire_quartz": 1,
+"old_bone": 1,
+"slime_gel": 10
+})
+slots_required = 0
+wing_id = "pengetahuan"
+completion_flag = "mineral_bundle_done"
+completion_message = "Pengetahuan desa bertambah. Ini geoda pelangi untukmu."
+reward_items = Dictionary[String, int]({
+"omni_geode": 1
+})

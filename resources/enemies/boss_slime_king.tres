@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/data/boss_data.gd" id="1"]
 [ext_resource type="Resource" path="res://resources/enemies/slime_golden.tres" id="2_minion"]
+[ext_resource type="AudioStream" path="res://assets/audio/music/boss_exclusive_orchestra.wav" id="3_music"]
 
 [resource]
 script = ExtResource("1")
@@ -9,6 +10,8 @@ title = "Raja Slime Emas"
 floor_number = 20
 sprite_scale = 2.5
 rest_time = 1.1
+music = ExtResource("3_music")
+music_volume_db = -8.0
 phase2_hp_ratio = 0.5
 phase3_hp_ratio = 0.2
 phase_tempo = PackedFloat32Array(1.0, 0.8, 0.65)

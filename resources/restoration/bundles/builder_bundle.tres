@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="RestorationProject" format=3]
+
+[ext_resource type="Script" uid="uid://dexc7jaawor5t" path="res://scripts/resources/restoration_project.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+project_id = "builder_bundle"
+display_name = "Sayap Karya — Paket Tukang"
+ui_short_name = "Paket Tukang"
+description = "Bahan bangunan untuk memperbaiki bengkel balai."
+requirements = Dictionary[String, int]({
+"plank": 20,
+"rope": 5,
+"resin": 10,
+"fiber": 50,
+"clay": 10
+})
+slots_required = 0
+wing_id = "karya"
+completion_flag = "builder_bundle_done"
+completion_message = "Bengkel balai berdiri kokoh lagi. Warga menghadiahkan sawmill."
+reward_items = Dictionary[String, int]({
+"sawmill": 1
+})

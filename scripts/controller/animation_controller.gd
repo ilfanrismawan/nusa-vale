@@ -12,6 +12,8 @@ var _visual_override: StringName
 var _facing_left := false
 var item_gesture_playing := false
 var carrying_item := false
+## Menunggang kuda: idle/walk/run diganti horse_idle/horse_walk/horse_run (PNG/14.x Horse).
+var riding_horse := false
 ## Frame yang ditahan untuk pose bidik (mis. busur ditarik). -1 = tidak menahan pose.
 var _pose_hold := -1
 ## Saat membidik sambil bergerak, kaki tetap memakai animasi jalan/lari ini.
@@ -27,6 +29,12 @@ func set_carrying_item(value: bool) -> void:
 	if carrying_item == value:
 		return
 	carrying_item = value
+	_apply(true)
+
+func set_riding_horse(value: bool) -> void:
+	if riding_horse == value:
+		return
+	riding_horse = value
 	_apply(true)
 
 func _ready() -> void:
@@ -112,6 +120,8 @@ func _apply(keep_frame: bool) -> void:
 	var action := String(_visual_override) if not _visual_override.is_empty() else _action
 	if _visual_override.is_empty() and carrying_item and action in ["idle", "walk", "run"]:
 		action = "carry_" + action
+	elif _visual_override.is_empty() and riding_horse and action in ["idle", "walk", "run"] and not _resolve_animation("horse_" + action).is_empty():
+		action = "horse_" + action
 	var resolved := _resolve_animation(action)
 	if resolved.is_empty():
 		push_warning("Animasi '%s_%s' tidak ada di SpriteFrames." % [action, _direction])

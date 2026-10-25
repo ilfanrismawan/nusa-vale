@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="BalaiWing" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/balai_wing.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+wing_id = "karya"
+display_name = "Sayap Karya"
+description = "Peternakan, barang artisan, bengkel, dan tungku desa."
+effects = Dictionary[StringName, float]({
+&"tool_upgrade_discount": 0.1
+})
+bonus_text = "biaya upgrade alat -10%"
+reward_tokens = 2
+completion_flag = "balai_wing_karya_done"
+completion_message = "Sayap Karya pulih sepenuhnya! Empu Bima memberi potongan harga tempa."

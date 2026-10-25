@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="RestorationProject" format=3]
+
+[ext_resource type="Script" uid="uid://dexc7jaawor5t" path="res://scripts/resources/restoration_project.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+project_id = "orchard_bundle"
+display_name = "Sayap Alam — Kebun Buah"
+ui_short_name = "Kebun Buah"
+description = "Buah dari pohon yang dirawat sepanjang tahun. Bawa lima jenis dari musim yang berbeda."
+requirements = Dictionary[String, int]({
+"apple": 1,
+"cherry": 1,
+"orange": 1,
+"peach": 1,
+"mango": 1,
+"apricot": 1,
+"banana": 1
+})
+slots_required = 5
+wing_id = "alam"
+completion_flag = "orchard_bundle_done"
+completion_message = "Keranjang buah penuh warna! Terimalah satu bibit pohon mangga."
+reward_items = Dictionary[String, int]({
+"seed_mango": 1
+})

@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="RestorationProject" format=3]
+
+[ext_resource type="Script" uid="uid://dexc7jaawor5t" path="res://scripts/resources/restoration_project.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+project_id = "spice_bundle"
+display_name = "Sayap Niaga — Lumbung Rempah"
+ui_short_name = "Lumbung Rempah"
+description = "Bumbu dapur pokok untuk para pedagang."
+requirements = Dictionary[String, int]({
+"salt": 5,
+"sugar": 5,
+"flour": 5,
+"oil": 5,
+"shoyu": 5
+})
+slots_required = 0
+wing_id = "niaga"
+completion_flag = "spice_bundle_done"
+completion_message = "Lumbung rempah terisi. Warga menghadiahkan mesin minyak."
+reward_items = Dictionary[String, int]({
+"oil_maker": 1
+})

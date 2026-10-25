@@ -539,7 +539,9 @@ func _on_rock_removed(rock: Choppable, token: int) -> void:
 	_blocked.erase(cell)
 	if dungeon_layout != null and dungeon_layout.walkable.has(cell):
 		dungeon_layout.navigation.set_point_solid(cell, false)
-	for item_id in rock_bonus_drops(rock.get_meta("cave_ore", ""), randf(), [randf(), randf()]):
+	# Sayap Pengetahuan Balai Nadi: peluang geoda dikali (1 + geode_chance).
+	var geode_roll := randf() / (1.0 + SkillSystem.household(&"geode_chance"))
+	for item_id in rock_bonus_drops(rock.get_meta("cave_ore", ""), geode_roll, [randf(), randf()]):
 		_spawn_bonus.call_deferred(item_id, rock.global_position)
 		# Prospector: batubara 2x. Geologist: geoda berpasangan (GDD 13).
 		if (item_id == "coal" and SkillSystem.roll(rock.last_hitter, &"coal_double")) \

@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="RestorationProject" format=3]
+
+[ext_resource type="Script" uid="uid://dexc7jaawor5t" path="res://scripts/resources/restoration_project.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+project_id = "summer_crops_bundle"
+display_name = "Sayap Alam — Panen Musim Panas"
+ui_short_name = "Panen Musim Panas"
+description = "Buah dan sayur musim panas untuk pesta panen desa. Cukup bawa empat jenis."
+requirements = Dictionary[String, int]({
+"tomato": 1,
+"corn": 1,
+"melon": 1,
+"blueberry": 1,
+"chili": 1,
+"watermelon": 1
+})
+slots_required = 4
+wing_id = "alam"
+completion_flag = "summer_crops_bundle_done"
+completion_message = "Panen musim panas lengkap! Ini bibit melon untuk ladangmu."
+reward_items = Dictionary[String, int]({
+"seed_melon": 10
+})

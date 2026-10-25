@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="StyleBox" path="res://resources/ui/shop_card_normal.tres" id="style"]
+[node name="SellSlot" type="PanelContainer"]
+custom_minimum_size = Vector2(93, 40)
+mouse_filter = 0
+theme_override_styles/panel = ExtResource("style")
+[node name="Icon" type="TextureRect" parent="."]
+texture_filter = 1
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+[node name="Count" type="Label" parent="."]
+layout_mode = 2
+horizontal_alignment = 2
+vertical_alignment = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 15

@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="RestorationProject" format=3]
+
+[ext_resource type="Script" uid="uid://dexc7jaawor5t" path="res://scripts/resources/restoration_project.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+project_id = "gem_bundle"
+display_name = "Sayap Pengetahuan — Permata Nusa"
+ui_short_name = "Permata Nusa"
+description = "Batu permata dari Gua Tambang untuk lemari pajang balai. Bawa enam jenis."
+requirements = Dictionary[String, int]({
+"quartz": 1,
+"amethyst": 1,
+"topaz": 1,
+"emerald": 1,
+"ruby": 1,
+"sapphire": 1,
+"citrine": 1,
+"onyx": 1
+})
+slots_required = 6
+wing_id = "pengetahuan"
+completion_flag = "gem_bundle_done"
+completion_message = "Lemari permata berkilau! Terimalah tiga geoda."
+reward_items = Dictionary[String, int]({
+"geode": 3
+})

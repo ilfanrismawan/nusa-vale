@@ -1,0 +1,353 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Theme" path="res://resources/ui/cooking_theme.tres" id="theme"]
+[ext_resource type="Theme" path="res://resources/ui/startup_form_theme.tres" id="form"]
+[ext_resource type="PackedScene" path="res://scenes/ui/book_text.tscn" id="text"]
+[ext_resource type="Shader" path="res://resources/ui/cooking_backdrop.gdshader" id="shader"]
+
+[sub_resource type="StyleBoxFlat" id="Paper"]
+bg_color = Color(0.969, 0.953, 0.914, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_left = 20
+corner_radius_bottom_right = 20
+
+[sub_resource type="StyleBoxFlat" id="TextNav"]
+bg_color = Color(0.26, 0.31, 0.22, 1)
+content_margin_left = 6.0
+content_margin_right = 6.0
+content_margin_top = 2.0
+content_margin_bottom = 2.0
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_left = 8
+corner_radius_bottom_right = 8
+
+[sub_resource type="StyleBoxFlat" id="TextNavHover"]
+bg_color = Color(0.38, 0.43, 0.31, 1)
+content_margin_left = 6.0
+content_margin_right = 6.0
+content_margin_top = 2.0
+content_margin_bottom = 2.0
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_left = 8
+corner_radius_bottom_right = 8
+
+[sub_resource type="ShaderMaterial" id="Backdrop"]
+shader = ExtResource("shader")
+shader_parameter/blur_amount = 3.5
+shader_parameter/top_tint = Color(0.025, 0.035, 0.02, 0.8)
+shader_parameter/bottom_tint = Color(0.24, 0.34, 0.24, 0.86)
+
+[node name="ShopPresentation" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Dimmer" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+material = SubResource("Backdrop")
+
+[node name="Book" type="Control" parent="."]
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+theme = ExtResource("theme")
+
+[node name="Title" type="Label" parent="Book"]
+offset_left = 30.0
+offset_top = 25.0
+offset_right = 950.0
+offset_bottom = 78.0
+theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
+theme_override_font_sizes/font_size = 32
+text = "General Store"
+
+[node name="Money" type="Label" parent="Book"]
+offset_left = 960.0
+offset_top = 30.0
+offset_right = 1240.0
+offset_bottom = 75.0
+theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 2
+text = "0 G"
+
+[node name="Portrait" type="TextureRect" parent="Book"]
+offset_left = 24.0
+offset_top = 150.0
+offset_right = 254.0
+offset_bottom = 503.0
+texture_filter = 1
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="Keeper" type="Label" parent="Book"]
+offset_left = 28.0
+offset_top = 104.0
+offset_right = 250.0
+offset_bottom = 146.0
+theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
+theme_override_font_sizes/font_size = 24
+text = "Penjaga toko"
+text_overrun_behavior = 3
+
+[node name="DialoguePanel" type="Panel" parent="Book"]
+offset_left = 24.0
+offset_top = 530.0
+offset_right = 254.0
+offset_bottom = 687.0
+theme_override_styles/panel = SubResource("Paper")
+mouse_filter = 2
+
+[node name="Greeting" type="Label" parent="Book"]
+offset_left = 40.0
+offset_top = 550.0
+offset_right = 238.0
+offset_bottom = 670.0
+text = "Selamat datang!"
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 18
+
+[node name="DetailPanel" type="Panel" parent="Book"]
+offset_left = 904.0
+offset_top = 146.0
+offset_right = 1244.0
+offset_bottom = 698.0
+theme_override_styles/panel = SubResource("Paper")
+mouse_filter = 2
+
+[node name="SelectedIcon" type="TextureRect" parent="Book"]
+offset_left = 1008.0
+offset_top = 169.0
+offset_right = 1120.0
+offset_bottom = 281.0
+texture_filter = 1
+expand_mode = 1
+stretch_mode = 5
+mouse_filter = 2
+
+[node name="SelectedName" type="Label" parent="Book"]
+offset_left = 928.0
+offset_top = 295.0
+offset_right = 1220.0
+offset_bottom = 353.0
+text = "Pilih kebutuhanmu"
+theme_override_font_sizes/font_size = 23
+autowrap_mode = 3
+max_lines_visible = 2
+text_overrun_behavior = 3
+
+[node name="Description" parent="Book" instance=ExtResource("text")]
+offset_left = 928.0
+offset_top = 363.0
+offset_right = 1220.0
+offset_bottom = 499.0
+text_font_size = 18
+
+[node name="Navigation" parent="Book/Description" index="1"]
+offset_left = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+
+[node name="Previous" parent="Book/Description/Navigation" index="0"]
+theme_override_styles/normal = SubResource("TextNav")
+theme_override_styles/disabled = SubResource("TextNav")
+theme_override_styles/hover = SubResource("TextNavHover")
+theme_override_styles/pressed = SubResource("TextNavHover")
+
+[node name="Next" parent="Book/Description/Navigation" index="2"]
+theme_override_styles/normal = SubResource("TextNav")
+theme_override_styles/disabled = SubResource("TextNav")
+theme_override_styles/hover = SubResource("TextNavHover")
+theme_override_styles/pressed = SubResource("TextNavHover")
+
+[node name="QuantityHeading" type="Label" parent="Book"]
+offset_left = 928.0
+offset_top = 510.0
+offset_right = 1218.0
+offset_bottom = 536.0
+text = "Jumlah pembelian"
+theme_override_font_sizes/font_size = 17
+
+[node name="Quantity" type="SpinBox" parent="Book"]
+offset_left = 928.0
+offset_top = 541.0
+offset_right = 1220.0
+offset_bottom = 581.0
+theme = ExtResource("form")
+min_value = 1.0
+max_value = 99.0
+value = 1.0
+
+[node name="Summary" type="Label" parent="Book"]
+offset_left = 928.0
+offset_top = 588.0
+offset_right = 1220.0
+offset_bottom = 634.0
+text = "Pilih barang, lalu tentukan jumlah."
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 3
+
+[node name="Buy" type="Button" parent="Book"]
+offset_left = 928.0
+offset_top = 640.0
+offset_right = 1220.0
+offset_bottom = 682.0
+text = "Pilih barang dahulu"
+theme_override_font_sizes/font_size = 20
+
+[node name="Filters" type="HBoxContainer" parent="Book"]
+offset_left = 280.0
+offset_top = 100.0
+offset_right = 880.0
+offset_bottom = 140.0
+theme_override_constants/separation = 6
+
+[node name="All" type="Button" parent="Book/Filters"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "Semua"
+theme_override_font_sizes/font_size = 17
+metadata/season = "all"
+
+[node name="Spring" type="Button" parent="Book/Filters"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "Semi"
+theme_override_font_sizes/font_size = 17
+metadata/season = "spring"
+
+[node name="Summer" type="Button" parent="Book/Filters"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "Panas"
+theme_override_font_sizes/font_size = 17
+metadata/season = "summer"
+
+[node name="Fall" type="Button" parent="Book/Filters"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "Gugur"
+theme_override_font_sizes/font_size = 17
+metadata/season = "fall"
+
+[node name="Winter" type="Button" parent="Book/Filters"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "Dingin"
+theme_override_font_sizes/font_size = 17
+metadata/season = "winter"
+
+[node name="Other" type="Button" parent="Book/Filters"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "Lain"
+theme_override_font_sizes/font_size = 17
+metadata/season = "other"
+
+[node name="Stock" type="GridContainer" parent="Book"]
+offset_left = 280.0
+offset_top = 156.0
+offset_right = 880.0
+offset_bottom = 476.0
+columns = 3
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+
+[node name="Empty" type="Label" parent="Book"]
+offset_left = 292.0
+offset_top = 270.0
+offset_right = 870.0
+offset_bottom = 365.0
+theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
+text = "Belum ada barang untuk kategori ini.\nCoba pilih Semua atau Lain."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="CatalogPrevious" type="Button" parent="Book"]
+offset_left = 280.0
+offset_top = 490.0
+offset_right = 360.0
+offset_bottom = 530.0
+text = "‹"
+
+[node name="CatalogPage" type="Label" parent="Book"]
+offset_left = 375.0
+offset_top = 493.0
+offset_right = 785.0
+offset_bottom = 527.0
+theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
+text = "1 / 1"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 18
+
+[node name="CatalogNext" type="Button" parent="Book"]
+offset_left = 800.0
+offset_top = 490.0
+offset_right = 880.0
+offset_bottom = 530.0
+text = "›"
+
+[node name="InventoryHint" type="Label" parent="Book"]
+offset_left = 280.0
+offset_top = 539.0
+offset_right = 880.0
+offset_bottom = 566.0
+theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
+text = "Isi tas"
+theme_override_font_sizes/font_size = 16
+
+[node name="Inventory" type="GridContainer" parent="Book"]
+offset_left = 280.0
+offset_top = 568.0
+offset_right = 880.0
+offset_bottom = 656.0
+columns = 6
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+
+[node name="InventoryPrevious" type="Button" parent="Book"]
+offset_left = 280.0
+offset_top = 663.0
+offset_right = 342.0
+offset_bottom = 700.0
+text = "‹"
+
+[node name="InventoryPage" type="Label" parent="Book"]
+offset_left = 351.0
+offset_top = 664.0
+offset_right = 528.0
+offset_bottom = 697.0
+theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
+text = "1 / 1"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 17
+
+[node name="InventoryNext" type="Button" parent="Book"]
+offset_left = 538.0
+offset_top = 663.0
+offset_right = 600.0
+offset_bottom = 700.0
+text = "›"
+
+[node name="Close" type="Button" parent="Book"]
+offset_left = 650.0
+offset_top = 663.0
+offset_right = 880.0
+offset_bottom = 700.0
+text = "Esc  Kembali"
+theme_override_font_sizes/font_size = 18

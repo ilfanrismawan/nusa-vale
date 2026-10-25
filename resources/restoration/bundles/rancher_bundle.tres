@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="RestorationProject" format=3]
+
+[ext_resource type="Script" uid="uid://dexc7jaawor5t" path="res://scripts/resources/restoration_project.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+project_id = "rancher_bundle"
+display_name = "Sayap Karya — Paket Peternak"
+ui_short_name = "Paket Peternak"
+description = "Hasil kandang dari unggas dan ternak besar. Bawa lima jenis."
+requirements = Dictionary[String, int]({
+"chicken_egg": 1,
+"duck_egg": 1,
+"cow_milk": 1,
+"goat_milk": 1,
+"buffalo_milk": 1,
+"wool": 1,
+"duck_feather": 1
+})
+slots_required = 5
+wing_id = "karya"
+completion_flag = "rancher_bundle_done"
+completion_message = "Peternak desa bangga padamu. Terimalah jerami untuk kandangmu."
+reward_items = Dictionary[String, int]({
+"hay": 20
+})

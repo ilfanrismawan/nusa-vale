@@ -19,6 +19,9 @@ Status: terpasang, 13 Oktober 2026. Desain utama: `GDD.md`, bagian 2 dan 4.10.
 | Sapi | 2.500 G | Ternak | Susu sapi | 1 | Pemeras Susu |
 | Kambing | 3.200 G | Ternak | Susu kambing | 2 | Pemeras Susu |
 | Domba | 3.000 G | Ternak | Wol | 3 | Gunting Wol |
+| Kerbau | 4.000 G | Ternak | Susu kerbau | 2 | Pemeras Susu |
+| Kapibara | 2.000 G | Ternak | – (bonus +1 kasih sayang hewan sekandang) | – | Sikat |
+| Kuda (maks 1) | 5.000 G | Ternak | – (tunggangan 1,6–1,8x) | – | Sikat |
 
 Hari terawat adalah hari hewan makan dan tidak sakit. Hasil dibuat pada pergantian hari; memberi pakan tidak memberi produk seketika. Hari lapar tidak menambah kemajuan produksi. Susu/wol menyimpan satu hasil siap per hewan dan menunggu dipanen sebelum produksi berikutnya. Telur tersimpan sampai total 999, kemudian produksi berhenti sampai stok diambil.
 
@@ -50,7 +53,7 @@ Kandang berisi hewan/produk/jerami dan silo berisi jerami tidak bisa dikemas. Ru
 
 Sprite hewan, bangunan, upgrade kandang, silo, jerami, produk, Mesin Keju, Alat Tenun, dan bingkai UI menggunakan Farm RPG Tiny Asset Pack milik pengguna. Ikon Pemeras Susu, Gunting Wol, Sikat Ternak, Rumput Pakan, serta sprite Mesin Mayones dibuat sebagai SVG piksel di `assets/ranch`.
 
-Interior kandang kini bisa dimasuki: klik kanan di depan pintu. Keluar juga melalui klik kanan pintu interior. Hewan, palung, titik kotor, sarang telur, dan papan pengelolaan dapat diinteraksikan langsung. Pembelian hewan dilakukan melalui Toko Ternak Rian di kota. Panduan dan referensi desain: [RANCH_INTERIORS.md](RANCH_INTERIORS.md). Kuda, kerbau, kapibara, pembiakan, inkubasi, bulu bebek, festival, serta layanan kesehatan berbayar masih pengembangan lanjutan.
+Interior kandang kini bisa dimasuki: klik kanan di depan pintu. Keluar juga melalui klik kanan pintu interior. Hewan, palung, titik kotor, sarang telur, dan papan pengelolaan dapat diinteraksikan langsung. Pembelian hewan dilakukan melalui Toko Ternak Rian di kota. Panduan dan referensi desain: [RANCH_INTERIORS.md](RANCH_INTERIORS.md). Kerbau, kapibara, kuda tunggangan, pembiakan Barn, Inkubator, anak hewan, dan bulu bebek terpasang 25 Oktober 2026 (save v26); aturan lengkap di GDD 4.10.9–4.10.11. Festival, ayam jago, dan layanan kesehatan berbayar masih pengembangan lanjutan. Mesin Keju juga menerima Susu Kerbau.
 
 ## Verifikasi
 

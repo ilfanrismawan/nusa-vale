@@ -66,6 +66,7 @@
 [ext_resource type="PackedScene" uid="uid://dkqwvuaii8bpi" path="res://scenes/world/exterior/town/shop.tscn" id="town_shop"]
 [ext_resource type="PackedScene" path="res://scenes/world/exterior/town/university.tscn" id="town_university"]
 [ext_resource type="PackedScene" path="res://scenes/world/exterior/town/warung.tscn" id="town_warung"]
+[ext_resource type="PackedScene" path="res://scenes/world/exterior/town/tea_stall.tscn" id="town_tea_stall"]
 [ext_resource type="Material" uid="uid://ci3yasder0uu3" path="res://resources/water_detail_material.tres" id="water_detail"]
 
 [ext_resource type="PackedScene" path="res://scenes/npc/routes/town_paths.tscn" id="ResidentPaths"]
@@ -8210,6 +8211,9 @@ position = Vector2(150, 376)
 [node name="ShopCounter" parent="YSortEntities/Buildings" unique_id=1022808899 instance=ExtResource("town_shop")]
 position = Vector2(754, 186)
 
+[node name="TeaStall" parent="YSortEntities/Buildings" instance=ExtResource("town_tea_stall")]
+position = Vector2(960, 504)
+
 [node name="Anvil" type="StaticBody2D" parent="YSortEntities" unique_id=1811101128]
 position = Vector2(1367, 915)
 script = ExtResource("11_twn")
@@ -8992,7 +8996,7 @@ script = ExtResource("ResidentPresenter")
 [editable path="NPCPaths"]
 
 [node name="zarathia_tea_stall" type="Marker2D" parent="NPCPoints"]
-position = Vector2(920, 446)
+position = Vector2(960, 488)
 
 [node name="zarathia_bench" type="Marker2D" parent="NPCPoints"]
 position = Vector2(580, 456)

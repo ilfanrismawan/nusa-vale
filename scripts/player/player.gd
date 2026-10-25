@@ -133,6 +133,7 @@ func _ready() -> void:
 		facing_direction = Transition.carry_facing
 		animation_controller.set_direction(facing_direction)
 	Transition.carry_facing = Vector2.ZERO
+	_resume_vehicle.call_deferred()
 		
 func _process(delta: float) -> void:
 	bind_context()
@@ -279,6 +280,7 @@ func refresh_world() -> void:
 	base_layer_ground = get_node_or_null("../../BaseLayerGround")
 	if base_layer_ground == null:
 		base_layer_ground = world_root().get_node_or_null("BaseLayerGround") as TileMapLayer
+	_resume_vehicle.call_deferred()
 
 func set_input_locked(reason: StringName, locked: bool) -> void:
 	if locked:
@@ -332,6 +334,57 @@ func _resolve_pending_jump() -> void:
 	if get_tree().paused or not input.in_context(InputLayout.EXPLORE):
 		return
 	try_jump()
+
+# ── Kendaraan (GDD 10) ──────────────────────────────────────────────
+
+func is_riding() -> bool:
+	return tool_controller != null and tool_controller.ride_state != null \
+		and state_machine.current_state == tool_controller.ride_state
+
+## Naik kendaraan dari item di tas. false bila sedang beraksi, terkunci, atau di dalam ruangan.
+func mount_vehicle(item: ItemData, quiet: bool = false) -> bool:
+	if item == null or item.vehicle == null or is_input_locked() or is_defeated or is_riding() or has_meta("riding_horse"):
+		return false
+	if not Vehicles.allowed_here(self):
+		if not quiet:
+			Notify.say("%s tidak bisa dipakai di dalam ruangan." % item.display_name)
+		return false
+	var state := state_machine.current_state
+	if not (state is IdleState or state is MoveState):
+		return false
+	bind_context()
+	release_carried_animal()
+	_clear_pickup_visual()
+	tool_controller.ride_state.start(item)
+	state_machine.change_state(tool_controller.ride_state)
+	return true
+
+## Turun dari kendaraan. park = kendaraan dinaiki lagi otomatis di area luar berikutnya.
+func dismount_vehicle(park: bool = false) -> bool:
+	if not is_riding():
+		return false
+	if park:
+		tool_controller.ride_state.parking = true
+		state_machine.change_state(state_machine.get_node("IdleState"))
+		return true
+	return tool_controller.ride_state.dismount()
+
+## Setelah pindah area: parkir kendaraan bila masuk ruangan, naik lagi bila keluar ke area luar.
+func _resume_vehicle() -> void:
+	if not is_inside_tree() or tool_controller == null or tool_controller.ride_state == null:
+		return
+	var vehicle_id := data.riding_vehicle_id
+	if vehicle_id.is_empty():
+		return
+	if not Vehicles.allowed_here(self):
+		dismount_vehicle(true)
+		return
+	if is_riding():
+		return
+	if not data.has_item(vehicle_id):
+		data.riding_vehicle_id = ""
+		return
+	mount_vehicle(GameState._resolve_item(vehicle_id), true)
 
 func play_item_gesture(pickup: bool = false, icon: Texture2D = null, item_id: String = "") -> void:
 	_pending_item_gesture = &"pick_up" if pickup else &"item_drop"
@@ -469,6 +522,9 @@ func _try_interact() -> bool:
 	if nearest_door != null:
 		nearest_door.interact(self)
 		return true
+	if has_meta("riding_horse"):
+		StructureManager.dismount(self)
+		return true
 	if StructureManager.interact_near(self):
 		return true
 	var target := _find_interactable()
@@ -517,6 +573,12 @@ func _interact_at(world_pos: Vector2) -> bool:
 	else:
 		target.interact()
 	return true
+
+## Pengali kecepatan saat menunggang kuda: 1,6x, naik sampai 1,8x pada 5 hati (GDD 4.10.10).
+func mount_speed_multiplier() -> float:
+	if not has_meta("riding_horse"):
+		return 1.0
+	return 1.6 + 0.2 * clampf(float(get_meta("riding_horse").get("affection", 0)) / 100.0, 0.0, 1.0)
 
 func release_carried_animal() -> void:
 	var carried := get_meta("carried_animal") as Node if has_meta("carried_animal") else null
@@ -935,6 +997,7 @@ func _die(exhausted: bool = false) -> void:
 	is_defeated = true
 	_knockback = Vector2.ZERO
 	release_carried_animal()
+	StructureManager.dismount(self, true)
 	_clear_pickup_visual()
 	state_machine.change_state(state_machine.get_node("IdleState"))
 	set_input_locked(DefeatSequence.LOCK, true)

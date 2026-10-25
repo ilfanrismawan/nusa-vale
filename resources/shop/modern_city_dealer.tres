@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ShopData" load_steps=5 format=3]
+
+[ext_resource type="Script" uid="uid://bosipocdasjvg" path="res://scripts/resources/shop_data.gd" id="1_shop"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="2_item"]
+[ext_resource type="Resource" path="res://resources/item_data/electric_scooter.tres" id="3_scooter"]
+[ext_resource type="Resource" path="res://resources/item_data/pickup_truck.tres" id="4_truck"]
+
+[resource]
+script = ExtResource("1_shop")
+shop_id = "modern_city_dealer"
+shop_name = "Dealer Kendaraan"
+keeper_name = "Penjual Kendaraan"
+greeting = "Kendaraan modern untuk jalanan kota. Barang yang terkunci baru bisa dibeli setelah Kota Modern terbuka."
+stock = Array[ExtResource("2_item")]([ExtResource("3_scooter"), ExtResource("4_truck")])
+buys_items = false

@@ -36,7 +36,7 @@ const CONSTRUCTION := {
 const RANCHES := ["chicken_coop", "barn"]
 const ARTISANS := {
 	"mayonnaise_maker": {"chicken_egg": "mayonnaise", "duck_egg": "duck_mayonnaise"},
-	"cheese_press": {"cow_milk": "cheese", "goat_milk": "goat_cheese"},
+	"cheese_press": {"cow_milk": "cheese", "goat_milk": "goat_cheese", "buffalo_milk": "buffalo_cheese"},
 	"loom": {"wool": "cloth"},
 	"keg": {
 		"wheat": "beer", "grape": "wine", "apple": "wine", "cherry": "wine",
@@ -81,8 +81,17 @@ var _recipes: Array[FurnaceRecipe] = []
 var _preserves_recipes: Array[PreservesJarRecipe] = []
 var _dehydrator_recipes: Array[DehydratorRecipe] = []
 var _sawmill_recipes: Array[FurnaceRecipe] = []
+## Kuda yang sedang ditunggangi: "uid:id" -> Player. Tidak disimpan; tidur/muat ulang menurunkan penunggang.
+var _riders: Dictionary = {}
+## Tempat kuda ditinggal di dunia (gaya Stardew): {"scene", "pos", "flip"}. Kosong = di depan Barn.
+## Tidak disimpan; setiap pagi kuda kembali ke depan Barn.
+var horse_spot: Dictionary = {}
+var _horse_scan := 0.0
 
 func _ready() -> void:
+	DayCycle.day_passed.connect(func(_day: int):
+		dismount_all()
+		horse_spot = {})
 	DayCycle.day_passed.connect(_advance_chickens)
 	DayCycle.day_passed.connect(_advance_beehives)
 	DayCycle.day_passed.connect(func(_day: int): if GameState.weather.is_storm(): _advance_lightning_rods())
@@ -166,7 +175,7 @@ func coop_state(record: Dictionary) -> Dictionary:
 
 func buy_animal(uid: int, species: String, requested_name: String = "", variant: String = "white") -> Dictionary:
 	var record := record_for(uid)
-	if not RanchHusbandry.SPECIES.has(species) or not variant in ChickenHusbandry.VARIANTS:
+	if not RanchHusbandry.SPECIES.has(species) or not variant in RanchHusbandry.variants_for(species):
 		return _result(false, "Jenis hewan tidak tersedia.")
 	var info: Dictionary = RanchHusbandry.SPECIES[species]
 	if record.get("item") != info.home:
@@ -174,15 +183,281 @@ func buy_animal(uid: int, species: String, requested_name: String = "", variant:
 	var state := coop_state(record)
 	if state.chickens.size() >= RanchHusbandry.capacity(state):
 		return _result(false, "Kandang penuh. Tingkatkan kandang terlebih dahulu.")
+	if species == "horse" and count_species("horse") >= RanchHusbandry.HORSE_LIMIT:
+		return _result(false, "Kamu sudah punya kuda. Satu kuda cukup untuk satu peternakan.")
 	if not GameState.spend_money(int(info.price)):
 		return _result(false, "Uang tidak cukup: %d G." % int(info.price))
 	var animal_name := requested_name.replace("\n", " ").replace("\r", " ").strip_edges().left(16)
 	if animal_name.is_empty():
 		animal_name = "%s %d" % [info.name, int(state.next_id)]
-	state.chickens.append({"id": int(state.next_id), "name": animal_name, "variant": variant, "species": species, "fed_day": 0, "pet_day": 0, "affection": 0, "brush_day": 0, "bad_days": 0, "sick": false, "progress": 0, "ready": ""})
+	var animal: Dictionary = RanchHusbandry.ANIMAL_DEFAULTS.duplicate()
+	animal.merge({"id": int(state.next_id), "name": animal_name, "variant": variant, "species": species, "fed_day": 0, "pet_day": 0, "affection": 0}, true)
+	state.chickens.append(animal)
 	state.next_id = int(state.next_id) + 1
 	_sync_all()
 	return _result(true, "%s tiba! Beri pakan, elus, dan jaga kebersihan kandang." % animal_name)
+
+func count_species(kind: String) -> int:
+	var count := 0
+	for record in records:
+		if record.item in RANCHES:
+			for animal in coop_state(record).chickens:
+				count += 1 if RanchHusbandry.species(animal) == kind else 0
+	return count
+
+func rename_animal(uid: int, id: int, requested_name: String) -> Dictionary:
+	var record := record_for(uid)
+	if not record.get("item") in RANCHES:
+		return _result(false, "Kandang tidak tersedia.")
+	var animal := RanchHusbandry.animal_by_id(coop_state(record), id)
+	var animal_name := requested_name.replace("\n", " ").replace("\r", " ").strip_edges().left(16)
+	if animal.is_empty() or animal_name.is_empty():
+		return _result(false, "Tulis nama terlebih dahulu.")
+	animal.name = animal_name
+	_sync_all()
+	return _result(true, "Namanya sekarang %s." % animal_name)
+
+## Pembiakan Barn (GDD 4.10.9): gratis, satu kehamilan per kandang, anak lahir setelah BREED_DAYS hari terawat.
+func breed_animal(uid: int, id: int) -> Dictionary:
+	var record := record_for(uid)
+	if record.get("item") != "barn":
+		return _result(false, "Pembiakan hanya di Kandang Ternak.")
+	var state := coop_state(record)
+	var animal := RanchHusbandry.animal_by_id(state, id)
+	if animal.is_empty():
+		return _result(false, "Hewan tidak tersedia.")
+	var reason := RanchHusbandry.can_breed(state, animal)
+	if not reason.is_empty():
+		return _result(false, reason)
+	animal.pregnant = int(RanchHusbandry.BREED_DAYS[RanchHusbandry.species(animal)])
+	_sync_all()
+	Juice.play_sound(&"pickup")
+	return _result(true, "%s sedang hamil. Anak lahir setelah %d hari terawat." % [animal.name, int(animal.pregnant)])
+
+## Inkubator dipasang sekali di Kandang Unggas memakai item "incubator" dari tas.
+func install_incubator(data: PlayerData, uid: int) -> Dictionary:
+	var record := record_for(uid)
+	if data == null or record.get("item") != "chicken_coop":
+		return _result(false, "Inkubator hanya untuk Kandang Unggas.")
+	var state := coop_state(record)
+	if state.incubator.installed:
+		return _result(false, "Inkubator sudah terpasang.")
+	if not data.remove_item("incubator", 1):
+		return _result(false, "Rakit Inkubator terlebih dahulu.")
+	state.incubator.installed = true
+	_sync_all()
+	return _result(true, "Inkubator terpasang. Masukkan telur ayam atau bebek.")
+
+func incubate_egg(data: PlayerData, uid: int, egg_id: String) -> Dictionary:
+	var record := record_for(uid)
+	if data == null or record.get("item") != "chicken_coop":
+		return _result(false, "Kandang tidak tersedia.")
+	var state := coop_state(record)
+	var base := RanchHusbandry.base_egg(egg_id)
+	if not state.incubator.installed:
+		return _result(false, "Pasang Inkubator terlebih dahulu.")
+	if not str(state.incubator.egg).is_empty():
+		return _result(false, "Inkubator masih berisi telur.")
+	if base.is_empty() or not data.remove_item(egg_id, 1):
+		return _result(false, "Bawa telur ayam atau bebek di tas.")
+	state.incubator.egg = egg_id
+	state.incubator.days = int(RanchHusbandry.HATCH[base].days)
+	_sync_all()
+	return _result(true, "Telur dierami. Menetas dalam %d hari bila kandang punya tempat." % int(state.incubator.days))
+
+func incubator_eggs(data: PlayerData) -> Array[String]:
+	var result: Array[String] = []
+	for slot in data.bag_size:
+		if data.inventory[slot] != null:
+			var id: String = data.inventory[slot].item.item_id
+			if not RanchHusbandry.base_egg(id).is_empty() and not id in result:
+				result.append(id)
+	return result
+
+## Kuda tunggangan (GDD 4.10.10), gaya Stardew/Harvest Moon: interaksi pada kuda di dunia langsung menaikinya.
+## Kuda lapar diberi 1 jerami dari tas pemain; elusan harian ikut terhitung saat naik.
+## Kecepatan dipakai MoveState lewat Player.mount_speed_multiplier().
+func mount_horse(player: Player, uid: int, id: int) -> Dictionary:
+	var record := record_for(uid)
+	var animal := RanchHusbandry.animal_by_id(coop_state(record), id) if record.get("item") in RANCHES else {}
+	if player == null or animal.is_empty() or RanchHusbandry.species(animal) != "horse":
+		return _result(false, "Kuda tidak tersedia.")
+	if not RanchHusbandry.is_adult(animal):
+		return _result(false, "%s masih terlalu kecil untuk ditunggangi." % animal.name)
+	if animal.sick:
+		return _result(false, "%s kurang sehat. Beri pakan dan bersihkan kandang dulu." % animal.name)
+	if player.is_riding():
+		return _result(false, "Turun dari kendaraan dulu.")
+	var key := "%d:%d" % [uid, id]
+	if is_instance_valid(_riders.get(key)):
+		return _result(false, "%s sedang ditunggangi pemain lain." % animal.name)
+	if player.has_meta("riding_horse") or (player.has_meta("carried_animal") and is_instance_valid(player.get_meta("carried_animal"))):
+		return _result(false, "Tanganmu sedang sibuk.")
+	var note := ""
+	if int(animal.fed_day) != DayCycle.current_day:
+		if not player.data.remove_item("hay", 1):
+			return _result(false, "%s lapar. Bawa 1 jerami untuk memberinya makan." % animal.name)
+		animal.fed_day = DayCycle.current_day
+		note = " Diberi 1 jerami."
+	if int(animal.pet_day) != DayCycle.current_day:
+		animal.pet_day = DayCycle.current_day
+		animal.affection = mini(100, int(animal.affection) + 3)
+	_riders[key] = player
+	player.set_meta("riding_horse", {"uid": uid, "id": id, "affection": int(animal.affection), "coat": RanchHusbandry.horse_coat(animal)})
+	# Pemain berpindah ke punggung kuda yang berdiri di dunia.
+	var actor := _horse_actor(player.world_root())
+	if actor != null:
+		player.global_position = actor.global_position - Player.FEET_OFFSET
+		actor.queue_free()
+	var mount: Node2D = load("res://scripts/world/horse_mount.gd").new()
+	mount.name = "HorseMount"
+	player.add_child(mount)
+	_sync_all()
+	return _result(true, "Menunggangi %s.%s Tekan interaksi untuk turun." % [animal.name, note])
+
+func dismount(player: Player, silent: bool = false) -> void:
+	if not is_instance_valid(player) or not player.has_meta("riding_horse"):
+		return
+	var info: Dictionary = player.get_meta("riding_horse")
+	player.remove_meta("riding_horse")
+	_riders.erase("%d:%d" % [int(info.uid), int(info.id)])
+	var mount := player.get_node_or_null("HorseMount")
+	if mount != null:
+		if not str(mount.last_scene).is_empty():
+			horse_spot = {"scene": str(mount.last_scene), "pos": mount.last_position, "flip": player.facing_direction.x < 0}
+		if not silent:
+			mount.play_dismount()
+			# Pemain turun ke samping kuda bila ada ruang.
+			var side := Vector2(14, 0) if player.facing_direction.x >= 0 else Vector2(-14, 0)
+			if not player.test_move(player.global_transform, side):
+				player.global_position += side
+		mount.queue_free()
+	_sync_all()
+	_sync_horse_actors()
+
+func dismount_all() -> void:
+	for player in _riders.values():
+		dismount(player, true)
+	_riders.clear()
+
+func is_ridden(uid: int, id: int) -> bool:
+	return is_instance_valid(_riders.get("%d:%d" % [uid, id]))
+
+## Kuda dewasa pertama milik peternakan: {"uid", "id"} atau kosong.
+func find_horse() -> Dictionary:
+	for record in records:
+		if record.item == "barn":
+			for animal in coop_state(record).chickens:
+				if RanchHusbandry.species(animal) == "horse" and RanchHusbandry.is_adult(animal):
+					return {"uid": int(record.uid), "id": int(animal.id)}
+	return {}
+
+func _horse_holder(world: Node) -> Node:
+	var holder := world.get_node_or_null("YSort")
+	return holder if holder != null else world
+
+func _horse_actor(world: Node) -> Node2D:
+	if world == null:
+		return null
+	var actor := _horse_holder(world).get_node_or_null("HorseActor") as Node2D
+	return actor if is_instance_valid(actor) and not actor.is_queued_for_deletion() else null
+
+## Menampilkan kuda di area tempat ia ditinggal (atau di depan Barn) untuk setiap dunia yang dibuka pemain.
+func _sync_horse_actors() -> void:
+	var horse := find_horse()
+	var seen := {}
+	for node in get_tree().get_nodes_in_group(Combat.PLAYER_GROUP):
+		if not node is Player:
+			continue
+		var world: Node = node.world_root()
+		if world == null or seen.has(world):
+			continue
+		seen[world] = true
+		var actor := _horse_actor(world)
+		var wanted := not horse.is_empty() and not is_ridden(int(horse.uid), int(horse.id))
+		if wanted:
+			wanted = world.get_meta("structure_area", "") == "farm" if horse_spot.is_empty() else str(world.scene_file_path) == str(horse_spot.scene)
+		if not wanted:
+			if actor != null:
+				actor.queue_free()
+			continue
+		if actor != null:
+			continue
+		var position := Vector2.ZERO
+		if horse_spot.is_empty():
+			var barn := structure_node(world, int(horse.uid))
+			if barn == null:
+				continue
+			var size := GameState._resolve_item("barn").placement_size
+			position = barn.global_position + Vector2(-size.x * 8 - 12, size.y * 8 + 10)
+		else:
+			position = horse_spot.pos
+		actor = load("res://scripts/world/horse_actor.gd").new()
+		actor.name = "HorseActor"
+		actor.uid = int(horse.uid)
+		actor.animal_id = int(horse.id)
+		actor.flip = bool(horse_spot.get("flip", false))
+		_horse_holder(world).add_child(actor)
+		actor.global_position = position
+
+## Cheat debug: bangun kandang gratis di tanah kosong terdekat dari pemain (harus di ladang).
+func debug_build(player: Player, item_id: String) -> String:
+	if not is_instance_valid(player) or player.world_root().get_meta("structure_area", "") != "farm" or player.base_layer_ground == null:
+		return "Pergi ke ladang (Farm) dulu, lalu jalankan cheat ini."
+	var ground := player.base_layer_ground
+	var origin := ground.local_to_map(ground.to_local(player.global_position + Player.FEET_OFFSET))
+	var size := GameState._resolve_item(item_id).placement_size
+	for radius in range(2, 25):
+		for dy in range(-radius, radius + 1):
+			for dx in range(-radius, radius + 1):
+				if maxi(absi(dx), absi(dy)) != radius:
+					continue
+				var cell := origin + Vector2i(dx, dy) - Vector2i(size.x / 2, size.y)
+				if not check_construction(player, item_id, cell).ok:
+					continue
+				var record := {"uid": _next_uid, "item": item_id, "cell": [cell.x, cell.y], "storage": [], "open": false, "job": {}, "ready": {}}
+				if item_id in RANCHES:
+					record.livestock = ChickenHusbandry.empty(DayCycle.current_day)
+				_next_uid += 1
+				records.append(record)
+				_sync_all()
+				placement_feedback(player, record)
+				return "%s dibangun gratis di dekatmu." % GameState._resolve_item(item_id).display_name
+	return "Tidak ada tanah kosong yang cukup luas di sekitarmu. Pindah ke area lapang."
+
+## Cheat debug: kuda dewasa gratis di Barn pertama, kenyang dan 4 hati, langsung berdiri di samping pemain.
+func debug_spawn_horse(player: Player) -> String:
+	var horse := find_horse()
+	if horse.is_empty():
+		var barn := {}
+		for record in records:
+			if record.item == "barn":
+				barn = record
+				break
+		if barn.is_empty():
+			return "Bangun Kandang Ternak (Barn) dulu; kuda tinggal di sana."
+		var state := coop_state(barn)
+		if state.chickens.size() >= RanchHusbandry.capacity(state):
+			return "Barn penuh."
+		var animal: Dictionary = RanchHusbandry.ANIMAL_DEFAULTS.duplicate()
+		animal.merge({"id": int(state.next_id), "name": "Kilat", "variant": "bay", "species": "horse", "fed_day": DayCycle.current_day, "pet_day": 0, "affection": 80}, true)
+		state.chickens.append(animal)
+		state.next_id = int(state.next_id) + 1
+		horse = {"uid": int(barn.uid), "id": int(animal.id)}
+	var data := RanchHusbandry.animal_by_id(coop_state(record_for(int(horse.uid))), int(horse.id))
+	data.fed_day = DayCycle.current_day
+	data.sick = false
+	if player != null and is_instance_valid(player):
+		dismount(player, true)
+		var actor := _horse_actor(player.world_root())
+		if actor != null:
+			actor.queue_free()
+		horse_spot = {"scene": str(player.world_root().scene_file_path), "pos": player.global_position + Player.FEET_OFFSET + Vector2(18, 0), "flip": true}
+		if player.world_root().has_meta("ranch_uid") or str(player.world_root().scene_file_path).contains("/interior/"):
+			horse_spot = {}
+	_sync_all()
+	_sync_horse_actors.call_deferred()
+	return "Kuda %s siap di dekatmu. Dekati lalu tekan interaksi untuk naik." % data.name
 
 func brush_animal(data: PlayerData, uid: int, id: int) -> Dictionary:
 	var record := record_for(uid)
@@ -613,6 +888,10 @@ func interact_near(player: Player) -> bool:
 		return world.interact_ranch_near(player)
 	if player.world_root().get_meta("structure_area", "") != "farm" or player.base_layer_ground == null:
 		return false
+	for actor in get_tree().get_nodes_in_group(&"horse_actor"):
+		if actor.get_world_2d() == player.get_world_2d() and actor.global_position.distance_to(player.global_position + Player.FEET_OFFSET) < 22:
+			actor.interact(player)
+			return true
 	for actor in get_tree().get_nodes_in_group(&"ranch_animal"):
 		if actor.visible and actor.get_world_2d() == player.get_world_2d() and actor.global_position.distance_to(player.global_position + Player.FEET_OFFSET) < 22:
 			actor.interact_with(player)
@@ -1128,6 +1407,10 @@ func process_animal_product(data: PlayerData, uid: int, input: String) -> Dictio
 	return _result(true, "Mengolah %s. Siap dalam 20 detik permainan aktif." % GameState._resolve_item(input).display_name)
 
 func _process(delta: float) -> void:
+	_horse_scan -= delta
+	if _horse_scan <= 0.0:
+		_horse_scan = 0.3
+		_sync_horse_actors()
 	if not DayCycle.is_running:
 		return
 	for record in records:

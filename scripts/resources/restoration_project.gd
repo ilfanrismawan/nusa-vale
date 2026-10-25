@@ -8,6 +8,8 @@ extends Resource
 @export var ui_short_name: String = ""
 @export_multiline var description: String = ""
 @export var requirements: Dictionary[String, int] = {}
+## Jumlah kebutuhan yang harus lengkap (ala Stardew "pilih N dari M"). 0 = semua.
+@export var slots_required: int = 0
 @export var wing_id: String = ""
 @export var unlock_id: String = ""
 @export var completion_flag: String = ""

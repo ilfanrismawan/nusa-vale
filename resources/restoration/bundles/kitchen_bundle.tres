@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="RestorationProject" format=3]
+
+[ext_resource type="Script" uid="uid://dexc7jaawor5t" path="res://scripts/resources/restoration_project.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+project_id = "kitchen_bundle"
+display_name = "Sayap Niaga — Dapur Desa"
+ui_short_name = "Dapur Desa"
+description = "Masakan rumahan untuk warung balai. Bawa enam jenis."
+requirements = Dictionary[String, int]({
+"bread": 1,
+"omelet": 1,
+"vegetable_soup": 1,
+"fish_stew": 1,
+"pancakes": 1,
+"rice_ball": 1,
+"fried_egg": 1,
+"baked_fish": 1
+})
+slots_required = 6
+wing_id = "niaga"
+completion_flag = "kitchen_bundle_done"
+completion_message = "Dapur balai harum lagi. Terimalah oven masak."
+reward_items = Dictionary[String, int]({
+"cooking_oven": 1
+})

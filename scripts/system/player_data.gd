@@ -168,6 +168,9 @@ var birthday_season: String = ""
 var birthday_day: int = 0
 var pet_id: String = ""
 var pet_name: String = ""
+## Kendaraan yang sedang dinaiki/diparkir (GDD 10). Runtime saja, tidak disimpan:
+## setelah load pemain mulai berjalan kaki.
+var riding_vehicle_id: String = ""
 
 ## Jumlah slot yang aktif/terlihat saat ini
 var bag_size: int:
@@ -729,6 +732,7 @@ func to_dict() -> Dictionary:
 	}
 
 func load_dict(data: Dictionary) -> void:
+	riding_vehicle_id = ""
 	load_social_progress(data.get("npc_progress", {}))
 	load_friendships(data.get("friendships", {}))
 	clear_food_effects()

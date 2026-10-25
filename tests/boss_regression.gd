@@ -58,6 +58,7 @@ func _test_data() -> void:
 	check(boss.tempo_for(3) < boss.tempo_for(2) and boss.tempo_for(2) < boss.tempo_for(1), "later phases are faster")
 	check(boss.slam_combo_for(1) == 1 and boss.slam_combo_for(3) == 3 and boss.spit_count_for(3) > boss.spit_count_for(1), "later phases combo more")
 	check(boss.reward_money > 0 and boss.reward_items.size() == boss.reward_counts.size(), "first-clear reward is set")
+	check(boss.music != null and boss.music is AudioStream, "boss exclusive orchestra music is assigned")
 	for item_id in boss.reward_items:
 		check(GameState._resolve_item(item_id) != null, "reward item exists: " + item_id)
 

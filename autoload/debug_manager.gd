@@ -21,18 +21,21 @@
 ##   INSERT → Bahan perbaikan jembatan (+20 Wood, +10 Stone)
 ##   HOME   → Toggle ikan gigit instan (Fishing)
 ##   END    → Toggle auto-menang minigame (Fishing)
+##   PGDN   → Spawn semua kendaraan ke tas (GDD 10)
 
 extends CanvasLayer
 
 ## ── Konfigurasi ──────────────────────────────────────────────────────────────
 const SkillDebugPanel = preload("res://development/skill_debug_panel.gd")
 const TestingActions = preload("res://development/testing_actions.gd")
+const VehicleDebugPanel = preload("res://development/vehicle_debug_panel.gd")
 const ENABLED := true   # Ganti ke false untuk matikan semua tanpa hapus kode
 
 var _panel: PanelContainer
 var _god_mode: bool = false
 var _speed_boost: bool = false
 var _equipment_tier: int = 0
+var _vehicle_panel: VehicleDebugPanel
 
 ## ── Lifecycle ─────────────────────────────────────────────────────────────────
 func _ready() -> void:
@@ -96,6 +99,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 		KEY_END:
 			_cheat_toggle_auto_win()
+			get_viewport().set_input_as_handled()
+		KEY_PAGEDOWN:
+			_vehicle_panel.spawn_all()
 			get_viewport().set_input_as_handled()
 
 ## ── Process Hooks ─────────────────────────────────────────────────────────────
@@ -227,6 +233,17 @@ func _build_panel() -> void:
 	_add_cheat_row(box, "", "Pulihkan HP, stamina, air & efek makanan", func():
 		TestingActions.recover(GameState.current)
 		_notify("Pemain aktif dipulihkan."))
+	for building in [["barn", "Bangun Kandang Ternak (Barn) gratis di dekat pemain"], ["chicken_coop", "Bangun Kandang Unggas gratis di dekat pemain"], ["silo", "Bangun Silo gratis di dekat pemain"]]:
+		_add_cheat_row(box, "", building[1], func():
+			var builder := Coop.current_player()
+			if builder == null:
+				builder = get_tree().get_first_node_in_group(Combat.PLAYER_GROUP) as Player
+			_notify(StructureManager.debug_build(builder, building[0])))
+	_add_cheat_row(box, "", "Spawn kuda di dekat pemain (gratis, perlu Barn)", func():
+		var actor := Coop.current_player()
+		if actor == null:
+			actor = get_tree().get_first_node_in_group(Combat.PLAYER_GROUP) as Player
+		_notify(StructureManager.debug_spawn_horse(actor)))
 	_add_cheat_row(box, "", "Toggle jam berjalan / berhenti", func():
 		DayCycle.is_running = not DayCycle.is_running
 		_notify("Jam berjalan: %s" % DayCycle.is_running))
@@ -244,6 +261,8 @@ func _build_panel() -> void:
 		_notify(TestingActions.give_item(GameState.current, item_id.text, int(amount.value))))
 
 	box.add_child(SkillDebugPanel.new())
+	_vehicle_panel = VehicleDebugPanel.new()
+	box.add_child(_vehicle_panel)
 
 	# ── Kategori: Sistem ──
 	_add_category_header(box, "⚙  SISTEM")

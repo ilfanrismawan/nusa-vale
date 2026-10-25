@@ -328,6 +328,9 @@ func context() -> int:
 		return L.AIR
 	if p.is_swimming():
 		return L.SWIM
+	if p.is_riding():
+		# Menumpang kendaraan: tata letak Lapangan apa pun yang dipegang (tombol Alat = turun).
+		return L.FIELD
 	return EquipmentContext.input_context(p.tool_controller.current_item if p.tool_controller != null else null)
 
 func in_context(mask: int) -> bool:

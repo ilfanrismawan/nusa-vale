@@ -22,7 +22,7 @@ func physics_update(_delta: float) -> void:
 		return
 	
 	player.update_facing_direction(input_vector)
-	player.velocity = input_vector * player.speed * speed_multiplier * player.data.food_movement_multiplier() * player.combat_speed_scale()
+	player.velocity = input_vector * player.speed * speed_multiplier * player.data.food_movement_multiplier() * player.combat_speed_scale() * player.mount_speed_multiplier()
 	player.move_and_slide()
 
 func _get_switch_state() -> State:

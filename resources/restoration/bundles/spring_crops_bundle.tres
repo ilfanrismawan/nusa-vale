@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="RestorationProject" format=3]
+
+[ext_resource type="Script" uid="uid://dexc7jaawor5t" path="res://scripts/resources/restoration_project.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+project_id = "spring_crops_bundle"
+display_name = "Sayap Alam — Panen Musim Semi"
+ui_short_name = "Panen Musim Semi"
+description = "Hasil ladang musim semi untuk lumbung benih desa. Cukup bawa empat jenis."
+requirements = Dictionary[String, int]({
+"parsnip": 1,
+"potato": 1,
+"cauliflower": 1,
+"strawberry": 1,
+"garlic": 1,
+"cabbage": 1
+})
+slots_required = 4
+wing_id = "alam"
+completion_flag = "spring_crops_bundle_done"
+completion_message = "Lumbung musim semi terisi. Warga membalas dengan bibit stroberi."
+reward_items = Dictionary[String, int]({
+"seed_strawberry": 10
+})
