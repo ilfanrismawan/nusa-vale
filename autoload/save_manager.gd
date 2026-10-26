@@ -604,6 +604,7 @@ func _serialize_farm() -> Array:
 			"stage": max(0, int(d.get("stage", 0))),
 			"days_in_stage": max(0, int(d.get("days_in_stage", 0))),
 			"watered": bool(d.get("watered", false)),
+			"regrow": bool(d.get("regrow", false)),
 		})
 		
 	return farm_data
@@ -657,7 +658,9 @@ func _load_farm(data: Dictionary) -> void:
 			"crop": crop,
 			"stage": clampi(int(entry.get("stage", 0)), 0, maxi(0, crop.get_total_stages() - 1)) if crop != null else 0,
 			"days_in_stage": max(0, int(entry.get("days_in_stage", 0))),
-			"watered": bool(entry.get("watered", false))
+			"watered": bool(entry.get("watered", false)),
+			# Opsional sejak 26 Oktober 2026; save lama = belum pernah dipanen.
+			"regrow": bool(entry.get("regrow", false))
 		}
 		
 func _load_world_state(data: Dictionary) -> void:

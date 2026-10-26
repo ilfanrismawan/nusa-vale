@@ -99,7 +99,10 @@ func _refresh() -> void:
 		child.queue_free()
 	match record.item:
 		"mayonnaise_maker", "cheese_press", "loom", "keg", "oil_maker", "fish_smoker":
-			if not record.job.is_empty():
+			if not record.job.is_empty() and record.job.has("day"):
+				var days := maxi(1, int(record.job.day) - DayCycle.current_day)
+				_label(_content, "Sedang memfermentasi. Hasil siap dalam %d hari." % days)
+			elif not record.job.is_empty():
 				_label(_content, "Sedang mengolah. Hasil siap setelah 20 detik permainan aktif.")
 			elif not record.ready.is_empty():
 				_content.add_child(_button("Ambil " + GameState._resolve_item(record.ready.id).display_name, _collect))
@@ -114,8 +117,11 @@ func _refresh() -> void:
 				_label(_content, prompt if not options.is_empty() else "Bahan yang sesuai tidak ditemukan di tasmu.")
 				for id in options:
 					var output := StructureManager.artisan_output(str(record.item), id)
-					_content.add_child(_button("%s → %s" % [GameState._resolve_item(id).display_name, GameState._resolve_item(output).display_name], _artisan.bind(id)))
+					var suffix := " (%d hari)" % StructureManager.keg_days(output) if record.item == "keg" else ""
+					_content.add_child(_button("%s → %s%s" % [GameState._resolve_item(id).display_name, GameState._resolve_item(output).display_name, suffix], _artisan.bind(id)))
 			_status.text = "Satu bahan menjadi satu olahan; kualitas bahan dipertahankan."
+			if record.item == "keg":
+				_status.text = "Bir dan jus 2 hari, mead 3 hari, wine 4 hari. Harga olahan mengikuti bahannya."
 		"lightning_rod":
 			if not record.ready.is_empty():
 				_content.add_child(_button("Ambil " + GameState._resolve_item(record.ready.id).display_name, _collect))

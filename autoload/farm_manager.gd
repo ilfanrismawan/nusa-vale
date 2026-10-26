@@ -150,6 +150,7 @@ func plant(cell: Vector2i, crop: CropData) -> bool:
 	data["crop"] = crop
 	data["stage"] = 0
 	data["days_in_stage"] = 0
+	data["regrow"] = false
 	data["watered"] = false
 	
 	_update_crop_tile(cell, crop, 0)
@@ -251,6 +252,7 @@ func harvest(cell: Vector2i) -> bool:
 		data["stage"] = maxi(0, max_stage - 1)
 		data["days_in_stage"] = 0
 		data["watered"] = false
+		data["regrow"] = true
 		if is_instance_valid(crop_layer) and _visible_plot(data):
 			_update_crop_tile(cell, crop, data["stage"])
 	else:
@@ -302,7 +304,11 @@ func _on_day_passed(_day: int) -> void:
 					if crop.is_fruit_tree() and orchard_active:
 						growth_bonus += 1
 					data["days_in_stage"] += growth_bonus
-					if data["days_in_stage"] >= crop.days_per_stage:
+					# Setelah panen pertama, pohon buah berbuah lagi tiap regrow_days.
+					var needed := crop.days_per_stage
+					if data.get("regrow", false) and crop.regrow_days > 0:
+						needed = crop.regrow_days
+					if data["days_in_stage"] >= needed:
 						data["stage"] += 1
 						data["days_in_stage"] = 0
 						if layers_valid and _visible_plot(data):

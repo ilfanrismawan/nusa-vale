@@ -9,5 +9,5 @@ item_id = "fairy_bar"
 display_name = "Batangan Fairy"
 icon = ExtResource("1_icon")
 description = "Batangan logam peri memesona yang memancarkan kilau merah muda mistis."
-sell_price = 40
+sell_price = 1100
 metadata/_custom_type_script = "uid://cm1okc20ussp3"

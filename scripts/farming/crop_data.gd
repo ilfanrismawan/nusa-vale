@@ -9,6 +9,8 @@ extends Resource
 @export var growth_stages: Array[Vector2i] = []
 
 @export var days_per_stage: int = 1
+## Pohon buah: hari sampai berbuah lagi setelah panen pertama (0 = days_per_stage).
+@export var regrow_days: int = 0
 
 @export var harvest_item_id: String = ""
 @export var harvest_count: int = 1

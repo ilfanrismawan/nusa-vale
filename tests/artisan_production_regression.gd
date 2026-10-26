@@ -43,6 +43,14 @@ func _ready() -> void:
 	var tree_data: Dictionary = FarmManager.farm_data.get(Vector2i(5, 5), {})
 	check(tree_data.get("crop") == apple_crop, "Fruit tree is not erased upon harvest")
 	check(int(tree_data.get("stage", 0)) == apple_crop.get_total_stages() - 2, "Fruit tree stage set to regrow stage (%d)" % (apple_crop.get_total_stages() - 2))
+	# Setelah panen pertama, pohon berbuah lagi tiap regrow_days (3) di musimnya.
+	DayCycle.current_day = 60 # fall
+	for day in apple_crop.regrow_days:
+		check(int(tree_data.stage) == apple_crop.get_total_stages() - 2, "Fruit tree still regrowing before day %d" % (day + 1))
+		tree_data.watered = true
+		FarmManager._on_day_passed(DayCycle.current_day + day + 1)
+	check(tree_data.get("regrow", false) and int(tree_data.stage) == apple_crop.get_total_stages() - 1, "Fruit tree bears fruit again after %d days" % apple_crop.regrow_days)
+	FarmManager.harvest(Vector2i(5, 5))
 
 	# Season advance: make sure apple tree does NOT wither even when season changes to winter
 	DayCycle.current_day = 84 # last day of fall
@@ -61,10 +69,11 @@ func _ready() -> void:
 	check(StructureManager.artisan_output("keg", "wheat") == "beer", "Keg converts wheat -> beer")
 	check(StructureManager.artisan_output("keg", "grape") == "wine", "Keg converts grape -> wine")
 	check(StructureManager.artisan_output("keg", "honey") == "mead", "Keg converts honey -> mead")
+	check(StructureManager.artisan_output("keg", "apple_gold") == "apple_wine_gold", "Keg makes per-fruit wine and keeps quality")
 	check(StructureManager.artisan_output("oil_maker", "corn") == "oil", "Oil Maker converts corn -> oil")
 	check(StructureManager.artisan_output("oil_maker", "truffle") == "truffle_oil", "Oil Maker converts truffle -> truffle_oil")
-	check(StructureManager.artisan_output("fish_smoker", "fish_salmon") == "smoked_fish", "Fish Smoker converts raw fish -> smoked_fish")
-	check(StructureManager.artisan_output("fish_smoker", "fish_salmon_gold") == "smoked_fish_gold", "Fish Smoker preserves gold quality")
+	check(StructureManager.artisan_output("fish_smoker", "fish_salmon") == "smoked_fish_salmon", "Fish Smoker converts raw fish -> smoked fish of that species")
+	check(StructureManager.artisan_output("fish_smoker", "fish_salmon_gold") == "smoked_fish_salmon_gold", "Fish Smoker preserves gold quality")
 	check(StructureManager.artisan_output("fish_smoker", "smoked_fish").is_empty(), "Fish Smoker rejects smoked fish as input")
 
 	# Test artisan job processing
@@ -82,10 +91,13 @@ func _ready() -> void:
 	}
 	StructureManager.records.append(keg_record)
 	var proc := StructureManager.process_animal_product(player, 777, "wheat")
-	check(proc.ok and not keg_record.job.is_empty(), "Keg starts processing wheat")
-	keg_record.job.seconds = 0.05
+	check(proc.ok and int(keg_record.job.get("day", 0)) == DayCycle.current_day + 2, "Keg ferments wheat for 2 game days")
 	DayCycle.is_running = true
-	StructureManager._process(0.1) # finish processing
+	StructureManager._process(100.0)
+	check(keg_record.ready.is_empty(), "Keg ignores active seconds")
+	StructureManager._advance_kegs(DayCycle.current_day + 1)
+	check(keg_record.ready.is_empty(), "Keg not ready after 1 day")
+	StructureManager._advance_kegs(DayCycle.current_day + 2)
 	check(not keg_record.ready.is_empty() and keg_record.ready.id == "beer", "Keg finishes and produces beer")
 	var col := StructureManager.collect(player, 777)
 	check(col.ok and player.has_item("beer"), "Beer collected into player bag")

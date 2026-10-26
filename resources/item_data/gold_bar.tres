@@ -12,5 +12,5 @@ icon = ExtResource("1_icon")
 description = "Batangan emas murni berkilau indah bernilai tinggi."
 stackable = true
 max_stack = 99
-sell_price = 40
+sell_price = 160
 metadata/_custom_type_script = "uid://cm1okc20ussp3"

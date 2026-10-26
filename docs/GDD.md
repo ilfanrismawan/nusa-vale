@@ -1,6 +1,6 @@
 # Nusa Vale — Game Design Document (GDD)
 
-Versi dokumen: 3.36 (26 Oktober 2026).
+Versi dokumen: 3.37 (26 Oktober 2026).
 Dokumen ini adalah **sumber kebenaran desain** proyek `E:\nusa-vale` (Game Design Document resmi).
 Pada versi 1.9, ditambahkan 4 pilar fundamental Life-Sim / Farming RPG: **Sistem Peternakan & Satwa** (kandang Barn/Coop, sapi, kambing, domba, ayam, bebek, kuda, pakan & affection), **Mesin Pengolah Pasca-Panen (Artisan Goods)** (mayones, keju, selai, fermentasi keg, tenun, pengasap ikan), **Sistem Cuaca Harian Dinamis** (cerah, hujan penyiram otomatis, badai petir penangkal baterai, salju), serta **Sistem Sosial, Persahabatan, & Jadwal Harian NPC** (hati 0-10, sistem hadiah loved/hated, rutinitas harian, heart events, dan romansa/teman sekamar).
 
@@ -291,6 +291,7 @@ Suara (detak, bisikan, langkah, koak, dengung lampu, dengung glitch, angin) disi
   - Pohon buah (Apel, Ceri, Jeruk, Persik, Mangga, Pisang, Aprikot) **bukan tanaman sekali panen**.
   - Bibit pohon buah ditanam dan tumbuh melalui beberapa fase hingga menjadi pohon dewasa permanen yang tetap berdiri lintas musim.
   - Pohon berbuah secara berkala hanya pada musim spesifiknya masing-masing, dapat dipanen berulang kali setiap beberapa hari selama musim aktif tanpa perlu menanam ulang.
+  - **[terpasang 26 Oktober 2026, keputusan pemilik]** Setelah panen pertama pohon berbuah lagi tiap **3 hari** (`CropData.regrow_days`; waktu tumbuh awal tetap). Bibit seharga ±12× buahnya, jual kembali 40%: Aprikot 1.000, Ceri 900, Pisang 2.100, Mangga 2.050, Jeruk/Apel 1.900, Persik 2.000 G. Hasil 25–58 G/petak/hari, balik modal ±36 hari berbuah. Di Greenhouse pohon berbuah sepanjang tahun.
 - **Greenhouse [terpasang]**: 32 petak tanam lintas musim di dalam ruangan, tidak terpengaruh musim luar dan tanaman tidak pernah layu.
 
 ### 4.5 Alat, Tier, dan Pengerjaan Upgrade [terpasang + keputusan]
@@ -338,7 +339,7 @@ Baseline terbaru: changelog 3.30 (bagian 19); audit lanjutan [AUDIT_2026-10-26.m
 - **Sumber Bijih Tingkat Lanjut [keputusan]**:
   - Batu Tembaga dan Besi ada di Hutan.
   - Batu Emas (*Gold Ore*) hingga batuan logam langka berikutnya (Platinum, Crimson, Frost, Shadow, Fairy, Obsidian) **ditempatkan di area Gunung dan lantai-lantai Gua tambang** yang harus di-unlock terlebih dahulu.
-- **Harga Jual Batangan Logam Naik Progresif [keputusan]**:
+- **Harga Jual Batangan Logam Naik Progresif [keputusan, terpasang 26 Oktober 2026]**:
   - Tembaga (Copper Bar): 40 G
   - Besi (Iron Bar): 80 G
   - Emas (Gold Bar): 160 G
@@ -550,10 +551,10 @@ Mesin pengolah yang dapat dirakit melalui Crafting dan ditempatkan di ladang ata
 - **Mayonnaise Maker**: Telur biasa $\rightarrow$ Mayones (nilai jual +50%); Telur Emas/Besar $\rightarrow$ Mayones Kualitas Emas.
 - **Cheese Press**: Susu Sapi $\rightarrow$ Keju Batangan; Susu Kambing $\rightarrow$ Keju Kambing (*Goat Cheese* bernilai jual tinggi).
 - **Preserves Jar (Toples Pengawet)**: Buah segar $\rightarrow$ Selai Manis (*Jam*); Sayuran $\rightarrow$ Acar Segar (*Pickles*).
-- **Keg (Tong Fermentasi)**: Gandum $\rightarrow$ Bir Olahan; Buah $\rightarrow$ Anggur/Jus Buah Fermentasi (membutuhkan waktu fermentasi 2–4 hari). Catatan [terpasang]: tong fermentasi (`fermentation_barrel`) dan butter churn saat ini dibeli di toko Dapur Nusantara, bukan dirakit.
+- **Keg (Tong Fermentasi)**: Gandum $\rightarrow$ Bir Olahan; Buah $\rightarrow$ Anggur/Jus Buah Fermentasi (membutuhkan waktu fermentasi 2–4 hari). **[terpasang 26 Oktober 2026]** Hasil per bahan dengan harga relatif bahan: wine buah ×2,25 (4 hari), jus buah/sayur ×2 (2 hari), bir dari gandum ×3 (2 hari), mead dari madu ×3 (3 hari). Item `wine`/`beer`/`mead` kini khusus anggur/gandum/madu; buah lain menghasilkan `<buah>_wine` atau `<buah>_juice` (`tools/generate_artisan_goods.py`). Fermentasi berjalan per pergantian hari (`StructureManager.KEG_DAYS`). Catatan [terpasang]: tong fermentasi (`fermentation_barrel`) dan butter churn saat ini dibeli di toko Dapur Nusantara, bukan dirakit.
 - **Loom (Alat Tenun)**: Wol domba $\rightarrow$ Kain Halus (*Cloth*) untuk bahan pakaian dan dekorasi.
 - **Oil Maker**: Jagung / Biji Bunga Matahari / Truffle $\rightarrow$ Minyak Masak & Minyak Truffle bernilai mewah.
-- **Fish Smoker (Pengasap Ikan)**: Ikan mentah + kayu $\rightarrow$ Ikan Asap bernilai jual 2x lipat dan memulihkan stamina tinggi.
+- **Fish Smoker (Pengasap Ikan)**: Ikan mentah + kayu $\rightarrow$ Ikan Asap bernilai jual 2x lipat dan memulihkan stamina tinggi. **[terpasang 26 Oktober 2026]** Tiap ikan punya ikan asapnya sendiri (`smoked_<ikan>`, 2× harga ikan, kualitas dipertahankan). Konsumsi kayu dan durasi berbasis hari belum diterapkan (proses tetap 20 detik aktif). `smoked_fish` lama dipertahankan untuk save.
 
 ---
 
@@ -1558,6 +1559,7 @@ Dengan disahkannya keputusan utama di atas, butir keputusan teknis turunan yang 
 
 ## 19. Changelog
 
+- **2026-10-26 (Versi 3.37)**: Balancing artisan dan progres (keputusan pemilik atas audit E2–E5): hasil Keg/Fish Smoker per bahan dengan harga relatif bahan, Keg 2–4 hari permainan, pohon buah berbuah tiap 3 hari dengan bibit ±12× buah, harga batangan logam progresif sesuai 4.6. Petak menyimpan penanda `regrow` (opsional, tanpa naik versi save); job Keg tersimpan sebagai hari, job Keg detik dari save lama selesai pada pergantian hari berikutnya.
 - **2026-10-26 (Versi 3.36)**: Audit balancing dan regresi ([AUDIT_2026-10-26.md](AUDIT_2026-10-26.md)). Madu dihapus dari stok General Store (loop beli madu → Keg → Mead); madu kini dari Beehive, dan Beehive pertama dari hadiah Dana Pasar. Fish Smoker tidak lagi menerima ikan asap. Pohon buah Greenhouse berbuah di luar musim (cek musim memakai area petak). Tes ekonomi/peternakan diperbaiki, tes arbitrase toko → mesin ditambahkan, lima tes fitur baru didaftarkan di runner. Status save v26 dikoreksi. Temuan nilai olahan, durasi mesin, pohon buah dan harga logam menunggu keputusan pemilik.
 - **2026-10-25 (Versi 3.35)**: Balai Nadi dilengkapi (bagian 4.9.1): 18 paket baru sehingga 21 paket di Balai Utama + 4 sayap, paket "pilih N dari M" (`slots_required`), hadiah barang per paket, bonus permanen saat sayap lengkap (keputusan pemilik: Alam tumbuh ±10% lebih cepat, Karya upgrade alat -10%, Niaga jual +5%, Pengetahuan geoda ×1,25) + 2 Token Talenta, tahap "Jantung Desa". Tanpa perubahan save (tetap v26).
 

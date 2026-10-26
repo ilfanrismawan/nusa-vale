@@ -20,6 +20,14 @@ func _ready() -> void:
 		var seed := GameState._resolve_item("seed_" + crop.crop_id)
 		var item := GameState._resolve_item(crop.harvest_item_id)
 		var days := (crop.get_total_stages() - 1) * crop.days_per_stage
+		if crop.is_fruit_tree():
+			# Pohon permanen: bibit mahal, berbuah tiap 3 hari, balik modal ±1 musim berbuah.
+			var per_day := float(item.sell_price * crop.harvest_count) / crop.regrow_days
+			var payback := seed.buy_price / per_day
+			check(crop.regrow_days == 3 and per_day <= 60.0 and payback >= 30.0 and payback <= 40.0, "%s tree %.1f G/day, payback %.1f fruiting days" % [crop.crop_id, per_day, payback])
+			check(seed.sell_price * 10 == seed.buy_price * 4, "%s sapling resells at 40%%" % crop.crop_id)
+			count += 1
+			continue
 		var profit := item.sell_price * crop.harvest_count - seed.buy_price
 		var daily := float(profit) / days
 		check(daily >= 6.5 and daily <= 10.5, "%s net profit %.1f G/tile/day over %d days" % [crop.crop_id, daily, days])
@@ -56,6 +64,27 @@ func _ready() -> void:
 			var quote: Dictionary = ToolUpgradeManager.get_upgrade_data(previous_id)
 			var fallback: Dictionary = ToolUpgradeManager._get_fallback_upgrade_data(tool, ToolUpgradeManager.TIERS[tier], next_id)
 			check(quote.cost == fallback.cost, "resource and fallback upgrade quote agree: " + next_id)
+	# Keg/Fish Smoker: harga hasil relatif bahan (GDD 4.11, audit 26 Oktober 2026).
+	var keg_mult := {"wine": 2.25, "juice": 2.0, "beer": 3.0, "mead": 3.0}
+	for input in StructureManager.ARTISANS.keg:
+		var output: String = StructureManager.ARTISANS.keg[input]
+		var ratio := float(GameState._resolve_item(output).sell_price) / GameState._resolve_item(input).sell_price
+		var expected := 0.0
+		for kind in keg_mult:
+			if output.ends_with(kind): expected = keg_mult[kind]
+		check(absf(ratio - expected) < 0.05 and StructureManager.keg_days(output) in [2, 3, 4], "keg %s -> %s x%.2f in %d days" % [input, output, ratio, StructureManager.keg_days(output)])
+	var smoked_count := 0
+	for filename in DirAccess.get_files_at("res://resources/item_data"):
+		if not filename.begins_with("fish_") or not filename.ends_with(".tres"): continue
+		var fish := GameState._resolve_item(filename.trim_suffix(".tres"))
+		if fish.category != ItemData.Category.FISH: continue
+		var smoked := GameState._resolve_item(StructureManager.artisan_output("fish_smoker", fish.item_id))
+		check(smoked != null and smoked.sell_price == fish.sell_price * 2, "smoked %s is worth 2x" % fish.item_id)
+		smoked_count += 1
+	check(smoked_count == 65, "all 65 fish have smoked goods")
+	var bars := {"copper": 40, "iron": 80, "gold": 160, "platinum": 260, "crimson": 400, "frost": 580, "shadow": 800, "fairy": 1100, "obsidian": 1500}
+	for metal in bars:
+		check(GameState._resolve_item(metal + "_bar").sell_price == bars[metal], "%s bar sells for %d G (GDD 4.6)" % [metal, bars[metal]])
 	# Barang toko tidak boleh bisa diolah mesin lalu dijual untung: diskon beli maks 15%,
 	# bonus jual maks 35% (Economist 4x5%, sayap Niaga 5%, Shared Prosperity 10%).
 	for shop_file in DirAccess.get_files_at("res://resources/shop"):

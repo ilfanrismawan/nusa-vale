@@ -12,5 +12,5 @@ icon = ExtResource("1_icon")
 description = "Batangan logam merah berkilau yang ditempa dari bijih crimson."
 stackable = true
 max_stack = 99
-sell_price = 40
+sell_price = 400
 metadata/_custom_type_script = "uid://cm1okc20ussp3"
