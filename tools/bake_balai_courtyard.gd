@@ -9,6 +9,8 @@ var land: Dictionary = {}
 var walkable: Dictionary = {}
 var objects: Node2D
 var anims := Animation.new()
+# One AtlasTexture per (texture, region): sprites share sub-resources instead of saving duplicates.
+var atlas_cache: Dictionary = {}
 
 func own(node: Node, parent: Node) -> Node:
 	parent.add_child(node)
@@ -35,19 +37,30 @@ func rect_body(label: String, center: Vector2, size: Vector2, parent: Node) -> S
 	own(shape, body)
 	return body
 
+func blocker(label: String, center: Vector2, size: Vector2, body: StaticBody2D) -> void:
+	var shape := CollisionShape2D.new()
+	shape.name = label
+	shape.position = center
+	var box := RectangleShape2D.new()
+	box.size = size
+	shape.shape = box
+	own(shape, body)
+
 func sprite(label: String, path: String, point: Vector2, region: Rect2, scale_value: Vector2, parent: Node) -> Sprite2D:
 	var s := Sprite2D.new()
 	s.name = label
 	s.position = point
 	s.scale = scale_value
-	var tex: Texture2D = load(path)
 	if region.has_area():
-		var atlas := AtlasTexture.new()
-		atlas.atlas = tex
-		atlas.region = region
-		s.texture = atlas
+		var key := "%s|%s" % [path, region]
+		if not atlas_cache.has(key):
+			var atlas := AtlasTexture.new()
+			atlas.atlas = load(path)
+			atlas.region = region
+			atlas_cache[key] = atlas
+		s.texture = atlas_cache[key]
 	else:
-		s.texture = tex
+		s.texture = load(path)
 	own(s, parent)
 	return s
 
@@ -76,7 +89,70 @@ func atlas_layer(label: String, texture_path: String, parent: Node, material_pat
 	own(layer, parent)
 	return layer
 
+## Trees as one y-sorted TileMapLayer instead of four nodes each. Alternative id = horizontal
+## jitter (0..8 px), so every tree keeps its baked position, sort point, and root collider.
+const TREE_REGION := Rect2i(0, 48, 32, 48)
+const TREE_JITTER := 9
+func tree_layer(label: String, texture_paths: Array, parent: Node) -> TileMapLayer:
+	var layer := TileMapLayer.new()
+	layer.name = label
+	layer.y_sort_enabled = true
+	layer.tile_set = TileSet.new()
+	layer.tile_set.tile_size = Vector2i(TILE, TILE)
+	layer.tile_set.add_physics_layer()
+	var coords := TREE_REGION.position / TREE_REGION.size
+	for i in range(texture_paths.size()):
+		var source := TileSetAtlasSource.new()
+		source.texture = load(texture_paths[i])
+		source.texture_region_size = TREE_REGION.size
+		layer.tile_set.add_source(source, i)
+		source.create_tile(coords)
+		for jitter in range(TREE_JITTER):
+			var alternative := 0 if jitter == 0 else source.create_alternative_tile(coords)
+			var data := source.get_tile_data(coords, alternative)
+			# Cell centre is cell*16+(8,8); the old node sat at cell*16+(4+jitter,8) with art 24 px above.
+			var shift := Vector2(jitter - 4, 0)
+			data.texture_origin = Vector2i(4 - jitter, 24)
+			data.add_collision_polygon(0)
+			data.set_collision_polygon_points(0, 0, PackedVector2Array([shift + Vector2(-5,-5), shift + Vector2(5,-5), shift + Vector2(5,1), shift + Vector2(-5,1)]))
+	own(layer, parent)
+	return layer
+
+## Collinear one-cell rail edges merged into one Line2D pair per straight run.
+func rail_runs(segments: Array, parent: Node) -> void:
+	var rows: Dictionary = {}
+	for seg: Array in segments:
+		var a: Vector2 = seg[0]
+		var b: Vector2 = seg[1]
+		var horizontal := is_equal_approx(a.y, b.y)
+		var key := Vector2(0 if horizontal else 1, a.y if horizontal else a.x)
+		if not rows.has(key): rows[key] = []
+		rows[key].append(minf(a.x, b.x) if horizontal else minf(a.y, b.y))
+	var index := 0
+	var keys := rows.keys()
+	keys.sort()
+	for key: Vector2 in keys:
+		var starts: Array = rows[key]
+		starts.sort()
+		var run_start: float = starts[0]
+		var run_end: float = starts[0] + TILE
+		for i in range(1, starts.size() + 1):
+			if i < starts.size() and is_equal_approx(starts[i], run_end):
+				run_end += TILE
+				continue
+			var a := Vector2(run_start, key.y) if key.x == 0 else Vector2(key.y, run_start)
+			var b := Vector2(run_end, key.y) if key.x == 0 else Vector2(key.y, run_end)
+			edge_line("Rail_%d" % index, a, b, parent)
+			index += 1
+			if i < starts.size():
+				run_start = starts[i]
+				run_end = starts[i] + TILE
+
+## Props are generated once; after that the editor owns them (bale_agung carries hand-made
+## restoration art and collision), so an existing file is reused, never overwritten.
 func prop_scene(label: String, region: Rect2, width: float, height: float, collider: Vector2, source := PROPS) -> PackedScene:
+	var destination := "res://scenes/world/balai_nadi/props/%s.tscn" % label.to_snake_case()
+	if ResourceLoader.exists(destination): return load(destination)
 	var node := Node2D.new()
 	node.name = label
 	node.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
@@ -105,13 +181,24 @@ func prop_scene(label: String, region: Rect2, width: float, height: float, colli
 		collision.owner = node
 	var packed := PackedScene.new()
 	packed.pack(node)
-	var destination := "res://scenes/world/balai_nadi/props/%s.tscn" % label.to_snake_case()
 	ResourceSaver.save(packed, destination)
 	node.free()
 	return load(destination)
 
+## Tile layers repainted in the editor after the first bake; their cells are copied from the
+## existing scene so a re-bake keeps them.
+const EDITOR_PAINTED := ["PelataranDanJembatan/TamanDanTeras"]
+func keep_painted_layers() -> void:
+	if not ResourceLoader.exists(OUT): return
+	var previous: Node = load(OUT).instantiate()
+	for path: String in EDITOR_PAINTED:
+		var source := previous.get_node_or_null(path) as TileMapLayer
+		if source != null: (courtyard.get_node(path) as TileMapLayer).tile_map_data = source.tile_map_data
+	previous.free()
+
 func instance_prop(scene: PackedScene, label: String, point: Vector2, parent: Node) -> Node2D:
-	var node: Node2D = scene.instantiate()
+	# Edit-state instance: only real overrides (name, position) are saved, so later prop edits show through.
+	var node: Node2D = scene.instantiate(PackedScene.GEN_EDIT_STATE_INSTANCE)
 	node.name = label
 	node.position = point
 	own(node, parent)
@@ -303,6 +390,7 @@ func bake() -> void:
 	var edges := group("PagarTepi",deck_group)
 	var deck_union := boards.duplicate()
 	deck_union.merge(platform)
+	var rail_segments: Array = []
 	for cell: Vector2i in deck_union:
 		var p := Vector2(cell*16)
 		for offset: Vector2i in [Vector2i.LEFT,Vector2i.RIGHT,Vector2i.DOWN,Vector2i.UP]:
@@ -317,7 +405,8 @@ func bake() -> void:
 				a+=Vector2(0,16)
 				b+=Vector2(16,16)
 			else: b+=Vector2(16,0)
-			edge_line("Rail_%d_%d_%d_%d" % [cell.x,cell.y,offset.x,offset.y],a,b,edges)
+			rail_segments.append([a,b])
+	rail_runs(rail_segments,edges)
 	var water_decor := atlas_layer("TerataiDanBatuAir","res://assets/farm_rpg/objects/Props/Spring/props water.png",terrain)
 	for cell: Vector2i in water.get_used_cells():
 		if not walkable.has(cell) and rng.randi_range(0,34)==0:
@@ -336,6 +425,8 @@ func bake() -> void:
 	var road_lamp := prop_scene("LenteraJalan",Rect2(0,0,16,32),16,32,Vector2(6,6),"res://assets/farm_rpg/objects/exterior/Street Lamp.png")
 	instance_prop(bale,"BaleUtama",Vector2(427,248),objects)
 	instance_prop(small,"BaleBarat",Vector2(240,240),objects)
+	# Editor additions kept from the hand-edited scene (same spot as BaleBarat, as saved).
+	instance_prop(small,"BaleKananAtas",Vector2(240,240),objects)
 	instance_prop(small,"BaleTimur",Vector2(656,400),objects)
 	instance_prop(small,"BaleTamanBarat",Vector2(-56,400),objects)
 	instance_prop(small,"BaleTamanSelatan",Vector2(144,672),objects)
@@ -377,6 +468,7 @@ func bake() -> void:
 	nature.y_sort_enabled = true
 	var tree_paths := ["res://assets/farm_rpg/objects/tree/Mahogany Tree Animation.png","res://assets/farm_rpg/objects/tree/Maple Tree Animation.png","res://assets/farm_rpg/objects/tree/Birch Tree Animation.png"]
 	var occupied: Dictionary = {}
+	var trees := tree_layer("Pohon",tree_paths,nature)
 	for y in range(CELLS.position.y+1,CELLS.end.y-1,2):
 		for x in range(CELLS.position.x+1,CELLS.end.x-1,2):
 			var cell := Vector2i(x,y)
@@ -386,11 +478,9 @@ func bake() -> void:
 			for off in [Vector2i.LEFT,Vector2i.RIGHT,Vector2i.UP,Vector2i.DOWN]:
 				if reserved.has(cell+off) or not land.has(cell+off): clear=false
 			if not clear: continue
-			var p := Vector2(cell*16)+Vector2(rng.randi_range(4,12),8)
-			var tree := group("Pohon_%d_%d" % [x,y],nature)
-			tree.position=p
-			sprite("Art",tree_paths[rng.randi_range(0,2)],Vector2(0,-24),Rect2(0,48,32,48),Vector2.ONE,tree)
-			rect_body("Akar",Vector2(0,-2),Vector2(10,6),tree)
+			# Same rng call order as the node version, so the forest layout is unchanged.
+			var jitter := rng.randi_range(4,12)-4
+			trees.set_cell(cell,rng.randi_range(0,2),TREE_REGION.position/TREE_REGION.size,jitter)
 			occupied[cell]=true
 	for cell: Vector2i in land:
 		if reserved.has(cell) or occupied.has(cell) or rng.randi_range(0,12)!=0: continue
@@ -399,19 +489,35 @@ func bake() -> void:
 			sprite("Semak_%d_%d" % [cell.x,cell.y],"res://assets/farm_rpg/tileset/ext/bushes.png",p-Vector2(0,8),Rect2(48,0,48,32),Vector2.ONE,nature)
 		else:
 			sprite("Bunga_%d_%d" % [cell.x,cell.y],"res://assets/farm_rpg/tileset/ext/ALL props 2.png",p-Vector2(0,8),Rect2(rng.randi_range(0,6)*16,0,16,32),Vector2.ONE,nature)
-	var blocking := group("CollisionAirDanBatas")
-	for y in range(CELLS.position.y,CELLS.end.y):
-		var start := CELLS.position.x-1
-		for x in range(CELLS.position.x,CELLS.end.x+1):
-			if x<CELLS.end.x and not walkable.has(Vector2i(x,y)):
-				if start < CELLS.position.x: start=x
-			elif start >= CELLS.position.x:
-				rect_body("Air_%d_%d" % [start,y],Vector2((start+x)*8,y*16+8),Vector2((x-start)*16,16),blocking)
-				start=CELLS.position.x-1
-	rect_body("BatasUtara",Vector2(WORLD.get_center().x,WORLD.position.y-4),Vector2(WORLD.size.x,8),blocking)
-	rect_body("BatasSelatan",Vector2(WORLD.get_center().x,WORLD.end.y+4),Vector2(WORLD.size.x,8),blocking)
-	rect_body("BatasBarat",Vector2(WORLD.position.x-4,WORLD.get_center().y),Vector2(8,WORLD.size.y),blocking)
-	rect_body("BatasTimur",Vector2(WORLD.end.x+4,WORLD.get_center().y),Vector2(8,WORLD.size.y),blocking)
+	instance_prop(load("res://scenes/world/balai_nadi/props/bale_istirahat2.tscn"),"BaleIstirahat",Vector2(897,46),objects)
+	# One body for lake and world edges; row runs with the same span merge into taller rectangles.
+	var blocking := StaticBody2D.new()
+	blocking.name = "CollisionAirDanBatas"
+	own(blocking,courtyard)
+	var open: Dictionary = {}
+	var water_rects: Array[Rect2i] = []
+	for y in range(CELLS.position.y,CELLS.end.y+1):
+		var row: Dictionary = {}
+		if y < CELLS.end.y:
+			var start := CELLS.position.x-1
+			for x in range(CELLS.position.x,CELLS.end.x+1):
+				if x<CELLS.end.x and not walkable.has(Vector2i(x,y)):
+					if start < CELLS.position.x: start=x
+				elif start >= CELLS.position.x:
+					row[Vector2i(start,x)] = true
+					start=CELLS.position.x-1
+		for span: Vector2i in open.keys():
+			if row.has(span): continue
+			water_rects.append(Rect2i(span.x,open[span],span.y-span.x,y-open[span]))
+			open.erase(span)
+		for span: Vector2i in row:
+			if not open.has(span): open[span] = y
+	for r in water_rects:
+		blocker("Air_%d_%d" % [r.position.x,r.position.y],(Vector2(r.position)+Vector2(r.size)/2.0)*16,Vector2(r.size*16),blocking)
+	blocker("BatasUtara",Vector2(WORLD.get_center().x,WORLD.position.y-4),Vector2(WORLD.size.x,8),blocking)
+	blocker("BatasSelatan",Vector2(WORLD.get_center().x,WORLD.end.y+4),Vector2(WORLD.size.x,8),blocking)
+	blocker("BatasBarat",Vector2(WORLD.position.x-4,WORLD.get_center().y),Vector2(8,WORLD.size.y),blocking)
+	blocker("BatasTimur",Vector2(WORLD.end.x+4,WORLD.get_center().y),Vector2(8,WORLD.size.y),blocking)
 	rect_body("Building",Vector2(427,190),Vector2(156,80),courtyard)
 	var interaction: Script = load("res://scripts/world/balai_nadi_interactable.gd")
 	for spec in [["Entrance",Vector2(427,239),"res://scenes/world/balai_nadi/interior.tscn",Vector2(427,296)],["ReturnWorld",Vector2(427,840),"res://scenes/world/town.tscn",Vector2(331,52)]]:
@@ -453,11 +559,11 @@ func bake() -> void:
 	particles.initial_velocity_max=3
 	particles.color=Color(0.5,1,0.86,0.7)
 	own(particles,restored)
-	var player: Node2D = load("res://scenes/player/Player.tscn").instantiate()
+	var player: Node2D = load("res://scenes/player/Player.tscn").instantiate(PackedScene.GEN_EDIT_STATE_INSTANCE)
 	player.name="Player"
-	player.position=Vector2(427,277)
+	player.position=Vector2(427,795)
 	own(player,courtyard)
-	add_waypoint("spawn",Vector2(427,277),courtyard)
+	add_waypoint("spawn",Vector2(427,795),courtyard)
 	var sign := Label.new()
 	sign.name="ArahDesa"
 	sign.position=Vector2(397,860)
@@ -465,6 +571,7 @@ func bake() -> void:
 	sign.add_theme_font_override("font",load("res://assets/fonts/m5x7.ttf"))
 	sign.add_theme_font_size_override("font_size",16)
 	own(sign,courtyard)
+	keep_painted_layers()
 	courtyard.set_meta("walkable_cells",walkable.keys())
 	var packed := PackedScene.new()
 	var result := packed.pack(courtyard)
