@@ -70,7 +70,8 @@ func _ready() -> void:
 	check(StructureManager.artisan_output("keg", "grape") == "wine", "Keg converts grape -> wine")
 	check(StructureManager.artisan_output("keg", "honey") == "mead", "Keg converts honey -> mead")
 	check(StructureManager.artisan_output("keg", "apple_gold") == "apple_wine_gold", "Keg makes per-fruit wine and keeps quality")
-	check(StructureManager.artisan_output("oil_maker", "corn") == "oil", "Oil Maker converts corn -> oil")
+	check(StructureManager.artisan_output("oil_maker", "corn") == "corn_oil", "Oil Maker converts corn -> corn oil")
+	check(StructureManager.artisan_output("oil_maker", "garlic").is_empty(), "Oil Maker leaves garlic oil to cooking")
 	check(StructureManager.artisan_output("oil_maker", "truffle") == "truffle_oil", "Oil Maker converts truffle -> truffle_oil")
 	check(StructureManager.artisan_output("fish_smoker", "fish_salmon") == "smoked_fish_salmon", "Fish Smoker converts raw fish -> smoked fish of that species")
 	check(StructureManager.artisan_output("fish_smoker", "fish_salmon_gold") == "smoked_fish_salmon_gold", "Fish Smoker preserves gold quality")
@@ -95,9 +96,9 @@ func _ready() -> void:
 	DayCycle.is_running = true
 	StructureManager._process(100.0)
 	check(keg_record.ready.is_empty(), "Keg ignores active seconds")
-	StructureManager._advance_kegs(DayCycle.current_day + 1)
+	StructureManager._advance_day_jobs(DayCycle.current_day + 1)
 	check(keg_record.ready.is_empty(), "Keg not ready after 1 day")
-	StructureManager._advance_kegs(DayCycle.current_day + 2)
+	StructureManager._advance_day_jobs(DayCycle.current_day + 2)
 	check(not keg_record.ready.is_empty() and keg_record.ready.id == "beer", "Keg finishes and produces beer")
 	var col := StructureManager.collect(player, 777)
 	check(col.ok and player.has_item("beer"), "Beer collected into player bag")
@@ -163,13 +164,26 @@ func _ready() -> void:
 	# Fast forward to finish
 	om_record.job.seconds = 0.05
 	StructureManager._process(0.1)
-	check(not om_record.ready.is_empty() and om_record.ready.id == "oil", "Oil maker finishes and ready has oil")
+	check(not om_record.ready.is_empty() and om_record.ready.id == "corn_oil", "Oil maker finishes and ready has corn oil")
 
 	# Direct harvest (Stardew style: interact on ready machine -> collects item!)
 	var harvest_res := StructureManager.interact_machine(player_node, 999)
 	check(harvest_res, "interact_machine returns true on harvest")
 	check(om_record.ready.is_empty(), "Ready record cleared on harvest")
-	check(player.has_item("oil"), "Oil collected directly into player inventory")
+	check(player.has_item("corn_oil"), "Corn oil collected directly into player inventory")
+	# Fish Smoker: perlu kayu, ikan asap siap esok hari.
+	var smoker := {"uid": 998, "item": "fish_smoker", "cell": [16, 16], "storage": [], "open": false, "job": {}, "ready": {}}
+	StructureManager.records.append(smoker)
+	player.load_inventory([])
+	player.add_item_silent("fish_carp", 1)
+	check(not StructureManager.process_animal_product(player, 998, "fish_carp").ok and player.has_item("fish_carp"), "Fish Smoker refuses fish without wood and keeps it")
+	player.add_item_silent("wood", StructureManager.SMOKER_WOOD)
+	check(StructureManager.process_animal_product(player, 998, "fish_carp").ok and not player.has_item("wood") and int(smoker.job.day) == DayCycle.current_day + 1, "Fish Smoker uses wood and finishes next day")
+	StructureManager._process(100.0)
+	check(smoker.ready.is_empty(), "Fish Smoker ignores active seconds")
+	StructureManager._advance_day_jobs(DayCycle.current_day + 1)
+	check(smoker.ready.get("id") == "smoked_fish_carp", "Fish Smoker produces smoked carp after a day")
+	StructureManager.records.erase(smoker)
 
 	tool_ctrl.free()
 	player_node.free()

@@ -47,8 +47,9 @@ const ARTISANS := {
 		"watermelon": "watermelon_juice", "pineapple": "pineapple_juice",
 		"tomato": "tomato_juice", "carrot": "carrot_juice"
 	},
+	## GDD 4.11: jagung, bunga matahari, truffle; minyak per bahan seharga 2x bahannya.
 	"oil_maker": {
-		"corn": "oil", "sunflower": "oil", "truffle": "truffle_oil", "garlic": "garlic_oil"
+		"corn": "corn_oil", "sunflower": "sunflower_oil", "truffle": "truffle_oil"
 	},
 	"fish_smoker": {
 		"smoked_fish": "smoked_fish"
@@ -75,6 +76,11 @@ static func is_processing_machine(item_id: String) -> bool:
 const ARTISAN_SECONDS := 20.0
 ## Keg memfermentasi dalam hari permainan (GDD 4.11), dicocokkan dengan akhiran hasil.
 const KEG_DAYS := {"beer": 2, "juice": 2, "mead": 3, "wine": 4}
+## Mesin artisan yang berjalan per pergantian hari, bukan detik aktif.
+const DAY_MACHINES := ["keg", "fish_smoker"]
+## Fish Smoker: ikan + kayu, ikan asap siap esok hari (GDD 4.11).
+const SMOKER_DAYS := 1
+const SMOKER_WOOD := 1
 
 static func keg_days(output: String) -> int:
 	var base := output.trim_suffix("_gold").trim_suffix("_silver")
@@ -82,6 +88,12 @@ static func keg_days(output: String) -> int:
 		if base.ends_with(kind):
 			return int(KEG_DAYS[kind])
 	return 2
+
+static func machine_days(machine: String, output: String) -> int:
+	if machine == "keg":
+		return keg_days(output)
+	return SMOKER_DAYS if machine == "fish_smoker" else 0
+
 const CHESTS := ["wooden_chest", "copper_chest", "iron_chest", "gold_chest", "platinum_chest", "crimson_chest", "frost_chest", "shadow_chest", "fairy_chest", "obsidian_chest"]
 var records: Array[Dictionary] = []
 var _next_uid := 1
@@ -106,7 +118,7 @@ func _ready() -> void:
 		horse_spot = {})
 	DayCycle.day_passed.connect(_advance_chickens)
 	DayCycle.day_passed.connect(_advance_beehives)
-	DayCycle.day_passed.connect(_advance_kegs)
+	DayCycle.day_passed.connect(_advance_day_jobs)
 	DayCycle.day_passed.connect(func(_day: int): if GameState.weather.is_storm(): _advance_lightning_rods())
 	DayCycle.time_tick.connect(_ranch_time)
 	GameState.weather.changed.connect(func(): _ranch_time(DayCycle.hour, DayCycle.minute))
@@ -150,14 +162,14 @@ func _advance_beehives(day: int) -> void:
 	if updated:
 		_sync_all()
 
-## Keg: job = {"input", "day"}; hasil siap saat hari permainan mencapai job.day.
-func _advance_kegs(day: int) -> void:
+## Keg/Fish Smoker: job = {"input", "day"}; hasil siap saat hari permainan mencapai job.day.
+func _advance_day_jobs(day: int) -> void:
 	var updated := false
 	for record in records:
-		if record.item != "keg" or record.job.is_empty() or not record.ready.is_empty():
+		if not record.item in DAY_MACHINES or record.job.is_empty() or not record.ready.is_empty():
 			continue
 		if int(record.job.get("day", 0)) <= day:
-			var output := artisan_output("keg", str(record.job.get("input", "")))
+			var output := artisan_output(str(record.item), str(record.job.get("input", "")))
 			if not output.is_empty():
 				record.ready = {"id": output, "count": 1}
 			record.job = {}
@@ -1005,7 +1017,7 @@ func interact_machine(player: Node, uid: int) -> bool:
 			placed.wobble_busy()
 		if record.job.has("day"):
 			var days_left := maxi(1, int(record.job.day) - DayCycle.current_day)
-			Notify.say("%s sedang memfermentasi... (%d hari lagi)" % [machine_name, days_left])
+			Notify.say("%s sedang memproses... (%d hari lagi)" % [machine_name, days_left])
 			return true
 		var secs := int(ceil(float(record.job.get("seconds", 0.0))))
 		Notify.say("%s sedang memproses... (%d detik lagi)" % [machine_name, secs])
@@ -1052,6 +1064,12 @@ func interact_machine(player: Node, uid: int) -> bool:
 			if res.ok:
 				job_started = true
 				product_name = GameState._resolve_item(out_id).display_name if GameState._resolve_item(out_id) != null else out_id
+			else:
+				# Mis. Fish Smoker tanpa kayu: tampilkan alasan sebenarnya.
+				if placed != null and placed.has_method("wobble_reject"):
+					placed.wobble_reject()
+				Notify.say(res.message)
+				return true
 	elif record.item == "preserves_jar":
 		for recipe in preserves_jar_recipes():
 			if recipe.input_item_id == held_id or held_id.begins_with(recipe.input_item_id):
@@ -1435,15 +1453,20 @@ func process_animal_product(data: PlayerData, uid: int, input: String) -> Dictio
 		return _result(false, "Bahan atau mesin tidak sesuai.")
 	if not record.job.is_empty() or not record.ready.is_empty():
 		return _result(false, "Tunggu proses selesai dan ambil hasilnya dahulu.")
+	if record.item == "fish_smoker" and not data.has_item("wood", SMOKER_WOOD):
+		return _result(false, "Pengasap ikan butuh %d kayu untuk setiap ikan." % SMOKER_WOOD)
 	if not data.remove_item(input, 1):
 		return _result(false, "Bahan tidak tersedia di tasmu.")
+	if record.item == "fish_smoker":
+		data.remove_item("wood", SMOKER_WOOD)
 	var input_name := GameState._resolve_item(input).display_name
-	if record.item == "keg":
-		var days := keg_days(output)
+	var days := machine_days(str(record.item), output)
+	if days > 0:
 		record.job = {"input": input, "day": DayCycle.current_day + days}
 		_sync_all()
 		Juice.sfx(load("res://assets/audio/sfx/machines/machine_start.wav"), -6.0)
-		return _result(true, "Memfermentasi %s. Siap dalam %d hari." % [input_name, days])
+		var verb := "Memfermentasi" if record.item == "keg" else "Mengasap"
+		return _result(true, "%s %s. Siap dalam %d hari." % [verb, input_name, days])
 	record.job = {"input": input, "seconds": ARTISAN_SECONDS}
 	_sync_all()
 	Juice.sfx(load("res://assets/audio/sfx/machines/machine_start.wav"), -6.0)
@@ -1548,12 +1571,12 @@ func load_save(saved: Variant) -> void:
 			if entry.item in ARTISANS:
 				var job: Variant = entry.get("job", {})
 				if job is Dictionary and job.get("input") is String and not artisan_output(str(entry.item), job.input).is_empty():
-					if entry.item == "keg" and _integer(job.get("day")) and job.day >= 0 and job.day <= 1000000:
+					if entry.item in DAY_MACHINES and _integer(job.get("day")) and job.day >= 0 and job.day <= 1000000:
 						record.job = {"input": job.input, "day": int(job.day)}
-					elif entry.item == "keg" and (job.get("seconds") is float or job.get("seconds") is int):
-						# Save lama (Keg berbasis detik): selesaikan pada pergantian hari berikutnya.
+					elif entry.item in DAY_MACHINES and (job.get("seconds") is float or job.get("seconds") is int):
+						# Save lama (berbasis detik): selesaikan pada pergantian hari berikutnya.
 						record.job = {"input": job.input, "day": DayCycle.current_day + 1}
-					elif entry.item != "keg" and (job.get("seconds") is float or job.get("seconds") is int) and is_finite(float(job.seconds)):
+					elif not entry.item in DAY_MACHINES and (job.get("seconds") is float or job.get("seconds") is int) and is_finite(float(job.seconds)):
 						record.job = {"input": job.input, "seconds": clampf(float(job.seconds), 0, ARTISAN_SECONDS)}
 				var ready: Variant = entry.get("ready", {})
 				if ready is Dictionary and ready.get("id") is String and ready.get("count") == 1:
@@ -1561,6 +1584,9 @@ func load_save(saved: Variant) -> void:
 						if RanchHusbandry.valid_product(ready.id, base):
 							record.ready = {"id": ready.id, "count": 1}
 					var smoked_base := str(ready.id).trim_suffix("_gold").trim_suffix("_silver")
+					# Hasil lama sebelum minyak per bahan (26 Oktober 2026) tetap bisa diambil.
+					if entry.item == "oil_maker" and (RanchHusbandry.valid_product(ready.id, "oil") or RanchHusbandry.valid_product(ready.id, "garlic_oil")):
+						record.ready = {"id": ready.id, "count": 1}
 					if entry.item == "fish_smoker" and smoked_base.begins_with("smoked_fish_") and ResourceLoader.exists("res://resources/item_data/%s.tres" % smoked_base):
 						record.ready = {"id": ready.id, "count": 1}
 				if not record.ready.is_empty():

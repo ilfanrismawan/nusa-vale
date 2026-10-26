@@ -46,13 +46,14 @@ func _ready() -> void:
 		# Fish Smoker menerima ikan apa pun; kunci tabelnya adalah hasil, bukan bahan.
 		var input: String = "fish_carp" if machine_id == "fish_smoker" else StructureManager.ARTISANS[machine_id].keys()[0]
 		data.add_item_silent(input, 1)
+		data.add_item_silent("wood", StructureManager.SMOKER_WOOD)
 		check(StructureManager.process_animal_product(data, 1, input).ok, "artisan begins: " + machine_id)
 		var machine := StructureManager.record_for(1)
 		StructureManager._process(5)
 		DayCycle.is_running = false
 		StructureManager._process(100)
-		if machine_id == "keg":
-			check(int(machine.job.get("day", 0)) > DayCycle.current_day and not machine.job.has("seconds"), "keg ferments by game day, not active seconds")
+		if machine_id in StructureManager.DAY_MACHINES:
+			check(int(machine.job.get("day", 0)) > DayCycle.current_day and not machine.job.has("seconds"), "%s works by game day, not active seconds" % machine_id)
 		else:
 			check(is_equal_approx(float(machine.job.seconds), 15), "stopped day cycle cannot advance artisan")
 		DayCycle.is_running = true
@@ -72,13 +73,13 @@ func _ready() -> void:
 		visual._process(0.1)
 		check(visual._audio_loop.playing and visual._particles.emitting, "resume restores machine feedback: " + machine_id)
 		StructureManager._process(15)
-		if machine_id == "keg":
+		if machine_id in StructureManager.DAY_MACHINES:
 			var keg_saved := StructureManager.to_save()
 			StructureManager.load_save(keg_saved)
 			machine = StructureManager.record_for(1)
 			visual.uid = 1
-			check(int(machine.job.get("day", 0)) > DayCycle.current_day, "keg fermentation day survives save/load")
-			StructureManager._advance_kegs(int(machine.job.day))
+			check(int(machine.job.get("day", 0)) > DayCycle.current_day, "%s job day survives save/load" % machine_id)
+			StructureManager._advance_day_jobs(int(machine.job.day))
 		visual._process(0.1)
 		check(not visual._particles.emitting and not visual._audio_loop.playing and not machine.ready.is_empty(), "completion stops running feedback: " + machine_id)
 		holder.queue_free()

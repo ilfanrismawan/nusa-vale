@@ -73,6 +73,9 @@ func _ready() -> void:
 		for kind in keg_mult:
 			if output.ends_with(kind): expected = keg_mult[kind]
 		check(absf(ratio - expected) < 0.05 and StructureManager.keg_days(output) in [2, 3, 4], "keg %s -> %s x%.2f in %d days" % [input, output, ratio, StructureManager.keg_days(output)])
+	for input in StructureManager.ARTISANS.oil_maker:
+		var oil := GameState._resolve_item(StructureManager.ARTISANS.oil_maker[input])
+		check(oil.sell_price == GameState._resolve_item(input).sell_price * 2, "oil from %s is worth 2x" % input)
 	var smoked_count := 0
 	for filename in DirAccess.get_files_at("res://resources/item_data"):
 		if not filename.begins_with("fish_") or not filename.ends_with(".tres"): continue

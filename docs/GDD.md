@@ -1,6 +1,6 @@
 # Nusa Vale — Game Design Document (GDD)
 
-Versi dokumen: 3.37 (26 Oktober 2026).
+Versi dokumen: 3.38 (26 Oktober 2026).
 Dokumen ini adalah **sumber kebenaran desain** proyek `E:\nusa-vale` (Game Design Document resmi).
 Pada versi 1.9, ditambahkan 4 pilar fundamental Life-Sim / Farming RPG: **Sistem Peternakan & Satwa** (kandang Barn/Coop, sapi, kambing, domba, ayam, bebek, kuda, pakan & affection), **Mesin Pengolah Pasca-Panen (Artisan Goods)** (mayones, keju, selai, fermentasi keg, tenun, pengasap ikan), **Sistem Cuaca Harian Dinamis** (cerah, hujan penyiram otomatis, badai petir penangkal baterai, salju), serta **Sistem Sosial, Persahabatan, & Jadwal Harian NPC** (hati 0-10, sistem hadiah loved/hated, rutinitas harian, heart events, dan romansa/teman sekamar).
 
@@ -553,8 +553,8 @@ Mesin pengolah yang dapat dirakit melalui Crafting dan ditempatkan di ladang ata
 - **Preserves Jar (Toples Pengawet)**: Buah segar $\rightarrow$ Selai Manis (*Jam*); Sayuran $\rightarrow$ Acar Segar (*Pickles*).
 - **Keg (Tong Fermentasi)**: Gandum $\rightarrow$ Bir Olahan; Buah $\rightarrow$ Anggur/Jus Buah Fermentasi (membutuhkan waktu fermentasi 2–4 hari). **[terpasang 26 Oktober 2026]** Hasil per bahan dengan harga relatif bahan: wine buah ×2,25 (4 hari), jus buah/sayur ×2 (2 hari), bir dari gandum ×3 (2 hari), mead dari madu ×3 (3 hari). Item `wine`/`beer`/`mead` kini khusus anggur/gandum/madu; buah lain menghasilkan `<buah>_wine` atau `<buah>_juice` (`tools/generate_artisan_goods.py`). Fermentasi berjalan per pergantian hari (`StructureManager.KEG_DAYS`). Catatan [terpasang]: tong fermentasi (`fermentation_barrel`) dan butter churn saat ini dibeli di toko Dapur Nusantara, bukan dirakit.
 - **Loom (Alat Tenun)**: Wol domba $\rightarrow$ Kain Halus (*Cloth*) untuk bahan pakaian dan dekorasi.
-- **Oil Maker**: Jagung / Biji Bunga Matahari / Truffle $\rightarrow$ Minyak Masak & Minyak Truffle bernilai mewah.
-- **Fish Smoker (Pengasap Ikan)**: Ikan mentah + kayu $\rightarrow$ Ikan Asap bernilai jual 2x lipat dan memulihkan stamina tinggi. **[terpasang 26 Oktober 2026]** Tiap ikan punya ikan asapnya sendiri (`smoked_<ikan>`, 2× harga ikan, kualitas dipertahankan). Konsumsi kayu dan durasi berbasis hari belum diterapkan (proses tetap 20 detik aktif). `smoked_fish` lama dipertahankan untuk save.
+- **Oil Maker**: Jagung / Biji Bunga Matahari / Truffle $\rightarrow$ Minyak Masak & Minyak Truffle bernilai mewah. **[terpasang 26 Oktober 2026]** Minyak per bahan seharga 2× bahannya: Minyak Jagung 270, Minyak Bunga Matahari 150, Minyak Truffle 500 G (20 detik aktif). `oil` tetap minyak dapur murah dari toko dan bukan hasil mesin; bawang putih tidak lagi masuk Oil Maker (Minyak Bawang dibuat lewat masakan).
+- **Fish Smoker (Pengasap Ikan)**: Ikan mentah + kayu $\rightarrow$ Ikan Asap bernilai jual 2x lipat dan memulihkan stamina tinggi. **[terpasang 26 Oktober 2026]** Tiap ikan punya ikan asapnya sendiri (`smoked_<ikan>`, 2× harga ikan, kualitas dipertahankan). Setiap ikan memakai 1 kayu dan selesai pada pergantian hari berikutnya (`SMOKER_WOOD`, `SMOKER_DAYS`); tanpa kayu mesin menolak dan ikan tetap di tas. `smoked_fish` lama dipertahankan untuk save.
 
 ---
 
@@ -1559,6 +1559,7 @@ Dengan disahkannya keputusan utama di atas, butir keputusan teknis turunan yang 
 
 ## 19. Changelog
 
+- **2026-10-26 (Versi 3.38)**: Oil Maker menghasilkan minyak per bahan (2× harga bahan; bawang putih dikeluarkan sesuai daftar 4.11). Fish Smoker memakai 1 kayu per ikan dan selesai esok hari. Hasil Oil Maker lama (`oil`, `garlic_oil`) di mesin tetap bisa diambil setelah load.
 - **2026-10-26 (Versi 3.37)**: Balancing artisan dan progres (keputusan pemilik atas audit E2–E5): hasil Keg/Fish Smoker per bahan dengan harga relatif bahan, Keg 2–4 hari permainan, pohon buah berbuah tiap 3 hari dengan bibit ±12× buah, harga batangan logam progresif sesuai 4.6. Petak menyimpan penanda `regrow` (opsional, tanpa naik versi save); job Keg tersimpan sebagai hari, job Keg detik dari save lama selesai pada pergantian hari berikutnya.
 - **2026-10-26 (Versi 3.36)**: Audit balancing dan regresi ([AUDIT_2026-10-26.md](AUDIT_2026-10-26.md)). Madu dihapus dari stok General Store (loop beli madu → Keg → Mead); madu kini dari Beehive, dan Beehive pertama dari hadiah Dana Pasar. Fish Smoker tidak lagi menerima ikan asap. Pohon buah Greenhouse berbuah di luar musim (cek musim memakai area petak). Tes ekonomi/peternakan diperbaiki, tes arbitrase toko → mesin ditambahkan, lima tes fitur baru didaftarkan di runner. Status save v26 dikoreksi. Temuan nilai olahan, durasi mesin, pohon buah dan harga logam menunggu keputusan pemilik.
 - **2026-10-25 (Versi 3.35)**: Balai Nadi dilengkapi (bagian 4.9.1): 18 paket baru sehingga 21 paket di Balai Utama + 4 sayap, paket "pilih N dari M" (`slots_required`), hadiah barang per paket, bonus permanen saat sayap lengkap (keputusan pemilik: Alam tumbuh ±10% lebih cepat, Karya upgrade alat -10%, Niaga jual +5%, Pengetahuan geoda ×1,25) + 2 Token Talenta, tahap "Jantung Desa". Tanpa perubahan save (tetap v26).

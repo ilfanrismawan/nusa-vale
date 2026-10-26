@@ -1,9 +1,9 @@
 """Generate per-ingredient artisan goods (stdlib only).
 
-Keg and Fish Smoker outputs are priced relative to their ingredient (GDD 4.11,
-audit 26 Oktober 2026): fruit wine x2.25, fruit juice x2.0, beer/mead x3,
-smoked fish x2. Re-run after changing an ingredient price; existing files are
-overwritten with the recomputed price.
+Keg, Oil Maker and Fish Smoker outputs are priced relative to their ingredient
+(GDD 4.11, audit 26 Oktober 2026): fruit wine x2.25, fruit juice x2.0,
+beer/mead x3, pressed oil x2, smoked fish x2. Re-run after changing an
+ingredient price; existing files are overwritten with the recomputed price.
 """
 from pathlib import Path
 import re
@@ -15,6 +15,7 @@ WINE = 2.25
 JUICE = 2.0
 BREW = 3.0
 SMOKED = 2.0
+OIL = 2.0
 
 # input -> (output id, multiplier, template item). Base ids beer/mead/wine are kept
 # for wheat/honey/grape so bundles and cooking that ask for them stay valid.
@@ -35,6 +36,15 @@ KEG = {
     "pineapple": ("pineapple_juice", JUICE, "wine"),
     "tomato": ("tomato_juice", JUICE, "wine"),
     "carrot": ("carrot_juice", JUICE, "wine"),
+}
+
+
+# Oil Maker (GDD 4.11: jagung, bunga matahari, truffle). "oil" stays the cheap
+# store-bought cooking oil and is no longer a machine output.
+OIL_MAKER = {
+    "corn": ("corn_oil", "Minyak Jagung"),
+    "sunflower": ("sunflower_oil", "Minyak Bunga Matahari"),
+    "truffle": ("truffle_oil", "Minyak Truffle"),
 }
 
 
@@ -71,6 +81,14 @@ def main():
             write_item(template, output, f"Wine {label}", f"Wine hasil fermentasi {label} di tong fermentasi.", price)
         else:
             write_item(template, output, f"Jus {label}", f"Jus {label} hasil tong fermentasi.", price)
+        written += 1
+    for source, (output, name) in OIL_MAKER.items():
+        price = round(int(field((ITEMS / f"{source}.tres").read_text(encoding="utf-8"), "sell_price")) * OIL)
+        if output == "truffle_oil":
+            text = (ITEMS / "truffle_oil.tres").read_text(encoding="utf-8")
+            (ITEMS / "truffle_oil.tres").write_text(set_field(set_field(text, "sell_price", str(price)), "buy_price", str(price * 2)), encoding="utf-8")
+        else:
+            write_item("truffle_oil", output, name, f"{name} hasil Oil Maker, bahan masak bernilai tinggi.", price)
         written += 1
     for path in sorted(ITEMS.glob("fish_*.tres")):
         text = path.read_text(encoding="utf-8")
