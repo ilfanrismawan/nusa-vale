@@ -16,3 +16,15 @@ extends Resource
 
 ## Jika true, pemain bisa menjual barang dari tas langsung di toko (harga sell_price).
 @export var buys_items: bool = true
+
+@export_group("Katalog perk")
+## Katalog tambahan yang ikut tampil bila pemain punya stat perk-nya (perk Merchant).
+## Bertipe Resource (isinya ShopData): tipe diri sendiri membuat referensi script melingkar.
+@export var perk_catalogs: Array[Resource] = []
+## Dipakai saat toko ini menjadi katalog perk: stat SkillSystem yang harus > 0.
+@export var perk_stat: StringName = &""
+## Katalog perk yang hanya buka akhir pekan (hari ke-6 dan ke-7 tiap pekan).
+@export var weekend_only: bool = false
+
+static func is_weekend(day: int) -> bool:
+	return (day - 1) % 7 >= 5

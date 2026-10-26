@@ -220,6 +220,20 @@ static func buy_price(data: PlayerData, item: ItemData, amount: int, unit_price:
 		cut += stat(data, &"bulk_seed_discount")
 	return maxi(1, roundi(unit_price * (1.0 - clampf(cut, 0.0, 0.9))))
 
+## Stok toko untuk pemain ini: stok tetap + katalog perk Merchant yang terbuka, tanpa duplikat.
+## (Di sini, bukan di ShopData, agar Resource toko tidak mereferensikan sistem skill.)
+static func shop_stock(data: PlayerData, shop: ShopData) -> Array[ItemData]:
+	var result: Array[ItemData] = shop.stock.duplicate()
+	for catalog in shop.perk_catalogs:
+		if catalog == null or catalog.perk_stat == &"" or stat(data, catalog.perk_stat) <= 0.0:
+			continue
+		if catalog.weekend_only and not ShopData.is_weekend(DayCycle.current_day):
+			continue
+		for item in catalog.stock:
+			if item != null and not result.has(item):
+				result.append(item)
+	return result
+
 ## Harga jual per unit. shipping = true untuk Shipping Bin, false untuk jual langsung di toko.
 static func sell_price(data: PlayerData, item: ItemData, shipping: bool) -> int:
 	if item == null or item.sell_price <= 0:

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b83ix8aqgilpf" path="res://scripts/data/cave_band.gd" id="3_band"]
 [ext_resource type="Script" uid="uid://cdshrao3ldkws" path="res://scripts/data/enemy_data.gd" id="4_enemy"]
-[ext_resource type="Resource" uid="uid://d0okra48wwdbj" path="res://resources/enemies/myconid_red.tres" id="myconid_red"]
+[ext_resource type="Resource" path="res://resources/enemies/myconid_young.tres" id="myconid_young"]
 [ext_resource type="Resource" uid="uid://db3agp1lgviiw" path="res://resources/enemies/slime_blue.tres" id="slime_blue"]
 [ext_resource type="Texture2D" path="res://resources/icons/icon_amethyst.tres" id="band_icon_amethyst"]
 
@@ -23,7 +23,7 @@ ore_weights = PackedFloat32Array(5.0, 2.0, 3.0, 0.4, 0.4, 0.3)
 first_floor = 11
 rock_min = 20
 rock_max = 28
-enemies = Array[ExtResource("4_enemy")]([ExtResource("slime_blue"), ExtResource("myconid_red")])
+enemies = Array[ExtResource("4_enemy")]([ExtResource("slime_blue"), ExtResource("myconid_young")])
 enemy_min = 3
 enemy_max = 5
 

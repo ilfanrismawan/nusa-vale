@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ShopData" format=3]
+
+[ext_resource type="Script" uid="uid://bosipocdasjvg" path="res://scripts/resources/shop_data.gd" id="1_shop"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="2_item"]
+[ext_resource type="Resource" path="res://resources/item_data/maple_seed.tres" id="3_maple_seed"]
+[ext_resource type="Resource" path="res://resources/item_data/birch_seed.tres" id="4_birch_seed"]
+[ext_resource type="Resource" path="res://resources/item_data/mahogany_seed.tres" id="5_mahogany_seed"]
+
+[resource]
+script = ExtResource("1_shop")
+shop_id = "merchant_rare_seeds"
+shop_name = "Stok Langka"
+stock = Array[ExtResource("2_item")]([ExtResource("3_maple_seed"), ExtResource("4_birch_seed"), ExtResource("5_mahogany_seed")])
+buys_items = false
+perk_stat = &"rare_stock"
+weekend_only = false

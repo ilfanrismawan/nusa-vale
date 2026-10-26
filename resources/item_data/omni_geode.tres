@@ -12,6 +12,7 @@ icon = ExtResource("1_icon")
 description = "Geoda langka yang bisa berisi apa saja, bahkan Pecahan Prisma."
 stackable = true
 max_stack = 99
+buy_price = 800
 sell_price = 200
 rarity = 3
 metadata/_custom_type_script = "uid://cm1okc20ussp3"

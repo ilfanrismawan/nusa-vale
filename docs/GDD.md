@@ -1,6 +1,6 @@
 # Nusa Vale — Game Design Document (GDD)
 
-Versi dokumen: 3.38 (26 Oktober 2026).
+Versi dokumen: 3.39 (26 Oktober 2026).
 Dokumen ini adalah **sumber kebenaran desain** proyek `E:\nusa-vale` (Game Design Document resmi).
 Pada versi 1.9, ditambahkan 4 pilar fundamental Life-Sim / Farming RPG: **Sistem Peternakan & Satwa** (kandang Barn/Coop, sapi, kambing, domba, ayam, bebek, kuda, pakan & affection), **Mesin Pengolah Pasca-Panen (Artisan Goods)** (mayones, keju, selai, fermentasi keg, tenun, pengasap ikan), **Sistem Cuaca Harian Dinamis** (cerah, hujan penyiram otomatis, badai petir penangkal baterai, salju), serta **Sistem Sosial, Persahabatan, & Jadwal Harian NPC** (hati 0-10, sistem hadiah loved/hated, rutinitas harian, heart events, dan romansa/teman sekamar).
 
@@ -56,7 +56,7 @@ Panduan editor resep, karakter, animasi dan syarat objek: [EDITOR_GUIDE.md](EDIT
 | Fishing | Minigame, lokasi, jam, musim ikan, air beku musim dingin, kolam air panas Gunung, danau gua lantai 10 | Pantai (`beach_sea`) belum punya scene |
 | Co-op | Lokal split-screen 2–4 pemain | Playtest solo/co-op lulus menurut pemilik; perubahan baru diuji sesuai dampaknya |
 | Konten lanjutan | Data equipment, HP per pemain, combat dasar (pedang/busur/tongkat), musuh dengan AI kejar/serang, denda tumbang lewat Klinik, Gunung + Gua Tambang lantai 1-100, lima boss, pemanah/penyihir, lift dan Toko Combat | musik boss orkestra (belum dibuktikan), bazaar, festival, ekonomi dinamis belum terpasang |
-| Role/EXP | Tujuh role Lv1–10 per karakter, EXP aktivitas, level setelah tidur, cabang, buku riset, Token Talenta, UI keahlian | Kurir Logistik, Forest Whisperer, Bintang Perak, Bintang Emas, dan Perpetual Orchard aktif; 7 perk bergantung sistem lanjutan masih “Segera hadir” |
+| Role/EXP | Tujuh role Lv1–10 per karakter, EXP aktivitas, level setelah tidur, cabang, buku riset, Token Talenta, UI keahlian | Kurir Logistik, Forest Whisperer, Bintang Perak, Bintang Emas, dan Perpetual Orchard aktif; 4 perk bergantung sistem lanjutan masih “Segera hadir” (Merchant Lv7/Lv10 aktif sejak 26 Oktober) |
 | Audio/horor | Autoload MusicManager, aset BGM area/siang/malam/hujan/tengah malam, crossfade; NightHorror dan data kejadian | Belum ada playtest audio sesi ini; bukan bukti musik boss orkestra selesai |
 
 Koreksi acuan implementasi:
@@ -349,6 +349,7 @@ Baseline terbaru: changelog 3.30 (bagian 19); audit lanjutan [AUDIT_2026-10-26.m
   - Shadow Bar: 800 G
   - Fairy Bar: 1.100 G
   - Obsidian Bar: 1.500 G
+  - **[terpasang 26 Oktober 2026, angka usulan]** Bijih bernilai ¼ batangannya (Tembaga tetap 15 G): Besi 20, Emas 40, Platinum 65, Crimson 100, Frost 145, Shadow 200, Fairy 275, Obsidian 375 G. Equipment rakitan (dan Sapu Terbang) dijual paling mahal 1,2× nilai bahannya agar rakit-lalu-jual tidak menjadi sumber uang utama late-game.
 
 ### 4.7 Toko, Shipping Bin, dan Logistik Penjualan [terpasang + keputusan]
 
@@ -1559,6 +1560,7 @@ Dengan disahkannya keputusan utama di atas, butir keputusan teknis turunan yang 
 
 ## 19. Changelog
 
+- **2026-10-26 (Versi 3.39)**: Sisa audit ekonomi: bijih bertingkat (¼ batangan), harga jual equipment rakitan dibatasi 1,2× bahan (39 item), lantai gua 11–20 memakai Myconid Muda (ATK 20, HP 32; damage ke armor Copper 8, sebelumnya 14), dan perk Merchant aktif — Lv7 Stok Langka (bibit maple/birch/mahoni di Toko Umum), Lv10A Guild Magnate (geoda dan geoda omni tiap akhir pekan), Lv10B Capitalist Investor (katalog Dealer Kendaraan dan pembelian skuter/mobil bak sebelum Kota Modern). Katalog perk memakai `ShopData.perk_catalogs`/`perk_stat`/`weekend_only` dan `SkillSystem.shop_stock`. Isi stok perk adalah usulan dan dapat diganti pemilik.
 - **2026-10-26 (Versi 3.38)**: Oil Maker menghasilkan minyak per bahan (2× harga bahan; bawang putih dikeluarkan sesuai daftar 4.11). Fish Smoker memakai 1 kayu per ikan dan selesai esok hari. Hasil Oil Maker lama (`oil`, `garlic_oil`) di mesin tetap bisa diambil setelah load.
 - **2026-10-26 (Versi 3.37)**: Balancing artisan dan progres (keputusan pemilik atas audit E2–E5): hasil Keg/Fish Smoker per bahan dengan harga relatif bahan, Keg 2–4 hari permainan, pohon buah berbuah tiap 3 hari dengan bibit ±12× buah, harga batangan logam progresif sesuai 4.6. Petak menyimpan penanda `regrow` (opsional, tanpa naik versi save); job Keg tersimpan sebagai hari, job Keg detik dari save lama selesai pada pergantian hari berikutnya.
 - **2026-10-26 (Versi 3.36)**: Audit balancing dan regresi ([AUDIT_2026-10-26.md](AUDIT_2026-10-26.md)). Madu dihapus dari stok General Store (loop beli madu → Keg → Mead); madu kini dari Beehive, dan Beehive pertama dari hadiah Dana Pasar. Fish Smoker tidak lagi menerima ikan asap. Pohon buah Greenhouse berbuah di luar musim (cek musim memakai area petak). Tes ekonomi/peternakan diperbaiki, tes arbitrase toko → mesin ditambahkan, lima tes fitur baru didaftarkan di runner. Status save v26 dikoreksi. Temuan nilai olahan, durasi mesin, pohon buah dan harga logam menunggu keputusan pemilik.

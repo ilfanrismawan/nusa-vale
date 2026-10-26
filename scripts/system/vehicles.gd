@@ -29,8 +29,13 @@ static func allowed_here(player: Player) -> bool:
 	return true
 
 ## Barang ini kendaraan yang sudah bisa dibeli (area syaratnya terbuka).
-static func is_unlocked(vehicle: VehicleData) -> bool:
-	return vehicle != null and (vehicle.required_unlock.is_empty() or UnlockManager.is_unlocked(vehicle.required_unlock))
+## Merchant Lv10 Capitalist Investor (import_catalog) membeli kendaraan Kota Modern lebih awal.
+static func is_unlocked(vehicle: VehicleData, buyer: PlayerData = null) -> bool:
+	if vehicle == null:
+		return false
+	if vehicle.required_unlock.is_empty() or UnlockManager.is_unlocked(vehicle.required_unlock):
+		return true
+	return vehicle.required_unlock == "modern_city" and buyer != null and SkillSystem.stat(buyer, &"import_catalog") > 0.0
 
 ## Gerak terbang: tabrakan biasa, kecuali air/jurang yang boleh dilintasi kendaraan ini.
 ## Meluncur sepanjang dinding seperti move_and_slide (coba penuh, lalu sumbu X, lalu Y).

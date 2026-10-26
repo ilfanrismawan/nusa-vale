@@ -9,5 +9,5 @@ item_id = "fairy_ore"
 display_name = "Bijih Fairy"
 icon = ExtResource("1_icon")
 description = "Bongkahan bijih ajaib berkilau merah muda berkat peri hutan."
-sell_price = 15
+sell_price = 275
 metadata/_custom_type_script = "uid://cm1okc20ussp3"

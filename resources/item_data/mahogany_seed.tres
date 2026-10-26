@@ -25,6 +25,7 @@ item_id = "mahogany_seed"
 display_name = "Biji Mahoni"
 icon = ExtResource("2_icon")
 description = "Tanam di tanah farm yang tidak dicangkul. Dalam 7 hari tumbuh jadi pohon besar yang bisa dipasangi tapper."
+buy_price = 300
 sell_price = 5
 action_data = SubResource("Action_use")
 metadata/_custom_type_script = "uid://cm1okc20ussp3"

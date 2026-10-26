@@ -12,5 +12,5 @@ icon = ExtResource("1_icon")
 description = "Bongkahan bijih gelap misterius yang menyerap cahaya."
 stackable = true
 max_stack = 99
-sell_price = 15
+sell_price = 200
 metadata/_custom_type_script = "uid://cm1okc20ussp3"

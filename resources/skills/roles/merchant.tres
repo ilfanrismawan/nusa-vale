@@ -72,9 +72,9 @@ script = ExtResource("2")
 level = 7
 branch = ""
 title = "Stok Langka"
-description = "Toko menjual bibit langka dari musim lain."
-effects = Dictionary[StringName, float]({})
-coming_soon = true
+description = "Toko Umum menjual bibit pohon langka (maple, birch, mahoni)."
+effects = Dictionary[StringName, float]({&"rare_stock": 1.0})
+coming_soon = false
 
 [sub_resource type="Resource" id="perk_8"]
 script = ExtResource("2")
@@ -90,18 +90,18 @@ script = ExtResource("2")
 level = 10
 branch = "a"
 title = "Guild Magnate"
-description = "Akses pedagang keliling eksklusif tiap akhir pekan."
-effects = Dictionary[StringName, float]({})
-coming_soon = true
+description = "Akhir pekan, Toko Umum membuka stok Pedagang Keliling: geoda dan geoda omni."
+effects = Dictionary[StringName, float]({&"weekend_merchant": 1.0})
+coming_soon = false
 
 [sub_resource type="Resource" id="perk_10"]
 script = ExtResource("2")
 level = 10
 branch = "b"
 title = "Capitalist Investor"
-description = "Katalog barang impor dari kota."
-effects = Dictionary[StringName, float]({})
-coming_soon = true
+description = "Katalog impor kota: skuter listrik dan mobil bak bisa dibeli sebelum Kota Modern terbuka."
+effects = Dictionary[StringName, float]({&"import_catalog": 1.0})
+coming_soon = false
 
 [resource]
 script = ExtResource("1")

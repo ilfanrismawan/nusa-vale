@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ShopData" format=3]
+
+[ext_resource type="Script" uid="uid://bosipocdasjvg" path="res://scripts/resources/shop_data.gd" id="1_shop"]
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="2_item"]
+[ext_resource type="Resource" path="res://resources/item_data/geode.tres" id="3_geode"]
+[ext_resource type="Resource" path="res://resources/item_data/omni_geode.tres" id="4_omni_geode"]
+
+[resource]
+script = ExtResource("1_shop")
+shop_id = "merchant_weekend"
+shop_name = "Pedagang Keliling"
+stock = Array[ExtResource("2_item")]([ExtResource("3_geode"), ExtResource("4_omni_geode")])
+buys_items = false
+perk_stat = &"weekend_merchant"
+weekend_only = true

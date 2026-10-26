@@ -12,5 +12,5 @@ icon = ExtResource("1_icon")
 description = "Bongkahan bijih merah menyala yang menyimpan energi panas bumi."
 stackable = true
 max_stack = 99
-sell_price = 15
+sell_price = 100
 metadata/_custom_type_script = "uid://cm1okc20ussp3"

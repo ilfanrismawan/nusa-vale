@@ -12,6 +12,7 @@ icon = ExtResource("1_icon")
 description = "Batu bulat berongga. Bawa ke Pandai Besi untuk dipecahkan."
 stackable = true
 max_stack = 99
+buy_price = 200
 sell_price = 50
 rarity = 1
 metadata/_custom_type_script = "uid://cm1okc20ussp3"

@@ -153,7 +153,7 @@ func _change_inventory_page(direction: int) -> void:
 	_refresh_inventory()
 
 func _build_rows() -> void:
-	for item in shop_data.stock:
+	for item in SkillSystem.shop_stock(data, shop_data):
 		if item == null or item.buy_price <= 0:
 			continue
 		var panel: PanelContainer = catalog_card_scene.instantiate()
@@ -450,7 +450,7 @@ func _can_sell(item: ItemData) -> bool:
 ## "owned" / "locked" / "" (bisa dibeli). Untuk upgrade tas dan barang tukar-tambah (requires_item_id).
 func _bag_status(item: ItemData) -> String:
 	if item.vehicle != null:
-		if not Vehicles.is_unlocked(item.vehicle):
+		if not Vehicles.is_unlocked(item.vehicle, data):
 			return "locked"
 		return "owned" if data.has_item(item.item_id) else ""
 	if not item.requires_item_id.is_empty():

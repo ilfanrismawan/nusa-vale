@@ -88,12 +88,51 @@ func _ready() -> void:
 	var bars := {"copper": 40, "iron": 80, "gold": 160, "platinum": 260, "crimson": 400, "frost": 580, "shadow": 800, "fairy": 1100, "obsidian": 1500}
 	for metal in bars:
 		check(GameState._resolve_item(metal + "_bar").sell_price == bars[metal], "%s bar sells for %d G (GDD 4.6)" % [metal, bars[metal]])
+	# Bijih bernilai 1/4 batangannya (tembaga tetap 15 G); 2 bijih -> 1 batang tetap untung.
+	for metal in bars:
+		var ore := GameState._resolve_item(metal + "_ore").sell_price
+		check(ore == (15 if metal == "copper" else roundi(bars[metal] / 4.0)) and ore * 2 < bars[metal], "%s ore sells for %d G" % [metal, ore])
+	# Equipment rakitan dijual paling mahal 1,2x nilai bahannya (kayu/batu 2 G, serat 1 G).
+	var raw := {"wood": 2, "stone": 2, "fiber": 1}
+	for catalog_path in ["res://resources/crafting/catalog.tres", "res://resources/crafting/anvil.tres", "res://resources/crafting/alchemy.tres"]:
+		for recipe in (load(catalog_path) as CraftingCatalog).recipes:
+			var crafted := GameState._resolve_item(recipe.output_item_id)
+			if crafted == null or (crafted.equipment_slot == ItemData.EquipmentSlot.NONE and crafted.item_id != "flying_broom"):
+				continue
+			var cost := 0
+			for id in recipe.ingredients:
+				cost += int(raw.get(id, GameState._resolve_item(id).sell_price)) * int(recipe.ingredients[id])
+			check(crafted.sell_price * recipe.output_amount <= roundi(cost * 1.2) + recipe.output_amount, "%s sells for at most 1.2x its materials" % crafted.item_id)
+	# Merchant Lv7/Lv10: katalog perk di Toko Umum.
+	var store := load("res://resources/shop/general_store.tres") as ShopData
+	var merchant := GameState.current
+	var seed_id := func(stock: Array[ItemData], id: String) -> bool: return stock.any(func(i): return i.item_id == id)
+	check(not seed_id.call(SkillSystem.shop_stock(merchant, store), "maple_seed"), "rare seeds hidden without Stok Langka")
+	merchant.skills.add_points(&"merchant", SkillSystem.max_points())
+	merchant.skills.apply_levels()
+	merchant.skills.choose(&"merchant", 10, "a")
+	var day := DayCycle.current_day
+	DayCycle.current_day = 1
+	check(seed_id.call(SkillSystem.shop_stock(merchant, store), "maple_seed") and not seed_id.call(SkillSystem.shop_stock(merchant, store), "geode"), "Stok Langka adds tree seeds; weekend merchant closed on weekdays")
+	DayCycle.current_day = 6
+	check(seed_id.call(SkillSystem.shop_stock(merchant, store), "geode") and not seed_id.call(SkillSystem.shop_stock(merchant, store), "electric_scooter"), "Guild Magnate opens weekend stock only")
+	merchant.skills.reset()
+	merchant.skills.add_points(&"merchant", SkillSystem.max_points())
+	merchant.skills.apply_levels()
+	merchant.skills.choose(&"merchant", 10, "b")
+	var scooter := GameState._resolve_item("electric_scooter")
+	check(seed_id.call(SkillSystem.shop_stock(merchant, store), "electric_scooter") and Vehicles.is_unlocked(scooter.vehicle, merchant) and not Vehicles.is_unlocked(scooter.vehicle, null), "Capitalist Investor buys city vehicles early")
+	DayCycle.current_day = day
+	merchant.skills.reset()
 	# Barang toko tidak boleh bisa diolah mesin lalu dijual untung: diskon beli maks 15%,
 	# bonus jual maks 35% (Economist 4x5%, sayap Niaga 5%, Shared Prosperity 10%).
 	for shop_file in DirAccess.get_files_at("res://resources/shop"):
 		if not shop_file.ends_with(".tres"): continue
 		var shop := load("res://resources/shop/" + shop_file) as ShopData
-		for stock_item in shop.stock:
+		var all_stock: Array[ItemData] = shop.stock.duplicate()
+		for catalog in shop.perk_catalogs:
+			all_stock.append_array(catalog.stock)
+		for stock_item in all_stock:
 			if stock_item == null or stock_item.buy_price <= 0: continue
 			for machine in StructureManager.ARTISANS:
 				var output := StructureManager.artisan_output(machine, stock_item.item_id)

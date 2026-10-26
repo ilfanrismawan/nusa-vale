@@ -17,5 +17,5 @@ attack_bonus = 8
 weapon_type = 3
 equipment_tier = 2
 buy_price = 1000
-sell_price = 400
+sell_price = 300
 rarity = 1
