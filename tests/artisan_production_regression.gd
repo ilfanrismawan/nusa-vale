@@ -65,6 +65,7 @@ func _ready() -> void:
 	check(StructureManager.artisan_output("oil_maker", "truffle") == "truffle_oil", "Oil Maker converts truffle -> truffle_oil")
 	check(StructureManager.artisan_output("fish_smoker", "fish_salmon") == "smoked_fish", "Fish Smoker converts raw fish -> smoked_fish")
 	check(StructureManager.artisan_output("fish_smoker", "fish_salmon_gold") == "smoked_fish_gold", "Fish Smoker preserves gold quality")
+	check(StructureManager.artisan_output("fish_smoker", "smoked_fish").is_empty(), "Fish Smoker rejects smoked fish as input")
 
 	# Test artisan job processing
 	var player := GameState.current

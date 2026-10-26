@@ -43,7 +43,8 @@ func _ready() -> void:
 			check(StructureManager.record_for(1).ready.get("id") == recipe.output_item_id, "processing duration %.1fs: %s" % [recipe.process_time, recipe.recipe_id])
 	for machine_id in StructureManager.ARTISANS:
 		StructureManager.records.assign([record(1, machine_id)])
-		var input: String = StructureManager.ARTISANS[machine_id].keys()[0]
+		# Fish Smoker menerima ikan apa pun; kunci tabelnya adalah hasil, bukan bahan.
+		var input: String = "fish_carp" if machine_id == "fish_smoker" else StructureManager.ARTISANS[machine_id].keys()[0]
 		data.add_item_silent(input, 1)
 		check(StructureManager.process_animal_product(data, 1, input).ok, "artisan begins: " + machine_id)
 		var machine := StructureManager.record_for(1)

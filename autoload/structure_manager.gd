@@ -1370,13 +1370,15 @@ func artisan_output(machine: String, input: String) -> String:
 	if not ARTISANS.has(machine):
 		return ""
 	if machine == "fish_smoker":
-		var base_id := input.trim_suffix("_gold").trim_suffix("_silver")
-		var item := GameState._resolve_item(base_id)
+		# Resolve input utuh: memotong akhiran dulu memicu error untuk item seperti sword_gold.
+		var item := GameState._resolve_item(input)
 		if item != null and item.category == ItemData.Category.FISH:
 			var qual := ""
 			if input.ends_with("_gold"): qual = "_gold"
 			elif input.ends_with("_silver"): qual = "_silver"
 			return "smoked_fish" + qual
+		# Entri tabel fish_smoker hanya untuk validasi hasil di save; ikan asap bukan bahan.
+		return ""
 	for base in ARTISANS[machine]:
 		if RanchHusbandry.valid_product(input, base):
 			return str(ARTISANS[machine][base]) + input.trim_prefix(base)

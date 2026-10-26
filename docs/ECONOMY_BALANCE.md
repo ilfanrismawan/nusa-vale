@@ -1,6 +1,6 @@
 # Balancing ekonomi dan rutinitas — 13 Oktober 2026
 
-> Riwayat baseline 13 Oktober. Harga upgrade/tas/rumah, nilai cooking, sumber EXP dan damage gua telah diperbarui pada [baseline 22 Oktober 2026](ECONOMY_BALANCE_2026-10-22.md). Playtest umum solo/co-op sudah dinyatakan lulus oleh pemilik; bukan prioritas yang perlu diulang.
+> Riwayat baseline 13 Oktober. Harga upgrade/tas/rumah, nilai cooking, sumber EXP dan damage gua telah diperbarui pada baseline 22 Oktober 2026 (changelog GDD 3.30; tidak ada file laporan terpisah). Celah sesudahnya: [AUDIT_2026-10-26.md](AUDIT_2026-10-26.md). Playtest umum solo/co-op sudah dinyatakan lulus oleh pemilik; bukan prioritas yang perlu diulang.
 
 
 Baseline demo untuk pemain solo; co-op menggunakan uang bersama dan stamina/tas

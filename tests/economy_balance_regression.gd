@@ -56,5 +56,17 @@ func _ready() -> void:
 			var quote: Dictionary = ToolUpgradeManager.get_upgrade_data(previous_id)
 			var fallback: Dictionary = ToolUpgradeManager._get_fallback_upgrade_data(tool, ToolUpgradeManager.TIERS[tier], next_id)
 			check(quote.cost == fallback.cost, "resource and fallback upgrade quote agree: " + next_id)
+	# Barang toko tidak boleh bisa diolah mesin lalu dijual untung: diskon beli maks 15%,
+	# bonus jual maks 35% (Economist 4x5%, sayap Niaga 5%, Shared Prosperity 10%).
+	for shop_file in DirAccess.get_files_at("res://resources/shop"):
+		if not shop_file.ends_with(".tres"): continue
+		var shop := load("res://resources/shop/" + shop_file) as ShopData
+		for stock_item in shop.stock:
+			if stock_item == null or stock_item.buy_price <= 0: continue
+			for machine in StructureManager.ARTISANS:
+				var output := StructureManager.artisan_output(machine, stock_item.item_id)
+				if output.is_empty(): continue
+				var resale := GameState._resolve_item(output).sell_price * 1.35
+				check(resale < stock_item.buy_price * 0.85, "%s from %s cannot be processed by %s for profit" % [stock_item.item_id, shop.shop_id, machine])
 	print("ECONOMY BALANCE COMPLETE: failures=%d" % failures)
 	get_tree().quit(1 if failures else 0)

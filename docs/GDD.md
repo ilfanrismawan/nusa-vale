@@ -1,6 +1,6 @@
 # Nusa Vale — Game Design Document (GDD)
 
-Versi dokumen: 3.35 (25 Oktober 2026).
+Versi dokumen: 3.36 (26 Oktober 2026).
 Dokumen ini adalah **sumber kebenaran desain** proyek `E:\nusa-vale` (Game Design Document resmi).
 Pada versi 1.9, ditambahkan 4 pilar fundamental Life-Sim / Farming RPG: **Sistem Peternakan & Satwa** (kandang Barn/Coop, sapi, kambing, domba, ayam, bebek, kuda, pakan & affection), **Mesin Pengolah Pasca-Panen (Artisan Goods)** (mayones, keju, selai, fermentasi keg, tenun, pengasap ikan), **Sistem Cuaca Harian Dinamis** (cerah, hujan penyiram otomatis, badai petir penangkal baterai, salju), serta **Sistem Sosial, Persahabatan, & Jadwal Harian NPC** (hati 0-10, sistem hadiah loved/hated, rutinitas harian, heart events, dan romansa/teman sekamar).
 
@@ -26,7 +26,7 @@ Ringkasan berikut menjadi acuan status terkini. Angka dan keputusan desain di ba
 
 **Playtest pemilik — LULUS / SELESAI (22 Oktober 2026):** pemilik proyek mengonfirmasi bahwa prioritas stabilitas dan playtest loop inti solo/co-op sudah dilakukan dan lulus. Jangan merekomendasikan ulang milestone ini sebagai pekerjaan yang belum selesai. Pengujian berikutnya difokuskan pada perubahan baru atau bug/regresi konkret. Acuan lintas dokumen: [PLAYTEST_STATUS.md](PLAYTEST_STATUS.md). Prioritas aktif berikutnya: **balancing progres dan ekonomi**, kemudian kelengkapan konten serta fitur yang belum terpasang.
 
-**Baseline balancing 22 Oktober 2026 [terpasang]:** modal tanam dipertahankan setelah upgrade Tembaga, biaya tas/rumah bertahap, target stamina 200 tercapai, EXP aktivitas diselaraskan, nilai 137 resep cooking diaudit (136 harga diubah), selisih jual kembali bibit mencegah loop EXP tanpa biaya, serta serangan gua diselaraskan terhadap DEF equipment. Detail angka, asumsi simulasi kas solo/co-op dan bukti tes terarah: [ECONOMY_BALANCE_2026-10-22.md](ECONOMY_BALANCE_2026-10-22.md). Kelulusan playtest umum pemilik di atas tetap berlaku; ini bukan pembukaan ulang milestone tersebut.
+**Baseline balancing 22 Oktober 2026 [terpasang]:** modal tanam dipertahankan setelah upgrade Tembaga, biaya tas/rumah bertahap, target stamina 200 tercapai, EXP aktivitas diselaraskan, nilai 137 resep cooking diaudit (136 harga diubah), selisih jual kembali bibit mencegah loop EXP tanpa biaya, serta serangan gua diselaraskan terhadap DEF equipment. Detail angka, asumsi simulasi kas solo/co-op dan bukti tes terarah: changelog GDD 3.30 (bagian 19) dan laporan `tools/balance_audit.py`; file laporan terpisah tidak pernah dibuat. Celah sistem setelah baseline ini: [AUDIT_2026-10-26.md](AUDIT_2026-10-26.md). Kelulusan playtest umum pemilik di atas tetap berlaku; ini bukan pembukaan ulang milestone tersebut.
 
 **Tingkat bukti:** “kode/data” berarti telah diperiksa secara statis; “lulus tes” hanya berlaku untuk tes dan run yang disebutkan; “playtest” memerlukan pemeriksaan permainan nyata. Tes headless tidak membuktikan kualitas visual, gamepad fisik, balancing, atau alur panjang solo/co-op.
 
@@ -50,8 +50,8 @@ Panduan editor resep, karakter, animasi dan syarat objek: [EDITOR_GUIDE.md](EDIT
 | Pengolahan | Furnace, Mayonnaise Maker, Cheese Press, Loom, Preserves Jar, Dehydrator, Beehive, Sawmill, Keg, Oil Maker, Fish Smoker, Penangkal Petir; stasiun Alchemy Table dan Anvil | Mesin olahan artisan lengkap dan teruji di runner; penuaan Cellar masih target |
 | Dunia | Farm, rumah, Forest, Deep Forest, Town, Balai Nadi, Greenhouse, Gunung dan Gua Tambang 1–100 | Pohon buah permanen lintas musim terpasang; Pantai dan Modern City masih target |
 | Town/NPC | Bangunan/interior, jadwal/rute, layanan, hadiah, panel hubungan, dialog bersyarat hati/flag; heart event, surat cerita, status dating/married, upacara dasar, pasangan/roommate tinggal di rumah, bantuan harian, surat resep/bingkisan | Upacara dasar berupa dialog di rumah; sinematik khusus dan bouquet/pendant masih target; reward seluruh 13 warga terpasang sebagai baseline 24 Oktober |
-| Cuaca | Cerah, Hujan, Badai Petir (Thunderstorm) dengan kilat prosedural & penangkal petir Battery Pack; menyiram outdoor otomatis | Salju/blizzard dan prakiraan TV masih target |
-| Cooking | 137 Resource resep, 22 Resource alat masak, database resep, buku per pemain, dapur rumah, stamina/HP, buff laju dan regenerasi HP | Hitungan data bukan bukti semua resep bisa diakses; resep TV dan buff lanjutan perlu implementasi/verifikasi; hadiah resep sosial terpasang untuk 13 resident |
+| Cuaca | Cerah, Hujan, Badai Petir (Thunderstorm) dengan kilat prosedural & penangkal petir Battery Pack; menyiram outdoor otomatis | Salju/blizzard masih target; cuaca belum bergantung musim. Prakiraan besok tersedia di TV rumah (`scripts/ui/television_ui.gd`) |
+| Cooking | 137 Resource resep, 22 Resource alat masak, database resep, buku per pemain, dapur rumah, stamina/HP, buff laju dan regenerasi HP | Hitungan data bukan bukti semua resep bisa diakses; kanal memasak TV mengajarkan resep; buff lanjutan perlu implementasi/verifikasi; hadiah resep sosial terpasang untuk 13 resident |
 | Biji Daya | Tiga sumber unik memberi +30 stamina; rumah Lv2 +30 dan Lv3 +40, maksimum individu 200 | Biji tetap per karakter; penghuni tanpa Biji Daya mencapai 170 dengan rumah penuh |
 | Fishing | Minigame, lokasi, jam, musim ikan, air beku musim dingin, kolam air panas Gunung, danau gua lantai 10 | Pantai (`beach_sea`) belum punya scene |
 | Co-op | Lokal split-screen 2–4 pemain | Playtest solo/co-op lulus menurut pemilik; perubahan baru diuji sesuai dampaknya |
@@ -62,7 +62,7 @@ Panduan editor resep, karakter, animasi dan syarat objek: [EDITOR_GUIDE.md](EDIT
 Koreksi acuan implementasi:
 
 - Viewport aktif `project.godot`: **1280 × 720**, window awal 1280 × 720; angka 960 × 540 di tabel lama sudah kedaluwarsa.
-- `SAVE_VERSION = 25` di `autoload/save_manager.gd`. Riwayat v17 rumah, v18 gathering/tapper, v19 hubungan NPC, v20 aksesori/mesin, v21 roster co-op, v22 Role & EXP tetap berlaku. Format saat ini juga menyimpan `npc_progress` (flag, event selesai, romansa, surat dan household) serta `friendships.<npc>.locked` per karakter. Shipping menyimpan histori pembayaran kurir. Save lama memperoleh default kosong; hubungan lama yang masih maksimum dikunci saat dibaca. Riwayat pernah maksimum tetapi sudah turun sebelum v25 tidak dapat dipulihkan dari data yang tidak pernah disimpan.
+- `SAVE_VERSION = 26` di `autoload/save_manager.gd` (v26: pembiakan, inkubator dan bulu bebek, bagian 4.10.11). Riwayat v17 rumah, v18 gathering/tapper, v19 hubungan NPC, v20 aksesori/mesin, v21 roster co-op, v22 Role & EXP tetap berlaku. Format saat ini juga menyimpan `npc_progress` (flag, event selesai, romansa, surat dan household) serta `friendships.<npc>.locked` per karakter. Shipping menyimpan histori pembayaran kurir. Save lama memperoleh default kosong; hubungan lama yang masih maksimum dikunci saat dibaca. Riwayat pernah maksimum tetapi sudah turun sebelum v25 tidak dapat dipulihkan dari data yang tidak pernah disimpan.
 - Stamina awal 100, maksimum pemain dapat naik melalui Biji Daya. Detail transaksi dan persistensi: [BIJI_DAYA.md](BIJI_DAYA.md).
 - Pingsan batas waktu pada 05:10 memulangkan pemain, bangun 08:00 dengan 50% kapasitas stamina; pemain co-op yang sudah tidur pulih penuh. **Tidak memotong uang atau item**. Denda medis karena HP habis (bagian 4.2 dan 8.1) terpasang terpisah sejak Phase 4B-1.
 - Shipping dibayar saat pergantian hari melalui `ShippingManager.settle`, ke saldo bersama dan ringkasan pendapatan. Dengan Economist Lv6 Kurir Logistik, kas dibayar pada 12.00 dan 17.00; sisa kiriman dibayar esok pagi. Ringkasan pagi juga memuat kiriman yang sudah dibayar, tanpa membayar ulang.
@@ -328,7 +328,7 @@ Suara (detak, bisikan, langkah, koak, dengung lampu, dengung glitch, angin) disi
   - Fairy: 20.000 G + 5 fairy_bar
   - Obsidian: 28.000 G + 5 obsidian_bar
 
-Baseline terbaru: [ECONOMY_BALANCE_2026-10-22.md](ECONOMY_BALANCE_2026-10-22.md). Panen awal 510 G + modal 100 G membayar Tembaga 350 G dan bibit ulang 225 G, menyisakan 35 G. Margin 39 crop dan ternak dipertahankan. Nilai jual kembali benih menjadi 40% harga beli untuk mencegah jual-beli berulang tanpa rugi saat bonus grosir/shipping aktif.
+Baseline terbaru: changelog 3.30 (bagian 19); audit lanjutan [AUDIT_2026-10-26.md](AUDIT_2026-10-26.md). Panen awal 510 G + modal 100 G membayar Tembaga 350 G dan bibit ulang 225 G, menyisakan 35 G. Margin 39 crop dan ternak dipertahankan. Nilai jual kembali benih menjadi 40% harga beli untuk mencegah jual-beli berulang tanpa rugi saat bonus grosir/shipping aktif.
 
 ### 4.6 Tebang, Tambang, Furnace, dan Nilai Logam [terpasang + keputusan]
 
@@ -636,7 +636,7 @@ Pemain lain bisa ikut atau keluar di tengah permainan tanpa kembali ke main menu
 
 **Cakupan saat audit 22 Oktober 2026 [terpasang, kode/data]:** 137 Resource resep di `resources/cooking/recipes/`, 22 Resource alat di `resources/cooking/equipment/`, database `resources/cooking/data/recipe_database.tres`, dan `CookingManager`. Lima resep adalah cakupan tahap awal 14 Oktober, bukan jumlah konten saat ini. Resep yang dapat dimasak bergantung pada entri database, buku yang dipelajari karakter, alat yang tersedia, dan bahan. Jumlah Resource tidak membuktikan seluruh resep sudah dapat dibuat dalam permainan.
 
-Dapur rumah setelah upgrade tingkat 1 di Wira, buku per pemain, pemulihan stamina/HP, buff laju dan regenerasi HP sudah memiliki implementasi. Hadiah resep sosial kini tersedia untuk 13 resident melalui kotak surat (12.4); TV dan kelengkapan buff lanjutan masih memerlukan implementasi/verifikasi. Lihat `COOKING.md` untuk riwayat tahap dasar.
+Dapur rumah setelah upgrade tingkat 1 di Wira, buku per pemain, pemulihan stamina/HP, buff laju dan regenerasi HP sudah memiliki implementasi. Hadiah resep sosial kini tersedia untuk 13 resident melalui kotak surat (12.4); Kanal memasak TV sudah mengajarkan resep; kelengkapan buff lanjutan masih memerlukan implementasi/verifikasi. Lihat `COOKING.md` untuk riwayat tahap dasar.
 
 - **Status**: Disetujui untuk diimplementasikan [keputusan].
 - **Fasilitas**: Dapur di interior rumah (setelah upgrade rumah) serta kompor/panci di Warung Makan kota.
@@ -1558,6 +1558,7 @@ Dengan disahkannya keputusan utama di atas, butir keputusan teknis turunan yang 
 
 ## 19. Changelog
 
+- **2026-10-26 (Versi 3.36)**: Audit balancing dan regresi ([AUDIT_2026-10-26.md](AUDIT_2026-10-26.md)). Madu dihapus dari stok General Store (loop beli madu → Keg → Mead); madu kini dari Beehive, dan Beehive pertama dari hadiah Dana Pasar. Fish Smoker tidak lagi menerima ikan asap. Pohon buah Greenhouse berbuah di luar musim (cek musim memakai area petak). Tes ekonomi/peternakan diperbaiki, tes arbitrase toko → mesin ditambahkan, lima tes fitur baru didaftarkan di runner. Status save v26 dikoreksi. Temuan nilai olahan, durasi mesin, pohon buah dan harga logam menunggu keputusan pemilik.
 - **2026-10-25 (Versi 3.35)**: Balai Nadi dilengkapi (bagian 4.9.1): 18 paket baru sehingga 21 paket di Balai Utama + 4 sayap, paket "pilih N dari M" (`slots_required`), hadiah barang per paket, bonus permanen saat sayap lengkap (keputusan pemilik: Alam tumbuh ±10% lebih cepat, Karya upgrade alat -10%, Niaga jual +5%, Pengetahuan geoda ×1,25) + 2 Token Talenta, tahap "Jantung Desa". Tanpa perubahan save (tetap v26).
 
 - **2026-10-25 (Versi 3.33)**: Peternakan lanjutan (bagian 4.10.9–4.10.11, keputusan pemilik: semua usulan): kerbau (susu tiap 2 hari, Keju Kerbau), kapibara (bonus kasih sayang sekandang), kuda tunggangan 1,6–1,8× (maks 1), pembiakan Barn 4 hati, Inkubator di Kandang Unggas, anak hewan, Bulu Bebek. Sprite placeholder recolor sapi. Save v26.

@@ -140,6 +140,12 @@ function Invoke-GodotCheck([string]$Label, [string[]]$Arguments, [bool]$Expected
         'tests/fishing_season_regression.tscn' = 'FISHING SEASON COMPLETE: failures=0'
         'tests/portrait_expression_regression.tscn' = 'PORTRAIT REGRESSION COMPLETE'
         'tests/npc_social_regression.tscn' = 'NPC SOCIAL COMPLETE: failures=0'
+        'tests/balai_bundles_regression.tscn' = 'BALAI BUNDLES COMPLETE: failures=0'
+        'tests/ranch_expansion_regression.tscn' = 'ranch_expansion_regression failures=0'
+        'tests/vehicle_regression.tscn' = 'VEHICLE_TEST failures=0'
+        'tests/shop_book_regression.tscn' = 'SHOP BOOK COMPLETE: failures=0'
+        'tests/shipping_regression.tscn' = 'SHIPPING REGRESSION COMPLETE: failures=0'
+        'tests/ai_regression.tscn' = 'AI REGRESSION COMPLETE: failures=0'
     }
     foreach ($scene in $completionMarkers.Keys) {
         if ($Arguments -contains $scene -and -not ($output -match [regex]::Escape($completionMarkers[$scene]))) {
@@ -271,6 +277,12 @@ try {
     Invoke-GodotCheck 'Balai Nadi contributions (expected save I/O error)' @('tests/balai_nadi_regression.tscn') $true
     Invoke-GodotCheck 'Greenhouse community restoration and farming' @('tests/greenhouse_regression.tscn') $false
     Invoke-GodotCheck 'Balai wings, funds and greenhouse reward' @('tests/balai_wings_regression.tscn') $true
+    Invoke-GodotCheck 'Balai bundles, pick N of M and wing rewards' @('tests/balai_bundles_regression.tscn')
+    Invoke-GodotCheck 'Ranch breeding, incubator, horse and feathers' @('tests/ranch_expansion_regression.tscn')
+    Invoke-GodotCheck 'Vehicles, water and parking' @('tests/vehicle_regression.tscn')
+    Invoke-GodotCheck 'Shop books and purchases' @('tests/shop_book_regression.tscn')
+    Invoke-GodotCheck 'Shipping bin settlement' @('tests/shipping_regression.tscn')
+    Invoke-GodotCheck 'Enemy behavior tree AI' @('tests/ai_regression.tscn')
     Invoke-GodotCheck 'Biji Daya unique rewards, consumption and persistence' @('tests/daya_regression.tscn') $true
     Invoke-GodotCheck 'Save regression (expected I/O errors)' @('tests/save_regression.tscn') $true
     $missingScenes = @($Scenes | Where-Object { -not $script:verifiedScenes.Contains($_) })
