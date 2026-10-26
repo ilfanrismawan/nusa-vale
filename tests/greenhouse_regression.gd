@@ -133,6 +133,17 @@ func _ready() -> void:
 	await get_tree().create_timer(1.5, true).timeout
 	check(get_tree().current_scene.scene_file_path.ends_with("world/farm.tscn"), "Greenhouse exit returns to farm")
 	check(FarmManager.area_id() == "farm" and not FarmManager.is_crop_in_season(crop) and not FarmManager.soil_layer.get_used_cells().has(CELL), "Returning to farm restores seasonal restrictions and hides greenhouse plots")
+	# Pohon buah di luar musim: musim dicek per area petak, bukan area dunia yang di-bind (Farm).
+	var tree: CropData = load("res://resources/crop_data/apple.tres")
+	var fruiting := tree.get_total_stages() - 2
+	var tree_cells := {"greenhouse": Vector2i(10001, 10000), "farm": Vector2i(10002, 10000)}
+	for area in tree_cells:
+		FarmManager.farm_data[tree_cells[area]] = {"area": area, "state": "planted", "crop": tree, "stage": fruiting, "days_in_stage": tree.days_per_stage - 1, "watered": true}
+	FarmManager._on_day_passed(DayCycle.current_day + 1)
+	check(DayCycle.get_current_season() != tree.season and FarmManager.farm_data[tree_cells.greenhouse].stage == fruiting + 1, "Greenhouse fruit tree bears fruit out of season while the farm is bound")
+	check(FarmManager.farm_data[tree_cells.farm].stage == fruiting, "Outdoor fruit tree still waits for its season")
+	for area in tree_cells:
+		FarmManager.farm_data.erase(tree_cells[area])
 	check(manager.contribute(GameState.p1(), ID, "wood") == 0, "Completed greenhouse refuses duplicate contributions")
 	var old_data := SaveManager._build_save_data()
 	old_data.version = 8

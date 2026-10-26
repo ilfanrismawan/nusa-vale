@@ -128,8 +128,10 @@ func hoe(cell: Vector2i) -> bool:
 	return true
 	
 ## Tanaman tanpa season (kosong) boleh ditanam kapan saja.
-func is_crop_in_season(crop: CropData) -> bool:
-	if area_id() == "greenhouse" and GameState.balai_nadi.completed("greenhouse_restoration"):
+## plot_area kosong = area dunia aktif; isi dengan area petak saat memproses semua petak.
+func is_crop_in_season(crop: CropData, plot_area: String = "") -> bool:
+	var area := plot_area if not plot_area.is_empty() else area_id()
+	if area == "greenhouse" and GameState.balai_nadi.completed("greenhouse_restoration"):
 		return true
 	return crop.season.is_empty() or crop.season == DayCycle.get_current_season()
 
@@ -290,7 +292,8 @@ func _on_day_passed(_day: int) -> void:
 				var orchard_active := SkillSystem.household(&"perpetual_orchard") > 0.0
 				var can_grow := true
 				if crop.is_fruit_tree() and data["stage"] >= max_stage - 1:
-					if not is_crop_in_season(crop) and not orchard_active:
+					# Area petak, bukan area dunia: sebelum ganti hari Farm selalu yang di-bind.
+					if not is_crop_in_season(crop, str(data.get("area", "farm"))) and not orchard_active:
 						can_grow = false
 				if can_grow:
 					var growth_bonus := 1

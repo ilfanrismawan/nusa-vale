@@ -35,6 +35,9 @@ func _ready() -> void:
 	check(8 * (hoe.stamina_cost + water.stamina_cost) <= 40, "preparing and watering eight starter plots leaves sixty stamina")
 	for animal in RanchHusbandry.SPECIES:
 		var info: Dictionary = RanchHusbandry.SPECIES[animal]
+		# Kapibara dan kuda (interval 0) tidak menghasilkan komoditas harian.
+		if int(info.interval) <= 0:
+			continue
 		var item := GameState._resolve_item(info.product)
 		var feed := GameState._resolve_item("hay").buy_price
 		var net := float(item.sell_price) / int(info.interval) - feed

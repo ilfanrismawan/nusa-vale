@@ -104,12 +104,12 @@ func _run() -> void:
 	_check(RanchHusbandry.valid(stable, "barn") and RanchHusbandry.horse_coat(horse) == "4", "warna kuda valid")
 	horse.variant = "white"
 	_check(RanchHusbandry.horse_coat(horse) == "1", "kuda save lama memakai warna 1")
-	var cow := _animal(stable, "cow")
-	cow.variant = "pearl"
+	var stable_cow := _animal(stable, "cow")
+	stable_cow.variant = "pearl"
 	_check(not RanchHusbandry.valid(stable, "barn"), "warna kuda ditolak untuk sapi")
-	stable.chickens.erase(cow)
-	var bad := StructureManager.buy_animal(990001, "cow", "Salah", "pearl")
-	_check(not bad.ok, "varian tidak sah ditolak toko")
+	stable.chickens.erase(stable_cow)
+	var bad_purchase := StructureManager.buy_animal(990001, "cow", "Salah", "pearl")
+	_check(not bad_purchase.ok, "varian tidak sah ditolak toko")
 	var eep := load("res://resources/ui/eep_livestock_shop_presentation.tres")
 	var rian := load("res://resources/ui/livestock_shop_presentation.tres")
 	_check(eep.variants.get("horse", PackedStringArray()).size() == 5 and not eep.excluded_species.has("horse"), "kuda dan 5 warnanya dijual Eep")
