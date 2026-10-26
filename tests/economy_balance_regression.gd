@@ -92,8 +92,7 @@ func _ready() -> void:
 	for metal in bars:
 		var ore := GameState._resolve_item(metal + "_ore").sell_price
 		check(ore == (15 if metal == "copper" else roundi(bars[metal] / 4.0)) and ore * 2 < bars[metal], "%s ore sells for %d G" % [metal, ore])
-	# Equipment rakitan dijual paling mahal 1,2x nilai bahannya (kayu/batu 2 G, serat 1 G).
-	var raw := {"wood": 2, "stone": 2, "fiber": 1}
+	# Equipment rakitan dijual paling mahal 1,2x nilai jual bahannya.
 	for catalog_path in ["res://resources/crafting/catalog.tres", "res://resources/crafting/anvil.tres", "res://resources/crafting/alchemy.tres"]:
 		for recipe in (load(catalog_path) as CraftingCatalog).recipes:
 			var crafted := GameState._resolve_item(recipe.output_item_id)
@@ -101,7 +100,7 @@ func _ready() -> void:
 				continue
 			var cost := 0
 			for id in recipe.ingredients:
-				cost += int(raw.get(id, GameState._resolve_item(id).sell_price)) * int(recipe.ingredients[id])
+				cost += GameState._resolve_item(id).sell_price * int(recipe.ingredients[id])
 			check(crafted.sell_price * recipe.output_amount <= roundi(cost * 1.2) + recipe.output_amount, "%s sells for at most 1.2x its materials" % crafted.item_id)
 	# Merchant Lv7/Lv10: katalog perk di Toko Umum.
 	var store := load("res://resources/shop/general_store.tres") as ShopData
