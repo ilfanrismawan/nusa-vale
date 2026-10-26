@@ -12,7 +12,7 @@
 Referensi utama adalah `assets/cooking/referensi toko jual peralatan masak.png` (1536 × 1024), bukan referensi alternatif kedua. Semua posisi layout memakai koordinat ilustrasi ini dalam node Showroom dengan skala 0.25, agar proporsi pemain sesuai dengan furniture.
 
 - Showroom/Floor: potongan lantai berulang, bukan satu screenshot ruangan.
-- Showroom/Fixtures: 28 node Sprite2D terpisah untuk empat display kitchen set di dinding belakang, rak sisi kiri/kanan, dua rak tengah, kasir, dekorasi, karpet, dan tangga.
+- Showroom/Fixtures: 31 node Sprite2D terpisah untuk empat display kitchen set di dinding belakang, rak sisi kiri/kanan, dua rak tengah, kasir, dekorasi (termasuk empat barang pajangan `Sprite2D`–`Sprite2D4`), karpet, dan tangga.
 - Jendela dan karpet mengambil potongan dari tileset toko yang disediakan. Fixture rak berisi barang dan kitchen set memakai potongan AtlasTexture dari ilustrasi referensi agar ilustrasi serta susunannya tetap sama. Isi barang yang sudah tergambar di suatu rak adalah bagian tekstur fixture tersebut; untuk mengubah tiap barang secara terpisah, ganti tekstur rak dengan rak kosong tileset lalu tambahkan Sprite2D barang sendiri.
 - Tidak ada screenshot penuh sebagai background. Floor, wall backing, furniture, collision, kamera, pemain, trigger kasir dan pintu adalah node tersendiri.
 - Texture/region bisa diubah melalui resource `resources/cooking/shop/art/*.tres`; tidak perlu mengubah kode untuk memindahkan atau mengganti sprite.

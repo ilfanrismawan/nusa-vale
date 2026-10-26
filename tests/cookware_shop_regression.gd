@@ -66,7 +66,7 @@ func _ready() -> void:
 	get_tree().current_scene = room
 	await get_tree().process_frame
 	await get_tree().process_frame
-	check(room.get_node("Showroom/Fixtures").get_child_count() == 28, "showroom fixtures are separate editable nodes")
+	check(room.get_node("Showroom/Fixtures").get_child_count() == 31, "showroom fixtures are separate editable nodes")
 	check(room.get_node("Showroom/Obstacles").get_child_count() == 14, "walls, shelves and counter have collision")
 	check(room.get_node("Showroom/Fixtures/CenterLeftShelf").position == Vector2(440, 741), "left island matches reference with foot-based Y sort")
 	check(room.get_node("Showroom/Fixtures/CenterRightShelf").position == Vector2(840, 741), "right island matches reference with foot-based Y sort")
@@ -77,7 +77,8 @@ func _ready() -> void:
 	query.shape = player.get_node("CollisionShape2D").shape
 	query.exclude = [player.get_rid()]
 	query.collision_mask = player.collision_mask
-	var route: Array[Vector2] = [Vector2(192, 195), Vector2(192, 110), Vector2(306, 110)]
+	# Dari spawn lewat lorong di antara dua rak tengah (global x ~190-222), lalu ke depan kasir.
+	var route: Array[Vector2] = [Vector2(208, 195), Vector2(208, 114), Vector2(300, 114)]
 	for segment in route.size() - 1:
 		for step in 20:
 			var point := route[segment].lerp(route[segment + 1], float(step) / 19.0)

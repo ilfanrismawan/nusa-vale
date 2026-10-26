@@ -284,6 +284,7 @@ try {
     Invoke-GodotCheck 'Ranch breeding, incubator, horse and feathers' @('tests/ranch_expansion_regression.tscn')
     Invoke-GodotCheck 'Vehicles, water and parking' @('tests/vehicle_regression.tscn')
     Invoke-GodotCheck 'Shop books and purchases' @('tests/shop_book_regression.tscn')
+    Invoke-GodotCheck 'Cookware shop showroom, kitchen sets and counter route' @('tests/cookware_shop_regression.tscn')
     Invoke-GodotCheck 'Shipping bin settlement' @('tests/shipping_regression.tscn')
     Invoke-GodotCheck 'Enemy behavior tree AI' @('tests/ai_regression.tscn')
     Invoke-GodotCheck 'Crafting expansion, beehive, sawmill and stations' @('tests/crafting_expansion_regression.tscn')
