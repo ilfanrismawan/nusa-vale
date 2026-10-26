@@ -9,3 +9,6 @@
 /scratch/
 tests/*.log
 *.TMP
+
+# Local installer, not part of the game
+/install.cmd
