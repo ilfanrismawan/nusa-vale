@@ -57,6 +57,31 @@ def set_field(text, key, value):
     return re.sub(r"^%s\s*=.*$" % key, "%s = %s" % (key, value), text, count=1, flags=re.M)
 
 
+# Food effect profiles (resources/cooking/effects) so every FOOD item has one.
+EFFECT_SCRIPT = 'path="res://scripts/resources/food_effect_data.gd"'
+
+
+def set_effect(text, profile):
+    """Replace any food effect on an ItemData .tres with a single profile."""
+    lines = [line for line in text.split("\n") if 'id="fx_type"' not in line and 'id="fx_profile"' not in line and not line.startswith("food_effects =")]
+    last_ext = max(i for i, line in enumerate(lines) if line.startswith("[ext_resource"))
+    lines[last_ext + 1:last_ext + 1] = [
+        f'[ext_resource type="Script" uid="uid://vbwn6cjjdlc0" {EFFECT_SCRIPT} id="fx_type"]',
+        f'[ext_resource type="Resource" path="res://resources/cooking/effects/{profile}.tres" id="fx_profile"]',
+    ]
+    category = next(i for i, line in enumerate(lines) if line.startswith("category ="))
+    lines.insert(category, 'food_effects = Array[ExtResource("fx_type")]([ExtResource("fx_profile")])')
+    return "\n".join(lines)
+
+
+def effect_for(item_id):
+    if item_id.endswith("_juice"):
+        return "refreshing"
+    if item_id.startswith("smoked_fish"):
+        return "seafood"
+    return "fermented"
+
+
 def write_item(template_id, item_id, name, description, price):
     text = (ITEMS / f"{template_id}.tres").read_text(encoding="utf-8")
     text = re.sub(r' uid="uid://[^"]+"', "", text.split("\n", 1)[0]) + "\n" + text.split("\n", 1)[1]
@@ -65,6 +90,8 @@ def write_item(template_id, item_id, name, description, price):
     text = set_field(text, "description", f'"{description}"')
     text = set_field(text, "sell_price", str(price))
     text = set_field(text, "buy_price", str(price * 2))
+    if field(text, "category") == "9":
+        text = set_effect(text, effect_for(item_id))
     (ITEMS / f"{item_id}.tres").write_text(text, encoding="utf-8")
 
 
@@ -76,7 +103,8 @@ def main():
         label = field(source_text, "display_name")
         if output in ("beer", "mead", "wine"):
             text = (ITEMS / f"{output}.tres").read_text(encoding="utf-8")
-            (ITEMS / f"{output}.tres").write_text(set_field(set_field(text, "sell_price", str(price)), "buy_price", str(price * 2)), encoding="utf-8")
+            text = set_effect(set_field(set_field(text, "sell_price", str(price)), "buy_price", str(price * 2)), "fermented")
+            (ITEMS / f"{output}.tres").write_text(text, encoding="utf-8")
         elif output.endswith("_wine"):
             write_item(template, output, f"Wine {label}", f"Wine hasil fermentasi {label} di tong fermentasi.", price)
         else:
@@ -90,6 +118,8 @@ def main():
         else:
             write_item("truffle_oil", output, name, f"{name} hasil Oil Maker, bahan masak bernilai tinggi.", price)
         written += 1
+    legacy = ITEMS / "smoked_fish.tres"
+    legacy.write_text(set_effect(legacy.read_text(encoding="utf-8"), "seafood"), encoding="utf-8")
     for path in sorted(ITEMS.glob("fish_*.tres")):
         text = path.read_text(encoding="utf-8")
         if field(text, "category") != "5":

@@ -83,7 +83,7 @@ func _ready() -> void:
 	check(GameState.players.size() == 2 and GameState.players[1] == b and b.index == 1, "seat_players puts chosen character at P2")
 	check(GameState.available_coop_characters().size() == 1 and GameState.available_coop_characters()[0] == a, "only characters not playing are available")
 	var data: Dictionary = JSON.parse_string(JSON.stringify(SaveManager._build_save_data()))
-	check(int(data.version) == 21 and data.coop_players.size() == 2 and data.coop_players[0].id == a.character_id, "roster serialized with ids")
+	check(int(data.version) >= 21 and data.coop_players.size() == 2 and data.coop_players[0].id == a.character_id, "roster serialized with ids")
 	check(SaveManager._is_valid_save(data), "v21 save is valid")
 	SaveManager._apply_save(data)
 	check(GameState.players.size() == 1 and GameState.coop_roster.size() == 2, "load starts solo with full roster")

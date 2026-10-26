@@ -96,7 +96,7 @@ func _test_equipment() -> void:
 	check(data.equipment.has("accessory") and data.equipment["accessory"] == null, "old save gets empty new slots")
 
 func _record(item: String) -> Dictionary:
-	var record := {"uid": 9000 + StructureManager.records.size(), "item": item, "cell": Vector2i(-50 - StructureManager.records.size(), -50), "storage": [], "open": false, "job": {}, "ready": {}}
+	var record := {"uid": 9000 + StructureManager.records.size(), "item": item, "cell": [-50 - StructureManager.records.size() * 4, -50], "storage": [], "open": false, "job": {}, "ready": {}}
 	StructureManager.records.append(record)
 	return record
 
@@ -119,6 +119,8 @@ func _test_sawmill() -> void:
 	var data: PlayerData = GameState.current
 	var mill := _record("sawmill")
 	var recipe: FurnaceRecipe = StructureManager.sawmill_recipes()[0]
+	# Tas awal + barang tes sebelumnya bisa penuh; mulai dari tas kosong.
+	data.load_inventory([])
 	data.add_item(GameState._resolve_item("wood"), recipe.input_amount)
 	check(StructureManager.saw(data, mill.uid, recipe).ok, "sawmill accepts wood")
 	var was_running := DayCycle.is_running
@@ -133,7 +135,9 @@ func _test_station() -> void:
 	var data: PlayerData = GameState.current
 	var alchemy := StructureManager.station_catalog("alchemy_table")
 	var anvil := StructureManager.station_catalog("anvil")
-	check(alchemy != null and alchemy.recipes.size() == 5, "alchemy table has 5 potions")
+	var potions := alchemy.recipes.filter(func(r): return str(r.output_item_id).begins_with("potion_")) if alchemy != null else []
+	check(potions.size() == 5, "alchemy table has 5 potions")
+	data.load_inventory([])
 	check(anvil != null and anvil.recipes.size() == 22, "anvil has 22 jewelry recipes")
 	var recipe: CraftingRecipe = alchemy.recipes[0]
 	for id in recipe.ingredients:

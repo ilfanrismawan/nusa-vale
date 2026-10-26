@@ -146,6 +146,9 @@ function Invoke-GodotCheck([string]$Label, [string[]]$Arguments, [bool]$Expected
         'tests/shop_book_regression.tscn' = 'SHOP BOOK COMPLETE: failures=0'
         'tests/shipping_regression.tscn' = 'SHIPPING REGRESSION COMPLETE: failures=0'
         'tests/ai_regression.tscn' = 'AI REGRESSION COMPLETE: failures=0'
+        'tests/crafting_expansion_regression.tscn' = 'CRAFTING EXPANSION REGRESSION COMPLETE: failures=0'
+        'tests/food_effects_regression.tscn' = 'failures=0'
+        'tests/coop_drop_in_regression.tscn' = 'COOP DROP-IN failures=0'
     }
     foreach ($scene in $completionMarkers.Keys) {
         if ($Arguments -contains $scene -and -not ($output -match [regex]::Escape($completionMarkers[$scene]))) {
@@ -283,6 +286,9 @@ try {
     Invoke-GodotCheck 'Shop books and purchases' @('tests/shop_book_regression.tscn')
     Invoke-GodotCheck 'Shipping bin settlement' @('tests/shipping_regression.tscn')
     Invoke-GodotCheck 'Enemy behavior tree AI' @('tests/ai_regression.tscn')
+    Invoke-GodotCheck 'Crafting expansion, beehive, sawmill and stations' @('tests/crafting_expansion_regression.tscn')
+    Invoke-GodotCheck 'Food effect resources and stacking' @('tests/food_effects_regression.tscn')
+    Invoke-GodotCheck 'Co-op drop-in roster' @('tests/coop_drop_in_regression.tscn')
     Invoke-GodotCheck 'Biji Daya unique rewards, consumption and persistence' @('tests/daya_regression.tscn') $true
     Invoke-GodotCheck 'Save regression (expected I/O errors)' @('tests/save_regression.tscn') $true
     $missingScenes = @($Scenes | Where-Object { -not $script:verifiedScenes.Contains($_) })
