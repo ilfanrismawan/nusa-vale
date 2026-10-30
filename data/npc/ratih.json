@@ -9,8 +9,8 @@
     "season": "winter",
     "day": 9
   },
-  "home_map": "town",
-  "residence": "Tempat tinggal di luar area yang dapat dimasuki; titik malam memakai lokasi kerja/istirahat sementara.",
+  "home_map": "herbal_house",
+  "residence": "Rumah Toska (rumah herbal); berjaga di klinik 08.00–16.00, libur Rabu.",
   "romanceable": false,
   "personality": [
     "teliti",
@@ -75,9 +75,9 @@
     "default": [
       {
         "time": "06:00",
-        "map": "town",
-        "point": "ratih_work",
-        "activity": "preparing"
+        "map": "herbal_house",
+        "point": "ratih_home",
+        "activity": "breakfast"
       },
       {
         "time": "08:00",
@@ -92,30 +92,36 @@
         "activity": "lunch"
       },
       {
-        "time": "14:00",
+        "time": "13:00",
         "map": "town",
         "point": "ratih_work",
         "activity": "working"
       },
       {
-        "time": "18:00",
+        "time": "16:00",
         "map": "town",
         "point": "ratih_rest",
         "activity": "resting"
       },
       {
+        "time": "19:00",
+        "map": "herbal_house",
+        "point": "ratih_home",
+        "activity": "resting"
+      },
+      {
         "time": "22:00",
-        "map": "town",
-        "point": "ratih_rest",
+        "map": "herbal_house",
+        "point": "ratih_home",
         "activity": "sleeping"
       }
     ],
     "rainy": [
       {
         "time": "06:00",
-        "map": "town",
-        "point": "ratih_work",
-        "activity": "preparing"
+        "map": "herbal_house",
+        "point": "ratih_home",
+        "activity": "breakfast"
       },
       {
         "time": "08:00",
@@ -130,21 +136,27 @@
         "activity": "lunch"
       },
       {
-        "time": "14:00",
+        "time": "13:00",
         "map": "town",
         "point": "ratih_work",
         "activity": "working"
       },
       {
-        "time": "18:00",
+        "time": "16:00",
         "map": "town",
         "point": "ratih_rest",
         "activity": "resting"
       },
       {
+        "time": "19:00",
+        "map": "herbal_house",
+        "point": "ratih_home",
+        "activity": "resting"
+      },
+      {
         "time": "22:00",
-        "map": "town",
-        "point": "ratih_rest",
+        "map": "herbal_house",
+        "point": "ratih_home",
         "activity": "sleeping"
       }
     ]

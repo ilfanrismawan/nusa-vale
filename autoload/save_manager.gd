@@ -384,6 +384,8 @@ func _build_save_data() -> Dictionary:
 			"appearance": GameState.p1().appearance.to_dict(),
 			"equipment": GameState.p1().serialize_equipment(),
 			"skills": GameState.p1().skills.to_dict(),
+			# Kemampuan fakultas Universitas; save lama tanpa kunci ini = semua dikuasai.
+			"abilities": GameState.p1().abilities.duplicate(),
 		},
 
 		"inventory": _serialize_inventory(),
@@ -567,6 +569,7 @@ func _load_player(data: Variant) -> void:
 	
 	# Versi 22: Role & EXP. Dimuat sebelum HP karena perk Combat menambah HP maks.
 	GameState.p1().skills.load_dict(player_data.get("skills", {}))
+	Abilities.load_save(GameState.p1(), player_data)
 	# Versi 14: HP per pemain. Save lama tanpa key ini = HP penuh.
 	GameState.p1().hp = clampi(int(player_data.get("hp", PlayerData.MAX_HP)), 1, GameState.p1().max_hp)
 

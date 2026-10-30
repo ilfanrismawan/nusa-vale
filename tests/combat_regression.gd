@@ -50,6 +50,7 @@ func _test_formula() -> void:
 func _test_player_data() -> void:
 	var data := PlayerData.new(1)
 	data.reset_to_starter()
+	Abilities.grant_all(data)
 	check(data.hp == PlayerData.MAX_HP and data.max_hp == 100, "new players start with 100 HP")
 	check(data.has_item("sword_wood") and data.equipment_stats() == Vector2i(0, 3) and not data.equipment.has("weapon"), "starter sword sits in the bag; armor gives DEF 3")
 	data.damage_hp(30)
@@ -81,6 +82,7 @@ func _test_player_data() -> void:
 func _test_penalty() -> void:
 	var data := PlayerData.new(1)
 	data.reset_to_starter()
+	Abilities.grant_all(data)
 	data.add_item_silent("wood", 10)
 	data.add_item_silent("biji_daya_harvest", 1)
 	var rules := DefeatRules.new()
@@ -145,6 +147,8 @@ func _test_enemy() -> void:
 
 func _test_player_combat() -> void:
 	GameState.new_game()
+	# Kemampuan fakultas Universitas: tes ini menguji gerak/tempur, bukan kursusnya.
+	Abilities.grant_all(GameState.p1())
 	var rig := (load("res://scenes/player/Player.tscn") as PackedScene).instantiate()
 	add_child(rig)
 	var player := rig.get_node("CharacterBody2D") as Player

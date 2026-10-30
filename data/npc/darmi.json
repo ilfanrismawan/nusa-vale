@@ -9,8 +9,8 @@
     "season": "fall",
     "day": 28
   },
-  "home_map": "town",
-  "residence": "Rumah kecil di belakang alun-alun; dari pagi sampai malam duduk di teras dekat alun-alun.",
+  "home_map": "house_west",
+  "residence": "Rumah Barat; dari pagi sampai sore duduk di teras dekat alun-alun, malam berjalan pulang.",
   "romanceable": false,
   "personality": [
     "bijak",
@@ -75,9 +75,9 @@
     "default": [
       {
         "time": "06:00",
-        "map": "town",
-        "point": "darmi_porch",
-        "activity": "preparing"
+        "map": "house_west",
+        "point": "darmi_home",
+        "activity": "breakfast"
       },
       {
         "time": "08:00",
@@ -104,18 +104,24 @@
         "activity": "resting"
       },
       {
+        "time": "19:30",
+        "map": "house_west",
+        "point": "darmi_home",
+        "activity": "resting"
+      },
+      {
         "time": "21:00",
-        "map": "town",
-        "point": "darmi_porch",
+        "map": "house_west",
+        "point": "darmi_home",
         "activity": "sleeping"
       }
     ],
     "rainy": [
       {
         "time": "06:00",
-        "map": "town",
-        "point": "darmi_porch",
-        "activity": "preparing"
+        "map": "house_west",
+        "point": "darmi_home",
+        "activity": "breakfast"
       },
       {
         "time": "08:00",
@@ -142,9 +148,15 @@
         "activity": "resting"
       },
       {
+        "time": "19:30",
+        "map": "house_west",
+        "point": "darmi_home",
+        "activity": "resting"
+      },
+      {
         "time": "21:00",
-        "map": "town",
-        "point": "darmi_porch",
+        "map": "house_west",
+        "point": "darmi_home",
         "activity": "sleeping"
       }
     ]

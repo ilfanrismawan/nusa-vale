@@ -182,7 +182,11 @@ func _process(delta: float) -> void:
 	queue_redraw()
 
 func _update_guard(free: bool, state: State) -> void:
-	var want := free and player.holds_weapon() and (player.input.pressed(&"guard") or force_guard) and not is_exhausted() \
+	# Block dipelajari di Fakultas Bela Diri Universitas.
+	var learned := Abilities.has(player.data, Abilities.GUARD)
+	if not learned and free and player.holds_weapon() and player.input.just_pressed(&"guard"):
+		Abilities.check(player, Abilities.GUARD)
+	var want := learned and free and player.holds_weapon() and (player.input.pressed(&"guard") or force_guard) and not is_exhausted() \
 		and (state is IdleState or state is MoveState)
 	if want and not guarding:
 		guarding = true
@@ -197,7 +201,7 @@ func _update_guard(free: bool, state: State) -> void:
 		player.update_facing_direction(dir, true)
 
 func is_parry_window() -> bool:
-	return guarding and Time.get_ticks_msec() - _guard_started_ms <= int((Combat.RULES.parry_window + SkillSystem.stat(player.data, &"parry_window")) * 1000.0)
+	return guarding and Abilities.has(player.data, Abilities.PARRY) and Time.get_ticks_msec() - _guard_started_ms <= int((Combat.RULES.parry_window + SkillSystem.stat(player.data, &"parry_window")) * 1000.0)
 
 ## Dipanggil ToolController saat klik kiri ditekan dengan senjata: mulai menahan.
 func begin_charge() -> void:
@@ -231,6 +235,8 @@ func request_dodge() -> bool:
 	var state := player.state_machine.current_state
 	var cancel := state == tools.combat_state and tools.combat_state.can_cancel()
 	if not (state is IdleState or state is MoveState or cancel):
+		return false
+	if not Abilities.check(player, Abilities.DODGE):
 		return false
 	if is_exhausted():
 		_flash = 0.4

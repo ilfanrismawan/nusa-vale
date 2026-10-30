@@ -28,6 +28,8 @@ func _ready() -> void:
 	await get_tree().process_frame
 	_test_no_conflicts()
 	GameState.new_game()
+	# Kemampuan fakultas Universitas: tes ini menguji gerak/tempur, bukan kursusnya.
+	Abilities.grant_all(GameState.p1())
 	var rig := (load("res://scenes/player/Player.tscn") as PackedScene).instantiate()
 	add_child(rig)
 	var player := rig.get_node("CharacterBody2D") as Player

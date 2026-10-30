@@ -22,6 +22,8 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	await get_tree().process_frame
 	GameState.new_game()
+	# Kemampuan fakultas Universitas: tes ini menguji gerak/tempur, bukan kursusnya.
+	Abilities.grant_all(GameState.p1())
 	StructureManager.reset()
 	_test_catalogs()
 	_test_items()

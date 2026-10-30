@@ -9,8 +9,8 @@
     "season": "fall",
     "day": 6
   },
-  "home_map": "town",
-  "residence": "Tempat tinggal di luar area yang dapat dimasuki; titik malam memakai lokasi kerja/istirahat sementara.",
+  "home_map": "house_blue",
+  "residence": "Rumah Biru di tepi selatan Town; pagi dan malam di rumah, siang memancing di dermaga.",
   "romanceable": false,
   "personality": [
     "sabar",
@@ -76,6 +76,12 @@
     "default": [
       {
         "time": "06:00",
+        "map": "house_blue",
+        "point": "bahar_home",
+        "activity": "breakfast"
+      },
+      {
+        "time": "07:00",
         "map": "town",
         "point": "bahar_work",
         "activity": "preparing"
@@ -105,15 +111,27 @@
         "activity": "resting"
       },
       {
+        "time": "20:00",
+        "map": "house_blue",
+        "point": "bahar_home",
+        "activity": "resting"
+      },
+      {
         "time": "22:00",
-        "map": "town",
-        "point": "bahar_rest",
+        "map": "house_blue",
+        "point": "bahar_home",
         "activity": "sleeping"
       }
     ],
     "rainy": [
       {
         "time": "06:00",
+        "map": "house_blue",
+        "point": "bahar_home",
+        "activity": "breakfast"
+      },
+      {
+        "time": "07:00",
         "map": "town",
         "point": "bahar_work",
         "activity": "preparing"
@@ -143,9 +161,15 @@
         "activity": "resting"
       },
       {
+        "time": "20:00",
+        "map": "house_blue",
+        "point": "bahar_home",
+        "activity": "resting"
+      },
+      {
         "time": "22:00",
-        "map": "town",
-        "point": "bahar_rest",
+        "map": "house_blue",
+        "point": "bahar_home",
         "activity": "sleeping"
       }
     ]

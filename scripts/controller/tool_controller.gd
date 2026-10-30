@@ -216,6 +216,9 @@ func attack(kind: CombatState.Kind = CombatState.Kind.LIGHT) -> bool:
 		return false
 	if state_machine.current_state in [action_state, fishing_state, combat_state, dodge_state, jump_state, ride_state]:
 		return false
+	# Tongkat sihir baru bisa dipakai setelah kursus Fakultas Sihir.
+	if weapon.weapon_type == ItemData.WeaponType.STAFF and not Abilities.check(player, Abilities.MAGIC):
+		return false
 	var combat := player.combat
 	if combat.is_exhausted():
 		combat.spend(1.0)
@@ -280,6 +283,8 @@ func weapon_art() -> bool:
 		return false
 	var state := state_machine.current_state
 	if not (state is IdleState or state is MoveState):
+		return false
+	if not Abilities.check(player, Abilities.WEAPON_ART):
 		return false
 	var art := style.art_for(int(weapon.equipment_tier))
 	if art == null:

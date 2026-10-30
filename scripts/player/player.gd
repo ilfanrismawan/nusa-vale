@@ -232,7 +232,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	var wants_jump := input.is_event(event, &"jump")
 	if wants_jump and is_jumping():
 		# Di udara: tombol lompat = lompat ganda (tidak ada interaksi sambil melompat).
-		tool_controller.jump_state.double_jump()
+		if Abilities.check(self, Abilities.DOUBLE_JUMP):
+			tool_controller.jump_state.double_jump()
 		get_viewport().set_input_as_handled()
 		return
 	if input.is_event(event, &"interact"):
@@ -339,6 +340,9 @@ func try_jump() -> bool:
 		return false
 	var state := state_machine.current_state
 	if not (state is IdleState or state is MoveState):
+		return false
+	# Lompat dipelajari di Fakultas Olahraga Universitas.
+	if not Abilities.check(self, Abilities.JUMP):
 		return false
 	bind_context()
 	state_machine.change_state(tool_controller.jump_state)
@@ -1143,7 +1147,8 @@ func _debug_combat_key(event: InputEvent) -> bool:
 			bind_context()
 			for entry in [["sword_wood", 1], ["bow_wood", 1], ["arrow_wood", 30], ["staff_wood", 1]]:
 				data.add_item(entry[0], entry[1])
-			Notify.say("[Debug] Pedang, busur, 30 anak panah, dan tongkat sihir masuk ke tas.")
+			Abilities.grant_all(data)
+			Notify.say("[Debug] Pedang, busur, 30 anak panah, tongkat sihir, dan semua kemampuan fakultas.")
 			return true
 		KEY_F6:
 			bind_context()

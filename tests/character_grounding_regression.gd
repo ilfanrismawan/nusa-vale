@@ -31,6 +31,8 @@ func _ready() -> void:
 		return
 	await get_tree().process_frame
 	GameState.new_game()
+	# Kemampuan fakultas Universitas: tes ini menguji gerak/tempur, bukan kursusnya.
+	Abilities.grant_all(GameState.p1())
 	DayCycle.current_day = 3
 	DayCycle.hour = 10
 	DayCycle.is_running = false

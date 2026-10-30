@@ -9,8 +9,8 @@
     "season": "summer",
     "day": 21
   },
-  "home_map": "town",
-  "residence": "Tempat tinggal di luar area yang dapat dimasuki; titik malam memakai lokasi kerja/istirahat sementara.",
+  "home_map": "warung",
+  "residence": "Tinggal di belakang Warung Rasa Nusa; melayani 08.00–20.00.",
   "romanceable": false,
   "personality": [
     "hangat",
@@ -99,8 +99,8 @@
     "default": [
       {
         "time": "06:00",
-        "map": "town",
-        "point": "joko_work",
+        "map": "warung",
+        "point": "joko_home",
         "activity": "preparing"
       },
       {
@@ -116,29 +116,35 @@
         "activity": "lunch"
       },
       {
-        "time": "14:00",
+        "time": "13:00",
         "map": "town",
         "point": "joko_work",
         "activity": "working"
       },
       {
-        "time": "18:00",
+        "time": "20:00",
         "map": "town",
         "point": "joko_rest",
         "activity": "resting"
       },
       {
+        "time": "21:00",
+        "map": "warung",
+        "point": "joko_home",
+        "activity": "resting"
+      },
+      {
         "time": "22:00",
-        "map": "town",
-        "point": "joko_rest",
+        "map": "warung",
+        "point": "joko_home",
         "activity": "sleeping"
       }
     ],
     "rainy": [
       {
         "time": "06:00",
-        "map": "town",
-        "point": "joko_work",
+        "map": "warung",
+        "point": "joko_home",
         "activity": "preparing"
       },
       {
@@ -154,21 +160,27 @@
         "activity": "lunch"
       },
       {
-        "time": "14:00",
+        "time": "13:00",
         "map": "town",
         "point": "joko_work",
         "activity": "working"
       },
       {
-        "time": "18:00",
+        "time": "20:00",
         "map": "town",
         "point": "joko_rest",
         "activity": "resting"
       },
       {
+        "time": "21:00",
+        "map": "warung",
+        "point": "joko_home",
+        "activity": "resting"
+      },
+      {
         "time": "22:00",
-        "map": "town",
-        "point": "joko_rest",
+        "map": "warung",
+        "point": "joko_home",
         "activity": "sleeping"
       }
     ]

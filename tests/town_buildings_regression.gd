@@ -18,6 +18,9 @@ func _ready() -> void:
 		return
 	await get_tree().process_frame
 	GameState.new_game()
+	# Pintu rumah & toko terkunci di luar jam buka (ServiceHours): uji pada Selasa pukul 10.00.
+	DayCycle.current_day = 2
+	DayCycle.hour = 10
 	var town: Node2D = load("res://scenes/world/town.tscn").instantiate()
 	get_tree().root.add_child(town)
 	get_tree().current_scene = town

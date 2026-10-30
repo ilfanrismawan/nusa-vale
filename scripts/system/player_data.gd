@@ -134,6 +134,8 @@ var watering_water: int = 20
 ## One order per player, held by the blacksmith until explicitly collected.
 var tool_order: Dictionary = {}
 var learned_recipes: Array[String] = []
+## Kemampuan dari fakultas Universitas (Abilities): id -> true.
+var abilities: Dictionary = {}
 var friendships: Dictionary = {}
 
 func load_friendships(value: Variant) -> void:
@@ -204,6 +206,7 @@ func reset_to_starter() -> void:
 	consumed_daya.clear()
 	tool_order.clear()
 	learned_recipes.clear()
+	abilities.clear()
 	skills.reset()
 	equipment = empty_equipment()
 	equipment["armor"] = GameState._resolve_item("armor_wood")
@@ -745,6 +748,7 @@ func to_dict() -> Dictionary:
 		"inventory": serialize_inventory(),
 		"equipment": serialize_equipment(),
 		"skills": skills.to_dict(),
+		"abilities": abilities.duplicate(),
 	}
 
 func load_dict(data: Dictionary) -> void:
@@ -763,6 +767,7 @@ func load_dict(data: Dictionary) -> void:
 	watering_water = clampi(int(data.get("watering_water", 20)), 0, 350)
 	load_daya(data.get("consumed_daya", []))
 	skills.load_dict(data.get("skills", {}))
+	Abilities.load_save(self, data)
 	stamina = clampi(int(data.get("stamina", MAX_STAMINA)), 0, max_stamina)
 	hp = clampi(int(data.get("hp", MAX_HP)), 1, max_hp)
 	bag_level = clampi(int(data.get("bag_level", 0)), 0, BAG_SIZES.size() - 1)

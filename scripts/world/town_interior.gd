@@ -8,6 +8,10 @@ const FONT = preload("res://assets/fonts/m5x7.ttf")
 func _ready() -> void:
 	_build_room()
 	_build_service()
+	# Warga yang tinggal di sini (jadwal map = nama file scene) pulang-pergi lewat pintu.
+	var residents := ResidentRoom.new()
+	residents.map_id = scene_file_path.get_file().get_basename()
+	add_child(residents)
 	DayCycle.is_running = true
 	for candidate in find_children("*", "CharacterBody2D", true, false):
 		if candidate is Player:
@@ -65,9 +69,8 @@ func _build_room() -> void:
 
 func _build_service() -> void:
 	if service == "blacksmith":
-		var npc := preload("res://scenes/npc/BlacksmithNPC.tscn").instantiate()
-		npc.position = Vector2(240, 120)
-		add_child(npc)
+		# Rumah & bengkel Empu Bima: ia melayani upgrade di tungku luar pada jam kerja.
+		_add_notice("Rumah dan bengkel Empu Bima. Upgrade alat dilayani di tungku depan, 08.00–17.00.")
 	elif service == "warung":
 		var kitchen := preload("res://scripts/world/kitchen_station.gd").new()
 		kitchen.position = Vector2(240, 120)
@@ -83,15 +86,22 @@ func _build_service() -> void:
 		desk.position = Vector2(240, 112)
 		add_child(desk)
 	else:
-		var notice := preload("res://scripts/world/school_notice.gd").new()
-		notice.position = Vector2(240, 104)
-		notice.message = "Rak bacaan desa." if service == "library" else ("Klinik Nusa Vale. Layanan perawatan belum dibuka." if service == "clinic" else "Selamat datang di " + room_title + ".")
-		var shape := CollisionShape2D.new()
-		var rectangle := RectangleShape2D.new()
-		rectangle.size = Vector2(48, 24)
-		shape.shape = rectangle
-		notice.add_child(shape)
-		var furniture := Sprite2D.new()
-		furniture.texture = preload("res://assets/ranch/care_board.png")
-		notice.add_child(furniture)
-		add_child(notice)
+		_add_notice("Selamat datang di " + room_title + ".")
+	if service == "library":
+		_add_notice("Perpustakaan buka " + ServiceHours.hours_text("library") + ".", Vector2(360, 104))
+	elif service == "warung":
+		_add_notice("Warung Rasa Nusa buka " + ServiceHours.hours_text("warung") + ". Joko melayani di depan.", Vector2(360, 104))
+
+func _add_notice(text: String, at: Vector2 = Vector2(240, 104)) -> void:
+	var notice := preload("res://scripts/world/school_notice.gd").new()
+	notice.position = at
+	notice.message = text
+	var shape := CollisionShape2D.new()
+	var rectangle := RectangleShape2D.new()
+	rectangle.size = Vector2(48, 24)
+	shape.shape = rectangle
+	notice.add_child(shape)
+	var furniture := Sprite2D.new()
+	furniture.texture = preload("res://assets/ranch/care_board.png")
+	notice.add_child(furniture)
+	add_child(notice)

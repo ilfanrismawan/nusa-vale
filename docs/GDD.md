@@ -159,6 +159,18 @@ Setiap ruangan kini punya fungsi (`scripts/system/campus.gd` untuk angka & state
 - **Sekolah** — Papan tulis: pelajaran harian gratis +10 EXP role topik. Meja guru: guru tamu sekali sepekan (role terbaik ≥ Lv 3, 15 stamina, 2 jam) → honor 150 G × level. Rak buku: bacaan harian +10 EXP (Forager/Farmer). Meja dapur: pesanan makan siang musiman (hasil panen; musim dingin ikan) dibayar 1,5× harga jual + 10 EXP. Bangku: +15 stamina sekali sehari.
 - Angka di atas adalah baseline balancing awal yang bisa disetel di `Campus`.
 
+### Fakultas Universitas & Kemampuan Gerak/Tempur [terpasang 31 Oktober 2026]
+Game baru tidak lagi memberi lompat, guling, block, parry, jurus senjata dan sihir tongkat sejak awal; semuanya dipelajari lewat kursus berurutan (08.00–17.00, 2 jam, `scripts/system/abilities.gd`). Save lama tanpa kunci `abilities` tetap menguasai semuanya.
+- **Fakultas Olahraga** (patung atrium): Lompat 200 G → Guling Menghindar 600 G → Lompat Ganda 1.500 G (Forager Lv 2).
+- **Dojo Bela Diri** (tangga lantai dua): Block 400 G → Parry 1.500 G (Combat Lv 2) → Jurus Senjata 4.000 G (Combat Lv 4).
+- **Fakultas Sihir** (lemari lab): Dasar Sihir Tongkat 2.500 G (Combat Lv 1).
+- Tombol kemampuan yang belum dipelajari menampilkan "Belum dipelajari" dan menyebut fakultasnya. Debug F9 memberi semua kemampuan.
+
+### Rumah Warga & Jam Buka [terpasang 31 Oktober 2026]
+- Warga punya rumah yang bisa dimasuki: Bahar (Rumah Biru), Bima (rumah & bengkel Pandai Besi), Damar (Rumah Bata), Darmi (Rumah Barat; siang langsung duduk di teras), Joko (belakang Warung), Kirana (Rumah Merah Muda), Ratih (Rumah Toska), Rian (Rumah Bertingkat); Wira/Zarathia/Zarathustra, Ubay, Eep tetap seperti sebelumnya. Pagi dan malam di rumah, siang bekerja di Town, berjalan lewat pintu (rute Town dibuat dari pemindaian tabrakan, `scripts/npc/resident_room.gd` untuk interior). Baskoro beristirahat di ruang belajar kampus pada malam hari.
+- Layanan NPC mengikuti aktivitas jadwal: Bima 08.00–17.00, Damar 07.30–17.00, Joko 08.00–20.00, Wira (libur Minggu), Eep (libur Rabu), Kedai Zarathia.
+- Pintu bangunan terkunci di luar jam (`scripts/system/service_hours.gd`): Toko Umum & Toko Perabot Dapur 09.00–17.00 (libur Rabu), Perpustakaan 09.00–18.00 (libur Senin), Klinik 08.00–16.00 (libur Rabu), Warung 07.00–21.00, Sekolah 07.00–17.00 (libur Minggu), Universitas 07.00–21.00, rumah warga 07.00–21.00.
+
 ### Pengelolaan Status Area & Unlock [keputusan]
 - **`UnlockManager` adalah satu-satunya sumber kebenaran (single source of truth)** untuk pembukaan area dan pintu gerbang.
 - Flag lama di `WorldState` yang tumpang tindih (seperti `school_open` atau pengecekan jembatan terpisah) distandarkan ke `UnlockManager.is_unlocked(area_id)`.

@@ -9,8 +9,8 @@
     "season": "spring",
     "day": 17
   },
-  "home_map": "town",
-  "residence": "Tempat tinggal di luar area yang dapat dimasuki; titik malam memakai lokasi kerja/istirahat sementara.",
+  "home_map": "house_pink",
+  "residence": "Rumah Merah Muda di barat daya Town.",
   "romanceable": false,
   "personality": [
     "ramah",
@@ -74,9 +74,9 @@
     "default": [
       {
         "time": "06:00",
-        "map": "town",
-        "point": "kirana_work",
-        "activity": "preparing"
+        "map": "house_pink",
+        "point": "kirana_home",
+        "activity": "breakfast"
       },
       {
         "time": "08:00",
@@ -103,18 +103,24 @@
         "activity": "resting"
       },
       {
+        "time": "20:00",
+        "map": "house_pink",
+        "point": "kirana_home",
+        "activity": "resting"
+      },
+      {
         "time": "22:00",
-        "map": "town",
-        "point": "kirana_rest",
+        "map": "house_pink",
+        "point": "kirana_home",
         "activity": "sleeping"
       }
     ],
     "rainy": [
       {
         "time": "06:00",
-        "map": "town",
-        "point": "kirana_work",
-        "activity": "preparing"
+        "map": "house_pink",
+        "point": "kirana_home",
+        "activity": "breakfast"
       },
       {
         "time": "08:00",
@@ -141,9 +147,15 @@
         "activity": "resting"
       },
       {
+        "time": "20:00",
+        "map": "house_pink",
+        "point": "kirana_home",
+        "activity": "resting"
+      },
+      {
         "time": "22:00",
-        "map": "town",
-        "point": "kirana_rest",
+        "map": "house_pink",
+        "point": "kirana_home",
         "activity": "sleeping"
       }
     ]

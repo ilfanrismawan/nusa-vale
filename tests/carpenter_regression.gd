@@ -27,6 +27,9 @@ func _ready() -> void:
 	seed(20261015)
 	GameState.new_game()
 	DayCycle.is_running = false
+	# Damar bekerja di Town 07.30-17.00; pagi buta ia masih di rumah.
+	DayCycle.current_day = 2
+	DayCycle.hour = 10
 	var town = load("res://scenes/world/town.tscn").instantiate()
 	get_tree().root.add_child(town)
 	get_tree().current_scene = town

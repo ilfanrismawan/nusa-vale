@@ -9,8 +9,8 @@
     "season": "spring",
     "day": 24
   },
-  "home_map": "town",
-  "residence": "Tempat tinggal di luar area yang dapat dimasuki; titik malam memakai lokasi kerja/istirahat sementara.",
+  "home_map": "house_tall",
+  "residence": "Rumah Bertingkat di selatan Town.",
   "romanceable": false,
   "personality": [
     "telaten",
@@ -75,12 +75,12 @@
     "default": [
       {
         "time": "06:00",
-        "map": "town",
-        "point": "rian_work",
-        "activity": "preparing"
+        "map": "house_tall",
+        "point": "rian_home",
+        "activity": "breakfast"
       },
       {
-        "time": "08:00",
+        "time": "07:00",
         "map": "town",
         "point": "rian_work",
         "activity": "working"
@@ -104,21 +104,27 @@
         "activity": "resting"
       },
       {
+        "time": "20:00",
+        "map": "house_tall",
+        "point": "rian_home",
+        "activity": "resting"
+      },
+      {
         "time": "22:00",
-        "map": "town",
-        "point": "rian_rest",
+        "map": "house_tall",
+        "point": "rian_home",
         "activity": "sleeping"
       }
     ],
     "rainy": [
       {
         "time": "06:00",
-        "map": "town",
-        "point": "rian_work",
-        "activity": "preparing"
+        "map": "house_tall",
+        "point": "rian_home",
+        "activity": "breakfast"
       },
       {
-        "time": "08:00",
+        "time": "07:00",
         "map": "town",
         "point": "rian_work",
         "activity": "working"
@@ -142,9 +148,15 @@
         "activity": "resting"
       },
       {
+        "time": "20:00",
+        "map": "house_tall",
+        "point": "rian_home",
+        "activity": "resting"
+      },
+      {
         "time": "22:00",
-        "map": "town",
-        "point": "rian_rest",
+        "map": "house_tall",
+        "point": "rian_home",
         "activity": "sleeping"
       }
     ]

@@ -24,6 +24,8 @@ func _ready() -> void:
 	_test_tier_data()
 	_test_synth()
 	GameState.new_game()
+	# Kemampuan fakultas Universitas: tes ini menguji gerak/tempur, bukan kursusnya.
+	Abilities.grant_all(GameState.p1())
 	var rig := (load("res://scenes/player/Player.tscn") as PackedScene).instantiate()
 	add_child(rig)
 	var player := rig.get_node("CharacterBody2D") as Player

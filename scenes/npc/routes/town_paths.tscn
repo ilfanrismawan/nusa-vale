@@ -449,6 +449,90 @@ resource_local_to_scene = true
 bake_interval = 4.0
 _data = {"points": PackedVector2Array(0, 0, 0, 0, 550, 440, 0, 0, 0, 0, 500, 460, 0, 0, 0, 0, 450, 490)}
 
+[sub_resource type="Curve2D" id="bahar_home_0"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 552, 804, 0, 0, 0, 0, 680, 770)
+}
+point_count = 2
+
+[sub_resource type="Curve2D" id="bahar_home_1"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 552, 804, 0, 0, 0, 0, 600, 772, 0, 0, 0, 0, 700, 440)
+}
+point_count = 3
+
+[sub_resource type="Curve2D" id="bima_home_0"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 1296, 952, 0, 0, 0, 0, 1240, 932, 0, 0, 0, 0, 1236, 912, 0, 0, 0, 0, 1240, 916)
+}
+point_count = 4
+
+[sub_resource type="Curve2D" id="damar_home_0"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 776, 816, 0, 0, 0, 0, 704, 780, 0, 0, 0, 0, 700, 440)
+}
+point_count = 3
+
+[sub_resource type="Curve2D" id="damar_home_1"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 776, 816, 0, 0, 0, 0, 704, 780, 0, 0, 0, 0, 708, 588, 0, 0, 0, 0, 780, 430)
+}
+point_count = 4
+
+[sub_resource type="Curve2D" id="darmi_home_0"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 152, 416, 0, 0, 0, 0, 780, 420)
+}
+point_count = 2
+
+[sub_resource type="Curve2D" id="joko_home_0"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 660, 276, 0, 0, 0, 0, 892, 316, 0, 0, 0, 0, 895, 388)
+}
+point_count = 3
+
+[sub_resource type="Curve2D" id="joko_home_1"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 660, 276, 0, 0, 0, 0, 892, 316, 0, 0, 0, 0, 970, 430)
+}
+point_count = 3
+
+[sub_resource type="Curve2D" id="kirana_home_0"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 184, 800, 0, 0, 0, 0, 328, 764, 0, 0, 0, 0, 700, 440)
+}
+point_count = 3
+
+[sub_resource type="Curve2D" id="kirana_home_1"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 184, 800, 0, 0, 0, 0, 328, 764, 0, 0, 0, 0, 550, 440)
+}
+point_count = 3
+
+[sub_resource type="Curve2D" id="ratih_home_0"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 904, 804, 0, 0, 0, 0, 704, 784, 0, 0, 0, 0, 520, 396, 0, 0, 0, 0, 519, 340)
+}
+point_count = 4
+
+[sub_resource type="Curve2D" id="ratih_home_1"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 904, 804, 0, 0, 0, 0, 964, 772, 0, 0, 0, 0, 964, 716, 0, 0, 0, 0, 700, 440)
+}
+point_count = 4
+
+[sub_resource type="Curve2D" id="rian_home_0"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 276, 800, 0, 0, 0, 0, 328, 760, 0, 0, 0, 0, 450, 490)
+}
+point_count = 3
+
+[sub_resource type="Curve2D" id="rian_home_1"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 276, 800, 0, 0, 0, 0, 344, 748, 0, 0, 0, 0, 700, 440)
+}
+point_count = 3
+
 [node name="NPCPaths" type="Node2D"]
 script = ExtResource("network")
 
@@ -804,3 +888,121 @@ curve = SubResource("ratih_work_branch")
 script = ExtResource("path")
 npc_id = &"rian"
 curve = SubResource("rian_work_branch")
+
+[node name="bahar_home_door" type="Marker2D" parent="."]
+position = Vector2(552, 804)
+script = ExtResource("gateway")
+npc_id = &"bahar"
+destination_maps = PackedStringArray("house_blue")
+
+[node name="bahar_home_route_0" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"bahar"
+curve = SubResource("bahar_home_0")
+
+[node name="bahar_home_route_1" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"bahar"
+curve = SubResource("bahar_home_1")
+
+[node name="bima_home_door" type="Marker2D" parent="."]
+position = Vector2(1296, 952)
+script = ExtResource("gateway")
+npc_id = &"bima"
+destination_maps = PackedStringArray("blacksmith")
+
+[node name="bima_home_route_0" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"bima"
+curve = SubResource("bima_home_0")
+
+[node name="damar_home_door" type="Marker2D" parent="."]
+position = Vector2(776, 816)
+script = ExtResource("gateway")
+npc_id = &"damar"
+destination_maps = PackedStringArray("house_brick")
+
+[node name="damar_home_route_0" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"damar"
+curve = SubResource("damar_home_0")
+
+[node name="damar_home_route_1" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"damar"
+curve = SubResource("damar_home_1")
+
+[node name="darmi_home_door" type="Marker2D" parent="."]
+position = Vector2(152, 416)
+script = ExtResource("gateway")
+npc_id = &"darmi"
+destination_maps = PackedStringArray("house_west")
+
+[node name="darmi_home_route_0" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"darmi"
+curve = SubResource("darmi_home_0")
+
+[node name="joko_home_door" type="Marker2D" parent="."]
+position = Vector2(660, 276)
+script = ExtResource("gateway")
+npc_id = &"joko"
+destination_maps = PackedStringArray("warung")
+
+[node name="joko_home_route_0" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"joko"
+curve = SubResource("joko_home_0")
+
+[node name="joko_home_route_1" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"joko"
+curve = SubResource("joko_home_1")
+
+[node name="kirana_home_door" type="Marker2D" parent="."]
+position = Vector2(184, 800)
+script = ExtResource("gateway")
+npc_id = &"kirana"
+destination_maps = PackedStringArray("house_pink")
+
+[node name="kirana_home_route_0" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"kirana"
+curve = SubResource("kirana_home_0")
+
+[node name="kirana_home_route_1" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"kirana"
+curve = SubResource("kirana_home_1")
+
+[node name="ratih_home_door" type="Marker2D" parent="."]
+position = Vector2(904, 804)
+script = ExtResource("gateway")
+npc_id = &"ratih"
+destination_maps = PackedStringArray("herbal_house")
+
+[node name="ratih_home_route_0" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"ratih"
+curve = SubResource("ratih_home_0")
+
+[node name="ratih_home_route_1" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"ratih"
+curve = SubResource("ratih_home_1")
+
+[node name="rian_home_door" type="Marker2D" parent="."]
+position = Vector2(276, 800)
+script = ExtResource("gateway")
+npc_id = &"rian"
+destination_maps = PackedStringArray("house_tall")
+
+[node name="rian_home_route_0" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"rian"
+curve = SubResource("rian_home_0")
+
+[node name="rian_home_route_1" type="Path2D" parent="."]
+script = ExtResource("path")
+npc_id = &"rian"
+curve = SubResource("rian_home_1")

@@ -5,7 +5,7 @@ extends StaticBody2D
 ## Tindakan berbayar atau yang memakan stamina/waktu minta tekan sekali lagi untuk konfirmasi.
 
 @export_enum("lecture", "library_read", "self_study", "market_pc", "student_card", "shop",
-	"exam", "database", "lab", "rest", "lesson", "guest_teacher", "school_request") var station := "library_read"
+	"exam", "database", "lab", "rest", "lesson", "guest_teacher", "school_request", "faculty") var station := "library_read"
 ## Untuk library_read: role EXP rak ini. Kosong = topik hari ini.
 @export var role_id: StringName = &""
 ## Untuk shop.
@@ -14,6 +14,13 @@ extends StaticBody2D
 @export var usage_key := ""
 ## Teks suasana sebelum keterangan fungsi.
 @export_multiline var message := ""
+## Untuk faculty: id fakultas di Abilities (sports, martial, magic).
+@export var faculty := ""
+## Papan nama kecil di atas perabot (kosong = tanpa papan).
+@export var sign_text := ""
+@export var sign_offset := Vector2(0, -30)
+
+const SIGN_FONT := preload("res://assets/fonts/m5x7.ttf")
 
 const CONFIRM_MSEC := 4000
 
@@ -24,6 +31,25 @@ var _shop_ui: ShopUI
 
 func _ready() -> void:
 	set_meta("player_interaction", true)
+	if not sign_text.is_empty():
+		_add_sign()
+
+
+func _add_sign() -> void:
+	var label := Label.new()
+	label.name = "Sign"
+	label.text = sign_text
+	label.add_theme_font_override("font", SIGN_FONT)
+	label.add_theme_font_size_override("font_size", 16)
+	label.add_theme_color_override("font_color", Color("fff4d6"))
+	label.add_theme_color_override("font_outline_color", Color("3a2616"))
+	label.add_theme_constant_override("outline_size", 4)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.z_index = 20
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(label)
+	label.size = label.get_minimum_size()
+	label.position = sign_offset - Vector2(label.size.x * 0.5, label.size.y)
 
 
 func interact(player: Player = null) -> void:
@@ -197,6 +223,30 @@ func _rest(_player: Player, data: PlayerData) -> void:
 	Campus.mark_used(data, _key())
 	data.restore_stamina(Campus.REST_STAMINA)
 	_say("Kamu beristirahat sejenak: +%d stamina." % Campus.REST_STAMINA)
+
+
+## Fakultas: kursus kemampuan gerak/tempur (Abilities), berurutan per fakultas.
+func _faculty(player: Player, data: PlayerData) -> void:
+	var faculty_name: String = Abilities.FACULTY_NAMES.get(faculty, "Fakultas")
+	var entry := Abilities.next_course(data, faculty)
+	if entry.is_empty():
+		_say("%s: kamu sudah menamatkan semua kursus di sini." % faculty_name)
+		return
+	if DayCycle.hour < Campus.LECTURE_OPEN_HOUR or DayCycle.hour >= Campus.LECTURE_CLOSE_HOUR:
+		_say("%s buka %02d.00–%02d.00. Kursus berikutnya: %s." % [faculty_name, Campus.LECTURE_OPEN_HOUR, Campus.LECTURE_CLOSE_HOUR, entry.title])
+		return
+	var block := Abilities.blocker(data, entry)
+	if not block.is_empty():
+		_say("%s — Kursus %s (%d G). %s" % [faculty_name, entry.title, entry.price, block])
+		return
+	if not _confirmed(player, "%s — Kursus %s: %d G, 2 jam." % [faculty_name, entry.title, entry.price]):
+		return
+	if not GameState.spend_money(int(entry.price)):
+		_say("Uangmu belum cukup untuk kursus %s (%d G)." % [entry.title, entry.price])
+		return
+	Abilities.learn(data, entry.id)
+	DayCycle.advance_minute(Abilities.COURSE_MINUTES)
+	Notify.say("Kursus selesai! Kamu menguasai %s. %s" % [entry.title, entry.hint])
 
 
 # ── Sekolah ─────────────────────────────────────────────────────────

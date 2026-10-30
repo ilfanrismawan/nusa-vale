@@ -1,6 +1,6 @@
 extends Node
 
-## Fungsi ruangan Sekolah & Universitas (Campus / CampusStation): batas harian,
+## Fungsi ruangan Sekolah & Universitas (Campus / CampusStation / Abilities): batas harian,
 ## konfirmasi, biaya, EXP, Kartu Mahasiswa, ujian, lab, pesanan sekolah dan save.
 
 var failures := 0
@@ -145,6 +145,49 @@ func _ready() -> void:
 	check(data.stamina == 10 + Campus.REST_STAMINA, "bench restores stamina")
 	found["WaitingChair1"].interact(player)
 	check(data.stamina == 10 + Campus.REST_STAMINA, "rest is once per day across benches")
+	# Fakultas: kemampuan gerak/tempur tidak dimiliki sejak awal.
+	DayCycle.hour = 9
+	for id in Abilities.ids():
+		check(not Abilities.has(data, id), "new game starts without ability: " + id)
+	check(not player.try_jump(), "cannot jump before the sports course")
+	check(not player.combat.request_dodge(), "cannot dodge before the sports course")
+	var sports: CampusStation = found["Statue"]
+	var martial: CampusStation = found["Stairs"]
+	var magic: CampusStation = found["LabCabinet1"]
+	check(sports.faculty == "sports" and martial.faculty == "martial" and magic.faculty == "magic", "three faculties are placed in the university")
+	check(sports.get_node_or_null("Sign") is Label, "faculty has a name sign")
+	money = GameState.money
+	press_twice(sports, player)
+	check(Abilities.has(data, Abilities.JUMP) and GameState.money == money - int(Abilities.course(Abilities.JUMP).price), "sports faculty teaches jumping for its fee")
+	check(DayCycle.hour == 11, "a course takes two hours")
+	check(player.try_jump(), "jump works after the course")
+	await get_tree().create_timer(1.0).timeout
+	press_twice(sports, player)
+	check(Abilities.has(data, Abilities.DODGE), "dodge is the next sports course")
+	money = GameState.money
+	press_twice(sports, player)
+	check(not Abilities.has(data, Abilities.DOUBLE_JUMP) and GameState.money == money, "double jump needs Forager Lv 2")
+	press_twice(martial, player)
+	check(Abilities.has(data, Abilities.GUARD), "martial faculty teaches guarding first")
+	press_twice(martial, player)
+	check(not Abilities.has(data, Abilities.PARRY), "parry needs Combat Lv 2")
+	press_twice(magic, player)
+	check(not Abilities.has(data, Abilities.MAGIC), "magic needs Combat Lv 1")
+	data.skills.add_points(&"combat", SkillSystem.points_for_level(2))
+	data.skills.apply_levels()
+	DayCycle.hour = 9
+	press_twice(martial, player)
+	press_twice(magic, player)
+	check(Abilities.has(data, Abilities.PARRY) and Abilities.has(data, Abilities.MAGIC), "parry and magic unlock once Combat qualifies")
+	DayCycle.hour = 18
+	press_twice(martial, player)
+	check(not Abilities.has(data, Abilities.WEAPON_ART), "faculties close after class hours")
+	var legacy := PlayerData.new(1)
+	Abilities.load_save(legacy, {})
+	check(Abilities.ids().all(func(id: StringName): return Abilities.has(legacy, id)), "old saves keep every ability")
+	Abilities.load_save(legacy, {"abilities": {"jump": true}})
+	check(Abilities.has(legacy, Abilities.JUMP) and not Abilities.has(legacy, Abilities.DODGE), "saved abilities load exactly")
+	check(SaveManager._build_save_data()["player"].get("abilities", {}).has("parry"), "player abilities are saved")
 	uni.queue_free()
 	await get_tree().process_frame
 

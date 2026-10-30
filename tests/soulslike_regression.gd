@@ -23,6 +23,8 @@ func _ready() -> void:
 	await get_tree().process_frame
 	_test_rules()
 	GameState.new_game()
+	# Kemampuan fakultas Universitas: tes ini menguji gerak/tempur, bukan kursusnya.
+	Abilities.grant_all(GameState.p1())
 	var rig := (load("res://scenes/player/Player.tscn") as PackedScene).instantiate()
 	add_child(rig)
 	var player := rig.get_node("CharacterBody2D") as Player
@@ -75,9 +77,11 @@ func _test_rules() -> void:
 		check(InputMap.has_action(action) and bound, "input action exists: " + action)
 	var light := PlayerData.new(1)
 	light.reset_to_starter()
+	Abilities.grant_all(light)
 	check(Combat.roll_class(light) == 0, "starter gear gives a Fast Roll (load %.2f)" % Combat.equip_load_ratio(light))
 	var heavy := PlayerData.new(1)
 	heavy.reset_to_starter()
+	Abilities.grant_all(heavy)
 	for key in ["helmet", "armor", "leggings", "boots"]:
 		heavy.equipment[key] = GameState._resolve_item("%s_obsidian" % key)
 	check(heavy.equipment["armor"] != null and Combat.roll_class(heavy) == 2, "full obsidian armor gives a Heavy Fat-Roll (load %.2f)" % Combat.equip_load_ratio(heavy))

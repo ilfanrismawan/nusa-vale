@@ -420,7 +420,7 @@ region_rect = Rect2(177, 96, 32, 26)
 [node name="ServicesBulletin" type="StaticBody2D" parent="WallDecor"]
 position = Vector2(56, 376)
 script = ExtResource("7_un")
-message = "Papan pengumuman: Kuliah umum 08.00–17.00 (ruang kuliah), belajar mandiri (ruang belajar), Kartu Mahasiswa (meja layanan), ujian sertifikasi (ruang kelas), analisis sampel (lab), Basis Data Lembah (ruang komputer)."
+message = "Papan pengumuman: Fakultas Olahraga (patung atrium), Dojo Bela Diri (tangga lantai dua), Fakultas Sihir (lemari lab) membuka kursus lompat, guling, block, parry, jurus, dan sihir. Kuliah umum 08.00–17.00 (ruang kuliah), belajar mandiri (ruang belajar), Kartu Mahasiswa (meja layanan), ujian sertifikasi (ruang kelas), analisis sampel (lab), Basis Data Lembah (ruang komputer)."
 
 [node name="Sprite2D" type="Sprite2D" parent="WallDecor/ServicesBulletin"]
 texture = ExtResource("3_un")
@@ -1439,8 +1439,11 @@ shape = SubResource("Rect_08")
 
 [node name="Stairs" type="StaticBody2D" parent="Furniture"]
 position = Vector2(136, 594)
-script = ExtResource("7_un")
-message = "Tangga ke lantai dua. Masih ditutup untuk renovasi."
+script = ExtResource("campus_un")
+station = "faculty"
+faculty = "martial"
+sign_text = "Dojo Bela Diri"
+message = "Tangga ke dojo Fakultas Bela Diri di lantai dua."
 
 [node name="Sprite2D" type="Sprite2D" parent="Furniture/Stairs"]
 texture = ExtResource("3_un")
@@ -1976,8 +1979,12 @@ shape = SubResource("Rect_08")
 
 [node name="LabCabinet1" type="StaticBody2D" parent="Furniture"]
 position = Vector2(884, 760)
-script = ExtResource("7_un")
-message = "Lemari bahan kimia. Terkunci."
+script = ExtResource("campus_un")
+station = "faculty"
+faculty = "magic"
+message = "Lemari ramuan Fakultas Sihir."
+sign_text = "Fakultas Sihir"
+sign_offset = Vector2(17, -30)
 
 [node name="Sprite2D" type="Sprite2D" parent="Furniture/LabCabinet1"]
 texture = ExtResource("3_un")
@@ -1991,8 +1998,10 @@ shape = SubResource("Rect_24")
 
 [node name="LabCabinet2" type="StaticBody2D" parent="Furniture"]
 position = Vector2(918, 760)
-script = ExtResource("7_un")
-message = "Lemari bahan kimia. Terkunci."
+script = ExtResource("campus_un")
+station = "faculty"
+faculty = "magic"
+message = "Lemari ramuan Fakultas Sihir."
 
 [node name="Sprite2D" type="Sprite2D" parent="Furniture/LabCabinet2"]
 texture = ExtResource("3_un")
@@ -2116,8 +2125,12 @@ shape = SubResource("Rect_27")
 
 [node name="Statue" type="StaticBody2D" parent="Furniture"]
 position = Vector2(480, 506)
-script = ExtResource("7_un")
-message = "Patung pendiri universitas. Tulisannya: \"Ilmu untuk lembah.\""
+script = ExtResource("campus_un")
+station = "faculty"
+faculty = "sports"
+sign_text = "Fakultas Olahraga"
+sign_offset = Vector2(0, -34)
+message = "Patung atlet pendiri universitas. Di kakinya ada meja pendaftaran Fakultas Olahraga."
 
 [node name="Sprite2D" type="Sprite2D" parent="Furniture/Statue"]
 texture = ExtResource("3_un")
@@ -2588,6 +2601,9 @@ limit_bottom = 960
 [node name="NPCPoints" type="Node2D" parent="."]
 [node name="baskoro_work" type="Marker2D" parent="NPCPoints"]
 position = Vector2(524, 190)
+
+[node name="baskoro_rest" type="Marker2D" parent="NPCPoints"]
+position = Vector2(690, 344)
 [node name="NPCActors" type="Node2D" parent="."]
 y_sort_enabled = true
 [node name="NPCMapPresenter" type="Node" parent="."]

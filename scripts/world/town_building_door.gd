@@ -12,6 +12,11 @@ func interact(actor: Player = null) -> void:
 		actor = RoomDoor.player()
 	if actor == null or actor.is_input_locked() or Transition.on_transition:
 		return
+	# Toko, klinik, sekolah dan rumah warga terkunci di luar jam buka (ServiceHours).
+	var service := ServiceHours.service_for_scene(target_scene)
+	if not ServiceHours.is_open(service):
+		Notify.say(ServiceHours.closed_message(service))
+		return
 	var marker := get_node_or_null(return_marker) as Node2D
 	RoomDoor.town_returns[actor.data.index] = marker.global_position if marker != null else global_position + Vector2(0, 24)
 	RoomDoor.travel(actor, target_scene, spawn_position)

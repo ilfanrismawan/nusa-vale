@@ -9,8 +9,8 @@
     "season": "winter",
     "day": 15
   },
-  "home_map": "town",
-  "residence": "Tempat tinggal di luar area yang dapat dimasuki; titik malam memakai lokasi kerja/istirahat sementara.",
+  "home_map": "blacksmith",
+  "residence": "Rumah dan bengkel Pandai Besi di tenggara Town; melayani upgrade di tungku depan 08.00–17.00.",
   "romanceable": false,
   "personality": [
     "disiplin",
@@ -26,14 +26,12 @@
   "offscreen_activities": [
     "sleeping"
   ],
-  "anchored": true,
+  "anchored": false,
   "service": {
     "type": "blacksmith",
     "available_activities": [
-      "preparing",
       "working",
-      "lunch",
-      "resting"
+      "lunch"
     ],
     "closed_days": []
   },
@@ -83,6 +81,12 @@
     "default": [
       {
         "time": "06:00",
+        "map": "blacksmith",
+        "point": "bima_home",
+        "activity": "breakfast"
+      },
+      {
+        "time": "07:30",
         "map": "town",
         "point": "bima_work",
         "activity": "preparing"
@@ -100,27 +104,39 @@
         "activity": "lunch"
       },
       {
-        "time": "14:00",
+        "time": "13:00",
         "map": "town",
         "point": "bima_work",
         "activity": "working"
       },
       {
-        "time": "18:00",
+        "time": "17:00",
         "map": "town",
         "point": "bima_work",
         "activity": "resting"
       },
       {
+        "time": "19:00",
+        "map": "blacksmith",
+        "point": "bima_home",
+        "activity": "resting"
+      },
+      {
         "time": "22:00",
-        "map": "town",
-        "point": "bima_work",
+        "map": "blacksmith",
+        "point": "bima_home",
         "activity": "sleeping"
       }
     ],
     "rainy": [
       {
         "time": "06:00",
+        "map": "blacksmith",
+        "point": "bima_home",
+        "activity": "breakfast"
+      },
+      {
+        "time": "07:30",
         "map": "town",
         "point": "bima_work",
         "activity": "preparing"
@@ -138,21 +154,27 @@
         "activity": "lunch"
       },
       {
-        "time": "14:00",
+        "time": "13:00",
         "map": "town",
         "point": "bima_work",
         "activity": "working"
       },
       {
-        "time": "18:00",
+        "time": "17:00",
         "map": "town",
         "point": "bima_work",
         "activity": "resting"
       },
       {
+        "time": "19:00",
+        "map": "blacksmith",
+        "point": "bima_home",
+        "activity": "resting"
+      },
+      {
         "time": "22:00",
-        "map": "town",
-        "point": "bima_work",
+        "map": "blacksmith",
+        "point": "bima_home",
         "activity": "sleeping"
       }
     ]
