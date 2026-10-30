@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/world/school.gd" id="4_sv2"]
 [ext_resource type="Script" path="res://scripts/world/school_notice.gd" id="5_sv2"]
 [ext_resource type="Script" path="res://scripts/world/exit_door_school.gd" id="6_sv2"]
+[ext_resource type="Script" path="res://scripts/world/campus_station.gd" id="campus_sv2"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_sv2"]
 texture = ExtResource("1_sv2")
@@ -129,8 +130,9 @@ z_index = -8
 
 [node name="Blackboard" type="StaticBody2D" parent="WallDecor"]
 position = Vector2(312, 36)
-script = ExtResource("5_sv2")
-message = "Papan tulis: \"Pelajaran hari ini: wortel tumbuh paling baik di musim semi.\""
+script = ExtResource("campus_sv2")
+station = "lesson"
+usage_key = "school_lesson"
 
 [node name="Sprite2D" type="Sprite2D" parent="WallDecor/Blackboard"]
 texture = ExtResource("2_sv2")
@@ -176,7 +178,10 @@ y_sort_enabled = true
 
 [node name="BookshelfL" type="StaticBody2D" parent="Furniture"]
 position = Vector2(218, 70)
-script = ExtResource("5_sv2")
+script = ExtResource("campus_sv2")
+station = "library_read"
+role_id = &"forager"
+usage_key = "school_read"
 message = "Rak buku penuh buku pelajaran dan cerita rakyat Nusa Vale."
 
 [node name="Sprite2D" type="Sprite2D" parent="Furniture/BookshelfL"]
@@ -191,7 +196,10 @@ shape = SubResource("Rect_02")
 
 [node name="BookshelfR" type="StaticBody2D" parent="Furniture"]
 position = Vector2(406, 70)
-script = ExtResource("5_sv2")
+script = ExtResource("campus_sv2")
+station = "library_read"
+role_id = &"farmer"
+usage_key = "school_read"
 message = "Rak buku: atlas, kamus, dan buku tentang tanaman."
 
 [node name="Sprite2D" type="Sprite2D" parent="Furniture/BookshelfR"]
@@ -206,6 +214,9 @@ shape = SubResource("Rect_02")
 
 [node name="TeacherDesk" type="StaticBody2D" parent="Furniture"]
 position = Vector2(312, 110)
+script = ExtResource("campus_sv2")
+station = "guest_teacher"
+usage_key = "school_teach"
 
 [node name="Sprite2D" type="Sprite2D" parent="Furniture/TeacherDesk"]
 texture = ExtResource("2_sv2")
@@ -485,8 +496,10 @@ shape = SubResource("Rect_08")
 
 [node name="Counter" type="StaticBody2D" parent="Furniture"]
 position = Vector2(140, 134)
-script = ExtResource("5_sv2")
-message = "Meja penerima tamu. Belum ada yang berjaga."
+script = ExtResource("campus_sv2")
+station = "school_request"
+usage_key = "school_request"
+message = "Meja dapur sekolah."
 
 [node name="Sprite2D" type="Sprite2D" parent="Furniture/Counter"]
 texture = ExtResource("2_sv2")
@@ -513,6 +526,9 @@ shape = SubResource("Rect_05")
 
 [node name="BenchL1" type="StaticBody2D" parent="Furniture"]
 position = Vector2(34, 150)
+script = ExtResource("campus_sv2")
+station = "rest"
+usage_key = "school_rest"
 
 [node name="Sprite2D" type="Sprite2D" parent="Furniture/BenchL1"]
 texture = ExtResource("2_sv2")
@@ -526,6 +542,9 @@ shape = SubResource("Rect_10")
 
 [node name="BenchL2" type="StaticBody2D" parent="Furniture"]
 position = Vector2(34, 182)
+script = ExtResource("campus_sv2")
+station = "rest"
+usage_key = "school_rest"
 
 [node name="Sprite2D" type="Sprite2D" parent="Furniture/BenchL2"]
 texture = ExtResource("2_sv2")

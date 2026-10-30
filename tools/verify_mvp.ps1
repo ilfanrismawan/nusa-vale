@@ -199,6 +199,7 @@ function Invoke-GodotCheck([string]$Label, [string[]]$Arguments, [bool]$Expected
     }
     if ($Arguments -contains 'tests/darmi_regression.tscn' -and -not ($output -match 'DARMI REGRESSION COMPLETE: failures=0')) { throw 'Darmi regression tidak selesai' }
     if ($Arguments -contains 'tests/wildlife_regression.tscn' -and -not ($output -match 'WILDLIFE REGRESSION COMPLETE: failures=0')) { throw 'Wildlife regression tidak selesai' }
+    if ($Arguments -contains 'tests/campus_regression.tscn' -and -not ($output -match 'CAMPUS REGRESSION COMPLETE: failures=0')) { throw 'Campus regression tidak selesai' }
     if ($Arguments -contains 'tests/pet_regression.tscn' -and -not ($output -match 'PET REGRESSION COMPLETE: failures=0')) { throw 'Pet regression tidak selesai' }
     if ($Arguments -contains 'tests/ranch_interior_regression.tscn' -and -not ($output -match 'RANCH INTERIOR REGRESSION COMPLETE: failures=0')) {
         throw 'Ranch interior regression tidak menyelesaikan semua pemeriksaan'
@@ -264,6 +265,7 @@ try {
     Invoke-GodotCheck 'Ranch interiors, solo transitions and building-specific co-op worlds' @('tests/ranch_interior_regression.tscn')
     Invoke-GodotCheck 'Pet on the farm by day, indoors at night, daily petting and persistence' @('tests/pet_regression.tscn')
     Invoke-GodotCheck 'Forest wildlife spawning, fleeing, hiding and day/night turnover' @('tests/wildlife_regression.tscn')
+    Invoke-GodotCheck 'School and university room functions, limits, card, exams, lab and save' @('tests/campus_regression.tscn')
     Invoke-GodotCheck 'Pets, crawling bugs, wildlife and ranch animals respect obstacle collision' @('tests/animal_collision_regression.tscn')
     Invoke-GodotCheck 'Player feet at body origin, ground shadows for player, NPCs and animals' @('tests/character_grounding_regression.tscn')
     Invoke-GodotCheck 'Mbah Darmi in town tells ghost lore and wards by heart level' @('tests/darmi_regression.tscn')

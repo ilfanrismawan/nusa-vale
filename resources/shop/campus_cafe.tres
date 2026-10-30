@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ShopData" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/shop_data.gd" id="1_shop"]
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="2_item"]
+[ext_resource type="Resource" path="res://resources/item_data/rice_ball.tres" id="rice_ball"]
+[ext_resource type="Resource" path="res://resources/item_data/bread.tres" id="bread"]
+[ext_resource type="Resource" path="res://resources/item_data/vegetable_soup.tres" id="vegetable_soup"]
+[ext_resource type="Resource" path="res://resources/item_data/coffee.tres" id="coffee"]
+[ext_resource type="Resource" path="res://resources/item_data/green_tea.tres" id="green_tea"]
+
+[resource]
+script = ExtResource("1_shop")
+shop_id = "campus_cafe"
+shop_name = "Kafe Kampus"
+keeper_name = "Ibu Kantin"
+greeting = "Lapar setelah kuliah? Semua dimasak pagi ini."
+stock = Array[ExtResource("2_item")]([ExtResource("rice_ball"), ExtResource("bread"), ExtResource("vegetable_soup"), ExtResource("coffee"), ExtResource("green_tea")])
+buys_items = false

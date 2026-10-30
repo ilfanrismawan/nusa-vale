@@ -38,6 +38,8 @@ var house: HouseManager
 var horror: HorrorManager
 ## Catatan Satwa per save (WildlifeJournal): id satwa -> kali diamati.
 var wildlife_seen: Dictionary = {}
+## Fungsi ruangan Sekolah & Universitas per save (Campus): batas harian, kartu, ujian, sampel lab.
+var campus: Dictionary = {}
 ## Tapper di pohon (GDD 7, 4A-3). Script tanpa class_name: lihat scripts/system/gathering_manager.gd.
 var gathering: Node
 ## Role & EXP (GDD 13): naik level saat tidur + layar rekap. Progres ada di PlayerData.skills.
@@ -205,6 +207,7 @@ func p1() -> PlayerData:
 func new_game() -> void:
 	WorldState.reset()
 	wildlife_seen = {}
+	campus = {}
 	daya.reset()
 	weather.reset()
 	shipping.reset()

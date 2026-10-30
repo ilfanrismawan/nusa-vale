@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ShopData" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/shop_data.gd" id="1_shop"]
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="2_item"]
+[ext_resource type="Resource" path="res://resources/item_data/green_tea.tres" id="green_tea"]
+[ext_resource type="Resource" path="res://resources/item_data/coffee.tres" id="coffee"]
+[ext_resource type="Resource" path="res://resources/item_data/boba_tea.tres" id="boba_tea"]
+[ext_resource type="Resource" path="res://resources/item_data/carrot_juice.tres" id="carrot_juice"]
+
+[resource]
+script = ExtResource("1_shop")
+shop_id = "campus_vending"
+shop_name = "Mesin Minuman"
+keeper_name = "Mesin Minuman"
+greeting = "Pilih minuman, lalu ambil di bawah."
+stock = Array[ExtResource("2_item")]([ExtResource("green_tea"), ExtResource("coffee"), ExtResource("boba_tea"), ExtResource("carrot_juice")])
+buys_items = false

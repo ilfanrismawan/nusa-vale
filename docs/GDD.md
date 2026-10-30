@@ -153,6 +153,12 @@ Spesifikasi terperinci dan batas antara fitur terpasang dengan rancangan lanjuta
 | Pantai (Beach) | scene baru | Spot memancing laut (`beach_sea`), hasil laut, forage pantai (harus di-unlock) | [keputusan] |
 | Modern City | scene baru | Area perkotaan metropolitan late-game, teknologi modern, kendaraan canggih (harus di-unlock setelah Nusa Vale makmur) | [keputusan] |
 
+### Fungsi Ruangan Sekolah & Universitas [terpasang 31 Oktober 2026]
+Setiap ruangan kini punya fungsi (`scripts/system/campus.gd` untuk angka & state, `scripts/world/campus_station.gd` untuk perabot). Batas harian/mingguan per karakter, tersimpan di kunci save `campus`. Tindakan berbayar atau yang memakai stamina/waktu minta tekan dua kali.
+- **Universitas** — Ruang Kuliah: kuliah umum 08.00–17.00, 400 G (200 G dengan Kartu Mahasiswa), 2 jam, +60 EXP untuk role topik hari itu (berganti harian). Perpustakaan: konter menjual Buku Riset; rak dibaca sekali sehari (+15 EXP; rak sejarah Economist, rak alam Forager). Ruang Belajar: meja belajar mandiri 20 stamina → +25 EXP role paling tertinggal; PC Analisis Pasar (3 barang tas dengan harga kirim tertinggi). Layanan Mahasiswa: Kartu Mahasiswa 2.500 G. Ruang Kelas: ujian sertifikasi saat role Lv 5 (3.000 G) / Lv 10 (10.000 G) → +1 Token Talenta per role per tingkat. Lab (perlu kartu): analisis 1 sampel panen/tanaman liar/ikan per jenis → EXP Farmer/Forager/Fisher (0,25 × harga jual, 10–80). Ruang Komputer: Basis Data Lembah (Catatan Satwa & sampel Lab). Kafe & mesin minuman: makanan/minuman (harga beli 2× harga jual). Bangku atrium/ruang tunggu: +15 stamina sekali sehari.
+- **Sekolah** — Papan tulis: pelajaran harian gratis +10 EXP role topik. Meja guru: guru tamu sekali sepekan (role terbaik ≥ Lv 3, 15 stamina, 2 jam) → honor 150 G × level. Rak buku: bacaan harian +10 EXP (Forager/Farmer). Meja dapur: pesanan makan siang musiman (hasil panen; musim dingin ikan) dibayar 1,5× harga jual + 10 EXP. Bangku: +15 stamina sekali sehari.
+- Angka di atas adalah baseline balancing awal yang bisa disetel di `Campus`.
+
 ### Pengelolaan Status Area & Unlock [keputusan]
 - **`UnlockManager` adalah satu-satunya sumber kebenaran (single source of truth)** untuk pembukaan area dan pintu gerbang.
 - Flag lama di `WorldState` yang tumpang tindih (seperti `school_open` atau pengecekan jembatan terpisah) distandarkan ke `UnlockManager.is_unlocked(area_id)`.

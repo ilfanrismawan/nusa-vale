@@ -39,7 +39,7 @@
   },
   "visual": {
     "sprite_frames": "res://resources/npc_data/npc_animation/bima_resident_frame.tres",
-    "portrait": "res://assets/farm_rpg/Character/NPC'S/Portrait (2).png",
+    "portrait": "res://assets/farm_rpg/Character/NPC'S/Blacksmith/Portrait/Blacksmith.png",
     "portrait_cell_size": 64,
     "portrait_columns": 5,
     "expressions": {

@@ -299,6 +299,8 @@ func _is_valid_save(data: Dictionary) -> bool:
 		return false
 	if not WildlifeJournal.valid_save(data.get("wildlife", {})):
 		return false
+	if not Campus.valid_save(data.get("campus", {})):
+		return false
 	if version < 1 or version > SAVE_VERSION:
 		return false
 	for key in ["day_cycle", "world_state", "unlocks", "discoveries", "resources", "forage", "balai_nadi"]:
@@ -416,6 +418,8 @@ func _build_save_data() -> Dictionary:
 		"horror": GameState.horror.to_save(),
 		# Catatan Satwa (GDD 4.10.13); kunci opsional, save lama = catatan kosong.
 		"wildlife": GameState.wildlife_seen.duplicate(),
+		# Fungsi ruangan Sekolah & Universitas; kunci opsional, save lama = kosong.
+		"campus": GameState.campus.duplicate(),
 
 		"coop_players": _serialize_coop_players(),
 	}
@@ -451,6 +455,7 @@ func _apply_save(data: Dictionary) -> void:
 	# Setelah gua, hari, dan unlock: tingkat horor dihitung dari progres itu.
 	GameState.horror.load_save(data.get("horror", {}))
 	WildlifeJournal.load_save(data.get("wildlife", {}))
+	Campus.load_save(data.get("campus", {}))
 	if GameState.weather.is_raining():
 		FarmManager.apply_rain()
 
