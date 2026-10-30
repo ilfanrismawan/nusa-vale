@@ -1,5 +1,394 @@
-[gd_scene load_steps=2 format=3]
-[ext_resource type="PackedScene" path="res://scenes/world/interior/town_room.tscn" id="1"]
-[node name="HouseTallInterior" instance=ExtResource("1")]
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/node_interior.gd" id="r1"]
+[ext_resource type="TileSet" path="res://resources/world/house_interior_tileset.tres" id="r2"]
+[ext_resource type="Shader" path="res://shaders/floor_wear.gdshader" id="r3"]
+[ext_resource type="Shader" path="res://shaders/room_vignette.gdshader" id="r4"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/interior/Doors, windows and curtains.png" id="r5"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/interior/Part 1 copiar.png" id="r6"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/interior/Part 11 copiar.png" id="r7"]
+[ext_resource type="Texture2D" path="res://resources/world/shop_fx/wall_shadow.tres" id="r8"]
+[ext_resource type="Script" path="res://scripts/world/school_notice.gd" id="r9"]
+[ext_resource type="Texture2D" path="res://resources/world/shop_fx/soft_shadow.tres" id="r10"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/interior/Beds.png" id="r11"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/interior/Others.png" id="r12"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/interior/Dressers.png" id="r13"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/interior/Tables and desks.png" id="r14"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/interior/Blacksmith.png" id="r15"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/exterior/Box.png" id="r16"]
+[ext_resource type="PackedScene" path="res://scenes/world/exterior/object/seat.tscn" id="r17"]
+[ext_resource type="Texture2D" path="res://resources/world/shop_fx/light_radial.tres" id="r18"]
+[ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="r19"]
+[ext_resource type="Script" path="res://scripts/world/exit_door_school.gd" id="r20"]
+[ext_resource type="Script" path="res://scripts/npc/resident_room.gd" id="r21"]
+
+[sub_resource type="ShaderMaterial" id="FloorWear"]
+shader = ExtResource("r3")
+shader_parameter/grime_color = Color(0.3, 0.2, 0.12, 1)
+shader_parameter/block_size = 2.0
+shader_parameter/grime_strength = 0.12
+shader_parameter/stain_strength = 0.18
+shader_parameter/stain_scale = 28.0
+
+[sub_resource type="ShaderMaterial" id="VignetteMaterial"]
+shader = ExtResource("r4")
+shader_parameter/vignette_color = Color(0.09, 0.04, 0.05, 1)
+shader_parameter/strength = 0.42
+shader_parameter/inner_radius = 0.55
+shader_parameter/outer_radius = 1.2
+
+[sub_resource type="RectangleShape2D" id="Rect_1"]
+size = Vector2(224, 54)
+
+[sub_resource type="RectangleShape2D" id="Rect_2"]
+size = Vector2(24, 224)
+
+[sub_resource type="RectangleShape2D" id="Rect_3"]
+size = Vector2(80, 16)
+
+[sub_resource type="RectangleShape2D" id="Rect_4"]
+size = Vector2(16, 40)
+
+[sub_resource type="RectangleShape2D" id="Rect_5"]
+size = Vector2(29, 10)
+
+[sub_resource type="RectangleShape2D" id="Rect_6"]
+size = Vector2(26, 10)
+
+[sub_resource type="RectangleShape2D" id="Rect_7"]
+size = Vector2(23, 4)
+
+[sub_resource type="RectangleShape2D" id="Rect_8"]
+size = Vector2(47, 6)
+
+[sub_resource type="RectangleShape2D" id="Rect_9"]
+size = Vector2(11, 5)
+
+[sub_resource type="RectangleShape2D" id="Rect_10"]
+size = Vector2(11, 6)
+
+[sub_resource type="RectangleShape2D" id="Rect_11"]
+size = Vector2(7, 4)
+
+[sub_resource type="RectangleShape2D" id="Rect_12"]
+size = Vector2(32, 16)
+
+[node name="HouseTallInterior" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("r1")
 room_title = "Rumah Bertingkat"
-service = "house"
+default_zoom = 2.0
+
+[node name="Lantai" type="TileMapLayer" parent="."]
+z_index = -12
+material = SubResource("FloorWear")
+texture_filter = 1
+tile_map_data = PackedByteArray(0, 0, 9, 0, 6, 0, 0, 0, 26, 0, 0, 0, 0, 0, 10, 0, 6, 0, 0, 0, 26, 0, 0, 0, 0, 0, 11, 0, 6, 0, 0, 0, 26, 0, 0, 0, 0, 0, 12, 0, 6, 0, 0, 0, 26, 0, 0, 0, 0, 0, 13, 0, 6, 0, 0, 0, 26, 0, 0, 0, 0, 0, 14, 0, 6, 0, 0, 0, 26, 0, 0, 0, 0, 0, 15, 0, 6, 0, 0, 0, 26, 0, 0, 0, 0, 0, 16, 0, 6, 0, 0, 0, 26, 0, 0, 0, 0, 0, 17, 0, 6, 0, 0, 0, 26, 0, 0, 0, 0, 0, 18, 0, 6, 0, 0, 0, 26, 0, 0, 0, 0, 0, 19, 0, 6, 0, 0, 0, 26, 0, 0, 0, 0, 0, 20, 0, 6, 0, 0, 0, 26, 0, 0, 0, 0, 0, 9, 0, 7, 0, 0, 0, 26, 0, 0, 0, 0, 0, 10, 0, 7, 0, 0, 0, 26, 0, 0, 0, 0, 0, 11, 0, 7, 0, 0, 0, 26, 0, 0, 0, 0, 0, 12, 0, 7, 0, 0, 0, 26, 0, 0, 0, 0, 0, 13, 0, 7, 0, 0, 0, 26, 0, 0, 0, 0, 0, 14, 0, 7, 0, 0, 0, 26, 0, 0, 0, 0, 0, 15, 0, 7, 0, 0, 0, 26, 0, 0, 0, 0, 0, 16, 0, 7, 0, 0, 0, 26, 0, 0, 0, 0, 0, 17, 0, 7, 0, 0, 0, 26, 0, 0, 0, 0, 0, 18, 0, 7, 0, 0, 0, 26, 0, 0, 0, 0, 0, 19, 0, 7, 0, 0, 0, 26, 0, 0, 0, 0, 0, 20, 0, 7, 0, 0, 0, 26, 0, 0, 0, 0, 0, 9, 0, 8, 0, 0, 0, 26, 0, 0, 0, 0, 0, 10, 0, 8, 0, 0, 0, 26, 0, 0, 0, 0, 0, 11, 0, 8, 0, 0, 0, 26, 0, 0, 0, 0, 0, 12, 0, 8, 0, 0, 0, 26, 0, 0, 0, 0, 0, 13, 0, 8, 0, 0, 0, 26, 0, 0, 0, 0, 0, 14, 0, 8, 0, 0, 0, 26, 0, 0, 0, 0, 0, 15, 0, 8, 0, 0, 0, 26, 0, 0, 0, 0, 0, 16, 0, 8, 0, 0, 0, 26, 0, 0, 0, 0, 0, 17, 0, 8, 0, 0, 0, 26, 0, 0, 0, 0, 0, 18, 0, 8, 0, 0, 0, 26, 0, 0, 0, 0, 0, 19, 0, 8, 0, 0, 0, 26, 0, 0, 0, 0, 0, 20, 0, 8, 0, 0, 0, 26, 0, 0, 0, 0, 0, 9, 0, 9, 0, 0, 0, 26, 0, 0, 0, 0, 0, 10, 0, 9, 0, 0, 0, 26, 0, 0, 0, 0, 0, 11, 0, 9, 0, 0, 0, 26, 0, 0, 0, 0, 0, 12, 0, 9, 0, 0, 0, 26, 0, 0, 0, 0, 0, 13, 0, 9, 0, 0, 0, 26, 0, 0, 0, 0, 0, 14, 0, 9, 0, 0, 0, 26, 0, 0, 0, 0, 0, 15, 0, 9, 0, 0, 0, 26, 0, 0, 0, 0, 0, 16, 0, 9, 0, 0, 0, 26, 0, 0, 0, 0, 0, 17, 0, 9, 0, 0, 0, 26, 0, 0, 0, 0, 0, 18, 0, 9, 0, 0, 0, 26, 0, 0, 0, 0, 0, 19, 0, 9, 0, 0, 0, 26, 0, 0, 0, 0, 0, 20, 0, 9, 0, 0, 0, 26, 0, 0, 0, 0, 0, 9, 0, 10, 0, 0, 0, 26, 0, 0, 0, 0, 0, 10, 0, 10, 0, 0, 0, 26, 0, 0, 0, 0, 0, 11, 0, 10, 0, 0, 0, 26, 0, 0, 0, 0, 0, 12, 0, 10, 0, 0, 0, 26, 0, 0, 0, 0, 0, 13, 0, 10, 0, 0, 0, 26, 0, 0, 0, 0, 0, 14, 0, 10, 0, 0, 0, 26, 0, 0, 0, 0, 0, 15, 0, 10, 0, 0, 0, 26, 0, 0, 0, 0, 0, 16, 0, 10, 0, 0, 0, 26, 0, 0, 0, 0, 0, 17, 0, 10, 0, 0, 0, 26, 0, 0, 0, 0, 0, 18, 0, 10, 0, 0, 0, 26, 0, 0, 0, 0, 0, 19, 0, 10, 0, 0, 0, 26, 0, 0, 0, 0, 0, 20, 0, 10, 0, 0, 0, 26, 0, 0, 0, 0, 0, 9, 0, 11, 0, 0, 0, 26, 0, 0, 0, 0, 0, 10, 0, 11, 0, 0, 0, 26, 0, 0, 0, 0, 0, 11, 0, 11, 0, 0, 0, 26, 0, 0, 0, 0, 0, 12, 0, 11, 0, 0, 0, 26, 0, 0, 0, 0, 0, 13, 0, 11, 0, 0, 0, 26, 0, 0, 0, 0, 0, 14, 0, 11, 0, 0, 0, 26, 0, 0, 0, 0, 0, 15, 0, 11, 0, 0, 0, 26, 0, 0, 0, 0, 0, 16, 0, 11, 0, 0, 0, 26, 0, 0, 0, 0, 0, 17, 0, 11, 0, 0, 0, 26, 0, 0, 0, 0, 0, 18, 0, 11, 0, 0, 0, 26, 0, 0, 0, 0, 0, 19, 0, 11, 0, 0, 0, 26, 0, 0, 0, 0, 0, 20, 0, 11, 0, 0, 0, 26, 0, 0, 0, 0, 0, 9, 0, 12, 0, 0, 0, 26, 0, 0, 0, 0, 0, 10, 0, 12, 0, 0, 0, 26, 0, 0, 0, 0, 0, 11, 0, 12, 0, 0, 0, 26, 0, 0, 0, 0, 0, 12, 0, 12, 0, 0, 0, 26, 0, 0, 0, 0, 0, 13, 0, 12, 0, 0, 0, 26, 0, 0, 0, 0, 0, 14, 0, 12, 0, 0, 0, 26, 0, 0, 0, 0, 0, 15, 0, 12, 0, 0, 0, 26, 0, 0, 0, 0, 0, 16, 0, 12, 0, 0, 0, 26, 0, 0, 0, 0, 0, 17, 0, 12, 0, 0, 0, 26, 0, 0, 0, 0, 0, 18, 0, 12, 0, 0, 0, 26, 0, 0, 0, 0, 0, 19, 0, 12, 0, 0, 0, 26, 0, 0, 0, 0, 0, 20, 0, 12, 0, 0, 0, 26, 0, 0, 0, 0, 0, 9, 0, 13, 0, 0, 0, 26, 0, 0, 0, 0, 0, 10, 0, 13, 0, 0, 0, 26, 0, 0, 0, 0, 0, 11, 0, 13, 0, 0, 0, 26, 0, 0, 0, 0, 0, 12, 0, 13, 0, 0, 0, 26, 0, 0, 0, 0, 0, 13, 0, 13, 0, 0, 0, 26, 0, 0, 0, 0, 0, 14, 0, 13, 0, 0, 0, 26, 0, 0, 0, 0, 0, 15, 0, 13, 0, 0, 0, 26, 0, 0, 0, 0, 0, 16, 0, 13, 0, 0, 0, 26, 0, 0, 0, 0, 0, 17, 0, 13, 0, 0, 0, 26, 0, 0, 0, 0, 0, 18, 0, 13, 0, 0, 0, 26, 0, 0, 0, 0, 0, 19, 0, 13, 0, 0, 0, 26, 0, 0, 0, 0, 0, 20, 0, 13, 0, 0, 0, 26, 0, 0, 0, 0, 0, 9, 0, 14, 0, 0, 0, 26, 0, 0, 0, 0, 0, 10, 0, 14, 0, 0, 0, 26, 0, 0, 0, 0, 0, 11, 0, 14, 0, 0, 0, 26, 0, 0, 0, 0, 0, 12, 0, 14, 0, 0, 0, 26, 0, 0, 0, 0, 0, 13, 0, 14, 0, 0, 0, 26, 0, 0, 0, 0, 0, 14, 0, 14, 0, 0, 0, 26, 0, 0, 0, 0, 0, 15, 0, 14, 0, 0, 0, 26, 0, 0, 0, 0, 0, 16, 0, 14, 0, 0, 0, 26, 0, 0, 0, 0, 0, 17, 0, 14, 0, 0, 0, 26, 0, 0, 0, 0, 0, 18, 0, 14, 0, 0, 0, 26, 0, 0, 0, 0, 0, 19, 0, 14, 0, 0, 0, 26, 0, 0, 0, 0, 0, 20, 0, 14, 0, 0, 0, 26, 0, 0, 0, 0, 0, 9, 0, 15, 0, 0, 0, 26, 0, 0, 0, 0, 0, 10, 0, 15, 0, 0, 0, 26, 0, 0, 0, 0, 0, 11, 0, 15, 0, 0, 0, 26, 0, 0, 0, 0, 0, 12, 0, 15, 0, 0, 0, 26, 0, 0, 0, 0, 0, 13, 0, 15, 0, 0, 0, 26, 0, 0, 0, 0, 0, 14, 0, 15, 0, 0, 0, 26, 0, 0, 0, 0, 0, 15, 0, 15, 0, 0, 0, 26, 0, 0, 0, 0, 0, 16, 0, 15, 0, 0, 0, 26, 0, 0, 0, 0, 0, 17, 0, 15, 0, 0, 0, 26, 0, 0, 0, 0, 0, 18, 0, 15, 0, 0, 0, 26, 0, 0, 0, 0, 0, 19, 0, 15, 0, 0, 0, 26, 0, 0, 0, 0, 0, 20, 0, 15, 0, 0, 0, 26, 0, 0, 0, 0, 0, 14, 0, 16, 0, 0, 0, 26, 0, 0, 0, 0, 0, 15, 0, 16, 0, 0, 0, 26, 0, 0, 0, 0, 0, 14, 0, 17, 0, 0, 0, 26, 0, 0, 0, 0, 0, 15, 0, 17, 0, 0, 0, 26, 0, 0, 0, 0, 0)
+tile_set = ExtResource("r2")
+
+[node name="Dinding" type="TileMapLayer" parent="."]
+z_index = -11
+texture_filter = 1
+tile_map_data = PackedByteArray(0, 0, 9, 0, 4, 0, 0, 0, 41, 0, 14, 0, 0, 0, 10, 0, 4, 0, 0, 0, 42, 0, 14, 0, 0, 0, 11, 0, 4, 0, 0, 0, 42, 0, 14, 0, 0, 0, 12, 0, 4, 0, 0, 0, 42, 0, 14, 0, 0, 0, 13, 0, 4, 0, 0, 0, 42, 0, 14, 0, 0, 0, 14, 0, 4, 0, 0, 0, 42, 0, 14, 0, 0, 0, 15, 0, 4, 0, 0, 0, 41, 0, 2, 0, 0, 0, 16, 0, 4, 0, 0, 0, 42, 0, 2, 0, 0, 0, 17, 0, 4, 0, 0, 0, 43, 0, 2, 0, 0, 0, 18, 0, 4, 0, 0, 0, 42, 0, 14, 0, 0, 0, 19, 0, 4, 0, 0, 0, 42, 0, 14, 0, 0, 0, 20, 0, 4, 0, 0, 0, 43, 0, 14, 0, 0, 0, 9, 0, 5, 0, 0, 0, 41, 0, 15, 0, 0, 0, 10, 0, 5, 0, 0, 0, 42, 0, 15, 0, 0, 0, 11, 0, 5, 0, 0, 0, 42, 0, 15, 0, 0, 0, 12, 0, 5, 0, 0, 0, 42, 0, 15, 0, 0, 0, 13, 0, 5, 0, 0, 0, 42, 0, 15, 0, 0, 0, 14, 0, 5, 0, 0, 0, 42, 0, 15, 0, 0, 0, 15, 0, 5, 0, 0, 0, 42, 0, 15, 0, 0, 0, 16, 0, 5, 0, 0, 0, 42, 0, 15, 0, 0, 0, 17, 0, 5, 0, 0, 0, 42, 0, 15, 0, 0, 0, 18, 0, 5, 0, 0, 0, 42, 0, 15, 0, 0, 0, 19, 0, 5, 0, 0, 0, 42, 0, 15, 0, 0, 0, 20, 0, 5, 0, 0, 0, 43, 0, 15, 0, 0, 0)
+tile_set = ExtResource("r2")
+
+[node name="Bingkai" type="TileMapLayer" parent="."]
+z_index = -10
+texture_filter = 1
+tile_map_data = PackedByteArray(0, 0, 8, 0, 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, 21, 0, 3, 0, 0, 0, 3, 0, 0, 0, 0, 0, 9, 0, 3, 0, 0, 0, 2, 0, 3, 0, 0, 0, 10, 0, 3, 0, 0, 0, 2, 0, 3, 0, 0, 0, 11, 0, 3, 0, 0, 0, 2, 0, 3, 0, 0, 0, 12, 0, 3, 0, 0, 0, 2, 0, 3, 0, 0, 0, 13, 0, 3, 0, 0, 0, 2, 0, 3, 0, 0, 0, 14, 0, 3, 0, 0, 0, 2, 0, 3, 0, 0, 0, 15, 0, 3, 0, 0, 0, 2, 0, 3, 0, 0, 0, 16, 0, 3, 0, 0, 0, 2, 0, 3, 0, 0, 0, 17, 0, 3, 0, 0, 0, 2, 0, 3, 0, 0, 0, 18, 0, 3, 0, 0, 0, 2, 0, 3, 0, 0, 0, 19, 0, 3, 0, 0, 0, 2, 0, 3, 0, 0, 0, 20, 0, 3, 0, 0, 0, 2, 0, 3, 0, 0, 0, 8, 0, 4, 0, 0, 0, 0, 0, 1, 0, 0, 0, 8, 0, 5, 0, 0, 0, 0, 0, 1, 0, 0, 0, 8, 0, 6, 0, 0, 0, 0, 0, 1, 0, 0, 0, 8, 0, 7, 0, 0, 0, 0, 0, 1, 0, 0, 0, 8, 0, 8, 0, 0, 0, 0, 0, 1, 0, 0, 0, 8, 0, 9, 0, 0, 0, 0, 0, 1, 0, 0, 0, 8, 0, 10, 0, 0, 0, 0, 0, 1, 0, 0, 0, 8, 0, 11, 0, 0, 0, 0, 0, 1, 0, 0, 0, 8, 0, 12, 0, 0, 0, 0, 0, 1, 0, 0, 0, 8, 0, 13, 0, 0, 0, 0, 0, 1, 0, 0, 0, 8, 0, 14, 0, 0, 0, 0, 0, 1, 0, 0, 0, 8, 0, 15, 0, 0, 0, 0, 0, 1, 0, 0, 0, 21, 0, 4, 0, 0, 0, 0, 0, 1, 0, 0, 0, 21, 0, 5, 0, 0, 0, 0, 0, 1, 0, 0, 0, 21, 0, 6, 0, 0, 0, 0, 0, 1, 0, 0, 0, 21, 0, 7, 0, 0, 0, 0, 0, 1, 0, 0, 0, 21, 0, 8, 0, 0, 0, 0, 0, 1, 0, 0, 0, 21, 0, 9, 0, 0, 0, 0, 0, 1, 0, 0, 0, 21, 0, 10, 0, 0, 0, 0, 0, 1, 0, 0, 0, 21, 0, 11, 0, 0, 0, 0, 0, 1, 0, 0, 0, 21, 0, 12, 0, 0, 0, 0, 0, 1, 0, 0, 0, 21, 0, 13, 0, 0, 0, 0, 0, 1, 0, 0, 0, 21, 0, 14, 0, 0, 0, 0, 0, 1, 0, 0, 0, 21, 0, 15, 0, 0, 0, 0, 0, 1, 0, 0, 0, 8, 0, 16, 0, 0, 0, 1, 0, 2, 0, 0, 0, 21, 0, 16, 0, 0, 0, 3, 0, 2, 0, 0, 0, 9, 0, 16, 0, 0, 0, 2, 0, 3, 0, 0, 0, 10, 0, 16, 0, 0, 0, 2, 0, 3, 0, 0, 0, 11, 0, 16, 0, 0, 0, 2, 0, 3, 0, 0, 0, 12, 0, 16, 0, 0, 0, 2, 0, 3, 0, 0, 0, 13, 0, 16, 0, 0, 0, 3, 0, 3, 0, 0, 0, 16, 0, 16, 0, 0, 0, 1, 0, 3, 0, 0, 0, 17, 0, 16, 0, 0, 0, 2, 0, 3, 0, 0, 0, 18, 0, 16, 0, 0, 0, 2, 0, 3, 0, 0, 0, 19, 0, 16, 0, 0, 0, 2, 0, 3, 0, 0, 0, 20, 0, 16, 0, 0, 0, 2, 0, 3, 0, 0, 0, 13, 0, 17, 0, 0, 0, 0, 0, 1, 0, 0, 0, 16, 0, 17, 0, 0, 0, 0, 0, 1, 0, 0, 0)
+tile_set = ExtResource("r2")
+
+[node name="TabrakanDinding" type="StaticBody2D" parent="."]
+
+[node name="Atas" type="CollisionShape2D" parent="TabrakanDinding"]
+position = Vector2(240, 75)
+shape = SubResource("Rect_1")
+
+[node name="Kiri" type="CollisionShape2D" parent="TabrakanDinding"]
+position = Vector2(132, 160)
+shape = SubResource("Rect_2")
+
+[node name="Kanan" type="CollisionShape2D" parent="TabrakanDinding"]
+position = Vector2(348, 160)
+shape = SubResource("Rect_2")
+
+[node name="BawahKiri" type="CollisionShape2D" parent="TabrakanDinding"]
+position = Vector2(184, 264)
+shape = SubResource("Rect_3")
+
+[node name="BawahKanan" type="CollisionShape2D" parent="TabrakanDinding"]
+position = Vector2(296, 264)
+shape = SubResource("Rect_3")
+
+[node name="LorongKiri" type="CollisionShape2D" parent="TabrakanDinding"]
+position = Vector2(216, 292)
+shape = SubResource("Rect_4")
+
+[node name="LorongKanan" type="CollisionShape2D" parent="TabrakanDinding"]
+position = Vector2(264, 292)
+shape = SubResource("Rect_4")
+
+[node name="HiasanDinding" type="Node2D" parent="."]
+z_index = -9
+
+[node name="Gorden" type="Sprite2D" parent="HiasanDinding"]
+position = Vector2(264, 80)
+texture_filter = 1
+texture = ExtResource("r5")
+offset = Vector2(0, -8)
+region_enabled = true
+region_rect = Rect2(144, 48, 48, 16)
+
+[node name="LukisanSapi" type="Sprite2D" parent="HiasanDinding"]
+position = Vector2(208, 82)
+texture_filter = 1
+texture = ExtResource("r6")
+offset = Vector2(0, -8)
+region_enabled = true
+region_rect = Rect2(37, 0, 20, 16)
+
+[node name="Kalender" type="Sprite2D" parent="HiasanDinding"]
+position = Vector2(176, 82)
+texture_filter = 1
+texture = ExtResource("r6")
+offset = Vector2(0, -6)
+region_enabled = true
+region_rect = Rect2(260, 4, 9, 12)
+
+[node name="HiasanLantai" type="Node2D" parent="."]
+z_index = -8
+
+[node name="KesetPintu" type="Sprite2D" parent="HiasanLantai"]
+position = Vector2(240, 268)
+texture_filter = 1
+texture = ExtResource("r7")
+offset = Vector2(0, -5)
+region_enabled = true
+region_rect = Rect2(276, 19, 25, 10)
+
+[node name="KarpetBelang" type="Sprite2D" parent="HiasanLantai"]
+position = Vector2(288, 206)
+texture_filter = 1
+texture = ExtResource("r7")
+offset = Vector2(0, -10.5)
+region_enabled = true
+region_rect = Rect2(226, 74, 27, 21)
+
+[node name="BayanganDindingAtas" type="Sprite2D" parent="HiasanLantai"]
+position = Vector2(240, 100)
+scale = Vector2(12, 0.5)
+texture = ExtResource("r8")
+
+[node name="Perabot" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Kasur" type="StaticBody2D" parent="Perabot"]
+position = Vector2(176, 146)
+script = ExtResource("r9")
+message = "Kasur Rian. Boneka sapinya hadiah dari Eep."
+
+[node name="Shadow" type="Sprite2D" parent="Perabot/Kasur"]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(1.341, 0.6)
+texture = ExtResource("r10")
+
+[node name="Sprite2D" type="Sprite2D" parent="Perabot/Kasur"]
+texture_filter = 1
+texture = ExtResource("r11")
+offset = Vector2(0, -17)
+region_enabled = true
+region_rect = Rect2(7, 365, 33, 34)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Perabot/Kasur"]
+position = Vector2(0, -5)
+shape = SubResource("Rect_5")
+
+[node name="Boneka" type="Sprite2D" parent="Perabot/Kasur"]
+position = Vector2(8, -14)
+texture_filter = 1
+texture = ExtResource("r6")
+offset = Vector2(0, -7.5)
+region_enabled = true
+region_rect = Rect2(130, 97, 13, 15)
+
+[node name="RakBuku" type="StaticBody2D" parent="Perabot"]
+position = Vector2(304, 112)
+script = ExtResource("r9")
+message = "Buku perawatan ternak, ditandai dengan bulu ayam."
+
+[node name="Shadow" type="Sprite2D" parent="Perabot/RakBuku"]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(1.22, 0.6)
+texture = ExtResource("r10")
+
+[node name="Sprite2D" type="Sprite2D" parent="Perabot/RakBuku"]
+texture_filter = 1
+texture = ExtResource("r12")
+offset = Vector2(0, -16)
+region_enabled = true
+region_rect = Rect2(81, 48, 30, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Perabot/RakBuku"]
+position = Vector2(0, -5)
+shape = SubResource("Rect_6")
+
+[node name="LemariRendah" type="StaticBody2D" parent="Perabot"]
+position = Vector2(264, 112)
+
+[node name="Shadow" type="Sprite2D" parent="Perabot/LemariRendah"]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(1.098, 0.6)
+texture = ExtResource("r10")
+
+[node name="Sprite2D" type="Sprite2D" parent="Perabot/LemariRendah"]
+texture_filter = 1
+texture = ExtResource("r13")
+offset = Vector2(0, -6)
+region_enabled = true
+region_rect = Rect2(98, 98, 27, 12)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Perabot/LemariRendah"]
+position = Vector2(0, -2)
+shape = SubResource("Rect_7")
+
+[node name="Meja" type="StaticBody2D" parent="Perabot"]
+position = Vector2(288, 196)
+
+[node name="Shadow" type="Sprite2D" parent="Perabot/Meja"]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(2.073, 0.6)
+texture = ExtResource("r10")
+
+[node name="Sprite2D" type="Sprite2D" parent="Perabot/Meja"]
+texture_filter = 1
+texture = ExtResource("r14")
+offset = Vector2(0, -10)
+region_enabled = true
+region_rect = Rect2(200, 200, 51, 20)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Perabot/Meja"]
+position = Vector2(0, -3)
+shape = SubResource("Rect_8")
+
+[node name="Tanaman" type="StaticBody2D" parent="Perabot"]
+position = Vector2(336, 248)
+
+[node name="Shadow" type="Sprite2D" parent="Perabot/Tanaman"]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.61, 0.6)
+texture = ExtResource("r10")
+
+[node name="Sprite2D" type="Sprite2D" parent="Perabot/Tanaman"]
+texture_filter = 1
+texture = ExtResource("r6")
+offset = Vector2(0, -7.5)
+region_enabled = true
+region_rect = Rect2(65, 177, 15, 15)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Perabot/Tanaman"]
+position = Vector2(0, -2.5)
+shape = SubResource("Rect_9")
+
+[node name="EmberSusu" type="StaticBody2D" parent="Perabot"]
+position = Vector2(156, 248)
+
+[node name="Shadow" type="Sprite2D" parent="Perabot/EmberSusu"]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.61, 0.6)
+texture = ExtResource("r10")
+
+[node name="Sprite2D" type="Sprite2D" parent="Perabot/EmberSusu"]
+texture_filter = 1
+texture = ExtResource("r15")
+offset = Vector2(0, -9.5)
+region_enabled = true
+region_rect = Rect2(233, 70, 15, 19)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Perabot/EmberSusu"]
+position = Vector2(0, -3)
+shape = SubResource("Rect_10")
+
+[node name="PetiPakan" type="StaticBody2D" parent="Perabot"]
+position = Vector2(172, 248)
+
+[node name="Shadow" type="Sprite2D" parent="Perabot/PetiPakan"]
+z_index = -1
+position = Vector2(0, -1)
+scale = Vector2(0.447, 0.6)
+texture = ExtResource("r10")
+
+[node name="Sprite2D" type="Sprite2D" parent="Perabot/PetiPakan"]
+texture_filter = 1
+texture = ExtResource("r16")
+offset = Vector2(0, -6.5)
+region_enabled = true
+region_rect = Rect2(3, 3, 11, 13)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Perabot/PetiPakan"]
+position = Vector2(0, -2)
+shape = SubResource("Rect_11")
+
+[node name="Kursi1" parent="Perabot" instance=ExtResource("r17")]
+position = Vector2(276, 212)
+facing = 0
+
+[node name="Kursi2" parent="Perabot" instance=ExtResource("r17")]
+position = Vector2(300, 212)
+facing = 0
+
+[node name="Pencahayaan" type="Node2D" parent="."]
+
+[node name="WarnaRuangan" type="CanvasModulate" parent="Pencahayaan"]
+color = Color(0.82, 0.74, 0.66, 1)
+
+[node name="CahayaJendela" type="PointLight2D" parent="Pencahayaan"]
+position = Vector2(264, 104)
+color = Color(0.9, 0.95, 1, 1)
+energy = 0.4
+texture = ExtResource("r18")
+texture_scale = 1.7
+
+[node name="Vignette" type="ColorRect" parent="Pencahayaan"]
+z_index = 20
+material = SubResource("VignetteMaterial")
+offset_left = 128
+offset_top = 48
+offset_right = 352
+offset_bottom = 288
+mouse_filter = 2
+
+[node name="Player" parent="." instance=ExtResource("r19")]
+position = Vector2(240, 256)
+
+[node name="Camera2D" parent="Player/CharacterBody2D" index="2"]
+limit_left = 0
+limit_top = 40
+limit_right = 480
+limit_bottom = 320
+
+[node name="ExitDoor" type="Area2D" parent="."]
+position = Vector2(240, 304)
+script = ExtResource("r20")
+target_scene = "res://scenes/world/town.tscn"
+spawn_position = Vector2(276, 798)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitDoor"]
+shape = SubResource("Rect_12")
+
+[node name="SpawnPoint" type="Marker2D" parent="."]
+position = Vector2(240, 256)
+
+[node name="ResidentRoom" type="Node2D" parent="."]
+script = ExtResource("r21")
+map_id = "house_tall"
+door_position = Vector2(240, 296)
+hall_position = Vector2(240, 200)
+points = {
+"rian_home": Vector2(176, 176)
+}
