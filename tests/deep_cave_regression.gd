@@ -69,9 +69,10 @@ func _ready() -> void:
 		enemy.queue_free()
 	var entrance := CaveEntrance.new()
 	check(entrance.required_unlock == "cave" and not UnlockManager.is_unlocked("cave"), "new game cave is locked")
-	check(not UnlockManager.try_unlock_cave(), "locked forest blocks cave access")
-	UnlockManager.unlock("forest")
-	check(UnlockManager.try_unlock_cave(), "forest bridge unlocks cave")
+	check(not UnlockManager.try_unlock_cave(), "cave stays locked before Penambang Lv %d" % UnlockManager.CAVE_MINER_LEVEL)
+	# Gua terbuka saat salah satu pemain mencapai Penambang Lv 2 (bukan lagi jembatan Forest).
+	GameState.p1().skills.levels["miner"] = UnlockManager.CAVE_MINER_LEVEL
+	check(UnlockManager.try_unlock_cave(), "Penambang Lv %d unlocks cave" % UnlockManager.CAVE_MINER_LEVEL)
 	var unlocks := UnlockManager.get_unlocks()
 	UnlockManager.reset()
 	UnlockManager.load_unlocks(unlocks)

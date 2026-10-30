@@ -1,5 +1,5 @@
 extends Node2D
-## Layout, textures, collisions, and motion are authored in exterior.tscn.
+## Layout, textures, collisions, and motion are authored in balai.tscn.
 ## This script only binds the existing day cycle and player camera to the scene.
 @export var camera_bounds := Rect2(0, 0, 864, 640)
 @export_range(1.0, 3.0) var camera_zoom := 1.5

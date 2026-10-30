@@ -8,7 +8,12 @@
 /Godot/
 /scratch/
 tests/*.log
+tests/*_result*.txt
 *.TMP
 
 # Local installer, not part of the game
 /install.cmd
+
+# Local reference art and mockups (not shipped)
+/Ref/
+/docs/mockups/

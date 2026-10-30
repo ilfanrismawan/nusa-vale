@@ -1,74 +1,72 @@
-[gd_scene format=3]
-[ext_resource type="Theme" path="res://resources/ui/inventory_book_theme.tres" id="theme"]
-[ext_resource type="PackedScene" path="res://scenes/ui/book_pager.tscn" id="pager"]
-[ext_resource type="PackedScene" path="res://scenes/ui/book_text.tscn" id="text"]
+[gd_scene format=3 uid="uid://duvmj8lvpyhd4"]
 
-[node name="InventoryStatus" type="PanelContainer"]
+[ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="2_nmrfw"]
+[ext_resource type="PackedScene" uid="uid://xnf0q80w3yh0" path="res://scenes/ui/book_text.tscn" id="text"]
+[ext_resource type="Theme" uid="uid://cl73ou0e04t25" path="res://resources/ui/inventory_book_theme.tres" id="theme"]
+
+[node name="InventoryStatus" type="PanelContainer" unique_id=418713774]
 custom_minimum_size = Vector2(420, 224)
 theme = ExtResource("theme")
 
-[node name="Pages" type="Control" parent="."]
+[node name="Pages" type="Control" parent="." unique_id=642373921]
 unique_name_in_owner = true
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 420.0
-offset_bottom = 224.0
+layout_mode = 2
 mouse_filter = 2
 
-[node name="Left" type="Control" parent="Pages"]
+[node name="Left" type="Control" parent="Pages" unique_id=579342190]
 unique_name_in_owner = true
+clip_contents = true
+anchors_preset = 0
 offset_left = 4.0
-offset_top = 0.0
 offset_right = 200.0
 offset_bottom = 224.0
-clip_contents = true
 mouse_filter = 2
 
-[node name="Right" type="Control" parent="Pages"]
+[node name="ProfileHeading" type="Label" parent="Pages/Left" unique_id=1300293653]
 unique_name_in_owner = true
-offset_left = 220.0
-offset_top = 0.0
-offset_right = 420.0
-offset_bottom = 224.0
-clip_contents = true
-mouse_filter = 2
-
-[node name="ProfileHeading" type="Label" parent="Pages/Left"]
-unique_name_in_owner = true
-offset_left = 4.0
-offset_top = 0.0
-offset_right = 196.0
-offset_bottom = 22.0
-mouse_filter = 2
-theme_override_font_sizes/font_size = 17
+layout_mode = 0
+offset_left = 7.0000005
+offset_top = 5.0
+offset_right = 181.0
+offset_bottom = 25.705883
+scale = Vector2(1.0625, 1.0625)
+theme_override_fonts/font = ExtResource("2_nmrfw")
+theme_override_font_sizes/font_size = 16
 text = "STATUS PETANI"
 clip_text = true
 
-
-[node name="StatusText" parent="Pages/Left" instance=ExtResource("text")]
+[node name="StatusText" parent="Pages/Left" unique_id=2060010613 instance=ExtResource("text")]
 unique_name_in_owner = true
-offset_left = 4.0
+layout_mode = 0
+offset_left = 8.0
 offset_top = 28.0
-offset_right = 196.0
+offset_right = 192.0
 offset_bottom = 222.0
 
-
-[node name="SkillsHeading" type="Label" parent="Pages/Right"]
+[node name="Right" type="Control" parent="Pages" unique_id=780174505]
 unique_name_in_owner = true
-offset_left = 4.0
-offset_top = 0.0
-offset_right = 196.0
-offset_bottom = 22.0
+clip_contents = true
+anchors_preset = 0
+offset_left = 221.0
+offset_right = 421.0
+offset_bottom = 224.0
 mouse_filter = 2
-theme_override_font_sizes/font_size = 17
+
+[node name="SkillsHeading" type="Label" parent="Pages/Right" unique_id=1648583758]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 4.0
+offset_right = 184.70589
+offset_bottom = 20.705883
+scale = Vector2(1.0625, 1.0625)
+theme_override_font_sizes/font_size = 16
 text = "KEAHLIAN & EXP"
 clip_text = true
 
-
-[node name="RoleLevels" parent="Pages/Right" instance=ExtResource("text")]
+[node name="RoleLevels" parent="Pages/Right" unique_id=1378645895 instance=ExtResource("text")]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 4.0
 offset_top = 28.0
 offset_right = 196.0
 offset_bottom = 222.0
-

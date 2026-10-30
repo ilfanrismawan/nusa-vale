@@ -12,11 +12,11 @@
 [ext_resource type="Script" path="res://scripts/world/building_sign.gd" id="10_0f5ws"]
 [ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/exterior/Houses/Farm Buildings/Chicken Coop/Chicken Coop.png" id="11_3xn22"]
 [ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/exterior/Fence Wood.png" id="12_qdlrp"]
-[ext_resource type="Texture2D" path="res://assets/ranch/feeding_trough.svg" id="13_pio5o"]
-[ext_resource type="Texture2D" path="res://assets/ranch/water_basin.svg" id="14_mcbkk"]
-[ext_resource type="Texture2D" path="res://assets/farm_rpg/animals/cow.png" id="15_wf0p6"]
-[ext_resource type="Texture2D" path="res://assets/farm_rpg/animals/sheep.png" id="16_mrfoy"]
-[ext_resource type="Texture2D" path="res://assets/farm_rpg/animals/chicken/white.png" id="17_erndl"]
+[ext_resource type="Texture2D" path="res://assets/ranch/feeding_trough.png" id="13_pio5o"]
+[ext_resource type="Texture2D" path="res://assets/ranch/water_basin.png" id="14_mcbkk"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/animals/Farm/Cow/Common Cow/Female Cow Black.png" id="15_wf0p6"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/animals/Farm/Sheep/Sheep Female.png" id="16_mrfoy"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/animals/Farm/Chicken/Chicken White.png" id="17_erndl"]
 [ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/tree/Pine Tree Animation.png" id="18_6i2g0"]
 [ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/tree/Maple Tree Animation.png" id="19_pwuev"]
 [ext_resource type="Texture2D" path="res://assets/farm_rpg/tileset/ext/Bridge.png" id="20_f7u2q"]
@@ -3471,7 +3471,7 @@ shape = SubResource("RectangleShape2D_2yy5a")
 position = Vector2(4, 320)
 script = ExtResource("21_j4gl6")
 scene_target = "res://scenes/world/town.tscn"
-spawn_position = Vector2(1184, 640)
+spawn_position = Vector2(1184, 648)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WestToTown" unique_id=478718052]
 shape = SubResource("RectangleShape2D_8wtjf")

@@ -1,5 +1,8 @@
 extends Node
 
+## Titik berdiri pemain di depan Bale Agung pada balai.tscn.
+const BALE_STAND := Vector2(616, 432)
+
 const ID := "balai_nadi_restoration"
 var failures := 0
 var completions := 0
@@ -85,25 +88,26 @@ func _ready() -> void:
 	check(manager.contribute(donor, ID, "stone") == 30 and donor.get_item_count("stone") == 20 and manager.completed(ID) and WorldState.has_flag("balai_nadi_restored") and completions == 1, "Completion sets flag and emits exactly one restoration event")
 	check(manager.contribute(donor, ID, "wood") == 0 and manager.contribute(donor, ID, "stone") == 0, "Completed project refuses further resources")
 	check(SaveManager.load_game() and manager.completed(ID) and WorldState.has_flag("balai_nadi_restored") and completions == 1 and donor.get_item_count("stone") == 20, "Completed disk reload preserves state without duplicate rewards/events")
-	var scene := load("res://scenes/world/balai_nadi/interior.tscn").instantiate() as Node2D
+	var scene := load("res://scenes/world/balai_nadi/balai.tscn").instantiate() as Node2D
 	get_tree().root.add_child(scene)
 	get_tree().current_scene = scene
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 	var player := scene.get_node("Player/CharacterBody2D") as Player
-	var visual := scene.get_node("RestorationVisual")
-	check(visual.get_node("Restored").visible and not visual.get_node("Unrestored").visible, "Restored interior is visible after loading completion")
+	var visual := scene.get_node("BaleAgung")
+	var art := visual.get_node("Polygon2D/Art") as Sprite2D
+	check(art.texture == visual.restored_texture, "Restored Bale Agung art is visible after loading completion")
 	await capture("balai-restored.png")
 	GameState.new_game()
-	check(not manager.completed(ID) and not WorldState.has_flag("balai_nadi_restored") and visual.get_node("Unrestored").visible, "New Game resets progress, flag and live visuals")
-	player.global_position = Vector2(427, 260)
+	check(not manager.completed(ID) and not WorldState.has_flag("balai_nadi_restored") and art.texture == visual.ruined_texture, "New Game resets progress, flag and live visuals")
+	var table := scene.get_node("BaleAgung/BalaiInteractionArea")
+	player.global_position = BALE_STAND
 	player.facing_direction = Vector2.UP
 	await get_tree().physics_frame
-	check(player._find_interactable() == scene.get_node("ContributionTable"), "Existing physics interaction finds contribution table")
+	check(player._find_interactable() == table, "Existing physics interaction finds the Bale Agung contribution area")
 	player.data.add_item("wood", 35)
 	player._try_interact()
 	await get_tree().process_frame
-	var table := scene.get_node("ContributionTable")
 	var menu: BalaiNadiUI = table._menus.get(0)
 	check(is_instance_valid(menu) and get_tree().paused, "Table interaction opens modal and pauses solo gameplay")
 	table.interact()
@@ -113,13 +117,17 @@ func _ready() -> void:
 	menu._select_requirement("wood")
 	check(not menu.get_node("%Donate").disabled, "Donation action reflects the selected material inventory")
 	await capture("balai-ui.png")
+	# Tunggu animasi kartu selesai; selama tween masuk tombol belum menerima klik.
+	await get_tree().create_timer(1.0, true).timeout
 	await click(menu.get_node("%Donate"))
 	check(manager.contributed(ID, "wood") == 35 and menu.get_node("%Donate").disabled and menu._rows.wood.label.text.contains("35 / 100"), "Contribution UI immediately updates progress and button state")
 	var escape := InputEventKey.new()
 	escape.keycode = KEY_ESCAPE
 	escape.pressed = true
-	get_viewport().push_input(escape, true)
-	await get_tree().process_frame
+	# Esc kembali satu tingkat: kartu -> lingkaran -> tutup.
+	for step in 2:
+		get_viewport().push_input(escape, true)
+		await get_tree().process_frame
 	check(not get_tree().paused and not is_instance_valid(menu), "Closing UI resumes gameplay and removes modal")
 	Coop.active = true
 	table.interact()
@@ -139,23 +147,17 @@ func _ready() -> void:
 	p2.add_item("wood", 7)
 	check(manager.contribute(p2, ID, "wood") == 7 and p2.get_item_count("wood") == 0 and donor.get_item_count("wood") == 0 and GameState.current == donor, "Explicit co-op donor is deducted without changing active player")
 	check(SaveManager.load_game() and manager.contributed(ID, "wood") == 7 and p2.get_item_count("wood") == 0, "Co-op donation saves shared progress and correct player's inventory")
-	player.global_position = Vector2(427, 280)
-	player.facing_direction = Vector2.DOWN
+	player.global_position = scene.get_node("ReturnTown").global_position - Player.FEET_OFFSET
 	await get_tree().physics_frame
-	check(player._find_interactable() == scene.get_node("Exit"), "Existing interaction finds interior exit")
-	player._try_interact()
 	await get_tree().create_timer(1.2, true).timeout
-	check(get_tree().current_scene.scene_file_path.ends_with("balai_nadi/exterior.tscn") and not Transition.on_transition, "Exit transitions to exterior and finishes fade")
+	check(get_tree().current_scene.scene_file_path.ends_with("town.tscn") and not Transition.on_transition, "South exit returns to town and finishes fade")
 	scene = get_tree().current_scene
 	player = scene.get_node("Player/CharacterBody2D")
-	check(player.global_position.distance_to(Vector2(427, 261)) < 1, "Exit restores configured exterior spawn")
-	player.global_position = Vector2(427, 249)
-	player.facing_direction = Vector2.UP
+	check(player.global_position.distance_to(Vector2(331, 52)) < 1, "Exit restores configured town spawn")
+	player.global_position = scene.get_node("BalaiNadiAccess").global_position
 	await get_tree().physics_frame
-	check(player._find_interactable() == scene.get_node("Entrance"), "Existing interaction finds exterior entrance")
-	player._try_interact()
 	await get_tree().create_timer(1.2, true).timeout
-	check(get_tree().current_scene.scene_file_path.ends_with("balai_nadi/interior.tscn") and not Transition.on_transition, "Entrance transitions to interior and finishes fade")
+	check(get_tree().current_scene.scene_file_path.ends_with("balai_nadi/balai.tscn") and not Transition.on_transition, "Town access returns to Balai Nadi and finishes fade")
 	check(manager.contributed(ID, "wood") == 7, "Scene transitions retain contribution progress")
 	print("BALAI NADI REGRESSION COMPLETE: failures=%d" % failures)
 	get_tree().quit(1 if failures else 0)

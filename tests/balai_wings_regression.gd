@@ -29,6 +29,8 @@ func _ready() -> void:
 		donor.add_item(item, manager.remaining("balai_nadi_restoration", item))
 		manager.contribute(donor, "balai_nadi_restoration", item)
 	check(manager.completed("balai_nadi_restoration") and not UnlockManager.is_unlocked("greenhouse"), "Hall restoration does not automatically unlock greenhouse")
+	# Tas awal (12 slot, 10 terisi alat) tidak muat 150 kayu + 75 batu + tembaga sekaligus.
+	donor.bag_level = 2
 	for item in {"wood": 150, "stone": 75, "copper_bar": 5}:
 		donor.add_item(item, manager.remaining("greenhouse_restoration", item))
 		manager.contribute(donor, "greenhouse_restoration", item)
@@ -41,7 +43,7 @@ func _ready() -> void:
 	var town: Node = load("res://scenes/world/town.tscn").instantiate()
 	get_tree().root.add_child(town)
 	await get_tree().process_frame
-	check(town.has_node("BalaiNadiAccess") and town.get_node("BalaiNadiAccess").target_scene.ends_with("balai_nadi/exterior.tscn"), "Hall access belongs to town separately from greenhouse")
+	check(town.has_node("BalaiNadiAccess") and ResourceUID.ensure_path(town.get_node("BalaiNadiAccess").target_scene).ends_with("balai_nadi/balai.tscn"), "Hall access belongs to town separately from greenhouse")
 	town.queue_free()
 	print("BALAI WINGS COMPLETE: failures=%d" % failures)
 	get_tree().quit(1 if failures else 0)

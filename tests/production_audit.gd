@@ -60,7 +60,7 @@ func _ready() -> void:
 		var holder := Node2D.new()
 		holder.set_meta("world", weakref(self))
 		add_child(holder)
-		var visual = load("res://scripts/world/placed_structure.gd").new()
+		var visual = load("res://scenes/objects/placed_structure.tscn").instantiate()
 		visual.uid = 1
 		holder.add_child(visual)
 		visual.set_process(false)

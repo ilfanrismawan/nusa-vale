@@ -49,8 +49,7 @@ func _ready() -> void:
 	shop._move_pad_cursor(1)
 	var highlighted := 0
 	for row in shop._rows:
-		var style: StyleBoxTexture = row.panel.get_theme_stylebox("panel")
-		if row.panel.visible and style.region_rect.position.y == 145: highlighted += 1
+		if row.panel.visible and row.panel.get_theme_stylebox("panel") == shop.card_selected: highlighted += 1
 	check(highlighted == 1, "controller navigation highlights only the currently selected shop item")
 	shop.close_shop()
 	await settle()
@@ -61,7 +60,8 @@ func _ready() -> void:
 	carpenter.player = player
 	add_child(carpenter)
 	await settle()
-	check(carpenter._content.get_child_count() == StructureManager.CONSTRUCTION.size() and carpenter._content.get_child(0).get_theme_stylebox("normal") is StyleBoxFlat, "building catalog uses editable native cream-theme cards")
+	# Kartu pertama adalah peningkatan rumah, sisanya bangunan StructureManager.CONSTRUCTION.
+	check(carpenter._content.get_child_count() == StructureManager.CONSTRUCTION.size() + 1 and carpenter._content.get_child(0).get_theme_stylebox("normal") is StyleBoxFlat, "building catalog uses editable native cream-theme cards")
 	carpenter._close()
 	await settle()
 	var other := GameState.ensure_player(1)

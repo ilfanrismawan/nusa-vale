@@ -5,8 +5,8 @@ size = Vector2(28, 20)
 [node name="BalaiNadiAccess" type="Area2D"]
 script = ExtResource("1")
 interaction_type = 1
-target_scene = "res://scenes/world/balai_nadi/exterior.tscn"
-spawn_position = Vector2(427, 277)
+target_scene = "res://scenes/world/balai_nadi/balai.tscn"
+spawn_position = Vector2(616, 784)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("sign")
 [node name="Sign" type="Polygon2D" parent="."]

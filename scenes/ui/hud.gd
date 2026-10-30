@@ -32,8 +32,28 @@ var data: PlayerData:
 func _owner_input() -> PlayerInput:
 	return player.input if is_instance_valid(player) else PlayerInput.solo()
 
+## Viewport yang sinyal size_changed-nya sedang dipakai (co-op memindah HUD ke layar pemain).
+var _bound_viewport: Viewport
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_ENTER_TREE and is_node_ready():
+		_bind_viewport()
+
+## Hubungkan ulang ke viewport saat ini dan atur ulang letak HUD (setelah reparent co-op).
+func _bind_viewport() -> void:
+	var viewport := get_viewport()
+	if _bound_viewport == viewport:
+		return
+	if is_instance_valid(_bound_viewport) and _bound_viewport.size_changed.is_connected(_layout_hud):
+		_bound_viewport.size_changed.disconnect(_layout_hud)
+	_bound_viewport = viewport
+	viewport.size_changed.connect(_layout_hud)
+	# ENTER_TREE datang sebelum anak (ActionHints) masuk tree: atur letak setelah semuanya siap.
+	_layout_hud.call_deferred()
+
 func _ready() -> void:
-	get_viewport().size_changed.connect(_layout_hud)
+	_bound_viewport = get_viewport()
+	_bound_viewport.size_changed.connect(_layout_hud)
 	# Horor malam: scene node yang bisa diatur di editor (scenes/effects/night_horror.tscn).
 	var night = preload("res://scenes/effects/night_horror.tscn").instantiate()
 	night.name = "NightHorror"
@@ -112,13 +132,19 @@ func _build_weather() -> void:
 	weather_label.add_theme_font_size_override("font_size", 16)
 	row.add_child(weather_label)
 	GameState.weather.changed.connect(_update_weather)
+	DayCycle.time_tick.connect(func(_hour: int, _minute: int): _update_weather())
 	_update_weather()
 
 func _update_weather() -> void:
 	if weather_label == null:
 		return
 	weather_label.text = GameState.weather.display_name()
-	weather_icon.texture = preload("res://assets/ui/weather_rain.svg") if GameState.weather.is_raining() else preload("res://assets/ui/weather_sunny.svg")
+	if GameState.weather.is_raining():
+		weather_icon.texture = preload("res://assets/ui/weather_rain.svg")
+	elif DayCycle.night_intensity() > 0.0:
+		weather_icon.texture = preload("res://assets/ui/weather_night.svg")
+	else:
+		weather_icon.texture = preload("res://assets/ui/weather_sunny.svg")
 
 var water_panel: PanelContainer
 var water_bar: ProgressBar

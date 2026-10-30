@@ -49,7 +49,7 @@ func _ready() -> void:
 	get_viewport().push_input(esc, true)
 	await get_tree().process_frame
 	check(ui.visible and not settings.visible and get_tree().paused, "Esc opens inventory, not settings, and pauses solo")
-	check(ui._top_tabs.size() == 8 and not ui.has_method("_on_save_pressed"), "Top tabs include skills and NPC pages without a direct save action")
+	check(ui._top_tabs.size() == 9 and not ui.has_method("_on_save_pressed"), "Top tabs include skills, NPC and controls pages without a direct save action")
 	await click_icon(ui._menu_buttons["NPC"])
 	check(is_instance_valid(ui._relationship_ui), "NPC tab opens from an actual mouse click")
 	ui._relationship_ui.close_menu()
@@ -76,7 +76,7 @@ func _ready() -> void:
 	check(SaveManager.save_game(), "Crafted output saves through existing game slots")
 	data.remove_item("sword_wood", 1)
 	check(SaveManager.load_game() and data.has_item("sword_wood"), "Crafted output survives game save/load")
-	var ammo_filter: Button = ui._crafting_panel._filters[2]
+	var ammo_filter: TextureButton = ui._crafting_panel._filters[2]
 	await click_control(ammo_filter, ammo_filter.get_global_rect().get_center())
 	check(ui._crafting_panel._recipe_buttons.size() >= 1 and recipe_button("arrow_wood") != null, "Ammo filter includes wooden ammunition alongside other tiers")
 	recipe_tile = recipe_button("arrow_wood")
@@ -87,7 +87,7 @@ func _ready() -> void:
 	check(not ui._crafting_panel._craft_button.disabled and ui._crafting_panel._title.text.contains("Hasil x20"), "Batch UI shows total ammunition output")
 	await click_control(craft_button, craft_button.get_global_rect().get_center())
 	check(data.get_item_count("arrow_wood") == 20, "Batch crafting from the menu produces the displayed quantity")
-	var building_filter: Button = ui._crafting_panel._filters[3]
+	var building_filter: TextureButton = ui._crafting_panel._filters[3]
 	await click_control(building_filter, building_filter.get_global_rect().get_center())
 	recipe_tile = recipe_button("furnace")
 	await click_control(recipe_tile, recipe_tile.get_global_rect().get_center())

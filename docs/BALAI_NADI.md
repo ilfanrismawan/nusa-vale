@@ -4,6 +4,13 @@ Update: proyek kedua **Pemulihan Greenhouse** sekarang terhubung ke greenhouse d
 Lihat `docs/GREENHOUSE.md` untuk kebutuhan, alur bermain, versi save 9 dan perubahan farming.
 Detail MVP awal berikut merupakan catatan implementasi pertama.
 
+Update 2026-10-30: `exterior.tscn` dan `interior.tscn` sudah diganti satu scene
+`scenes/world/balai_nadi/balai.tscn` (telaga, jembatan, Bale Agung). Pintu Kota
+(`scenes/world/exterior/town/balai_access.tscn`) membawa pemain ke ujung selatan jembatan;
+kontribusi dibuka lewat `BaleAgung/BalaiInteractionArea` di prop `bale_agung.tscn`;
+`ReturnTown` di tepi selatan kembali ke Kota. Bagian "Play and integrate" di bawah
+menggambarkan dua scene lama dan hanya tersisa sebagai riwayat.
+
 Balai Nadi is an optional, persistent community restoration. Its first project accepts
 100 `wood` (Kayu) and 50 `stone` (Stone), using existing ItemData resources.
 

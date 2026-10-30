@@ -189,6 +189,12 @@ func play_boss_orchestra(fade_time: float = 0.8) -> void:
 func play_track(track_path: String, fade_time: float = DEFAULT_FADE, target_volume_db: float = -6.0) -> void:
 	if _current_path == track_path and (_active_player and _active_player.playing):
 		return
+	# Headless (tes/CI) tidak bersuara. Thread audio melepas playback secara tertunda, jadi
+	# memutar musik di sini kadang meninggalkan stream saat proses keluar
+	# ("resources still in use at exit") dan menggagalkan smoke test verify_mvp.
+	if DisplayServer.get_name() == "headless":
+		_current_path = track_path
+		return
 
 	var stream := _get_stream(track_path)
 	if not stream:

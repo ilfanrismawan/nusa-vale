@@ -3,6 +3,8 @@ extends CanvasLayer
 ## Horor malam per pemain (GDD 4.1, Horor Tengah Malam). Scene: scenes/effects/night_horror.tscn,
 ## dibuat oleh HUD. Interior dan pemain yang tidur tetap tenang.
 ## Semua angka diatur di Inspector; kejadian ganjil = file di resources/horror/events/.
+## Angka yang berubah per Tingkat Gaib ada di resources/horror/profiles/ (HorrorProfile), dan
+## Kesulitan Gaib per save di resources/horror/difficulty/ (HorrorDifficulty); GameState.horror.
 
 @export var enabled: bool = true
 
@@ -18,6 +20,7 @@ extends CanvasLayer
 ## Turun per detik di dalam ruangan / saat tidur.
 @export var fear_fall_indoors: float = 0.5
 ## Jarak aman dari cahaya (PointLight2D yang menyala atau node grup "horror_safe_light").
+## Dikali safe_radius_scale Kesulitan Gaib.
 @export var safe_light_radius: float = 72.0
 
 @export_group("Detak Jantung")
@@ -50,29 +53,48 @@ extends CanvasLayer
 ## Kejadian hanya muncul bila malam sudah segelap ini (0,7 = 00.00).
 @export_range(0.0, 1.0, 0.01) var events_min_night: float = 0.7
 @export var first_event_delay: float = 10.0
-@export var event_interval_min: float = 18.0
-@export var event_interval_max: float = 38.0
+## Jeda antar kejadian: event_interval_min/max di HorrorProfile.
 ## Rasa takut penuh mempercepat jadwal kejadian sebanyak (1 + nilai ini) kali.
 @export var fear_event_speedup: float = 1.0
 
 @export_group("Penunggu")
-## Makhluk penguntit (scene dengan script NightStalker). Masukkan dua kali untuk peluang ganda.
+## Katalog semua makhluk (scene dengan script NightStalker), dipakai debug spawn_stalker(index).
+## Makhluk yang muncul sendiri = HorrorProfile.stalkers tingkat sekarang.
 @export var stalker_scenes: Array[PackedScene] = []
 ## Muncul hanya bila malam segelap ini (0,75 = ±01.00) dan rasa takut minimal ini.
 @export_range(0.0, 1.0, 0.01) var stalker_min_night: float = 0.75
 @export_range(0.0, 1.0, 0.01) var stalker_min_fear: float = 0.45
 @export var stalker_first_delay: float = 40.0
-## Tiap selang ini diundi dengan peluang stalker_chance.
-@export var stalker_check_interval: float = 15.0
-@export_range(0.0, 1.0, 0.01) var stalker_chance: float = 0.35
-## Jeda setelah makhluk pergi / menyentuh sebelum boleh muncul lagi (detik nyata).
-@export var stalker_cooldown: float = 150.0
+## Peluang, selang undian, dan jeda setelah makhluk pergi: HorrorProfile + Kesulitan Gaib.
 ## Jarak muncul dari pemain, diutamakan di belakangnya.
 @export var stalker_spawn_distance: float = 170.0
-## Energi boleh habis karena jumpscare (bisa membuat pingsan). Mati = sisa minimal 1.
-@export var jumpscare_can_faint: bool = false
+## Pingsan karena jumpscare: HorrorDifficulty.jumpscare_can_faint (mati = sisa energi minimal 1).
 @export_range(-20.0, 12.0, 0.5) var jumpscare_volume_db: float = 0.0
 @export var jumpscare_lock_seconds: float = 0.9
+
+@export_group("Dampak Rasa Takut")
+## Mulai Tingkat Gaib dengan HorrorProfile.fear_effects (bukan Hanya Suasana).
+## Rasa takut minimal ini: biaya stamina dikali fear_stamina_scale dan pandangan sesekali berkunang.
+@export_range(0.0, 1.0, 0.01) var fear_effect_from: float = 0.6
+@export_range(1.0, 2.0, 0.01) var fear_stamina_scale: float = 1.1
+## Peluang per detik pandangan berkunang (layar meredup sesaat) saat efek aktif.
+@export_range(0.0, 1.0, 0.01) var fear_dim_chance: float = 0.08
+## Rasa takut minimal ini: kecepatan lari dikali fear_run_scale.
+@export_range(0.0, 1.0, 0.01) var fear_run_from: float = 0.99
+@export_range(0.3, 1.0, 0.01) var fear_run_scale: float = 0.85
+
+@export_group("Ketukan Pintu")
+## Tingkat 4 / Malam Jumat Kliwon: di dalam rumah setelah 00.00 hanya terdengar ketukan atau
+## suara memanggil dari luar. Tanpa makhluk dan tanpa serangan.
+@export var knock_interval_min: float = 45.0
+@export var knock_interval_max: float = 110.0
+@export var knock_lines: PackedStringArray = [
+	"Tok... tok... tok. Ada yang mengetuk pintu.",
+	"Suara yang mirip temanmu memanggil dari luar: \"Buka pintunya...\"",
+	"Pintu diketuk tiga kali, lalu sunyi.",
+]
+## Malam Jumat Kliwon: jeda kejadian ganjil dikali ini.
+@export_range(0.2, 1.0, 0.05) var kliwon_event_interval: float = 0.6
 
 @export_group("Ambience")
 @export_range(-60.0, 0.0, 0.5) var ambience_volume_min: float = -45.0
@@ -109,7 +131,10 @@ var _lights: Array[Node2D] = []
 var _light_world: Node
 var _light_refresh := 0.0
 var _safe_check := 0.0
+## Aman = dekat cahaya menyala ATAU di dalam asap kemenyan.
 var _safe := false
+## Dekat cahaya menyala saja (Banaspati tertarik ke cahaya, bukan ke asap).
+var _lit := false
 
 var _step_event: HorrorEvent
 var _steps_left := 0
@@ -117,10 +142,12 @@ var _steps_total := 0
 var _step_timer := 0.0
 var _step_idle := 0.0
 
-var _stalker: Node2D
+## Makhluk yang sedang mengikuti pemain ini (maksimal HorrorProfile.max_stalkers).
+var _stalkers: Array[NightStalker] = []
 var _stalker_timer := 40.0
 var _stalker_ready_at := 0.0
 var _scream: AudioStreamPlayer
+var _knock_timer := 30.0
 
 
 class ShadowDrawing extends Node2D:
@@ -260,6 +287,7 @@ func _ready() -> void:
 
 func _exit_tree() -> void:
 	_carried_fear[_key] = fear
+	_apply_fear_effects(1.0, 1.0)
 
 
 func _player_key() -> int:
@@ -310,6 +338,7 @@ func _process(delta: float) -> void:
 	intensity = move_toward(intensity, target, delta * 0.6)
 	midnight = move_toward(midnight, _midnight_target(target), delta * 0.25)
 	_update_fear(delta, target)
+	_update_fear_effects(delta)
 	_update_heartbeat(delta)
 	_beat = move_toward(_beat, 0.0, delta * 3.0)
 	_glitch = move_toward(_glitch, 0.0, delta * 2.8)
@@ -324,17 +353,65 @@ func _process(delta: float) -> void:
 		_event_timer = first_event_delay
 		_stalker_timer = stalker_first_delay
 		_steps_left = 0
+		_update_knocks(delta)
 		return
 	_update_footsteps(delta)
 	_update_stalker(delta, target)
+	# Tuyul: pemain di luar ruangan dini hari (HorrorManager memastikan sekali per hari farm).
+	if _horror_state() != null and DayCycle.hour < 6:
+		_horror_state().try_tuyul(_rng)
 	if target < events_min_night:
 		return
 	_event_timer -= delta * (1.0 + fear * fear_event_speedup)
 	if _event_timer <= 0.0:
-		_event_timer = _rng.randf_range(event_interval_min, event_interval_max)
+		var profile := _profile()
+		_event_timer = _rng.randf_range(profile.event_interval_min, profile.event_interval_max)
+		if _horror_state() != null and _horror_state().is_kliwon():
+			_event_timer *= kliwon_event_interval
 		var event := _pick_event(target)
 		if event != null:
 			trigger(event)
+
+
+## Ketukan pintu (Tahap 6): hanya di rumah pemain, 00.00–04.59, Tingkat Gaib malam ini 4.
+func knock_allowed() -> bool:
+	if not is_instance_valid(player) or Coop.is_sleeping(player) or DayCycle.is_sleep_transition or DayCycle._is_passing_out:
+		return false
+	if DayCycle.hour >= 5 or DayCycle.night_intensity() < events_min_night:
+		return false
+	var world := player.world_root()
+	if not is_instance_valid(world) or not world.scene_file_path.ends_with("interior_house.tscn"):
+		return false
+	return _horror_state() != null and _horror_state().night_tier() >= GameState.horror.profiles.size()
+
+
+func _update_knocks(delta: float) -> void:
+	if not knock_allowed():
+		_knock_timer = maxf(_knock_timer, knock_interval_min * 0.5)
+		return
+	_knock_timer -= delta
+	if _knock_timer > 0.0:
+		return
+	_knock_timer = _rng.randf_range(knock_interval_min, knock_interval_max)
+	knock()
+
+
+## Satu ketukan: tiga bunyi "tok" + teks. Juga untuk uji / debug.
+func knock() -> void:
+	var stream := HorrorSynth.get_stream(&"footstep")
+	for i in 3:
+		get_tree().create_timer(0.28 * i).timeout.connect(func() -> void:
+			if is_instance_valid(_sting):
+				var p := AudioStreamPlayer.new()
+				p.bus = _bus
+				p.stream = stream
+				p.pitch_scale = 1.6
+				p.volume_db = -4.0
+				add_child(p)
+				p.finished.connect(p.queue_free)
+				p.play())
+	if not knock_lines.is_empty():
+		Notify.say(knock_lines[_rng.randi_range(0, knock_lines.size() - 1)])
 
 
 func _apply_shader() -> void:
@@ -349,10 +426,11 @@ func _apply_shader() -> void:
 	_material.set_shader_parameter("glitch", _glitch)
 	_material.set_shader_parameter("fog_amount", fog_amount)
 	_material.set_shader_parameter("desaturate_amount", desaturate_amount)
-	_material.set_shader_parameter("grain_amount", grain_amount)
-	_material.set_shader_parameter("aberration_px", aberration_px)
+	var effects := 1.0 if _screen_effects() else 0.0
+	_material.set_shader_parameter("grain_amount", grain_amount * effects)
+	_material.set_shader_parameter("aberration_px", aberration_px * effects)
 	_material.set_shader_parameter("red_pulse_amount", red_pulse_amount)
-	_material.set_shader_parameter("glitch_amount", glitch_amount)
+	_material.set_shader_parameter("glitch_amount", glitch_amount * effects)
 
 
 # ── Rasa takut + detak jantung ───────────────────────────────────────────────
@@ -367,13 +445,91 @@ func _update_fear(delta: float, target: float) -> void:
 		return
 	var cap := 1.0 if midnight > 0.0 else fear_cap_before_midnight
 	if fear < cap:
-		var rise := (fear_rise_per_second + fear_rise_midnight * midnight) * target
+		var rise := (fear_rise_per_second + fear_rise_midnight * midnight) * target * fear_rise_scale()
 		fear = minf(cap, fear + rise * delta)
 
 
-## true bila pemain dekat cahaya yang menyala.
+## true bila pemain dekat cahaya yang menyala (asap kemenyan tidak dihitung).
 func is_near_light() -> bool:
-	return _safe
+	return _lit
+
+
+## true bila titik dunia ini di dalam asap kemenyan (HorrorWard) di area pemain ini.
+func in_incense(world_pos: Vector2) -> bool:
+	if not is_instance_valid(player):
+		return false
+	var world := player.world_root()
+	for node in get_tree().get_nodes_in_group(HorrorWard.GROUP):
+		var ward := node as HorrorWard
+		if ward != null and is_instance_valid(world) and world.is_ancestor_of(ward) and ward.covers(world_pos):
+			return true
+	return false
+
+
+## Keris Pusaka yang sedang dipegang: lama tatapan untuk mengusir makhluk (0 = tidak memegang).
+func keris_gaze() -> float:
+	if not is_instance_valid(player) or player.tool_controller == null:
+		return 0.0
+	var item: ItemData = player.tool_controller.current_item
+	return item.horror_gaze_seconds if item != null else 0.0
+
+
+## Bagian rasa takut yang ditahan, 0..0,9: perk Nyali (skill Combat) + equipment
+## (ItemData.horror_fear_resist, mis. Mustika Pemberani).
+func fear_resist() -> float:
+	if not is_instance_valid(player) or player.data == null:
+		return 0.0
+	var gear := 0.0
+	for item in player.data.equipment.values():
+		if item is ItemData:
+			gear = maxf(gear, (item as ItemData).horror_fear_resist)
+	return clampf(SkillSystem.stat(player.data, &"fear_resist") + gear, 0.0, 0.9)
+
+
+## Tugu Pagar Gaib terpasang dan pemain ini sedang di farm: tidak ada makhluk yang muncul sendiri.
+func farm_warded() -> bool:
+	if not is_instance_valid(player) or GameState.horror == null or not GameState.horror.has_farm_ward():
+		return false
+	var world := player.world_root()
+	return is_instance_valid(world) and world.scene_file_path.ends_with("/farm.tscn")
+
+
+## Jeda gerak makhluk setelah pemain berpaling, dari Jimat yang dipakai pemain ini.
+func charm_delay() -> float:
+	if not is_instance_valid(player) or player.data == null:
+		return 0.0
+	var delay := 0.0
+	for item in player.data.equipment.values():
+		if item is ItemData:
+			delay = maxf(delay, (item as ItemData).horror_charm_seconds)
+	return delay
+
+
+# ── Dampak rasa takut (Tingkat Gaib 2+, GDD 4.1 Progres Horor) ───────────────
+
+func fear_effects_active() -> bool:
+	return fear >= fear_effect_from and _profile().fear_effects and not _difficulty().ambience_only
+
+
+func _update_fear_effects(delta: float) -> void:
+	var active := fear_effects_active()
+	_apply_fear_effects(fear_stamina_scale if active else 1.0, fear_run_scale if active and fear >= fear_run_from else 1.0)
+	if active and _screen_effects() and _blackout <= 0.0 and _rng.randf() < fear_dim_chance * delta:
+		var tw := create_tween()
+		tw.tween_property(self, "_blackout", 0.45, 0.08)
+		tw.tween_property(self, "_blackout", 0.0, 0.35)
+
+
+func _apply_fear_effects(stamina_scale: float, run_scale: float) -> void:
+	if not is_instance_valid(player):
+		return
+	player.fear_run_multiplier = run_scale
+	# Tubuh tamu yang sudah keluar co-op: indeksnya tidak ada lagi, dan player.data
+	# (get_player) akan membuat pemain hantu di daftar karakter.
+	if Coop.active and player.player_index >= GameState.players.size():
+		return
+	if player.data != null:
+		player.data.fear_stamina_multiplier = stamina_scale
 
 
 func _refresh_safe(delta: float) -> void:
@@ -385,17 +541,23 @@ func _refresh_safe(delta: float) -> void:
 	var world := player.world_root()
 	if world != _light_world or _light_refresh <= 0.0:
 		_collect_lights(world)
-	_safe = is_lit(player.global_position)
+	_lit = is_lit(player.global_position)
+	_safe = _lit or in_incense(player.global_position)
 
 
 ## true bila titik dunia ini berada dalam cahaya yang menyala (dipakai juga oleh NightStalker).
-func is_lit(world_pos: Vector2) -> bool:
+## strong_only = hanya cahaya kuat (grup "horror_strong_light", mis. Api Unggun, perapian):
+## Leak/Kuyang menembus lentera, lilin, dan lampu taman.
+func is_lit(world_pos: Vector2, strong_only: bool = false) -> bool:
 	for light in _lights:
 		if not is_instance_valid(light) or not light.is_visible_in_tree():
 			continue
 		if light is PointLight2D and not (light as PointLight2D).enabled:
 			continue
+		if strong_only and not light.is_in_group(&"horror_strong_light"):
+			continue
 		var radius: float = light.get("safe_radius") if "safe_radius" in light else safe_light_radius
+		radius *= _difficulty().safe_radius_scale
 		if light.global_position.distance_to(world_pos) <= radius:
 			return true
 	return false
@@ -427,7 +589,7 @@ func _update_heartbeat(delta: float) -> void:
 	_heart.pitch_scale = lerpf(1.0, 1.12, k)
 	_heart.play()
 	_beat = 1.0
-	if fear >= shake_from_fear and not Coop.active:
+	if fear >= shake_from_fear and allow_shake():
 		Juice.shake(shake_strength * k, 0.12)
 
 
@@ -436,9 +598,12 @@ func _update_heartbeat(delta: float) -> void:
 func _pick_event(night: float) -> HorrorEvent:
 	var now := Time.get_ticks_msec() / 1000.0
 	var pool: Array[HorrorEvent] = []
+	var tier := _tier()
 	var total := 0.0
 	for e in events:
 		if e == null or e.weight <= 0.0 or fear < e.min_fear or night < e.min_night:
+			continue
+		if tier < e.min_tier or tier > e.max_tier:
 			continue
 		if _last_fired.has(e) and now - float(_last_fired[e]) < e.cooldown_seconds:
 			continue
@@ -468,9 +633,9 @@ func trigger(e: HorrorEvent) -> void:
 	_last_fired[e] = Time.get_ticks_msec() / 1000.0
 	fear = minf(1.0, fear + e.fear_add)
 	if e.glitch:
-		_glitch = 1.0
+		pulse_glitch(1.0)
 		_sting.play()
-	if e.shake > 0.0 and not Coop.active:
+	if e.shake > 0.0 and allow_shake():
 		Juice.shake(e.shake, 0.25)
 	if not e.notify_text.is_empty():
 		Notify.say(e.notify_text)
@@ -568,8 +733,9 @@ func _flicker_lights(e: HorrorEvent) -> void:
 		tw.tween_interval(maxf(e.duration - 1.0, 0.3))
 		tw.tween_property(light, "color", base, 0.4)
 		_play_at(e.sound if e.sound != null else HorrorSynth.get_stream(&"flicker"), light.global_position, e.volume_db, 1.0)
-	# Lampu padam sesaat = aman hilang sesaat.
-	_safe = false
+	# Lampu padam sesaat = aman hilang sesaat (asap kemenyan tetap melindungi).
+	_lit = false
+	_safe = in_incense(player.global_position)
 	_safe_check = maxf(e.duration, 0.5)
 
 
@@ -611,83 +777,216 @@ func add_fear(amount: float) -> void:
 
 
 func pulse_glitch(amount: float) -> void:
+	if not _screen_effects():
+		return
 	_glitch = maxf(_glitch, amount)
+
+
+# ── Tingkat Gaib, Kesulitan Gaib, aksesibilitas (GDD 4.1, Progres Horor) ────
+
+func _horror_state() -> HorrorManager:
+	return GameState.horror
+
+
+func _tier() -> int:
+	var state := _horror_state()
+	return state.tier() if state != null else 1
+
+
+func _profile() -> HorrorProfile:
+	var state := _horror_state()
+	return state.profile() if state != null else load("res://resources/horror/profiles/tier_1.tres") as HorrorProfile
+
+
+func _difficulty() -> HorrorDifficulty:
+	var state := _horror_state()
+	return state.difficulty() if state != null else load("res://resources/horror/difficulty/normal.tres") as HorrorDifficulty
+
+
+func fear_rise_scale() -> float:
+	var food := player.data.food_fear_multiplier() if is_instance_valid(player) and player.data != null else 1.0
+	return _profile().fear_rise_scale * _difficulty().fear_rise_scale * food * (1.0 - fear_resist())
+
+
+## Peluang makhluk muncul per undian (0 pada mode Hanya Suasana).
+func stalker_chance() -> float:
+	var d := _difficulty()
+	if d.ambience_only:
+		return 0.0
+	return clampf(_profile().stalker_chance * d.stalker_chance_scale, 0.0, 0.95)
+
+
+## Energi yang hilang bila disentuh makhluk dengan denda dasar ini.
+func scaled_penalty(base: int) -> int:
+	var d := _difficulty()
+	if d.ambience_only:
+		return 0
+	return roundi(base * d.penalty_scale)
+
+
+func _screen_effects() -> bool:
+	var state := _horror_state()
+	return state == null or state.screen_effects
+
+
+func _jumpscare_mode() -> int:
+	var state := _horror_state()
+	return state.jumpscare_mode if state != null else HorrorManager.Jumpscare.FULL
+
+
+## Guncangan kamera horor: solo saja, dan bisa dimatikan di Pengaturan (dipakai juga NightStalker).
+func allow_shake() -> bool:
+	return not Coop.active and _screen_effects()
 
 
 ## Makhluk yang sedang mengikuti pemain ini (null bila tidak ada).
 func current_stalker() -> Node2D:
-	return _stalker if is_instance_valid(_stalker) else null
+	var alive := stalkers()
+	return alive[0] if not alive.is_empty() else null
+
+
+## Semua makhluk yang masih mengikuti pemain ini.
+func stalkers() -> Array[NightStalker]:
+	_stalkers.assign(_stalkers.filter(func(s: Variant) -> bool: return is_instance_valid(s) and not (s as Node).is_queued_for_deletion()))
+	return _stalkers
 
 
 func _update_stalker(delta: float, target: float) -> void:
-	if stalker_scenes.is_empty() or current_stalker() != null:
+	var profile := _profile()
+	if profile.stalkers.is_empty() or stalkers().size() >= profile.max_stalkers:
 		return
-	if target < stalker_min_night or fear < stalker_min_fear or _safe:
+	if target < stalker_min_night or farm_warded():
 		return
 	if Time.get_ticks_msec() / 1000.0 < _stalker_ready_at:
 		return
 	_stalker_timer -= delta
 	if _stalker_timer > 0.0:
 		return
-	_stalker_timer = stalker_check_interval
-	if _rng.randf() < stalker_chance:
-		spawn_stalker()
+	_stalker_timer = profile.stalker_check_interval
+	if _rng.randf() < stalker_chance():
+		_spawn_scene(profile.stalkers[_rng.randi_range(0, profile.stalkers.size() - 1)], true)
 
 
-## Munculkan makhluk sekarang (index -1 = acak). Juga untuk uji / debug.
+## Munculkan makhluk dari katalog stalker_scenes sekarang (index -1 = acak). Untuk uji / debug;
+## tetap muncul pada mode Hanya Suasana.
 func spawn_stalker(index: int = -1) -> Node2D:
-	if stalker_scenes.is_empty() or not is_instance_valid(player):
+	if stalker_scenes.is_empty():
+		return null
+	for old in stalkers():
+		old.queue_free()
+	_stalkers.clear()
+	return _spawn_scene(stalker_scenes[index if index >= 0 and index < stalker_scenes.size() else _rng.randi_range(0, stalker_scenes.size() - 1)])
+
+
+## auto = undian biasa: makhluk penyuka cahaya butuh cahaya menyala di dekat pemain; yang lain
+## butuh rasa takut stalker_min_fear dan pemain tidak dekat cahaya. Debug (auto = false) selalu muncul.
+func _spawn_scene(scene: PackedScene, auto: bool = false) -> Node2D:
+	if scene == null or not is_instance_valid(player):
 		return null
 	var world := player.world_root()
 	if not is_instance_valid(world):
 		return null
 	if world != _light_world:
 		_collect_lights(world)
-	if current_stalker() != null:
-		_stalker.queue_free()
-	var scene: PackedScene = stalker_scenes[index if index >= 0 and index < stalker_scenes.size() else _rng.randi_range(0, stalker_scenes.size() - 1)]
-	if scene == null:
-		return null
 	var stalker := scene.instantiate() as NightStalker
 	if stalker == null:
 		push_warning("NightHorror: stalker_scenes harus memakai script NightStalker.")
 		return null
 	var feet := player.global_position + Player.FEET_OFFSET
-	var back := -player.facing_direction.normalized()
-	if back == Vector2.ZERO:
-		back = Vector2.UP
-	var spot := feet + back * stalker_spawn_distance
-	for attempt in 10:
-		var candidate := feet + back.rotated(_rng.randf_range(-1.0, 1.0) * (0.6 + attempt * 0.25)) * stalker_spawn_distance
-		if not is_lit(candidate):
-			spot = candidate
-			break
+	var spot: Vector2
+	if stalker.rule == NightStalker.Rule.ATTRACTED_TO_LIGHT:
+		var light := _nearest_light(feet, stalker.light_search_radius)
+		if light == null and auto:
+			stalker.free()
+			return null
+		var origin := light.global_position if light != null else feet + Vector2.from_angle(_rng.randf() * TAU) * 60.0
+		stalker.home = origin
+		spot = origin + Vector2.from_angle(_rng.randf() * TAU) * _rng.randf_range(6.0, 18.0)
+	else:
+		if auto and (fear < stalker_min_fear or _safe):
+			stalker.free()
+			return null
+		var back := -player.facing_direction.normalized()
+		if back == Vector2.ZERO:
+			back = Vector2.UP
+		spot = feet + back * stalker_spawn_distance
+		for attempt in 10:
+			var candidate := feet + back.rotated(_rng.randf_range(-1.0, 1.0) * (0.6 + attempt * 0.25)) * stalker_spawn_distance
+			if not is_lit(candidate):
+				spot = candidate
+				break
 	stalker.setup(player, self)
 	world.add_child(stalker)
 	stalker.global_position = spot.round()
-	stalker.finished.connect(_on_stalker_finished)
-	_stalker = stalker
+	stalker.finished.connect(_on_stalker_finished.bind(stalker))
+	_stalkers.append(stalker)
 	return stalker
 
 
-func _on_stalker_finished() -> void:
-	_stalker_ready_at = Time.get_ticks_msec() / 1000.0 + stalker_cooldown
-	_stalker_timer = stalker_check_interval
+## Cahaya menyala terdekat dari titik ini dalam radius (null bila tidak ada).
+func _nearest_light(from: Vector2, radius: float) -> Node2D:
+	var best: Node2D = null
+	var best_dist := radius
+	for light in _lights:
+		if not is_instance_valid(light) or not light.is_visible_in_tree():
+			continue
+		if light is PointLight2D and not (light as PointLight2D).enabled:
+			continue
+		var d := light.global_position.distance_to(from)
+		if d <= best_dist:
+			best = light
+			best_dist = d
+	return best
+
+
+func _on_stalker_finished(stalker: NightStalker = null) -> void:
+	if stalker != null and stalker.survived():
+		_reward_survival(stalker)
+	var profile := _profile()
+	_stalker_ready_at = Time.get_ticks_msec() / 1000.0 + profile.stalker_cooldown
+	_stalker_timer = profile.stalker_check_interval
+
+
+## Jumpscare (Pengaturan > Horor): FULL = wajah + jeritan + kilat; NO_FACE = tanpa wajah;
+## OFF = hanya teks. Denda energi tetap mengikuti Kesulitan Gaib.
+## Selamat dari makhluk (tidak tersentuh dan sempat dihadapi): material malam + Catatan Gaib.
+## Jumlah = 1 dikali reward_scale Kesulitan Gaib (sisa pecahan jadi peluang). Hanya Suasana: tidak ada.
+func _reward_survival(stalker: NightStalker) -> void:
+	var d := _difficulty()
+	if d.ambience_only or not is_instance_valid(player):
+		return
+	if _horror_state() != null and not stalker.ghost_id.is_empty():
+		_horror_state().record_survival(stalker.ghost_id, stalker.display_name, player.data)
+	if stalker.reward_item_id.is_empty():
+		return
+	var scale := d.reward_scale * (2.0 if _horror_state() != null and _horror_state().is_kliwon() else 1.0)
+	var amount := floori(scale)
+	if _rng.randf() < scale - amount:
+		amount += 1
+	if amount <= 0:
+		return
+	var left := player.data.add_item(stalker.reward_item_id, amount)
+	if left > 0:
+		Notify.say("Tas penuh: %s tertinggal di kegelapan." % stalker.reward_item_id.replace("_", " "))
 
 
 func stalker_touched(stalker: Node2D) -> void:
-	_stalker_ready_at = Time.get_ticks_msec() / 1000.0 + stalker_cooldown
+	stalker.set_meta(&"touched", true)
+	_stalker_ready_at = Time.get_ticks_msec() / 1000.0 + _profile().stalker_cooldown
 	fear = 1.0
-	_glitch = 1.0
-	var tex: Texture2D = stalker.get("jumpscare_texture")
-	var cue: AudioStream = stalker.get("jumpscare_sound")
-	_scream.stream = cue if cue != null else HorrorSynth.get_stream(&"scream")
-	_scream.volume_db = jumpscare_volume_db
-	_scream.play()
-	_sting.play()
-	if not Coop.active:
-		Juice.shake(5.0, 0.5)
-		Juice.hitstop(90)
+	var mode := _jumpscare_mode()
+	var tex: Texture2D = stalker.get("jumpscare_texture") if mode == HorrorManager.Jumpscare.FULL else null
+	if mode != HorrorManager.Jumpscare.OFF:
+		pulse_glitch(1.0)
+		var cue: AudioStream = stalker.get("jumpscare_sound")
+		_scream.stream = cue if cue != null else HorrorSynth.get_stream(&"scream")
+		_scream.volume_db = jumpscare_volume_db
+		_scream.play()
+		_sting.play()
+		if allow_shake():
+			Juice.shake(5.0, 0.5)
+		if not Coop.active:
+			Juice.hitstop(90)
 	if _jumpscare != null and tex != null:
 		_jumpscare.texture = tex
 		_jumpscare.visible = true
@@ -702,19 +1001,19 @@ func stalker_touched(stalker: Node2D) -> void:
 		tw.tween_interval(0.45)
 		tw.tween_property(_jumpscare, "modulate:a", 0.0, 0.35)
 		tw.tween_callback(func() -> void: _jumpscare.visible = false)
-	if _flash != null:
+	if _flash != null and mode != HorrorManager.Jumpscare.OFF:
 		_flash.visible = true
 		_flash.color = Color(0.55, 0.0, 0.03, 0.75)
 		var fl := create_tween()
 		fl.tween_property(_flash, "color:a", 0.0, 0.6)
 		fl.tween_callback(func() -> void: _flash.visible = false)
 	if is_instance_valid(player):
-		var penalty: int = int(stalker.get("stamina_penalty"))
+		var penalty := scaled_penalty(int(stalker.get("stamina_penalty")))
 		var data := player.data
-		var floor_value := 0 if jumpscare_can_faint else 1
+		var floor_value := 0 if _difficulty().jumpscare_can_faint else 1
 		data.stamina = maxi(floor_value, data.stamina - penalty)
 		player.set_input_locked(&"jumpscare", true)
-		get_tree().create_timer(jumpscare_lock_seconds).timeout.connect(func() -> void:
+		get_tree().create_timer(jumpscare_lock_seconds * (1.0 - fear_resist())).timeout.connect(func() -> void:
 			if is_instance_valid(player):
 				player.set_input_locked(&"jumpscare", false))
 		var text: String = stalker.get("notify_touch")

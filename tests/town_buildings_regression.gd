@@ -23,9 +23,13 @@ func _ready() -> void:
 	get_tree().current_scene = town
 	await settle()
 	var buildings := town.get_node("YSortEntities/Buildings")
-	check(buildings.get_child_count() == 14, "town keeps all 14 existing building positions as scene instances")
+	check(buildings.get_child_count() == 15, "town keeps all 15 existing building positions as scene instances")
 	for building in buildings.get_children():
 		check(building.scene_file_path.begins_with("res://scenes/world/exterior/town/"), "instanced exterior " + building.name)
+		# Kios teh tidak punya interior: penjaganya berdiri di KeeperSpot.
+		if building.name == "TeaStall":
+			check(building.has_node("Sign") and building.has_node("KeeperSpot") and building.has_node("CollisionShape2D"), "tea stall keeps sign, keeper spot and footprint")
+			continue
 		check(building.has_node("Door/CollisionShape2D") and building.has_node("Sign") and building.has_node("ReturnSpawn") and (building.has_node("CollisionShape2D") or building.has_node("CollisionPolygon2D")), "door, sign, return marker and physical footprint " + building.name)
 		var door := building.get_node("Door")
 		check(door.get_signal_connection_list("body_entered").is_empty(), "building entry requires interaction " + building.name)

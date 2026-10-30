@@ -355,7 +355,7 @@ size = Vector2(507, 9)
 size = Vector2(192, 94)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vdhk3"]
-size = Vector2(88, 36)
+size = Vector2(32, 8)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4atha"]
 texture = ExtResource("12_hsxf1")
@@ -610,7 +610,7 @@ mount = 2
 [node name="StaticBody2D" type="StaticBody2D" parent="CarpenterHouseSort/Sign2" unique_id=637963800]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CarpenterHouseSort/Sign2/StaticBody2D" unique_id=203684333]
-position = Vector2(0, -10)
+position = Vector2(0, -4)
 shape = SubResource("RectangleShape2D_vdhk3")
 
 [node name="CarpenterHouse" parent="CarpenterHouseSort" unique_id=716367442 instance=ExtResource("7_hsxf1")]
@@ -1316,7 +1316,7 @@ shape = SubResource("RectangleShape2D_4ha6c")
 [node name="EnterMountain" type="Area2D" parent="." unique_id=762607510]
 script = ExtResource("20_spa1p")
 scene_target = "res://scenes/world/mountain.tscn"
-spawn_position = Vector2(328, 352)
+spawn_position = Vector2(328, 328)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EnterMountain" unique_id=635997167]
 position = Vector2(420, 334)

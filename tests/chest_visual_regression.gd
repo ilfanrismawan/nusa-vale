@@ -47,7 +47,7 @@ func check_chest_visuals() -> void:
 	var holder := Node2D.new()
 	holder.set_meta("world", weakref(farm))
 	farm.add_child(holder)
-	var chest = load("res://scripts/world/placed_structure.gd").new()
+	var chest = load("res://scenes/objects/placed_structure.tscn").instantiate()
 	var record := _record("wooden_chest", Vector2i.ZERO)
 	chest.uid = record.uid
 	holder.add_child(chest)

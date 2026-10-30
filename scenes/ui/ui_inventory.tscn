@@ -7,17 +7,18 @@
 [ext_resource type="Texture2D" path="res://resources/ui/slider_track.tres" id="20_slider_track"]
 [ext_resource type="Texture2D" path="res://resources/ui/slider_handle.tres" id="21_slider_handle"]
 [ext_resource type="Texture2D" uid="uid://duh7k2bv6sk0i" path="res://assets/farm_rpg/ui/Banner.png" id="26_v05ns"]
-[ext_resource type="PackedScene" path="res://scenes/ui/skill_tree_ui.tscn" id="30_skills"]
+[ext_resource type="PackedScene" uid="uid://ci12rtnquqvtc" path="res://scenes/ui/skill_tree_ui.tscn" id="30_skills"]
 [ext_resource type="PackedScene" uid="uid://dtfmpcp3erfgl" path="res://scenes/ui/npc_relationship_ui.tscn" id="31_relationship"]
-[ext_resource type="FontVariation" uid="uid://bw6sa2q375h63" path="res://resources/ui/readable_font.tres" id="actions_1_wuc6u"]
+[ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="actions_1_wuc6u"]
 [ext_resource type="Theme" uid="uid://cl73ou0e04t25" path="res://resources/ui/inventory_book_theme.tres" id="book_theme"]
 [ext_resource type="Texture2D" uid="uid://d0xlnxsut3hss" path="res://assets/ui/inventory_tab_book.svg" id="compact_book"]
 [ext_resource type="Texture2D" uid="uid://l7i581xpyqct" path="res://assets/ui/inventory_tab_swords.svg" id="compact_swords"]
+[ext_resource type="Texture2D" uid="uid://t1kn0xagqdma" path="res://assets/ui/inventory_tab_controls.svg" id="controls_icon"]
 [ext_resource type="PackedScene" uid="uid://od0hup87d58v" path="res://scenes/ui/drop_item_dialog.tscn" id="drop_dialog"]
 [ext_resource type="PackedScene" path="res://scenes/ui/inventory_collection.tscn" id="page_collection"]
-[ext_resource type="PackedScene" path="res://scenes/ui/inventory_crafting.tscn" id="page_crafting"]
+[ext_resource type="PackedScene" uid="uid://dxqwfunjbbwvy" path="res://scenes/ui/inventory_crafting.tscn" id="page_crafting"]
 [ext_resource type="PackedScene" path="res://scenes/ui/inventory_equipment.tscn" id="page_equipment"]
-[ext_resource type="PackedScene" path="res://scenes/ui/inventory_status.tscn" id="page_status"]
+[ext_resource type="PackedScene" uid="uid://duvmj8lvpyhd4" path="res://scenes/ui/inventory_status.tscn" id="page_status"]
 [ext_resource type="Texture2D" uid="uid://dmcgw5n2vubjy" path="res://resources/ui/ribbon_category_active.svg" id="RightRibbonsContainer_1_ajyiq"]
 [ext_resource type="Texture2D" path="res://resources/ui/icon_tab_book.tres" id="RightRibbonsContainer_2_1m6vq"]
 [ext_resource type="Texture2D" uid="uid://ceaabjb2hrclc" path="res://resources/ui/ribbon_category.svg" id="RightRibbonsContainer_4_f6yib"]
@@ -27,7 +28,7 @@
 [ext_resource type="Texture2D" uid="uid://birkrsryiufsg" path="res://resources/ui/icon_tab_sword.tres" id="RightRibbonsContainer_8_0gtmw"]
 [ext_resource type="Texture2D" uid="uid://cplqbi4dvu6y6" path="res://resources/icons/icon_catfish.tres" id="RightRibbonsContainer_9_nv1c6"]
 [ext_resource type="Texture2D" path="res://resources/icons/icon_common_mushroom.tres" id="RightRibbonsContainer_10_cvi2t"]
-[ext_resource type="PackedScene" path="res://scenes/ui/inventory_settings.tscn" id="settings_page"]
+[ext_resource type="PackedScene" uid="uid://b4k0iwkrbnh0x" path="res://scenes/ui/inventory_settings.tscn" id="settings_page"]
 [ext_resource type="PackedScene" uid="uid://cbg24vroh5cka" path="res://scenes/ui/inventory_slot.tscn" id="slot"]
 [ext_resource type="StyleBox" path="res://resources/ui/style_book_subpanel.tres" id="subpanel"]
 [ext_resource type="PackedScene" uid="uid://xnf0q80w3yh0" path="res://scenes/ui/book_text.tscn" id="text"]
@@ -84,7 +85,7 @@ color = Color(0, 0, 0, 0.5)
 
 [node name="BookRoot" type="Control" parent="Dimmer" unique_id=1109639389]
 unique_name_in_owner = true
-texture_filter = 2
+texture_filter = 1
 custom_minimum_size = Vector2(476, 288)
 layout_mode = 1
 anchors_preset = 8
@@ -137,7 +138,7 @@ stretch_mode = 5
 [node name="SkillTreePage" parent="Dimmer/BookRoot" unique_id=1089942463 instance=ExtResource("30_skills")]
 unique_name_in_owner = true
 visible = false
-anchors_preset = 0
+layout_mode = 0
 offset_left = 28.0
 offset_top = 20.0
 offset_right = 448.0
@@ -586,9 +587,12 @@ horizontal_alignment = 2
 texture_filter = 2
 layout_mode = 0
 offset_left = 16.0
-offset_top = -18.0
+offset_top = 240.0
 offset_right = 16.0
-offset_bottom = -18.0
+offset_bottom = 240.0
+theme_override_colors/font_color = Color(1, 0.94, 0.82, 1)
+theme_override_colors/font_outline_color = Color(0.231373, 0.141176, 0.109804, 1)
+theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 16
 text = "FILTER TAS"
 
@@ -638,6 +642,16 @@ offset_top = 20.0
 offset_right = 448.0
 offset_bottom = 244.0
 
+[node name="ControlsPage" parent="Dimmer/BookRoot" unique_id=1500654032 instance=ExtResource("settings_page")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 28.0
+offset_top = 20.0
+offset_right = 448.0
+offset_bottom = 244.0
+controls_only = true
+
 [node name="LeftPage" type="Control" parent="Dimmer/BookRoot" unique_id=1788590238]
 unique_name_in_owner = true
 texture_filter = 1
@@ -655,8 +669,9 @@ unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 0
 offset_left = 10.666672
-offset_right = 202.66667
+offset_right = 192.0
 offset_bottom = 20.0
+theme_override_fonts/font = ExtResource("actions_1_wuc6u")
 theme_override_font_sizes/font_size = 16
 text = "TAS"
 clip_text = true
@@ -743,7 +758,7 @@ unique_name_in_owner = true
 texture_filter = 2
 custom_minimum_size = Vector2(24, 22)
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 16
 text = "‹"
 
 [node name="PageLabel" type="Label" parent="Dimmer/BookRoot/LeftPage/PageNav" unique_id=1933631229]
@@ -761,7 +776,7 @@ unique_name_in_owner = true
 texture_filter = 2
 custom_minimum_size = Vector2(24, 22)
 layout_mode = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 16
 text = "›"
 
 [node name="SortButton" type="Button" parent="Dimmer/BookRoot/LeftPage" unique_id=1625936274]
@@ -810,9 +825,10 @@ texture_filter = 2
 layout_mode = 0
 offset_left = 104.0
 offset_top = 204.0
-offset_right = 196.0
-offset_bottom = 222.0
-theme_override_font_sizes/font_size = 12
+offset_right = 226.66667
+offset_bottom = 228.0
+scale = Vector2(0.75, 0.75)
+theme_override_font_sizes/font_size = 16
 text = "0 / 12"
 horizontal_alignment = 2
 clip_text = true
@@ -935,7 +951,7 @@ texture_filter = 1
 layout_mode = 0
 offset_left = 81.333336
 offset_top = 38.0
-offset_right = 273.33334
+offset_right = 196.0
 offset_bottom = 56.0
 theme_override_colors/font_color = Color(0.96862745, 0.85882354, 0.7764706, 1)
 theme_override_colors/font_shadow_color = Color(0.46666667, 0.2901961, 0.13725491, 0.5686275)
@@ -1206,6 +1222,32 @@ offset_right = 31.0
 offset_bottom = 33.33335
 mouse_filter = 2
 texture = ExtResource("TopTabsContainer_10_siyrm")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TabControls" type="TextureButton" parent="Dimmer/BookRoot/TopTabsContainer" unique_id=504076748]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(38, 36)
+layout_mode = 0
+offset_left = 352.0
+offset_top = 6.0
+offset_right = 390.0
+offset_bottom = 42.0
+tooltip_text = "Kontrol: keyboard, mouse, dan gamepad"
+texture_normal = ExtResource("TopTabsContainer_4_enmef")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/TopTabsContainer/TabControls" unique_id=1135035591]
+texture_filter = 1
+layout_mode = 1
+offset_left = 7.0
+offset_top = 4.0
+offset_right = 31.0
+offset_bottom = 28.0
+mouse_filter = 2
+texture = ExtResource("controls_icon")
 expand_mode = 1
 stretch_mode = 5
 

@@ -34,6 +34,10 @@ var weather: DailyWeather
 var cave: CaveManager
 ## Tingkat rumah + pesanan upgrade di Wira (GDD 4.12, save v17).
 var house: HouseManager
+## Progres Horor & Kesulitan Gaib (GDD 4.1).
+var horror: HorrorManager
+## Catatan Satwa per save (WildlifeJournal): id satwa -> kali diamati.
+var wildlife_seen: Dictionary = {}
 ## Tapper di pohon (GDD 7, 4A-3). Script tanpa class_name: lihat scripts/system/gathering_manager.gd.
 var gathering: Node
 ## Role & EXP (GDD 13): naik level saat tidur + layar rekap. Progres ada di PlayerData.skills.
@@ -99,6 +103,9 @@ func _ready() -> void:
 	house = HouseManager.new()
 	house.name = "House"
 	add_child(house)
+	horror = load("res://scenes/horror/horror_settings.tscn").instantiate() as HorrorManager
+	horror.name = "Horror"
+	add_child(horror)
 	gathering = preload("res://scripts/system/gathering_manager.gd").new()
 	gathering.name = "Gathering"
 	add_child(gathering)
@@ -121,21 +128,27 @@ func get_player(index: int) -> PlayerData:
 func ensure_player(index: int) -> PlayerData:
 	index = clampi(index, 0, MAX_PLAYERS - 1)
 	while players.size() <= index:
-		var data := new_coop_character()
+		# Daftarkan dulu sebelum reset: sinyal dari reset_to_starter bisa memanggil
+		# get_player(index) lagi dan, tanpa ini, membuat pemain baru tanpa henti.
+		var data := PlayerData.new(1)
 		data.index = players.size()
 		players.append(data)
+		_init_coop_character(data)
 	return players[index]
 
 ## Karakter co-op baru (alat awal). add_to_roster = false: belum masuk daftar save ini
 ## (layar kustomisasi bisa dibatalkan); seat_players memasukkannya saat bergabung.
 func new_coop_character(add_to_roster: bool = true) -> PlayerData:
 	var data := PlayerData.new(1)
+	_init_coop_character(data, add_to_roster)
+	return data
+
+func _init_coop_character(data: PlayerData, add_to_roster: bool = true) -> void:
 	data.reset_to_starter()
 	data.character_id = _new_character_id()
 	data.player_name = "Pemain %d" % (coop_roster.size() + 2)
 	if add_to_roster:
 		coop_roster.append(data)
-	return data
 
 func _new_character_id() -> String:
 	var used := {}
@@ -191,12 +204,14 @@ func p1() -> PlayerData:
 
 func new_game() -> void:
 	WorldState.reset()
+	wildlife_seen = {}
 	daya.reset()
 	weather.reset()
 	shipping.reset()
 	balai_nadi.reset()
 	cave.reset()
 	house.reset()
+	horror.reset()
 	gathering.reset()
 	skills.reset()
 	StructureManager.reset()
@@ -207,6 +222,8 @@ func new_game() -> void:
 	players[0].birthday_day = 0
 	players[0].pet_id = ""
 	players[0].pet_name = ""
+	players[0].pet_affection = 0
+	players[0].pet_day = 0
 	chopped_trees.clear()
 	mined_rocks.clear()
 	has_spawn_point = false

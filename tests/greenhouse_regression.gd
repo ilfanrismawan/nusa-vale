@@ -54,22 +54,17 @@ func _ready() -> void:
 	player.global_position = town.get_node("BalaiNadiAccess").global_position
 	await get_tree().physics_frame
 	await get_tree().create_timer(1.5, true).timeout
-	check(get_tree().current_scene.scene_file_path.ends_with("balai_nadi/exterior.tscn"), "Farm sign transitions to separate Balai Nadi exterior")
-	player = get_tree().current_scene.get_node("Player/CharacterBody2D")
-	player.global_position = Vector2(427, 244)
-	player.facing_direction = Vector2.UP
-	await get_tree().physics_frame
-	# Masuk ke gedung Balai tetap memakai interaksi klik kanan.
-	player._try_interact()
-	await get_tree().create_timer(1.2, true).timeout
+	check(get_tree().current_scene.scene_file_path.ends_with("balai_nadi/balai.tscn"), "Town access transitions to separate Balai Nadi scene")
 	var balai := get_tree().current_scene
 	player = balai.get_node("Player/CharacterBody2D")
-	player.global_position = Vector2(427, 260)
+	player.global_position = Vector2(616, 432)
 	player.facing_direction = Vector2.UP
+	# Sayap Alam (Greenhouse) baru terbuka setelah Balai Utama pulih (GDD 4.9.1).
+	manager.load_save({"projects": {"balai_nadi_restoration": {"contributions": {}, "completed": true}}})
 	await get_tree().physics_frame
 	player._try_interact()
 	await get_tree().process_frame
-	var menu: BalaiNadiUI = balai.get_node("ContributionTable")._menus.get(0)
+	var menu: BalaiNadiUI = balai.get_node("BaleAgung/BalaiInteractionArea")._menus.get(0)
 	check(menu._filtered_projects().size() == manager.definitions.size(), "Balai UI offers all independent restoration projects")
 	menu._select_project(1)
 	menu._select_requirement("copper_bar")
@@ -89,7 +84,7 @@ func _ready() -> void:
 	menu._contribute("copper_bar")
 	check(manager.completed(ID) and WorldState.has_flag("greenhouse_unlocked") and completion_count == 1, "Final contribution unlocks greenhouse once")
 	check(player.data.get_item_count("wood") == 20 and player.data.get_item_count("stone") == 15 and player.data.get_item_count("copper_bar") == 3, "Only remaining requirements are deducted")
-	check(not manager.completed("balai_nadi_restoration") and menu.get_node("%Donate").disabled and menu._status.text.contains("Greenhouse"), "Greenhouse completion is independent and UI shows its own reward")
+	check(menu.get_node("%Donate").disabled and menu._status.text.contains("Greenhouse"), "Greenhouse completion shows its own reward")
 	menu.close_menu()
 	await get_tree().process_frame
 	GameState.next_spawn_position = Vector2(576, 120)

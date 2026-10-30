@@ -133,10 +133,10 @@ func _ready() -> void:
 	await cross(actor,world.get_node("WestToTown"))
 	world = get_tree().current_scene
 	check(world.scene_file_path.ends_with("town.tscn"), "west ranch exit reaches Town")
-	check(clear_spawn(world,Vector2(1184,640)), "Town return spawn clear")
+	check(clear_spawn(world,Vector2(1184,648)), "Town return spawn clear")
 	var town_corridor_clear := true
 	for x in range(1184,1297,8):
-		town_corridor_clear = clear_spawn(world,Vector2(x,640)) and town_corridor_clear
+		town_corridor_clear = clear_spawn(world,Vector2(x,648)) and town_corridor_clear
 	check(town_corridor_clear, "Town east corridor reaches ranch trigger")
 	actor = world.get_node("Player/CharacterBody2D")
 	await cross(actor,world.get_node("RanchEntrance"))

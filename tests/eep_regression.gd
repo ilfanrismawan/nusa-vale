@@ -76,7 +76,7 @@ func _ready() -> void:
 	eep._choose_service(1, player)
 	var shop: CanvasLayer = eep._service_menu
 	check(shop.get_node("%VendorName").text == "Eep" and shop.get_node("%ShopTitle").text == "Peternakan Eep", "shop uses Eep presentation and identity")
-	check(shop.get_node("%Vendor").texture != null and shop._species_order.size() == 5, "Eep portrait and all five livestock species available")
+	check(shop.get_node("%Vendor").texture != null and shop._species_order.size() == RanchHusbandry.SPECIES.size(), "Eep portrait and every livestock species available")
 	check(shop.get_node("%PurchaseLivestock").disabled, "missing housing prevents purchase")
 	GameState.money = 100000
 	var before_money := GameState.money

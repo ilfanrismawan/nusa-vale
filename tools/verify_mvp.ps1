@@ -68,8 +68,14 @@ function Invoke-GodotCheck([string]$Label, [string[]]$Arguments, [bool]$Expected
     if ($Arguments -contains 'tests/night_survival_regression.tscn' -and -not ($output -match 'NIGHT SURVIVAL REGRESSION COMPLETE: failures=0')) {
         throw 'Night survival regression tidak menyelesaikan semua pemeriksaan'
     }
+    if ($Arguments -contains 'tests/horror_progression_regression.tscn' -and -not ($output -match 'HORROR PROGRESSION COMPLETE: failures=0')) {
+        throw 'Horror progression regression tidak menyelesaikan semua pemeriksaan'
+    }
     if ($Arguments -contains 'tests/cooking_regression.tscn' -and -not ($output -match 'COOKING REGRESSION COMPLETE: failures=0')) {
         throw 'Cooking regression tidak menyelesaikan semua pemeriksaan'
+    }
+    if ($Arguments -contains 'tests/food_eating_regression.tscn' -and -not ($output -match 'FOOD EATING REGRESSION COMPLETE: failures=0')) {
+        throw 'Food eating regression tidak menyelesaikan semua pemeriksaan'
     }
     if ($Arguments -contains 'tests/early_progression_regression.tscn' -and -not ($output -match 'EARLY PROGRESSION COMPLETE: failures=0')) {
         throw 'Early progression regression tidak menyelesaikan semua pemeriksaan'
@@ -103,6 +109,21 @@ function Invoke-GodotCheck([string]$Label, [string[]]$Arguments, [bool]$Expected
     }
     if ($Arguments -contains 'tests/coop_smoke.tscn' -and -not ($output -match 'COOP SMOKE COMPLETE: failures=0')) {
         throw 'Co-op smoke tidak menyelesaikan semua pemeriksaan'
+    }
+    if ($Arguments -contains 'tests/character_grounding_regression.tscn' -and -not ($output -match 'CHARACTER GROUNDING REGRESSION COMPLETE: failures=0')) {
+        throw 'Character grounding regression tidak menyelesaikan semua pemeriksaan'
+    }
+    if ($Arguments -contains 'tests/animal_collision_regression.tscn' -and -not ($output -match 'ANIMAL COLLISION REGRESSION COMPLETE: failures=0')) {
+        throw 'Animal collision regression tidak menyelesaikan semua pemeriksaan'
+    }
+    if ($Arguments -contains 'tests/coop_ingame_ui_regression.tscn' -and -not ($output -match 'COOP INGAME UI COMPLETE: failures=0')) {
+        throw 'Co-op in-game UI regression tidak menyelesaikan semua pemeriksaan'
+    }
+    if ($Arguments -contains 'tests/coop_lobby_scene_regression.tscn' -and -not ($output -match 'COOP LOBBY SCENE COMPLETE: failures=0')) {
+        throw 'Co-op lobby scene regression tidak menyelesaikan semua pemeriksaan'
+    }
+    if ($Arguments -contains 'tests/coop_ui_regression.tscn' -and -not ($output -match 'COOP UI REGRESSION COMPLETE: failures=0')) {
+        throw 'Co-op UI regression tidak menyelesaikan semua pemeriksaan'
     }
     if ($Arguments -contains 'tests/gameplay_regression.tscn' -and -not ($output -match 'GAMEPLAY REGRESSION COMPLETE: failures=0')) {
         throw 'Gameplay regression tidak menyelesaikan semua pemeriksaan'
@@ -176,6 +197,9 @@ function Invoke-GodotCheck([string]$Label, [string[]]$Arguments, [bool]$Expected
     if ($Arguments -contains 'tests/ranch_world_regression.tscn' -and -not ($output -match 'RANCH WORLD REGRESSION COMPLETE: failures=0')) {
         throw 'Ranch world regression tidak menyelesaikan semua pemeriksaan'
     }
+    if ($Arguments -contains 'tests/darmi_regression.tscn' -and -not ($output -match 'DARMI REGRESSION COMPLETE: failures=0')) { throw 'Darmi regression tidak selesai' }
+    if ($Arguments -contains 'tests/wildlife_regression.tscn' -and -not ($output -match 'WILDLIFE REGRESSION COMPLETE: failures=0')) { throw 'Wildlife regression tidak selesai' }
+    if ($Arguments -contains 'tests/pet_regression.tscn' -and -not ($output -match 'PET REGRESSION COMPLETE: failures=0')) { throw 'Pet regression tidak selesai' }
     if ($Arguments -contains 'tests/ranch_interior_regression.tscn' -and -not ($output -match 'RANCH INTERIOR REGRESSION COMPLETE: failures=0')) {
         throw 'Ranch interior regression tidak menyelesaikan semua pemeriksaan'
     }
@@ -204,20 +228,24 @@ try {
         'scenes/world/interior/university.tscn',
         'scenes/world/interior/barn_interior.tscn',
         'scenes/world/interior/coop_interior.tscn',
-        'scenes/world/balai_nadi/exterior.tscn',
-        'scenes/world/balai_nadi/interior.tscn'
+        'scenes/world/balai_nadi/balai.tscn'
     )) {
         Invoke-GodotCheck $scene @($scene, '--quit-after', '60')
     }
     Invoke-GodotCheck 'Night exploration, deadline and co-op recovery' @('tests/night_survival_regression.tscn')
+    Invoke-GodotCheck 'Horror tiers, difficulty and accessibility' @('tests/horror_progression_regression.tscn')
     Invoke-GodotCheck 'Water stamina, overnight soil reset and resource tier gates' @('tests/farm_rules_regression.tscn')
     Invoke-GodotCheck 'Starter stock, renewable ore and Wood to Iron progression' @('tests/early_progression_regression.tscn')
     Invoke-GodotCheck 'Starter resource routes around locked mature obstacles' @('tests/starter_routes_regression.tscn')
     Invoke-GodotCheck 'Resource spawn clearance, restored overlap and tree depth' @('tests/resource_spawner_regression.tscn')
     Invoke-GodotCheck 'Shared Forest ore, owner stamina and reentry in co-op' @('tests/forest_ore_coop_regression.tscn')
     Invoke-GodotCheck 'Co-op 2/3/4 players' @('tests/coop_smoke.tscn')
+    Invoke-GodotCheck 'Co-op solo-sized UI and per-player UI scale' @('tests/coop_ui_regression.tscn')
+    Invoke-GodotCheck 'Co-op editable lobby scene and controls' @('tests/coop_lobby_scene_regression.tscn')
+    Invoke-GodotCheck 'Co-op in-game menus, small viewports and roster actions' @('tests/coop_ingame_ui_regression.tscn')
     Invoke-GodotCheck 'Inventory and settings menu' @('tests/menu_regression.tscn')
     Invoke-GodotCheck 'Book paper bounds and pagination without scrolling' @('tests/inventory_book_layout_regression.tscn')
+    Invoke-GodotCheck 'Inventory controls tab' @('tests/inventory_controls_regression.tscn')
     Invoke-GodotCheck 'Gamepad inventory navigation and input bindings' @('tests/gamepad_input_regression.tscn')
     Invoke-GodotCheck 'Crafting recipes and transactions' @('tests/crafting_regression.tscn')
     Invoke-GodotCheck 'Combat HP, weapons, enemies and defeat' @('tests/combat_regression.tscn')
@@ -234,6 +262,11 @@ try {
     Invoke-GodotCheck 'Ranch care, production, grazing, upgrades and persistence' @('tests/ranch_regression.tscn')
     Invoke-GodotCheck 'Ranch walking animals, physical grazing and care UI' @('tests/ranch_world_regression.tscn')
     Invoke-GodotCheck 'Ranch interiors, solo transitions and building-specific co-op worlds' @('tests/ranch_interior_regression.tscn')
+    Invoke-GodotCheck 'Pet on the farm by day, indoors at night, daily petting and persistence' @('tests/pet_regression.tscn')
+    Invoke-GodotCheck 'Forest wildlife spawning, fleeing, hiding and day/night turnover' @('tests/wildlife_regression.tscn')
+    Invoke-GodotCheck 'Pets, crawling bugs, wildlife and ranch animals respect obstacle collision' @('tests/animal_collision_regression.tscn')
+    Invoke-GodotCheck 'Player feet at body origin, ground shadows for player, NPCs and animals' @('tests/character_grounding_regression.tscn')
+    Invoke-GodotCheck 'Mbah Darmi in town tells ghost lore and wards by heart level' @('tests/darmi_regression.tscn')
     Invoke-GodotCheck 'Processing durations, persistence and machine feedback' @('tests/production_audit.tscn')
     Invoke-GodotCheck 'Right-click doors and livestock shop purchases' @('tests/doors_livestock_shop_regression.tscn')
     Invoke-GodotCheck 'Automatic outdoor boundaries in solo and co-op' @('tests/outdoor_transition_regression.tscn')
@@ -252,6 +285,7 @@ try {
     Invoke-GodotCheck 'Crop, livestock and tool upgrade economy balance' @('tests/economy_balance_regression.tscn')
     Invoke-GodotCheck 'Progression, cooking arbitrage, stamina and matched cave gear' @('tests/progression_balance_regression.tscn')
     Invoke-GodotCheck 'Cooking, recipe ownership, full-bag rollback and food effects' @('tests/cooking_regression.tscn')
+    Invoke-GodotCheck 'Eating crops, forage and artisan goods (right click, bag, balance)' @('tests/food_eating_regression.tscn')
     Invoke-GodotCheck 'One-time farm cleanup' @('tests/farm_cleanup_regression.tscn')
     Invoke-GodotCheck 'Deferred inventory and character cache' @('tests/performance_ui_regression.tscn')
     Invoke-GodotCheck 'Tool tiers, capacity, area and upgrades' @('tests/tool_progression_regression.tscn')

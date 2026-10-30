@@ -1,6 +1,6 @@
 # Nusa Vale — Game Design Document (GDD)
 
-Versi dokumen: 3.39 (26 Oktober 2026).
+Versi dokumen: 3.59 (29 Oktober 2026).
 Dokumen ini adalah **sumber kebenaran desain** proyek `E:\nusa-vale` (Game Design Document resmi).
 Pada versi 1.9, ditambahkan 4 pilar fundamental Life-Sim / Farming RPG: **Sistem Peternakan & Satwa** (kandang Barn/Coop, sapi, kambing, domba, ayam, bebek, kuda, pakan & affection), **Mesin Pengolah Pasca-Panen (Artisan Goods)** (mayones, keju, selai, fermentasi keg, tenun, pengasap ikan), **Sistem Cuaca Harian Dinamis** (cerah, hujan penyiram otomatis, badai petir penangkal baterai, salju), serta **Sistem Sosial, Persahabatan, & Jadwal Harian NPC** (hati 0-10, sistem hadiah loved/hated, rutinitas harian, heart events, dan romansa/teman sekamar).
 
@@ -62,7 +62,7 @@ Panduan editor resep, karakter, animasi dan syarat objek: [EDITOR_GUIDE.md](EDIT
 Koreksi acuan implementasi:
 
 - Viewport aktif `project.godot`: **1280 × 720**, window awal 1280 × 720; angka 960 × 540 di tabel lama sudah kedaluwarsa.
-- `SAVE_VERSION = 26` di `autoload/save_manager.gd` (v26: pembiakan, inkubator dan bulu bebek, bagian 4.10.11). Riwayat v17 rumah, v18 gathering/tapper, v19 hubungan NPC, v20 aksesori/mesin, v21 roster co-op, v22 Role & EXP tetap berlaku. Format saat ini juga menyimpan `npc_progress` (flag, event selesai, romansa, surat dan household) serta `friendships.<npc>.locked` per karakter. Shipping menyimpan histori pembayaran kurir. Save lama memperoleh default kosong; hubungan lama yang masih maksimum dikunci saat dibaca. Riwayat pernah maksimum tetapi sudah turun sebelum v25 tidak dapat dipulihkan dari data yang tidak pernah disimpan.
+- `SAVE_VERSION = 27` di `autoload/save_manager.gd` (v27: Kesulitan Gaib per save dan tingkat horor yang sudah diumumkan, bagian 4.1; v26: pembiakan, inkubator dan bulu bebek, bagian 4.10.11). Riwayat v17 rumah, v18 gathering/tapper, v19 hubungan NPC, v20 aksesori/mesin, v21 roster co-op, v22 Role & EXP tetap berlaku. Format saat ini juga menyimpan `npc_progress` (flag, event selesai, romansa, surat dan household) serta `friendships.<npc>.locked` per karakter. Shipping menyimpan histori pembayaran kurir. Save lama memperoleh default kosong; hubungan lama yang masih maksimum dikunci saat dibaca. Riwayat pernah maksimum tetapi sudah turun sebelum v25 tidak dapat dipulihkan dari data yang tidak pernah disimpan.
 - Stamina awal 100, maksimum pemain dapat naik melalui Biji Daya. Detail transaksi dan persistensi: [BIJI_DAYA.md](BIJI_DAYA.md).
 - Pingsan batas waktu pada 05:10 memulangkan pemain, bangun 08:00 dengan 50% kapasitas stamina; pemain co-op yang sudah tidur pulih penuh. **Tidak memotong uang atau item**. Denda medis karena HP habis (bagian 4.2 dan 8.1) terpasang terpisah sejak Phase 4B-1.
 - Shipping dibayar saat pergantian hari melalui `ShippingManager.settle`, ke saldo bersama dan ringkasan pendapatan. Dengan Economist Lv6 Kurir Logistik, kas dibayar pada 12.00 dan 17.00; sisa kiriman dibayar esok pagi. Ringkasan pagi juga memuat kiriman yang sudah dibayar, tanpa membayar ulang.
@@ -142,7 +142,7 @@ Spesifikasi terperinci dan batas antara fitur terpasang dengan rancangan lanjuta
 | Farm | `scenes/world/farm.tscn` | Rumah, Greenhouse (32 petak), papan proyek Balai Nadi, Shipping Bin, ShopCounter, Broken Bridge, 2 FishingSpot (`farm_pond`, `farm_river`), pohon, batu, forage, titik gali | [terpasang] |
 | Rumah (interior) | `scenes/world/interior/interior_house.tscn` | Kasur tidur, lemari Wardrobe, dapur memasak, pintu keluar | [terpasang + keputusan] |
 | Greenhouse (interior) | `scenes/world/interior/greenhouse.tscn` | 32 petak tanam lintas musim; terbuka setelah proyek Greenhouse selesai | [terpasang] |
-| Balai Nadi | `scenes/world/balai_nadi/exterior.tscn`, `interior.tscn` | Gedung permanen di Kota dengan pintu masuk permanen; meja kontribusi proyek restorasi desa | [terpasang + keputusan] |
+| Balai Nadi | `scenes/world/balai_nadi/balai.tscn` | Telaga dengan jembatan ke Bale Agung, masuk dari utara Kota; interaksi Bale Agung membuka kontribusi proyek restorasi desa. Terrain masih blockout (tepi tanah/air belum dilukis) | [terpasang sebagian + keputusan] |
 | Hutan (Forest) | `scenes/world/Forest.tscn` | Pohon spawn, batu tembaga, batu besi, forage musiman, rumput liar, titik gali, sungai hutan | [terpasang] |
 | Kota (Town) | `scenes/world/town.tscn` | Toko General Store, Sekolah, Universitas, Blacksmith (Pandai Besi), Warung Makan, Klinik, Balai Nadi permanen, rumah warga | [terpasang + keputusan] |
 | Gunung (Mountain) | `scenes/world/mountain.tscn` | Akses dari Hill, pintu Gua, forage dan kolam air panas; jalur Modern City masih keputusan | [terpasang sebagian + keputusan] |
@@ -219,6 +219,180 @@ Suara (detak, bisikan, langkah, koak, dengung lampu, dengung glitch, angin) disi
 - Kuntilanak melayang hingga 34 px/detik (berjalan 25, berlari 75) dan menganga saat dekat; kemunculannya ditandai tawa melengking. Pocong melompat 20 px tiap ±0,7 detik dengan bunyi hentakan. Keduanya pucat bercahaya dan berdengung saat dekat; dalam 110 px rasa takut naik cepat dan layar sesekali glitch.
 - Disentuh: jumpscare wajah layar penuh + jeritan + kilat merah + guncangan, kontrol terkunci 0,9 detik, rasa takut penuh, energi -25 (Kuntilanak) / -30 (Pocong). Default tidak bisa membuat pingsan (sisa minimal 1; `jumpscare_can_faint`).
 - Lolos: berlari, masuk ruangan, atau berdiri di dekat cahaya (lampu/api mengusirnya). Pergi sendiri setelah 75–85 detik. Tanpa perubahan save.
+
+#### Progres Horor & Tingkat Kesulitan Gaib [keputusan 28 Oktober 2026; Tahap 1–6 terpasang; semua angka usulan]
+
+Masalah saat ini: horor sama dari hari pertama sampai late game (rasa takut, cahaya = aman, ditatap = membeku), dan rasa takut tidak berdampak gameplay. Setelah pemain hafal aturannya, horor kehilangan daya. Prinsip rancangan: **tiap fase mengajarkan satu aturan, fase berikutnya mematahkannya**. Dua sumbu terpisah:
+
+- **Tingkat Gaib (1–4)**: *hantu dan kejadian apa* yang muncul; naik otomatis mengikuti progres pemain.
+- **Kesulitan Gaib**: *seberapa kejam* angka-angkanya; dipilih pemain di Pengaturan.
+
+Batas yang tetap dijaga dari rancangan 4.1: interior, pemain yang tidur, dan transisi tidur/pingsan tetap tenang; efek tetap per pemain (co-op per layar).
+
+##### A. Tingkat Gaib (ditentukan progres, bukan hari)
+
+Dihitung ulang dari data save yang sudah ada (tanpa field save baru); diambil tingkat tertinggi yang syaratnya terpenuhi. Pemain yang bermain santai tidak tiba-tiba bertemu hantu late game.
+
+| Tingkat | Nama | Syarat (salah satu) |
+|---|---|---|
+| 1 | Bisikan | Awal game |
+| 2 | Gangguan | Deep Forest terbuka, Gua lantai ≥ 20, atau musim ke-3 tahun 1 |
+| 3 | Teror | Gua lantai ≥ 50, atau Tahun 2 |
+| 4 | Malam Keramat | Gua lantai ≥ 80, atau Tahun 2 musim Gugur |
+
+Saat tingkat naik: pesan/surat dari NPC sesepuh desa ("Malam-malam ini terasa lain…") sebagai penanda, bukan pop-up tutorial.
+
+##### B. Early game — Tingkat 1 "Ada yang mengawasi"
+
+- Sistem yang sudah terpasang menjadi isi fase ini. Mengajarkan dua aturan: **cahaya = aman** dan **tatap = membeku**.
+- Hanya Kuntilanak; Pocong mulai di akhir fase (mis. musim ke-2) atau tingkat 2.
+- Kejadian ganjil ringan: siluet sekilas, bisikan, gagak, langkah kaki, lampu berkedip.
+- Tanpa denda gameplay dari rasa takut (seperti sekarang).
+- Petunjuk lewat dialog NPC (sesepuh/dukun desa): "Kalau dengar tawa melengking, jangan lari ke gelap, cari api."
+
+##### C. Mid game — Tingkat 2 "Aturannya mulai bohong"
+
+Hantu baru yang mematahkan aturan fase awal:
+
+| Hantu | Aturan | Penangkal |
+|---|---|---|
+| **Banaspati** (bola api) | **Tertarik ke cahaya**: muncul di dekat lampu/api; lampu aman bisa jadi bahaya. Membakar sedikit energi bila menyentuh | Padamkan/ jauhi cahaya, Kemenyan |
+| **Genderuwo** | Besar, lambat, **tidak takut cahaya**; **tidak melihat pemain yang diam** (tidak bergerak ≥ 1 detik) | Diam/bersembunyi di semak, lalu menjauh saat ia berpaling |
+| **Tuyul** | Tidak menyerang; bila pemain di luar setelah 00.00, mencuri sedikit G dari peti atau 1 tumpukan dari Shipping Bin di farm. Jejak kaki kecil terlihat pagi harinya | Mangkuk kacang hijau / kepiting di dekat peti, Pagar Gaib |
+
+Rasa takut mulai berdampak (ringan):
+- Takut ≥ 0,6: stamina aksi +10% dan pandangan sesekali berkunang (layar meredup sesaat; ikut opsi efek layar).
+- Takut penuh: kecepatan lari -15% (tetap bisa lari).
+
+**Terpasang (Tahap 2, 28 Oktober 2026)**:
+- `NightStalker.rule`: `FREEZE_WHEN_WATCHED` (Kuntilanak, Pocong), `MOVE_WHEN_WATCHED` (disiapkan untuk Sundel Bolong), `ATTRACTED_TO_LIGHT`, `BLIND_TO_STILL`. Angka aturan di Inspector grup "Aturan".
+- **Genderuwo** (`scenes/horror/genderuwo.tscn`): 22 px/detik, langkah berat bergetar, tidak diusir cahaya dan tidak membeku saat ditatap. Pemain yang diam ≥ 1 detik tidak terlihat: ia mengendus dalam radius 48 px dari posisi terakhir pemain dan tidak bisa mencengkeram selama pemain diam. Energi -35 (Normal).
+- **Banaspati** (`scenes/horror/banaspati.tscn`): hanya muncul di cahaya menyala ≤ 260 px dari pemain (tanpa syarat rasa takut), memburu pemain yang berdiri di cahaya, tidak bisa menyambar di gelap, kembali melayang di cahayanya, dan pergi setelah pemain 8 detik di gelap. Energi -15 (Normal).
+- Profil tingkat 2–4 memuat Kuntilanak, Pocong, Genderuwo, Banaspati, dan `fear_effects`. Angka dampak rasa takut di grup Inspector "Dampak Rasa Takut" pada `NightHorror`; `PlayerData.fear_stamina_multiplier` dan `Player.fear_run_multiplier` tidak disimpan.
+- **Sprite sementara** dibuat skrip `tools/generate_horror_placeholders.gd` (`assets/horror/genderuwo.png`, `banaspati.png`, `jumpscare_genderuwo.png`, `jumpscare_banaspati.png`); ganti dengan gambar Aseprite bernama sama.
+- Debug: "Munculkan Genderuwo" dan "Munculkan Banaspati". Tes: `tests/horror_progression_regression.tscn`.
+- Belum: Tuyul (Tahap 4); Kemenyan sebagai penangkal Banaspati (Tahap 3).
+
+Jejak dunia: jejak kaki di tanah farm, lentera yang padam dan perlu dinyalakan ulang, orang-orangan sawah berpindah arah. Kosmetik, hilang saat hari berganti.
+
+**Terpasang (Tahap 4, 28 Oktober 2026; keputusan pemilik: angka usulan)**:
+- **Tuyul** (`HorrorManager.try_tuyul`): sekali per hari farm, saat pemain mana pun berada di luar ruangan pukul 01.00–05.59 pada Tingkat Gaib ≥ 2. Acak 50:50 (atau pasti ke bin bila uang < 20 G): mengambil **satu baris Shipping Bin** senilai maksimal 500 G, atau **5% uang** pemain maksimal 500 G. Pengali `theft_scale` Kesulitan Gaib: Tenang dan Hanya Suasana tidak mencuri, Normal ×1, Mencekam ×1,5 (maks 750 G), Mimpi Buruk ×2 (maks 1.000 G). Catatan: uang di game ini milik bersama dan tidak disimpan di peti, jadi "uang di peti" pada usulan diterapkan sebagai uang pemain.
+- Saat mencuri: teks "Terdengar gemerincing koin dari arah farm..."; pagi berikutnya laporan apa yang diambil. **Jejak kaki kecil** (`scripts/horror/tuyul_tracks.gd`) di dekat Shipping Bin dari malam pencurian sampai 12.00 esoknya.
+- **Sesajen Penangkal Tuyul** (crafting grup Dekorasi: 3 Kacang Merah + 3 Garam + 4 Kayu; jual 60 G; dekorasi 1×1): satu sesajen di farm mencegah semua pencurian.
+- Disimpan di `horror.theft_day` dan `horror.theft_report` (opsional, tanpa naik versi save). Debug: "Tuyul mencuri sekarang".
+- Belum: lentera padam dan orang-orangan sawah berpindah (kejadian Lampu berkedip yang sudah ada tetap berjalan).
+
+##### Mbah Darmi, sesepuh desa [terpasang 29 Oktober 2026]
+
+- Warga ke-14 (`data/npc/darmi.json`, `resources/npc_data/characters/darmi_resident.tres`): **Mbah Darmi**, 78 tahun, "Sesepuh Desa dan Penutur Cerita Malam". Duduk tetap (`anchored`) di titik `darmi_porch` alun-alun Kota (dekat Pos Pengiriman) 06.00–21.00, lalu tidur di luar layar. Ulang tahun Gugur 28. Tidak bisa dinikahi.
+- **Cerita hantu bertahap** lewat event hati (sekali tiap tingkat, saat mengobrol di dekatnya 06.00–21.00): perkenalan (0 hati, aturan cahaya), Kuntilanak & Pocong (1), Genderuwo & Banaspati + resep Kemenyan (2), Tuyul + Sesajen Penangkal Tuyul (3), Sundel Bolong & Leak (4), Wedang Kantil / Jimat Penolak / Keris Pusaka (5), Penunggu & ritual altar (6), Malam Jumat Kliwon & ketukan pintu (7), Catatan Gaib & Mustika Pemberani (8). Obrolan harian (`dialogue_by_hearts`) mengulang inti nasihat tingkat hatinya. Semua bahan dan aturan sesuai mekanik yang terpasang.
+- Hadiah resep persahabatan: **Wedang Kantil** + 2 Bunga Kantil pada 4 hati (`data/npc/social/household_rules.json`). Kesukaan: Wedang Kantil, Teh Melati, Bunga Kantil, Teh Kamomil; benci Slime, Cacing, Tulang Tua.
+- Pesan naik Tingkat Gaib dan pengumuman Malam Jumat Kliwon kini atas nama "Mbah Darmi berpesan".
+- Visual: sprite `NPC'S/Mbah Darmi/Idle|Walk` (recolor sheet Lyria: rambut abu bersanggul dengan tusuk konde, kebaya krem, kain batik cokelat) dan potret 64×64 baru dengan 3 ekspresi (biasa, senang, cemas) `Portrait.png`. Sumber `.aseprite` di folder yang sama.
+- Regresi: `tests/darmi_regression.tscn`; tes NPC lama kini menghitung 14 warga (13 × 5 tonggak + 9 cerita Mbah).
+
+##### D. Late game — Tingkat 3 "Diburu" dan Tingkat 4 "Malam Keramat"
+
+- **Kombinasi aturan bertentangan**: **Sundel Bolong** hanya bergerak **saat ditatap** (kebalikan Kuntilanak). Bila keduanya muncul bersama, pemain solo harus memilih yang ditatap; co-op bisa membagi tugas.
+- **Leak / Kuyang** (kepala terbang): menembus cahaya kecil (lentera, lilin, lampu taman); hanya api unggun, Kemenyan, atau penangkal tingkat tinggi yang efektif.
+- Tingkat 3: maksimal 2 makhluk per pemain; jeda antar-makhluk lebih pendek.
+- **Penunggu Area (mini-boss gaib)**, satu per area (Deep Forest, Gunung, Gua lantai tertentu). Tidak dikalahkan dengan senjata, melainkan **ritual**: kumpulkan sesajen, nyalakan kemenyan di 3 titik, bertahan sampai 05.00 atau sampai ritual selesai. Gagal = tidak ada denda item, ritual bisa diulang malam lain. Hadiah: material unik (Kayu Keramat, bahan Keris Pusaka) dan entri Catatan Gaib.
+- Tingkat 4 — **Malam Jumat Kliwon** (event kalender): satu malam per musim (usulan: Kamis malam minggu ke-4, kecuali pemilik menambah siklus pasaran Jawa). Semua hantu aktif, kejadian ganjil lebih sering, hadiah material malam ×2. Diumumkan lewat surat/NPC sehari sebelumnya.
+- Tingkat 4 — **Ketukan di pintu rumah**: hanya suara dari luar (ketukan, suara "teman" memanggil) saat pemain di dalam rumah setelah 00.00. Tidak ada makhluk di interior dan tidak ada serangan, sehingga aturan interior tetap tenang dipertahankan.
+
+**Terpasang (Tahap 5, 28 Oktober 2026; keputusan pemilik: angka usulan)**:
+- **Dua makhluk sekaligus**: `HorrorProfile.max_stalkers` = 1 (tingkat 1–2) dan 2 (tingkat 3–4); `NightHorror.stalkers()` menggantikan satu makhluk. Debug "Munculkan ..." tetap mengganti semua makhluk yang ada.
+- **Sundel Bolong** (`scenes/horror/sundel_bolong.tscn`, aturan `MOVE_WHEN_WATCHED`): hanya bergerak saat ditatap, 26 px/detik, takut cahaya, energi -35. Selamat → Embun Kubur.
+- **Leak/Kuyang** (`scenes/horror/leak.tscn`, `strong_light_only`): kepala melayang 40 px/detik, membeku saat ditatap, menembus lentera/lilin/lampu taman; hanya **cahaya kuat** (grup `horror_strong_light`: Api Unggun dan perapian batu/bata, ditandai `"strong_light"` di `StructureManager.DECOR`), asap kemenyan, atau Keris Pusaka yang mengusirnya. Energi -40. Selamat → Bara Banaspati.
+- **Keris Pusaka** (crafting grup Equipment; resep akhir di Tahap 6 memakai Kayu Keramat; pedang serangan +18, jual 700 G): saat dipegang di hotbar, makhluk apa pun yang ditatap pemain itu 1,5 detik tanpa putus terusir dan dihitung selamat (`ItemData.horror_gaze_seconds`).
+- **Tugu Pagar Gaib** (crafting grup Dekorasi; resep akhir di Tahap 6 memakai Batu dan Kristal Keramat; jual 900 G; dekorasi 1×1): selama terpasang di farm, makhluk tidak muncul sendiri di farm dan Tuyul tidak mencuri. Dibuat sebagai barang crafting, bukan bangunan Carpenter, agar memakai sistem penempatan yang ada.
+- **Nyali**: efek `fear_resist` 0,25 ditambahkan ke perk Combat Lv6 "Tubuh Tangguh" (rasa takut naik 25% lebih lambat, kaku jumpscare 25% lebih singkat). Pohon skill tidak diubah strukturnya.
+- Catatan Gaib kini 6 entri (nama + petunjuk satu baris agar muat satu halaman). Sprite/ikon sementara dibuat `tools/generate_horror_placeholders.gd` (Sundel Bolong = recolor Kuntilanak).
+
+**Terpasang (Tahap 6, 28 Oktober 2026; keputusan pemilik: Kliwon versi sederhana, tiga Penunggu sekaligus)**:
+- **Malam Jumat Kliwon**: Kamis minggu ke-4 = **hari ke-25 tiap musim** (hari 1 = Senin). Mulai Tingkat Gaib 2, malam itu memakai profil tingkat 4 (semua makhluk, dua sekaligus), jeda kejadian ganjil ×0,6, dan hadiah material malam ×2 (`HorrorManager.night_tier()`/`is_kliwon()`). Pengumuman pagi sehari sebelumnya dan pagi harinya. Tingkat 1 tidak terdampak; Hanya Suasana tidak diumumkan. Debug: "Malam Jumat Kliwon (paksa, nyala/mati)".
+- **Ketukan pintu**: di dalam rumah pemain (`interior_house`) pukul 00.00–04.59 saat tingkat malam 4: tiga bunyi ketukan + satu teks acak (diketuk, suara mirip teman memanggil) tiap 45–110 detik. Tanpa makhluk dan tanpa denda; interior tetap aman. Debug: "Ketukan pintu sekarang".
+- **Ritual Penunggu Area** (`scripts/horror/ritual_altar.gd`, node `AltarPenunggu`): altar di Hutan Dalam (850, 200), Gunung (392, 320), dan lobi Gua (200, 150); posisi sementara, geser di editor bila perlu. Syarat: Tingkat Gaib 3+, pukul 00.00–04.59, bukan Hanya Suasana, sekali berhasil per area per malam.
+  1. Interaksi dengan altar memakai sesajen: 3 Kemenyan + 2 Bunga Kantil (Hutan) / 2 Embun Kubur (Gunung) / 2 Bara Banaspati (Gua).
+  2. Nyalakan tiga titik kemenyan di sekitar altar dalam 90 detik.
+  3. Penunggu bangkit; bertahan 60 detik tanpa tersentuh (Penunggu kebal asap kemenyan; Penunggu yang terusir lebih cepat, mis. tatapan Keris, juga dihitung berhasil).
+  - Penunggu (turunan makhluk yang ada, energi -50): **Penunggu Hutan Dalam** (Genderuwo besar, buta pada yang diam), **Penunggu Gunung** (Kuntilanak besar, lebih cepat dan sering berpindah), **Penunggu Gua** (Leak besar, hanya cahaya kuat).
+  - Hadiah: **Kayu Keramat** / **Batu Keramat** / **Kristal Keramat** (400 G; ×2 saat Kliwon) + entri Catatan Gaib. Gagal (disentuh, waktu habis, subuh, meninggalkan area): sesajen hangus, tanpa denda lain, bisa diulang.
+  - Resep diperbarui: **Keris Pusaka** = 2 Batangan Emas + 2 Bara Banaspati + 1 Embun Kubur + **1 Kayu Keramat**; **Tugu Pagar Gaib** = 2 Batangan Platinum + 3 Bara Banaspati + **1 Batu Keramat + 1 Kristal Keramat**.
+  - Disimpan di `horror.ritual_day` (opsional, tanpa naik versi save).
+- **Catatan Gaib** kini 9 entri (6 makhluk + 3 Penunggu) dan muat satu halaman.
+- **Catatan Gaib lengkap [keputusan pemilik 28 Oktober 2026: tanpa Balai Nadi]**: paket Balai Nadi tidak ditambah (sayap yang sudah lengkap di save lama akan terhitung belum lengkap saat load). Sebagai gantinya, saat 9/9 entri lengkap pemain yang melengkapinya langsung menerima **Mustika Pemberani** sekali per save (aksesori: pertahanan +3, `horror_fear_resist` 0,3 = rasa takut naik 30% lebih lambat dan kaku jumpscare lebih singkat, `horror_charm_seconds` 1 detik seperti Jimat; jual 800 G). Tas penuh: dicoba lagi tiap pagi. Disimpan di `horror.journal_rewarded` (opsional, tanpa naik versi save). Judul Catatan Gaib menampilkan "· lengkap".
+- Suara sintesis horor (`HorrorSynth`) dilepas saat game keluar agar tidak tersisa sebagai "resources still in use at exit".
+
+##### E. Tingkatan penangkal
+
+| Fase | Penangkal | Cara kerja | Sumber |
+|---|---|---|---|
+| Early | Lentera, api unggun, lampu taman | Zona aman statis (sudah ada) | Sudah ada |
+| Early | Masakan penenang (Wedang Jahe, dst.) | Buff: kenaikan rasa takut -30% selama durasi buff | Cooking |
+| Mid | **Kemenyan** | Zona aman portabel 60 detik di sekitar pemain; mengusir Banaspati | Crafting (getah/resin Deep Forest + kayu) |
+| Mid | **Kacang Hijau / Garam** | Ditaruh di dekat peti/bin: Tuyul tidak mencuri di radius itu | Toko/crafting |
+| Mid | **Jimat** | Aksesori equipment: makhluk baru bergerak 1 detik setelah pemain berpaling | Crafting + material malam |
+| Late | **Keris Pusaka** | Saat dipegang, tatapan mengusir makhluk lebih cepat (3,5 → 1,5 detik); efektif ke Leak/Kuyang | Bijih gua dalam + Kayu Keramat + ritual |
+| Late | **Pagar Gaib** | Bangunan farm: farm bebas Tuyul dan kejadian jejak | Carpenter, late game |
+| Semua | Perk **"Nyali"** (skill tree) | Kenaikan rasa takut berkurang, kontrol terkunci saat jumpscare lebih singkat | Skill tree |
+
+Hadiah agar pemain mau keluar malam:
+- Material khusus malam (usulan: Bunga Kantil, Embun Kubur, Minyak Duyung) sebagai bahan Jimat/Keris/ritual dan barang jual bernilai.
+- **Catatan Gaib**: bestiary yang terisi saat pemain selamat dari hantu baru (atau menyelesaikan ritual); dapat menjadi kategori koleksi Balai Nadi.
+
+**Terpasang (Tahap 3, 28 Oktober 2026)**:
+- **Selamat** = makhluk sempat hadir ≥ 10 detik (`NightStalker.survive_after`) lalu pergi tanpa menyentuh (habis waktu, diusir cahaya/asap, kehilangan jejak, atau pemain masuk ruangan). Hadiah 1 material × `reward_scale` Kesulitan Gaib (sisa pecahan = peluang), tidak ada di Hanya Suasana. Material per makhluk (`reward_item_id`): Kuntilanak → **Bunga Kantil** (60 G), Pocong → **Embun Kubur** (70 G), Genderuwo → **Bulu Genderuwo** (90 G), Banaspati → **Bara Banaspati** (80 G). Nama usulan "Minyak Duyung" diganti agar tiap makhluk punya material sendiri.
+- **Kemenyan** (crafting grup Bahan: 1 Resin + 3 Kayu; jual 80 G): klik kiri untuk dibakar, asap mengikuti pemain 60 detik radius 80 px (`ItemData.horror_ward_seconds`/`horror_ward_radius`, `scripts/horror/horror_ward.gd`). Di dalam asap rasa takut turun seperti di dekat cahaya dan semua makhluk yang masuk mundur, termasuk Genderuwo dan Banaspati. Asap bukan cahaya: Banaspati tidak tertarik ke asap.
+- **Jimat Penolak** (crafting grup Equipment: 2 Bunga Kantil + 1 Embun Kubur + 1 Bulu Genderuwo + 1 Batangan Tembaga; jual 320 G; slot aksesori, pertahanan +1): makhluk yang membeku saat ditatap baru bergerak 1 detik setelah pemain berpaling (`ItemData.horror_charm_seconds`).
+- **Makanan penenang**: efek baru `FoodEffectData.fear_rise_multiplier`. Teh Kamomil, Teh Lavender, dan Teh Melati mendapat efek **Tenang** (rasa takut naik -30%, 180 detik). Resep baru **Wedang Kantil** (dapur, buku 150 G: 1 Bunga Kantil + 1 Madu; stamina +30, jual 95 G) memberi efek **Berani** (-50%, 300 detik).
+- **Catatan Gaib dasar**: `GameState.horror.journal` (jumlah selamat per makhluk) disimpan di `horror.journal` save v27 (opsional, tanpa naik versi). Entri baru diumumkan sekali; daftar tampil di halaman kanan Tas > Pengaturan > Horor (makhluk yang belum ditemui tampil "???").
+- Ikon sementara di `assets/horror/icons/` (dibuat `tools/generate_horror_placeholders.gd`). Belum: Bara Banaspati sebagai bahan (rencana Kemenyan tahan lama), Catatan Gaib ke Balai Nadi (Tahap 6).
+
+##### F. Kesulitan Gaib (pilihan pemain)
+
+| Parameter | Tenang | Normal | Mencekam | Mimpi Buruk |
+|---|---|---|---|---|
+| Kenaikan rasa takut | ×0,5 | ×1 | ×1,3 | ×1,6 |
+| Peluang muncul makhluk (per undian) | 15% | 35% | 45% | 60% |
+| Energi hilang saat disentuh | -10 | -25 / -30 | -40 | -50 |
+| Jumpscare bisa membuat pingsan | Tidak | Tidak | Tidak | Ya |
+| Pencurian Tuyul | Tidak ada | Kecil | Sedang | Besar |
+| Radius aman cahaya | 110 px | 72 px | 60 px | 48 px |
+| Hadiah material malam | ×0,75 | ×1 | ×1,25 | ×1,5 |
+
+Opsi aksesibilitas terpisah: intensitas jumpscare (penuh / tanpa wajah / mati), efek layar (grain, aberration, glitch, guncangan) on/off, dan **mode "Hanya Suasana"** (kabut, ambience, kejadian ganjil kosmetik; tanpa makhluk dan tanpa denda). Co-op: host (P1) memilih kesulitan.
+
+**Keputusan penyimpanan [keputusan 28 Oktober 2026]**: Kesulitan Gaib (termasuk Hanya Suasana) disimpan **per save** agar hadiah tidak bisa dicurangi dengan berganti kesulitan; opsi jumpscare dan efek layar berlaku **untuk semua save** (`user://settings.cfg`, bagian `horror`). Konten yang bergantung pada hantu (material dari hantu, Catatan Gaib, ritual) tidak tersedia di mode Hanya Suasana kecuali pemilik memutuskan lain.
+
+**Terpasang (Tahap 1, 28 Oktober 2026)**:
+- `GameState.horror` (`scripts/system/horror_manager.gd`, `HorrorManager`): Tingkat Gaib dihitung dari lantai gua terdalam, hari permainan, dan unlock area; pesan pagi dari sesepuh desa sekali saat tingkat baru tercapai. Save v27 menyimpan `horror.difficulty` dan `horror.notified_tier`; save lama dimuat sebagai Normal tanpa pesan susulan.
+- Profil tingkat `resources/horror/profiles/tier_1..4.tres` (`HorrorProfile`): syarat, makhluk yang boleh muncul (tingkat 1 hanya Kuntilanak; Pocong mulai tingkat 2), peluang/jeda makhluk, jeda kejadian ganjil, pengali rasa takut. Kesulitan `resources/horror/difficulty/*.tres` (`HorrorDifficulty`): ambience, calm, normal, dread, nightmare.
+- `HorrorEvent.min_tier`/`max_tier`: Siluet melesat, Bisikan nama, dan Mata merah mulai tingkat 2.
+- Pilihan: layar buat karakter (pemilik farm, "Horor Malam ‹ Normal ›") dan Tas > Pengaturan > **Horor** (Kesulitan Gaib save ini, Jumpscare, Grain/glitch/guncangan). Debug: "Tingkat Gaib berikutnya (paksa)" dan "Kesulitan Gaib berikutnya".
+- Tes: `tests/horror_progression_regression.tscn` (terdaftar di `tools/verify_mvp.ps1`).
+- Belum: tingkat 3 dengan 2 makhluk sekaligus (menunggu Tahap 5); hadiah material malam dan pencurian Tuyul sudah punya pengali di `HorrorDifficulty` tetapi belum dipakai (Tahap 3–4).
+
+##### G. Rancangan teknis
+
+- **`HorrorProfile` (Resource, `resources/horror/profiles/tier_1..4.tres`)**: memindahkan angka yang kini di Inspector `NightHorror` dan `NightStalker` (peluang, jeda, kecepatan, denda, radius cahaya, makhluk yang boleh muncul). Kesulitan = Resource pengali di atas profil.
+- **`HorrorEvent`** ditambah `min_tier` / `max_tier`; event lama default tingkat 1–4.
+- **`NightStalker`** ditambah enum `rule`: `FREEZE_WHEN_WATCHED` (perilaku sekarang), `MOVE_WHEN_WATCHED`, `ATTRACTED_TO_LIGHT`, `BLIND_TO_STILL`, sehingga hantu baru cukup scene + sprite + data.
+- Tingkat Gaib dihitung dari data progres yang sudah tersimpan (unlock Deep Forest, lantai gua terdalam, tahun/musim); tanpa naik versi save. Pencurian Tuyul dan jejak dunia memakai data peti/bin yang ada.
+- Tes: perluas `tests/night_survival_regression.gd` dan `tests/horror_debug_probe.gd` per tingkat, aturan, dan kesulitan; DebugManager diberi perintah paksa tingkat/kesulitan.
+
+##### H. Tahap pengerjaan
+
+| Tahap | Isi | Hasil yang terasa | Ketergantungan |
+|---|---|---|---|
+| 1 — Fondasi **[terpasang]** | `HorrorProfile`, Tingkat Gaib, filter `min_tier`/`max_tier`, Kesulitan Gaib + aksesibilitas + mode Hanya Suasana, perintah debug, tes | Horor berbeda antar fase; pemain bisa memilih kesulitan | Tidak ada |
+| 2 — Aturan baru **[terpasang]** | Enum `rule` di `NightStalker`, Genderuwo dan Banaspati (sprite + suara), dampak rasa takut tingkat 2 | Mid game punya aturan yang mematahkan early game | Tahap 1; aset sprite |
+| 3 — Penangkal mid **[terpasang]** | Kemenyan, Jimat, masakan penenang, material malam, Catatan Gaib dasar | Pemain punya alat dan alasan keluar malam | Tahap 2; resep crafting/cooking |
+| 4 — Tuyul & jejak dunia **[terpasang]** | Pencurian peti/bin, Kacang Hijau/Garam, jejak kaki, lentera padam | Horor menyentuh farm dan ekonomi | Tahap 1; balancing ekonomi |
+| 5 — Late game **[terpasang]** | Sundel Bolong, Leak/Kuyang, Keris Pusaka, Pagar Gaib, perk Nyali | Late game terasa diburu | Tahap 2–3 |
+| 6 — Ritual & event **[terpasang]** | Penunggu Area + ritual, Malam Jumat Kliwon, ketukan pintu, Catatan Gaib ke Balai Nadi | Puncak konten horor | Tahap 5 |
+
+Tahap 1 adalah fondasi wajib; tahap 2–4 boleh diubah urutannya; tahap 5–6 memerlukan tahap sebelumnya. Setiap tahap diuji terhadap regresi horor yang ada (interior tenang, co-op per layar, transisi tidur/pingsan).
 
 ### 4.2 Stamina, Tidur, dan Denda Pingsan [terpasang + keputusan]
 
@@ -396,7 +570,9 @@ Baseline terbaru: changelog 3.30 (bagian 19); audit lanjutan [AUDIT_2026-10-26.m
   - Karya: `tool_upgrade_discount` 0,10 (biaya uang upgrade alat di Empu Bima -10%, bahan tetap).
   - Niaga: `ship_bonus` dan `shop_sell` +0,05 (harga jual +5%).
   - Pengetahuan: `geode_chance` 0,25 (peluang geoda di gua ×1,25).
+- **Urutan buka** [keputusan pemilik 26 Oktober 2026]: hanya Balai Utama (Restorasi Balai Nadi) yang tampil di awal. Sayap Alam, Karya, Niaga, dan Pengetahuan (termasuk Greenhouse) baru muncul di menu dan bisa disumbang setelah restorasi itu selesai (`BalaiNadiManager.wings_unlocked()`). Progres sayap di save lama tetap tersimpan; paket yang sudah selesai tetap selesai.
 - Tahap restorasi baru "Jantung Desa" saat keempat sayap lengkap.
+- **Menu gaya AssistiveTouch + kaca cair** [keputusan pemilik 26 Oktober 2026]: interaksi dengan Bale Agung atau meja kontribusi membuka satu tombol inti bulat di tengah layar (ikon Bale, cincin progres total). Tombol itu mekar menjadi lingkaran kelopak kaca: Balai Utama, Alam, Karya, Niaga, Pengetahuan (sebelum Balai Utama pulih hanya kelopak "Pulihkan Balai"; sayap lain tetap tersembunyi). Memilih sayap mengganti kelopak menjadi paket sayap itu; memilih paket membuka kartu kaca berisi kotak kebutuhan (ikon, disumbang/dibutuhkan, centang), "Terisi N dari M", hadiah (ikon ×jumlah, +Token Talenta), tombol Sumbang dan Semua. Teks dibuat seminimal mungkin: nama hanya muncul di kelopak terpilih, bonus sayap hanya di samping sayap terpilih. Ikon sayap memakai ikon barang yang ada (lobak, batang tembaga, selai, amethyst). Kontrol: stik/WASD menunjuk kelopak sesuai arah, A/E pilih atau sumbang, Y/R sumbang semua, B/Esc kembali satu tingkat (di tingkat atas menutup), mouse hover/klik. Tombol hanya muncul saat interaksi Balai, tidak menempel di HUD. Gerak: kelopak mekar saat dibuka, melayang naik turun bergantian, kelopak terpilih bergeser keluar dan berpendar, seluruh lingkaran condong ke arah stik dan kilau tombol inti ikut bergeser; kartu melayang pelan. File: `scenes/ui/balai_nadi_ui.tscn`, `balai_radial_petal.tscn`, `balai_requirement_slot.tscn`, shader `resources/ui/glass_panel.gdshader` (blur, lensa, kilau, bingkai, bayangan, pendar; bisa diatur di Inspector), angka gerak di export `BalaiNadiUI`.
 - **Tampilan sebelum/sesudah restorasi** [terpasang 25 Oktober 2026]: Bale Agung di luar memakai `assets/balai_nadi/v4/bale_agung_ruined.png` (atap bolong, kusam, lumut, tirai sobek, kristal padam; dibuat dari v2 lewat skrip) sampai Restorasi Balai Nadi selesai, lalu `v2/bale_agung.png` (`scripts/world/balai_restoration_art.gd`). Interior memakai gambar ruangan `v1/interior_ruined.png` / `interior_restored.png` menggantikan kotak placeholder; meja kontribusi dan batas jalan disesuaikan dengan gambar.
 - Tanpa perubahan save (tetap v26): progres disimpan per `project_id`, save lama memuat paket baru dalam keadaan kosong; status dan flag sayap dihitung ulang saat load. Tes `tests/balai_bundles_regression.tscn`.
 
@@ -546,6 +722,40 @@ Sprite `assets/farm_rpg/animals/{buffalo,horse,capybara}.png` memakai tata letak
 - **Pupuk kandang** dari usulan tidak dibuat karena sistem pupuk dari kotoran belum ada.
 - **Save v26**: per hewan `baby_days`, `pregnant`, `feather`; per kandang `incubator` {`installed`, `egg`, `days`}. Save lama dimuat sebagai hewan dewasa tanpa kehamilan/inkubator. Regresi: `tests/ranch_expansion_regression.tscn`.
 
+#### 4.10.12 Babi, Burung Unta, Peliharaan, dan Sprite Paket Farm RPG [terpasang 28 Oktober 2026]
+
+- **Babi** (`pig`, Barn, 6.000 G): setiap 3 hari terawat mengendus 1 Truffle (kualitas perak/emas dari kasih sayang, tanpa ukuran besar). Hasil disimpan di hewan dan diambil **dengan tangan** lewat tombol "Ambil Truffle" di menu kandang (tanpa alat, 1 stamina). Bisa dibiakkan (hamil 5 hari). Truffle diolah di Oil Maker menjadi Minyak Truffle. Laba bersih ±73 G/hari (batas uji ekonomi 35–100 G).
+- **Burung Unta** (`ostrich`, Kandang Unggas, 4.500 G): bertelur setiap 3 hari terawat; telur masuk stok kandang bersama telur lain. Telur bisa ditetaskan di Inkubator (7 hari). Unggas: dielus, tidak disikat. Harga Telur Burung Unta naik menjadi jual 300 / beli toko 600 G (pola beli = 2× jual tetap) agar sepadan dengan slot kandang (±90 G/hari).
+- **Hewan peliharaan di dunia** (`scripts/world/pet_actor.gd`): kucing/anjing pilihan pemain 1 saat membuat karakter kini muncul. Siang (06.00–19.59) bermain di depan pintu rumah ladang, malam di dalam rumah. Dielus sekali sehari oleh pemain mana pun (+5 kasih sayang, maks 100); lencana nama menampilkan ♥ bila belum dielus. Data `pet_affection`/`pet_day` di data pemain; kunci baru opsional sehingga **tanpa naik versi save** (save lama = 0). Kasih sayang peliharaan belum memberi hadiah [usulan berikutnya].
+- **Sprite**: semua ternak memakai sheet asli paket di `assets/farm_rpg/animals/Farm` dan `Forest` (`scripts/ui/ranch_visual.gd`), termasuk sheet anak (ayam, bebek, sapi, kambing, domba, babi, burung unta) sehingga anak tidak lagi sekadar diperkecil. Kapibara memakai `Forest/Capybara` (sheet lama ternyata recolor sapi); kuda di kandang/menu memakai `Farm/Horse` (2 warna: surai gelap untuk bay/chestnut, surai terang untuk flaxen/cream/pearl). Kerbau tetap `animals/buffalo.png` (tidak ada di paket); kuda tunggangan tetap `Character/PNG/14.x Horse` (sinkron dengan animasi pemain). Ikon dan sprite peliharaan dari `animals/Pets`.
+- **Perbaikan animasi**: hewan yang berjalan kini memakai siklus jalan (baris 0–2 sheet), bukan pose berbaring/duduk; arah hadap samping tidak lagi terbalik.
+- Regresi: `tests/pet_regression.tscn` (baru), `tests/ranch_regression.tscn` (babi, burung unta, sheet), `tests/economy_balance_regression.tscn`.
+
+#### 4.10.13 Satwa Liar Hutan [terpasang 29 Oktober 2026]
+
+- **Tujuan**: suasana hidup di area luar; satwa liar tidak diburu, tidak menjatuhkan item, dan tidak disimpan di save.
+- **Data**: `resources/wildlife/*.tres` (`scripts/data/wildlife_data.gd`, dapat diatur di Inspector: sheet, baris/kolom animasi, musim, area, jam, bobot, kecepatan, jarak kabur). Sheet dari `assets/farm_rpg/animals/Forest`.
+
+| Satwa | Area | Musim | Waktu | Perilaku |
+|---|---|---|---|---|
+| Rusa Betina | Hutan, Hutan Dalam, Gunung | Semua | Siang | Kabur berlari (jarak 48) |
+| Rusa Jantan (langka) | Hutan Dalam, Gunung | Semua | Siang | Kabur berlari (jarak 56) |
+| Kelinci Cokelat | Hutan, Hutan Dalam, Gunung | Semua | Siang | Melompat kabur (jarak 32) |
+| Kelinci Krem | Hutan | Semi–Gugur | Siang | Melompat kabur |
+| Rubah Merah | Hutan, Hutan Dalam | Semi–Gugur | Senja (05–08, 17–21) | Kabur berlari; diam sambil duduk |
+| Rubah Putih | Hutan, Hutan Dalam, Gunung | Dingin | Kapan saja | Kabur berlari |
+| Kura-kura | Hutan | Semi–Gugur | Siang | Tidak lari: masuk cangkang sampai pemain menjauh |
+| Katak | Hutan, Hutan Dalam | Semi, Panas | Kapan saja | Melompat kabur (jarak 24) |
+| Gagak | Ladang, Hutan | Semua | Siang | Terbang menjauh ke atas lalu menghilang (jarak 40) |
+
+- **Spawner** (`scripts/world/wildlife_spawner.gd`): Hutan maks 4, Hutan Dalam 4, Gunung 3, Ladang 2 (hanya gagak). Diisi ulang tiap jam di petak tanah kosong ≥ 140 px dari pemain; satwa yang jam/musimnya lewat menghilang perlahan.
+- **Satwa** (`scripts/world/wild_animal.gd`): diam/berkeliaran ≤ 48 px dari titik muncul; pemain berjalan mengejutkan dari jarak kabur, pemain berlari dari 2× jarak itu. Satwa kabur 2,5 detik menjauhi pemain; bila sudah > 200 px dari asalnya ia menghilang dan diganti di tempat lain. Gagak di ladang hanya suasana dan tidak memakan tanaman.
+- **Catatan Satwa** [terpasang 29 Oktober 2026] (`scripts/system/wildlife_journal.gd`): satwa tercatat bila pemain yang tidak berlari berada di luar jarak kabur tetapi dalam 1,8× jarak itu selama 2 detik (tanda "!" di atas satwa). Jenis baru +20 EXP Peramu; semua jenis (9) memberi bonus +100 sekali. Halaman **Satwa** di buku Pengaturan: penjelasan di kiri, daftar (nama, kali diamati, waktu muncul; "???" bila belum) di kanan. Disimpan per save di kunci opsional `wildlife` {id: jumlah, `_complete`}; tanpa naik versi save.
+- **Memberi makan** [terpasang 29 Oktober 2026]: tiap satwa punya makanan kesukaan (`favorite_foods`): rusa apel/wortel, kelinci wortel/kubis, rubah telur ayam, kura-kura kubis, katak jangkrik/cacing, gagak jagung/gandum (kualitas apa pun). Pemain yang memegangnya tidak membuat satwa kabur saat berjalan dan memancingnya mendekat (berhenti ±14 px). Interaksi memakai 1 item: satwa itu **jinak** (tidak kabur dari pemain berjalan, tetap kabur dari pemain berlari) dan tercatat. Jenis yang pertama kali diberi makan +10 EXP Peramu; jumlah "diberi makan" tampil di Catatan Satwa (kunci `fed:<id>`). Interaksi tanpa makanan menyebut makanan kesukaannya.
+- **Hadiah satwa jinak** [terpasang 29 Oktober 2026]: 3 detik setelah diberi makan, peluang meninggalkan satu barang di tanah (`gift_item`/`gift_chance`): kelinci Bulu Kelinci (`rabbit_fur`, item baru, 80 G) 50%, rusa Common Mushroom 50%, kura-kura Cangkang 50%, gagak Kuarsa 40%; rubah dan katak tanpa hadiah. Satu satwa hanya dijinakkan sekali, jadi hadiah dibatasi jumlah satwa yang muncul.
+- **Gagak memakan tanaman** [terpasang 29 Oktober 2026] (`FarmManager.crow_attack`): setiap ganti hari yang tidak hujan, bila ada ≥ 12 tanaman Ladang yang tidak berada dalam 8 petak dari Orang-orangan Sawah, peluang 30% satu tanaman acak dimakan (tanah tetap tercangkul; notifikasi menyebut tanamannya). Pohon buah dan rumah kaca aman. Orang-orangan Sawah kini berfungsi (bukan hanya hiasan).
+- Regresi: `tests/wildlife_regression.tscn`.
+
 ### 4.11 Mesin Pengolah Pasca-Panen (Artisan Goods & Processing) [keputusan]
 
 Mesin pengolah yang dapat dirakit melalui Crafting dan ditempatkan di ladang atau gudang untuk mengubah komoditas mentah menjadi produk bernilai tinggi:
@@ -583,7 +793,7 @@ Semua resep di bawah memakai `CraftingRecipe` di `resources/crafting/catalog.tre
 
 - **Senjata, armor, dan panah per tier** [terpasang]: Tembaga sampai Obsidian kini punya resep pedang, busur, tongkat sihir, helm, armor, celana zirah, sepatu, dan panah x10 (70 resep). Pola: pedang 3 bar + 4 kayu, busur 2 bar + 8 kayu + 6 serat, tongkat 2 bar + 6 kayu + permata, helm 3 bar + 2 serat, armor 5 bar + 6 serat, celana 4 bar + 4 serat, sepatu 2 bar + 4 serat, panah 1 bar + 2 kayu. Permata per tier: Tembaga kuarsa, Besi ametis, Emas topaz, Platinum zamrud, Crimson rubi, Frost safir, Shadow oniks, Fairy kristal peri, Obsidian kuarsa api. Pedang/busur memakai permata mulai Emas; armor mulai Crimson.
 - **Peti tier 9-10** [terpasang]: Peti Fairy (120 slot, 20 Fairy Bar + 100 kayu) dan Peti Obsidian (132 slot, 22 Obsidian Bar + 110 kayu), juga lewat upgrade peti di tempat.
-- **Dekorasi farm** (grup "Dekorasi") [terpasang]: Orang-orangan Sawah, Rumah Burung, Lampu Taman (menyala malam), Tumpukan Jerami, Ember Kayu, Tong Kayu, Kotak Surat Hias, Patung Batu, Manusia Salju, Palung Pakan, Api Unggun (animasi + cahaya), Lilin Hias (animasi + cahaya), Tumpukan Tong, Papan Pengumuman. Tambahan versi 3.19: Sumur Hias, Air Mancur, Ayunan, Jungkat-jungkit, Papan Petunjuk, Tikar Piknik (wol), Lampu Kembar (resin, menyala malam), Jemuran, Rumah Anjing (tulang tua), Penunjuk Angin Sapi dan Ayam, Lentera Resin (menyala malam), Pohon Natal, Kotak Pasir, Sapu Lidi Hias. Dipasang dan dikemas seperti pagar; hanya hiasan (orang-orangan belum mengusir gagak, sumur belum mengisi penyiram).
+- **Dekorasi farm** (grup "Dekorasi") [terpasang]: Orang-orangan Sawah, Rumah Burung, Lampu Taman (menyala malam), Tumpukan Jerami, Ember Kayu, Tong Kayu, Kotak Surat Hias, Patung Batu, Manusia Salju, Palung Pakan, Api Unggun (animasi + cahaya), Lilin Hias (animasi + cahaya), Tumpukan Tong, Papan Pengumuman. Tambahan versi 3.19: Sumur Hias, Air Mancur, Ayunan, Jungkat-jungkit, Papan Petunjuk, Tikar Piknik (wol), Lampu Kembar (resin, menyala malam), Jemuran, Rumah Anjing (tulang tua), Penunjuk Angin Sapi dan Ayam, Lentera Resin (menyala malam), Pohon Natal, Kotak Pasir, Sapu Lidi Hias. Dipasang dan dikemas seperti pagar; hanya hiasan (kecuali Orang-orangan Sawah yang menjaga tanaman dari gagak sejak versi 3.54; sumur belum mengisi penyiram).
 - **Mesin baru** (grup "Bangunan") [terpasang]:
   - **Sarang Lebah**: 1 Madu + 1 Lilin Lebah tiap 3 hari, dijeda Musim Dingin. Ini sumber pertama Lilin Lebah.
   - **Penggergajian**: 3 Kayu menjadi 1 Papan Kayu dalam 8 detik (`resources/sawmill/`).
@@ -599,15 +809,18 @@ Semua resep di bawah memakai `CraftingRecipe` di `resources/crafting/catalog.tre
 
 Pemain lain bisa ikut atau keluar di tengah permainan tanpa kembali ke main menu. Keputusan pemilik proyek (2026-10-19): tanpa kabin (langsung ikut, tidur di rumah utama), cara ikut = tekan Start di gamepad yang belum dipakai lalu konfirmasi, karakter yang bisa dimuat hanya karakter co-op save ini, dan pemain boleh keluar di tengah permainan dengan data tersimpan.
 
-- **Bergabung** [terpasang]: saat bermain (sendiri atau sudah co-op), gamepad yang belum dipakai menekan **Start**. Game dijeda sebentar dan menu "P2 bergabung" muncul, hanya dikendalikan gamepad itu (D-pad/stik pilih, A pilih, B batal, X dua kali = hapus karakter). Pilihan: karakter co-op save ini yang sedang tidak dimainkan, **+ Karakter Baru**, atau Batal. Karakter baru membuka layar kustomisasi yang sama dengan Game Baru, tetapi tanpa nama farm dan pet (milik P1); nama bawaan "Pemain N" sehingga bisa langsung lanjut dengan gamepad. Setelah memilih, layar terbagi dan pemain baru muncul di samping P1; semua pemain tetap di area dan posisinya.
+- **Bergabung** [terpasang]: saat bermain (sendiri atau sudah co-op), gamepad yang belum dipakai menekan **Start**. Menu "P2 bergabung" muncul di petak layar tempat pemain baru nanti bermain (kanan saat berdua, kuadran berikutnya saat 3-4 pemain); **game tidak dijeda** (keputusan 2026-10-26), P1 dan pemain lain tetap bermain selama pemain baru memilih, membuat, atau memuat karakter. Menu hanya dikendalikan gamepad itu (D-pad/stik pilih, A pilih, B batal, X dua kali = hapus karakter). Pilihan: karakter co-op save ini yang sedang tidak dimainkan, **+ Karakter Baru**, atau Batal. Karakter baru membuka layar kustomisasi yang sama dengan Game Baru, tetapi tanpa nama farm dan pet (milik P1); nama bawaan "Pemain N" sehingga bisa langsung lanjut dengan gamepad. Setelah memilih, pemain baru muncul di samping P1; semua pemain tetap di area dan posisinya. Dari main sendiri layar dibagi dengan fade singkat (area dimuat ulang); saat sudah co-op, layar pemain ke-3/4 ditambahkan langsung tanpa fade dan tanpa memuat ulang area. Bila pemain belum bisa dimunculkan (P1 membuka menu pause/tas saat main sendiri, transisi, ada pemain di gua atau di kasur), panel menampilkan alasannya dan pemain baru otomatis muncul begitu bisa.
+- **Batal bergabung** [terpasang 2026-10-26]: pemain baru menekan B (di menu atau saat menunggu), atau P1 menekan **F2**. Selama ada pemain yang sedang bergabung, F2 tidak menjalankan cheat debug F2 dan gamepad lain belum bisa ikut; pemain tamu juga belum bisa keluar sampai pemain itu selesai atau batal.
 - **Gamepad P1** [terpasang]: gamepad pertama yang dipakai P1 saat main sendiri tetap milik P1 setelah co-op dimulai (keyboard + mouse + gamepad itu), jadi Start-nya tetap membuka tas. Gamepad lain yang menekan Start dianggap pemain baru.
 - **Keluar** [terpasang]: pemain tamu **menahan Start 1,5 detik** lalu memilih "Ya, keluar"; P1 juga bisa memakai tombol **Keluarkan <nama>** di menu pause halaman Permainan. Game disimpan saat pemain keluar. Layar sisa pemain digabung ulang; bila tinggal P1, game kembali ke main sendiri di area dan posisi P1.
-- **Batasan** [terpasang]: bergabung/keluar ditolak (dengan Notify) saat ada pemain di gua, saat pemain sedang pindah area atau berbaring di kasur, saat transisi berjalan, dan (main sendiri) saat menu pause terbuka. Maksimal 4 pemain bersamaan.
+- **Batasan** [terpasang]: keluar ditolak (dengan Notify) saat ada pemain di gua, saat pemain sedang pindah area atau berbaring di kasur, dan saat transisi berjalan; untuk bergabung, kondisi yang sama hanya menunda munculnya pemain (menu tetap bisa dipakai). Maksimal 4 pemain bersamaan.
+- **Input selama bergabung** [terpasang 2026-10-26]: tombol dan stik gamepad pemain baru hanya masuk ke panelnya, tidak ke game atau menu pemain lain. Saat main sendiri, aksi P1 dibatasi sementara ke keyboard + mouse + gamepad P1, lalu kembali menerima semua gamepad setelah batal.
 - **Daftar karakter co-op** [terpasang]: tiap save menyimpan semua karakter co-op yang pernah ikut (maks. 8), termasuk yang sedang tidak bermain, seperti farmhand Stardew. Tas, stamina, HP, equipment, resep, persahabatan, ulang tahun, dan penampilan per karakter; uang tetap bersama. Game yang dimuat selalu mulai sendiri; pemain lain bergabung lagi dan memilih karakternya.
 - **Lobby main menu** [terpasang]: tombol Co-op Lokal tetap ada; setelah lobby, tiap pemain tamu memilih karakter dengan menu yang sama. Bila semua tamu batal, game dimulai sendiri.
 - **Save v21** [terpasang]: `coop_players` kini daftar semua karakter co-op dengan key `id` per karakter. Save v6-v20: P2-P4 lama menjadi karakter co-op pertama di daftar dengan id baru.
-- **Catatan** [terpasang]: saat layar dibangun ulang (bergabung/keluar), area dimuat ulang seperti saat pindah pintu, jadi barang yang dijatuhkan di tanah dan musuh di area itu ikut direset; isi ladang, bangunan, dan tas tidak berubah. Uji tanpa gamepad di editor: F2 menambah/mengeluarkan pemain numpad (numpad 8456 jalan, 0 alat, 1 interaksi; tahan * untuk keluar).
-- Kode: `autoload/coop.gd` (request_join, leave, current_plan), `scripts/system/coop_drop_in.gd`, `scripts/ui/coop_join_menu.gd`, `CoopRoot.spawn_plan`, `GameState.coop_roster`. Tes: `res://tests/coop_drop_in_regression.tscn`.
+- **Catatan** [terpasang]: saat layar dibangun ulang (bergabung/keluar), area dimuat ulang seperti saat pindah pintu, jadi barang yang dijatuhkan di tanah dan musuh di area itu ikut direset; isi ladang, bangunan, dan tas tidak berubah. Uji tanpa gamepad di editor: F2 menambah/mengeluarkan pemain numpad (numpad 8456 jalan, 0 alat, 1 interaksi; tahan * untuk keluar); saat pemain numpad masih memilih karakter, F2 membatalkannya.
+- **Ukuran UI per pemain** [terpasang 2026-10-29]: HUD, hotbar, dan tas di layar co-op tampil seukuran main sendiri (100%). Tiap pemain bisa mengatur **Skala UI** 75/100/125/150% di tas > Setelan > Layar; besar dunia tidak berubah. P1 tetap melihat semua setelan bersama; P2-P4 hanya melihat skala UI miliknya (gamepad: A mengganti pilihan). Disimpan per kursi (P1-P4) di `user://input_bindings.cfg`, bukan di save. Kode: `CoopRoot.set_ui_scale`, `scripts/ui/inventory_settings.gd`. Tes: `res://tests/coop_ui_regression.tscn`.
+- Kode: `autoload/coop.gd` (request_join, try_join, cancel_join, leave, current_plan), `scripts/system/coop_drop_in.gd`, `scripts/ui/coop_join_pane.gd` (panel SubViewport tanpa jeda), `scripts/ui/coop_join_menu.gd`, `CoopRoot.add_player`, `PlayerInput.set_solo_pad`, `CoopRoot.spawn_plan`, `GameState.coop_roster`. Tes: `res://tests/coop_drop_in_regression.tscn`.
 
 ---
 
@@ -1555,11 +1768,32 @@ Dengan disahkannya keputusan utama di atas, butir keputusan teknis turunan yang 
 7. **Tanggal Pasti Kalender Hari Raya**: Menetapkan tanggal kalender (1–28) per musim untuk Hari Raya Idul Fitri, Natal (25 Dingin), dan Malam Tahun Baru (28 Dingin).
 8. **Formula Numerik Fluktuasi Pasar**: Menentukan batas ambang kuantitas penjualan harian (misal: threshold > 50 item) sebelum harga pasar mengalami penurunan 10%.
 9. **Kendaraan lanjutan**: harga sepeda/resep sapu, fungsi bak muatan Mobil Bak, dan syarat membuka `modern_city` (bagian 10).
+10. **Progres Horor (4.1)**: angka syarat Tingkat Gaib (kini usulan di `resources/horror/profiles/`). Sudah diputuskan: Catatan Gaib lengkap memberi hadiah langsung (tanpa Balai Nadi), kesulitan per save, aksesibilitas global, Malam Jumat Kliwon versi sederhana (hari ke-25 tiap musim), tiga Penunggu Area.
 
 ---
 
 ## 19. Changelog
 
+- **2026-10-29 (Versi 3.59)**: Karakter menapak tanah (permintaan pemilik, seperti Stardew): titik badan pemain kini di kaki (sprite ber-offset 10 px ke atas seperti NPC, `Player.FEET_OFFSET` = nol), jadi collision dan urutan gambar mengikuti kaki, bukan pinggang. Hewan ternak 32 px juga kakinya tepat di titik badan. Bayangan oval di kaki pemain, NPC, peliharaan, satwa liar, hewan ternak, dan kuda; saat lompat/kendaraan melayang bayangan tetap di tanah dan mengecil, saat duduk disembunyikan, saat menunggang kuda melebar. Kode: `scripts/effects/ground_shadow.gd`. Tes: `res://tests/character_grounding_regression.tscn`. Tanpa perubahan save.
+- **2026-10-29 (Versi 3.58)**: Collision hewan (permintaan pemilik): peliharaan kini badan fisik (`CharacterBody2D`) yang terhalang bangunan, pagar, pohon, dan objek seperti pemain, dan titik mainnya digeser bila tertutup objek. Serangga darat tidak lagi merayap/kabur menembus objek; serangga terbang dan burung yang kabur tetap melintas di atas. Hewan ternak bergerak mode top-down (`FLOATING`), mencari tujuan baru saat menabrak, dan titik rumahnya digeser bila tertutup objek. Pemain tetap bisa berjalan menembus hewan. Kode: `scripts/world/animal_physics.gd`. Tes: `res://tests/animal_collision_regression.tscn`. Tanpa perubahan save.
+- **2026-10-29 (Versi 3.57)**: UI co-op seukuran main sendiri (bagian 4.14, permintaan pemilik): HUD, hotbar, dan tas tidak lagi digambar 2x lalu diperkecil setengah. Skala UI per pemain (75/100/125/150%) di Setelan > Layar; P2-P4 kini bisa membuka Setelan yang hanya berisi skala UI miliknya (gamepad: A mengganti). Disimpan per kursi di `user://`, tanpa perubahan save.
+- **2026-10-29 (Versi 3.56)**: NPC baru **Mbah Darmi** (sesepuh desa, alun-alun Kota): perkenalan lalu 8 cerita hantu dan penangkalnya yang terbuka per hati, resep Wedang Kantil di 4 hati, pesan Tingkat Gaib/Kliwon atas namanya. Sprite recolor + potret 3 ekspresi baru. Tanpa perubahan save.
+- **2026-10-29 (Versi 3.55)**: Aset fiber: ikon Fiber dipoles di Aseprite (warna serat kering hijau-jerami, tali dua nada dengan simpul, celah outline ditutup; `assets/farm_rpg/icons/Forage/fiber.aseprite`). Gambar baru `fiber_drops` (3 variasi: tegak, tergeletak kanan/kiri) dipakai acak untuk fiber yang jatuh dari rumput liar (`ItemPickup.WORLD_VARIANTS`); ikon tas tetap ikon item. Tanpa perubahan save.
+- **2026-10-29 (Versi 3.54)**: Satwa jinak bisa meninggalkan hadiah (Bulu Kelinci baru 80 G, jamur, cangkang, kuarsa). Gagak memakan 1 tanaman ladang tak terjaga (≥ 12 tanaman, 30%, tidak saat hujan); Orang-orangan Sawah menjaga radius 8 petak. Tanpa perubahan save.
+- **2026-10-29 (Versi 3.53)**: Satwa liar bisa diberi makan makanan kesukaannya (memancing mendekat, lalu jinak; +EXP Peramu untuk jenis pertama). Gagak mampir ke Ladang dan Hutan, terbang menjauh saat didekati. Catatan Satwa kini 9 jenis dan mencatat jumlah pemberian makan.
+- **2026-10-29 (Versi 3.52)**: Catatan Satwa (bagian 4.10.13): amati satwa liar dari dekat tanpa membuatnya kabur untuk mencatatnya; jenis baru memberi EXP Peramu, catatan lengkap memberi bonus. Halaman Satwa di buku Pengaturan. Kunci save opsional `wildlife`, tanpa naik versi save.
+- **2026-10-29 (Versi 3.51)**: Satwa liar hutan (bagian 4.10.13): rusa, kelinci, rubah merah/putih, kura-kura, dan katak berkeliaran di Hutan, Hutan Dalam, dan Gunung sesuai musim/jam; kabur saat didekati (2× jarak bila pemain berlari), kura-kura bersembunyi di cangkang. Hanya suasana, tanpa perubahan save.
+- **2026-10-28 (Versi 3.50)**: Babi (truffle, 3 hari, diambil tangan) dan Burung Unta (telur 3 hari, bisa ditetaskan) ditambahkan; harga Telur Burung Unta 300/600 G. Peliharaan kucing/anjing muncul di ladang (siang) dan rumah (malam), dielus sekali sehari. Semua sprite ternak dari sheet asli `animals/Farm`/`Forest` termasuk sheet anak; animasi jalan dan arah hadap diperbaiki. Aset `assets/ranch` digambar ulang di Aseprite. Tanpa naik versi save (bagian 4.10.12).
+- **2026-10-28 (Versi 3.49)**: Catatan Gaib lengkap (9/9) memberi Mustika Pemberani sekali per save, tanpa paket Balai Nadi (keputusan pemilik). Cache suara horor dilepas saat keluar. Tanpa naik versi save.
+- **2026-10-28 (Versi 3.48)**: Progres Horor Tahap 6 terpasang (bagian 4.1, keputusan pemilik: Kliwon versi sederhana, tiga Penunggu): Malam Jumat Kliwon hari ke-25 tiap musim, ketukan pintu di rumah, ritual Penunggu di altar Hutan Dalam/Gunung/Gua dengan hadiah Kayu/Batu/Kristal Keramat (kini bahan Keris Pusaka dan Tugu Pagar Gaib), Catatan Gaib 9 entri. Catatan Gaib di Balai Nadi ditunda. Tanpa naik versi save.
+- **2026-10-28 (Versi 3.47)**: Progres Horor Tahap 5 terpasang (bagian 4.1): dua makhluk sekaligus mulai tingkat 3, Sundel Bolong (bergerak saat ditatap), Leak/Kuyang (hanya diusir cahaya kuat), Keris Pusaka (tatapan pengusir), Tugu Pagar Gaib (farm aman dari makhluk dan Tuyul), dan Nyali pada perk Combat Lv6. Tanpa perubahan save.
+- **2026-10-28 (Versi 3.46)**: Progres Horor Tahap 4 terpasang (bagian 4.1): Tuyul mencuri sekali per malam dari Shipping Bin atau uang (5%, maks 500 G pada Normal, dikali Kesulitan Gaib), Sesajen Penangkal Tuyul, jejak kaki di dekat Shipping Bin, dan laporan pagi. Tanpa naik versi save.
+- **2026-10-28 (Versi 3.45)**: Progres Horor Tahap 3 terpasang (bagian 4.1): material malam dari selamat menghadapi makhluk (Bunga Kantil, Embun Kubur, Bulu Genderuwo, Bara Banaspati), Kemenyan (zona aman portabel), Jimat Penolak (aksesori), efek makanan Tenang/Berani dan resep Wedang Kantil, serta Catatan Gaib dasar di Pengaturan > Horor. Catatan Gaib tersimpan di `horror.journal` tanpa naik versi save.
+- **2026-10-28 (Versi 3.44)**: Progres Horor Tahap 2 terpasang (bagian 4.1): aturan gerak `NightStalker.rule`, Genderuwo (buta terhadap pemain diam) dan Banaspati (tertarik ke cahaya) dengan sprite sementara, serta dampak rasa takut tingkat 2+ (stamina +10%, lari -15%, pandangan berkunang). Tanpa perubahan save.
+- **2026-10-28 (Versi 3.43)**: Progres Horor Tahap 1 terpasang (bagian 4.1): Tingkat Gaib 1–4 dari progres (`HorrorManager`, `HorrorProfile`), filter kejadian per tingkat, Kesulitan Gaib per save (Hanya Suasana/Tenang/Normal/Mencekam/Mimpi Buruk; save v27), opsi jumpscare dan efek layar global, pilihan di layar buat karakter dan Pengaturan > Horor, perintah debug, dan tes `horror_progression_regression`. Pemilik menerima semua saran rancangan, termasuk penyimpanan kesulitan per save.
+- **2026-10-28 (Versi 3.42)**: Rancangan Progres Horor & Kesulitan Gaib (bagian 4.1, [usulan]): Tingkat Gaib 1–4 dari progres pemain, hantu baru per fase (Banaspati, Genderuwo, Tuyul, Sundel Bolong, Leak/Kuyang, Penunggu Area), tingkatan penangkal, Kesulitan Gaib (Tenang/Normal/Mencekam/Mimpi Buruk) + mode Hanya Suasana, rancangan teknis `HorrorProfile`, dan 6 tahap pengerjaan. Belum ada perubahan kode atau save.
+- **2026-10-26 (Versi 3.41)**: Co-op drop-in tanpa jeda (bagian 4.14, permintaan pemilik): saat pemain lain bergabung, menu pilih/buat karakter tampil di petak layarnya sendiri dan P1 tetap bermain; input gamepad pemain baru tidak mengenai P1. Pemain ke-3/4 muncul langsung tanpa membangun ulang layar. Bila belum bisa dimunculkan (menu P1, transisi, gua, kasur) pemain menunggu otomatis. F2 membatalkan pemain yang sedang bergabung. Tanpa perubahan save.
+- **2026-10-26 (Versi 3.40)**: Menu Balai Nadi diganti gaya AssistiveTouch dengan kaca cair (bagian 4.9.1): tombol inti di tengah, lingkaran sayap, lingkaran paket, kartu kaca; teks minimal, gerak melayang dan condong ke arah stik. Tanpa perubahan save (tetap v26).
 - **2026-10-26 (Versi 3.39)**: Sisa audit ekonomi: bijih bertingkat (¼ batangan), harga jual equipment rakitan dibatasi 1,2× bahan (39 item), lantai gua 11–20 memakai Myconid Muda (ATK 20, HP 32; damage ke armor Copper 8, sebelumnya 14), dan perk Merchant aktif — Lv7 Stok Langka (bibit maple/birch/mahoni di Toko Umum), Lv10A Guild Magnate (geoda dan geoda omni tiap akhir pekan), Lv10B Capitalist Investor (katalog Dealer Kendaraan dan pembelian skuter/mobil bak sebelum Kota Modern). Katalog perk memakai `ShopData.perk_catalogs`/`perk_stat`/`weekend_only` dan `SkillSystem.shop_stock`. Isi stok perk adalah usulan dan dapat diganti pemilik.
 - **2026-10-26 (Versi 3.38)**: Oil Maker menghasilkan minyak per bahan (2× harga bahan; bawang putih dikeluarkan sesuai daftar 4.11). Fish Smoker memakai 1 kayu per ikan dan selesai esok hari. Hasil Oil Maker lama (`oil`, `garlic_oil`) di mesin tetap bisa diambil setelah load.
 - **2026-10-26 (Versi 3.37)**: Balancing artisan dan progres (keputusan pemilik atas audit E2–E5): hasil Keg/Fish Smoker per bahan dengan harga relatif bahan, Keg 2–4 hari permainan, pohon buah berbuah tiap 3 hari dengan bibit ±12× buah, harga batangan logam progresif sesuai 4.6. Petak menyimpan penanda `regrow` (opsional, tanpa naik versi save); job Keg tersimpan sebagai hari, job Keg detik dari save lama selesai pada pergantian hari berikutnya.

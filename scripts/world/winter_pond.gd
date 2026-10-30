@@ -3,13 +3,18 @@ extends Node2D
 
 ## Kolam pancing yang tidak membeku di Musim Dingin (GDD 5): kolam air panas Gunung
 ## dan danau bawah tanah Gua Tambang. Dibangun dari kode: tepi kolam memakai ubin animasi
-## "Water Ground animations tiles.png", isi kolam memakai warna Water tile.png,
-## lalu FishingSpot (freezes_in_winter = false) dan tabrakan supaya pemain tidak masuk air.
+## "Water Ground animations tiles.png", isi kolam memakai Water tile.png dengan shader air
+## yang sama seperti Town, lalu FishingSpot (freezes_in_winter = false) dan tabrakan supaya
+## pemain tidak masuk air.
 ## Berjalan juga di editor (@tool) supaya kolam terlihat dan ikut berubah saat properti diubah.
 ## Bagian buatan kode tidak tersimpan ke .tscn; node anak yang ditambah sendiri tidak dihapus.
 
 const RIM_TEXTURE := preload("res://assets/farm_rpg/tileset/ext/Water Ground animations tiles.png")
-const WATER_COLOR := Color8(0, 146, 221)
+const WATER_TEXTURE := preload("res://assets/farm_rpg/tileset/ext/Water tile.png")
+const WATER_MATERIAL := preload("res://resources/water_detail_material.tres")
+## Batu di dalam air (4 frame 32x32, ombak kecil di kakinya).
+const ROCK_TEXTURE := preload("res://assets/farm_rpg/objects/exterior/Beach/Stones.png")
+const ROCK_FRAMES := 4
 const TILE := 16
 ## Ubin kolam 3x3 di atlas (kolom 13-15, baris 0-2); 4 frame animasi ke bawah tiap 4 baris.
 const RIM_ORIGIN := Vector2i(13, 0)
@@ -36,6 +41,21 @@ const WATER_INSET := 9.0
 	set(value):
 		tint = value
 		_rebuild_if_ready()
+## Warna air (dikalikan ke Water tile), mis. hijau toska hangat untuk air panas.
+@export var water_tint: Color = Color.WHITE:
+	set(value):
+		water_tint = value
+		_rebuild_if_ready()
+## Warna tepi kolam; redupkan supaya ubin tepi menyatu dengan lantai batu.
+@export var rim_tint: Color = Color.WHITE:
+	set(value):
+		rim_tint = value
+		_rebuild_if_ready()
+## Batu-batu kecil di dalam kolam (sudut dan tepi).
+@export var rocks: bool = false:
+	set(value):
+		rocks = value
+		_rebuild_if_ready()
 
 const GENERATED := &"winter_pond_generated"
 
@@ -55,15 +75,21 @@ func build() -> void:
 	var pixel_size := Vector2(size * TILE)
 	modulate = tint
 	_build_rim(size)
-	var water := ColorRect.new()
+	var water := TextureRect.new()
 	water.name = "Water"
-	water.color = WATER_COLOR
+	water.texture = WATER_TEXTURE
+	water.stretch_mode = TextureRect.STRETCH_TILE
+	water.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	water.material = WATER_MATERIAL
+	water.self_modulate = water_tint
 	water.position = Vector2(WATER_INSET, WATER_INSET)
 	water.size = pixel_size - Vector2(WATER_INSET, WATER_INSET) * 2.0
 	water.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	water.z_index = -8
 	water.z_as_relative = false
 	_add_generated(water)
+	if rocks:
+		_add_rocks(water, pixel_size)
 	_add_body(pixel_size)
 	_add_spot(pixel_size)
 	if steam:
@@ -80,6 +106,7 @@ func _build_rim(size: Vector2i) -> void:
 	rim.name = "Rim"
 	rim.z_index = -9
 	rim.z_as_relative = false
+	rim.self_modulate = rim_tint
 	rim.tile_set = tiles
 	_add_generated(rim)
 	for x in size.x:
@@ -97,6 +124,29 @@ func _build_rim(size: Vector2i) -> void:
 				for frame in RIM_FRAMES:
 					source.set_tile_animation_frame_duration(atlas, frame, RIM_FRAME_TIME)
 			rim.set_cell(Vector2i(x, y), 0, atlas)
+
+## Batu di dalam Water supaya jumlah anak kolam tetap (Rim, Water, Edge, FishingSpot, Steam).
+func _add_rocks(water: Control, pixel_size: Vector2) -> void:
+	var frames := SpriteFrames.new()
+	frames.set_animation_speed(&"default", 3.0)
+	var frame_size := Vector2(ROCK_TEXTURE.get_width() / ROCK_FRAMES, ROCK_TEXTURE.get_height())
+	for i in ROCK_FRAMES:
+		var atlas := AtlasTexture.new()
+		atlas.atlas = ROCK_TEXTURE
+		atlas.region = Rect2(Vector2(i * frame_size.x, 0), frame_size)
+		frames.add_frame(&"default", atlas)
+	# Posisi relatif ke ukuran kolam: dua sudut berseberangan dan satu di tepi kanan.
+	var spots := [Vector2(0.14, 0.22), Vector2(0.86, 0.8), Vector2(0.9, 0.3)]
+	for i in spots.size():
+		var rock := AnimatedSprite2D.new()
+		rock.name = "Rock%d" % i
+		rock.sprite_frames = frames
+		rock.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		rock.position = pixel_size * spots[i] - water.position
+		rock.flip_h = i == 1
+		rock.frame = i
+		rock.play()
+		water.add_child(rock)
 
 ## Pemain berhenti di bibir kolam.
 func _add_body(pixel_size: Vector2) -> void:
@@ -140,11 +190,11 @@ func _add_steam(pixel_size: Vector2) -> void:
 	particles.initial_velocity_min = 4.0
 	particles.initial_velocity_max = 9.0
 	particles.scale_amount_min = 1.0
-	particles.scale_amount_max = 2.5
+	particles.scale_amount_max = 3.0
 	var fade := Gradient.new()
 	fade.set_color(0, Color(1, 1, 1, 0.0))
 	fade.set_color(1, Color(1, 1, 1, 0.0))
-	fade.add_point(0.25, Color(1, 1, 1, 0.45))
+	fade.add_point(0.25, Color(1, 1, 1, 0.55))
 	particles.color_ramp = fade
 	_add_generated(particles)
 

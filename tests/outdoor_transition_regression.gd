@@ -84,9 +84,9 @@ func _ready() -> void:
 	player = world.get_node("Player/CharacterBody2D")
 	await cross(player, world.get_node("BalaiNadiAccess"))
 	world = get_tree().current_scene
-	check(world.scene_file_path.ends_with("balai_nadi/exterior.tscn"), "town to Balai courtyard automatically travels")
+	check(world.scene_file_path.ends_with("balai_nadi/balai.tscn"), "town to Balai courtyard automatically travels")
 	player = world.get_node("Player/CharacterBody2D")
-	await cross(player, world.get_node("ReturnWorld"))
+	await cross(player, world.get_node("ReturnTown"))
 	check(get_tree().current_scene.scene_file_path.ends_with("town.tscn"), "Balai courtyard to town automatically travels")
 	get_tree().current_scene.queue_free()
 	get_tree().current_scene = null

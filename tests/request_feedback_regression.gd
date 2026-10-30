@@ -51,10 +51,10 @@ func _ready() -> void:
 	var town := preload("res://scenes/world/town.tscn").instantiate()
 	add_child(town)
 	await get_tree().process_frame
-	check(town.has_node("BalaiNadiAccess") and town.get_node("BalaiNadiAccess").target_scene.ends_with("balai_nadi/exterior.tscn"), "town provides access to the dedicated Balai Nadi courtyard")
-	var hall := preload("res://scenes/world/balai_nadi/exterior.tscn").instantiate()
+	check(town.has_node("BalaiNadiAccess") and ResourceUID.ensure_path(town.get_node("BalaiNadiAccess").target_scene).ends_with("balai_nadi/balai.tscn"), "town provides access to the dedicated Balai Nadi courtyard")
+	var hall := preload("res://scenes/world/balai_nadi/balai.tscn").instantiate()
 	add_child(hall)
-	check(hall.get_node("ReturnWorld").target_scene.ends_with("town.tscn"), "Balai Nadi returns to town instead of farm")
+	check(hall.get_node("ReturnTown").target_scene.ends_with("town.tscn"), "Balai Nadi returns to town instead of farm")
 	await get_tree().create_timer(1.0, true).timeout
 	FarmManager.clear_references()
 	town.queue_free()

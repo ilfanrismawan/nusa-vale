@@ -63,6 +63,11 @@ func _ready() -> void:
 		return
 	await get_tree().process_frame
 	GameState.new_game()
+	await check_ready_bubble_scene()
+	if "--ready-bubble-only" in OS.get_cmdline_user_args():
+		print("READY BUBBLE SCENE COMPLETE: failures=%d" % failures)
+		get_tree().quit(1 if failures else 0)
+		return
 	FarmManager.farm_data.clear()
 	farm = load("res://scenes/world/farm.tscn").instantiate()
 	get_tree().root.add_child(farm)
@@ -78,6 +83,11 @@ func _ready() -> void:
 		get_tree().quit(1)
 		return
 	DayCycle.is_running = false
+	await check_ready_sound_distance()
+	if "--ready-sfx-only" in OS.get_cmdline_user_args():
+		print("READY SFX DISTANCE COMPLETE: failures=%d" % failures)
+		get_tree().quit(1 if failures else 0)
+		return
 	player.data.bag_level = 1
 	var ground := player.base_layer_ground
 	var placed := false
@@ -110,7 +120,7 @@ func _ready() -> void:
 		if result.ok:
 			placed = true
 			cell = candidate
-			placed_uid = StructureManager.records[0].uid
+			placed_uid = StructureManager.records.back().uid
 	check(placed and not player.data.has_item("wooden_chest"), "Placement consumes one crafted object on valid farm ground")
 	if not placed:
 		get_tree().quit(1)
@@ -179,10 +189,11 @@ func _ready() -> void:
 	check(SaveManager.save_game(), "Building positions, chest contents and furnace jobs save")
 	StructureManager.reset()
 	check(SaveManager.load_game() and StructureManager.records.size() == 3, "Structures restore through actual JSON save/load")
-	var loaded_chest := StructureManager.records[0]
-	var loaded_furnace := StructureManager.records[1]
+	var loaded_chest: Dictionary = StructureManager.records.filter(func(r): return r.item == "wooden_chest")[0]
+	var loaded_furnace: Dictionary = StructureManager.records.filter(func(r): return r.item == "furnace")[0]
+	var loaded_gate: Dictionary = StructureManager.records.filter(func(r): return r.item == "wooden_gate")[0]
 	check(StructureManager.storage(loaded_chest).get_item_count("wood") == 7, "Chest contents survive game save/load")
-	check(StructureManager.records[2].open and not loaded_furnace.job.is_empty(), "Gate state and furnace progress survive game save/load")
+	check(loaded_gate.open and not loaded_furnace.job.is_empty(), "Gate state and furnace progress survive game save/load")
 	DayCycle.is_running = true
 	StructureManager._process(recipe.process_time + 1)
 	DayCycle.is_running = false
@@ -338,13 +349,13 @@ func test_item_gestures() -> void:
 			get_viewport().get_texture().get_image().save_png("res://scratch/pickup_held_item.png")
 	await get_tree().create_timer(1.2).timeout
 	check(is_instance_valid(player._pickup_visual) and player.animation_controller.carrying_item and String(player.animation_controller.sprite.animation).begins_with("carry_idle_"), "Collected item stays held overhead while idle after pickup completes")
-	check(is_equal_approx(player._pickup_visual.position.y + float(player._pickup_visual.get_meta("visible_height")) * 0.5, -6.0), "Visible bottom of the held icon rests on raised hands despite texture padding")
+	check(is_equal_approx(player._pickup_visual.position.y + float(player._pickup_visual.get_meta("visible_height")) * 0.5, Player.SPRITE_OFFSET.y - 6.0), "Visible bottom of the held icon rests on raised hands despite texture padding")
 	for action in [&"walk", &"run", &"idle"]:
 		player.animation_controller.play(action)
 		check(String(player.animation_controller.sprite.animation).begins_with("carry_" + String(action) + "_") and is_instance_valid(player._pickup_visual), "Held icon and carrying pose persist during " + String(action))
 	player.data.inventory[1] = {"item": GameState._resolve_item("stone"), "count": 1}
 	player.tool_controller.select_tool(1)
-	check(held_icon_count() == 1 and player._pickup_visual.texture == GameState._resolve_item("stone").icon and player._carried_item_id.is_empty(), "Scrolling after pickup replaces the held item with exactly one preview")
+	check(held_icon_count() == 1 and player._pickup_visual.texture == GameState._resolve_item("stone").icon and player._carried_item_id == "stone", "Scrolling after pickup replaces the held item with exactly one held material")
 	player.data.inventory[2] = {"item": GameState._resolve_item("axe_wood"), "count": 1}
 	await get_tree().create_timer(0.35).timeout
 	player.tool_controller.select_tool(2)
@@ -353,7 +364,11 @@ func test_item_gestures() -> void:
 	await get_tree().create_timer(0.2).timeout
 	check(held_icon_count() == 1 and player._pickup_visual.texture == GameState._resolve_item("stone").icon, "Old preview timers cannot clear a newer preview after scrolling A-B-A")
 	await get_tree().create_timer(0.65).timeout
-	check(held_icon_count() == 0 and not player.animation_controller.carrying_item, "Latest preview expires and restores normal pose")
+	check(held_icon_count() == 1 and player._carried_item_id == "stone", "Selected material stays held overhead while its slot is selected")
+	# Alat hanya tampil sebentar, lalu pose kembali normal.
+	player.tool_controller.select_tool(2)
+	await get_tree().create_timer(1.0).timeout
+	check(held_icon_count() == 0 and not player.animation_controller.carrying_item, "Tool preview expires and restores normal pose")
 	player.tool_controller.select_tool(1)
 	player.tool_controller.select_tool(3)
 	check(held_icon_count() == 0 and not player.animation_controller.carrying_item, "Selecting an empty hotbar slot immediately clears the previous icon")
@@ -372,3 +387,146 @@ func held_icon_count() -> int:
 		if child is Sprite2D and str(child.name).begins_with("HeldPickupItem"):
 			count += 1
 	return count
+
+func check_ready_bubble_scene() -> void:
+	for machine in ["furnace", "keg", "cheese_press"]:
+		var product_id: String = {"furnace": "copper_bar", "keg": "apple_wine", "cheese_press": "cheese"}[machine]
+		var entry := {"uid": -100, "item": machine, "cell": [0, 0], "storage": [], "open": false, "job": {}, "ready": {"id": product_id, "count": 1}}
+		StructureManager.records.append(entry)
+		var structure = load("res://scenes/objects/placed_structure.tscn").instantiate()
+		check(structure.get_node("ReadyBubble/Background").texture.resource_path.ends_with("ui/dialogue box.png"), "%s uses the dialogue bubble asset" % machine)
+		check(structure.get_node("ReadyBubble/ProductIcon").z_index > structure.get_node("ReadyBubble/Background").z_index, "%s layers its product above the bubble" % machine)
+		structure.uid = -100
+		structure.ready_bob_amplitude = 0.0
+		structure.ready_height_factor = 0.0
+		structure.get_node("ReadyBubble").position = Vector2(7, -40)
+		structure.get_node("ReadyBubble").scale = Vector2(1.25, 0.8)
+		structure.get_node("ReadyBubble").rotation = 0.2
+		structure.get_node("ReadyBubble").modulate = Color(0.9, 0.8, 0.7, 0.75)
+		structure.bubble_idle_pulse = 0.0
+		structure.bubble_sway_degrees = 0.0
+		structure.get_node("ReadyBubble/Background").region_rect = Rect2(48, 16, 16, 16)
+		add_child(structure)
+		structure.set_process(false)
+		structure._process(0.0)
+		var bubble: Node2D = structure.get_node("ReadyBubble")
+		var icon: Sprite2D = structure.get_node("ReadyBubble/ProductIcon")
+		check(bubble.visible and bubble.position == Vector2(7, -40), "%s ready bubble respects scene position" % machine)
+		check(structure.get_node("ReadyBubble/Background").region_rect == Rect2(48, 16, 16, 16), "%s preserves the Inspector sprite region" % machine)
+		check(icon.texture == GameState._resolve_item(product_id).icon, "%s displays its ready product icon" % machine)
+		check(icon.get_rect().size == Vector2(16, 16), "%s displays one product frame, not a spritesheet" % machine)
+		check(is_equal_approx(icon.get_rect().size.x * icon.scale.x, structure.ready_icon_size), "%s respects Inspector icon size" % machine)
+		if machine == "keg":
+			structure.product_frame = Vector2i(1, 0)
+			structure._process(0.0)
+			check(icon.region_enabled and icon.region_rect.position == Vector2(16, 0), "keg product frame can be selected in Inspector")
+		structure.ready_height_factor = 0.4
+		structure._process(0.0)
+		var displayed_height: float = structure.get_node("Sprite").get_rect().size.y
+		check(bubble.position.is_equal_approx(Vector2(7, -40 - displayed_height * 0.4)), "%s bubble follows the visible frame height" % machine)
+		structure.ready_height_factor = 0.0
+		var base_scale := Vector2(1.25, 0.8)
+		check(bubble.scale.is_equal_approx(base_scale * structure.bubble_pop_start_scale), "%s starts with a small pop-in" % machine)
+		structure._process(structure.bubble_pop_seconds)
+		check(bubble.scale.is_equal_approx(base_scale) and is_equal_approx(bubble.rotation, 0.2), "%s settles to its authored scale and rotation" % machine)
+		structure.refresh()
+		structure._process(0.0)
+		check(bubble.scale.is_equal_approx(base_scale), "%s refresh does not restart the ready pop" % machine)
+		var exit_origin := bubble.position
+		entry.ready = {}
+		structure._process(structure.bubble_collect_seconds * 0.5)
+		check(bubble.visible and bubble.modulate.a < 0.75 and bubble.position.y < exit_origin.y, "%s collected bubble rises and fades" % machine)
+		entry.ready = {"id": product_id, "count": 1}
+		structure._process(0.0)
+		check(bubble.visible and is_equal_approx(bubble.modulate.a, 0.75), "%s new output interrupts exit without leaving a faded icon" % machine)
+		structure._process(structure.bubble_pop_seconds)
+		entry.ready = {}
+		structure._process(structure.bubble_collect_seconds + 0.01)
+		check(not bubble.visible and bubble.scale.is_equal_approx(base_scale), "%s hides and restores transform after collection" % machine)
+		entry.ready = {"id": product_id, "count": 1}
+		structure.bubble_juice_enabled = false
+		structure._process(0.0)
+		check(bubble.visible and bubble.scale.is_equal_approx(base_scale), "%s juice can be disabled in Inspector" % machine)
+		structure.bubble_juice_enabled = true
+		structure.use_product_icon = false
+		icon.texture = GameState._resolve_item("wood").icon
+		structure._process(0.0)
+		check(icon.texture == GameState._resolve_item("wood").icon, "%s supports a custom icon" % machine)
+		structure.ready_bubble_enabled = false
+		structure._process(0.0)
+		check(not bubble.visible, "%s ready bubble can be disabled in Inspector" % machine)
+		structure.ready_bubble_enabled = true
+		entry.ready = {}
+		structure._process(0.0)
+		check(not bubble.visible, "%s hides its bubble once output is collected" % machine)
+		StructureManager.records.erase(entry)
+		structure.queue_free()
+	await get_tree().process_frame
+
+func check_ready_sound_distance() -> void:
+	var feet := player.global_position + Player.FEET_OFFSET
+	for machine in ["furnace", "keg", "cheese_press"]:
+		var entry := _record(machine, Vector2i.ZERO)
+		var structure = load("res://scenes/objects/placed_structure.tscn").instantiate()
+		structure.uid = entry.uid
+		farm.add_child(structure)
+		structure.set_process(false)
+		var sound = structure.get_node("ReadySound")
+		structure.global_position = feet + Vector2(sound.max_distance + 200, 0)
+		var wrapper := Node2D.new()
+		wrapper.add_to_group("player")
+		farm.add_child(wrapper)
+		wrapper.global_position = structure.global_position
+		entry.ready = {"id": "copper_bar", "count": 1}
+		structure._process(0.0)
+		check(not sound.playing, "%s stays silent when only a player wrapper is nearby" % machine)
+		structure.global_position = feet + Vector2(20, 0)
+		structure._process(0.0)
+		check(not sound.playing, "%s does not replay a missed sound when a player approaches" % machine)
+		entry.ready = {}
+		structure._process(0.0)
+		entry.ready = {"id": "copper_bar", "count": 1}
+		structure._process(0.0)
+		check(sound.playing, "%s new output plays its ready sound with a player nearby" % machine)
+		sound.stop()
+		structure._process(0.0)
+		structure.refresh()
+		structure._process(0.0)
+		check(not sound.playing, "%s ready sound only plays once across process and refresh" % machine)
+		sound.max_distance = 10.0
+		entry.ready = {}
+		structure._process(0.0)
+		entry.ready = {"id": "copper_bar", "count": 1}
+		structure._process(0.0)
+		check(not sound.playing, "%s respects the Inspector hearing radius" % machine)
+		sound.max_distance = 160.0
+		entry.ready = {}
+		structure._process(0.0)
+		entry.ready = {"id": "copper_bar", "count": 1}
+		structure._process(0.0)
+		check(sound.playing, "%s can play once again for the next production cycle" % machine)
+		sound.stop()
+		sound.enabled = false
+		entry.ready = {}
+		structure._process(0.0)
+		entry.ready = {"id": "copper_bar", "count": 1}
+		structure._process(0.0)
+		check(not sound.playing, "%s ready sound can be disabled in Inspector" % machine)
+		sound.enabled = true
+		entry.ready = {}
+		structure._process(0.0)
+		var other_view := SubViewport.new()
+		other_view.world_2d = World2D.new()
+		other_view.size = Vector2i(64, 64)
+		farm.add_child(other_view)
+		var other_world := Node2D.new()
+		other_view.add_child(other_world)
+		structure.reparent(other_world)
+		structure.global_position = feet + Vector2(20, 0)
+		entry.ready = {"id": "copper_bar", "count": 1}
+		structure._process(0.0)
+		check(not sound.playing, "%s ignores players in another co-op World2D" % machine)
+		StructureManager.records.erase(entry)
+		wrapper.queue_free()
+		other_view.queue_free()
+	await get_tree().process_frame

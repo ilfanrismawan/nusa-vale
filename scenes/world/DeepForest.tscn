@@ -1,5 +1,6 @@
 [gd_scene format=4]
 
+[ext_resource type="PackedScene" path="res://scenes/world/wildlife_spawner.tscn" id="WildlifeSpawnerScene"]
 [ext_resource type="Script" path="res://scripts/world/deep_forest.gd" id="1_kdet6"]
 [ext_resource type="Material" path="res://resources/grass_detail_material.tres" id="2_4dk2x"]
 [ext_resource type="Texture2D" path="res://assets/farm_rpg/tileset/ext/Tileset Grass Deep Forest.png" id="3_nwxwl"]
@@ -27,6 +28,8 @@
 [ext_resource type="Script" path="res://scripts/world/dig_spot_spawner.gd" id="25_n8071"]
 [ext_resource type="Script" path="res://scripts/world/deep_forest_ore_spawner.gd" id="26_ex8bj"]
 [ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="27_axkua"]
+[ext_resource type="Script" path="res://scripts/horror/ritual_altar.gd" id="altar_script"]
+[ext_resource type="PackedScene" path="res://scenes/horror/penunggu_hutan.tscn" id="altar_penunggu"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_p2fon"]
 texture = ExtResource("3_nwxwl")
@@ -15765,12 +15768,16 @@ returning = true
 shape = SubResource("RectangleShape2D_f0fd6")
 
 [node name="Label" type="Label" parent="ReturnToForest" unique_id=192636498]
+z_index = 10
 offset_left = -115.0
-offset_top = -50.0
-offset_right = -115.0
-offset_bottom = -50.0
+offset_top = 14.0
+offset_right = 115.0
+offset_bottom = 28.0
+theme_override_colors/font_outline_color = Color(0.14902, 0.207843, 0.160784, 1)
+theme_override_constants/outline_size = 3
 theme_override_font_sizes/font_size = 10
-text = "↑ Kembali ke Forest [E]"
+text = "Kembali ke Forest [E]"
+horizontal_alignment = 1
 
 [node name="ForageSpawner" type="Node2D" parent="." unique_id=1795012677]
 script = ExtResource("22_4k1it")
@@ -15805,3 +15812,21 @@ max_active = 20
 
 [node name="Player" parent="." unique_id=374434540 instance=ExtResource("27_axkua")]
 position = Vector2(800, 160)
+
+[node name="AltarPenunggu" type="Area2D" parent="YSortEntities"]
+position = Vector2(850, 200)
+script = ExtResource("altar_script")
+area_id = "hutan"
+penunggu_scene = ExtResource("altar_penunggu")
+ghost_id = &"penunggu_hutan"
+display_name = "Penunggu Hutan Dalam"
+offerings = {
+"bunga_kantil": 2,
+"kemenyan": 3
+}
+reward_item = "kayu_keramat"
+
+[node name="WildlifeSpawner" parent="." instance=ExtResource("WildlifeSpawnerScene")]
+location_id = "deep_forest"
+max_animals = 4
+entities_path = NodePath("YSortEntities")

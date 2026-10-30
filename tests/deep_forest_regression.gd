@@ -12,6 +12,8 @@ func _ready() -> void:
 		return
 	await get_tree().process_frame
 	GameState.new_game()
+	# Tas awal (12 slot, 10 terisi alat) tidak muat 150 kayu + 75 batu sekaligus.
+	GameState.current.bag_level = 2
 	GameState.money = 5000
 	GameState.add_item("wood", 150)
 	GameState.add_item("stone", 75)
