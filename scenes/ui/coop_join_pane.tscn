@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3]
+[ext_resource type="Script" path="res://scripts/ui/coop_join_pane.gd" id="script"]
+[ext_resource type="Script" path="res://scripts/ui/coop_join_input_container.gd" id="container"]
+[ext_resource type="PackedScene" path="res://scenes/ui/coop_backdrop.tscn" id="backdrop"]
+[ext_resource type="PackedScene" path="res://scenes/ui/coop_wait_panel.tscn" id="wait"]
+
+[node name="CoopJoinPane" type="CanvasLayer"]
+process_mode = 3
+layer = 40
+script = ExtResource("script")
+
+[node name="Backdrop" parent="." instance=ExtResource("backdrop")]
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 641.0
+offset_right = 1280.0
+offset_bottom = 720.0
+
+[node name="JoinPane" type="SubViewportContainer" parent="."]
+offset_left = 641.0
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+texture_filter = 1
+stretch = true
+script = ExtResource("container")
+
+[node name="Screen" type="SubViewport" parent="JoinPane"]
+transparent_bg = true
+handle_input_locally = true
+size = Vector2i(639, 720)
+render_target_update_mode = 4
+
+[node name="WaitLayer" type="CanvasLayer" parent="JoinPane/Screen"]
+layer = 40
+
+[node name="WaitPanel" parent="JoinPane/Screen/WaitLayer" instance=ExtResource("wait")]
+visible = false

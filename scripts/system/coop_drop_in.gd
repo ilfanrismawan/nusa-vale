@@ -2,11 +2,13 @@ extends Node
 
 ## Pendengar drop-in co-op (dibuat autoload Coop, anak terakhir root supaya menerima _input
 ## sebelum scene). GDD 4.14:
-## - Gamepad yang belum dipakai menekan Start saat bermain -> Coop.request_join (menu pilih karakter).
+## - Gamepad yang belum dipakai menekan Start saat bermain -> Coop.request_join (panel pilih
+##   karakter; game tidak dijeda). Event perangkat pemain itu hanya diteruskan ke panelnya.
+## - F2 membatalkan pemain yang sedang bergabung.
 ## - Main sendiri: gamepad pertama yang dipakai P1 (tombol selain Start, atau Start bila P1 belum
 ##   menyentuh keyboard/mouse) menjadi milik P1, jadi Start-nya tetap membuka tas.
 ## - Pemain tamu menahan Start HOLD_LEAVE detik -> konfirmasi keluar dari co-op.
-## - Debug/editor: F2 menambah atau mengeluarkan pemain uji numpad.
+## - Debug/editor: F2 (tanpa pemain yang sedang bergabung) menambah atau mengeluarkan pemain uji numpad.
 
 const HOLD_LEAVE := 1.5
 
@@ -34,20 +36,27 @@ func _to_front() -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if Coop.forward_join_event(event):
+		get_viewport().set_input_as_handled()
+		return
 	if (event is InputEventKey or event is InputEventMouseButton) and event.is_pressed():
 		_seen_keyboard = true
-		if event is InputEventKey and not event.echo and event.physical_keycode == KEY_F2 and OS.is_debug_build():
-			_toggle_numpad_guest()
+		if event is InputEventKey and not event.echo and event.physical_keycode == KEY_F2:
+			if Coop.has_pending_join():
+				get_viewport().set_input_as_handled()
+				Coop.cancel_join()
+			elif OS.is_debug_build():
+				_toggle_numpad_guest()
 		return
 	if not (event is InputEventJoypadButton) or not event.pressed:
 		return
 	var device: int = event.device
-	if Coop.is_switching() or Coop.device_in_use(device):
+	if (Coop.is_switching() and not Coop.has_pending_join()) or Coop.device_in_use(device):
 		return
 	var start: bool = event.button_index == JOY_BUTTON_START
 	if not Coop.has_root() and Coop.p1_pad < 0 and (not start or not _seen_keyboard):
 		# Gamepad ini yang dipakai P1 main sendiri.
-		Coop.p1_pad = device
+		Coop.claim_p1_pad(device)
 		return
 	if start and Coop.in_game():
 		get_viewport().set_input_as_handled()
@@ -92,7 +101,7 @@ func _ask_leave(index: int) -> void:
 	var bag := view.get_node_or_null("UIInventory") if view != null else null
 	if bag != null and bag.visible and bag.has_method("toggle"):
 		bag.toggle()
-	var menu = Coop.JOIN_MENU.new()
+	var menu = Coop.JOIN_MENU.instantiate()
 	menu.leave_mode = true
 	menu.device = Coop.devices[index]
 	menu.player_number = index + 1

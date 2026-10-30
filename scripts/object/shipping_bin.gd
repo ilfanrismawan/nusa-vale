@@ -5,7 +5,7 @@ extends Area2D
 ## A di gamepad) untuk membuka tas dalam mode jual. Bisa juga lewat Player._try_interact.
 
 const PROMPT_FONT := preload("res://assets/fonts/m5x7.ttf")
-const FEET_OFFSET := Vector2(0, 8)
+const FEET_OFFSET := Player.FEET_OFFSET
 ## Pemain yang berdiri sedekat ini dianggap menghadap kotak dari arah mana pun.
 const CLOSE_DISTANCE := 10.0
 ## Batas dot(arah hadap, arah ke kotak) agar dianggap menghadap.
@@ -31,6 +31,8 @@ var _lid_tween: Tween
 
 func _ready() -> void:
 	add_to_group("shipping_bin")
+	# Jejak Tuyul semalam (GDD 4.1, Progres Horor Tahap 4).
+	_attach_tuyul_tracks.call_deferred()
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 	_quiet_until_ms = Time.get_ticks_msec() + QUIET_AFTER_READY_MS
@@ -137,7 +139,7 @@ func deposit_selected(player: Player) -> bool:
 		flying.scale = Vector2.ONE * 0.65
 		flying.z_index = 30
 		add_child(flying)
-		flying.global_position = player.global_position + Vector2(0, -16)
+		flying.global_position = player.global_position + Player.SPRITE_OFFSET + Vector2(0, -16)
 		var tween := create_tween()
 		tween.tween_property(flying, "global_position", global_position + Vector2(0, -12), 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		tween.tween_property(flying, "scale", Vector2.ZERO, 0.12)
@@ -212,3 +214,6 @@ func sell_harvested_items() -> void:
 		Notify.say("Dititipkan senilai %d G. Dibayar setelah tidur." % earned)
 	else:
 		Notify.say("Tidak ada yang bisa dijual")
+
+func _attach_tuyul_tracks() -> void:
+	TuyulTracks.attach(self)

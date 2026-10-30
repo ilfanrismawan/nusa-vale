@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_event")
 id = &"red_eyes"
+min_tier = 2
 kind = 5
 weight = 0.8
 min_fear = 0.35

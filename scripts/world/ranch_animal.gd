@@ -1,5 +1,8 @@
 extends CharacterBody2D
 ## A farm-world view only. All care and production live in shared save records.
+const AnimalPhysics := preload("res://scripts/world/animal_physics.gd")
+const FEET_RADIUS := 4.0
+const GroundShadow := preload("res://scripts/effects/ground_shadow.gd")
 var uid := 0
 var animal_id := 0
 var home := Vector2.ZERO
@@ -13,20 +16,24 @@ var _pasture_uid := 0
 var _timer := 0.0
 var _facing := "down"
 var _carried_by: Player
+var _shadow: Node2D
 
 func _ready() -> void:
 	add_to_group(&"ranch_animal")
 	collision_layer = 0
-	collision_mask = 1
+	collision_mask = AnimalPhysics.OBSTACLE_MASK
+	# Top-down: tanpa lantai/dinding ala platformer, supaya meluncur rata di sepanjang pagar.
+	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	var shape := CollisionShape2D.new()
 	var circle := CircleShape2D.new()
-	circle.radius = 4
+	circle.radius = FEET_RADIUS
 	shape.shape = circle
 	add_child(shape)
 	_sprite = AnimatedSprite2D.new()
 	_sprite.position.y = -8
 	add_child(_sprite)
+	_shadow = GroundShadow.attach(self)
 	_badge = Label.new()
 	_badge.position = Vector2(-23, 10) if indoors else Vector2(-18, -28)
 	if indoors:
@@ -43,6 +50,8 @@ func _ready() -> void:
 	_product_icon.position = Vector2(10, -20)
 	_product_icon.scale = Vector2(0.75, 0.75)
 	add_child(_product_icon)
+	# Titik rumah (depan kandang) bisa tertutup objek yang ditaruh pemain: geser ke titik kosong.
+	home = AnimalPhysics.nearest_free(self, home, FEET_RADIUS, 24.0 if indoors else 48.0, [get_rid()])
 	_target = home
 	global_position = home
 	refresh()
@@ -63,7 +72,8 @@ func refresh() -> void:
 	# Kuda gaya Stardew berdiri di dunia sebagai HorseActor (horse_actor.gd), bukan di kandang/padang.
 	if RanchHusbandry.species(bird) == "horse" and RanchHusbandry.is_adult(bird):
 		visible = false
-	_sprite.scale = Vector2.ONE * (1.0 if RanchHusbandry.is_adult(bird) else 0.65)
+	# Anak tanpa sheet anak memakai sprite dewasa yang diperkecil.
+	_sprite.scale = Vector2.ONE * (1.0 if RanchHusbandry.is_adult(bird) or RanchVisual.has_baby_sheet(RanchHusbandry.species(bird)) else 0.65)
 	_badge.text = "Siap" if not str(bird.ready).is_empty() else ("Lapar" if int(bird.fed_day) != DayCycle.current_day else str(bird.name))
 	if indoors:
 		_badge.text = str(bird.name) + (" !" if bird.sick or int(bird.fed_day) != DayCycle.current_day else "")
@@ -78,10 +88,23 @@ func refresh() -> void:
 func _set_frames(bird: Dictionary, walking: bool) -> void:
 	if walking:
 		_facing = "side" if absf(velocity.x) > absf(velocity.y) else ("up" if velocity.y < 0 else "down")
-	var frames := RanchVisual.frames(RanchHusbandry.species(bird), str(bird.variant), walking, _facing)
+	var frames := RanchVisual.frames(RanchHusbandry.species(bird), str(bird.variant), walking, _facing, not RanchHusbandry.is_adult(bird))
 	if _sprite.sprite_frames != frames:
 		_sprite.sprite_frames = frames
 		_sprite.play()
+		_fit_feet()
+
+## Kaki di baris terbawah sel (16 px ayam/bebek, 32 px lainnya): geser sprite supaya kaki tepat di
+## titik badan (collision dan y-sort), lalu ukur bayangan sesuai lebar hewan.
+func _fit_feet() -> void:
+	var names := _sprite.sprite_frames.get_animation_names()
+	if names.is_empty() or _sprite.sprite_frames.get_frame_count(names[0]) == 0:
+		return
+	var height := float(_sprite.sprite_frames.get_frame_texture(names[0], 0).get_height())
+	# Posisi sprite (-8) ditambah offset ini = -height/2: dasar sel tepat di titik badan.
+	_sprite.offset.y = 8.0 - height * 0.5
+	if is_instance_valid(_shadow):
+		_shadow.radius = 4.0 if height <= 16.0 else 8.0
 
 func _physics_process(delta: float) -> void:
 	if is_instance_valid(_carried_by):
@@ -94,9 +117,10 @@ func _physics_process(delta: float) -> void:
 			_sprite.z_index = 0
 			collision_mask = 1
 			_badge.show()
+			_shadow.show()
 			refresh()
 			return
-		global_position = _carried_by.global_position + Vector2(0, -22)
+		global_position = _carried_by.global_position + Player.SPRITE_OFFSET + Vector2(0, -22)
 		return
 	if not visible or not DayCycle.is_running:
 		return
@@ -109,8 +133,14 @@ func _physics_process(delta: float) -> void:
 	var offset := _target - global_position
 	velocity = offset.normalized() * 13 if offset.length() > 3 else Vector2.ZERO
 	_set_frames(bird, velocity.length() > 0)
-	_sprite.flip_h = velocity.x < 0
+	if absf(velocity.x) > 0.01:
+		_sprite.flip_h = (velocity.x < 0) == RanchVisual.faces_right(RanchHusbandry.species(bird))
 	move_and_slide()
+	# Menabrak pagar/bangunan/objek dan tidak bisa meluncur: pilih tujuan lain di frame berikutnya.
+	if get_slide_collision_count() > 0 and get_real_velocity().length() < 2.0:
+		_pasture_uid = 0
+		_timer = minf(_timer, 0.4)
+		return
 	if _pasture_uid > 0 and global_position.distance_to(_target) < 10:
 		if StructureManager.graze_animal(uid, animal_id, _pasture_uid).ok:
 			Juice.play(&"plant", global_position)
@@ -173,10 +203,12 @@ func lift_with(player: Player) -> void:
 	collision_mask = 0
 	_badge.hide()
 	_product_icon.hide()
-	_sprite.position = Vector2.ZERO
+	_shadow.hide()
+	# Diangkat: pusat gambar di atas kepala seperti sebelum offset kaki (_fit_feet).
+	_sprite.position = Vector2(0, -_sprite.offset.y)
 	_sprite.z_index = 11
 	_sprite.z_as_relative = false
-	global_position = player.global_position + Vector2(0, -22)
+	global_position = player.global_position + Player.SPRITE_OFFSET + Vector2(0, -22)
 	player.play_item_gesture(true)
 	Notify.say("%s diangkat. Tekan interaksi untuk meletakkan." % str(animal().name))
 
@@ -198,6 +230,7 @@ func place_from_player(player: Player) -> void:
 	_sprite.z_index = 0
 	_sprite.z_as_relative = true
 	_badge.show()
+	_shadow.show()
 	collision_layer = 0
 	collision_mask = 1
 	_target = global_position

@@ -129,7 +129,7 @@ func physics_update(_delta: float) -> void:
 					return
 				_set_phase(Phase.BITE, ANIM_HOOKED)
 				Juice.play(&"bite", _bobber_pos)
-				Juice.float_text("!", player.global_position + Vector2(0, -18), Color(1.0, 0.9, 0.3), 0.4)
+				Juice.float_text("!", player.global_position + Player.SPRITE_OFFSET + Vector2(0, -18), Color(1.0, 0.9, 0.3), 0.4)
 				Notify.say("! Ikan menggigit! Klik sekarang!")
 				
 		Phase.BITE:
@@ -207,8 +207,8 @@ func _release_cast() -> void:
 
 	Juice.play(&"swish", player.global_position)
 	if _perfect:
-		Juice.float_text("Sempurna!", player.global_position + Vector2(0, -22), Color(0.49, 0.77, 0.2), 0.5)
-	_meter.launch(player.global_position + Vector2(0, -10))
+		Juice.float_text("Sempurna!", player.global_position + Player.SPRITE_OFFSET + Vector2(0, -22), Color(0.49, 0.77, 0.2), 0.5)
+	_meter.launch(player.global_position + Player.SPRITE_OFFSET + Vector2(0, -10))
 
 	#DEBUG FISHING
 	_wait_target = 0.1 if OS.has_feature("editor") and FishingManager.debug_instant_bite else randf_range(WAIT_MIN, WAIT_MAX)
@@ -240,7 +240,7 @@ func _use_bait() -> ItemData:
 			best = item
 	if best == null or not player.data.remove_item(best.item_id, 1):
 		return null
-	Juice.float_text("Umpan: %s" % best.display_name, player.global_position + Vector2(0, -30), Color(0.85, 0.95, 0.6), 0.8)
+	Juice.float_text("Umpan: %s" % best.display_name, player.global_position + Player.SPRITE_OFFSET + Vector2(0, -30), Color(0.85, 0.95, 0.6), 0.8)
 	return best
 
 func _free_meter() -> void:
@@ -293,7 +293,7 @@ func _catch_feedback() -> void:
 	if int(_hooked.item.rarity) >= RARE_TIER:
 		Juice.play(&"sparkle", _bobber_pos + Vector2(0, -12))
 	if FishingManager._last_catch_new:
-		Juice.float_text("BARU!", player.global_position + Vector2(0, -20), Color(1.0, 0.85, 0.3), 1.0)
+		Juice.float_text("BARU!", player.global_position + Player.SPRITE_OFFSET + Vector2(0, -20), Color(1.0, 0.85, 0.3), 1.0)
 
 
 func _try_double_catch() -> void:
@@ -301,7 +301,7 @@ func _try_double_catch() -> void:
 		return
 	if FishingManager.register_catch(_hooked):
 		Juice.fly_to_hotbar(_hooked.item.icon, _bobber_pos + Vector2(4, 0), _hooked.item.item_id)
-		Juice.float_text("x2!", player.global_position + Vector2(0, -30), Color(1.0, 0.85, 0.3), 0.8)
+		Juice.float_text("x2!", player.global_position + Player.SPRITE_OFFSET + Vector2(0, -30), Color(1.0, 0.85, 0.3), 0.8)
 		Notify.say("Beruntung! Dapat 2 %s." % _hooked.item.display_name)
 
 func _end(success: bool, message: String = "") -> void:

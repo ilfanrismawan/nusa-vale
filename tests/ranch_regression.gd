@@ -126,8 +126,40 @@ func _ready() -> void:
 	check(StructureManager.collect(data, machine.uid).ok and data.get_item_count("cheese_large_gold") == 1, "finished cheese collected exactly once")
 	check(StructureManager.artisan_output("loom", "wool_silver") == "cloth_silver" and StructureManager.artisan_output("mayonnaise_maker", "duck_egg") == "duck_mayonnaise", "wool and duck egg have matching artisan recipes")
 	check(GameState._resolve_item("cheese_large_gold").sell_price > GameState._resolve_item("cow_milk_large_gold").sell_price, "processing raises the sale value")
+	data.add_item_silent("hay", 20)
+	StructureManager.records.append(building(11, "barn", Vector2i(40, 0)))
+	StructureManager.records.append(building(12, "chicken_coop", Vector2i(50, 0)))
+	check(StructureManager.buy_animal(11, "pig", "Ndut").ok and not StructureManager.buy_animal(11, "ostrich").ok and StructureManager.buy_animal(12, "ostrich", "Jangkung").ok, "pig lives in the barn and ostrich in the poultry coop")
+	var sty := StructureManager.coop_state(StructureManager.record_for(11))
+	var nest := StructureManager.coop_state(StructureManager.record_for(12))
+	sty.chickens[0].affection = 90
+	nest.chickens[0].affection = 90
+	for day in 3:
+		StructureManager.feed_chickens(data, 11)
+		StructureManager.feed_chickens(data, 12)
+		new_day()
+		while int(sty.dirt) > 0:
+			StructureManager.clean_ranch(data, 11)
+		while int(nest.dirt) > 0:
+			StructureManager.clean_ranch(data, 12)
+		if day == 1:
+			check(sty.chickens[0].ready.is_empty(), "pig needs three cared days per truffle")
+		if day == 2:
+			check(sty.chickens[0].ready == "truffle_gold" and RanchHusbandry.valid(sty, "barn"), "a loved pig finds a gold truffle after three cared days (no large size)")
+			check(StructureManager.harvest_animal(data, 11, 1).ok and data.get_item_count("truffle_gold") == 1, "truffle is taken by hand without a tool")
+	check(int(nest.products.get("ostrich_egg_gold", 0)) == 1 and RanchHusbandry.valid(nest, "chicken_coop"), "a loved ostrich lays a gold egg after three cared days")
+	check(StructureManager.collect_eggs(data, 12).ok and data.get_item_count("ostrich_egg_gold") == 1, "ostrich eggs are collected with the coop eggs")
+	check(RanchHusbandry.base_egg("ostrich_egg_gold") == "ostrich_egg" and RanchHusbandry.HATCH.ostrich_egg.species == "ostrich", "ostrich eggs hatch in the incubator")
+	check(not StructureManager.brush_animal(data, 12, 1).ok, "ostrich is poultry and is petted, not brushed")
 	for kind in RanchHusbandry.SPECIES:
 		check(RanchVisual.frames(kind).get_frame_count(&"default") == 2, "owned sprite loaded for " + kind)
+		for direction in ["side", "down", "up"]:
+			for baby in [false, true]:
+				var walk := RanchVisual.frames(kind, "white", true, direction, baby)
+				check(walk.get_frame_count(&"default") >= 4 and walk.get_frame_texture(&"default", 0).get_image() != null and not walk.get_frame_texture(&"default", 0).get_image().is_invisible(), "%s %s walk frame has pixels (baby=%s)" % [kind, direction, baby])
+	check(RanchVisual.sheet_path("capybara").begins_with("Forest/") and RanchVisual.sheet_path("cow").begins_with("Farm/"), "livestock sprites come from the Farm/Forest pack folders")
+	check(RanchVisual.sheet_path("cow", "white", true).contains("Baby") and not RanchVisual.has_baby_sheet("buffalo"), "calves use the pack's baby sheet; buffalo falls back to the adult sheet")
+	check(RanchVisual.sheet_path("horse", "flaxen") == "Farm/Horse/2/idle.png" and RanchVisual.frames("horse", "bay", true, "side").get_frame_count(&"default") == 6, "pasture horse uses Farm/Horse coats and its run sheet")
 	RanchVisual._cache.clear()
 	ChickenVisual._cache.clear()
 	# Let short care SFX finish before tearing down the audio server.

@@ -36,6 +36,8 @@ func _ready() -> void:
 	watered.tile_set = TileSet.new()
 	world.add_child(watered)
 	FarmManager.initialize(world)
+	# 39 tanaman tanpa Orang-orangan Sawah: matikan gagak agar pertumbuhan diuji secara pasti.
+	FarmManager.crows_enabled = false
 	var files := DirAccess.get_files_at("res://resources/crop_data")
 	var tested := 0
 	for file in files:

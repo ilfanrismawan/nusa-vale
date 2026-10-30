@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1_item"]
+[ext_resource type="Texture2D" path="res://assets/horror/icons/keris_pusaka.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_item")
+category = 7
+item_id = "keris_pusaka"
+display_name = "Keris Pusaka"
+icon = ExtResource("2_icon")
+description = "Senjata jarak dekat. Saat dipegang, makhluk malam yang kau tatap 1,5 detik terusir, termasuk Leak dan Sundel Bolong."
+stackable = false
+max_stack = 1
+equipment_slot = 1
+attack_bonus = 18
+weapon_type = 1
+equipment_tier = 3
+sell_price = 700
+rarity = 2
+horror_gaze_seconds = 1.5

@@ -1,0 +1,84 @@
+[gd_scene load_steps=3 format=3]
+[ext_resource type="Script" path="res://scripts/ui/coop_dialog_layout.gd" id="layout"]
+[ext_resource type="Theme" path="res://resources/ui/coop_ingame_theme.tres" id="theme"]
+[node name="WaitPanel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("theme")
+script = ExtResource("layout")
+list_height = 88.0
+[node name="Frame" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Center" type="CenterContainer" parent="Frame"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Card" type="PanelContainer" parent="Frame/Center"]
+custom_minimum_size = Vector2(552, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Content" type="VBoxContainer" parent="Frame/Center/Card"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+[node name="Header" type="Label" parent="Frame/Center/Card/Content" groups=["coop_compact_hide"]]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 18
+text = "PEMAIN 2 / BERGABUNG"
+
+[node name="Title" type="Label" parent="Frame/Center/Card/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Siap Bergabung"
+autowrap_mode = 3
+max_lines_visible = 2
+text_overrun_behavior = 3
+
+[node name="Scroll" type="ScrollContainer" parent="Frame/Center/Card/Content"]
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+mouse_filter = 2
+horizontal_scroll_mode = 0
+
+[node name="Reason" type="Label" parent="Frame/Center/Card/Content/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Menunggu area siap…"
+autowrap_mode = 3
+
+[node name="SharedInfo" type="Label" parent="Frame/Center/Card/Content" groups=["coop_compact_hide"]]
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 18
+text = "Anda akan masuk otomatis setelah area siap.\nPemain lain tetap bermain."
+autowrap_mode = 3
+
+[node name="Action" type="Button" parent="Frame/Center/Card/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 44)
+focus_mode = 0
+mouse_filter = 2
+text = "B  Batalkan Bergabung"
+clip_text = true

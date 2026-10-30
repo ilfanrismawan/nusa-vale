@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=4]
+[gd_scene load_steps=18 format=4]
 
 [ext_resource type="Script" uid="uid://lcsyaf3lrn6n" path="res://scripts/world/cave.gd" id="1_cave"]
 [ext_resource type="PackedScene" uid="uid://bye3dnnqckqj5" path="res://scenes/player/Player.tscn" id="2_player"]
@@ -10,6 +10,8 @@
 [ext_resource type="PackedScene" uid="uid://bm4iun38bhd33" path="res://scenes/world/exterior/object/ShopCounter.tscn" id="8_shop"]
 [ext_resource type="Resource" path="res://resources/shop/combat_shop.tres" id="9_shop_data"]
 [ext_resource type="Script" path="res://scripts/world/bug_spawner.gd" id="10_bugs"]
+[ext_resource type="Script" path="res://scripts/horror/ritual_altar.gd" id="altar_script"]
+[ext_resource type="PackedScene" path="res://scenes/horror/penunggu_gua.tscn" id="altar_penunggu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall0"]
 size = Vector2(640, 48)
@@ -166,3 +168,16 @@ position = Vector2(328, 328)
 
 [node name="LadderUp" type="Marker2D" parent="Layout"]
 position = Vector2(328, 48)
+
+[node name="AltarPenunggu" type="Area2D" parent="Lobby"]
+position = Vector2(200, 150)
+script = ExtResource("altar_script")
+area_id = "gua"
+penunggu_scene = ExtResource("altar_penunggu")
+ghost_id = &"penunggu_gua"
+display_name = "Penunggu Gua"
+offerings = {
+"bara_banaspati": 2,
+"kemenyan": 3
+}
+reward_item = "kristal_keramat"

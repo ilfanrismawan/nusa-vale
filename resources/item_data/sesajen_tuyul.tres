@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1_item"]
+[ext_resource type="Texture2D" path="res://assets/horror/icons/sesajen_tuyul.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_item")
+category = 8
+item_id = "sesajen_tuyul"
+display_name = "Sesajen Penangkal Tuyul"
+icon = ExtResource("2_icon")
+description = "Mangkuk kacang dan garam. Taruh di farm: Tuyul sibuk menghitung isinya dan tidak mencuri dari Shipping Bin atau uangmu."
+placeable = true
+placement_size = Vector2i(1, 1)
+sell_price = 60

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/wildlife_data.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/animals/Forest/Rabbit/Rabbit Blonde.png" id="2_walk"]
+
+[resource]
+script = ExtResource("1_script")
+display_name = "Kelinci Krem"
+frame_size = 16
+walk_sheet = ExtResource("2_walk")
+run_rows = PackedInt32Array(3, 4, 5)
+seasons = PackedStringArray("spring", "summer", "fall")
+locations = PackedStringArray("forest")
+time = "day"
+weight = 0.6
+walk_speed = 10.0
+run_speed = 75.0
+flee_radius = 32.0
+favorite_foods = PackedStringArray("carrot", "cabbage")
+gift_item = "rabbit_fur"
+gift_chance = 0.5

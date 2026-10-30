@@ -2,7 +2,8 @@ extends CanvasLayer
 
 ## Menu drop-in co-op (GDD 4.14), hanya dikendalikan perangkat pemain yang bergabung.
 ## Mode bergabung: pilih karakter co-op save ini yang sedang tidak dimainkan, buat Karakter
-## Baru (layar kustomisasi), atau Batal. X = hapus karakter (tekan dua kali).
+## Baru (layar kustomisasi), atau Batal. X = hapus karakter (tekan dua kali). Mode ini tampil
+## di dalam CoopJoinPane (petak layar pemain baru) sementara pemain lain tetap bermain.
 ## Mode keluar (leave_mode): konfirmasi "Keluar dari co-op?".
 ## Gamepad: D-pad/stik atas-bawah, A pilih, B batal, X hapus. Numpad uji: 8/2 atau 5, 1, titik, 0.
 
@@ -10,153 +11,107 @@ signal chosen(data: PlayerData)
 signal confirmed
 signal cancelled
 
-const FONT: Font = preload("res://resources/ui/readable_font.tres")
 const CREATOR_SCENE := "res://scenes/ui/character_creator_ui.tscn"
-const COLOR_TEXT := Color8(249, 230, 207)
-const COLOR_DIM := Color(0.97, 0.88, 0.78, 0.45)
-const COLOR_SELECTED := Color8(140, 214, 120)
-const COLOR_DANGER := Color8(232, 120, 104)
-const COLOR_PANEL := Color(0.13, 0.07, 0.11, 0.94)
 const STICK_THRESHOLD := 0.6
+
+@export_group("Tampilan")
+@export var row_scene: PackedScene = preload("res://scenes/ui/coop_join_row.tscn")
+@export var leave_mode := false
+## Pane menyediakan blur di viewport dunia, bukan di viewport UI transparan ini.
+@export var embedded_in_pane := false
+@export_group("Teks")
+@export var join_title := "Pilih Karakter"
+@export var leave_title := "Keluar dari Co-op?"
+@export var new_character_text := "+ Karakter Baru"
+@export var join_action_text := "Gunakan Karakter"
 
 var device: int = PlayerInput.DEVICE_NUMPAD
 var player_number: int = 2
-var leave_mode := false
 var player_name := ""
 
-## [{"label": String, "kind": "character"/"new"/"cancel"/"yes", "data": PlayerData, "disabled": bool}]
+## Daftar karakter, karakter baru, atau konfirmasi keluar.
 var _entries: Array[Dictionary] = []
-var _labels: Array[Label] = []
+var _rows: Array[Button] = []
 var _selected := 0
 var _delete_armed := false
 var _stick_ready := true
-var _hint: Label
-var _list: VBoxContainer
-var _panel: Control
 var _done := false
-
+@onready var _hint: Label = %Hint
+@onready var _list: VBoxContainer = %Entries
+@onready var _panel: Control = $UI
 
 func _ready() -> void:
-	layer = 40
-	process_mode = Node.PROCESS_MODE_ALWAYS
-	_build_ui()
-	_rebuild_entries()
-
-
-func _build_ui() -> void:
-	var ui_theme := Theme.new()
-	ui_theme.default_font = FONT
-	ui_theme.default_font_size = 16
-
-	_panel = Control.new()
-	_panel.theme = ui_theme
-	_panel.mouse_filter = Control.MOUSE_FILTER_STOP
-	_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	add_child(_panel)
-
-	var dim := ColorRect.new()
-	dim.color = Color(0, 0, 0, 0.55)
-	dim.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_panel.add_child(dim)
-
-	var center := CenterContainer.new()
-	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_panel.add_child(center)
-
-	var box_panel := PanelContainer.new()
-	var style := StyleBoxFlat.new()
-	style.bg_color = COLOR_PANEL
-	style.border_color = Color8(232, 183, 120)
-	style.set_border_width_all(2)
-	style.set_content_margin_all(14)
-	box_panel.add_theme_stylebox_override("panel", style)
-	box_panel.custom_minimum_size = Vector2(320, 0)
-	center.add_child(box_panel)
-
-	var box := VBoxContainer.new()
-	box.add_theme_constant_override("separation", 6)
-	box_panel.add_child(box)
-
-	var title_text := ("Keluar dari co-op?" if leave_mode else "P%d bergabung" % player_number)
-	var title := _label(title_text, 32, COLOR_TEXT)
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	box.add_child(title)
-
-	var sub_text := ""
+	get_viewport().size_changed.connect(_refresh)
+	%Backdrop.visible = not embedded_in_pane
+	%Header.text = "PEMAIN %d / %s" % [player_number, "CO-OP" if leave_mode else "BERGABUNG"]
+	%Title.text = leave_title if leave_mode else join_title
 	if leave_mode:
-		sub_text = "%s keluar, datanya disimpan. Layar lain digabung ulang." % (player_name if not player_name.is_empty() else "P%d" % player_number)
-	else:
-		sub_text = "Pilih karakter co-op di save ini, atau buat baru."
-	var sub := _label(sub_text, 16, COLOR_DIM)
-	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	sub.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	sub.custom_minimum_size = Vector2(300, 0)
-	box.add_child(sub)
-
-	_list = VBoxContainer.new()
-	_list.add_theme_constant_override("separation", 2)
-	box.add_child(_list)
-
-	_hint = _label("", 16, COLOR_DIM)
-	_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_hint.custom_minimum_size = Vector2(300, 0)
-	box.add_child(_hint)
-
-func _label(text: String, size: int, color: Color) -> Label:
-	var label := Label.new()
-	label.text = text
-	label.add_theme_font_size_override("font_size", size)
-	label.add_theme_color_override("font_color", color)
-	return label
-
+		var display_name := player_name if not player_name.is_empty() else "P%d" % player_number
+		%Subtitle.text = "Progres %s disimpan. Layar pemain lain akan disusun ulang." % display_name
+		%SharedInfo.text = ""
+		%Action.hide()
+		$UI.list_height = 112.0
+	_rebuild_entries()
 
 func _rebuild_entries() -> void:
 	_entries.clear()
 	if leave_mode:
-		_entries.append({"label": "Ya, keluar", "kind": "yes"})
-		_entries.append({"label": "Batal", "kind": "cancel"})
+		# Tetap bermain adalah pilihan awal yang aman.
+		_entries.append({"label": "Tetap Bermain", "kind": "cancel"})
+		_entries.append({"label": "Keluar dari Co-op", "kind": "yes"})
 	else:
 		for data in GameState.available_coop_characters():
 			var name_text := data.player_name if not data.player_name.strip_edges().is_empty() else "Tanpa nama"
 			_entries.append({"label": name_text, "kind": "character", "data": data})
 		var full := not GameState.can_create_coop_character()
-		_entries.append({"label": "+ Karakter Baru" + (" (penuh)" if full else ""), "kind": "new", "disabled": full})
-		_entries.append({"label": "Batal", "kind": "cancel"})
+		_entries.append({"label": new_character_text + (" (penuh)" if full else ""), "kind": "new", "disabled": full})
 	_selected = clampi(_selected, 0, _entries.size() - 1)
 	for child in _list.get_children():
+		_list.remove_child(child)
 		child.queue_free()
-	_labels.clear()
+	_rows.clear()
 	for entry in _entries:
-		var label := _label("", 16, COLOR_TEXT)
-		_list.add_child(label)
-		_labels.append(label)
+		var row := row_scene.instantiate() as Button
+		_list.add_child(row)
+		_rows.append(row)
 	_refresh()
 
 func _refresh() -> void:
 	for i in _entries.size():
 		var entry := _entries[i]
-		var label := _labels[i]
-		var selected := i == _selected
-		label.text = ("> " if selected else "   ") + str(entry["label"])
-		var color := COLOR_SELECTED if selected else COLOR_TEXT
-		if entry.get("disabled", false):
-			color = COLOR_DIM
-		if selected and _delete_armed:
-			color = COLOR_DANGER
-		label.add_theme_color_override("font_color", color)
-	var hint := "A pilih   B batal"
-	if not leave_mode:
-		if _delete_armed:
-			hint = "Tekan X lagi untuk menghapus karakter ini selamanya."
-		elif _entries[_selected]["kind"] == "character":
-			hint = "A pilih   X hapus   B batal"
-		if device == PlayerInput.DEVICE_NUMPAD:
-			hint += "\n(Numpad: 8/5 pindah, 1 pilih, 0 hapus, titik batal)"
+		var row := _rows[i]
+		row.text = str(entry["label"])
+		row.disabled = entry.get("disabled", false)
+		row.theme_type_variation = &"SelectedRow" if i == _selected else &""
+		if i == _selected and _delete_armed:
+			row.theme_type_variation = &"DangerRow"
+	var selected := _entries[_selected]
+	var action := join_action_text if selected["kind"] == "character" else "Buat Karakter Baru"
+	var accept_key := "1" if device == PlayerInput.DEVICE_NUMPAD else "A"
+	var cancel_key := "titik" if device == PlayerInput.DEVICE_NUMPAD else "B"
+	var delete_key := "0" if device == PlayerInput.DEVICE_NUMPAD else "X"
+	%Action.text = "%s  %s" % [accept_key, action]
+	%Action.disabled = selected.get("disabled", false)
+	var compact: bool = get_viewport().get_visible_rect().size.y < $UI.compact_height
+	var hint := "%s: pilih   %s: batal" % [accept_key, cancel_key]
+	if not compact:
+		hint = "Atas / Bawah: pilih   " + hint
+	if _delete_armed:
+		hint = "Tekan %s lagi untuk menghapus permanen. %s: batal." % [delete_key, cancel_key]
+		%Action.text = "%s  Batalkan Penghapusan" % accept_key
+	elif not leave_mode and selected["kind"] == "character":
+		hint += ("   " if compact else "\n") + "%s: hapus karakter" % delete_key
 	_hint.text = hint
+	$UI.reflow()
+	_scroll_selected.call_deferred()
 
+func _scroll_selected() -> void:
+	# Daftar bisa dibangun ulang (hapus karakter) sebelum deferred call berjalan.
+	if _done or _rows.is_empty() or _selected >= _rows.size():
+		return
+	var row := _rows[_selected]
+	if is_instance_valid(row) and _list.is_ancestor_of(row):
+		%Scroll.ensure_control_visible(row)
 
 # ── Input (hanya perangkat pemain ini) ──────────────────────────────
 

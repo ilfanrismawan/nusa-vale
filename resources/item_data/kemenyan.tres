@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1_item"]
+[ext_resource type="Texture2D" path="res://assets/horror/icons/kemenyan.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_item")
+category = 4
+item_id = "kemenyan"
+display_name = "Kemenyan"
+icon = ExtResource("2_icon")
+description = "Pakai (klik kiri) untuk membakar: asapnya menjadi zona aman di sekitarmu selama 60 detik dan mengusir makhluk malam, termasuk Banaspati."
+sell_price = 80
+horror_ward_seconds = 60.0
+horror_ward_radius = 80.0

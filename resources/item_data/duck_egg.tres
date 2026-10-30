@@ -5,6 +5,8 @@
 
 [resource]
 script = ExtResource("1")
+edible = true
+stamina_restore = 13
 item_id = "duck_egg"
 display_name = "Telur Bebek"
 icon = ExtResource("2")

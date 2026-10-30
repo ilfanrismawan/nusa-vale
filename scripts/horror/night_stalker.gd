@@ -2,17 +2,45 @@ class_name NightStalker
 extends Node2D
 
 ## Penunggu malam (GDD 4.1, Horor Tengah Malam). Dibuat oleh NightHorror setelah 01.00.
-## Hanya bergerak saat tidak dilihat: begitu pemain menghadapnya, ia diam.
-## Ditatap terlalu lama, ia menghilang lalu muncul lagi di belakang pemain.
-## Disentuh = jumpscare + energi berkurang. Cahaya mengusirnya.
-## Scene contoh: scenes/horror/kuntilanak.tscn, scenes/horror/pocong.tscn.
+## Aturan gerak dipilih lewat `rule` (GDD 4.1, Progres Horor):
+## - FREEZE_WHEN_WATCHED: hanya bergerak saat tidak dilihat; ditatap terlalu lama, ia menghilang
+##   lalu muncul lagi di belakang pemain (Kuntilanak, Pocong).
+## - MOVE_WHEN_WATCHED: kebalikannya, hanya bergerak saat ditatap.
+## - ATTRACTED_TO_LIGHT: muncul di dekat cahaya dan hanya bisa memburu pemain yang berada di cahaya;
+##   di gelap ia kehilangan jejak lalu pergi (Banaspati).
+## - BLIND_TO_STILL: tidak takut cahaya dan tidak peduli tatapan, tetapi tidak melihat pemain yang
+##   diam; ia lalu mengendus di sekitar posisi terakhir pemain (Genderuwo).
+## Disentuh = jumpscare + energi berkurang.
+## Scene contoh: scenes/horror/kuntilanak.tscn, pocong.tscn, genderuwo.tscn, banaspati.tscn.
 
 signal finished
 
 enum MoveStyle { GLIDE, HOP }
+enum Rule { FREEZE_WHEN_WATCHED, MOVE_WHEN_WATCHED, ATTRACTED_TO_LIGHT, BLIND_TO_STILL }
 
 @export var display_name: String = "Penunggu"
 @export var move_style: MoveStyle = MoveStyle.GLIDE
+@export var rule: Rule = Rule.FREEZE_WHEN_WATCHED
+
+@export_group("Catatan Gaib")
+## Id Catatan Gaib (kosong = tidak dicatat).
+@export var ghost_id: StringName = &""
+## Material yang didapat bila pemain selamat darinya (item_id; kosong = tanpa hadiah).
+@export var reward_item_id: String = ""
+## Petunjuk singkat di Catatan Gaib.
+@export_multiline var journal_hint: String = ""
+## Selamat = makhluk sempat hadir sekian detik lalu pergi tanpa menyentuh.
+@export var survive_after: float = 10.0
+
+@export_group("Aturan")
+## BLIND_TO_STILL: pemain dianggap diam bila tidak bergerak selama ini (detik).
+@export var still_time: float = 1.0
+## BLIND_TO_STILL: jarak mengendus di sekitar posisi terakhir pemain.
+@export var wander_radius: float = 48.0
+## ATTRACTED_TO_LIGHT: muncul di cahaya menyala dalam jarak ini dari pemain.
+@export var light_search_radius: float = 260.0
+## ATTRACTED_TO_LIGHT: pergi setelah pemain berada di gelap selama ini (detik).
+@export var lose_track_time: float = 8.0
 
 @export_group("Gerak")
 ## GLIDE: kecepatan melayang maksimal (px/detik). Pemain berjalan ±25, berlari ±45.
@@ -43,6 +71,10 @@ enum MoveStyle { GLIDE, HOP }
 @export var stamina_penalty: int = 25
 ## Cahaya (lampu/api) mengusir makhluk ini.
 @export var repelled_by_light: bool = true
+## Hanya cahaya kuat (Api Unggun, perapian) yang mengusirnya; lentera/lilin/lampu ditembus (Leak).
+@export var strong_light_only: bool = false
+## Asap kemenyan tidak mengusirnya (Penunggu Area saat ritual).
+@export var ignores_incense: bool = false
 
 @export_group("Tampilan")
 @export var jumpscare_texture: Texture2D
@@ -56,12 +88,16 @@ enum MoveStyle { GLIDE, HOP }
 @export var jumpscare_sound: AudioStream
 @export_range(-40.0, 12.0, 0.5) var spawn_volume_db: float = -6.0
 @export_range(-40.0, 12.0, 0.5) var presence_volume_db: float = -4.0
+## Langkah berat tiap selang ini saat bergerak (0 = tanpa langkah).
+@export var step_interval: float = 0.0
 
 @export_group("Teks")
 @export_multiline var notify_spawn: String = ""
 ## %d = energi yang hilang.
 @export_multiline var notify_touch: String = "Kamu terhuyung ketakutan. Energi -%d."
 @export_multiline var notify_repelled: String = "Cahaya membuatnya mundur ke kegelapan."
+@export_multiline var notify_incense: String = "Asap kemenyan membuatnya menjauh."
+@export_multiline var notify_keris: String = "Keris Pusaka bergetar. Makhluk itu terusir oleh tatapanmu."
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var presence: AudioStreamPlayer2D = get_node_or_null("Presence")
@@ -83,11 +119,24 @@ var _in_air := false
 var _bob := 0.0
 var _sprite_base := Vector2.ZERO
 var _rng := RandomNumberGenerator.new()
+## ATTRACTED_TO_LIGHT: cahaya tempatnya muncul (diisi NightHorror).
+var home := Vector2.ZERO
+var _still := 0.0
+var _last_seen := Vector2.ZERO
+var _wander_goal := Vector2.ZERO
+var _wander_timer := 0.0
+var _dark_time := 0.0
+var _step_timer := 0.0
+## Detik sejak terakhir ditatap (untuk Jimat).
+var _unwatched := 0.0
+## Detik ditatap tanpa putus (untuk Keris Pusaka).
+var _gaze := 0.0
 
 
 func setup(p_target: Player, p_horror: Node) -> void:
 	target = p_target
 	horror = p_horror
+	_last_seen = p_target.global_position + Player.FEET_OFFSET
 
 
 func _ready() -> void:
@@ -104,9 +153,19 @@ func _ready() -> void:
 		presence.volume_db = presence_volume_db
 		presence.play()
 	var cue: AudioStream = spawn_sound
+	var pitch := 1.0
 	if cue == null:
-		cue = HorrorSynth.get_stream(&"giggle") if move_style == MoveStyle.GLIDE else HorrorSynth.get_stream(&"footstep")
-	_play_cue(cue, spawn_volume_db, 0.55 if move_style == MoveStyle.HOP else 1.0)
+		match rule:
+			Rule.BLIND_TO_STILL:
+				cue = HorrorSynth.get_stream(&"footstep")
+				pitch = 0.4
+			Rule.ATTRACTED_TO_LIGHT:
+				cue = HorrorSynth.get_stream(&"flicker")
+				pitch = 0.7
+			_:
+				cue = HorrorSynth.get_stream(&"giggle") if move_style == MoveStyle.GLIDE else HorrorSynth.get_stream(&"footstep")
+				pitch = 0.55 if move_style == MoveStyle.HOP else 1.0
+	_play_cue(cue, spawn_volume_db, pitch)
 	if not notify_spawn.is_empty():
 		Notify.say(notify_spawn)
 
@@ -130,15 +189,24 @@ func _process(delta: float) -> void:
 	if _life <= 0.0:
 		leave()
 		return
-	if repelled_by_light and (horror.is_near_light() or horror.is_lit(global_position)):
+	if repelled_by_light and _light_repels():
 		if not notify_repelled.is_empty() and _fade > 0.3:
 			Notify.say(notify_repelled)
 		leave()
 		return
 
+	if not ignores_incense and horror.in_incense(global_position):
+		if not notify_incense.is_empty() and _fade > 0.3:
+			Notify.say(notify_incense)
+		leave()
+		return
+
 	var feet := _target_feet()
 	var dist := global_position.distance_to(feet)
-	if dist <= touch_radius and _fade > 0.5:
+	var goal := _goal(feet, delta)
+	if _leaving:
+		return
+	if dist <= touch_radius and _fade > 0.5 and _can_grab():
 		horror.stalker_touched(self)
 		_leaving = true
 		_fade = 0.0
@@ -151,19 +219,113 @@ func _process(delta: float) -> void:
 			horror.pulse_glitch(0.35)
 
 	var watched := is_watched()
-	if watched:
+	_unwatched = 0.0 if watched else _unwatched + delta
+	# Keris Pusaka: ditatap pemain pemegang keris cukup lama = terusir (berlaku untuk semua aturan).
+	_gaze = _gaze + delta if watched and _watched_by_target() else 0.0
+	var keris: float = horror.keris_gaze()
+	if keris > 0.0 and _gaze >= keris:
+		if not notify_keris.is_empty():
+			Notify.say(notify_keris)
+		leave()
+		return
+	if rule == Rule.FREEZE_WHEN_WATCHED and watched:
 		_watch += delta
-		_speed = 0.0
-		sprite.speed_scale = 0.0 if _in_air else 0.25
 		if _watch >= watch_relocate_time and _relocations < max_relocations and not _relocating:
 			_relocate()
 	else:
 		_watch = maxf(0.0, _watch - delta * 0.5)
+	var moving := _should_move(watched) and not _relocating
+	if moving:
 		sprite.speed_scale = 1.0
-		if not _relocating:
-			_move(delta, feet)
-	_animate_bob(delta, watched)
+		_move(delta, goal)
+		_heavy_steps(delta)
+	else:
+		_speed = 0.0
+		sprite.speed_scale = 0.0 if _in_air else 0.25
+	_animate_bob(delta, not moving)
 	queue_redraw()
+
+
+func _light_repels() -> bool:
+	if strong_light_only:
+		return horror.is_lit(_target_feet(), true) or horror.is_lit(global_position, true)
+	return horror.is_near_light() or horror.is_lit(global_position)
+
+
+## Pemain target (pemilik NightHorror ini) sedang menghadap makhluk.
+func _watched_by_target() -> bool:
+	var to_me := global_position - _target_feet()
+	var d := to_me.length()
+	if d > view_distance:
+		return false
+	return d < 6.0 or target.facing_direction.normalized().dot(to_me / d) >= cos(deg_to_rad(view_half_angle))
+
+
+func _should_move(watched: bool) -> bool:
+	match rule:
+		Rule.FREEZE_WHEN_WATCHED:
+			# Jimat: tetap membeku sesaat setelah pemain berpaling.
+			return not watched and _unwatched >= horror.charm_delay()
+		Rule.MOVE_WHEN_WATCHED:
+			return watched
+	return true
+
+
+## Tujuan gerak sesuai aturan. ATTRACTED_TO_LIGHT bisa memanggil leave() di sini.
+func _goal(feet: Vector2, delta: float) -> Vector2:
+	match rule:
+		Rule.BLIND_TO_STILL:
+			if target.velocity.length() > 4.0:
+				_still = 0.0
+				_last_seen = feet
+				return feet
+			_still += delta
+			if _still < still_time:
+				return feet
+			# Tidak melihat pemain yang diam: mengendus di sekitar posisi terakhirnya.
+			_wander_timer -= delta
+			if _wander_timer <= 0.0 or global_position.distance_to(_wander_goal) < 4.0:
+				_wander_timer = _rng.randf_range(1.8, 3.2)
+				_wander_goal = _last_seen + Vector2.from_angle(_rng.randf() * TAU) * _rng.randf_range(wander_radius * 0.5, wander_radius)
+			return _wander_goal
+		Rule.ATTRACTED_TO_LIGHT:
+			if horror.is_near_light():
+				_dark_time = 0.0
+				return feet
+			_dark_time += delta
+			if _dark_time >= lose_track_time:
+				leave()
+			# Kehilangan jejak di gelap: kembali melayang di sekitar cahayanya.
+			return home + Vector2(sin(_life * 1.3) * 10.0, cos(_life * 0.9) * 6.0)
+	return feet
+
+
+## Disentuh hanya berarti tertangkap bila makhluk "melihat" pemain.
+func _can_grab() -> bool:
+	match rule:
+		Rule.BLIND_TO_STILL:
+			return _still < still_time
+		Rule.ATTRACTED_TO_LIGHT:
+			return horror.is_near_light()
+	return true
+
+
+func _heavy_steps(delta: float) -> void:
+	if step_interval <= 0.0 or _speed < 4.0:
+		return
+	_step_timer -= delta
+	if _step_timer > 0.0:
+		return
+	_step_timer = step_interval
+	var dist := global_position.distance_to(_target_feet())
+	_play_cue(HorrorSynth.get_stream(&"footstep"), lerpf(-2.0, -18.0, clampf(dist / 220.0, 0.0, 1.0)), _rng.randf_range(0.38, 0.45))
+	if dist < 60.0 and horror.allow_shake():
+		Juice.shake(0.5, 0.08)
+
+
+## true bila pemain selamat: makhluk sempat hadir survive_after detik dan tidak pernah menyentuh.
+func survived() -> bool:
+	return not has_meta(&"touched") and lifetime - _life >= survive_after
 
 
 func leave() -> void:
@@ -209,8 +371,8 @@ func _move(delta: float, feet: Vector2) -> void:
 			var side := dir.orthogonal() * sin(_life * 2.3) * 0.35
 			global_position += (dir + side).normalized() * _speed * delta
 			sprite.flip_h = dir.x < 0.0
-			# Dekat: mulut menganga.
-			var near := global_position.distance_to(feet) < 45.0
+			# Dekat pemain: mulut menganga.
+			var near := global_position.distance_to(_target_feet()) < 45.0
 			if near and sprite.sprite_frames.has_animation(&"lunge") and sprite.animation != &"lunge":
 				sprite.play(&"lunge")
 			elif not near and sprite.animation == &"lunge":
@@ -239,7 +401,7 @@ func _land() -> void:
 	_play_idle()
 	var dist := global_position.distance_to(_target_feet())
 	_play_cue(HorrorSynth.get_stream(&"footstep"), lerpf(-4.0, -16.0, clampf(dist / 200.0, 0.0, 1.0)), 0.55)
-	if dist < 70.0 and not Coop.active:
+	if dist < 70.0 and horror.allow_shake():
 		Juice.shake(0.6, 0.08)
 
 

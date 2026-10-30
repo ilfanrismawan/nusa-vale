@@ -1,12 +1,21 @@
 extends Node
 
 ## Tes drop-in co-op (GDD 4.14): input P1 + gamepad, daftar karakter co-op di save v21,
-## bergabung dari main sendiri di Farm lalu keluar lagi. Tidak menulis slot save.
+## bergabung dari main sendiri di Farm tanpa menjeda P1 (F2/B batal), pemain ke-3 tanpa
+## membangun ulang layar, lalu keluar lagi. Tidak menulis slot save.
+
+const RESULT_PATH := "res://tests/coop_drop_in_result.txt"
 
 var failures := 0
 
 func note(text: String) -> void:
 	print(text)
+	# Hasil juga ditulis ke RESULT_PATH supaya bisa dibaca setelah keluar.
+	var mode := FileAccess.READ_WRITE if FileAccess.file_exists(RESULT_PATH) else FileAccess.WRITE
+	var file := FileAccess.open(RESULT_PATH, mode)
+	if file != null:
+		file.seek_end()
+		file.store_line(text)
 
 func check(value: bool, label: String) -> void:
 	if value:
@@ -38,6 +47,13 @@ func _numpad(code: Key) -> InputEventKey:
 	k.pressed = true
 	return k
 
+func _stick(device: int) -> InputEventJoypadMotion:
+	var m := InputEventJoypadMotion.new()
+	m.device = device
+	m.axis = JOY_AXIS_LEFT_X
+	m.axis_value = -1.0
+	return m
+
 func _wait(seconds: float) -> void:
 	await get_tree().create_timer(seconds, true, false, true).timeout
 
@@ -55,8 +71,15 @@ func _settled(count: int) -> bool:
 		return not Coop.active and get_tree().get_first_node_in_group("player") != null
 	return Coop.has_root() and Coop.player_count() == count and Coop.root.body_of(count - 1) != null
 
+## Jendela tes sering tidak fokus (editor di depan): jeda fokus PauseManager akan
+## membuat game terlihat "dijeda menu", jadi abaikan selama tes.
+func _process(_delta: float) -> void:
+	if PauseManager.background:
+		PauseManager.set_background(false)
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(RESULT_PATH))
 	await get_tree().process_frame
 	# Tes tetap hidup saat scene diganti: scene "sekarang" dipindah ke node kosong.
 	var placeholder := Node.new()
@@ -111,15 +134,29 @@ func _ready() -> void:
 	Coop.p1_pad = -1
 	await _send(_pad(7, JOY_BUTTON_START))
 	check(Coop.p1_pad == 7 and not Coop.is_switching(), "first gamepad becomes P1's own pad")
+	# Start pad P1 membuka tas (jeda solo); tutup dulu sebelum menguji pemain baru.
 	var bag := get_tree().current_scene.find_child("UIInventory", true, false)
-	if bag != null and bag.visible:
-		bag.toggle()
-	await _wait(0.3)
+	if bag != null:
+		await _wait_until(func() -> bool: return bag.visible and get_tree().paused, 3.0)
+		if bag.visible:
+			bag.toggle()
+		await _wait_until(func() -> bool: return not get_tree().paused, 3.0)
+	check(not get_tree().paused, "P1 bag closed before join test")
 	await _send(_pad(8, JOY_BUTTON_START))
-	check(Coop.is_switching() and get_tree().paused, "Start on another pad opens join menu and pauses")
+	check(Coop.has_pending_join() and not get_tree().paused, "Start on another pad opens join pane without pausing")
+	check(not InputMap.event_is_action(_stick(8), &"move_left") and InputMap.event_is_action(_stick(7), &"move_left"), "joiner's stick does not move solo P1, P1's pad still does")
 	await _send(_pad(8, JOY_BUTTON_B))
 	await _wait(0.2)
-	check(not Coop.is_switching() and not get_tree().paused and not Coop.active, "B cancels join menu")
+	check(not Coop.is_switching() and not get_tree().paused and not Coop.active, "B cancels join pane")
+	check(InputMap.event_is_action(_stick(8), &"move_left"), "solo input accepts all pads again after cancel")
+	await _send(_pad(8, JOY_BUTTON_START))
+	check(Coop.has_pending_join(), "join pane opens again")
+	var f2 := InputEventKey.new()
+	f2.physical_keycode = KEY_F2
+	f2.pressed = true
+	await _send(f2)
+	await _wait(0.2)
+	check(not Coop.has_pending_join() and not Coop.active, "F2 cancels pending join")
 	# Numpad: menu -> pilih karakter pertama (Sari) dengan 1.
 	var sari := GameState.coop_roster[0]
 	solo_body = get_tree().get_first_node_in_group("player") as Node2D
@@ -129,6 +166,8 @@ func _ready() -> void:
 	await _send(_numpad(KEY_KP_1))
 	await _wait_until(_settled.bind(2))
 	note("STATE active=%s root=%s count=%d switching=%s scene=%s" % [Coop.active, Coop.has_root(), Coop.player_count(), Coop.is_switching(), get_tree().current_scene])
+	if Coop.has_pending_join():
+		note("PENDING chosen=%s reason='%s' paused=%s wait='%s'" % [Coop._join_pane._data != null, Coop.block_reason(true), get_tree().paused, Coop._join_pane._wait_label.text])
 	check(Coop.has_root() and Coop.player_count() == 2, "co-op root built with 2 players")
 	if Coop.has_root():
 		check(Coop.root.area_path_of(0).to_lower().contains("farm.tscn"), "P1 stays in Farm")
@@ -136,14 +175,26 @@ func _ready() -> void:
 		check(Coop.root.position_of(1).distance_to(start_pos) < 40.0, "P2 spawns next to P1")
 		check(GameState.players[1] == sari and Coop.root.body_of(1).data == sari, "P2 plays the chosen character")
 		check(Coop.get_input(0).extra_pad == 7 and Coop.get_input(0).owns_event(_pad(7)), "P1 keeps its gamepad in co-op")
+	await _wait(1.0)
+	if Coop.has_root():
+		note("POS before 3rd join (+1s): %s" % [Coop.root.position_of(0)])
 	var third := GameState.new_coop_character(false)
-	Coop._finish_join(5, third)
+	var root_before: Node = Coop.root
+	check(Coop.try_join(5, third).is_empty(), "third player can join right away")
 	await _wait_until(_settled.bind(3))
 	check(Coop.player_count() == 3 and GameState.coop_roster.has(third), "third player joins mid co-op")
+	if not Coop.has_root():
+		note("COOP DROP-IN failures=%d (stopped early)" % failures)
+		get_tree().quit(1)
+		return
+	note("POS after 3rd join: %s" % [Coop.root.position_of(0)])
+	check(Coop.root == root_before and Coop.root.body_of(2) != null and Coop.root.body_of(2).data == third, "third player added without rebuilding screens")
 	Coop.leave(1)
 	await _wait(0.2)
 	await _wait_until(_settled.bind(2))
 	check(Coop.player_count() == 2 and GameState.players[1] == third and Coop.devices[1] == 5, "guest leaves, others re-indexed")
+	if Coop.has_root():
+		note("POS after 1st leave: %s" % [Coop.root.position_of(0)])
 	Coop.leave(1)
 	await _wait(0.2)
 	await _wait_until(_settled.bind(1))

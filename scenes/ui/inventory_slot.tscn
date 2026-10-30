@@ -18,6 +18,7 @@ corner_radius_bottom_left = 4
 
 [sub_resource type="LabelSettings" id="LabelSettings_count"]
 font = ExtResource("3_r4ab7")
+font_size = 16
 font_color = Color(0.13443616, 0.070290215, 0.019135073, 1)
 outline_size = 1
 outline_color = Color(0.96862745, 0.85882354, 0.7764706, 1)

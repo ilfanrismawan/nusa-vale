@@ -16,7 +16,7 @@ var vehicle_item_id := ""
 ## true sebelum keluar state = kendaraan diparkir (dinaiki lagi di area luar berikutnya).
 var parking := false
 var _visual: VehicleVisual
-var _shadow: JumpState.JumpShadow
+var _shadow: Node2D
 var _sprite_home := Vector2.ZERO
 var _time := 0.0
 var _moving := false
@@ -54,14 +54,8 @@ func enter() -> void:
 		if _visual != null:
 			_visual.name = "VehicleVisual"
 			player.add_child(_visual)
-	if vehicle.hover_height > 0.0:
-		if not is_instance_valid(_shadow):
-			_shadow = JumpState.JumpShadow.new()
-			_shadow.name = "VehicleShadow"
-			_shadow.position = Player.FEET_OFFSET
-			_shadow.z_index = -1
-			player.add_child(_shadow)
-		_shadow.visible = true
+	# Bayangan tetap pemain; kendaraan melayang mengangkatnya lewat lift.
+	_shadow = player.ground_shadow
 	player.data.riding_vehicle_id = vehicle_item_id
 	_update_visual(false)
 	Juice.play(vehicle.mount_sound, player.global_position, -10.0)
@@ -97,7 +91,8 @@ func _update_visual(moving: bool) -> void:
 	if is_instance_valid(_visual):
 		_visual.set_facing(player.facing_direction)
 		_visual.set_moving(moving)
-		_visual.position = offset
+		# Kendaraan sejajar dengan sprite penunggang (sprite pemain digeser ke atas, kaki = titik badan).
+		_visual.position = offset + animation_controller.sprite.offset
 		offset += _visual.rider_offset()
 	animation_controller.sprite.position = _sprite_home + offset
 	if is_instance_valid(_shadow):
@@ -119,7 +114,7 @@ func exit() -> void:
 		_visual.queue_free()
 	_visual = null
 	if is_instance_valid(_shadow):
-		_shadow.visible = false
+		_shadow.lift = 0.0
 	if not parking:
 		player.data.riding_vehicle_id = ""
 	parking = false

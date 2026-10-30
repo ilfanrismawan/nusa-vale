@@ -1,6 +1,10 @@
 extends Node2D
 ## Serangga liar (dibuat BugSpawner, jangan ditaruh manual). Terbang atau merayap di sekitar
 ## titik asalnya, kabur dari pemain yang terlalu dekat, dan masuk tas saat kena ayunan jaring.
+## Serangga darat tidak menembus penghalang layer 1 (bangunan, pagar, pohon, batu); serangga
+## terbang melayang di atasnya.
+
+const AnimalPhysics := preload("res://scripts/world/animal_physics.gd")
 
 signal caught
 
@@ -9,6 +13,8 @@ const FLY_HEIGHT := 12.0
 const FLY_RANGE := 36.0
 const CRAWL_RANGE := 14.0
 const FLEE_DISTANCE := 44.0
+## Jarak sisa di depan serangga darat yang harus kosong sebelum melangkah (px).
+const CRAWL_CLEARANCE := 2.0
 
 var data: Resource  # BugData
 var anchor := Vector2.ZERO
@@ -66,7 +72,7 @@ func _physics_process(delta: float) -> void:
 		var away := (catch_point() - player.global_position).normalized()
 		if away == Vector2.ZERO:
 			away = Vector2.RIGHT.rotated(randf() * TAU)
-		_target = global_position + away * FLEE_DISTANCE
+		_target = _flee_target(away)
 		_flee = 0.7
 	if _flee > 0.0:
 		_flee -= delta
@@ -79,7 +85,15 @@ func _physics_process(delta: float) -> void:
 		if _wait <= 0.0:
 			_pick_target()
 	else:
-		global_position += to.normalized() * minf(speed * delta, to.length())
+		var step := to.normalized() * minf(speed * delta, to.length())
+		if not data.flying and AnimalPhysics.is_blocked(self, global_position, global_position + step.normalized() * (step.length() + CRAWL_CLEARANCE)):
+			# Merayap menabrak objek: berhenti di sini dan pilih arah lain.
+			_target = global_position
+			_flee = 0.0
+			anchor = global_position
+			_wait = 0.3
+			return
+		global_position += step
 		if absf(to.x) > 0.5:
 			_sprite.flip_h = to.x < 0.0
 	if data.flying:
@@ -97,6 +111,24 @@ func _pick_target() -> void:
 	var r := FLY_RANGE if data.flying else CRAWL_RANGE
 	_target = anchor + Vector2(randf_range(-r, r), randf_range(-r, r) * 0.6)
 	_wait = randf_range(0.2, 1.0) if data.flying else randf_range(0.8, 2.5)
+	if data.flying:
+		return
+	for attempt in 6:
+		if not AnimalPhysics.is_blocked(self, global_position, _target):
+			return
+		_target = anchor + Vector2(randf_range(-r, r), randf_range(-r, r) * 0.6)
+	_target = global_position
+
+
+## Arah kabur: lurus menjauh, atau belok sampai 90 derajat bila serangga darat terhalang.
+func _flee_target(away: Vector2) -> Vector2:
+	if data.flying:
+		return global_position + away * FLEE_DISTANCE
+	for angle in [0.0, 0.6, -0.6, 1.2, -1.2, 1.57, -1.57]:
+		var target := global_position + away.rotated(angle) * FLEE_DISTANCE
+		if not AnimalPhysics.is_blocked(self, global_position, target):
+			return target
+	return global_position
 
 
 func _nearest_player() -> Player:

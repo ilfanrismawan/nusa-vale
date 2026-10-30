@@ -17,6 +17,14 @@ var _bound_world: Node
 
 const TERRAIN_SET_SOIL := 0
 const TERRAIN_TILLED := 0
+## Gagak (GDD 4.10.13): tiap ganti hari yang tidak hujan, bila ada >= CROW_MIN_CROPS tanaman ladang
+## yang tidak dijaga Orang-orangan Sawah (radius SCARECROW_RADIUS petak), peluang CROW_CHANCE satu
+## tanaman dimakan. Pohon buah dan petak di luar ladang (rumah kaca) aman.
+const CROW_MIN_CROPS := 12
+const CROW_CHANCE := 0.3
+const SCARECROW_RADIUS := 8.0
+## Tes pertumbuhan tanaman mematikan gagak agar hasilnya pasti.
+var crows_enabled := true
 
 func _ready() -> void:
 	DayCycle.season_changed.connect(_on_season_changed)
@@ -328,6 +336,42 @@ func _on_day_passed(_day: int) -> void:
 		
 		if layers_valid and _visible_plot(data):
 			watered_layer.erase_cell(cell)
+	crow_attack(randf())
+
+## Tanaman ladang (bukan pohon buah, bukan rumah kaca) di luar jangkauan Orang-orangan Sawah.
+func unguarded_crops() -> Array[Vector2i]:
+	var guards: Array[Vector2i] = []
+	for record in StructureManager.records:
+		if record.get("item") == "scarecrow":
+			guards.append(Vector2i(int(record.cell[0]), int(record.cell[1])))
+	var result: Array[Vector2i] = []
+	for cell: Vector2i in farm_data:
+		var data: Dictionary = farm_data[cell]
+		var crop: CropData = data.get("crop")
+		if crop == null or crop.is_fruit_tree() or str(data.get("area", "farm")) != "farm":
+			continue
+		if not guards.any(func(guard: Vector2i) -> bool: return Vector2(cell - guard).length() <= SCARECROW_RADIUS):
+			result.append(cell)
+	return result
+
+## Gagak memakan satu tanaman yang tidak dijaga bila roll < CROW_CHANCE. Mengembalikan petaknya
+## atau (-1, -1). Tanahnya tetap tercangkul.
+func crow_attack(roll: float) -> Vector2i:
+	if not crows_enabled or roll >= CROW_CHANCE or (GameState.weather != null and GameState.weather.is_raining()):
+		return Vector2i(-1, -1)
+	var open := unguarded_crops()
+	if open.size() < CROW_MIN_CROPS:
+		return Vector2i(-1, -1)
+	var cell: Vector2i = open[randi() % open.size()]
+	var data: Dictionary = farm_data[cell]
+	var crop: CropData = data.crop
+	data.crop = null
+	data.stage = 0
+	data.days_in_stage = 0
+	if is_instance_valid(crop_layer) and _visible_plot(data):
+		crop_layer.erase_cell(cell)
+	Notify.say("Gagak memakan %s di ladang! Orang-orangan Sawah menjaga tanaman dalam %d petak di sekitarnya." % [crop.display_name, int(SCARECROW_RADIUS)])
+	return cell
 
 func _erase_empty_plot_visuals(cell: Vector2i, plot_area: String) -> void:
 	# Loaded co-op worlds have independent layers; clear both without rebinding context.

@@ -5,6 +5,8 @@
 
 [resource]
 script = ExtResource("1")
+edible = true
+stamina_restore = 13
 category = 4
 item_id = "blueberry_jam"
 display_name = "Selai Blueberry"

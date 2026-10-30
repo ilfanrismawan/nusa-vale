@@ -20,17 +20,10 @@ func _ready() -> void:
 		label.add_theme_font_size_override("font_size", 10)
 		add_child(label)
 	body_entered.connect(_on_body_entered)
-	# Prompt tombol ikut perangkat terakhir (E di keyboard, A di gamepad).
-	PlayerInput.solo().device_changed.connect(_on_device_changed)
-	_refresh_label()
 
-func _on_device_changed(_pad: bool) -> void:
-	_refresh_label()
 
-func _refresh_label() -> void:
-	var label := get_node_or_null("Label") as Label
-	if label != null:
-		label.text = "↑ Kembali ke Forest" if returning else ("↓ Deep Forest" if UnlockManager.is_unlocked("deep_forest") else "↓ Deep Forest\n" + InputPrompt.format(&"interact", "Unlock permanen: 3.000G + 150 Kayu + 75 Batu", null, InputLayout.FIELD))
+
+
 
 func _on_body_entered(body: Node2D) -> void:
 	if not body is Player or body.is_input_locked() or Transition.on_transition:
@@ -50,7 +43,6 @@ func interact(actor: Player = null) -> void:
 			Notify.say("Butuh akses Forest, 3.000G (%d), 150 Kayu (%d), 75 Batu (%d)." % [GameState.money, GameState.get_item_count("wood"), GameState.get_item_count("stone")])
 			return
 		Notify.say("Deep Forest terbuka permanen! Tidak ada biaya masuk berikutnya.")
-		_refresh_label()
 	_travel(player)
 
 func _travel(player: Player) -> void:

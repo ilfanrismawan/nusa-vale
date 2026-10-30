@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_event")
 id = &"shadow_dash"
+min_tier = 2
 kind = 1
 weight = 0.8
 min_fear = 0.4

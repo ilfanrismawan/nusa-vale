@@ -1,0 +1,86 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scripts/horror/night_stalker.gd" id="1_stalker"]
+[ext_resource type="Texture2D" path="res://assets/horror/leak.png" id="2_sheet"]
+[ext_resource type="Texture2D" path="res://assets/horror/jumpscare_leak.png" id="3_face"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f0"]
+atlas = ExtResource("2_sheet")
+region = Rect2(0, 0, 24, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f1"]
+atlas = ExtResource("2_sheet")
+region = Rect2(24, 0, 24, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f2"]
+atlas = ExtResource("2_sheet")
+region = Rect2(48, 0, 24, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f3"]
+atlas = ExtResource("2_sheet")
+region = Rect2(72, 0, 24, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f4"]
+atlas = ExtResource("2_sheet")
+region = Rect2(96, 0, 24, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_body"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f3")
+}],
+"loop": true,
+"name": &"float",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f4")
+}],
+"loop": true,
+"name": &"lunge",
+"speed": 10.0
+}]
+
+[node name="Leak" type="Node2D"]
+z_index = 3
+script = ExtResource("1_stalker")
+display_name = "Leak"
+ghost_id = &"leak"
+reward_item_id = "bara_banaspati"
+journal_hint = "Tembus lentera. Takut api besar."
+glide_speed = 40.0
+glide_accel = 70.0
+lifetime = 70.0
+touch_radius = 10.0
+aura_radius = 110.0
+aura_fear_per_second = 0.4
+stamina_penalty = 40
+strong_light_only = true
+glow = Color(1.8, 1.7, 1.7, 1)
+notify_spawn = "Sesuatu melayang rendah di atas pepohonan... sebuah kepala dengan isi perut menjuntai. Lentera tak akan menolongmu."
+notify_touch = "Leak menyambar dari udara! Energi -%d."
+notify_repelled = "Api besar membuat Leak menjerit dan terbang menjauh."
+jumpscare_texture = ExtResource("3_face")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, -26)
+sprite_frames = SubResource("SpriteFrames_body")
+animation = &"float"
+autoplay = "float"
+
+[node name="Presence" type="AudioStreamPlayer2D" parent="."]
+max_distance = 260.0
+attenuation = 1.6
+bus = &"SFX"

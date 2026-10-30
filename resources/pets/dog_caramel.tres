@@ -1,14 +1,15 @@
 [gd_resource type="Resource" format=3 uid="uid://ekgcceush4b0"]
 
 [ext_resource type="Script" uid="uid://bjxfn7uk6q6t8" path="res://scripts/resources/starter_pet_option.gd" id="script"]
-[ext_resource type="Texture2D" uid="uid://bpb8rdn8f7oyi" path="res://assets/farm_rpg/icons/Pets/dogs icons.png" id="sheet"]
+[ext_resource type="Texture2D" uid="uid://c6g53vp7ufemw" path="res://assets/farm_rpg/animals/Pets/Dogs/9/5.png" id="sheet"]
 
 [sub_resource type="AtlasTexture" id="Icon"]
 atlas = ExtResource("sheet")
-region = Rect2(0, 32, 16, 16)
+region = Rect2(6, 41, 20, 20)
 
 [resource]
 script = ExtResource("script")
 pet_id = "dog_caramel"
 display_name = "Anjing Karamel"
 icon = SubResource("Icon")
+sheet = ExtResource("sheet")

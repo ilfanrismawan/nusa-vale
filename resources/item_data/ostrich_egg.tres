@@ -11,9 +11,11 @@ filter_clip = true
 
 [resource]
 script = ExtResource("1_item")
+edible = true
+stamina_restore = 8
 item_id = "ostrich_egg"
 display_name = "Telur Burung Unta"
 icon = SubResource("Icon")
-description = "Bahan dapur. Harga dan ikon dapat diubah melalui Inspector."
-buy_price = 100
-sell_price = 50
+description = "Telur besar hasil burung unta. Bahan dapur bernilai tinggi; bisa ditetaskan di Inkubator kandang unggas."
+buy_price = 600
+sell_price = 300

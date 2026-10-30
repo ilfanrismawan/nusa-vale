@@ -44,8 +44,7 @@ func run() -> void:
 	add_child(inventory_ui)
 	check(inventory_ui._consume_button != null, "inventory consumption UI builds")
 	inventory_ui.queue_free()
-	var shrine := Area2D.new()
-	shrine.set_script(load("res://scripts/world/daya_shrine.gd"))
+	var shrine := (load("res://scenes/world/exterior/object/daya_shrine.tscn") as PackedScene).instantiate()
 	add_child(shrine)
 	check(shrine.collision_layer != 0, "shrine is discoverable by interaction query")
 	shrine.queue_free()
@@ -97,19 +96,23 @@ func run() -> void:
 	add_child(forest)
 	await get_tree().physics_frame
 	var actor := forest.get_node("Player/CharacterBody2D") as Player
-	actor.global_position = Vector2(672, 480) - actor.FEET_OFFSET - Vector2.UP * actor.INTERACTION_DISTANCE
+	var placed_shrine := forest.get_node("YSortEntities/DayaShrine") as Node2D
+	check(placed_shrine.get_node("Seed").texture == GameState._resolve_item("biji_daya_forest").icon, "shrine shows the Biji Daya item icon")
+	actor.global_position = placed_shrine.global_position - actor.FEET_OFFSET - Vector2.UP * actor.INTERACTION_DISTANCE
 	actor.facing_direction = Vector2.UP
 	await get_tree().physics_frame
 	var actual_shrine := actor._find_interactable()
 	check(actual_shrine != null and actual_shrine.get_script() == load("res://scripts/world/daya_shrine.gd"), "forest physics query reaches placed shrine")
+	# Lewat tombol Interaksi pemain yang sebenarnya, bukan memanggil shrine langsung.
 	WorldState.set_flag("bridge_repaired", false)
-	if actual_shrine != null:
-		actual_shrine.interact(actor)
+	actor._try_interact()
 	check(not m.obtained.has("forest"), "shrine remains gated before bridge repair")
 	WorldState.set_flag("bridge_repaired", true)
-	if actual_shrine != null:
-		actual_shrine.interact(actor)
+	check(actor._try_interact(), "interact button reaches the shrine")
 	check(p.get_item_count("biji_daya_forest") == 1, "exploration interaction awards seed")
+	check(actual_shrine == null or (actual_shrine._playing and actor.is_input_locked()), "obtaining plays the reward effect and holds the player")
+	await get_tree().create_timer(2.5).timeout
+	check(actual_shrine == null or (not actual_shrine._playing and not actor.is_input_locked() and not actual_shrine.get_node("Seed").visible), "reward effect ends, frees the player and empties the shrine")
 	var bag = actor.ui_inventory
 	bag._open()
 	for i in p.bag_size:

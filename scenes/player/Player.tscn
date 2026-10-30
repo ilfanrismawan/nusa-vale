@@ -2386,6 +2386,7 @@ script = ExtResource("28_root")
 script = ExtResource("1_524rm")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D" unique_id=561424470]
+offset = Vector2(0, -10)
 sprite_frames = SubResource("SpriteFrames_ovsut")
 animation = &"axe_down"
 autoplay = "idle_down"

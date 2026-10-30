@@ -1,0 +1,25 @@
+[gd_resource type="Resource" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/wildlife_data.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/animals/Forest/Turtle/Green/Walk.png" id="2_walk"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/animals/Forest/Turtle/Green/Idle.png" id="3_idle"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/animals/Forest/Turtle/Green/Sleep, hide.png" id="4_run"]
+
+[resource]
+script = ExtResource("1_script")
+display_name = "Kura-kura"
+frame_size = 32
+walk_sheet = ExtResource("2_walk")
+idle_sheet = ExtResource("3_idle")
+run_sheet = ExtResource("4_run")
+faces_right = true
+seasons = PackedStringArray("spring", "summer", "fall")
+locations = PackedStringArray("forest")
+time = "day"
+weight = 0.5
+walk_speed = 4.0
+run_speed = 0.0
+flee_radius = 28.0
+favorite_foods = PackedStringArray("cabbage")
+gift_item = "fish_shell"
+gift_chance = 0.5

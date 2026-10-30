@@ -1,5 +1,7 @@
 [gd_resource type="Theme" format=3 uid="uid://c1wj1ihbrjfm"]
 
+[ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="pixel_font"]
+
 [sub_resource type="StyleBoxFlat" id="Buff"]
 content_margin_left = 10.0
 content_margin_top = 8.0
@@ -113,13 +115,9 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
-[sub_resource type="SystemFont" id="Font"]
-font_names = PackedStringArray("Comic Sans MS", "Segoe UI", "Arial")
-font_weight = 700
-
 [resource]
-default_font = SubResource("Font")
-default_font_size = 22
+default_font = ExtResource("pixel_font")
+default_font_size = 16
 BuffPanel/base_type = &"PanelContainer"
 BuffPanel/styles/panel = SubResource("Buff")
 Button/colors/font_color = Color(1, 0.9, 0.81, 1)
@@ -149,7 +147,7 @@ KeyBadge/styles/pressed = SubResource("Selected")
 Label/colors/font_color = Color(0.27, 0.19, 0.1, 1)
 NewBadge/base_type = &"Label"
 NewBadge/colors/font_color = Color(1, 1, 1, 1)
-NewBadge/font_sizes/font_size = 19
+NewBadge/font_sizes/font_size = 16
 NewBadge/styles/normal = SubResource("New")
 PanelContainer/styles/panel = SubResource("Paper")
 RecipeCard/base_type = &"Button"

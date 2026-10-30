@@ -17,9 +17,11 @@ const FONT: Font = preload("res://resources/ui/readable_font.tres")
 
 ## Garis pemisah antar layar (piksel layar).
 const GAP := 2
-## Ukuran logis 2D layar = ukuran sebenarnya x UI_SCALE, sehingga HUD/tas (dirancang untuk
-## 854x480) tetap muat dan font piksel tampil 1:1.
-const UI_SCALE := 2.0
+## Skala UI per pemain (Setelan > Layar > Skala UI). 1.0 = seukuran main sendiri.
+## Ukuran logis 2D layar = ukuran sebenarnya / skala, dan zoom kamera dibagi skala yang sama
+## sehingga besar dunia tidak berubah; hanya HUD, hotbar, dan tas yang membesar/mengecil.
+const UI_SCALES: Array[float] = [0.75, 1.0, 1.25, 1.5]
+const DEFAULT_UI_SCALE := 1.0
 ## Zoom kamera efektif (piksel layar per piksel dunia) per jumlah pemain.
 const EFFECTIVE_ZOOM := {2: 2.0, 3: 1.5, 4: 1.5}
 ## Jarak antar pemain saat muncul bersama.
@@ -61,6 +63,7 @@ var _area_of: Array[String] = []
 var _fades: Array[ColorRect] = []
 var _juice_layers: Array[CanvasLayer] = []
 var _busy: Array[bool] = []
+var _ui_scales: Array[float] = []
 var _sleeping: Dictionary = {} # player_index -> true
 var _spare_panel: Control
 var _spare_label: Label
@@ -74,7 +77,7 @@ func _ready() -> void:
 
 	for i in count:
 		_build_view(i)
-	_build_spare_panel(count)
+	_sync_spare_panel(count)
 	_layout()
 	get_viewport().size_changed.connect(_layout)
 
@@ -153,6 +156,31 @@ func has_busy_player() -> bool:
 func sleeping_count() -> int:
 	return _sleeping.size()
 
+## Skala UI layar pemain `index` (1.0 = seukuran main sendiri).
+func ui_scale_of(index: int) -> float:
+	return _ui_scales[index] if index >= 0 and index < _ui_scales.size() else DEFAULT_UI_SCALE
+
+## Ganti skala UI satu pemain; disimpan per kursi (P1-P4) di user://, bukan di save.
+func set_ui_scale(index: int, value: float) -> void:
+	if index < 0 or index >= _ui_scales.size():
+		return
+	value = clampf(value, UI_SCALES[0], UI_SCALES[-1])
+	InputLayout.save_option(_ui_scale_option(index), value)
+	if is_equal_approx(_ui_scales[index], value):
+		return
+	_ui_scales[index] = value
+	var cam := _cameras[index]
+	if cam != null and cam.has_method("set_coop_mode"):
+		cam.set_coop_mode(Coop.get_input(index).uses_mouse(), 1.0 / value)
+	_layout()
+
+static func load_ui_scale(index: int) -> float:
+	var value := float(InputLayout.load_option(_ui_scale_option(index), DEFAULT_UI_SCALE))
+	return clampf(value, UI_SCALES[0], UI_SCALES[-1])
+
+static func _ui_scale_option(index: int) -> String:
+	return "coop_ui_scale_p%d" % (index + 1)
+
 
 # ── Layar ───────────────────────────────────────────────────────────
 
@@ -199,10 +227,17 @@ func _build_view(index: int) -> void:
 	_roots.append(null)
 	_area_of.append("")
 	_busy.append(false)
+	_ui_scales.append(load_ui_scale(index))
 
-## Kuadran ke-4 saat 3 pemain: jam dan hari.
-func _build_spare_panel(count: int) -> void:
+## Kuadran ke-4 saat 3 pemain: jam dan hari. Dilepas lagi bila jumlah pemain bukan 3.
+func _sync_spare_panel(count: int) -> void:
 	if count != 3:
+		if _spare_panel != null:
+			_spare_panel.queue_free()
+			_spare_panel = null
+			_spare_label = null
+		return
+	if _spare_panel != null:
 		return
 	_spare_panel = ColorRect.new()
 	(_spare_panel as ColorRect).color = Color(0.09, 0.07, 0.1)
@@ -216,6 +251,8 @@ func _build_spare_panel(count: int) -> void:
 	_spare_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_spare_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_spare_panel.add_child(_spare_label)
+	if is_node_ready():
+		_on_time_tick(DayCycle.hour, DayCycle.minute)
 
 func _layout() -> void:
 	var size_px := get_viewport_rect().size
@@ -242,8 +279,7 @@ func _layout() -> void:
 		var c := _containers[i]
 		c.position = rects[i].position
 		c.size = rects[i].size
-		var ui_scale := UI_SCALE if count > 1 else 1.0
-		_views[i].size_2d_override = Vector2i((rects[i].size * ui_scale).round())
+		_views[i].size_2d_override = Vector2i((rects[i].size / _ui_scales[i]).round())
 	if _spare_panel != null and rects.size() >= 4:
 		_spare_panel.position = rects[3].position
 		_spare_panel.size = rects[3].size
@@ -348,6 +384,22 @@ func _unload_unused() -> void:
 
 # ── Pemain ──────────────────────────────────────────────────────────
 
+## Drop-in saat sudah co-op: tambah layar pemain `index` (input dan data sudah disiapkan
+## Coop) lalu munculkan di plan {"path", "position"}. Layar lain hanya diatur ulang ukurannya.
+func add_player(index: int, plan: Dictionary) -> void:
+	if index != _views.size():
+		push_error("CoopRoot.add_player: index %d tidak berurutan" % index)
+		return
+	_build_view(index)
+	_sync_spare_panel(_views.size())
+	_layout()
+	var area: Area = null
+	if not str(plan.get("path", "")).is_empty():
+		area = _area(plan["path"])
+	if area == null:
+		area = _area(START_AREA)
+	_spawn_player(index, area, plan.get("position", null))
+
 func _spawn_player(index: int, area: Area, spawn: Variant = null) -> void:
 	var proot: Node2D = PLAYER_SCENE.instantiate()
 	proot.set("player_index", index)
@@ -372,7 +424,7 @@ func _spawn_player(index: int, area: Area, spawn: Variant = null) -> void:
 		cam.process_mode = Node.PROCESS_MODE_PAUSABLE
 		cam.reparent(view, false)
 		if cam.has_method("set_coop_mode"):
-			cam.set_coop_mode(Coop.get_input(index).uses_mouse(), UI_SCALE)
+			cam.set_coop_mode(Coop.get_input(index).uses_mouse(), 1.0 / _ui_scales[index])
 		cam.make_current()
 
 	_roots[index] = proot
@@ -409,9 +461,9 @@ func _apply_camera(index: int) -> void:
 	var count := Coop.player_count()
 	var effective: float = EFFECTIVE_ZOOM.get(count, 2.0)
 	if cam.has_method("set_default_zoom"):
-		cam.set_default_zoom(effective * UI_SCALE)
+		cam.set_default_zoom(effective / _ui_scales[index])
 	else:
-		cam.zoom = Vector2.ONE * effective * UI_SCALE
+		cam.zoom = Vector2.ONE * effective / _ui_scales[index]
 
 ## Pindahkan satu pemain ke area lain (pintu). Pemain lain tidak ikut.
 func move_player(body: Player, path: String, spawn: Variant = null) -> void:

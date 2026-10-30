@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3]
+[ext_resource type="Shader" path="res://resources/ui/cooking_backdrop.gdshader" id="shader"]
+[sub_resource type="ShaderMaterial" id="Blur"]
+shader = ExtResource("shader")
+shader_parameter/blur_amount = 3.0
+shader_parameter/top_tint = Color(0.08, 0.055, 0.07, 0.22)
+shader_parameter/bottom_tint = Color(0.08, 0.055, 0.07, 0.35)
+[node name="Backdrop" type="ColorRect"]
+material = SubResource("Blur")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

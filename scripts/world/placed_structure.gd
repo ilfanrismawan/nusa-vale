@@ -1,104 +1,73 @@
 extends StaticBody2D
 
+const PRODUCT_READY_SOUND := preload("res://scripts/world/product_ready_sound.gd")
+
 var uid := 0
-var _sprite: Sprite2D
-var _collision: CollisionShape2D
+@onready var _sprite: Sprite2D = $Sprite
+@onready var _collision: CollisionShape2D = $CollisionShape2D
 var _chest_open := false
 var _quiet_until_ms := 0
 var _lid_tween: Tween
-var _coop_status: Label
-var _egg_icon: Sprite2D
-var _particles: CPUParticles2D
-var _light: PointLight2D
-var _audio_loop: AudioStreamPlayer2D
+@onready var _coop_status: Label = $CoopStatus
+@onready var _egg_icon: Sprite2D = $EggIcon
+@onready var _particles: CPUParticles2D = $ProcessingParticles
+@onready var _light: PointLight2D = $ProcessingLight
+@onready var _ready_sound: PRODUCT_READY_SOUND = $ReadySound
+@onready var _audio_loop: AudioStreamPlayer2D = $ProcessingAudio
 var _was_running := false
 var _ready_bounce_time := 0.0
 
 # ── Stardew Valley Style Juice & Ready Bubble ──
-var _ready_bubble: Node2D
-var _bubble_bg: Sprite2D
-var _bubble_icon: Sprite2D
+@onready var _ready_bubble: Node2D = $ReadyBubble
+@onready var _bubble_bg: Sprite2D = $ReadyBubble/Background
+@onready var _bubble_icon: Sprite2D = $ReadyBubble/ProductIcon
 var _squash_tween: Tween
 
+@export_group("Balon Hasil Produksi")
+@export var ready_bubble_enabled := true
+## Posisi ReadyBubble di scene menjadi offset dasar, ditambah tinggi objek ini.
+@export_range(0.0, 2.0, 0.05) var ready_height_factor := 0.4
+@export_range(0.0, 20.0, 0.5) var ready_bob_amplitude := 3.0
+## Kecepatan animasi melayang dalam radian per detik; 0 = diam.
+@export_range(0.0, 20.0, 0.1) var ready_bob_speed := 6.0
+@export var use_product_icon := true
+@export_range(1.0, 128.0, 1.0) var ready_icon_size := 14.0
+## AtlasTexture sudah dipotong oleh resource item; gambar spritesheet mentah memakai frame ini.
+@export var crop_product_sheet := true
+@export var product_frame_size := Vector2i(16, 16)
+@export var product_frame := Vector2i.ZERO
+@export_group("Juice Balon")
+@export var bubble_juice_enabled := true
+@export_range(0.05, 1.5, 0.01) var bubble_pop_seconds := 0.32
+@export_range(0.1, 1.0, 0.05) var bubble_pop_start_scale := 0.45
+@export_range(0.0, 4.0, 0.1) var bubble_pop_overshoot := 1.8
+@export_range(0.0, 0.4, 0.01) var bubble_pop_stretch := 0.12
+@export_range(0.0, 0.15, 0.005) var bubble_idle_pulse := 0.025
+@export_range(0.0, 12.0, 0.1) var bubble_pulse_speed := 3.0
+@export_range(0.0, 8.0, 0.1) var bubble_sway_degrees := 1.5
+@export_range(0.0, 12.0, 0.1) var bubble_sway_speed := 2.0
+@export_range(0.05, 1.0, 0.01) var bubble_collect_seconds := 0.18
+@export_range(0.0, 40.0, 0.5) var bubble_collect_rise := 10.0
+@export_range(0.5, 2.0, 0.01) var bubble_collect_scale := 1.12
+var _bubble_base_scale := Vector2.ONE
+var _bubble_base_modulate := Color.WHITE
+var _bubble_base_rotation := 0.0
+var _bubble_present := false
+var _bubble_departing := false
+var _bubble_age := 0.0
+var _bubble_departure_age := 0.0
+var _bubble_exit_position := Vector2.ZERO
+var _bubble_origin := Vector2.ZERO
+var _icon_base_scale := Vector2.ONE
+
 func _ready() -> void:
-	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	set_meta("player_interaction", true)
-	_sprite = Sprite2D.new()
-	add_child(_sprite)
-	_collision = CollisionShape2D.new()
-	add_child(_collision)
-	_coop_status = Label.new()
-	_coop_status.position = Vector2(-24, 25)
-	_coop_status.add_theme_font_override("font", preload("res://assets/fonts/m5x7.ttf"))
-	_coop_status.add_theme_font_size_override("font_size", 12)
-	_coop_status.add_theme_color_override("font_color", Color("fff1c9"))
-	_coop_status.add_theme_color_override("font_outline_color", Color("302333"))
-	_coop_status.add_theme_constant_override("outline_size", 2)
-	_coop_status.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_coop_status)
-	_egg_icon = Sprite2D.new()
-	_egg_icon.position = Vector2(28, 27)
-	_egg_icon.texture = preload("res://assets/farm_rpg/icons/Food Icons/Chicken Egg.png")
-	add_child(_egg_icon)
-
-	# ── VFX: Partikel buatan prosedural (CC0) ──
-	_particles = CPUParticles2D.new()
-	_particles.emitting = false
-	_particles.amount = 14
-	_particles.lifetime = 0.85
-	_particles.position = Vector2(0, -6)
-	_particles.direction = Vector2.UP
-	_particles.spread = 22.0
-	_particles.gravity = Vector2(0, -28)
-	_particles.initial_velocity_min = 16.0
-	_particles.initial_velocity_max = 34.0
-	_particles.scale_amount_min = 1.5
-	_particles.scale_amount_max = 2.5
-	add_child(_particles)
-
-	# ── VFX: Cahaya hangat prosedural (CC0) ──
-	var gradient := Gradient.new()
-	gradient.colors = PackedColorArray([Color(1.0, 0.65, 0.2, 0.8), Color(1.0, 0.35, 0.0, 0.0)])
-	var grad_tex := GradientTexture2D.new()
-	grad_tex.gradient = gradient
-	grad_tex.fill = GradientTexture2D.FILL_RADIAL
-	grad_tex.fill_from = Vector2(0.5, 0.5)
-	grad_tex.fill_to = Vector2(1.0, 0.5)
-	grad_tex.width = 64
-	grad_tex.height = 64
-
-	_light = PointLight2D.new()
-	_light.texture = grad_tex
-	_light.enabled = false
-	_light.texture_scale = 1.3
-	add_child(_light)
-
-	# ── SFX: Audio loop spasial saat mesin running (CC0) ──
-	_audio_loop = AudioStreamPlayer2D.new()
-	_audio_loop.bus = &"SFX"
-	_audio_loop.volume_db = -14
-	_audio_loop.max_distance = 180.0
-	_audio_loop.attenuation = 1.5
-	add_child(_audio_loop)
-
-	# ── Stardew Style Ready Product Floating Bubble ──
-	_ready_bubble = Node2D.new()
-	_ready_bubble.visible = false
-	_ready_bubble.z_index = 8
-	add_child(_ready_bubble)
-
-	_bubble_bg = Sprite2D.new()
-	var bubble_texture: Texture2D = preload("res://assets/farm_rpg/ui/speech bubble, emojis, reaction.png")
-	_bubble_bg.texture = bubble_texture
-	_bubble_bg.region_enabled = true
-	_bubble_bg.region_rect = Rect2(3, 2, 21, 22)
-	_bubble_bg.offset = Vector2(0, -4)
-	_ready_bubble.add_child(_bubble_bg)
-
-	_bubble_icon = Sprite2D.new()
-	_bubble_icon.position = Vector2(0, -5)
-	_ready_bubble.add_child(_bubble_icon)
-
+	_bubble_origin = _ready_bubble.position
+	_bubble_base_scale = _ready_bubble.scale
+	_bubble_base_modulate = _ready_bubble.modulate
+	_bubble_base_rotation = _ready_bubble.rotation
+	_icon_base_scale = _bubble_icon.scale
+	_ready_bubble.hide()
 	_quiet_until_ms = Time.get_ticks_msec() + 400
 	refresh()
 
@@ -212,7 +181,8 @@ func refresh() -> void:
 		_sprite.hframes = 4
 	if record.item in ["cheese_press", "loom"]:
 		_sprite.texture = (item.icon as AtlasTexture).atlas
-		_sprite.hframes = _sprite.texture.get_width() / 32
+		_sprite.hframes = maxi(1, _sprite.texture.get_width() / 32)
+		_sprite.vframes = maxi(1, _sprite.texture.get_height() / 32)
 	var art := _art(str(record.item))
 	if record.item in StructureManager.DECOR or record.item in StructureManager.WORKSHOPS:
 		if int(art.get("frames", 1)) > 1:
@@ -228,10 +198,15 @@ func _art(item_id: String) -> Dictionary:
 
 func _process(delta: float) -> void:
 	var record := StructureManager.record_for(uid)
+	if record.is_empty():
+		_ready_sound.update_ready(false)
+		_ready_bubble.hide()
+		return
 	var is_machine: bool = record.get("item") in ["furnace", "preserves_jar", "dehydrator", "sawmill", "beehive", "keg", "oil_maker", "fish_smoker", "lightning_rod"] or record.get("item") in StructureManager.ARTISANS
 	# Sarang lebah selalu punya job (hari panen), jadi tidak dihitung "berjalan".
 	var is_running: bool = is_machine and not record.job.is_empty() and DayCycle.is_running and record.get("item") != "beehive"
 	var is_ready: bool = is_machine and not record.ready.is_empty()
+	_ready_sound.update_ready(is_ready)
 
 	if record.get("item") == "furnace":
 		_sprite.frame = int(Time.get_ticks_msec() / 125) % 5 if is_running else 0
@@ -313,23 +288,35 @@ func _process(delta: float) -> void:
 
 	# ── SFX & VFX Saat Mesin Selesai (Ready) ──
 	if _was_running and not is_running and is_ready:
-		Juice.sfx(load("res://assets/audio/sfx/machines/machine_ready.wav"), -4.0)
 		Juice.play(&"sparkle", global_position)
 
 	# ── Stardew-Style Ready Product Floating Bubble ──
-	if is_ready and not record.ready.is_empty():
+	if ready_bubble_enabled and is_ready and not record.ready.is_empty():
 		_ready_bubble.visible = true
 		var pid := str(record.ready.get("id", ""))
 		var pitem := GameState._resolve_item(pid)
-		if pitem != null and pitem.icon != null:
-			_bubble_icon.texture = pitem.icon
-			var max_dim := maxf(float(pitem.icon.get_width()), float(pitem.icon.get_height()))
-			_bubble_icon.scale = Vector2.ONE * (14.0 / maxf(1.0, max_dim))
-		var bob := sin(Time.get_ticks_msec() * 0.006) * 3.0
-		var h: float = _sprite.texture.get_height() if _sprite.texture != null else 32.0
-		_ready_bubble.position = Vector2(0, _sprite.position.y - (h * 0.4) - 12.0 + bob)
+		if use_product_icon:
+			_bubble_icon.texture = pitem.icon if pitem != null else null
+			_bubble_icon.region_enabled = false
+			if pitem != null and pitem.icon != null:
+				var icon_texture: Texture2D = pitem.icon
+				var frame_size := Vector2i(maxi(1, product_frame_size.x), maxi(1, product_frame_size.y))
+				var source_size := Vector2i(icon_texture.get_width(), icon_texture.get_height())
+				if crop_product_sheet and not icon_texture is AtlasTexture and source_size.x % frame_size.x == 0 and source_size.y % frame_size.y == 0 and source_size != frame_size:
+					var columns := source_size.x / frame_size.x
+					var rows := source_size.y / frame_size.y
+					var frame_cell := Vector2i(clampi(product_frame.x, 0, columns - 1), clampi(product_frame.y, 0, rows - 1))
+					_bubble_icon.region_enabled = true
+					_bubble_icon.region_rect = Rect2(Vector2(frame_cell * frame_size), Vector2(frame_size))
+				var max_dim := maxf(_bubble_icon.get_rect().size.x, _bubble_icon.get_rect().size.y)
+				_bubble_icon.scale = _icon_base_scale * (ready_icon_size / maxf(1.0, max_dim))
+
+		var bob := sin(_bubble_age * ready_bob_speed) * ready_bob_amplitude
+		var h: float = _sprite.get_rect().size.y if _sprite.texture != null else 32.0
+		_ready_bubble.position = _bubble_origin + Vector2(0, _sprite.position.y - h * ready_height_factor + bob)
+		_update_bubble_juice(delta, true)
 	else:
-		_ready_bubble.visible = false
+		_update_bubble_juice(delta, false)
 
 	# Animasi lembut saat produk sedang diproses atau siap diambil
 	var is_tweening: bool = _squash_tween != null and _squash_tween.is_valid()
@@ -352,6 +339,54 @@ func _process(delta: float) -> void:
 		_update_chest_lid()
 	_animate_art(str(record.get("item", "")))
 
+## Animasi relatif terhadap transform scene, tanpa tween yang bertumpuk saat refresh.
+func _update_bubble_juice(delta: float, present: bool) -> void:
+	if not ready_bubble_enabled or not bubble_juice_enabled:
+		_bubble_present = present and ready_bubble_enabled
+		_bubble_departing = false
+		_bubble_age = _bubble_age + maxf(0.0, delta) if _bubble_present else 0.0
+		_ready_bubble.visible = _bubble_present
+		_ready_bubble.scale = _bubble_base_scale
+		_ready_bubble.rotation = _bubble_base_rotation
+		_ready_bubble.modulate = _bubble_base_modulate
+		return
+	if present:
+		if not _bubble_present:
+			_bubble_age = 0.0
+		_bubble_present = true
+		_bubble_departing = false
+		_bubble_age += maxf(0.0, delta)
+		var progress := clampf(_bubble_age / maxf(0.001, bubble_pop_seconds), 0.0, 1.0)
+		var back := progress - 1.0
+		var eased := 1.0 + (bubble_pop_overshoot + 1.0) * back * back * back + bubble_pop_overshoot * back * back
+		var pop := lerpf(bubble_pop_start_scale, 1.0, eased)
+		var stretch := sin(progress * TAU) * (1.0 - progress) * bubble_pop_stretch
+		var idle := 1.0 + sin(_bubble_age * bubble_pulse_speed) * bubble_idle_pulse * progress
+		_ready_bubble.scale = _bubble_base_scale * Vector2(pop * (1.0 + stretch), pop * (1.0 - stretch)) * idle
+		_ready_bubble.rotation = _bubble_base_rotation + deg_to_rad(bubble_sway_degrees) * sin(_bubble_age * bubble_sway_speed) * progress
+		_ready_bubble.modulate = _bubble_base_modulate
+		_ready_bubble.visible = true
+		return
+	if _bubble_present:
+		_bubble_present = false
+		_bubble_departing = true
+		_bubble_departure_age = 0.0
+		_bubble_exit_position = _ready_bubble.position
+	if _bubble_departing:
+		_bubble_departure_age += maxf(0.0, delta)
+		var progress := clampf(_bubble_departure_age / maxf(0.001, bubble_collect_seconds), 0.0, 1.0)
+		_ready_bubble.position = _bubble_exit_position + Vector2.UP * bubble_collect_rise * progress
+		_ready_bubble.scale = _bubble_base_scale * lerpf(1.0, bubble_collect_scale, progress)
+		_ready_bubble.rotation = _bubble_base_rotation
+		_ready_bubble.modulate = _bubble_base_modulate * Color(1, 1, 1, 1.0 - progress)
+		if progress < 1.0:
+			return
+		_bubble_departing = false
+	_ready_bubble.hide()
+	_ready_bubble.scale = _bubble_base_scale
+	_ready_bubble.rotation = _bubble_base_rotation
+	_ready_bubble.modulate = _bubble_base_modulate
+
 ## Dekorasi/mesin baru: frame animasi, frame malam (lampu), dan cahaya saat malam.
 func _animate_art(item_id: String) -> void:
 	var art := _art(item_id)
@@ -364,6 +399,9 @@ func _animate_art(item_id: String) -> void:
 		_sprite.frame = int(Time.get_ticks_msec() / 140) % int(art.frames)
 	if art.get("light", false):
 		_light.enabled = night
+		# Cahaya kuat mengusir Leak/Kuyang (GDD 4.1, Progres Horor Tahap 5).
+		if art.get("strong_light", false) and not _light.is_in_group(&"horror_strong_light"):
+			_light.add_to_group(&"horror_strong_light")
 		_light.position = Vector2(0, _sprite.position.y - 6)
 		_light.energy = 0.6 + sin(Time.get_ticks_msec() * 0.006) * 0.08
 

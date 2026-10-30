@@ -161,16 +161,16 @@ func _build_decor(state: Dictionary) -> void:
 		_prop(preload("res://assets/farm_rpg/objects/exterior/Houses/Farm Buildings/Barn/Window.png"), Vector2(x, 147), Rect2(0, 0, 48, 32))
 	for x in [392, 462]:
 		_prop(preload("res://assets/farm_rpg/objects/exterior/Houses/Farm Buildings/Barn/Lamp.png"), Vector2(x, 146), Rect2(0, 0, 16, 32))
-	_prop(preload("res://assets/ranch/care_board.svg"), Vector2(567, 177))
+	_prop(preload("res://assets/ranch/care_board.png"), Vector2(567, 177))
 	_label(_decor, "Kelola", Vector2(550, 187))
 	_spots.append({"position": Vector2(567, 195), "action": "menu"})
 	_prop(preload("res://assets/farm_rpg/objects/exterior/Hay Bales.png"), Vector2(278, 178), Rect2(0, 0, 32, 16))
 	_label(_decor, "Cadangan", Vector2(257, 188))
 	_spots.append({"position": Vector2(278, 199), "action": "stock"})
-	_prop(preload("res://assets/ranch/feeding_trough.svg"), Vector2(427, 180))
+	_prop(preload("res://assets/ranch/feeding_trough.png"), Vector2(427, 180))
 	_label(_decor, "Palung", Vector2(410, 187))
 	_spots.append({"position": Vector2(427, 203), "action": "feed"})
-	_prop(preload("res://assets/ranch/water_basin.svg"), Vector2(587, 308))
+	_prop(preload("res://assets/ranch/water_basin.png"), Vector2(587, 308))
 	_label(_decor, "Keluar", Vector2(446, 312))
 	_spots.append({"position": Vector2(427, 339), "action": "exit"})
 	for slot in RanchHusbandry.capacity(state):
@@ -185,11 +185,11 @@ func _build_decor(state: Dictionary) -> void:
 		bedding.modulate = Color(1, 1, 1, 0.85)
 		_decor.add_child(bedding)
 		if housing == "chicken_coop":
-			_prop(preload("res://assets/ranch/nesting_box.svg"), center + Vector2(0, -18))
+			_prop(preload("res://assets/ranch/nesting_box.png"), center + Vector2(0, -18))
 	if housing == "chicken_coop":
 		_label(_decor, "Sarang telur", Vector2(464, 168))
 		_spots.append({"position": Vector2(499, 185), "action": "eggs"})
-		_prop(preload("res://assets/ranch/nesting_box.svg"), Vector2(500, 174))
+		_prop(preload("res://assets/ranch/nesting_box.png"), Vector2(500, 174))
 	_tier = int(state.tier)
 
 func _refresh() -> void:
@@ -232,7 +232,7 @@ func _refresh() -> void:
 	for index in int(state.dirt):
 		var pos := Vector2(393, 225 + index * 40)
 		var sprite := Sprite2D.new()
-		sprite.texture = preload("res://assets/ranch/dirt.svg")
+		sprite.texture = preload("res://assets/ranch/dirt.png")
 		sprite.position = pos
 		_dirt.add_child(sprite)
 		_spots.append({"position": pos, "action": "clean"})

@@ -11,7 +11,8 @@ extends RefCounted
 ## Fisher    fish_zone, bite_speed, cast_range (petak), perfect_window (+pengali), fish_double,
 ##           fish_calm, fish_sell, rare_fish (+pengali), ice_fishing
 ## Combat    attack, combat_stamina, parry_window (detik), riposte_bonus, attack_speed, low_hp_damage,
-##           max_hp, iframes (detik), poise_damage, kill_heal, damage_reduction, stagger_immune
+##           max_hp, iframes (detik), poise_damage, kill_heal, damage_reduction, stagger_immune,
+##           fear_resist (Nyali: bagian rasa takut malam dan kaku jumpscare yang ditahan, GDD 4.1)
 ## Miner     pickaxe_stamina, pickaxe_power, coal_double, gem_double, ore_double, smelt_speed, stairs_chance
 ## Merchant  shop_discount, shop_sell, bulk_seed_discount, facility_discount
 ## Balai Nadi (bonus sayap) tool_upgrade_discount (biaya uang upgrade alat), geode_chance (+pengali geoda)

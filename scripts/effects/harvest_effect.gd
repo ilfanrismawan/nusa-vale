@@ -6,8 +6,8 @@ const WEED_RADIUS := 12.0
 const WEED_RADIUS_PER_TIER := 4.0
 ## Jarak titik tebasan di depan badan pemain (px).
 const WEED_SWING_REACH := 12.0
-## Sama dengan Player.FEET_OFFSET (kaki pemain 8 px di bawah titik badannya).
-const FEET_OFFSET := Vector2(0, 8)
+## Kaki pemain (titik badan pemain = kaki).
+const FEET_OFFSET := Player.FEET_OFFSET
 
 func apply(player: Player, cell: Vector2i) -> void:
 	var tool := active_tool(player)

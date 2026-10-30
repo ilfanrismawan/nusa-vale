@@ -1,408 +1,439 @@
-[gd_scene format=3]
+[gd_scene load_steps=15 format=3]
+
 [ext_resource type="Script" path="res://scripts/ui/balai_nadi_ui.gd" id="script"]
 [ext_resource type="Theme" path="res://resources/ui/cooking_theme.tres" id="theme"]
-[ext_resource type="Theme" path="res://resources/ui/startup_form_theme.tres" id="form"]
-[ext_resource type="Texture2D" path="res://resources/balai_nadi/v3/icon_lotus.tres" id="lotus"]
-[ext_resource type="Shader" path="res://resources/ui/cooking_backdrop.gdshader" id="shader"]
-[sub_resource type="StyleBoxFlat" id="Paper"]
-bg_color = Color(0.969, 0.953, 0.914, 1)
-corner_radius_top_left = 20
-corner_radius_top_right = 20
-corner_radius_bottom_left = 20
-corner_radius_bottom_right = 20
-[sub_resource type="StyleBoxFlat" id="Track"]
-bg_color = Color(0.85, 0.83, 0.76, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_left = 4
-corner_radius_bottom_right = 4
-[sub_resource type="StyleBoxFlat" id="Fill"]
-bg_color = Color(0.48, 0.62, 0.35, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_left = 4
-corner_radius_bottom_right = 4
+[ext_resource type="Shader" path="res://resources/ui/cooking_backdrop.gdshader" id="backdrop_shader"]
+[ext_resource type="Shader" path="res://resources/ui/glass_panel.gdshader" id="glass_shader"]
+[ext_resource type="Script" path="res://scripts/ui/glass_panel.gd" id="glass_script"]
+[ext_resource type="PackedScene" path="res://scenes/ui/balai_radial_petal.tscn" id="petal"]
 
 [sub_resource type="ShaderMaterial" id="Backdrop"]
-shader = ExtResource("shader")
-shader_parameter/blur_amount = 3.5
-shader_parameter/top_tint = Color(0.03, 0.04, 0.02, 0.65)
-shader_parameter/bottom_tint = Color(0.24, 0.34, 0.24, 0.82)
+shader = ExtResource("backdrop_shader")
+shader_parameter/blur_amount = 2.5
+shader_parameter/top_tint = Color(0.03, 0.05, 0.12, 0.25)
+shader_parameter/bottom_tint = Color(0.08, 0.14, 0.26, 0.38)
+
+[sub_resource type="ShaderMaterial" id="CardGlass"]
+shader = ExtResource("glass_shader")
+shader_parameter/rect_size = Vector2(592, 532)
+shader_parameter/padding = 16.0
+shader_parameter/corner_radius = 30.0
+shader_parameter/refraction = 0.06
+
+[sub_resource type="ShaderMaterial" id="BonusGlass"]
+shader = ExtResource("glass_shader")
+shader_parameter/rect_size = Vector2(240, 48)
+shader_parameter/padding = 8.0
+shader_parameter/corner_radius = 16.0
+shader_parameter/shadow_alpha = 0.0
+
+[sub_resource type="ShaderMaterial" id="HintGlass"]
+shader = ExtResource("glass_shader")
+shader_parameter/rect_size = Vector2(420, 48)
+shader_parameter/padding = 6.0
+shader_parameter/corner_radius = 18.0
+shader_parameter/shadow_alpha = 0.0
+
+[sub_resource type="ShaderMaterial" id="RewardGlass"]
+shader = ExtResource("glass_shader")
+shader_parameter/rect_size = Vector2(252, 56)
+shader_parameter/padding = 6.0
+shader_parameter/corner_radius = 22.0
+shader_parameter/shadow_alpha = 0.0
+
+[sub_resource type="StyleBoxFlat" id="ButtonGlass"]
+bg_color = Color(1, 1, 1, 0.16)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 0.7)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+
+[sub_resource type="StyleBoxFlat" id="ButtonGold"]
+bg_color = Color(1, 0.84, 0.47, 0.88)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.97, 0.88, 0.95)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+
+[sub_resource type="StyleBoxFlat" id="ButtonOff"]
+bg_color = Color(1, 1, 1, 0.07)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 0.25)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
 
 [node name="BalaiNadiUI" type="CanvasLayer"]
-layer = 70
 process_mode = 3
+layer = 70
 script = ExtResource("script")
 
 [node name="Backdrop" type="ColorRect" parent="."]
+material = SubResource("Backdrop")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-material = SubResource("Backdrop")
+mouse_filter = 2
 
 [node name="Design" type="Control" parent="."]
-offset_left = 0.0
-offset_top = 0.0
+layout_mode = 3
+anchors_preset = 0
 offset_right = 1280.0
 offset_bottom = 720.0
 mouse_filter = 2
 theme = ExtResource("theme")
 
-[node name="Lotus" type="TextureRect" parent="Design"]
+[node name="Radial" type="Control" parent="Design"]
 unique_name_in_owner = true
-offset_left = 35.0
-offset_top = 24.0
-offset_right = 90.0
-offset_bottom = 79.0
-texture_filter = 1
+layout_mode = 3
+anchors_preset = 0
+offset_left = 640.0
+offset_top = 345.0
+offset_right = 640.0
+offset_bottom = 345.0
 mouse_filter = 2
-expand_mode = 1
-stretch_mode = 5
-texture = ExtResource("lotus")
 
-[node name="Heading" type="Label" parent="Design"]
+[node name="Title" type="Label" parent="Design/Radial"]
 unique_name_in_owner = true
-offset_left = 108.0
-offset_top = 26.0
-offset_right = 658.0
-offset_bottom = 74.0
+layout_mode = 0
+offset_left = -220.0
+offset_top = 70.0
+offset_right = 220.0
+offset_bottom = 98.0
+theme_override_colors/font_color = Color(1, 0.89, 0.6, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.08, 0.16, 0.85)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 19
 text = "Balai Nadi"
-theme_override_font_sizes/font_size = 34
-autowrap_mode = 3
-theme_override_colors/font_color = Color(1, 0.95, 0.86, 1)
+horizontal_alignment = 1
+vertical_alignment = 1
 
-
-[node name="Overall" type="Label" parent="Design"]
+[node name="Petals" type="Control" parent="Design/Radial"]
 unique_name_in_owner = true
-offset_left = 40.0
-offset_top = 89.0
-offset_right = 770.0
-offset_bottom = 119.0
-text = "0 / 3 paket selesai"
-theme_override_font_sizes/font_size = 16
-autowrap_mode = 3
-theme_override_colors/font_color = Color(1, 0.95, 0.86, 1)
-
-
-[node name="OverallProgress" type="ProgressBar" parent="Design"]
-unique_name_in_owner = true
-offset_left = 40.0
-offset_top = 128.0
-offset_right = 1240.0
-offset_bottom = 134.0
+layout_mode = 3
+anchors_preset = 0
 mouse_filter = 2
-theme_override_styles/background = SubResource("Track")
-theme_override_styles/fill = SubResource("Fill")
-show_percentage = false
 
-[node name="Owner" type="Label" parent="Design"]
+[node name="Core" parent="Design/Radial" instance=ExtResource("petal")]
 unique_name_in_owner = true
-offset_left = 770.0
-offset_top = 46.0
-offset_right = 1240.0
-offset_bottom = 81.0
-text = "Bahan dari tasmu · Dana bersama"
+offset_left = -60.0
+offset_top = -60.0
+offset_right = 60.0
+offset_bottom = 60.0
+selected_scale = 1.0
+
+[node name="BonusPill" type="Control" parent="Design/Radial"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 240.0
+offset_bottom = 48.0
+mouse_filter = 2
+
+[node name="Glass" type="ColorRect" parent="Design/Radial/BonusPill"]
+material = SubResource("BonusGlass")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("glass_script")
+corner_radius = 16.0
+padding = 8.0
+tint = Color(1, 0.86, 0.55, 0.18)
+
+[node name="BonusLabel" type="Label" parent="Design/Radial/BonusPill"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_colors/font_color = Color(1, 0.89, 0.6, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.08, 0.16, 0.85)
+theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 15
-autowrap_mode = 3
-theme_override_colors/font_color = Color(1, 0.95, 0.86, 1)
+horizontal_alignment = 1
+vertical_alignment = 1
 
-horizontal_alignment = 2
-
-[node name="Wings" type="VBoxContainer" parent="Design"]
+[node name="Card" type="Control" parent="Design"]
 unique_name_in_owner = true
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 344.0
+offset_top = 104.0
+offset_right = 936.0
+offset_bottom = 636.0
+pivot_offset = Vector2(296, 266)
+
+[node name="Glass" type="ColorRect" parent="Design/Card"]
+material = SubResource("CardGlass")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("glass_script")
+corner_radius = 30.0
+padding = 16.0
+tint = Color(0.8, 0.88, 1, 0.24)
+
+[node name="Header" parent="Design/Card" instance=ExtResource("petal")]
+unique_name_in_owner = true
+offset_left = 236.0
+offset_top = -44.0
+offset_right = 356.0
+offset_bottom = 76.0
+mouse_filter = 2
+selected_scale = 1.0
+
+[node name="CardTitle" type="Label" parent="Design/Card"]
+unique_name_in_owner = true
+layout_mode = 0
 offset_left = 40.0
-offset_top = 154.0
-offset_right = 260.0
-offset_bottom = 592.0
-theme_override_constants/separation = 10
+offset_top = 80.0
+offset_right = 552.0
+offset_bottom = 112.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.08, 0.16, 0.85)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 24
+text = "Paket"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="WingHint" type="Label" parent="Design"]
+[node name="CardProgress" type="Label" parent="Design/Card"]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 40.0
-offset_top = 539.0
-offset_right = 260.0
-offset_bottom = 654.0
-text = "Pulihkan balai bersama warga. Setiap sumbangan membuat perbedaan."
-theme_override_font_sizes/font_size = 17
-autowrap_mode = 3
-theme_override_colors/font_color = Color(1, 0.95, 0.86, 1)
+offset_top = 112.0
+offset_right = 552.0
+offset_bottom = 136.0
+theme_override_colors/font_color = Color(1, 0.89, 0.6, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.08, 0.16, 0.85)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 16
+text = "Terisi 0 dari 0"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-
-[node name="Catalog" type="Panel" parent="Design"]
-offset_left = 280.0
-offset_top = 150.0
-offset_right = 630.0
-offset_bottom = 600.0
-theme_override_styles/panel = SubResource("Paper")
-
-[node name="WingTitle" type="Label" parent="Design/Catalog"]
+[node name="CompletedStamp" type="Label" parent="Design/Card"]
 unique_name_in_owner = true
-offset_left = 18.0
-offset_top = 17.0
-offset_right = 332.0
-offset_bottom = 54.0
-text = "Semua Paket"
-theme_override_font_sizes/font_size = 22
-autowrap_mode = 3
+visible = false
+layout_mode = 0
+offset_left = 392.0
+offset_top = 34.0
+offset_right = 560.0
+offset_bottom = 62.0
+rotation = 0.12
+theme_override_colors/font_color = Color(0.51, 0.94, 0.75, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.08, 0.16, 0.9)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 16
+text = "PAKET LENGKAP"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-
-[node name="Bundles" type="GridContainer" parent="Design/Catalog"]
+[node name="Requirements" type="GridContainer" parent="Design/Card"]
 unique_name_in_owner = true
-offset_left = 18.0
-offset_top = 64.0
-offset_right = 332.0
-offset_bottom = 394.0
-columns = 2
+layout_mode = 0
+offset_left = 164.0
+offset_top = 146.0
+offset_right = 428.0
+offset_bottom = 410.0
 theme_override_constants/h_separation = 12
 theme_override_constants/v_separation = 12
+columns = 3
 
-[node name="Empty" type="Label" parent="Design/Catalog"]
+[node name="ItemName" type="Label" parent="Design/Card"]
 unique_name_in_owner = true
-offset_left = 22.0
-offset_top = 120.0
-offset_right = 328.0
-offset_bottom = 350.0
-text = "Belum ada paket."
-theme_override_font_sizes/font_size = 18
-autowrap_mode = 3
-
-
-[node name="PreviousBundles" type="Button" parent="Design/Catalog"]
-unique_name_in_owner = true
-offset_left = 18.0
-offset_top = 401.0
-offset_right = 73.0
-offset_bottom = 435.0
-text = "‹"
-theme_override_font_sizes/font_size = 16
-
-[node name="BundlePage" type="Label" parent="Design/Catalog"]
-unique_name_in_owner = true
-offset_left = 82.0
-offset_top = 403.0
-offset_right = 267.0
-offset_bottom = 433.0
-text = "1 / 1"
-theme_override_font_sizes/font_size = 15
-autowrap_mode = 3
-
-horizontal_alignment = 1
-
-[node name="NextBundles" type="Button" parent="Design/Catalog"]
-unique_name_in_owner = true
-offset_left = 277.0
-offset_top = 401.0
-offset_right = 332.0
-offset_bottom = 435.0
-text = "›"
-theme_override_font_sizes/font_size = 16
-
-[node name="Detail" type="Panel" parent="Design"]
-unique_name_in_owner = true
-offset_left = 650.0
-offset_top = 150.0
-offset_right = 1240.0
-offset_bottom = 600.0
-theme_override_styles/panel = SubResource("Paper")
-
-[node name="ProjectTitle" type="Label" parent="Design/Detail"]
-unique_name_in_owner = true
-offset_left = 24.0
-offset_top = 15.0
-offset_right = 502.0
-offset_bottom = 64.0
-text = "Pilih Paket"
-theme_override_font_sizes/font_size = 22
-autowrap_mode = 3
-
-
-[node name="ProjectIcon" type="TextureRect" parent="Design/Detail"]
-unique_name_in_owner = true
-offset_left = 510.0
-offset_top = 15.0
-offset_right = 566.0
-offset_bottom = 71.0
-texture_filter = 1
-mouse_filter = 2
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Description" type="Label" parent="Design/Detail"]
-unique_name_in_owner = true
-offset_left = 24.0
-offset_top = 77.0
-offset_right = 566.0
-offset_bottom = 142.0
-text = "Deskripsi paket."
-theme_override_font_sizes/font_size = 15
-autowrap_mode = 3
-
-
-[node name="PreviousRequirements" type="Button" parent="Design/Detail"]
-unique_name_in_owner = true
-offset_left = 24.0
-offset_top = 147.0
-offset_right = 66.0
-offset_bottom = 177.0
-text = "‹"
-theme_override_font_sizes/font_size = 16
-
-[node name="RequirementPage" type="Label" parent="Design/Detail"]
-unique_name_in_owner = true
-offset_left = 80.0
-offset_top = 148.0
-offset_right = 480.0
-offset_bottom = 178.0
-text = "Kebutuhan 1 / 1"
-theme_override_font_sizes/font_size = 15
-autowrap_mode = 3
-
-horizontal_alignment = 1
-
-[node name="NextRequirements" type="Button" parent="Design/Detail"]
-unique_name_in_owner = true
-offset_left = 524.0
-offset_top = 147.0
-offset_right = 566.0
-offset_bottom = 177.0
-text = "›"
-theme_override_font_sizes/font_size = 16
-
-[node name="Requirements" type="GridContainer" parent="Design/Detail"]
-unique_name_in_owner = true
-offset_left = 24.0
-offset_top = 187.0
-offset_right = 566.0
-offset_bottom = 319.0
-columns = 4
-theme_override_constants/h_separation = 10
-
-[node name="QuantityLabel" type="Label" parent="Design/Detail"]
-unique_name_in_owner = true
-offset_left = 24.0
-offset_top = 337.0
-offset_right = 96.0
-offset_bottom = 370.0
-text = "Jumlah"
-theme_override_font_sizes/font_size = 15
-autowrap_mode = 3
-
-
-[node name="Quantity" type="SpinBox" parent="Design/Detail"]
-unique_name_in_owner = true
-offset_left = 100.0
-offset_top = 331.0
-offset_right = 212.0
-offset_bottom = 374.0
-theme = ExtResource("form")
-min_value = 1.0
-max_value = 100.0
-value = 1.0
-step = 1.0
-rounded = true
-
-[node name="Maximum" type="Button" parent="Design/Detail"]
-unique_name_in_owner = true
-offset_left = 222.0
-offset_top = 331.0
-offset_right = 294.0
-offset_bottom = 374.0
-text = "Maks."
-theme_override_font_sizes/font_size = 16
-
-[node name="Donate" type="Button" parent="Design/Detail"]
-unique_name_in_owner = true
-offset_left = 305.0
-offset_top = 331.0
-offset_right = 566.0
-offset_bottom = 374.0
-text = "Sumbangkan"
-theme_override_font_sizes/font_size = 16
-
-[node name="Status" type="Label" parent="Design/Detail"]
-unique_name_in_owner = true
-offset_left = 24.0
-offset_top = 388.0
-offset_right = 566.0
-offset_bottom = 438.0
-text = "Kontribusi bertahap disimpan otomatis."
-theme_override_font_sizes/font_size = 14
-autowrap_mode = 3
-
-
-[node name="CompletedStamp" type="Label" parent="Design"]
-unique_name_in_owner = true
-offset_left = 900.0
-offset_top = 89.0
-offset_right = 1240.0
-offset_bottom = 121.0
-text = "PAKET LENGKAP"
-theme_override_font_sizes/font_size = 20
-autowrap_mode = 3
-
-visible = false
-theme_override_colors/font_color = Color(1, 0.86, 0.6, 1)
-horizontal_alignment = 1
-mouse_filter = 2
-
-[node name="RewardPanel" type="Panel" parent="Design"]
-unique_name_in_owner = true
-offset_left = 280.0
-offset_top = 610.0
-offset_right = 1240.0
-offset_bottom = 673.0
-theme_override_styles/panel = SubResource("Paper")
-
-[node name="RewardTitle" type="Label" parent="Design/RewardPanel"]
-unique_name_in_owner = true
-offset_left = 16.0
-offset_top = 15.0
-offset_right = 101.0
-offset_bottom = 49.0
-text = "Hadiah"
-theme_override_font_sizes/font_size = 18
-autowrap_mode = 3
-
-
-[node name="Reward" type="Label" parent="Design/RewardPanel"]
-unique_name_in_owner = true
-offset_left = 148.0
-offset_top = 7.0
-offset_right = 940.0
-offset_bottom = 58.0
-text = "Hadiah otomatis setelah paket lengkap."
-theme_override_font_sizes/font_size = 13
-autowrap_mode = 3
-
-[node name="RewardIcon" type="TextureRect" parent="Design/RewardPanel"]
-unique_name_in_owner = true
-offset_left = 100.0
-offset_top = 14.0
-offset_right = 136.0
-offset_bottom = 50.0
-texture_filter = 1
-mouse_filter = 2
-expand_mode = 1
-stretch_mode = 5
-
-
-[node name="Footer" type="Label" parent="Design"]
-unique_name_in_owner = true
+layout_mode = 0
 offset_left = 40.0
-offset_top = 683.0
-offset_right = 940.0
-offset_bottom = 713.0
-text = "Pilih paket → pilih bahan → atur jumlah → sumbangkan. Progres tersimpan otomatis."
-theme_override_font_sizes/font_size = 14
-autowrap_mode = 3
-theme_override_colors/font_color = Color(1, 0.95, 0.86, 1)
-
-
-[node name="Close" type="Button" parent="Design"]
-unique_name_in_owner = true
-offset_left = 1070.0
-offset_top = 681.0
-offset_right = 1240.0
-offset_bottom = 715.0
-text = "Esc  Tutup"
+offset_top = 412.0
+offset_right = 552.0
+offset_bottom = 436.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.08, 0.16, 0.85)
+theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RewardPill" type="Control" parent="Design/Card"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 30.0
+offset_top = 444.0
+offset_right = 282.0
+offset_bottom = 500.0
+mouse_filter = 2
+
+[node name="Glass" type="ColorRect" parent="Design/Card/RewardPill"]
+material = SubResource("RewardGlass")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("glass_script")
+corner_radius = 22.0
+padding = 6.0
+tint = Color(1, 0.86, 0.55, 0.16)
+
+[node name="RewardIcon" type="TextureRect" parent="Design/Card/RewardPill"]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 18.0
+offset_top = 12.0
+offset_right = 50.0
+offset_bottom = 44.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="RewardCount" type="Label" parent="Design/Card/RewardPill"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 54.0
+offset_top = 10.0
+offset_right = 110.0
+offset_bottom = 46.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.08, 0.16, 0.85)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 18
+vertical_alignment = 1
+
+[node name="RewardTokens" type="Label" parent="Design/Card/RewardPill"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 112.0
+offset_top = 10.0
+offset_right = 240.0
+offset_bottom = 46.0
+theme_override_colors/font_color = Color(1, 0.89, 0.6, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.08, 0.16, 0.85)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 16
+vertical_alignment = 1
+
+[node name="DonateAll" type="Button" parent="Design/Card"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 300.0
+offset_top = 450.0
+offset_right = 410.0
+offset_bottom = 494.0
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.35)
+theme_override_font_sizes/font_size = 17
+theme_override_styles/normal = SubResource("ButtonGlass")
+theme_override_styles/hover = SubResource("ButtonGlass")
+theme_override_styles/pressed = SubResource("ButtonGlass")
+theme_override_styles/disabled = SubResource("ButtonOff")
+text = "Semua"
+
+[node name="Donate" type="Button" parent="Design/Card"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 420.0
+offset_top = 450.0
+offset_right = 562.0
+offset_bottom = 494.0
+focus_mode = 0
+theme_override_colors/font_color = Color(0.12, 0.1, 0.18, 1)
+theme_override_colors/font_hover_color = Color(0.12, 0.1, 0.18, 1)
+theme_override_colors/font_pressed_color = Color(0.12, 0.1, 0.18, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.35)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("ButtonGold")
+theme_override_styles/hover = SubResource("ButtonGold")
+theme_override_styles/pressed = SubResource("ButtonGold")
+theme_override_styles/disabled = SubResource("ButtonOff")
+text = "Sumbang"
+
+[node name="Status" type="Label" parent="Design/Card"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 40.0
+offset_top = 498.0
+offset_right = 552.0
+offset_bottom = 520.0
+theme_override_colors/font_color = Color(1, 1, 1, 0.85)
+theme_override_colors/font_outline_color = Color(0.1, 0.08, 0.16, 0.85)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 13
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Back" type="Button" parent="Design/Card"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 28.0
+offset_top = 28.0
+offset_right = 72.0
+offset_bottom = 72.0
+tooltip_text = "Kembali"
+focus_mode = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.89, 0.6, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.89, 0.6, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.08, 0.16, 0.85)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("ButtonGlass")
+theme_override_styles/hover = SubResource("ButtonGlass")
+theme_override_styles/pressed = SubResource("ButtonGlass")
+text = "‹"
+
+[node name="Hints" type="Control" parent="Design"]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 0
+offset_left = 430.0
+offset_top = 658.0
+offset_right = 850.0
+offset_bottom = 706.0
+mouse_filter = 2
+
+[node name="Glass" type="ColorRect" parent="Design/Hints"]
+material = SubResource("HintGlass")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("glass_script")
+corner_radius = 18.0
+padding = 6.0
+
+[node name="HintLabel" type="Label" parent="Design/Hints"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.1, 0.08, 0.16, 0.85)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 15
+horizontal_alignment = 1
+vertical_alignment = 1

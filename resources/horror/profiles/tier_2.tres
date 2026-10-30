@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="HorrorProfile" format=3 uid="uid://bp2y3b2ha10iy"]
+
+[ext_resource type="Script" uid="uid://fbatp422sl5" path="res://scripts/data/horror_profile.gd" id="1_profile"]
+[ext_resource type="PackedScene" path="res://scenes/horror/banaspati.tscn" id="st_banaspati"]
+[ext_resource type="PackedScene" path="res://scenes/horror/genderuwo.tscn" id="st_genderuwo"]
+[ext_resource type="PackedScene" path="res://scenes/horror/kuntilanak.tscn" id="st_kuntilanak"]
+[ext_resource type="PackedScene" path="res://scenes/horror/pocong.tscn" id="st_pocong"]
+
+[resource]
+script = ExtResource("1_profile")
+tier = 2
+display_name = "Gangguan"
+unlock_cave_floor = 20
+unlock_day = 57
+unlock_area = "deep_forest"
+notify_reached = "Mbah Darmi berpesan: \"Malam-malam ini terasa lain, Nak. Yang dulu cuma berbisik, sekarang mulai mengganggu.\""
+stalkers = Array[PackedScene]([ExtResource("st_kuntilanak"), ExtResource("st_pocong"), ExtResource("st_genderuwo"), ExtResource("st_banaspati")])
+fear_effects = true

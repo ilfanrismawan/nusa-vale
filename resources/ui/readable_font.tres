@@ -1,6 +1,6 @@
 [gd_resource type="FontVariation" format=3 uid="uid://bw6sa2q375h63"]
 
-[ext_resource type="SystemFont" path="res://resources/ui/menu_vector_font.tres" id="font"]
+[ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="font"]
 
 [resource]
 resource_name = "Nusa Vale Readable Menu"

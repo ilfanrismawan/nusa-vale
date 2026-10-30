@@ -1,0 +1,341 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/coop_lobby.gd" id="1"]
+[ext_resource type="Font" path="res://resources/ui/readable_font.tres" id="2"]
+[ext_resource type="Shader" path="res://resources/ui/cooking_backdrop.gdshader" id="3_blur"]
+
+[sub_resource type="ShaderMaterial" id="BackdropBlur"]
+shader = ExtResource("3_blur")
+shader_parameter/blur_amount = 3.0
+shader_parameter/top_tint = Color(0.08, 0.055, 0.07, 0.22)
+shader_parameter/bottom_tint = Color(0.08, 0.055, 0.07, 0.35)
+
+[sub_resource type="StyleBoxFlat" id="Panel"]
+content_margin_left = 24.0
+content_margin_top = 24.0
+content_margin_right = 24.0
+content_margin_bottom = 24.0
+bg_color = Color(0.13, 0.07, 0.11, 0.62)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.91, 0.718, 0.471, 1)
+
+[sub_resource type="StyleBoxFlat" id="Joined"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.188, 0.133, 0.118, 0.64)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.549, 0.839, 0.471, 1)
+
+[sub_resource type="StyleBoxFlat" id="Empty"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.188, 0.133, 0.118, 0.48)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.439, 0.329, 0.239, 1)
+
+[sub_resource type="StyleBoxFlat" id="Primary"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.271, 0.357, 0.208, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.91, 0.718, 0.471, 1)
+
+[sub_resource type="StyleBoxFlat" id="Secondary"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.243, 0.165, 0.145, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.91, 0.718, 0.471, 1)
+
+[sub_resource type="StyleBoxFlat" id="Hover"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.271, 0.357, 0.208, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.976, 0.902, 0.812, 1)
+
+[sub_resource type="StyleBoxFlat" id="Pressed"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.173, 0.239, 0.141, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.91, 0.718, 0.471, 1)
+
+[sub_resource type="StyleBoxFlat" id="Disabled"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.208, 0.176, 0.157, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.408, 0.341, 0.271, 1)
+
+[sub_resource type="StyleBoxFlat" id="Focus"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.976, 0.902, 0.812, 1)
+
+[sub_resource type="Theme" id="Theme"]
+default_font = ExtResource("2")
+default_font_size = 16
+Label/colors/font_color = Color(0.976, 0.902, 0.812, 1)
+ReadyLabel/base_type = &"Label"
+ReadyLabel/colors/font_color = Color(0.549, 0.839, 0.471, 1)
+WaitingLabel/base_type = &"Label"
+WaitingLabel/colors/font_color = Color(0.765, 0.675, 0.584, 1)
+JoinedCard/base_type = &"PanelContainer"
+JoinedCard/styles/panel = SubResource("Joined")
+EmptyCard/base_type = &"PanelContainer"
+EmptyCard/styles/panel = SubResource("Empty")
+Button/colors/font_color = Color(0.976, 0.902, 0.812, 1)
+Button/colors/font_disabled_color = Color(0.765, 0.675, 0.584, 1)
+Button/styles/normal = SubResource("Secondary")
+Button/styles/hover = SubResource("Hover")
+Button/styles/pressed = SubResource("Pressed")
+Button/styles/disabled = SubResource("Disabled")
+Button/styles/focus = SubResource("Focus")
+PrimaryButton/base_type = &"Button"
+PrimaryButton/styles/normal = SubResource("Primary")
+
+[node name="CoopLobby" type="CanvasLayer"]
+process_mode = 3
+layer = 30
+script = ExtResource("1")
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme")
+
+[node name="Dim" type="ColorRect" parent="UI"]
+material = SubResource("BackdropBlur")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 1, 1, 1)
+
+[node name="Center" type="CenterContainer" parent="UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="UI/Center"]
+custom_minimum_size = Vector2(760, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("Panel")
+
+[node name="Content" type="VBoxContainer" parent="UI/Center/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="UI/Center/Panel/Content"]
+layout_mode = 2
+text = "Bertani Bersama"
+theme_override_font_sizes/font_size = 32
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="UI/Center/Panel/Content"]
+layout_mode = 2
+text = "CO-OP LOKAL  /  2–4 PEMAIN"
+theme_type_variation = &"WaitingLabel"
+horizontal_alignment = 1
+
+[node name="PlayerCount" type="Label" parent="UI/Center/Panel/Content"]
+layout_mode = 2
+text = "1 / 4 pemain bergabung"
+unique_name_in_owner = true
+theme_override_font_sizes/font_size = 18
+
+[node name="PlayerGrid" type="GridContainer" parent="UI/Center/Panel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+columns = 2
+
+[node name="Player1" type="PanelContainer" parent="UI/Center/Panel/Content/PlayerGrid"]
+custom_minimum_size = Vector2(344, 112)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"JoinedCard"
+
+[node name="Content" type="VBoxContainer" parent="UI/Center/Panel/Content/PlayerGrid/Player1"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Seat" type="Label" parent="UI/Center/Panel/Content/PlayerGrid/Player1/Content"]
+layout_mode = 2
+text = "PEMAIN 1  /  TUAN RUMAH"
+theme_override_font_sizes/font_size = 18
+
+[node name="Device" type="Label" parent="UI/Center/Panel/Content/PlayerGrid/Player1/Content"]
+layout_mode = 2
+text = "Keyboard + Mouse"
+autowrap_mode = 3
+theme_type_variation = &"ReadyLabel"
+
+[node name="Status" type="Label" parent="UI/Center/Panel/Content/PlayerGrid/Player1/Content"]
+layout_mode = 2
+text = "Siap bermain"
+theme_type_variation = &"ReadyLabel"
+
+[node name="Player2" type="PanelContainer" parent="UI/Center/Panel/Content/PlayerGrid"]
+custom_minimum_size = Vector2(344, 112)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"EmptyCard"
+
+[node name="Content" type="VBoxContainer" parent="UI/Center/Panel/Content/PlayerGrid/Player2"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Seat" type="Label" parent="UI/Center/Panel/Content/PlayerGrid/Player2/Content"]
+layout_mode = 2
+text = "PEMAIN 2"
+theme_override_font_sizes/font_size = 18
+
+[node name="Device" type="Label" parent="UI/Center/Panel/Content/PlayerGrid/Player2/Content"]
+layout_mode = 2
+text = "Tekan A / Start di gamepad"
+autowrap_mode = 3
+theme_type_variation = &"WaitingLabel"
+
+[node name="Status" type="Label" parent="UI/Center/Panel/Content/PlayerGrid/Player2/Content"]
+layout_mode = 2
+text = "Menunggu pemain"
+theme_type_variation = &"WaitingLabel"
+
+[node name="Player3" type="PanelContainer" parent="UI/Center/Panel/Content/PlayerGrid"]
+custom_minimum_size = Vector2(344, 112)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"EmptyCard"
+
+[node name="Content" type="VBoxContainer" parent="UI/Center/Panel/Content/PlayerGrid/Player3"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Seat" type="Label" parent="UI/Center/Panel/Content/PlayerGrid/Player3/Content"]
+layout_mode = 2
+text = "PEMAIN 3"
+theme_override_font_sizes/font_size = 18
+
+[node name="Device" type="Label" parent="UI/Center/Panel/Content/PlayerGrid/Player3/Content"]
+layout_mode = 2
+text = "Tekan A / Start di gamepad"
+autowrap_mode = 3
+theme_type_variation = &"WaitingLabel"
+
+[node name="Status" type="Label" parent="UI/Center/Panel/Content/PlayerGrid/Player3/Content"]
+layout_mode = 2
+text = "Menunggu pemain"
+theme_type_variation = &"WaitingLabel"
+
+[node name="Player4" type="PanelContainer" parent="UI/Center/Panel/Content/PlayerGrid"]
+custom_minimum_size = Vector2(344, 112)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"EmptyCard"
+
+[node name="Content" type="VBoxContainer" parent="UI/Center/Panel/Content/PlayerGrid/Player4"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Seat" type="Label" parent="UI/Center/Panel/Content/PlayerGrid/Player4/Content"]
+layout_mode = 2
+text = "PEMAIN 4"
+theme_override_font_sizes/font_size = 18
+
+[node name="Device" type="Label" parent="UI/Center/Panel/Content/PlayerGrid/Player4/Content"]
+layout_mode = 2
+text = "Tekan A / Start di gamepad"
+autowrap_mode = 3
+theme_type_variation = &"WaitingLabel"
+
+[node name="Status" type="Label" parent="UI/Center/Panel/Content/PlayerGrid/Player4/Content"]
+layout_mode = 2
+text = "Menunggu pemain"
+theme_type_variation = &"WaitingLabel"
+
+[node name="SharedInfo" type="Label" parent="UI/Center/Panel/Content"]
+layout_mode = 2
+text = "Uang bersama. Tas, stamina, dan layar masing-masing."
+theme_type_variation = &"WaitingLabel"
+
+[node name="SessionHint" type="Label" parent="UI/Center/Panel/Content"]
+layout_mode = 2
+text = "Informasi slot save muncul saat lobi dibuka."
+unique_name_in_owner = true
+autowrap_mode = 3
+theme_type_variation = &"WaitingLabel"
+
+[node name="Buttons" type="HBoxContainer" parent="UI/Center/Panel/Content"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="BackButton" type="Button" parent="UI/Center/Panel/Content/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 44)
+layout_mode = 2
+text = "Kembali"
+
+[node name="StartButton" type="Button" parent="UI/Center/Panel/Content/Buttons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(224, 44)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+disabled = true
+text = "Mulai Bersama"
+
+[connection signal="pressed" from="UI/Center/Panel/Content/Buttons/BackButton" to="." method="_close"]
+[connection signal="pressed" from="UI/Center/Panel/Content/Buttons/StartButton" to="." method="_try_start"]

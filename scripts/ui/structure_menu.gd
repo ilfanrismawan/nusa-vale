@@ -37,7 +37,7 @@ func _ready() -> void:
 	_title = title
 	var record := StructureManager.record_for(uid)
 	title.text = GameState._resolve_item(record.item).display_name
-	title.add_theme_font_size_override("font_size", 24)
+	title.add_theme_font_size_override("font_size", 16)
 	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	heading.add_child(title)
 	var close := _button("Tutup (Esc)", _close)

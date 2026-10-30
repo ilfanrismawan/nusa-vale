@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://drgsyvponulc3"]
 
+[ext_resource type="Script" path="res://scripts/world/product_ready_sound.gd" id="ready_sound_script"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/machines/machine_ready.wav" id="ready_sound_stream"]
 [ext_resource type="Script" uid="uid://d31rtu60pv6cu" path="res://scripts/world/furnace.gd" id="1_sjjya"]
 [ext_resource type="Texture2D" uid="uid://coe3shqd8hgfb" path="res://assets/farm_rpg/objects/Work Benches/Furnace.png" id="2_jdhxq"]
 
@@ -137,3 +139,11 @@ bus = &"SFX"
 amount = 15
 lifetime = 0.8
 process_material = SubResource("ParticleProcessMaterial_ovsut")
+
+[node name="ReadySound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("ready_sound_stream")
+volume_db = -4.0
+max_distance = 160.0
+attenuation = 1.5
+bus = &"SFX"
+script = ExtResource("ready_sound_script")

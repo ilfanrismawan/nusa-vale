@@ -5,16 +5,19 @@ extends Node
 ## boleh memanggilnya tanpa cek. Layar, area, dan perpindahan pemain diurus CoopRoot.
 ##
 ## Drop-in seperti Stardew (GDD 4.14): saat bermain, gamepad yang belum dipakai menekan Start
-## -> menu pilih karakter (CoopJoinMenu) -> CoopRoot dibangun ulang dengan pemain baru, tiap
-## pemain tetap di area dan posisinya. Pemain tamu keluar dengan menahan Start (atau P1 lewat
-## menu pause); sisa P1 saja = kembali ke main sendiri tanpa ke main menu.
+## -> panel pilih karakter (CoopJoinPane) di petak layar pemain baru, game TIDAK dijeda dan
+## pemain lain tetap bermain -> pemain baru dimunculkan: dari main sendiri CoopRoot dibangun
+## (fade singkat), saat sudah co-op layarnya ditambahkan langsung tanpa membangun ulang.
+## F2 (P1) membatalkan pemain yang sedang bergabung. Pemain tamu keluar dengan menahan
+## Start (atau P1 lewat menu pause); sisa P1 saja = kembali ke main sendiri tanpa ke main menu.
 
 signal session_started
 signal session_ended
 
 const ROOT_SCENE := "res://scenes/main/coop_root.tscn"
 const MAX_PLAYERS := 4
-const JOIN_MENU := preload("res://scripts/ui/coop_join_menu.gd")
+const JOIN_MENU := preload("res://scenes/ui/coop_join_menu.tscn")
+const JOIN_PANE := preload("res://scenes/ui/coop_join_pane.tscn")
 const DROP_IN := preload("res://scripts/system/coop_drop_in.gd")
 
 var active := false
@@ -34,7 +37,8 @@ var start_notice: String = ""
 ## Simpan game saat pemain tamu keluar (tes mematikannya supaya tidak menulis slot save).
 var save_on_leave := true
 var _drop_in: Node
-var _join_menu: CanvasLayer
+## Panel pemain yang sedang bergabung (null = tidak ada).
+var _join_pane = null
 var _switching := false
 
 
@@ -55,6 +59,7 @@ func start(p_devices: Array[int], plan: Dictionary = {}) -> void:
 		GameState.ensure_player(i)
 	GameState.players.resize(devices.size())
 	GameState.use_player(GameState.p1())
+	PlayerInput.set_solo_pad(PlayerInput.SOLO_PAD_ANY)
 	active = true
 	session_started.emit()
 	DayCycle.is_running = true
@@ -89,8 +94,13 @@ func device_in_use(device: int) -> bool:
 		return true
 	return active and devices.has(device)
 
+## CoopRoot sedang dibangun ulang, atau ada pemain yang sedang bergabung.
 func is_switching() -> bool:
-	return _switching or is_instance_valid(_join_menu)
+	return _switching or has_pending_join()
+
+## Ada pemain yang sedang memilih/membuat karakter atau menunggu dimunculkan.
+func has_pending_join() -> bool:
+	return is_instance_valid(_join_pane)
 
 ## Alasan pemain belum bisa bergabung/keluar sekarang; "" = boleh.
 func block_reason(joining: bool) -> String:
@@ -98,57 +108,108 @@ func block_reason(joining: bool) -> String:
 		return "Mulai atau muat game dulu."
 	if joining and player_count() >= MAX_PLAYERS:
 		return "Co-op sudah penuh (4 pemain)."
+	if not joining and has_pending_join():
+		return "Tunggu pemain yang sedang bergabung selesai dulu."
 	if _switching or Transition.on_transition:
 		return "Tunggu sebentar, lalu coba lagi."
 	if has_root():
 		if root.has_busy_player() or root.sleeping_count() > 0:
 			return "Tunggu pemain selesai pindah area atau bangun tidur."
 	elif get_tree().paused:
-		return "Tutup menu dulu, lalu tekan Start lagi."
+		return "Menunggu P1 menutup menu."
 	for plan in current_plan().values():
 		if str(plan.get("path", "")).contains("/cave/"):
 			return "Tidak bisa bergabung atau keluar saat ada pemain di gua."
 	return ""
 
-## Gamepad/numpad `device` ingin ikut: buka menu pilih karakter (game dijeda sebentar).
+## Gamepad/numpad `device` ingin ikut: buka panel pilih karakter di petak layarnya.
+## Game tidak dijeda; P1 dan pemain lain tetap bermain selama pemain baru memilih.
 func request_join(device: int) -> void:
-	if is_switching():
+	if has_pending_join():
+		Notify.say("Tunggu P%d selesai bergabung (F2 = batal)." % _join_pane.player_number)
 		return
+	if _switching:
+		return
+	if not in_game():
+		Notify.say("Mulai atau muat game dulu.")
+		return
+	if player_count() >= MAX_PLAYERS:
+		Notify.say("Co-op sudah penuh (4 pemain).")
+		return
+	var pane = JOIN_PANE.instantiate()
+	pane.device = device
+	pane.player_number = player_count() + 1
+	pane.closed.connect(_on_join_pane_closed)
+	_join_pane = pane
+	if not active:
+		# Main sendiri: aksi solo menerima semua gamepad, jadi kunci ke gamepad P1 supaya
+		# stik/tombol pemain baru tidak ikut menggerakkan P1.
+		PlayerInput.set_solo_pad(p1_pad if p1_pad >= 0 else PlayerInput.SOLO_PAD_NONE)
+	get_tree().root.add_child(pane)
+
+## Batalkan pemain yang sedang bergabung (F2 dari P1).
+func cancel_join() -> void:
+	if has_pending_join():
+		_join_pane.cancel()
+
+## Teruskan event milik perangkat pemain yang sedang bergabung ke panelnya.
+## true = event sudah dipakai panel (jangan sampai ke game/menu pemain lain).
+func forward_join_event(event: InputEvent) -> bool:
+	if not has_pending_join() or not _join_pane.owns_event(event):
+		return false
+	_join_pane.forward(event)
+	return true
+
+## Gamepad pertama yang dipakai P1 saat main sendiri menjadi milik P1.
+func claim_p1_pad(device: int) -> void:
+	p1_pad = device
+	if has_pending_join() and not active:
+		PlayerInput.set_solo_pad(device)
+
+func _on_join_pane_closed(joined: bool) -> void:
+	_join_pane = null
+	if not joined and not active:
+		PlayerInput.set_solo_pad(PlayerInput.SOLO_PAD_ANY)
+
+## Pemain yang sudah memilih karakter dimunculkan sekarang bila bisa.
+## "" = berhasil; selain itu alasan menunggu (panel mencoba lagi sebentar kemudian).
+func try_join(device: int, data: PlayerData) -> String:
+	if _switching:
+		return "Tunggu sebentar..."
 	var reason := block_reason(true)
 	if not reason.is_empty():
-		Notify.say(reason)
-		return
-	var menu = JOIN_MENU.new()
-	menu.device = device
-	menu.player_number = player_count() + 1
-	menu.chosen.connect(func(data: PlayerData): _finish_join(device, data))
-	menu.cancelled.connect(func(): PauseManager.set_reason(&"coop_join", false))
-	_join_menu = menu
-	PauseManager.set_reason(&"coop_join", true)
-	get_tree().root.add_child(menu)
-
-func _finish_join(device: int, data: PlayerData) -> void:
-	PauseManager.set_reason(&"coop_join", false)
-	if not block_reason(true).is_empty():
-		Notify.say(block_reason(true))
-		return
+		return reason
 	var plan := current_plan()
-	var new_devices: Array[int] = []
-	if active:
-		new_devices.assign(devices)
-	else:
-		new_devices.append(PlayerInput.DEVICE_KEYBOARD)
+	# Pemain baru muncul di samping P1.
+	var p1_plan: Dictionary = plan.get(0, {})
+	var spawn := {"path": p1_plan.get("path", ""), "position": p1_plan.get("position", Vector2.ZERO) + Vector2(16, 0)}
 	var guests: Array[PlayerData] = []
 	for i in range(1, GameState.players.size()):
 		guests.append(GameState.players[i])
 	guests.append(data)
-	new_devices.append(device)
-	# Pemain baru muncul di samping P1.
-	var p1_plan: Dictionary = plan.get(0, {})
-	plan[new_devices.size() - 1] = {"path": p1_plan.get("path", ""), "position": p1_plan.get("position", Vector2.ZERO) + Vector2(16, 0)}
+	if has_root():
+		_hot_join(device, guests, spawn)
+		return ""
+	var new_devices: Array[int] = [PlayerInput.DEVICE_KEYBOARD, device]
+	plan[1] = spawn
 	GameState.seat_players(guests)
-	start_notice = "%s bergabung sebagai P%d! Tahan Start untuk keluar." % [_display_name(data), new_devices.size()]
+	start_notice = _join_notice(data, new_devices.size())
 	_relaunch(new_devices, plan)
+	return ""
+
+## Sudah co-op: layar pemain baru ditambahkan ke CoopRoot yang berjalan, tanpa fade dan
+## tanpa memuat ulang area; pemain lain tidak terganggu.
+func _hot_join(device: int, guests: Array[PlayerData], spawn: Dictionary) -> void:
+	var index := devices.size()
+	GameState.seat_players(guests)
+	devices.append(device)
+	inputs.append(PlayerInput.create(index, device))
+	GameState.use_player(GameState.p1())
+	root.add_player(index, spawn)
+	Notify.say(_join_notice(GameState.players[index], index + 1))
+
+func _join_notice(data: PlayerData, number: int) -> String:
+	return "%s bergabung sebagai P%d! Tahan Start untuk keluar." % [_display_name(data), number]
 
 ## Pemain tamu ke-index keluar. Datanya disimpan ke save; layar lain digabung ulang.
 ## Sisa P1 saja = kembali main sendiri di area dan posisinya.

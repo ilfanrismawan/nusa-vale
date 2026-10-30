@@ -1,0 +1,19 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://scripts/system/horror_manager.gd" id="manager"]
+[ext_resource type="Script" path="res://scripts/data/horror_profile.gd" id="profile_type"]
+[ext_resource type="Resource" path="res://resources/horror/profiles/tier_1.tres" id="tier_1"]
+[ext_resource type="Resource" path="res://resources/horror/profiles/tier_2.tres" id="tier_2"]
+[ext_resource type="Resource" path="res://resources/horror/profiles/tier_3.tres" id="tier_3"]
+[ext_resource type="Resource" path="res://resources/horror/profiles/tier_4.tres" id="tier_4"]
+[ext_resource type="Script" path="res://scripts/data/horror_difficulty.gd" id="difficulty_type"]
+[ext_resource type="Resource" path="res://resources/horror/difficulty/ambience.tres" id="ambience"]
+[ext_resource type="Resource" path="res://resources/horror/difficulty/calm.tres" id="calm"]
+[ext_resource type="Resource" path="res://resources/horror/difficulty/normal.tres" id="normal"]
+[ext_resource type="Resource" path="res://resources/horror/difficulty/dread.tres" id="dread"]
+[ext_resource type="Resource" path="res://resources/horror/difficulty/nightmare.tres" id="nightmare"]
+
+[node name="Horror" type="Node"]
+script = ExtResource("manager")
+profiles = Array[ExtResource("profile_type")]([ExtResource("tier_1"), ExtResource("tier_2"), ExtResource("tier_3"), ExtResource("tier_4")])
+difficulties = Array[ExtResource("difficulty_type")]([ExtResource("ambience"), ExtResource("calm"), ExtResource("normal"), ExtResource("dread"), ExtResource("nightmare")])

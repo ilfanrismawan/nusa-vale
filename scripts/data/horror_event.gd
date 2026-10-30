@@ -23,6 +23,9 @@ enum Kind {
 @export_range(0.0, 1.0, 0.01) var min_fear: float = 0.0
 ## Kegelapan minimal (DayCycle.night_intensity): 0,7 = mulai 00.00.
 @export_range(0.0, 1.0, 0.01) var min_night: float = 0.7
+## Tingkat Gaib tempat kejadian ini boleh muncul (GDD 4.1, Progres Horor).
+@export_range(1, 4) var min_tier: int = 1
+@export_range(1, 4) var max_tier: int = 4
 ## Jeda minimal sebelum kejadian yang sama boleh muncul lagi (detik nyata).
 @export var cooldown_seconds: float = 40.0
 ## Kosong = suara sintesis bawaan untuk jenis ini.

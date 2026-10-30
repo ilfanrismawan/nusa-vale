@@ -45,6 +45,11 @@ func _ready() -> void:
 	check(manager.definitions.size() == 21 and manager.wings().size() == 4, "21 bundles across hall + four wings")
 	for entry in manager.wings():
 		check(manager.wing_projects(entry.wing_id).size() >= 4, "%s has at least four bundles" % entry.display_name)
+	# Sayap terkunci sampai Balai Utama pulih.
+	donor.add_item_silent("parsnip", 1)
+	check(not manager.wings_unlocked() and manager.contribute(donor, "spring_crops_bundle", "parsnip") == 0 and manager.available_projects().size() == 1, "wing bundles locked before hall restoration")
+	_fill(manager, donor, "balai_nadi_restoration")
+	check(manager.completed("balai_nadi_restoration") and manager.wings_unlocked() and manager.available_projects().size() == 21, "hall restoration unlocks all wings")
 	# Pilih N dari M: Panen Musim Semi selesai dengan 4 dari 6.
 	var spring := manager.definition("spring_crops_bundle")
 	check(manager.slots_needed(spring) == 4 and spring.requirements.size() == 6, "spring bundle asks 4 of 6")

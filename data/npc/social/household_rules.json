@@ -123,6 +123,15 @@
           "honey": 1
         }
       }
+    ],
+    "darmi": [
+      {
+        "hearts": 4,
+        "recipe": "wedang_kantil",
+        "items": {
+          "bunga_kantil": 2
+        }
+      }
     ]
   }
 }

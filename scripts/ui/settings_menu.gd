@@ -217,6 +217,9 @@ func save_settings() -> void:
 	config.set_value("audio", "master_volume", master_slider.value)
 	config.set_value("audio", "music_volume", music_slider.value)
 	config.set_value("audio", "sfx_volume", sfx_slider.value)
+	# File ini ditulis ulang utuh: bawa juga aksesibilitas horor (GDD 4.1).
+	if GameState.horror != null:
+		GameState.horror.write_accessibility(config)
 	config.save(CONFIG_PATH)
 
 func load_settings() -> void:
@@ -409,7 +412,7 @@ func _setup_controls() -> void:
 			button.clip_text = true
 			button.text = _binding_text(row, kind)
 			button.tooltip_text = button.text
-			button.add_theme_font_size_override("font_size", 14)
+			button.add_theme_font_size_override("font_size", 16)
 			button.pressed.connect(_begin_capture.bind(row["id"], kind, button))
 			grid.add_child(button)
 	_add_controls_row(["Berjalan (gamepad)", "-", "Stik kiri (selalu)"])
@@ -423,7 +426,7 @@ func _add_controls_row(texts: Array, header: bool = false) -> void:
 func _add_controls_label(text: String, color: Color = Color.TRANSPARENT) -> void:
 	var label := Label.new()
 	label.text = text
-	label.add_theme_font_size_override("font_size", 14)
+	label.add_theme_font_size_override("font_size", 16)
 	# Teks panjang dibungkus supaya tabel muat di panel tanpa geser ke samping.
 	var first_column: bool = %ControlsGrid.get_child_count() % 3 == 0
 	label.custom_minimum_size = Vector2(CONTROLS_LABEL_WIDTH if first_column else CONTROLS_BUTTON_WIDTH, 0)

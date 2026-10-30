@@ -11,6 +11,8 @@ filter_clip = true
 
 [resource]
 script = ExtResource("1_item")
+edible = true
+stamina_restore = 4
 item_id = "green_pepper"
 display_name = "Paprika Hijau"
 icon = SubResource("Icon")

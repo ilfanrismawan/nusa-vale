@@ -4,6 +4,8 @@
 
 [resource]
 script = ExtResource("1_item")
+edible = true
+stamina_restore = 4
 item_id = "cranberry"
 display_name = "Cranberry"
 category = 4

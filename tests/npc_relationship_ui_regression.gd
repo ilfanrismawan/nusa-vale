@@ -31,7 +31,7 @@ func _ready() -> void:
 	ui.player = player
 	add_child(ui)
 	await get_tree().process_frame
-	check(ui._ids.size() == 13, "all thirteen NPCs appear")
+	check(ui._ids.size() == 14, "all fourteen NPCs appear")
 	check(ui.get_node("%Residents").columns == 4, "each paper leaf has two columns")
 	check(not ui.get_node("%Right").visible, "details are hidden until a card is clicked")
 	var pager = ui.get_node("%ResidentsPager")

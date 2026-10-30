@@ -1,5 +1,6 @@
 class_name BlacksmithNPC
 extends StaticBody2D
+const GroundShadow := preload("res://scripts/effects/ground_shadow.gd")
 
 ## NPC Pandai Besi di kota (Town).
 ## Menghadapi pemain dan membuka UI upgrade alat saat diajak bicara.
@@ -24,6 +25,7 @@ var _geode_ui: AcceptDialog
 var _line_index: int = 0
 
 func _ready() -> void:
+	GroundShadow.attach(self)
 	if interaction_area != null:
 		interaction_area.body_entered.connect(_on_body_entered)
 		interaction_area.body_exited.connect(_on_body_exited)

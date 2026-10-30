@@ -63,8 +63,8 @@ script = ExtResource("2")
 level = 6
 branch = ""
 title = "Tubuh Tangguh"
-description = "HP maks +20; i-frame roll +0,05 detik."
-effects = Dictionary[StringName, float]({&"max_hp": 20.0, &"iframes": 0.05})
+description = "HP maks +20; i-frame roll +0,05 detik. Nyali: rasa takut malam naik 25% lebih lambat dan kaku karena jumpscare 25% lebih singkat."
+effects = Dictionary[StringName, float]({&"max_hp": 20.0, &"iframes": 0.05, &"fear_resist": 0.25})
 coming_soon = false
 
 [sub_resource type="Resource" id="perk_7"]

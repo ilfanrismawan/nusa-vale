@@ -1,0 +1,10 @@
+[gd_resource type="Resource" format=3]
+[ext_resource type="Script" path="res://scripts/npc/data/resident_profile.gd" id="profile"]
+[resource]
+script = ExtResource("profile")
+source_json = "res://data/npc/darmi.json"
+npc_id = "darmi"
+display_name = "Mbah Darmi"
+role_title = "Sesepuh Desa dan Penutur Cerita Malam"
+move_speed = 22.0
+schedule_source = 1

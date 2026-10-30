@@ -20,6 +20,9 @@ signal sleep_ended
 
 var facing_direction := Vector2.DOWN
 var character_visual: CharacterVisual
+## Bayangan oval di kaki (lompat/kendaraan mengangkat sprite, bayangan tetap di tanah).
+var ground_shadow: Node2D
+const GroundShadow := preload("res://scripts/effects/ground_shadow.gd")
 
 ## Index pemain (0 = P1). Diisi CoopRoot lewat player_root.gd; solo selalu 0.
 var player_index: int:
@@ -50,6 +53,8 @@ var _pickup_visual_tween: Tween
 var _footsteps := FootstepAudio.new()
 var food_speed_remaining := 0.0
 var food_speed_multiplier := 1.0
+## Diatur NightHorror: lari melambat saat rasa takut penuh (GDD 4.1, Progres Horor).
+var fear_run_multiplier := 1.0
 
 var seated_chair: Node2D
 var _seated_sprite_home := Vector2.ZERO
@@ -58,7 +63,11 @@ var sit_transitioning := false
 
 const INTERACTION_DISTANCE := 32.0
 
-const FEET_OFFSET := Vector2(0, 8)
+## Titik asal badan = kaki (sprite digeser SPRITE_OFFSET ke atas, seperti NPC), jadi collision dan
+## urutan gambar (y-sort) mengikuti kaki. Konstanta tetap ada untuk semua pemanggil "posisi kaki".
+const FEET_OFFSET := Vector2.ZERO
+## Offset AnimatedSprite2D (Player.tscn): kaki di sheet 32x32 ada di baris 25, jadi naik 10 px.
+const SPRITE_OFFSET := Vector2(0, -10)
 ## Klik kanan sambil memegang senjata membuka pintu bila kursor sedekat ini ke pintunya.
 const DOOR_CLICK_RADIUS := 24.0
 ## Kebal sesaat setelah terkena serangan (GDD 8.1, i-frames).
@@ -85,6 +94,10 @@ var lock_on: LockOn
 var _pending_jump_frame := -1
 var _pending_jump_ms := 0
 const PENDING_JUMP_WINDOW_MS := 150
+## Klik kanan tanpa objek interaksi sambil memegang makanan = makan. Ditunda satu frame fisika
+## seperti lompat, supaya forage/NPC/toko yang memakai klik yang sama didahulukan.
+var _pending_eat_frame := -1
+var _pending_eat_ms := 0
 const ACTION_DISTANCE := 16.0
 const MAX_ACTION_DISTANCE := 28.0
 
@@ -111,6 +124,7 @@ func _ready() -> void:
 	character_visual.name = "CharacterVisual"
 	add_child(character_visual)
 	character_visual.setup(animation_controller.sprite, tool_controller)
+	ground_shadow = GroundShadow.attach(self)
 
 	combat = PlayerCombat.new()
 	combat.name = "PlayerCombat"
@@ -139,6 +153,7 @@ func _process(delta: float) -> void:
 	bind_context()
 	_sync_carried_item()
 	_flush_item_gesture()
+	_restore_held_item()
 	_update_held_item_position()
 	_update_tile_cursor()
 	_update_aim()
@@ -231,6 +246,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			# forage/NPC/toko yang memakai A yang sama sempat menandai interaksi.
 			_pending_jump_frame = Engine.get_physics_frames()
 			_pending_jump_ms = Time.get_ticks_msec()
+		elif event is InputEventMouseButton and FoodEating.held_edible(self) != null:
+			_pending_eat_frame = Engine.get_physics_frames()
+			_pending_eat_ms = Time.get_ticks_msec()
 		return
 	if wants_jump:
 		try_jump()
@@ -252,6 +270,7 @@ func _physics_process(delta: float) -> void:
 			return
 		
 	_resolve_pending_jump()
+	_resolve_pending_eat()
 	var previous_position := global_position
 	state_machine.physics_update(delta)
 	var moving := state_machine.current_state is MoveState
@@ -325,6 +344,16 @@ func try_jump() -> bool:
 	state_machine.change_state(tool_controller.jump_state)
 	return true
 
+func _resolve_pending_eat() -> void:
+	if _pending_eat_frame < 0 or Engine.get_physics_frames() <= _pending_eat_frame:
+		return
+	_pending_eat_frame = -1
+	if Time.get_ticks_msec() - _pending_eat_ms > PENDING_JUMP_WINDOW_MS or input.interacted_ms >= _pending_eat_ms:
+		return
+	if get_tree().paused or is_input_locked() or FoodEating.held_edible(self) == null:
+		return
+	FoodEating.eat(self, FoodEating.held_slot(self))
+
 func _resolve_pending_jump() -> void:
 	if _pending_jump_frame < 0 or Engine.get_physics_frames() <= _pending_jump_frame:
 		return
@@ -393,11 +422,18 @@ func play_item_gesture(pickup: bool = false, icon: Texture2D = null, item_id: St
 	_flush_item_gesture()
 
 ## Preview the selected hotbar item briefly above the player when scrolling tools.
+## Barang biasa (makanan, hasil panen, benih, dll.) tetap diangkat di atas kepala selama
+## slotnya dipilih, seperti Harvest Moon; alat dan senjata hanya tampil sebentar.
 func show_tool_preview(item: ItemData) -> void:
 	if item != null and _carried_item_id == item.item_id and is_instance_valid(_pickup_visual):
 		return
 	_clear_pickup_visual()
 	if item == null or item.icon == null:
+		return
+	if _holds_overhead(item):
+		_carried_item_id = item.item_id
+		_show_static_item_visual(item.icon)
+		animation_controller.set_carrying_item(true)
 		return
 	_preview_item_id = item.item_id
 	_show_static_item_visual(item.icon)
@@ -442,6 +478,31 @@ func _holding_tool_or_weapon() -> bool:
 	var held := tool_controller.current_item
 	return held != null and (held.is_tool() or Combat.is_weapon(held))
 
+## Barang yang diangkat terus di atas kepala saat dipegang. Kendaraan dan furnitur
+## (sudah punya bayangan penempatan) tidak diangkat.
+func _holds_overhead(item: ItemData) -> bool:
+	return item != null and item.icon != null and not item.is_tool() and not Combat.is_weapon(item) \
+		and item.vehicle == null and not (item.placeable and item.seat_definition != null)
+
+## Angkat lagi barang yang dipegang setelah aksi/gesture/pindah area membersihkannya.
+func _restore_held_item() -> void:
+	if is_instance_valid(_pickup_visual) or not _pending_item_gesture.is_empty():
+		return
+	var held := tool_controller.current_item
+	if not _holds_overhead(held) or not data.has_item(held.item_id):
+		return
+	if is_input_locked() or is_defeated or is_riding() or has_meta("riding_horse") \
+			or sit_transitioning or is_instance_valid(seated_chair):
+		return
+	if has_meta("carried_animal") and is_instance_valid(get_meta("carried_animal")):
+		return
+	var state := state_machine.current_state
+	if not (state is IdleState or state is MoveState):
+		return
+	_carried_item_id = held.item_id
+	_show_static_item_visual(held.icon)
+	animation_controller.set_carrying_item(true)
+
 func _sync_carried_item() -> void:
 	var visible_id := _carried_item_id if not _carried_item_id.is_empty() else _preview_item_id
 	if visible_id.is_empty():
@@ -479,11 +540,11 @@ func _update_held_item_position() -> void:
 		return
 	var sprite := animation_controller.sprite
 	var animation := String(sprite.animation)
-	var hand_y := -6.0
+	var hand_y := SPRITE_OFFSET.y - 6.0
 	if animation.begins_with("pick_up_"):
 		var last_frame := maxi(1, sprite.sprite_frames.get_frame_count(sprite.animation) - 1)
 		var progress := clampf((sprite.frame + sprite.frame_progress) / last_frame, 0.0, 1.0)
-		hand_y = lerpf(3.0, -6.0, progress)
+		hand_y = SPRITE_OFFSET.y + lerpf(3.0, -6.0, progress)
 	elif animation.begins_with("carry_walk_") or animation.begins_with("carry_run_"):
 		hand_y += float(sprite.frame % 2)
 	var hand_x := signf(facing_direction.x)
@@ -748,7 +809,8 @@ func begin_sitting(
 	# independently with the cushion. Keep the normal world Z index.
 	var ground_anchor := seat_position
 	ground_anchor.y = maxf(ground_anchor.y, chair.global_position.y + 1.0)
-	var visual_position: Vector2 = _seated_sprite_home + seat_position + chair.sit_visual_offset - ground_anchor
+	# sit_visual_offset diatur untuk sprite tanpa offset: batalkan SPRITE_OFFSET supaya posisi duduk sama.
+	var visual_position: Vector2 = _seated_sprite_home + seat_position + chair.sit_visual_offset - ground_anchor - SPRITE_OFFSET
 	await _hop_to(ground_anchor, sit_hop_height, visual_position)
 	
 	if not is_instance_valid(seated_chair):
@@ -759,6 +821,7 @@ func begin_sitting(
 		return
 	
 	animation_controller.set_visual_override(&"sit")
+	ground_shadow.hide()
 	seated_chair.show_seated_backrest(self)
 	sit_transitioning = false
 	
@@ -773,6 +836,7 @@ func stand_up() -> void:
 	velocity = Vector2.ZERO
 	
 	animation_controller.set_visual_override(&"idle")
+	ground_shadow.show()
 	
 	await _hop_to(
 		_position_before_sitting,
@@ -933,12 +997,12 @@ func take_hit(raw_attack: int, source: Node = null, knockback: Vector2 = Vector2
 	_invulnerable = HIT_INVULNERABLE * (0.4 if blocked else 1.0)
 	_knockback = knockback * (2.0 if blocked else 6.0)
 	if blocked:
-		CombatJuice.damage_number("-%d" % damage, global_position + Vector2(0, -18), Color(0.75, 0.85, 1.0))
+		CombatJuice.damage_number("-%d" % damage, global_position + SPRITE_OFFSET + Vector2(0, -18), Color(0.75, 0.85, 1.0))
 	else:
-		CombatJuice.damage_number("-%d" % damage, global_position + Vector2(0, -18), CombatJuice.HURT_COLOR)
+		CombatJuice.damage_number("-%d" % damage, global_position + SPRITE_OFFSET + Vector2(0, -18), CombatJuice.HURT_COLOR)
 		Juice.play(&"player_hurt", global_position)
 		CombatJuice.player_hurt(self)
-		CombatJuice.blood(global_position + Vector2(0, -6), knockback, clampi(damage, 6, 16))
+		CombatJuice.blood(global_position + SPRITE_OFFSET + Vector2(0, -6), knockback, clampi(damage, 6, 16))
 		_blink()
 	if data.hp <= 0:
 		_die()

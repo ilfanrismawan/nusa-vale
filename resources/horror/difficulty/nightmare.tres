@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="HorrorDifficulty" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/horror_difficulty.gd" id="1_difficulty"]
+
+[resource]
+script = ExtResource("1_difficulty")
+id = &"nightmare"
+display_name = "Mimpi Buruk"
+description = "Jumpscare bisa membuat pingsan. Hadiah malam x1,5."
+ambience_only = false
+fear_rise_scale = 1.6
+stalker_chance_scale = 1.71
+penalty_scale = 2.0
+jumpscare_can_faint = true
+safe_radius_scale = 0.67
+reward_scale = 1.5
+theft_scale = 2.0

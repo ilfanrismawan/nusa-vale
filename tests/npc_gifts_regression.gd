@@ -18,7 +18,7 @@ func _ready() -> void:
 	DayCycle.is_running = false
 	DayCycle.current_day = 1
 	var ids: Array = NPCDatabase.residents.keys() + NPCDatabase.gift_profiles.keys()
-	check(ids.size() == 13, "thirteen centralized NPC gift profiles registered")
+	check(ids.size() == 14, "fourteen centralized NPC gift profiles registered")
 	for id: String in ids:
 		check(NPCSocialService.known(id), id + " supports social gifts")
 		var seen: Array = []

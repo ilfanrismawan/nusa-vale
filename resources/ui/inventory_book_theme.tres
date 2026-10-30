@@ -105,13 +105,53 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.6, 0.4, 0.25, 1)
 
+[sub_resource type="StyleBoxFlat" id="SelectHover"]
+content_margin_left = 6.0
+content_margin_top = 2.0
+content_margin_right = 6.0
+content_margin_bottom = 2.0
+bg_color = Color(1, 0.91, 0.72, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.65, 0.42, 0.2, 1)
+
+[sub_resource type="StyleBoxFlat" id="Select"]
+content_margin_left = 6.0
+content_margin_top = 2.0
+content_margin_right = 6.0
+content_margin_bottom = 2.0
+bg_color = Color(0.96, 0.86, 0.67, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.48, 0.3, 0.17, 1)
+
 [sub_resource type="StyleBoxEmpty" id="Empty"]
+
+[sub_resource type="StyleBoxFlat" id="SelectPopup"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.96, 0.86, 0.67, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.48, 0.3, 0.17, 1)
+shadow_color = Color(0.16, 0.09, 0.04, 0.35)
+shadow_size = 3
+shadow_offset = Vector2(1, 2)
 
 [sub_resource type="StyleBoxFlat" id="Fill"]
 bg_color = Color(0.35, 0.48, 0.28, 1)
 
 [resource]
 default_font = ExtResource("1_ttb6f")
+default_font_size = 16
 AcceptDialog/styles/panel = SubResource("Paper")
 BookCard/base_type = &"PanelContainer"
 BookCard/styles/panel = SubResource("Paper")
@@ -136,11 +176,32 @@ HSlider/styles/slider = SubResource("SliderTrack")
 Label/colors/font_color = Color(0.25, 0.14, 0.08, 1)
 LineEdit/colors/font_color = Color(0.25, 0.14, 0.08, 1)
 LineEdit/colors/font_placeholder_color = Color(0.5, 0.36, 0.22, 1)
-LineEdit/font_sizes/font_size = 11
+LineEdit/font_sizes/font_size = 16
 LineEdit/styles/focus = SubResource("Input")
 LineEdit/styles/normal = SubResource("Input")
+OptionButton/colors/font_color = Color(0.25, 0.14, 0.08, 1)
+OptionButton/colors/font_disabled_color = Color(0.5, 0.4, 0.3, 1)
+OptionButton/colors/font_focus_color = Color(0.25, 0.14, 0.08, 1)
+OptionButton/colors/font_hover_color = Color(0.25, 0.14, 0.08, 1)
+OptionButton/colors/font_pressed_color = Color(0.25, 0.14, 0.08, 1)
+OptionButton/constants/arrow_margin = 6
+OptionButton/constants/h_separation = 6
+OptionButton/constants/modulate_arrow = 1
+OptionButton/styles/disabled = SubResource("Disabled")
+OptionButton/styles/focus = SubResource("Focus")
+OptionButton/styles/hover = SubResource("SelectHover")
+OptionButton/styles/hover_pressed = SubResource("SelectHover")
+OptionButton/styles/normal = SubResource("Select")
+OptionButton/styles/pressed = SubResource("SelectHover")
 Panel/styles/panel = SubResource("Paper")
 PanelContainer/styles/panel = SubResource("Empty")
+PopupMenu/colors/font_color = Color(0.25, 0.14, 0.08, 1)
+PopupMenu/colors/font_disabled_color = Color(0.5, 0.4, 0.3, 1)
+PopupMenu/colors/font_hover_color = Color(1, 0.94, 0.74, 1)
+PopupMenu/constants/v_separation = 4
+PopupMenu/styles/hover = SubResource("Hover")
+PopupMenu/styles/panel = SubResource("SelectPopup")
+PopupMenu/styles/separator = SubResource("Track")
 ProgressBar/styles/background = SubResource("Track")
 ProgressBar/styles/fill = SubResource("Fill")
 TabBar/colors/font_selected_color = Color(1, 0.94, 0.74, 1)

@@ -5,12 +5,13 @@ expand_icon = true
 theme_override_constants/icon_max_width = 22
 toggle_mode = true
 [node name="Amount" type="Label" parent="."]
+scale = Vector2(0.75, 0.75)
 offset_left = 16.0
 offset_top = 20.0
-offset_right = 30.0
-offset_bottom = 32.0
+offset_right = 34.66666666666667
+offset_bottom = 36.0
 horizontal_alignment = 2
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 16
 mouse_filter = 2
 [node name="Ready" type="ColorRect" parent="."]
 offset_left = 4.0

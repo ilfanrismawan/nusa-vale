@@ -3,6 +3,9 @@ extends Area2D
 
 ## Jarak barang buangan dari kaki pemain (px).
 const DROP_DISTANCE := 18.0
+## Gambar tanah bervariasi (sheet sel 16x16, dipilih acak) untuk barang yang sering berserakan.
+## Ikon tas dan gestur pungut tetap memakai ikon item.
+const WORLD_VARIANTS := {"fiber": "res://assets/farm_rpg/icons/Forage/fiber_drops.png"}
 
 var item_id: String = ""
 var amount: int = 1
@@ -33,7 +36,7 @@ static func spawn(
 	pickup.setup(
 		p_item_id,
 		p_amount,
-		OutlineIcon.get_for(p_icon if p_icon != null else _icon_for(p_item_id))
+		OutlineIcon.get_for(p_icon if p_icon != null else _world_icon_for(p_item_id))
 	)
 	pickup._raw_icon = p_icon if p_icon != null else _icon_for(p_item_id)
 
@@ -62,6 +65,18 @@ static func drop_from(
 		Juice.play_sound(&"item_drop")
 		player.play_item_gesture()
 	return pickup
+
+
+static func _world_icon_for(p_item_id: String) -> Texture2D:
+	var path: String = WORLD_VARIANTS.get(p_item_id, "")
+	if path.is_empty() or not ResourceLoader.exists(path):
+		return _icon_for(p_item_id)
+	var sheet: Texture2D = load(path)
+	var atlas := AtlasTexture.new()
+	atlas.atlas = sheet
+	@warning_ignore("integer_division")
+	atlas.region = Rect2(randi() % maxi(1, sheet.get_width() / 16) * 16, 0, 16, 16)
+	return atlas
 
 
 static func _icon_for(p_item_id: String) -> Texture2D:

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="HorrorDifficulty" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/horror_difficulty.gd" id="1_difficulty"]
+
+[resource]
+script = ExtResource("1_difficulty")
+id = &"normal"
+display_name = "Normal"
+description = "Horor sesuai rancangan."
+ambience_only = false
+fear_rise_scale = 1.0
+stalker_chance_scale = 1.0
+penalty_scale = 1.0
+jumpscare_can_faint = false
+safe_radius_scale = 1.0
+reward_scale = 1.0
+theft_scale = 1.0

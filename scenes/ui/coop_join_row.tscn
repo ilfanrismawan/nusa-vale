@@ -1,0 +1,10 @@
+[gd_scene format=3]
+[node name="CharacterRow" type="Button"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+focus_mode = 0
+mouse_filter = 2
+text = "Nama Karakter"
+alignment = 0
+text_overrun_behavior = 3
+clip_text = true

@@ -92,6 +92,6 @@ func _build_service() -> void:
 		shape.shape = rectangle
 		notice.add_child(shape)
 		var furniture := Sprite2D.new()
-		furniture.texture = preload("res://assets/ranch/care_board.svg")
+		furniture.texture = preload("res://assets/ranch/care_board.png")
 		notice.add_child(furniture)
 		add_child(notice)

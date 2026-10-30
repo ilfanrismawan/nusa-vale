@@ -15,8 +15,9 @@ stretch_mode = 5
 modulate = Color(1.15, 1.15, 1.15, 0.95)
 mouse_filter = 2
 [node name="Count" type="Label" parent="."]
+scale = Vector2(0.875, 0.875)
 offset_left = 4.0
 offset_top = 2.0
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 16
 theme_override_colors/font_color = Color(1, 0.98, 0.9, 1)
 mouse_filter = 2

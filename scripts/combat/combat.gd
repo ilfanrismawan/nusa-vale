@@ -115,7 +115,7 @@ static func _combat_exp(player: Player, enemy: Enemy) -> void:
 		player.data.restore_hp(heal)
 		if player.combat != null:
 			player.combat.restore(float(heal))
-		CombatJuice.damage_number("+%d" % heal, player.global_position + Vector2(0, -18), Color(0.6, 1.0, 0.6))
+		CombatJuice.damage_number("+%d" % heal, player.global_position + Player.SPRITE_OFFSET + Vector2(0, -18), Color(0.6, 1.0, 0.6))
 
 ## Efek status tier senjata (GDD 8.2, v3.3) setelah pukulan masuk. Terbakar/dingin/api gelap
 ## menempel di musuh (Enemy.apply_status); serap jiwa dan berkah peri memulihkan penyerangnya.
@@ -129,7 +129,7 @@ static func apply_tier_status(target: Node, fx: WeaponTierFx, attack: int, sourc
 			if player != null and not player.is_defeated and player.data.hp < player.data.max_hp and randf() < fx.status_chance:
 				var heal := maxi(1, roundi(attack * fx.lifesteal_ratio))
 				player.data.restore_hp(heal)
-				CombatJuice.damage_number("+%d" % heal, player.global_position + Vector2(0, -18), fx.color_alt.lerp(Color(0.6, 1.0, 0.6), 0.5))
+				CombatJuice.damage_number("+%d" % heal, player.global_position + Player.SPRITE_OFFSET + Vector2(0, -18), fx.color_alt.lerp(Color(0.6, 1.0, 0.6), 0.5))
 		WeaponTierFx.Status.STAMINA:
 			var player := source as Player
 			if player != null and player.combat != null and randf() < fx.status_chance:

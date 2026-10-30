@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="HorrorProfile" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/horror_profile.gd" id="1_profile"]
+[ext_resource type="PackedScene" path="res://scenes/horror/kuntilanak.tscn" id="st_kuntilanak"]
+
+
+[resource]
+script = ExtResource("1_profile")
+tier = 1
+display_name = "Bisikan"
+unlock_cave_floor = 0
+unlock_day = 0
+unlock_area = ""
+notify_reached = ""
+stalkers = Array[PackedScene]([ExtResource("st_kuntilanak")])
+stalker_chance = 0.3
+stalker_check_interval = 15.0
+stalker_cooldown = 150.0
+event_interval_min = 22.0
+event_interval_max = 40.0
+fear_rise_scale = 1.0

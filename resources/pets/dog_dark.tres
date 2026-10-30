@@ -1,14 +1,15 @@
 [gd_resource type="Resource" format=3 uid="uid://bangqb77sj48p"]
 
 [ext_resource type="Script" uid="uid://bjxfn7uk6q6t8" path="res://scripts/resources/starter_pet_option.gd" id="script"]
-[ext_resource type="Texture2D" uid="uid://bpb8rdn8f7oyi" path="res://assets/farm_rpg/icons/Pets/dogs icons.png" id="sheet"]
+[ext_resource type="Texture2D" uid="uid://cuxon2h8e47e3" path="res://assets/farm_rpg/animals/Pets/Dogs/6/3.png" id="sheet"]
 
 [sub_resource type="AtlasTexture" id="Icon"]
 atlas = ExtResource("sheet")
-region = Rect2(0, 48, 16, 16)
+region = Rect2(5, 43, 20, 20)
 
 [resource]
 script = ExtResource("script")
 pet_id = "dog_dark"
 display_name = "Anjing Gelap"
 icon = SubResource("Icon")
+sheet = ExtResource("sheet")

@@ -1,0 +1,124 @@
+[gd_scene load_steps=6 format=3]
+[ext_resource type="Script" path="res://scripts/ui/coop_join_menu.gd" id="script"]
+[ext_resource type="Script" path="res://scripts/ui/coop_dialog_layout.gd" id="layout"]
+[ext_resource type="Theme" path="res://resources/ui/coop_ingame_theme.tres" id="theme"]
+[ext_resource type="PackedScene" path="res://scenes/ui/coop_backdrop.tscn" id="backdrop"]
+[ext_resource type="PackedScene" path="res://scenes/ui/coop_join_row.tscn" id="row"]
+
+[node name="CoopJoinMenu" type="CanvasLayer"]
+process_mode = 3
+layer = 40
+script = ExtResource("script")
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("theme")
+script = ExtResource("layout")
+
+[node name="Backdrop" parent="UI" instance=ExtResource("backdrop")]
+unique_name_in_owner = true
+layout_mode = 1
+[node name="Frame" type="MarginContainer" parent="UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Center" type="CenterContainer" parent="UI/Frame"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Card" type="PanelContainer" parent="UI/Frame/Center"]
+custom_minimum_size = Vector2(552, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Content" type="VBoxContainer" parent="UI/Frame/Center/Card"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+[node name="Header" type="Label" parent="UI/Frame/Center/Card/Content" groups=["coop_compact_hide"]]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 18
+text = "PEMAIN 2 / BERGABUNG"
+
+[node name="Title" type="Label" parent="UI/Frame/Center/Card/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Pilih Karakter"
+autowrap_mode = 3
+max_lines_visible = 2
+text_overrun_behavior = 3
+
+[node name="Subtitle" type="Label" parent="UI/Frame/Center/Card/Content" groups=["coop_compact_hide"]]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 18
+text = "Pakai karakter tersimpan atau buat karakter baru."
+autowrap_mode = 3
+
+[node name="Scroll" type="ScrollContainer" parent="UI/Frame/Center/Card/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 176)
+layout_mode = 2
+mouse_filter = 2
+horizontal_scroll_mode = 0
+
+[node name="Entries" type="VBoxContainer" parent="UI/Frame/Center/Card/Content/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="PreviewCharacter" parent="UI/Frame/Center/Card/Content/Scroll/Entries" instance=ExtResource("row")]
+theme_type_variation = &"SelectedRow"
+text = "Nama Karakter"
+
+[node name="PreviewNewCharacter" parent="UI/Frame/Center/Card/Content/Scroll/Entries" instance=ExtResource("row")]
+text = "+ Karakter Baru"
+
+[node name="SharedInfo" type="Label" parent="UI/Frame/Center/Card/Content" groups=["coop_compact_hide"]]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 18
+text = "Pemain lain tetap bermain."
+autowrap_mode = 3
+
+[node name="Action" type="Button" parent="UI/Frame/Center/Card/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+focus_mode = 0
+mouse_filter = 2
+theme_type_variation = &"PrimaryButton"
+text = "A  Gunakan Karakter"
+clip_text = true
+
+[node name="Hint" type="Label" parent="UI/Frame/Center/Card/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+theme_override_font_sizes/font_size = 18
+text = "Atas / Bawah: pilih   B: batal\nX: hapus karakter"
+autowrap_mode = 3
+
+[connection signal="pressed" from="UI/Frame/Center/Card/Content/Action" to="." method="_accept"]

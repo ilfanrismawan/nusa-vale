@@ -5,6 +5,8 @@
 
 [resource]
 script = ExtResource("1")
+edible = true
+stamina_restore = 18
 item_id = "buffalo_milk_large_silver"
 display_name = "Susu Kerbau Besar Perak"
 icon = ExtResource("2")

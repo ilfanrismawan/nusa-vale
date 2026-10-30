@@ -87,6 +87,7 @@ var _btn_hotbar: Button
 var _collection_panel: PanelContainer
 var _btn_sort: Button
 var _equipment_panel: PanelContainer
+var _controls_panel: PanelContainer
 var _settings_panel: PanelContainer
 var _crafting_panel: PanelContainer
 ## Tab Keahlian (Role & EXP, GDD 13).
@@ -138,7 +139,9 @@ func _ready() -> void:
 func _setup_rpg_menus() -> void:
 	_rpg_menu = %TopTabsContainer
 	_menu_buttons = {"Tas": tab_book, "Status": %TabStatus, "Equipment": %TabEquipment, "Crafting": %TabCrafting, "Keahlian": %TabSkills, "NPC": %TabNPC, "Koleksi": tab_collection}
-	_top_tabs.assign([%TabEquipment, tab_book, tab_gear, tab_collection, %TabStatus, %TabCrafting, %TabSkills, %TabNPC])
+	_top_tabs.assign([tab_book, %TabStatus, %TabEquipment, %TabCrafting, %TabSkills, %TabNPC, tab_collection, tab_gear, %TabControls])
+	for index in _top_tabs.size():
+		_top_tabs[index].position.x = index * 38
 	for tab in _top_tabs:
 		_setup_tab_hover(tab, tab.tooltip_text)
 	%TabStatus.pressed.connect(_show_status)
@@ -146,6 +149,8 @@ func _setup_rpg_menus() -> void:
 	%TabCrafting.pressed.connect(_show_crafting)
 	%TabSkills.pressed.connect(_show_skills)
 	%TabNPC.pressed.connect(_show_relationships)
+	_controls_panel = %ControlsPage
+	%TabControls.pressed.connect(_show_controls)
 	_settings_panel = %SettingsPage
 	_status_panel = %StatusPage
 	_status_text = _status_panel.get_node("%StatusText")
@@ -154,7 +159,7 @@ func _setup_rpg_menus() -> void:
 	_collection_panel = %CollectionPage
 	_skill_tree = %SkillTreePage
 	_relationship_ui = %RelationshipPage
-	for page in [_equipment_panel, _crafting_panel, _skill_tree, _relationship_ui, _settings_panel]:
+	for page in [_equipment_panel, _crafting_panel, _skill_tree, _relationship_ui, _settings_panel, _controls_panel]:
 		page.inventory_ui = self
 	_btn_sort = %SortButton
 	_btn_sort.pressed.connect(_sort_bag)
@@ -174,6 +179,7 @@ func _show_bag_page() -> void:
 	_skill_tree.hide()
 	_relationship_ui.hide()
 	_settings_panel.hide()
+	_controls_panel.hide()
 	book_root.get_node("LeftPage").show()
 	book_root.get_node("RightPage").show()
 	book_root.get_node("RightRibbonsContainer").show()
@@ -191,6 +197,7 @@ func _show_status() -> void:
 	_skill_tree.hide()
 	_relationship_ui.hide()
 	_settings_panel.hide()
+	_controls_panel.hide()
 	book_root.get_node("LeftPage").hide()
 	book_root.get_node("RightPage").hide()
 	book_root.get_node("RightRibbonsContainer").hide()
@@ -235,6 +242,8 @@ func _update_menu_highlight() -> void:
 		active = _menu_buttons["NPC"]
 	if is_instance_valid(_settings_panel) and _settings_panel.visible:
 		active = tab_gear
+	if is_instance_valid(_controls_panel) and _controls_panel.visible:
+		active = %TabControls
 	_highlight_top_tab(active)
 
 
@@ -249,6 +258,7 @@ func _show_collection() -> void:
 	_skill_tree.hide()
 	_relationship_ui.hide()
 	_settings_panel.hide()
+	_controls_panel.hide()
 	book_root.get_node("LeftPage").hide()
 	book_root.get_node("RightPage").hide()
 	book_root.get_node("RightRibbonsContainer").hide()
@@ -268,6 +278,7 @@ func _show_equipment() -> void:
 	_skill_tree.hide()
 	_relationship_ui.hide()
 	_settings_panel.hide()
+	_controls_panel.hide()
 	for path in ["LeftPage", "RightPage", "RightRibbonsContainer"]:
 		book_root.get_node(path).hide()
 	_equipment_panel.show()
@@ -280,7 +291,7 @@ func _show_crafting() -> void:
 		return
 	_hide_tooltip()
 	_clear_item_detail()
-	for panel in [_status_panel, _equipment_panel, _collection_panel, _skill_tree, _relationship_ui, _settings_panel]:
+	for panel in [_status_panel, _equipment_panel, _collection_panel, _skill_tree, _relationship_ui, _settings_panel, _controls_panel]:
 		panel.hide()
 	for path in ["LeftPage", "RightPage", "RightRibbonsContainer"]:
 		book_root.get_node(path).hide()
@@ -293,6 +304,13 @@ func _show_relationships() -> void:
 	_show_embedded_page(_relationship_ui)
 
 
+func _show_controls() -> void:
+	if Coop.active and data.index != 0:
+		Notify.say("Pengaturan kontrol bersama hanya dapat dibuka P1.")
+		return
+	_show_embedded_page(_controls_panel)
+
+
 func _show_skills() -> void:
 	_show_embedded_page(_skill_tree)
 
@@ -302,7 +320,7 @@ func _show_embedded_page(page: Control) -> void:
 		return
 	_hide_tooltip()
 	_clear_item_detail()
-	for panel in [_status_panel, _equipment_panel, _collection_panel, _crafting_panel, _skill_tree, _relationship_ui, _settings_panel]:
+	for panel in [_status_panel, _equipment_panel, _collection_panel, _crafting_panel, _skill_tree, _relationship_ui, _settings_panel, _controls_panel]:
 		panel.hide()
 	for path in ["LeftPage", "RightPage", "RightRibbonsContainer"]:
 		book_root.get_node(path).hide()
@@ -378,10 +396,7 @@ func _layout_top_tab(tab: TextureButton, active: bool, hovered := false) -> void
 func _on_gear_pressed() -> void:
 	if _drop_dialog_open():
 		return
-	if Coop.active and data.index != 0:
-		detail_desc.text = "Pengaturan bersama hanya dapat dibuka P1."
-		Notify.say("Pengaturan bersama hanya dapat dibuka P1.")
-		return
+	# Co-op P2-P4: halaman ini hanya menampilkan setelan pribadi (Skala UI).
 	_show_embedded_page(_settings_panel)
 
 
@@ -504,11 +519,12 @@ func _setup_close_button() -> void:
 
 ## ── Input Handling ──────────────────────────────────────────────────────────
 func _input(event: InputEvent) -> void:
-	if visible and is_instance_valid(_settings_panel) and _settings_panel.visible:
-		if _settings_panel.capture_input(event):
+	var settings_page: PanelContainer = _controls_panel if is_instance_valid(_controls_panel) and _controls_panel.visible else _settings_panel
+	if visible and is_instance_valid(settings_page) and settings_page.visible:
+		if settings_page.capture_input(event):
 			get_viewport().set_input_as_handled()
 			return
-		var backend: SettingsMenu = _settings_panel._backend
+		var backend: SettingsMenu = settings_page._backend
 		if backend != null and (is_instance_valid(backend._slot_menu) or backend._exit_dialog.visible):
 			return
 
@@ -570,11 +586,11 @@ func _can_open_now() -> bool:
 	return not (is_instance_valid(player) and player.is_input_locked())
 
 
-## Pindah halaman buku; Setelan hanya tersedia untuk P1 saat co-op.
+## Pindah halaman buku; tab Kontrol hanya untuk P1 saat co-op (Setelan P2-P4 = skala UI saja).
 func _cycle_tab(step: int) -> void:
 	var tabs: Array[TextureButton] = []
 	for t in _top_tabs:
-		if is_instance_valid(t) and (t != tab_gear or not Coop.active or data.index == 0):
+		if is_instance_valid(t) and (t != %TabControls or not Coop.active or data.index == 0):
 			tabs.append(t)
 	if tabs.is_empty():
 		return
@@ -593,6 +609,8 @@ func _cycle_tab(step: int) -> void:
 		current = _menu_buttons["NPC"]
 	if _settings_panel.visible:
 		current = tab_gear
+	if _controls_panel.visible:
+		current = %TabControls
 	var idx := maxi(tabs.find(current), 0)
 	tabs[posmod(idx + step, tabs.size())].pressed.emit()
 
@@ -605,7 +623,7 @@ func toggle() -> void:
 
 func _open() -> void:
 	_show_bag_page()
-	tab_gear.tooltip_text = "Pengaturan bersama hanya dapat dibuka P1." if Coop.active and data.index != 0 else "Buka pengaturan layar, audio, kontrol, dan permainan"
+	tab_gear.tooltip_text = "Atur skala UI layarmu (setelan bersama hanya P1)" if Coop.active and data.index != 0 else "Buka pengaturan layar, audio, dan permainan"
 	refresh_inventory()
 	_clear_item_detail()
 	_hide_tooltip()
@@ -625,6 +643,7 @@ func _close() -> void:
 	_skill_tree.hide()
 	_relationship_ui.hide()
 	_settings_panel.hide()
+	_controls_panel.hide()
 	if is_instance_valid(_consume_dialog):
 		_consume_dialog.hide()
 	_close_drop_dialog()
@@ -774,7 +793,11 @@ func _on_slot_clicked(index: int, button: int) -> void:
 	if _drop_dialog_open():
 		return
 	if button == MOUSE_BUTTON_RIGHT:
-		_open_drop_dialog(index)
+		var right_item := _slot_item(index) if not _sell_mode else null
+		if right_item != null and right_item.is_edible() and is_instance_valid(player):
+			_eat_from_slot(index)
+		else:
+			_open_drop_dialog(index)
 		return
 	if button != MOUSE_BUTTON_LEFT:
 		return
@@ -870,8 +893,8 @@ func _display_item_detail(item: ItemData, count: int, slot_idx: int = -1) -> voi
 
 	if detail_desc:
 		var text := item.description
-		if item.category == ItemData.Category.FOOD:
-			text += "\n" + item.food_summary()
+		if item.is_edible():
+			text += "\n" + item.food_summary() + "\nKlik kanan: makan"
 		if text.is_empty():
 			if item.category == ItemData.Category.TOOL:
 				text = "Gunakan peralatan ini dengan klik kiri saat berada di dekat objek kerja."
@@ -1067,6 +1090,24 @@ func _update_drop_button() -> void:
 		_tip_label.visible = not show_drop
 
 
+## Klik kanan slot makanan: makan satu. Efek makan dimainkan pada pemain di balik buku tas,
+## slotnya sendiri ikut memantul.
+func _eat_from_slot(global_idx: int) -> void:
+	if not FoodEating.eat(player, global_idx).ok:
+		return
+	refresh_inventory()
+	if global_idx == _selected_slot_index and _slot_item(global_idx) == null:
+		_clear_item_detail()
+	for slot in _slots:
+		if slot.slot_index != global_idx:
+			continue
+		slot.pivot_offset = slot.size * 0.5
+		slot.scale = Vector2(1.18, 0.86)
+		var tw := slot.create_tween()
+		tw.tween_property(slot, "scale", Vector2.ONE, 0.22).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		break
+
+
 func _drop_dialog_open() -> bool:
 	return is_instance_valid(_drop_dialog) and _drop_dialog.visible
 
@@ -1156,9 +1197,10 @@ func _setup_daya_ui() -> void:
 		_consume_dialog.popup_centered())
 
 func _consume_daya() -> void:
+	var entry: Variant = data.inventory[_consume_slot] if _consume_slot >= 0 and _consume_slot < data.bag_size else null
+	var icon: Texture2D = entry.item.icon if entry is Dictionary and entry.get("item") is ItemData else null
 	if not visible or _sell_mode or not GameState.daya.consume(data, _consume_slot, _consume_id):
 		return
-	var icon := load("res://assets/ui/biji_daya.svg") as Texture2D
 	_close()
 	if is_instance_valid(player):
 		var glow := Node2D.new()
@@ -1168,7 +1210,6 @@ func _consume_daya() -> void:
 		var seed := Sprite2D.new()
 		seed.texture = icon
 		seed.position = Vector2(0, -18)
-		seed.scale = Vector2(0.65, 0.65)
 		glow.add_child(seed)
 		for direction in [-1, 1]:
 			var root := Line2D.new()
@@ -1189,4 +1230,9 @@ func _resize_inventory() -> void:
 	var view := get_viewport().get_visible_rect().size
 	# Include the category ribbons and top tabs when fitting split-screen viewports.
 	var fit := minf(inventory_scale, minf((view.x - 24.0) / 620.0, (view.y - 24.0) / 420.0))
+	# Skala bulat (1.5x/1x) bila hampir muat, supaya piksel buku tetap rata di split screen.
+	for step in [inventory_scale, 1.0]:
+		if fit < step and fit >= step - 0.05:
+			fit = step
+			break
 	book_root.scale = Vector2.ONE * maxf(0.1, fit)

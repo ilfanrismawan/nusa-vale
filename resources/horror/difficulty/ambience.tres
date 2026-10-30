@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="HorrorDifficulty" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/horror_difficulty.gd" id="1_difficulty"]
+
+[resource]
+script = ExtResource("1_difficulty")
+id = &"ambience"
+display_name = "Hanya Suasana"
+description = "Kabut, suara, dan kejadian ganjil tetap ada. Tanpa makhluk, tanpa denda."
+ambience_only = true
+fear_rise_scale = 0.0
+stalker_chance_scale = 0.0
+penalty_scale = 0.0
+jumpscare_can_faint = false
+safe_radius_scale = 1.0
+reward_scale = 0.0
+theft_scale = 0.0

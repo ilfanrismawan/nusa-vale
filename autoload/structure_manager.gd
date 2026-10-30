@@ -4,12 +4,12 @@ signal changed
 const FURNITURE := ["wooden_chair", "wooden_bench"]
 const PreservesJarRecipe = preload("res://scripts/resources/preserves_jar_recipe.gd")
 const DehydratorRecipe = preload("res://scripts/resources/dehydrator_recipe.gd")
-const IDS := ["furnace", "wooden_chest", "wooden_fence", "crafting_workbench", "stone_fence", "wooden_gate", "copper_chest", "iron_chest", "gold_chest", "platinum_chest", "crimson_chest", "frost_chest", "shadow_chest", "chicken_coop", "preserves_jar", "barn", "dehydrator", "silo", "pasture_grass", "mayonnaise_maker", "cheese_press", "loom", "wooden_chair", "wooden_bench", "fairy_chest", "obsidian_chest", "beehive", "sawmill", "alchemy_table", "anvil", "scarecrow", "birdhouse", "street_lamp", "hay_bale", "wooden_bucket", "village_barrel", "mailbox_decor", "stone_statue", "snowman", "feed_trough", "bonfire", "candle", "stacked_barrels", "notice_board", "garden_well", "water_fountain", "garden_swing", "seesaw", "signpost", "picnic_blanket", "twin_lamp", "clothesline", "dog_house", "cow_weathervane", "chicken_weathervane", "hanging_lantern", "xmas_tree", "sandbox", "wooden_broom", "keg", "oil_maker", "fish_smoker", "lightning_rod", "single_bed_wood", "double_bed_wood", "single_bed_blue", "bunk_bed", "baby_crib", "classic_chair", "stool_wood", "armchair_cozy", "sofa_living", "sofa_large", "study_desk", "dining_table_wood", "round_table", "nightstand", "wardrobe_classic", "bookshelf_tall", "kitchen_cabinet", "dresser_mirror", "dresser_drawers", "fireplace_stone", "fireplace_brick", "candle_stand", "floor_lamp", "cat_tree_tall", "cat_bed", "cat_bowl", "grandfather_clock", "indoor_plant_large", "indoor_plant_small", "painting_wall", "gramophone", "wall_mirror", "carpet_rug", "wall_shelf", "umbrella_stand", "school_blackboard", "school_desk", "grand_bookshelf", "lab_alchemy_desk", "weapon_rack", "temple_bell"]
+const IDS := ["furnace", "wooden_chest", "wooden_fence", "crafting_workbench", "stone_fence", "wooden_gate", "copper_chest", "iron_chest", "gold_chest", "platinum_chest", "crimson_chest", "frost_chest", "shadow_chest", "chicken_coop", "preserves_jar", "barn", "dehydrator", "silo", "pasture_grass", "mayonnaise_maker", "cheese_press", "loom", "wooden_chair", "wooden_bench", "fairy_chest", "obsidian_chest", "beehive", "sawmill", "alchemy_table", "anvil", "scarecrow", "birdhouse", "street_lamp", "hay_bale", "wooden_bucket", "village_barrel", "mailbox_decor", "stone_statue", "snowman", "feed_trough", "bonfire", "candle", "stacked_barrels", "notice_board", "garden_well", "water_fountain", "garden_swing", "seesaw", "signpost", "picnic_blanket", "twin_lamp", "clothesline", "dog_house", "cow_weathervane", "chicken_weathervane", "hanging_lantern", "xmas_tree", "sandbox", "wooden_broom", "keg", "oil_maker", "fish_smoker", "lightning_rod", "single_bed_wood", "double_bed_wood", "single_bed_blue", "bunk_bed", "baby_crib", "classic_chair", "stool_wood", "armchair_cozy", "sofa_living", "sofa_large", "study_desk", "dining_table_wood", "round_table", "nightstand", "wardrobe_classic", "bookshelf_tall", "kitchen_cabinet", "dresser_mirror", "dresser_drawers", "fireplace_stone", "fireplace_brick", "candle_stand", "floor_lamp", "cat_tree_tall", "cat_bed", "cat_bowl", "grandfather_clock", "indoor_plant_large", "indoor_plant_small", "painting_wall", "gramophone", "wall_mirror", "carpet_rug", "wall_shelf", "umbrella_stand", "school_blackboard", "school_desk", "grand_bookshelf", "lab_alchemy_desk", "weapon_rack", "temple_bell", "sesajen_tuyul", "tugu_pagar_gaib"]
 ## Dekorasi pasang (GDD 4.13). frames = jumlah frame animasi di atlas ikon, night_frame = frame saat malam, light = menyala saat malam.
 const DECOR := {
 	"scarecrow": {}, "birdhouse": {}, "street_lamp": {"frames": 2, "night_frame": 1, "light": true}, "hay_bale": {}, "wooden_bucket": {},
 	"village_barrel": {}, "mailbox_decor": {}, "stone_statue": {}, "snowman": {}, "feed_trough": {},
-	"bonfire": {"frames": 6, "light": true}, "candle": {"frames": 4, "light": true}, "stacked_barrels": {}, "notice_board": {},
+	"bonfire": {"frames": 6, "light": true, "strong_light": true}, "candle": {"frames": 4, "light": true}, "stacked_barrels": {}, "notice_board": {},
 	"garden_well": {}, "water_fountain": {}, "garden_swing": {}, "seesaw": {}, "signpost": {}, "picnic_blanket": {},
 	"twin_lamp": {"frames": 2, "night_frame": 1, "light": true}, "clothesline": {}, "dog_house": {}, "cow_weathervane": {},
 	"chicken_weathervane": {}, "hanging_lantern": {"light": true}, "xmas_tree": {}, "sandbox": {}, "wooden_broom": {},
@@ -17,11 +17,15 @@ const DECOR := {
 	"classic_chair": {}, "stool_wood": {}, "armchair_cozy": {}, "sofa_living": {}, "sofa_large": {},
 	"study_desk": {}, "dining_table_wood": {}, "round_table": {}, "nightstand": {},
 	"wardrobe_classic": {}, "bookshelf_tall": {}, "kitchen_cabinet": {}, "dresser_mirror": {}, "dresser_drawers": {},
-	"fireplace_stone": {"light": true}, "fireplace_brick": {"light": true}, "candle_stand": {"light": true}, "floor_lamp": {"light": true},
+	"fireplace_stone": {"light": true, "strong_light": true}, "fireplace_brick": {"light": true, "strong_light": true}, "candle_stand": {"light": true}, "floor_lamp": {"light": true},
 	"cat_tree_tall": {}, "cat_bed": {}, "cat_bowl": {},
 	"grandfather_clock": {}, "indoor_plant_large": {}, "indoor_plant_small": {}, "painting_wall": {},
 	"gramophone": {}, "wall_mirror": {}, "carpet_rug": {}, "wall_shelf": {}, "umbrella_stand": {},
 	"school_blackboard": {}, "school_desk": {}, "grand_bookshelf": {}, "lab_alchemy_desk": {}, "weapon_rack": {}, "temple_bell": {},
+	## Penangkal Tuyul (GDD 4.1, Progres Horor Tahap 4).
+	"sesajen_tuyul": {},
+	## Farm aman dari makhluk malam dan Tuyul (Tahap 5).
+	"tugu_pagar_gaib": {},
 }
 ## Mesin crafting baru (GDD 4.13): sprite dirapatkan ke bawah tapak seperti dekorasi.
 const WORKSHOPS := {"beehive": {"frames": 7}, "sawmill": {}, "alchemy_table": {}, "anvil": {}, "keg": {}, "oil_maker": {}, "fish_smoker": {}, "lightning_rod": {}}
@@ -505,7 +509,7 @@ func brush_animal(data: PlayerData, uid: int, id: int) -> Dictionary:
 	if data == null or not record.get("item") in RANCHES:
 		return _result(false, "Kandang tidak tersedia.")
 	var animal := RanchHusbandry.animal_by_id(coop_state(record), id)
-	if animal.is_empty() or RanchHusbandry.species(animal) in ["chicken", "duck"]:
+	if animal.is_empty() or RanchHusbandry.species(animal) in ["chicken", "duck", "ostrich"]:
 		return _result(false, "Unggas cukup dielus.")
 	if int(animal.brush_day) == DayCycle.current_day:
 		return _result(false, "Sudah disikat hari ini.")
@@ -539,7 +543,8 @@ func harvest_animal(data: PlayerData, uid: int, id: int) -> Dictionary:
 	if animal.is_empty() or str(animal.ready).is_empty():
 		return _result(false, "Belum siap dipanen. Penuhi pakan dan tunggu hari terawat.")
 	var tool: String = RanchHusbandry.SPECIES[RanchHusbandry.species(animal)].tool
-	if not data.has_item(tool, 1):
+	# Hasil tanpa alat (truffle babi) diambil langsung dengan tangan.
+	if not tool.is_empty() and not data.has_item(tool, 1):
 		return _result(false, "Perlu %s di tas. Tersedia di toko." % GameState._resolve_item(tool).display_name)
 	if data.stamina < 1:
 		return _result(false, "Perlu 1 stamina untuk panen.")
@@ -749,7 +754,7 @@ func _sync_view(view: Node2D) -> void:
 				node.facing = int(record.get("facing", 1))
 				node.placement_uid = record.uid
 			else:
-				node = load("res://scripts/world/placed_structure.gd").new()
+				node = load("res://scenes/objects/placed_structure.tscn").instantiate()
 				node.uid = record.uid
 			node.name = name
 			view.add_child(node)
@@ -1477,6 +1482,7 @@ func _process(delta: float) -> void:
 	if _horse_scan <= 0.0:
 		_horse_scan = 0.3
 		_sync_horse_actors()
+		PetActor.sync_all(get_tree())
 	if not DayCycle.is_running:
 		return
 	for record in records:

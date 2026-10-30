@@ -1,0 +1,27 @@
+[gd_resource type="Resource" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/wildlife_data.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/animals/Forest/Crow/Crow.png" id="2_walk"]
+
+[resource]
+script = ExtResource("1_script")
+display_name = "Gagak"
+frame_size = 32
+walk_sheet = ExtResource("2_walk")
+walk_rows = PackedInt32Array(0, 0, 0)
+walk_columns = PackedInt32Array(0, 1)
+idle_rows = PackedInt32Array(0, 0, 0)
+idle_columns = PackedInt32Array(0, 1, 2, 3, 4)
+run_rows = PackedInt32Array(2, 2, 2)
+run_columns = PackedInt32Array(0, 1, 2, 3, 4)
+seasons = PackedStringArray()
+locations = PackedStringArray("farm", "forest")
+time = "day"
+weight = 0.8
+walk_speed = 5.0
+run_speed = 70.0
+flee_radius = 40.0
+flies = true
+favorite_foods = PackedStringArray("corn", "wheat")
+gift_item = "quartz"
+gift_chance = 0.4

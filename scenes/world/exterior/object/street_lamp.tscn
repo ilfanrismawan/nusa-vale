@@ -1,0 +1,41 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/street_lamp.gd" id="1_lamp"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/exterior/Street Lamp.png" id="2_art"]
+
+[sub_resource type="Gradient" id="Gradient_glow"]
+colors = PackedColorArray(1, 0.65, 0.2, 0.8, 1, 0.35, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_glow"]
+gradient = SubResource("Gradient_glow")
+width = 64
+height = 64
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_base"]
+size = Vector2(8, 5)
+
+[node name="StreetLamp" type="Node2D"]
+texture_filter = 1
+script = ExtResource("1_lamp")
+
+[node name="Art" type="Sprite2D" parent="."]
+position = Vector2(0, -14)
+texture = ExtResource("2_art")
+hframes = 2
+
+[node name="Light" type="PointLight2D" parent="."]
+position = Vector2(0, -29)
+enabled = false
+color = Color(1, 0.78, 0.4, 1)
+energy = 0.7
+texture = SubResource("GradientTexture2D_glow")
+texture_scale = 1.8
+
+[node name="BaseCollision" type="StaticBody2D" parent="."]
+position = Vector2(0, -3)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BaseCollision"]
+shape = SubResource("RectangleShape2D_base")

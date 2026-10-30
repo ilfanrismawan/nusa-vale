@@ -1,5 +1,5 @@
 extends Control
-@export var text_font_size := 0
+@export_range(16, 16) var text_font_size := 16
 @export var text_font: Font
 @export var nearest_textures := false
 ## All text stays accessible through discrete pages, without scroll or truncation.
@@ -16,7 +16,7 @@ func _ready() -> void:
 	for path: String in ["Body", "Navigation/Previous", "Navigation/Page", "Navigation/Next"]:
 		var control := get_node(path) as Control
 		if text_font_size > 0:
-			control.add_theme_font_size_override("font_size", text_font_size)
+			control.add_theme_font_size_override("font_size", 16)
 		if text_font != null:
 			control.add_theme_font_override("font", text_font)
 		if nearest_textures:

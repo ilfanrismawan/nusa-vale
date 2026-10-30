@@ -5,6 +5,8 @@
 
 [resource]
 script = ExtResource("1")
+edible = true
+stamina_restore = 16
 category = 4
 item_id = "pickled_cucumber"
 display_name = "Acar Timun"

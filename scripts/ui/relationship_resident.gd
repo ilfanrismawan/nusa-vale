@@ -9,6 +9,8 @@ extends Button
 @onready var gift_check_2: Label = %GiftCheck2
 @onready var talk_check: Label = %TalkCheck
 
+@onready var _name_bounds: Rect2 = name_label.get_rect()
+
 var npc_id: String = ""
 
 const HEART_ICON := preload("res://resources/ui/icon_tab_heart.tres")
@@ -24,11 +26,15 @@ func setup(id: String, display_name: String, portrait_tex: Texture2D, points: in
 	if is_instance_valid(name_label):
 		name_label.text = display_name
 		var font := name_label.get_theme_font("font")
-		var font_size := name_label.get_theme_font_size("font_size")
+		name_label.add_theme_font_size_override("font_size", 16)
 		var wrap_flags := TextServer.BREAK_MANDATORY | TextServer.BREAK_WORD_BOUND | TextServer.BREAK_ADAPTIVE
-		while font_size > 7 and font.get_multiline_string_size(display_name, HORIZONTAL_ALIGNMENT_LEFT, name_label.size.x, font_size, -1, wrap_flags).y > name_label.size.y:
-			font_size -= 1
-		name_label.add_theme_font_size_override("font_size", font_size)
+		var text_scale := 1.0
+		while text_scale > 0.4 and font.get_multiline_string_size(display_name, HORIZONTAL_ALIGNMENT_LEFT, _name_bounds.size.x / text_scale, 16, -1, wrap_flags).y * text_scale > _name_bounds.size.y:
+			text_scale -= 0.05
+		name_label.position = _name_bounds.position
+		name_label.size = _name_bounds.size / text_scale
+		name_label.scale = Vector2.ONE * text_scale
+
 	if is_instance_valid(status_label):
 		var status_text := romance_status if not romance_status.is_empty() else ("Lajang" if is_romanceable else "")
 		status_label.text = status_text

@@ -22,7 +22,9 @@ func physics_update(_delta: float) -> void:
 		return
 	
 	player.update_facing_direction(input_vector)
-	player.velocity = input_vector * player.speed * speed_multiplier * player.data.food_movement_multiplier() * player.combat_speed_scale() * player.mount_speed_multiplier()
+	# Lari (speed_multiplier > 1) melambat saat rasa takut penuh.
+	var fear_scale := player.fear_run_multiplier if speed_multiplier > 1.0 else 1.0
+	player.velocity = input_vector * player.speed * speed_multiplier * player.data.food_movement_multiplier() * player.combat_speed_scale() * player.mount_speed_multiplier() * fear_scale
 	player.move_and_slide()
 
 func _get_switch_state() -> State:

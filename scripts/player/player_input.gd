@@ -22,6 +22,9 @@ signal device_changed(using_pad: bool)
 const DEVICE_KEYBOARD := -1
 ## Hanya debug: pemain tambahan di numpad keyboard yang sama, untuk menguji tanpa gamepad.
 const DEVICE_NUMPAD := -2
+## Gamepad yang diterima aksi solo (set_solo_pad): semua gamepad, atau tidak ada sama sekali.
+const SOLO_PAD_ANY := -1
+const SOLO_PAD_NONE := -3
 
 const L := preload("res://scripts/player/input_layout.gd")
 
@@ -81,6 +84,9 @@ var interacted_ms := -100000
 var _hotbar_mouse_buttons: Dictionary = {}
 
 static var _solo: PlayerInput
+## Main sendiri: gamepad yang menggerakkan P1. Bawaan semua gamepad; saat pemain lain sedang
+## bergabung (drop-in, game tidak dijeda) dibatasi ke gamepad P1 atau keyboard saja.
+static var solo_pad: int = SOLO_PAD_ANY
 static var _overrides: Dictionary = {}
 static var _overrides_loaded := false
 static var _rows_cache: Array[Dictionary] = []
@@ -92,6 +98,14 @@ static func solo() -> PlayerInput:
 		_solo = PlayerInput.new()
 		_solo._build()
 	return _solo
+
+## Batasi gamepad aksi solo (SOLO_PAD_ANY, SOLO_PAD_NONE, atau nomor gamepad P1).
+static func set_solo_pad(pad: int) -> void:
+	if solo_pad == pad:
+		return
+	solo_pad = pad
+	if _solo != null:
+		_solo._build()
 
 ## Input pemain co-op; membuat ulang aksi "p<n>_*" untuk perangkat ini.
 static func create(p_index: int, p_device: int, p_extra_pad: int = -1) -> PlayerInput:
@@ -280,7 +294,7 @@ func _name(base: StringName, mask: int) -> StringName:
 
 func _device_accepts(kind: String) -> bool:
 	if prefix.is_empty():
-		return true
+		return kind == "kb" or solo_pad != SOLO_PAD_NONE
 	if kind == "kb":
 		return device == DEVICE_KEYBOARD
 	return device >= 0 or extra_pad >= 0
@@ -288,7 +302,9 @@ func _device_accepts(kind: String) -> bool:
 func _joy_device() -> int:
 	if device >= 0:
 		return device
-	return extra_pad if extra_pad >= 0 else -1
+	if extra_pad >= 0:
+		return extra_pad
+	return solo_pad if prefix.is_empty() and solo_pad >= 0 else -1
 
 func _is_pad() -> bool:
 	return device >= 0
@@ -421,7 +437,9 @@ func right_stick() -> Vector2:
 		pads.append(device)
 	elif extra_pad >= 0:
 		pads.append(extra_pad)
-	elif prefix.is_empty():
+	elif prefix.is_empty() and solo_pad >= 0:
+		pads.append(solo_pad)
+	elif prefix.is_empty() and solo_pad == SOLO_PAD_ANY:
 		pads = Input.get_connected_joypads()
 	for pad in pads:
 		var v := Vector2(Input.get_joy_axis(pad, JOY_AXIS_RIGHT_X), Input.get_joy_axis(pad, JOY_AXIS_RIGHT_Y))

@@ -1,9 +1,12 @@
 class_name Furnace
 extends Node2D
 
+const PRODUCT_READY_SOUND := preload("res://scripts/world/product_ready_sound.gd")
+
 @export var recipes: Array[FurnaceRecipe] = []
 @export var recipe: FurnaceRecipe
 
+@onready var ready_sound: PRODUCT_READY_SOUND = $ReadySound
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var area_2d: Area2D = get_node_or_null("Area2D")
 @onready var point_light: PointLight2D = get_node_or_null("PointLight2D")
@@ -158,7 +161,7 @@ func finish_furnace() -> void:
 		ItemPickup.spawn(parent, origin + offset, current_recipe.output_item_id, 1)
 
 	Notify.say("Peleburan selesai! %s x%d siap diambil." % [out_name, current_recipe.output_amount])
-	Juice.sfx(load("res://assets/audio/sfx/machines/machine_ready.wav"), -4.0)
+	ready_sound.play_if_near()
 	Juice.play(&"sparkle", global_position)
 
 	current_recipe = null

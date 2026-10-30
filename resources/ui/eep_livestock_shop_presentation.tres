@@ -49,10 +49,13 @@ script = ExtResource("script")
 title = "Peternakan Eep"
 vendor_name = "Eep"
 greeting = "Halo! Pilih teman baru untuk kebunmu."
-display_slots = 8
-species_order = PackedStringArray("chicken", "duck", "cow", "goat", "sheep", "buffalo", "capybara", "horse")
+display_slots = 10
+species_order = PackedStringArray("chicken", "duck", "ostrich", "cow", "goat", "sheep", "buffalo", "pig", "capybara", "horse")
 vendor_art = SubResource("Vendor")
 descriptions = Dictionary[String, String]({
+"pig": "Babi dewasa penghuni kandang ternak. Setiap tiga hari terawat ia mengendus Truffle; ambil dengan tangan dari menu kandang, lalu olah di Oil Maker.",
+"pig_role": "Pencari truffle",
+"ostrich": "Burung unta dewasa penghuni kandang unggas. Bertelur besar setiap tiga hari terawat; telurnya bisa ditetaskan di Inkubator.",
 "chicken": "Ayam dewasa penghuni kandang unggas. Menghasilkan telur jika diberi pakan dan dirawat dengan baik.",
 "cow": "Sapi dewasa penghuni kandang ternak. Rawat dan perah menggunakan ember susu untuk memperoleh hasilnya.",
 "duck": "Bebek dewasa penghuni kandang unggas. Menghasilkan telur bebek setelah kebutuhan hariannya terpenuhi.",

@@ -21,7 +21,7 @@ func _ready() -> void:
 	var data := GameState.p1()
 	var other := GameState.new_coop_character()
 	other.story_flags.p2_only = true
-	check(NPCDatabase.residents.size() == 13, "all thirteen resident profiles registered")
+	check(NPCDatabase.residents.size() == 14, "all fourteen resident profiles registered")
 	check(NPCSocialService.taste("ubay", "coffee") == "loved", "Ubay gift preferences use recognized JSON field")
 	check(NPCDatabase.residents.zarathia.service == "shop" and NPCDatabase.residents.wira.service == "carpenter", "shop and carpenter services normalized")
 	check(NPCDatabase.residents.zarathia.visual.expressions.happy == [0, 2], "numeric portrait index converted")

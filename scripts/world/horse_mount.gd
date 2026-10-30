@@ -7,6 +7,8 @@ extends Node2D
 ## Turun otomatis saat pemain masuk interior, gua, atau ranch indoor; kuda ditinggal di area luar terakhir.
 ## Sprite pemain diangkat RIDE_LIFT supaya kaki kuda berpijak di titik kaki pemain.
 const RIDE_LIFT := 10.0
+## Bayangan pemain selebar kuda selama menunggang.
+const RIDE_SHADOW_RADIUS := 11.0
 const HOP_HEIGHT := 14.0
 const HOP_TIME := 0.28
 const HorseActor := preload("res://scripts/world/horse_actor.gd")
@@ -44,7 +46,8 @@ func _play_mount() -> void:
 	var info: Dictionary = _player.get_meta("riding_horse", {})
 	_horse = AnimatedSprite2D.new()
 	_horse.sprite_frames = HorseActor.horse_frames(str(info.get("coat", "1")))
-	_horse.position = Player.FEET_OFFSET + Vector2(0, -RIDE_LIFT)
+	# Sama dengan _sync_horse: kuda mengikuti sprite penunggang (termasuk offset kaki sprite).
+	_horse.position = _home_offset + _body.offset + Vector2(0, 8 - RIDE_LIFT)
 	_horse.play(HorseActor.anim_name("idle", _player.facing_direction))
 	add_child(_horse)
 	# Urutan anak menaruh kuda di bawah sprite pemain tanpa mengubah z_index terhadap tanah.
@@ -59,6 +62,8 @@ func _land() -> void:
 		return
 	_riding = true
 	_player.animation_controller.set_riding_horse(true)
+	if is_instance_valid(_player.ground_shadow):
+		_player.ground_shadow.radius = RIDE_SHADOW_RADIUS
 	_body.position = _home_offset + Vector2(0, -RIDE_LIFT)
 	# Kuda tertekan sedikit saat diduduki lalu memantul kembali.
 	_body.scale = Vector2(1.15, 0.85)
@@ -66,7 +71,7 @@ func _land() -> void:
 	var feet := _player.global_position + Player.FEET_OFFSET
 	Juice.burst(feet, _dust)
 	Juice.play_sound(&"pickup", 5.0)
-	Juice.float_text("♥", _player.global_position + Vector2(0, -34), Color("ff7073"))
+	Juice.float_text("♥", _player.global_position + Player.SPRITE_OFFSET + Vector2(0, -34), Color("ff7073"))
 	Juice.shake(1.5, 0.12)
 
 ## Dipanggil StructureManager.dismount sebelum node dihapus: lompat turun ke samping.
@@ -77,6 +82,7 @@ func play_dismount() -> void:
 	_riding = false
 	if is_instance_valid(_horse):
 		_horse.hide()
+	_reset_shadow()
 	_player.animation_controller.set_riding_horse(false)
 	_body.scale = Vector2.ONE
 	var body := _body
@@ -122,7 +128,7 @@ func _sync_horse() -> void:
 			_horse.pause()
 			_horse.frame = mini(sprite.frame, _horse.sprite_frames.get_frame_count(horse_anim) - 1)
 	_horse.flip_h = sprite.flip_h
-	_horse.position = sprite.position + Vector2(0, 8)
+	_horse.position = sprite.position + sprite.offset + Vector2(0, 8)
 	_horse.scale = sprite.scale
 
 ## Posisi kaki kuda di area luar terakhir (dipakai StructureManager.horse_spot saat turun).
@@ -143,7 +149,12 @@ func _exit_tree() -> void:
 	if not is_instance_valid(_player):
 		return
 	_player.animation_controller.set_riding_horse(false)
+	_reset_shadow()
 	# Turun tanpa animasi (tidur, pingsan, cheat): kembalikan posisi sprite pemain.
 	if not _hopping_off and is_instance_valid(_body):
 		_body.position = _home_offset
 		_body.scale = Vector2.ONE
+
+func _reset_shadow() -> void:
+	if is_instance_valid(_player.ground_shadow):
+		_player.ground_shadow.radius = Player.GroundShadow.DEFAULT_RADIUS

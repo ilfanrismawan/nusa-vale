@@ -36,13 +36,14 @@ clip_contents = true
 mouse_filter = 2
 
 [node name="Heading" type="Label" parent="Pages/Left"]
+scale = Vector2(1.0625, 1.0625)
 unique_name_in_owner = true
 offset_left = 4.0
 offset_top = 0.0
-offset_right = 196.0
-offset_bottom = 22.0
+offset_right = 184.7058823529412
+offset_bottom = 20.705882352941178
 mouse_filter = 2
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 16
 text = "KOLEKSI"
 clip_text = true
 
@@ -58,41 +59,46 @@ theme_override_constants/h_separation = 4
 theme_override_constants/v_separation = 4
 
 [node name="Filter1" type="Button" parent="Pages/Left/Filters"]
+scale = Vector2(0.75, 0.75)
 unique_name_in_owner = true
 custom_minimum_size = Vector2(94, 20)
 toggle_mode = true
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 16
 text = "Ikan"
 
 [node name="Filter2" type="Button" parent="Pages/Left/Filters"]
+scale = Vector2(0.75, 0.75)
 unique_name_in_owner = true
 custom_minimum_size = Vector2(94, 20)
 toggle_mode = true
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 16
 text = "Hutan"
 
 [node name="Filter3" type="Button" parent="Pages/Left/Filters"]
+scale = Vector2(0.75, 0.75)
 unique_name_in_owner = true
 custom_minimum_size = Vector2(94, 20)
 toggle_mode = true
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 16
 text = "Tanaman"
 
 [node name="Filter4" type="Button" parent="Pages/Left/Filters"]
+scale = Vector2(0.75, 0.75)
 unique_name_in_owner = true
 custom_minimum_size = Vector2(94, 20)
 toggle_mode = true
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 16
 text = "Mineral"
 
 [node name="Summary" type="Label" parent="Pages/Left"]
+scale = Vector2(0.6875, 0.6875)
 unique_name_in_owner = true
 offset_left = 4.0
 offset_top = 74.0
-offset_right = 196.0
-offset_bottom = 102.0
+offset_right = 283.27272727272725
+offset_bottom = 114.72727272727272
 mouse_filter = 2
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 16
 text = ""
 clip_text = true
 autowrap_mode = 3
@@ -108,11 +114,12 @@ columns = 1
 theme_override_constants/v_separation = 4
 
 [node name="CollectionPager" parent="Pages/Left" instance=ExtResource("pager")]
+scale = Vector2(0.75, 0.75)
 unique_name_in_owner = true
 offset_left = 4.0
 offset_top = 201.0
-offset_right = 196.0
-offset_bottom = 222.0
+offset_right = 260.0
+offset_bottom = 229.0
 content_path = NodePath("../List")
 page_size = 3
 

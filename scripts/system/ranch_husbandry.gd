@@ -8,15 +8,19 @@ const SPECIES := {
 	"goat": {"name": "Kambing", "price": 3200, "interval": 2, "product": "goat_milk", "tool": "milk_pail", "home": "barn"},
 	"sheep": {"name": "Domba", "price": 3000, "interval": 3, "product": "wool", "tool": "shears", "home": "barn"},
 	"buffalo": {"name": "Kerbau", "price": 4000, "interval": 2, "product": "buffalo_milk", "tool": "milk_pail", "home": "barn"},
+	## Tanpa alat di Barn = hasil siap diambil tangan dari hewannya. "large": false = tanpa ukuran besar
+	## (kualitas perak/emas tetap dari kasih sayang).
+	"pig": {"name": "Babi", "price": 6000, "interval": 3, "product": "truffle", "tool": "", "home": "barn", "large": false},
+	"ostrich": {"name": "Burung Unta", "price": 4500, "interval": 3, "product": "ostrich_egg", "tool": "", "home": "chicken_coop", "large": false},
 	## interval 0 = tidak menghasilkan komoditas harian (GDD 4.10.5).
 	"capybara": {"name": "Kapibara", "price": 2000, "interval": 0, "product": "", "tool": "", "home": "barn"},
 	"horse": {"name": "Kuda", "price": 5000, "interval": 0, "product": "", "tool": "", "home": "barn"},
 }
 const MAX_PRODUCTS := 999
 ## Lama hamil dalam hari terawat (GDD 4.10.9). Spesies tanpa entri tidak bisa dibiakkan.
-const BREED_DAYS := {"cow": 6, "goat": 5, "sheep": 5, "buffalo": 7, "capybara": 4}
+const BREED_DAYS := {"cow": 6, "goat": 5, "sheep": 5, "buffalo": 7, "capybara": 4, "pig": 5}
 ## Lama inkubasi telur (hari) dan spesies yang menetas.
-const HATCH := {"chicken_egg": {"species": "chicken", "days": 3}, "duck_egg": {"species": "duck", "days": 5}}
+const HATCH := {"chicken_egg": {"species": "chicken", "days": 3}, "duck_egg": {"species": "duck", "days": 5}, "ostrich_egg": {"species": "ostrich", "days": 7}}
 ## Hari sampai anak hewan dewasa; anak tidak berproduksi dan tidak bisa ditunggangi/dibiakkan.
 const GROW_DAYS := {"chicken_coop": 3, "barn": 5}
 const BREED_AFFECTION := 80
@@ -61,12 +65,13 @@ static func species(animal: Dictionary) -> String:
 	return str(animal.get("species", "chicken"))
 
 static func product(animal: Dictionary, comfortable: bool) -> String:
-	var base: String = SPECIES[species(animal)].product
+	var info: Dictionary = SPECIES[species(animal)]
+	var base: String = info.product
 	var affection := int(animal.affection)
 	var suffix := ""
 	if comfortable and affection >= 40:
 		suffix = "_gold" if affection >= 80 else "_silver"
-	if comfortable and affection >= 60:
+	if comfortable and affection >= 60 and info.get("large", true):
 		base += "_large"
 	return base + suffix
 
@@ -116,7 +121,7 @@ static func advance(state: Dictionary, day: int) -> void:
 			if int(animal.progress) < int(info.interval):
 				continue
 			var output := product(animal, not dirty)
-			if str(info.tool).is_empty():
+			if str(info.tool).is_empty() and info.home == "chicken_coop":
 				if product_count(state) >= MAX_PRODUCTS:
 					animal.progress = mini(int(animal.progress), int(info.interval))
 					continue
@@ -260,11 +265,11 @@ static func valid(state: Variant, home: String = "chicken_coop") -> bool:
 			return false
 		if animal.get("baby_days", 0) > GROW_DAYS[home] or animal.get("pregnant", 0) > BREED_DAYS.get(kind, 0) or animal.get("feather", 0) > FEATHER_DAYS:
 			return false
-		if animal.get("ready", "") != "" and (str(SPECIES[kind].tool).is_empty() or not valid_product(str(animal.ready), str(SPECIES[kind].product))):
+		if animal.get("ready", "") != "" and ((str(SPECIES[kind].tool).is_empty() and home == "chicken_coop") or not valid_product(str(animal.ready), str(SPECIES[kind].product))):
 			return false
 		seen[int(animal.id)] = true
 	for id in state.get("products", {}):
-		if not id is String or not (valid_product(id, "chicken_egg") or valid_product(id, "duck_egg") or id == "duck_feather") or home != "chicken_coop" or not integer(state.products[id]) or state.products[id] <= 0:
+		if not id is String or not (valid_product(id, "chicken_egg") or valid_product(id, "duck_egg") or valid_product(id, "ostrich_egg") or id == "duck_feather") or home != "chicken_coop" or not integer(state.products[id]) or state.products[id] <= 0:
 			return false
 	return product_count(state) <= MAX_PRODUCTS
 

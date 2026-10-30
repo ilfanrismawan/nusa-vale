@@ -23,7 +23,7 @@ var _duration := JUMP_TIME
 var _start_height := 0.0
 var _peak := JUMP_HEIGHT
 var _sprite_home := Vector2.ZERO
-var _shadow: JumpShadow
+var _shadow: Node2D
 
 func _init() -> void:
 	animation_name = &"Walk"
@@ -40,14 +40,10 @@ func enter() -> void:
 	super.enter()
 	animation_controller.sprite.speed_scale = 1.6
 	_sprite_home = animation_controller.sprite.position
-	if not is_instance_valid(_shadow):
-		_shadow = JumpShadow.new()
-		_shadow.name = "JumpShadow"
-		_shadow.position = Player.FEET_OFFSET
-		_shadow.z_index = -1
-		player.add_child(_shadow)
-	_shadow.visible = true
-	_shadow.lift = 0.0
+	# Bayangan tetap pemain: tetap di tanah, mengecil saat badan naik.
+	_shadow = player.ground_shadow
+	if is_instance_valid(_shadow):
+		_shadow.lift = 0.0
 	Juice.play(&"swish", player.global_position, -12.0)
 	CombatJuice.dust(player.global_position + Player.FEET_OFFSET, -player.facing_direction)
 
@@ -99,17 +95,5 @@ func exit() -> void:
 	height = 0.0
 	scatter_item = null
 	if is_instance_valid(_shadow):
-		_shadow.visible = false
+		_shadow.lift = 0.0
 
-
-## Bayangan oval di kaki; mengecil saat badan makin tinggi.
-class JumpShadow extends Node2D:
-	var lift := 0.0:
-		set(value):
-			lift = value
-			queue_redraw()
-
-	func _draw() -> void:
-		var scale_by := clampf(1.0 - lift / 30.0, 0.55, 1.0)
-		draw_set_transform(Vector2.ZERO, 0.0, Vector2(1.0, 0.45))
-		draw_circle(Vector2.ZERO, 6.0 * scale_by, Color(0, 0, 0, 0.28 * scale_by))

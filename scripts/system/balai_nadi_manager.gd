@@ -35,6 +35,20 @@ func restoration_stage() -> String:
 
 # ── Sayap (GDD 4.9): bonus permanen saat semua paket satu sayap selesai ──
 
+## Sayap baru muncul dan terbuka setelah Restorasi Balai Nadi (Balai Utama) selesai.
+func wings_unlocked() -> bool:
+	return completed(RESTORATION.project_id)
+
+func project_available(project: RestorationProject) -> bool:
+	return project != null and (project.wing_id.is_empty() or wings_unlocked())
+
+func available_projects() -> Array[RestorationProject]:
+	var result: Array[RestorationProject] = []
+	for project in definitions:
+		if project_available(project):
+			result.append(project)
+	return result
+
 func wings() -> Array[BalaiWing]:
 	return CATALOG.wings
 
@@ -131,6 +145,9 @@ func contribute(donor: PlayerData, project_id: String, item_id: String, requeste
 	var project := definition(project_id)
 	if _busy or donor == null or not GameState.players.has(donor) or project == null or requested <= 0:
 		return 0
+	if not project_available(project):
+		Notify.say("Pulihkan Balai Utama dahulu untuk membuka sayap ini.")
+		return 0
 	var accepted := mini(requested, mini(remaining(project_id, item_id), available_amount(donor, item_id)))
 	# Village Treasurer bisa membuat paket yang sudah terisi langsung memenuhi syarat:
 	# kontribusi 0 lalu menyelesaikannya.
@@ -208,6 +225,8 @@ func contribute(donor: PlayerData, project_id: String, item_id: String, requeste
 		project_completed.emit(project_id)
 		Notify.say(project.completion_message)
 		Notify.say("Hadiah: %d Token Talenta! Pakai di tab Keahlian." % SkillSystem.RULES.balai_tokens)
+		if project_id == RESTORATION.project_id:
+			Notify.say("Sayap Alam, Karya, Niaga, dan Pengetahuan kini terbuka di Balai Nadi!")
 	if wing_done:
 		if not project_wing.completion_flag.is_empty() and not old_wing_flag:
 			WorldState.flag_changed.emit(project_wing.completion_flag, true)

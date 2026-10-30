@@ -16,14 +16,7 @@ func _ready() -> void:
 	sprite.position = Vector2(0, -6)
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	add_child(sprite)
-	var label := Label.new()
-	label.text = "Surat"
-	label.position = Vector2(-12, -26)
-	label.add_theme_font_override("font", preload("res://assets/fonts/m5x7.ttf"))
-	label.add_theme_font_size_override("font_size", 12)
-	label.add_theme_color_override("font_outline_color", Color.BLACK)
-	label.add_theme_constant_override("outline_size", 3)
-	add_child(label)
+	
 
 func interact(player: Player = null) -> void:
 	if player == null or is_instance_valid(_dialog):

@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/horror/genderuwo.tscn" id="1_base"]
+
+[node name="PenungguHutan" instance=ExtResource("1_base")]
+scale = Vector2(1.5, 1.5)
+display_name = "Penunggu Hutan Dalam"
+ghost_id = &""
+reward_item_id = ""
+journal_hint = ""
+lifetime = 600.0
+stamina_penalty = 50
+repelled_by_light = false
+ignores_incense = true
+glow = Color(1.2, 1.9, 1.2, 1)
+glide_speed = 26.0
+notify_spawn = "Pepohonan berderak. Penunggu Hutan Dalam bangkit: ia tak melihat yang diam."
+notify_touch = "Penunggu Hutan Dalam mencengkerammu! Energi -%d."

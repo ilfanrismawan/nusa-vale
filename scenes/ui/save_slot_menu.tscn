@@ -34,25 +34,27 @@ theme = ExtResource("theme")
 mouse_filter = 2
 
 [node name="Title" type="Label" parent="Design"]
+scale = Vector2(2.25, 2.25)
 unique_name_in_owner = true
 offset_left = 80.0
 offset_top = 42.0
-offset_right = 1030.0
-offset_bottom = 104.0
+offset_right = 502.22222222222223
+offset_bottom = 69.55555555555556
 text = "Muat Permainan"
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 theme_override_colors/font_color = Color(1, 0.95, 0.86, 1)
 
 
 [node name="Hint" type="Label" parent="Design"]
+scale = Vector2(1.125, 1.125)
 unique_name_in_owner = true
 offset_left = 82.0
 offset_top = 110.0
-offset_right = 1132.0
-offset_bottom = 148.0
+offset_right = 1015.3333333333334
+offset_bottom = 143.77777777777777
 text = "Pilih slot ceritamu. Data tidak berubah sebelum aksi dikonfirmasi."
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 theme_override_colors/font_color = Color(1, 0.95, 0.86, 1)
 
@@ -73,13 +75,14 @@ theme_override_constants/h_separation = 24
 theme_override_constants/v_separation = 20
 
 [node name="Close" type="Button" parent="Design"]
+scale = Vector2(1.125, 1.125)
 unique_name_in_owner = true
 offset_left = 1005.0
 offset_top = 650.0
-offset_right = 1200.0
-offset_bottom = 696.0
+offset_right = 1178.3333333333333
+offset_bottom = 690.8888888888889
 text = "Esc  Kembali"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 
 [node name="Confirmation" type="ColorRect" parent="Design"]
 unique_name_in_owner = true
@@ -98,41 +101,45 @@ offset_bottom = 480.0
 theme_override_styles/panel = SubResource("Paper")
 
 [node name="ConfirmHeading" type="Label" parent="Design/Confirmation/Dialog"]
+scale = Vector2(1.6875, 1.6875)
 unique_name_in_owner = true
 offset_left = 30.0
 offset_top = 22.0
-offset_right = 480.0
-offset_bottom = 67.0
+offset_right = 296.6666666666667
+offset_bottom = 48.66666666666667
 text = "Konfirmasi"
-theme_override_font_sizes/font_size = 27
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 
 [node name="ConfirmText" type="Label" parent="Design/Confirmation/Dialog"]
+scale = Vector2(1.1875, 1.1875)
 unique_name_in_owner = true
 offset_left = 30.0
 offset_top = 80.0
-offset_right = 480.0
-offset_bottom = 180.0
+offset_right = 408.94736842105266
+offset_bottom = 164.21052631578948
 text = "Yakin melanjutkan?"
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 
 [node name="ConfirmNo" type="Button" parent="Design/Confirmation/Dialog"]
+scale = Vector2(1.125, 1.125)
 unique_name_in_owner = true
 offset_left = 30.0
 offset_top = 195.0
-offset_right = 240.0
-offset_bottom = 239.0
+offset_right = 216.66666666666666
+offset_bottom = 234.11111111111111
 text = "Batal"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 
 [node name="ConfirmYes" type="Button" parent="Design/Confirmation/Dialog"]
+scale = Vector2(1.125, 1.125)
 unique_name_in_owner = true
 offset_left = 270.0
 offset_top = 195.0
-offset_right = 480.0
-offset_bottom = 239.0
+offset_right = 456.66666666666663
+offset_bottom = 234.11111111111111
 text = "Ya, lanjutkan"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16

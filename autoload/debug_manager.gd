@@ -229,6 +229,22 @@ func _build_panel() -> void:
 	_add_cheat_row(box, "Ins", "Bahan Jembatan (+20 Wood, +10 Stone)", _cheat_add_bridge_materials)
 	_add_cheat_row(box, "", "Buka Semua Area (Forest/Cave/School/Bridge)", _cheat_unlock_all_areas)
 
+	# ── Kategori: Horor ──
+	_add_category_header(box, "👻  HOROR TENGAH MALAM")
+	_add_cheat_row(box, "", "Set Jam 00:30 (malam horor)", _cheat_set_horror_time)
+	_add_cheat_row(box, "", "Munculkan Kuntilanak", _cheat_spawn_stalker.bind(0))
+	_add_cheat_row(box, "", "Munculkan Pocong", _cheat_spawn_stalker.bind(1))
+	_add_cheat_row(box, "", "Munculkan Genderuwo", _cheat_spawn_stalker.bind(2))
+	_add_cheat_row(box, "", "Munculkan Banaspati", _cheat_spawn_stalker.bind(3))
+	_add_cheat_row(box, "", "Munculkan Sundel Bolong", _cheat_spawn_stalker.bind(4))
+	_add_cheat_row(box, "", "Munculkan Leak", _cheat_spawn_stalker.bind(5))
+	_add_cheat_row(box, "", "Tingkat Gaib berikutnya (paksa)", _cheat_cycle_horror_tier)
+	_add_cheat_row(box, "", "Kesulitan Gaib berikutnya", _cheat_cycle_horror_difficulty)
+	_add_cheat_row(box, "", "Tuyul mencuri sekarang", _cheat_tuyul)
+	_add_cheat_row(box, "", "Malam Jumat Kliwon (paksa, nyala/mati)", _cheat_kliwon)
+	_add_cheat_row(box, "", "Ketukan pintu sekarang", _cheat_knock)
+	_add_cheat_row(box, "", "Uji Jumpscare Sekarang", _cheat_jumpscare)
+
 	_add_category_header(box, "PENGUJIAN TAMBAHAN (pemain aktif)")
 	_add_cheat_row(box, "", "Pulihkan HP, stamina, air & efek makanan", func():
 		TestingActions.recover(GameState.current)
@@ -591,3 +607,79 @@ func _testing_set_hour(value: int) -> void:
 	DayCycle.time_tick.emit(value, 0)
 	DayCycle.apply_scene_lighting()
 	_notify("Jam pengujian: %02d:00" % value)
+
+# --- Horor ---
+func _night_horror() -> Node:
+	for node in get_tree().root.find_children("*", "CanvasLayer", true, false):
+		if node.has_method("spawn_stalker"):
+			return node
+	return null
+
+func _cheat_set_horror_time() -> void:
+	DayCycle.hour = 0
+	DayCycle.minute = 30
+	var horror := _night_horror()
+	if horror != null:
+		horror.add_fear(0.5)
+	_notify("🌑 Jam 00:30. Rasa takut naik, makhluk bisa muncul di luar ruangan, jauh dari cahaya.")
+
+## 0 (ikut progres) → 1 → 2 → 3 → 4 → 0. Tidak disimpan.
+func _cheat_cycle_horror_tier() -> void:
+	var horror := GameState.horror
+	horror.forced_tier = (horror.forced_tier + 1) % (GameState.horror.profiles.size() + 1)
+	var label := "ikut progres" if horror.forced_tier == 0 else "dipaksa"
+	_notify("👻 Tingkat Gaib %d — %s (%s)." % [horror.tier(), horror.profile().display_name, label])
+
+func _cheat_cycle_horror_difficulty() -> void:
+	var horror := GameState.horror
+	var index := GameState.horror.difficulties.find(horror.difficulty())
+	var next := GameState.horror.difficulties[(index + 1) % GameState.horror.difficulties.size()]
+	horror.set_difficulty(next.id)
+	_notify("👻 Kesulitan Gaib: %s." % next.display_name)
+
+## Abaikan jam/tingkat: Tuyul mencuri malam ini (kecuali ada Sesajen atau kesulitan tanpa pencurian).
+func _cheat_tuyul() -> void:
+	var horror := GameState.horror
+	var saved := [DayCycle.hour, horror.forced_tier, horror.theft_day]
+	DayCycle.hour = 2
+	horror.forced_tier = maxi(2, horror.tier())
+	horror.theft_day = 0
+	var report := horror.try_tuyul()
+	DayCycle.hour = saved[0]
+	horror.forced_tier = saved[1]
+	if report.is_empty():
+		horror.theft_day = saved[2]
+	_notify("👣 " + (report if not report.is_empty() else "Tuyul tidak mencuri (Sesajen terpasang atau kesulitan tanpa pencurian)."))
+
+func _cheat_kliwon() -> void:
+	GameState.horror.forced_kliwon = not GameState.horror.forced_kliwon
+	_notify("🌕 Malam Jumat Kliwon %s (tingkat malam ini %d)." % ["aktif" if GameState.horror.forced_kliwon else "mati", GameState.horror.night_tier()])
+
+func _cheat_knock() -> void:
+	var horror := _night_horror()
+	if horror == null:
+		_notify("⚠ NightHorror tidak ditemukan (HUD belum dimuat).")
+		return
+	horror.knock()
+
+func _cheat_spawn_stalker(index: int) -> void:
+	var horror := _night_horror()
+	if horror == null:
+		_notify("⚠ NightHorror tidak ditemukan (HUD belum dimuat).")
+		return
+	if horror.spawn_stalker(index) == null:
+		_notify("⚠ Gagal memunculkan makhluk (perlu di dalam scene dunia).")
+		return
+	_notify("👻 Makhluk muncul di belakangmu. Jangan menoleh lama-lama...")
+
+func _cheat_jumpscare() -> void:
+	var horror := _night_horror()
+	if horror == null:
+		_notify("⚠ NightHorror tidak ditemukan (HUD belum dimuat).")
+		return
+	var stalker: Node2D = horror.spawn_stalker(-1)
+	if stalker == null:
+		_notify("⚠ Gagal memunculkan makhluk (perlu di dalam scene dunia).")
+		return
+	horror.stalker_touched(stalker)
+	stalker.queue_free()

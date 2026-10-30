@@ -52,15 +52,16 @@ clip_contents = true
 mouse_filter = 2
 
 [node name="Heading" type="Label" parent="Pages/Left"]
+scale = Vector2(0.9375, 0.9375)
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 4.0
 offset_top = 2.0
-offset_right = 196.0
-offset_bottom = 24.0
+offset_right = 208.8
+offset_bottom = 25.466666666666665
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.24, 0.12, 0.06, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 16
 text = "PERLENGKAPAN"
 horizontal_alignment = 1
 clip_text = true
@@ -86,15 +87,16 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="Name" type="Label" parent="Pages/Left"]
+scale = Vector2(0.75, 0.75)
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 44.0
 offset_top = 134.0
-offset_right = 156.0
-offset_bottom = 152.0
+offset_right = 193.33333333333334
+offset_bottom = 158.0
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.25, 0.14, 0.08, 1)
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 16
 text = "Petani"
 horizontal_alignment = 1
 clip_text = true
@@ -113,7 +115,7 @@ unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.98, 0.88, 0.65, 1)
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 16
 text = "ATK 0   DEF 0"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -336,14 +338,15 @@ theme_override_styles/pressed = ExtResource("slot_pressed")
 theme_override_styles/disabled = ExtResource("slot_normal")
 
 [node name="LockedIconshield" type="Label" parent="Pages/Left/Slot_shield"]
+scale = Vector2(0.875, 0.875)
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 2.0
 offset_top = 2.0
-offset_right = 32.0
-offset_bottom = 32.0
+offset_right = 36.285714285714285
+offset_bottom = 36.285714285714285
 mouse_filter = 2
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 16
 text = "🛡️"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -365,14 +368,15 @@ theme_override_styles/pressed = ExtResource("slot_locked")
 theme_override_styles/disabled = ExtResource("slot_locked")
 
 [node name="LockedIconlocked" type="Label" parent="Pages/Left/Slot_locked"]
+scale = Vector2(0.875, 0.875)
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 2.0
 offset_top = 2.0
-offset_right = 32.0
-offset_bottom = 32.0
+offset_right = 36.285714285714285
+offset_bottom = 36.285714285714285
 mouse_filter = 2
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 16
 text = "🔒"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -390,28 +394,30 @@ clip_contents = true
 mouse_filter = 2
 
 [node name="BagHeading" type="Label" parent="Pages/Right"]
+scale = Vector2(0.9375, 0.9375)
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 4.0
 offset_top = 2.0
-offset_right = 196.0
-offset_bottom = 24.0
+offset_right = 208.8
+offset_bottom = 25.466666666666665
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.24, 0.12, 0.06, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 16
 text = "PERLENGKAPAN TAS"
 clip_text = true
 
 [node name="BagHint" type="Label" parent="Pages/Right"]
+scale = Vector2(0.6875, 0.6875)
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 4.0
 offset_top = 26.0
-offset_right = 196.0
-offset_bottom = 54.0
+offset_right = 283.27272727272725
+offset_bottom = 66.72727272727272
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.55, 0.38, 0.25, 1)
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 16
 text = "Klik slot terpasang untuk melepas ke tas."
 autowrap_mode = 3
 clip_text = true
@@ -427,12 +433,13 @@ offset_bottom = 150.0
 theme_override_constants/separation = 4
 
 [node name="EquipmentPager" parent="Pages/Right" instance=ExtResource("pager")]
+scale = Vector2(0.75, 0.75)
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 4.0
 offset_top = 154.0
-offset_right = 196.0
-offset_bottom = 176.0
+offset_right = 260.0
+offset_bottom = 183.33333333333334
 content_path = NodePath("../Available")
 page_size = 3
 
@@ -450,7 +457,7 @@ unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.38, 0.22, 0.12, 1)
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 16
 text = "Kalung, cincin & aksesori menambah ATK/DEF. Senjata aktif diatur lewat hotbar."
 autowrap_mode = 3
 clip_text = true

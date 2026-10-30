@@ -5,8 +5,9 @@
 size_flags_horizontal = 3
 
 [node name="Action" type="Label" parent="."]
+scale = Vector2(0.75, 0.75)
 unique_name_in_owner = true
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 16
 mouse_filter = 2
 text = ""
 autowrap_mode = 0
@@ -18,15 +19,17 @@ unique_name_in_owner = true
 theme_override_constants/separation = 4
 
 [node name="Keyboard" type="Button" parent="Buttons"]
+scale = Vector2(0.75, 0.75)
 unique_name_in_owner = true
 custom_minimum_size = Vector2(86, 24)
 size_flags_horizontal = 3
 text_overrun_behavior = 3
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 16
 
 [node name="Gamepad" type="Button" parent="Buttons"]
+scale = Vector2(0.75, 0.75)
 unique_name_in_owner = true
 custom_minimum_size = Vector2(86, 24)
 size_flags_horizontal = 3
 text_overrun_behavior = 3
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 16

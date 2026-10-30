@@ -1,14 +1,15 @@
 [gd_resource type="Resource" format=3 uid="uid://jse7w303p288"]
 
 [ext_resource type="Script" uid="uid://bjxfn7uk6q6t8" path="res://scripts/resources/starter_pet_option.gd" id="script"]
-[ext_resource type="Texture2D" uid="uid://dsk3nyv71so3m" path="res://assets/farm_rpg/icons/Pets/cats icons.png" id="sheet"]
+[ext_resource type="Texture2D" uid="uid://c3pyoijnv27ux" path="res://assets/farm_rpg/animals/Pets/Cats/1/Black.png" id="sheet"]
 
 [sub_resource type="AtlasTexture" id="Icon"]
 atlas = ExtResource("sheet")
-region = Rect2(0, 0, 16, 16)
+region = Rect2(6, 43, 20, 20)
 
 [resource]
 script = ExtResource("script")
 pet_id = "cat"
 display_name = "Kucing Hitam"
 icon = SubResource("Icon")
+sheet = ExtResource("sheet")

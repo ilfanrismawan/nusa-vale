@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_event")
 id = &"whisper_name"
+min_tier = 2
 kind = 2
 weight = 0.4
 min_fear = 0.6

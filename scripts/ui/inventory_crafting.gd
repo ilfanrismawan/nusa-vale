@@ -1,5 +1,7 @@
 extends PanelContainer
 
+@export var filter_hover_color := Color(1.08, 1.05, 1.0)
+
 @export var recipe_scene: PackedScene = preload("res://scenes/ui/inventory_recipe_tile.tscn")
 @export var material_scene: PackedScene = preload("res://scenes/ui/inventory_material_row.tscn")
 
@@ -12,7 +14,7 @@ var _selected: CraftingRecipe
 var _group := "Semua"
 var _list: GridContainer
 var _recipe_buttons: Array[Button] = []
-var _filters: Array[Button] = []
+var _filters: Array[TextureButton] = []
 var _icon: TextureRect
 var _title: Label
 var _description: Control
@@ -32,15 +34,20 @@ func _ready() -> void:
 	_materials = %Materials
 	_quantity = %Quantity
 	# SpinBox owns an internal LineEdit; size that text explicitly for this paper row.
-	_quantity.get_line_edit().add_theme_font_size_override("font_size", 11)
+	_quantity.get_line_edit().add_theme_font_size_override("font_size", 16)
 	_craft_button = %CraftButton
 	_message = %Message
-	_filters.assign(find_children("Filter*", "Button", true, false))
+	_filters.assign(%FilterTabsContainer.get_children())
 	for i in _filters.size():
 		_filters[i].pressed.connect(_select_group.bind(GROUPS[i]))
+		_filters[i].mouse_entered.connect(_filter_hover.bind(_filters[i], true))
+		_filters[i].mouse_exited.connect(_filter_hover.bind(_filters[i], false))
 	_quantity.value_changed.connect(func(_value: float): _refresh_detail())
 	_craft_button.pressed.connect(_craft)
 	refresh()
+
+func _filter_hover(tab: TextureButton, hovered: bool) -> void:
+	tab.modulate = filter_hover_color if hovered else Color.WHITE
 
 func _select_group(group: String) -> void:
 	_group = group

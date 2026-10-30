@@ -12,7 +12,7 @@ signal exhausted_changed(active: bool)
 enum HitOutcome { HIT, EVADED, PARRIED, BLOCKED }
 
 const BAR_SIZE := Vector2(18, 2)
-const BAR_OFFSET := Vector2(0, -27)
+const BAR_OFFSET := Vector2(0, -27) + Player.SPRITE_OFFSET
 const STAMINA_COLOR := Color(0.45, 0.9, 0.35)
 const EXHAUSTED_COLOR := Color(0.95, 0.35, 0.3)
 const GUARD_COLOR := Color(0.75, 0.9, 1.0)

@@ -1,231 +1,236 @@
-[gd_scene format=3]
-[ext_resource type="Theme" path="res://resources/ui/inventory_book_theme.tres" id="theme"]
-[ext_resource type="PackedScene" path="res://scenes/ui/book_pager.tscn" id="pager"]
-[ext_resource type="PackedScene" path="res://scenes/ui/book_text.tscn" id="text"]
-[ext_resource type="Script" path="res://scripts/ui/skill_tree_ui.gd" id="script"]
+[gd_scene format=3 uid="uid://ci12rtnquqvtc"]
 
-[node name="SkillTreeUI" type="Control"]
+[ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="3_xxak1"]
+[ext_resource type="Script" uid="uid://cb8eb7y1u74e4" path="res://scripts/ui/skill_tree_ui.gd" id="script"]
+[ext_resource type="PackedScene" uid="uid://xnf0q80w3yh0" path="res://scenes/ui/book_text.tscn" id="text"]
+[ext_resource type="Theme" uid="uid://cl73ou0e04t25" path="res://resources/ui/inventory_book_theme.tres" id="theme"]
+
+[node name="SkillTreeUI" type="Control" unique_id=1616807998]
+layout_mode = 3
+anchors_preset = 0
 script = ExtResource("script")
-design_size = Vector2(420, 224)
 
-[node name="Backdrop" type="ColorRect" parent="."]
+[node name="Backdrop" type="ColorRect" parent="." unique_id=1466745060]
 unique_name_in_owner = true
-anchors_preset = 15
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color(0.2, 0.11, 0.06, 0.95)
 
-[node name="Design" type="Control" parent="."]
+[node name="Design" type="Control" parent="." unique_id=1505526908]
 unique_name_in_owner = true
-offset_left = 0.0
-offset_top = 0.0
+anchors_preset = 0
 offset_right = 420.0
 offset_bottom = 224.0
-theme = ExtResource("theme")
 mouse_filter = 2
+theme = ExtResource("theme")
 
-[node name="TreePanel" type="Control" parent="Design"]
+[node name="TreePanel" type="Control" parent="Design" unique_id=2106417832]
 unique_name_in_owner = true
+clip_contents = true
+anchors_preset = 0
 offset_left = 4.0
-offset_top = 0.0
 offset_right = 200.0
 offset_bottom = 224.0
-clip_contents = true
 mouse_filter = 2
 
-[node name="Detail" type="Control" parent="Design"]
+[node name="RoleTitle" type="Label" parent="Design/TreePanel" unique_id=2028506060]
 unique_name_in_owner = true
-offset_left = 220.0
-offset_top = 0.0
-offset_right = 420.0
-offset_bottom = 224.0
-clip_contents = true
-mouse_filter = 2
-
-[node name="RoleTitle" type="Label" parent="Design/TreePanel"]
-unique_name_in_owner = true
+layout_mode = 0
 offset_left = 4.0
-offset_top = 0.0
 offset_right = 196.0
 offset_bottom = 20.0
-mouse_filter = 2
-theme_override_font_sizes/font_size = 15
+theme_override_fonts/font = ExtResource("3_xxak1")
+theme_override_font_sizes/font_size = 16
 text = "KEAHLIAN"
 clip_text = true
 
-
-[node name="Roles" type="GridContainer" parent="Design/TreePanel"]
+[node name="Roles" type="GridContainer" parent="Design/TreePanel" unique_id=2007683637]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 4.0
 offset_top = 24.0
 offset_right = 196.0
 offset_bottom = 110.0
-columns = 2
 theme_override_constants/h_separation = 4
 theme_override_constants/v_separation = 2
+columns = 2
 
-[node name="Exp" type="Label" parent="Design/TreePanel"]
+[node name="Exp" type="Label" parent="Design/TreePanel" unique_id=1311633227]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 4.0
 offset_top = 112.0
 offset_right = 196.0
 offset_bottom = 126.0
-mouse_filter = 2
-theme_override_font_sizes/font_size = 11
-text = ""
+theme_override_font_sizes/font_size = 16
 clip_text = true
 
-
-[node name="Progress" type="ProgressBar" parent="Design/TreePanel"]
+[node name="Progress" type="ProgressBar" parent="Design/TreePanel" unique_id=743936008]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 4.0
 offset_top = 128.0
 offset_right = 196.0
 offset_bottom = 131.0
 show_percentage = false
 
-[node name="Lines" type="Node2D" parent="Design/TreePanel"]
+[node name="Lines" type="Node2D" parent="Design/TreePanel" unique_id=291731624]
 unique_name_in_owner = true
 
-
-[node name="Nodes" type="Control" parent="Design/TreePanel"]
+[node name="Nodes" type="Control" parent="Design/TreePanel" unique_id=60972193]
 unique_name_in_owner = true
-offset_left = 0.0
-offset_top = 0.0
+anchors_preset = 0
 offset_right = 196.0
 offset_bottom = 202.0
 mouse_filter = 2
 
-[node name="TierOrigin" type="Marker2D" parent="Design/TreePanel"]
+[node name="TierOrigin" type="Marker2D" parent="Design/TreePanel" unique_id=421147187]
 unique_name_in_owner = true
 position = Vector2(4, 149)
 
-[node name="TierStep" type="Marker2D" parent="Design/TreePanel"]
+[node name="TierStep" type="Marker2D" parent="Design/TreePanel" unique_id=381489029]
 unique_name_in_owner = true
 position = Vector2(41, 149)
 
-[node name="BranchStep" type="Marker2D" parent="Design/TreePanel"]
+[node name="BranchStep" type="Marker2D" parent="Design/TreePanel" unique_id=1821446109]
 unique_name_in_owner = true
 position = Vector2(4, 169)
 
-[node name="Previous" type="Button" parent="Design/TreePanel"]
+[node name="Previous" type="Button" parent="Design/TreePanel" unique_id=945623828]
+scale = Vector2(0.75, 0.75)
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 4.0
 offset_top = 202.0
-offset_right = 28.0
-offset_bottom = 224.0
+offset_right = 36.0
+offset_bottom = 231.33333333333334
+theme_override_fonts/font = ExtResource("3_xxak1")
+theme_override_font_sizes/font_size = 16
 text = "‹"
-theme_override_font_sizes/font_size = 12
 
-[node name="Page" type="Label" parent="Design/TreePanel"]
+[node name="Page" type="Label" parent="Design/TreePanel" unique_id=1978085287]
+scale = Vector2(0.6875, 0.6875)
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 32.0
 offset_top = 202.0
-offset_right = 168.0
-offset_bottom = 224.0
-mouse_filter = 2
-theme_override_font_sizes/font_size = 11
-text = ""
-clip_text = true
+offset_right = 229.8181818181818
+offset_bottom = 234.0
+theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="Next" type="Button" parent="Design/TreePanel"]
-unique_name_in_owner = true
-offset_left = 172.0
-offset_top = 202.0
-offset_right = 196.0
-offset_bottom = 224.0
-text = "›"
-theme_override_font_sizes/font_size = 12
-
-[node name="Owner" type="Label" parent="Design/Detail"]
-unique_name_in_owner = true
-offset_left = 4.0
-offset_top = 0.0
-offset_right = 196.0
-offset_bottom = 16.0
-mouse_filter = 2
-theme_override_font_sizes/font_size = 11
-text = ""
 clip_text = true
 
-
-[node name="DetailIcon" type="TextureRect" parent="Design/Detail"]
+[node name="Next" type="Button" parent="Design/TreePanel" unique_id=812894650]
+scale = Vector2(0.75, 0.75)
 unique_name_in_owner = true
+layout_mode = 0
+offset_left = 172.0
+offset_top = 202.0
+offset_right = 204.0
+offset_bottom = 231.33333333333334
+theme_override_font_sizes/font_size = 16
+text = "›"
+
+[node name="Detail" type="Control" parent="Design" unique_id=1730894784]
+unique_name_in_owner = true
+clip_contents = true
+anchors_preset = 0
+offset_left = 220.0
+offset_right = 420.0
+offset_bottom = 224.0
+mouse_filter = 2
+
+[node name="Owner" type="Label" parent="Design/Detail" unique_id=326646092]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 4.0
+offset_right = 196.0
+offset_bottom = 16.0
+theme_override_fonts/font = ExtResource("3_xxak1")
+theme_override_font_sizes/font_size = 16
+clip_text = true
+
+[node name="DetailIcon" type="TextureRect" parent="Design/Detail" unique_id=1832514727]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
 offset_left = 4.0
 offset_top = 22.0
 offset_right = 32.0
 offset_bottom = 50.0
+mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
-mouse_filter = 2
 
-[node name="SkillTitle" type="Label" parent="Design/Detail"]
+[node name="SkillTitle" type="Label" parent="Design/Detail" unique_id=1130840652]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 38.0
 offset_top = 20.0
 offset_right = 196.0
 offset_bottom = 54.0
-mouse_filter = 2
-theme_override_font_sizes/font_size = 14
-text = ""
-clip_text = true
+theme_override_fonts/font = ExtResource("3_xxak1")
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
+clip_text = true
 max_lines_visible = 2
 
-[node name="Description" parent="Design/Detail" instance=ExtResource("text")]
+[node name="Description" parent="Design/Detail" unique_id=1642941527 instance=ExtResource("text")]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 4.0
 offset_top = 58.0
 offset_right = 196.0
 offset_bottom = 144.0
 
-
-[node name="Requirement" parent="Design/Detail" instance=ExtResource("text")]
+[node name="Requirement" parent="Design/Detail" unique_id=178547342 instance=ExtResource("text")]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 4.0
 offset_top = 148.0
 offset_right = 196.0
 offset_bottom = 196.0
 
-
-[node name="Confirm" type="Button" parent="Design/Detail"]
+[node name="Confirm" type="Button" parent="Design/Detail" unique_id=683822094]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 4.0
 offset_top = 202.0
 offset_right = 120.0
 offset_bottom = 224.0
+theme_override_fonts/font = ExtResource("3_xxak1")
+theme_override_font_sizes/font_size = 16
 text = "Pilih Cabang"
-theme_override_font_sizes/font_size = 11
 clip_text = true
 
-[node name="UseToken" type="Button" parent="Design/Detail"]
+[node name="UseToken" type="Button" parent="Design/Detail" unique_id=1735554833]
+scale = Vector2(0.6875, 0.6875)
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 124.0
 offset_top = 202.0
-offset_right = 196.0
-offset_bottom = 224.0
+offset_right = 228.72727272727275
+offset_bottom = 234.0
+theme_override_font_sizes/font_size = 16
 text = "1 Token"
-theme_override_font_sizes/font_size = 11
 
-[node name="EarnHint" type="Label" parent="Design"]
+[node name="EarnHint" type="Label" parent="Design" unique_id=148820369]
 unique_name_in_owner = true
-offset_left = 0.0
-offset_top = 0.0
+visible = false
+layout_mode = 0
 offset_right = 1.0
 offset_bottom = 1.0
-mouse_filter = 2
-theme_override_font_sizes/font_size = 11
-text = ""
+theme_override_fonts/font = ExtResource("3_xxak1")
+theme_override_font_sizes/font_size = 16
 clip_text = true
-visible = false
 
-[node name="Close" type="Button" parent="Design"]
+[node name="Close" type="Button" parent="Design" unique_id=1055373686]
 unique_name_in_owner = true
+visible = false
+layout_mode = 0
 offset_left = 320.0
-offset_top = 0.0
 offset_right = 420.0
 offset_bottom = 20.0
 text = "Kembali"
-visible = false

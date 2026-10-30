@@ -5,6 +5,8 @@
 
 [resource]
 script = ExtResource("1")
+edible = true
+stamina_restore = 20
 item_id = "mayonnaise_large_gold"
 display_name = "Mayones Besar Emas"
 icon = ExtResource("2")

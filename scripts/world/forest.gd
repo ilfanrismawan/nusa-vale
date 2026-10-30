@@ -9,11 +9,6 @@ func _ready() -> void:
 	gate.position = Vector2(520, 720)
 	add_child(gate)
 	_build_fishing_spot()
-	var shrine := Area2D.new()
-	shrine.name = "DayaShrine"
-	shrine.set_script(preload("res://scripts/world/daya_shrine.gd"))
-	shrine.position = Vector2(672, 480)
-	add_child(shrine)
 	DayCycle.is_running = true
 	FarmManager.initialize(self)
 	ForageSpawner.attach(self, "forest")
@@ -21,8 +16,6 @@ func _ready() -> void:
 	TreeSpawner.attach_trees(self, "forest", ^"YSortEntities", 2, 12)
 	DigSpotSpawner.attach_dig_spots(self, "forest", ^"YSortEntities", 2, 5)
 	preload("res://scripts/world/bug_spawner.gd").attach(self, "forest", ^"YSortEntities", 6)
-
-	Notify.say("Cahaya keemasan berdenyut di akar keramat dekat jalan hutan. Dekati dan berinteraksi.")
 
 func _exit_tree() -> void:
 	FarmManager.clear_references()
@@ -59,4 +52,3 @@ func _build_fishing_spot() -> void:
 				collision.position = spot.to_local(water.to_global(water.map_to_local(Vector2i(start, y)))) + Vector2((x - start - 1) * tile_size.x * 0.5, 0)
 				spot.add_child(collision)
 				start = -1
-

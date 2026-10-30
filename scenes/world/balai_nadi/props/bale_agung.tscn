@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" path="res://assets/balai_nadi/v4/bale_agung_ruined.png" id="4_ruin"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ajcru"]
-size = Vector2(22, 24)
+size = Vector2(44, 48)
 
 [node name="BaleAgung" type="Node2D" unique_id=1873435796]
 texture_filter = 1
@@ -39,5 +39,5 @@ script = ExtResource("2_em5h5")
 target_scene = "res://scenes/ui/balai_nadi_ui.tscn"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BalaiInteractionArea" unique_id=773626079]
-position = Vector2(0, 36)
+position = Vector2(0, 40)
 shape = SubResource("RectangleShape2D_ajcru")

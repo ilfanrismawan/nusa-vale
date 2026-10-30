@@ -1,0 +1,17 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/wildlife_spawner.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/data/wildlife_data.gd" id="2"]
+[ext_resource type="Resource" path="res://resources/wildlife/crow.tres" id="animal_0"]
+[ext_resource type="Resource" path="res://resources/wildlife/deer_female.tres" id="animal_1"]
+[ext_resource type="Resource" path="res://resources/wildlife/deer_male.tres" id="animal_2"]
+[ext_resource type="Resource" path="res://resources/wildlife/fox_red.tres" id="animal_3"]
+[ext_resource type="Resource" path="res://resources/wildlife/fox_white.tres" id="animal_4"]
+[ext_resource type="Resource" path="res://resources/wildlife/frog.tres" id="animal_5"]
+[ext_resource type="Resource" path="res://resources/wildlife/rabbit_blonde.tres" id="animal_6"]
+[ext_resource type="Resource" path="res://resources/wildlife/rabbit_brown.tres" id="animal_7"]
+[ext_resource type="Resource" path="res://resources/wildlife/turtle.tres" id="animal_8"]
+
+[node name="WildlifeSpawner" type="Node2D"]
+script = ExtResource("1")
+species = Array[ExtResource("2")]([ExtResource("animal_0"), ExtResource("animal_1"), ExtResource("animal_2"), ExtResource("animal_3"), ExtResource("animal_4"), ExtResource("animal_5"), ExtResource("animal_6"), ExtResource("animal_7"), ExtResource("animal_8")])

@@ -1,0 +1,91 @@
+[gd_scene format=3 uid="uid://bw0550f44esb0"]
+
+[ext_resource type="Script" uid="uid://ca8bahj2tch7v" path="res://scripts/world/daya_shrine.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://ci7l6cnifsu3n" path="res://assets/farm_rpg/objects/exterior/Deep Forest/Altar.png" id="2_altar"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_biji_daya_forest.tres" id="3_seed"]
+[ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="4_font"]
+
+[sub_resource type="CircleShape2D" id="InteractShape"]
+radius = 26.0
+
+[sub_resource type="RectangleShape2D" id="Footprint"]
+size = Vector2(34, 12)
+
+[sub_resource type="CanvasItemMaterial" id="Additive"]
+blend_mode = 1
+
+[sub_resource type="Gradient" id="AuraGradient"]
+colors = PackedColorArray(1, 0.86, 0.45, 0.7, 1, 0.86, 0.45, 0)
+
+[sub_resource type="GradientTexture2D" id="AuraTexture"]
+gradient = SubResource("AuraGradient")
+width = 48
+height = 48
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="Gradient" id="SparkleFade"]
+offsets = PackedFloat32Array(0, 0.6, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="Gradient" id="SparkleColors"]
+colors = PackedColorArray(1, 0.9, 0.55, 1, 0.88, 0.62, 1, 1)
+
+[node name="DayaShrine" type="Area2D" unique_id=389640681]
+collision_mask = 2
+script = ExtResource("1_script")
+
+[node name="InteractShape" type="CollisionShape2D" parent="." unique_id=1344643925]
+position = Vector2(0, -10)
+shape = SubResource("InteractShape")
+
+[node name="Footprint" type="StaticBody2D" parent="." unique_id=168844460]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Footprint" unique_id=50231536]
+position = Vector2(0, -6)
+shape = SubResource("Footprint")
+
+[node name="Aura" type="Sprite2D" parent="." unique_id=429936627]
+material = SubResource("Additive")
+position = Vector2(0, -34)
+texture = SubResource("AuraTexture")
+
+[node name="Altar" type="Sprite2D" parent="." unique_id=249887282]
+texture = ExtResource("2_altar")
+offset = Vector2(0, -22)
+hframes = 6
+vframes = 3
+frame = 5
+
+[node name="Seed" type="Sprite2D" parent="." unique_id=662622363]
+position = Vector2(0, -38)
+texture = ExtResource("3_seed")
+
+[node name="Sparkles" type="CPUParticles2D" parent="." unique_id=961273831]
+position = Vector2(0, -34)
+amount = 10
+lifetime = 1.4
+emission_shape = 1
+emission_sphere_radius = 12.0
+direction = Vector2(0, -1)
+spread = 180.0
+gravity = Vector2(0, -10)
+initial_velocity_min = 3.0
+initial_velocity_max = 9.0
+scale_amount_max = 2.0
+color_ramp = SubResource("SparkleFade")
+color_initial_ramp = SubResource("SparkleColors")
+
+[node name="Hint" type="Label" parent="." unique_id=704118352]
+offset_left = -45.0
+offset_top = -64.0
+offset_right = 135.0
+offset_bottom = -44.0
+scale = Vector2(0.5, 0.5)
+theme_override_colors/font_outline_color = Color(0.14902, 0.207843, 0.160784, 1)
+theme_override_constants/outline_size = 3
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 16
+text = "Akar Keramat · Interaksi"
+horizontal_alignment = 1

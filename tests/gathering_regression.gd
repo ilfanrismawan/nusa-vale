@@ -40,6 +40,7 @@ func _ready() -> void:
 	_test_bait()
 	_test_balai_bundle()
 	await _test_tapper()
+	_test_fiber_drops()
 	await _test_planted_tree()
 	_test_save()
 	world.queue_free()
@@ -214,6 +215,20 @@ func _test_tapper() -> void:
 	await _frames(2)
 	check(world.find_children("*", "ItemPickup", true, false).any(func(p): return p.get("item_id") == "tapper"), "the tapper drops as a pickup")
 	tree.queue_free()
+
+## Fiber di tanah memakai salah satu dari tiga gambar fiber_drops; ikon tas tetap ikon item.
+func _test_fiber_drops() -> void:
+	var regions := {}
+	for i in 30:
+		var icon := ItemPickup._world_icon_for("fiber") as AtlasTexture
+		if icon != null and icon.atlas.resource_path.ends_with("fiber_drops.png"):
+			regions[icon.region.position.x] = true
+	check(regions.size() >= 2 and regions.keys().all(func(x): return x in [0.0, 16.0, 32.0]), "fiber drops on the ground use varied fiber_drops cells")
+	var pickup := ItemPickup.spawn(world, player.global_position + Vector2(40, 0), "fiber", 1)
+	check(pickup != null and pickup._raw_icon == GameState._resolve_item("fiber").icon, "picked-up fiber still flies to the bag with the item icon")
+	check(not (ItemPickup._world_icon_for("stone") is AtlasTexture and (ItemPickup._world_icon_for("stone") as AtlasTexture).atlas.resource_path.ends_with("fiber_drops.png")), "other items keep their normal ground icon")
+	if pickup != null:
+		pickup.queue_free()
 
 func _test_planted_tree() -> void:
 	var spawner = PLANTED.attach_planted(world, "testfarm", NodePath("."))

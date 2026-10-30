@@ -12,7 +12,7 @@ extends Control
 @onready var version_label: Label = %VersionLabel
 
 const GAME_SCENE := "res://scenes/world/farm.tscn"
-const CoopLobby := preload("res://scripts/ui/coop_lobby.gd")
+const CoopLobby := preload("res://scenes/ui/coop_lobby.tscn")
 
 var _tween: Tween
 var btn_coop: Button
@@ -83,7 +83,7 @@ func _on_coop_pressed() -> void:
 
 
 func _open_coop_lobby() -> void:
-	var lobby := CoopLobby.new()
+	var lobby := CoopLobby.instantiate()
 	lobby.start_requested.connect(_start_coop)
 	add_child(lobby)
 
@@ -112,7 +112,7 @@ func _pick_guest(devices: Array[int], index: int, joined: Array[int], guests: Ar
 	if index >= devices.size():
 		_begin_coop(joined, guests)
 		return
-	var menu = Coop.JOIN_MENU.new()
+	var menu = Coop.JOIN_MENU.instantiate()
 	menu.device = devices[index]
 	menu.player_number = joined.size() + 1
 	menu.chosen.connect(func(data: PlayerData):

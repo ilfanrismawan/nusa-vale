@@ -5,6 +5,8 @@
 
 [resource]
 script = ExtResource("1")
+edible = true
+stamina_restore = 26
 item_id = "buffalo_cheese_large_gold"
 display_name = "Keju Kerbau Besar Emas"
 icon = ExtResource("2")

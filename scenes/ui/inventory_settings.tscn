@@ -1,106 +1,83 @@
-[gd_scene format=3]
-[ext_resource type="Theme" path="res://resources/ui/inventory_book_theme.tres" id="theme"]
-[ext_resource type="PackedScene" path="res://scenes/ui/book_pager.tscn" id="pager"]
-[ext_resource type="PackedScene" path="res://scenes/ui/book_text.tscn" id="text"]
-[ext_resource type="Script" path="res://scripts/ui/inventory_settings.gd" id="script"]
+[gd_scene format=3 uid="uid://b4k0iwkrbnh0x"]
 
-[node name="InventorySettings" type="PanelContainer"]
+[ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="3_31xb1"]
+[ext_resource type="PackedScene" uid="uid://bhnf8yfj1vm28" path="res://scenes/ui/book_pager.tscn" id="pager"]
+[ext_resource type="Script" uid="uid://cwo65rj0mdlsy" path="res://scripts/ui/inventory_settings.gd" id="script"]
+[ext_resource type="Theme" uid="uid://cl73ou0e04t25" path="res://resources/ui/inventory_book_theme.tres" id="theme"]
+
+[node name="InventorySettings" type="PanelContainer" unique_id=267367365]
 custom_minimum_size = Vector2(420, 224)
 theme = ExtResource("theme")
 script = ExtResource("script")
 
-[node name="Pages" type="Control" parent="."]
+[node name="Pages" type="Control" parent="." unique_id=569191873]
 unique_name_in_owner = true
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 420.0
-offset_bottom = 224.0
+layout_mode = 2
 mouse_filter = 2
 
-[node name="Left" type="Control" parent="Pages"]
+[node name="Left" type="Control" parent="Pages" unique_id=10494257]
 unique_name_in_owner = true
+clip_contents = true
+anchors_preset = 0
 offset_left = 4.0
-offset_top = 0.0
 offset_right = 200.0
 offset_bottom = 224.0
-clip_contents = true
 mouse_filter = 2
 
-[node name="Right" type="Control" parent="Pages"]
+[node name="GeneralHeading" type="Label" parent="Pages/Left" unique_id=556099178]
 unique_name_in_owner = true
-offset_left = 220.0
-offset_top = 0.0
-offset_right = 420.0
-offset_bottom = 224.0
-clip_contents = true
-mouse_filter = 2
-
-[node name="GeneralHeading" type="Label" parent="Pages/Left"]
-unique_name_in_owner = true
+layout_mode = 0
 offset_left = 4.0
-offset_top = 0.0
+offset_top = 2.0
 offset_right = 196.0
-offset_bottom = 22.0
-mouse_filter = 2
-theme_override_font_sizes/font_size = 17
+offset_bottom = 24.0
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
 text = "SETELAN"
 clip_text = true
 
-
-[node name="Section" type="OptionButton" parent="Pages/Left"]
+[node name="Section" type="OptionButton" parent="Pages/Left" unique_id=977828918]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 4.0
 offset_top = 26.0
 offset_right = 196.0
 offset_bottom = 48.0
-fit_to_longest_item = false
-item_count = 3
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
 selected = 0
-theme_override_font_sizes/font_size = 12
+fit_to_longest_item = false
+item_count = 5
 popup/item_0/text = "Layar"
 popup/item_0/id = 0
 popup/item_1/text = "Audio"
 popup/item_1/id = 1
 popup/item_2/text = "Permainan"
 popup/item_2/id = 2
+popup/item_3/text = "Horor"
+popup/item_3/id = 3
+popup/item_4/text = "Satwa"
+popup/item_4/id = 4
 
-[node name="Display" type="Control" parent="Pages/Left"]
+[node name="Display" type="Control" parent="Pages/Left" unique_id=556247274]
 unique_name_in_owner = true
+anchors_preset = 0
 offset_left = 4.0
 offset_top = 56.0
 offset_right = 196.0
 offset_bottom = 222.0
-visible = true
 mouse_filter = 2
 
-[node name="Audio" type="Control" parent="Pages/Left"]
+[node name="WindowMode" type="OptionButton" parent="Pages/Left/Display" unique_id=1213231410]
 unique_name_in_owner = true
-offset_left = 4.0
-offset_top = 56.0
-offset_right = 196.0
-offset_bottom = 222.0
-visible = false
-mouse_filter = 2
-
-[node name="Game" type="Control" parent="Pages/Left"]
-unique_name_in_owner = true
-offset_left = 4.0
-offset_top = 56.0
-offset_right = 196.0
-offset_bottom = 222.0
-visible = false
-mouse_filter = 2
-
-[node name="WindowMode" type="OptionButton" parent="Pages/Left/Display"]
-unique_name_in_owner = true
-offset_left = 0.0
-offset_top = 0.0
+layout_mode = 0
 offset_right = 192.0
 offset_bottom = 24.0
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
+selected = 0
 fit_to_longest_item = false
 item_count = 3
-selected = 0
-theme_override_font_sizes/font_size = 12
 popup/item_0/text = "Jendela"
 popup/item_0/id = 0
 popup/item_1/text = "Layar penuh"
@@ -108,16 +85,17 @@ popup/item_1/id = 1
 popup/item_2/text = "Tanpa bingkai"
 popup/item_2/id = 2
 
-[node name="Resolution" type="OptionButton" parent="Pages/Left/Display"]
+[node name="Resolution" type="OptionButton" parent="Pages/Left/Display" unique_id=37171429]
 unique_name_in_owner = true
-offset_left = 0.0
+layout_mode = 0
 offset_top = 34.0
 offset_right = 192.0
 offset_bottom = 58.0
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
+selected = 0
 fit_to_longest_item = false
 item_count = 7
-selected = 0
-theme_override_font_sizes/font_size = 12
 popup/item_0/text = "640 x 360 (360p)"
 popup/item_0/id = 0
 popup/item_1/text = "960 x 540"
@@ -133,41 +111,75 @@ popup/item_5/id = 5
 popup/item_6/text = "2560 x 1440 (2K)"
 popup/item_6/id = 6
 
-[node name="Vsync" type="CheckBox" parent="Pages/Left/Display"]
+[node name="Vsync" type="CheckBox" parent="Pages/Left/Display" unique_id=1348757091]
 unique_name_in_owner = true
-offset_left = 0.0
+layout_mode = 0
 offset_top = 70.0
 offset_right = 192.0
 offset_bottom = 94.0
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
 text = "VSync"
 
-[node name="MasterLabel" type="Label" parent="Pages/Left/Audio"]
+[node name="UiScaleTitle" type="Label" parent="Pages/Left/Display" unique_id=1873301457]
 unique_name_in_owner = true
-offset_left = 0.0
-offset_top = 0.0
+visible = false
+layout_mode = 0
+offset_top = 104.0
+offset_right = 192.0
+offset_bottom = 122.0
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
+text = "Skala UI co-op"
+clip_text = true
+
+[node name="UiScale" type="OptionButton" parent="Pages/Left/Display" unique_id=1873301458]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_top = 124.0
+offset_right = 192.0
+offset_bottom = 148.0
+tooltip_text = "Besar HUD, hotbar, dan tas di layar co-op pemain ini. Besar dunia tidak berubah."
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
+fit_to_longest_item = false
+
+[node name="Audio" type="Control" parent="Pages/Left" unique_id=1230497758]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 0
+offset_left = 4.0
+offset_top = 56.0
+offset_right = 196.0
+offset_bottom = 222.0
+mouse_filter = 2
+
+[node name="MasterLabel" type="Label" parent="Pages/Left/Audio" unique_id=1160438860]
+unique_name_in_owner = true
+layout_mode = 0
 offset_right = 136.0
 offset_bottom = 18.0
-mouse_filter = 2
-theme_override_font_sizes/font_size = 13
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
 text = "Master"
 clip_text = true
 
-
-[node name="MasterValue" type="Label" parent="Pages/Left/Audio"]
+[node name="MasterValue" type="Label" parent="Pages/Left/Audio" unique_id=1795947570]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 140.0
-offset_top = 0.0
 offset_right = 192.0
 offset_bottom = 18.0
-mouse_filter = 2
-theme_override_font_sizes/font_size = 13
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
 text = "100%"
-clip_text = true
 horizontal_alignment = 2
+clip_text = true
 
-[node name="Master" type="HSlider" parent="Pages/Left/Audio"]
+[node name="Master" type="HSlider" parent="Pages/Left/Audio" unique_id=1591540620]
 unique_name_in_owner = true
-offset_left = 0.0
+layout_mode = 0
 offset_top = 22.0
 offset_right = 192.0
 offset_bottom = 42.0
@@ -175,33 +187,33 @@ max_value = 1.0
 step = 0.05
 value = 1.0
 
-[node name="MusicLabel" type="Label" parent="Pages/Left/Audio"]
+[node name="MusicLabel" type="Label" parent="Pages/Left/Audio" unique_id=1479420606]
 unique_name_in_owner = true
-offset_left = 0.0
+layout_mode = 0
 offset_top = 52.0
 offset_right = 136.0
 offset_bottom = 70.0
-mouse_filter = 2
-theme_override_font_sizes/font_size = 13
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
 text = "Musik"
 clip_text = true
 
-
-[node name="MusicValue" type="Label" parent="Pages/Left/Audio"]
+[node name="MusicValue" type="Label" parent="Pages/Left/Audio" unique_id=878931620]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 140.0
 offset_top = 52.0
 offset_right = 192.0
 offset_bottom = 70.0
-mouse_filter = 2
-theme_override_font_sizes/font_size = 13
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
 text = "100%"
-clip_text = true
 horizontal_alignment = 2
+clip_text = true
 
-[node name="Music" type="HSlider" parent="Pages/Left/Audio"]
+[node name="Music" type="HSlider" parent="Pages/Left/Audio" unique_id=1578273849]
 unique_name_in_owner = true
-offset_left = 0.0
+layout_mode = 0
 offset_top = 74.0
 offset_right = 192.0
 offset_bottom = 94.0
@@ -209,33 +221,33 @@ max_value = 1.0
 step = 0.05
 value = 1.0
 
-[node name="SfxLabel" type="Label" parent="Pages/Left/Audio"]
+[node name="SfxLabel" type="Label" parent="Pages/Left/Audio" unique_id=624385340]
 unique_name_in_owner = true
-offset_left = 0.0
+layout_mode = 0
 offset_top = 104.0
 offset_right = 136.0
 offset_bottom = 122.0
-mouse_filter = 2
-theme_override_font_sizes/font_size = 13
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
 text = "Efek suara"
 clip_text = true
 
-
-[node name="SfxValue" type="Label" parent="Pages/Left/Audio"]
+[node name="SfxValue" type="Label" parent="Pages/Left/Audio" unique_id=1708084894]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 140.0
 offset_top = 104.0
 offset_right = 192.0
 offset_bottom = 122.0
-mouse_filter = 2
-theme_override_font_sizes/font_size = 13
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
 text = "100%"
-clip_text = true
 horizontal_alignment = 2
+clip_text = true
 
-[node name="Sfx" type="HSlider" parent="Pages/Left/Audio"]
+[node name="Sfx" type="HSlider" parent="Pages/Left/Audio" unique_id=1559082408]
 unique_name_in_owner = true
-offset_left = 0.0
+layout_mode = 0
 offset_top = 126.0
 offset_right = 192.0
 offset_bottom = 146.0
@@ -243,81 +255,285 @@ max_value = 1.0
 step = 0.05
 value = 1.0
 
-[node name="Save" type="Button" parent="Pages/Left/Game"]
+[node name="Game" type="Control" parent="Pages/Left" unique_id=1578329790]
 unique_name_in_owner = true
-offset_left = 0.0
-offset_top = 0.0
+visible = false
+anchors_preset = 0
+offset_left = 4.0
+offset_top = 56.0
+offset_right = 196.0
+offset_bottom = 222.0
+mouse_filter = 2
+
+[node name="Save" type="Button" parent="Pages/Left/Game" unique_id=149930847]
+unique_name_in_owner = true
+layout_mode = 0
 offset_right = 192.0
 offset_bottom = 26.0
 text = "Simpan game"
 
-[node name="Load" type="Button" parent="Pages/Left/Game"]
+[node name="Load" type="Button" parent="Pages/Left/Game" unique_id=1568398308]
 unique_name_in_owner = true
-offset_left = 0.0
+layout_mode = 0
 offset_top = 34.0
 offset_right = 192.0
 offset_bottom = 60.0
 text = "Muat game"
 
-[node name="MainMenu" type="Button" parent="Pages/Left/Game"]
+[node name="MainMenu" type="Button" parent="Pages/Left/Game" unique_id=1197165404]
 unique_name_in_owner = true
-offset_left = 0.0
+layout_mode = 0
 offset_top = 68.0
 offset_right = 192.0
 offset_bottom = 94.0
 text = "Menu utama"
 
-[node name="Quit" type="Button" parent="Pages/Left/Game"]
+[node name="Quit" type="Button" parent="Pages/Left/Game" unique_id=427979743]
 unique_name_in_owner = true
-offset_left = 0.0
+layout_mode = 0
 offset_top = 102.0
 offset_right = 192.0
 offset_bottom = 128.0
 text = "Keluar game"
 
-[node name="ControlsHeading" type="Label" parent="Pages/Right"]
+[node name="Horror" type="Control" parent="Pages/Left" unique_id=942920408]
 unique_name_in_owner = true
+visible = false
+anchors_preset = 0
 offset_left = 4.0
-offset_top = 0.0
+offset_top = 56.0
 offset_right = 196.0
-offset_bottom = 22.0
+offset_bottom = 222.0
+
+[node name="DifficultyTitle" type="Label" parent="Pages/Left/Horror" unique_id=409103727]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 279.27274
+offset_bottom = 20.363636
+scale = Vector2(0.6875, 0.6875)
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
+text = "Kesulitan Gaib (save ini)"
+
+[node name="JumpscareTitle" type="Label" parent="Pages/Left/Horror" unique_id=138751190]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 88.0
+offset_right = 279.27274
+offset_bottom = 108.36364
+scale = Vector2(0.6875, 0.6875)
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
+text = "Jumpscare"
+
+[node name="HorrorDifficulty" type="OptionButton" parent="Pages/Left/Horror" unique_id=2026441648]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 14.0
+offset_right = 256.0
+offset_bottom = 46.0
+scale = Vector2(0.75, 0.75)
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
+fit_to_longest_item = false
+
+[node name="DifficultyNote" type="Label" parent="Pages/Left/Horror" unique_id=1469316186]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 40.0
+offset_right = 307.2
+offset_bottom = 110.4
+scale = Vector2(0.625, 0.625)
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 3
+
+[node name="JumpscareMode" type="OptionButton" parent="Pages/Left/Horror" unique_id=258537048]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 102.0
+offset_right = 256.0
+offset_bottom = 134.0
+scale = Vector2(0.75, 0.75)
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
+fit_to_longest_item = false
+item_count = 3
+popup/item_0/text = "Penuh"
+popup/item_0/id = 0
+popup/item_1/text = "Tanpa wajah"
+popup/item_1/id = 1
+popup/item_2/text = "Mati"
+popup/item_2/id = 2
+
+[node name="HorrorEffects" type="CheckBox" parent="Pages/Left/Horror" unique_id=311355071]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 132.0
+offset_right = 256.0
+offset_bottom = 164.0
+scale = Vector2(0.75, 0.75)
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
+text = "Grain, glitch, guncangan"
+
+[node name="Wildlife" type="Control" parent="Pages/Left" unique_id=544771499]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 0
+offset_left = 4.0
+offset_top = 56.0
+offset_right = 196.0
+offset_bottom = 222.0
+
+[node name="WildlifeHelp" type="Label" parent="Pages/Left/Wildlife" unique_id=188336913]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 279.27274
+offset_bottom = 241.45454
+scale = Vector2(0.6875, 0.6875)
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
+text = "Satwa liar hidup di Hutan, Hutan Dalam, dan Gunung; gagak mampir ke ladang.
+
+Mereka kabur bila didekati, apalagi saat kamu berlari. Mendekatlah pelan dan amati sejenak untuk mencatatnya.
+
+Pegang makanan kesukaannya untuk memancingnya mendekat, lalu beri makan agar jinak.
+
+Jenis baru: +%d EXP Peramu. Catatan lengkap: +%d."
+autowrap_mode = 3
+
+[node name="ControlsHelp" type="Label" parent="Pages/Left" unique_id=922092469]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 4.0
+offset_top = 30.0
+offset_right = 260.0
+offset_bottom = 270.0
+scale = Vector2(0.75, 0.75)
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
+text = "Pilih binding keyboard/mouse atau gamepad, lalu tekan tombol baru.
+
+Trigger LT/RT didukung.
+Esc: batalkan.
+
+Tersimpan otomatis. Tombol bentrok ditukar.
+
+Setelan berlaku bersama."
+autowrap_mode = 3
+
+[node name="Right" type="Control" parent="Pages" unique_id=2011833921]
+unique_name_in_owner = true
+clip_contents = true
+anchors_preset = 0
+offset_left = 220.0
+offset_right = 420.0
+offset_bottom = 224.0
 mouse_filter = 2
-theme_override_font_sizes/font_size = 17
+
+[node name="ControlsHeading" type="Label" parent="Pages/Right" unique_id=28237005]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = 196.0
+offset_bottom = 24.0
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
 text = "KONTROL"
 clip_text = true
 
-
-[node name="Hints" type="CheckBox" parent="Pages/Right"]
+[node name="Hints" type="CheckBox" parent="Pages/Right" unique_id=1450562092]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 4.0
 offset_top = 25.0
 offset_right = 196.0
 offset_bottom = 47.0
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
 text = "Petunjuk tombol"
-theme_override_font_sizes/font_size = 12
 
-[node name="Reset" type="Button" parent="Pages/Right"]
+[node name="Reset" type="Button" parent="Pages/Right" unique_id=829177025]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 4.0
 offset_top = 50.0
 offset_right = 196.0
 offset_bottom = 72.0
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
 text = "Kembalikan tombol"
-theme_override_font_sizes/font_size = 12
 
-[node name="Bindings" type="VBoxContainer" parent="Pages/Right"]
+[node name="Bindings" type="VBoxContainer" parent="Pages/Right" unique_id=2056030285]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 4.0
 offset_top = 82.0
 offset_right = 196.0
 offset_bottom = 190.0
 theme_override_constants/separation = 8
 
-[node name="BindingsPager" parent="Pages/Right" instance=ExtResource("pager")]
+[node name="BindingsPager" parent="Pages/Right" unique_id=382799572 instance=ExtResource("pager")]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 4.0
 offset_top = 201.0
-offset_right = 196.0
-offset_bottom = 222.0
+offset_right = 260.0
+offset_bottom = 229.0
+scale = Vector2(0.75, 0.75)
 content_path = NodePath("../Bindings")
 page_size = 2
+
+[node name="Previous" parent="Pages/Right/BindingsPager" index="0" unique_id=224919849]
+theme_override_colors/font_color = Color(0.32941177, 0.1882353, 0.11372549, 1)
+theme_override_colors/font_pressed_color = Color(0.19862017, 0.10502628, 0.055573694, 1)
+theme_override_colors/font_hover_color = Color(0.656568, 0.40748316, 0.27731824, 1)
+
+[node name="Next" parent="Pages/Right/BindingsPager" index="2" unique_id=1925740867]
+theme_override_colors/font_color = Color(0.32941177, 0.1882353, 0.11372549, 1)
+theme_override_colors/font_pressed_color = Color(0.19204468, 0.10086232, 0.052682213, 1)
+theme_override_colors/font_hover_color = Color(0.70776933, 0.44654638, 0.31056595, 1)
+
+[node name="HorrorJournal" type="Label" parent="Pages/Right" unique_id=1935366031]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 311.2
+offset_bottom = 349.6
+scale = Vector2(0.625, 0.625)
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 3
+
+[node name="WildlifeJournal" type="Label" parent="Pages/Right" unique_id=1630053653]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 311.2
+offset_bottom = 349.6
+scale = Vector2(0.625, 0.625)
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 3
+
+[node name="ControlsNote" type="Label" parent="Pages/Right" unique_id=1012613085]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 4.0
+offset_top = 30.0
+offset_right = 260.0
+offset_bottom = 190.0
+scale = Vector2(0.75, 0.75)
+theme_override_fonts/font = ExtResource("3_31xb1")
+theme_override_font_sizes/font_size = 16
+text = "Pengaturan keyboard, mouse, gamepad, dan petunjuk tombol tersedia di tab Kontrol (ikon keyboard)."
+autowrap_mode = 3
+
+[editable path="Pages/Right/BindingsPager"]

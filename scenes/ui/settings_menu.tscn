@@ -86,7 +86,7 @@ content_margin_bottom = 4.0
 
 [sub_resource type="Theme" id="SettingsTheme"]
 default_font = ExtResource("2_font")
-default_font_size = 20
+default_font_size = 16
 Label/colors/font_color = Color(0.28, 0.16, 0.11, 1)
 Button/colors/font_color = Color(1, 0.89, 0.66, 1)
 Button/colors/font_hover_color = Color(1, 0.95, 0.78, 1)
@@ -165,7 +165,7 @@ stretch_mode = 5
 
 [node name="Title" type="Label" parent="Dimmer/PanelContainer/Margin/Content/Header"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 16
 text = "PENGATURAN"
 
 [node name="Subtitle" type="Label" parent="Dimmer/PanelContainer/Margin/Content"]

@@ -5,6 +5,8 @@
 
 [resource]
 script = ExtResource("2_script")
+edible = true
+stamina_restore = 4
 category = 6
 item_id = "spring_onion"
 display_name = "Spring Onion"

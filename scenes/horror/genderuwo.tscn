@@ -1,0 +1,87 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scripts/horror/night_stalker.gd" id="1_stalker"]
+[ext_resource type="Texture2D" path="res://assets/horror/genderuwo.png" id="2_sheet"]
+[ext_resource type="Texture2D" path="res://assets/horror/jumpscare_genderuwo.png" id="3_face"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f0"]
+atlas = ExtResource("2_sheet")
+region = Rect2(0, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f1"]
+atlas = ExtResource("2_sheet")
+region = Rect2(32, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f2"]
+atlas = ExtResource("2_sheet")
+region = Rect2(64, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f3"]
+atlas = ExtResource("2_sheet")
+region = Rect2(96, 0, 32, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f4"]
+atlas = ExtResource("2_sheet")
+region = Rect2(128, 0, 32, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_body"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f3")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f4")
+}],
+"loop": true,
+"name": &"lunge",
+"speed": 6.0
+}]
+
+[node name="Genderuwo" type="Node2D"]
+z_index = 2
+script = ExtResource("1_stalker")
+display_name = "Genderuwo"
+ghost_id = &"genderuwo"
+reward_item_id = "bulu_genderuwo"
+journal_hint = "Tak takut cahaya; buta pada yang diam."
+rule = 3
+glide_speed = 22.0
+glide_accel = 30.0
+lifetime = 85.0
+touch_radius = 14.0
+aura_radius = 120.0
+aura_fear_per_second = 0.3
+stamina_penalty = 35
+repelled_by_light = false
+step_interval = 0.62
+notify_spawn = "Bau anyir dan langkah berat terdengar dari kegelapan. Kata orang, Genderuwo tak bisa melihat yang diam."
+notify_touch = "Genderuwo mencengkerammu! Kamu terhuyung, energi -%d."
+notify_repelled = ""
+jumpscare_texture = ExtResource("3_face")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, -24)
+sprite_frames = SubResource("SpriteFrames_body")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="Presence" type="AudioStreamPlayer2D" parent="."]
+max_distance = 260.0
+attenuation = 1.6
+bus = &"SFX"

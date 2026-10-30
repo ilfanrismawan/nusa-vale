@@ -1,0 +1,88 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scripts/horror/night_stalker.gd" id="1_stalker"]
+[ext_resource type="Texture2D" path="res://assets/horror/banaspati.png" id="2_sheet"]
+[ext_resource type="Texture2D" path="res://assets/horror/jumpscare_banaspati.png" id="3_face"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f0"]
+atlas = ExtResource("2_sheet")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f1"]
+atlas = ExtResource("2_sheet")
+region = Rect2(24, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f2"]
+atlas = ExtResource("2_sheet")
+region = Rect2(48, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f3"]
+atlas = ExtResource("2_sheet")
+region = Rect2(72, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f4"]
+atlas = ExtResource("2_sheet")
+region = Rect2(96, 0, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_body"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f3")
+}],
+"loop": true,
+"name": &"float",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f4")
+}],
+"loop": true,
+"name": &"lunge",
+"speed": 10.0
+}]
+
+[node name="Banaspati" type="Node2D"]
+z_index = 3
+script = ExtResource("1_stalker")
+display_name = "Banaspati"
+ghost_id = &"banaspati"
+reward_item_id = "bara_banaspati"
+journal_hint = "Memburu di cahaya. Lari ke gelap."
+rule = 2
+glide_speed = 30.0
+glide_accel = 60.0
+lifetime = 70.0
+touch_radius = 10.0
+aura_radius = 90.0
+aura_fear_per_second = 0.3
+stamina_penalty = 15
+repelled_by_light = false
+glow = Color(2.6, 2, 1.6, 1)
+draw_shadow = false
+notify_spawn = "Api di dekatmu berkobar aneh... ada wajah di dalamnya. Banaspati menyukai cahaya."
+notify_touch = "Banaspati menyambarmu! Panasnya membakar, energi -%d."
+notify_repelled = ""
+jumpscare_texture = ExtResource("3_face")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, -14)
+sprite_frames = SubResource("SpriteFrames_body")
+animation = &"float"
+autoplay = "float"
+
+[node name="Presence" type="AudioStreamPlayer2D" parent="."]
+max_distance = 260.0
+attenuation = 1.6
+bus = &"SFX"

@@ -17,7 +17,7 @@ const DEFAULT_PLAYER_NAME := "Petani"
 ## v22: Role & EXP per pemain ("skills" di blok player dan tiap karakter co-op); save lama = Lv0.
 ## v25: permanent friendship locks and per-character household/social reward letters.
 ## v26: peternakan lanjutan (kerbau, kapibara, kuda, anak hewan, kehamilan, inkubator, bulu bebek); save lama = hewan dewasa tanpa inkubator.
-const SAVE_VERSION := 26
+const SAVE_VERSION := 27
 
 signal game_saved
 signal game_loaded
@@ -263,7 +263,7 @@ func _valid_player(player: Variant) -> bool:
 		return false
 	if not player.get("birthday_season", "") is String or not _valid_numbers(player, ["birthday_day"]):
 		return false
-	if not player.get("pet_id", "") is String or not player.get("pet_name", "") is String:
+	if not player.get("pet_id", "") is String or not player.get("pet_name", "") is String or not _valid_numbers(player, ["pet_affection", "pet_day"]):
 		return false
 	var order: Variant = player.get("tool_order", {})
 	if not order is Dictionary:
@@ -294,6 +294,10 @@ func _is_valid_save(data: Dictionary) -> bool:
 	if not HouseManager.valid_save(data.get("house", {})):
 		return false
 	if not GameState.gathering.valid_save(data.get("gathering", {})):
+		return false
+	if not HorrorManager.valid_save(data.get("horror", {})):
+		return false
+	if not WildlifeJournal.valid_save(data.get("wildlife", {})):
 		return false
 	if version < 1 or version > SAVE_VERSION:
 		return false
@@ -363,6 +367,8 @@ func _build_save_data() -> Dictionary:
 			"birthday_day": GameState.p1().birthday_day,
 			"pet_id": GameState.p1().pet_id,
 			"pet_name": GameState.p1().pet_name,
+			"pet_affection": GameState.p1().pet_affection,
+			"pet_day": GameState.p1().pet_day,
 			"money": max(0, GameState.money),
 			"stamina": clampi(GameState.p1().stamina, 0, GameState.p1().max_stamina),
 			"hp": clampi(GameState.p1().hp, 1, GameState.p1().max_hp),
@@ -406,6 +412,10 @@ func _build_save_data() -> Dictionary:
 		"house": GameState.house.to_save(),
 		# Versi 18: tapper di pohon (GDD 7, 4A-3).
 		"gathering": GameState.gathering.to_save(),
+		# Versi 27: Kesulitan Gaib per save + tingkat horor yang sudah diumumkan (GDD 4.1).
+		"horror": GameState.horror.to_save(),
+		# Catatan Satwa (GDD 4.10.13); kunci opsional, save lama = catatan kosong.
+		"wildlife": GameState.wildlife_seen.duplicate(),
 
 		"coop_players": _serialize_coop_players(),
 	}
@@ -438,6 +448,9 @@ func _apply_save(data: Dictionary) -> void:
 	GameState.daya.load_save(data.get("daya", {}))
 	GameState.cave.load_save(data.get("cave", {}))
 	GameState.gathering.load_save(data.get("gathering", {}))
+	# Setelah gua, hari, dan unlock: tingkat horor dihitung dari progres itu.
+	GameState.horror.load_save(data.get("horror", {}))
+	WildlifeJournal.load_save(data.get("wildlife", {}))
 	if GameState.weather.is_raining():
 		FarmManager.apply_rain()
 

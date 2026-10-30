@@ -1,0 +1,24 @@
+[gd_resource type="Resource" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/wildlife_data.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/animals/Forest/Frog/Frogs-Sheet.png" id="2_walk"]
+
+[resource]
+script = ExtResource("1_script")
+display_name = "Katak"
+frame_size = 16
+walk_sheet = ExtResource("2_walk")
+walk_rows = PackedInt32Array(1, 0, 2)
+walk_columns = PackedInt32Array(3, 4, 5, 6)
+idle_rows = PackedInt32Array(1, 0, 2)
+idle_columns = PackedInt32Array(0, 1, 2)
+run_rows = PackedInt32Array(1, 0, 2)
+run_columns = PackedInt32Array(3, 4, 5, 6)
+seasons = PackedStringArray("spring", "summer")
+locations = PackedStringArray("forest", "deep_forest")
+time = "any"
+weight = 0.7
+walk_speed = 8.0
+run_speed = 45.0
+flee_radius = 24.0
+favorite_foods = PackedStringArray("cricket", "worm")

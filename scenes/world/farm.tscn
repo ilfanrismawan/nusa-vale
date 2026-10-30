@@ -1,5 +1,6 @@
 [gd_scene format=4 uid="uid://bpk7kk0a4ctut"]
 
+[ext_resource type="PackedScene" path="res://scenes/world/wildlife_spawner.tscn" id="WildlifeSpawnerScene"]
 [ext_resource type="Script" uid="uid://bphhaa1w3edwp" path="res://scripts/world/farm.gd" id="1_mrr1a"]
 [ext_resource type="Texture2D" uid="uid://dp1hfkqgkux1l" path="res://assets/farm_rpg/tileset/ext/Tileset Grass Cliff Tileset Spring.png" id="2_x1w4o"]
 [ext_resource type="Texture2D" uid="uid://m0e6tls4sgbf" path="res://assets/farm_rpg/tileset/ext/Tileset Grass Deep Forest.png" id="3_okm01"]
@@ -19001,3 +19002,8 @@ shape = SubResource("EepRanchExitShape")
 [node name="RanchDirection" parent="." instance=ExtResource("EepRanchSign")]
 position = Vector2(1040, 944)
 caption = "Ranch Eep: selatan"
+
+[node name="WildlifeSpawner" parent="." instance=ExtResource("WildlifeSpawnerScene")]
+location_id = "farm"
+max_animals = 2
+entities_path = NodePath("YSort")

@@ -44,24 +44,26 @@ mouse_filter = 2
 theme = ExtResource("theme")
 
 [node name="Heading" type="Label" parent="Design"]
+scale = Vector2(1.5, 1.5)
 unique_name_in_owner = true
 offset_left = 32.0
 offset_top = 20.0
-offset_right = 532.0
-offset_bottom = 62.0
-theme_override_font_sizes/font_size = 24
+offset_right = 365.3333333333333
+offset_bottom = 48.0
+theme_override_font_sizes/font_size = 16
 text = "Pertukangan"
 autowrap_mode = 3
 theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
 
 
 [node name="Money" type="Label" parent="Design"]
+scale = Vector2(1.375, 1.375)
 unique_name_in_owner = true
 offset_left = 1240.0
 offset_top = 20.0
-offset_right = 1560.0
-offset_bottom = 62.0
-theme_override_font_sizes/font_size = 22
+offset_right = 1472.7272727272727
+offset_bottom = 50.54545454545455
+theme_override_font_sizes/font_size = 16
 text = "● 0 G"
 autowrap_mode = 3
 theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
@@ -87,23 +89,25 @@ offset_bottom = 840.0
 theme_override_styles/panel = SubResource("Paper")
 
 [node name="Dialog" type="Label" parent="Design/Speech"]
+scale = Vector2(1.0625, 1.0625)
 unique_name_in_owner = true
 offset_left = 22.0
 offset_top = 24.0
-offset_right = 338.0
-offset_bottom = 104.0
-theme_override_font_sizes/font_size = 17
+offset_right = 319.4117647058824
+offset_bottom = 99.29411764705883
+theme_override_font_sizes/font_size = 16
 text = "Mau membangun sesuatu?"
 autowrap_mode = 3
 
 
 [node name="VendorName" type="Label" parent="Design"]
+scale = Vector2(1.3125, 1.3125)
 unique_name_in_owner = true
 offset_left = 90.0
 offset_top = 700.0
-offset_right = 320.0
-offset_bottom = 742.0
-theme_override_font_sizes/font_size = 21
+offset_right = 265.23809523809524
+offset_bottom = 732.0
+theme_override_font_sizes/font_size = 16
 text = "Pak Damar"
 autowrap_mode = 3
 
@@ -111,12 +115,13 @@ theme_override_styles/normal = SubResource("Name")
 horizontal_alignment = 1
 
 [node name="CatalogTitle" type="Label" parent="Design"]
+scale = Vector2(1.625, 1.625)
 unique_name_in_owner = true
 offset_left = 485.0
 offset_top = 110.0
-offset_right = 965.0
-offset_bottom = 152.0
-theme_override_font_sizes/font_size = 26
+offset_right = 780.3846153846154
+offset_bottom = 135.84615384615384
+theme_override_font_sizes/font_size = 16
 text = "Bangunan Ladang"
 autowrap_mode = 3
 theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
@@ -155,45 +160,49 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="DetailTitle" type="Label" parent="Design/Detail"]
+scale = Vector2(1.5625, 1.5625)
 unique_name_in_owner = true
 offset_left = 36.0
 offset_top = 190.0
-offset_right = 461.0
-offset_bottom = 232.0
-theme_override_font_sizes/font_size = 25
+offset_right = 308.0
+offset_bottom = 216.88
+theme_override_font_sizes/font_size = 16
 text = "Bangunan"
 autowrap_mode = 3
 
 
 [node name="Footprint" type="Label" parent="Design/Detail"]
+scale = Vector2(1.0625, 1.0625)
 unique_name_in_owner = true
 offset_left = 36.0
 offset_top = 237.0
-offset_right = 461.0
-offset_bottom = 267.0
-theme_override_font_sizes/font_size = 17
+offset_right = 436.0
+offset_bottom = 265.2352941176471
+theme_override_font_sizes/font_size = 16
 text = "Ukuran · 0 × 0 petak"
 autowrap_mode = 3
 
 
 [node name="Description" type="Label" parent="Design/Detail"]
+scale = Vector2(1.0625, 1.0625)
 unique_name_in_owner = true
 offset_left = 36.0
 offset_top = 277.0
-offset_right = 461.0
-offset_bottom = 362.0
-theme_override_font_sizes/font_size = 17
+offset_right = 436.0
+offset_bottom = 357.0
+theme_override_font_sizes/font_size = 16
 text = "Deskripsi"
 autowrap_mode = 3
 
 
 [node name="Cost" type="Label" parent="Design/Detail"]
+scale = Vector2(1.375, 1.375)
 unique_name_in_owner = true
 offset_left = 36.0
 offset_top = 367.0
-offset_right = 461.0
-offset_bottom = 402.0
-theme_override_font_sizes/font_size = 22
+offset_right = 345.09090909090907
+offset_bottom = 392.45454545454544
+theme_override_font_sizes/font_size = 16
 text = "● 0 G"
 autowrap_mode = 3
 
@@ -211,24 +220,26 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="Owner" type="Label" parent="Design"]
+scale = Vector2(0.9375, 0.9375)
 unique_name_in_owner = true
 offset_left = 1030.0
 offset_top = 733.0
-offset_right = 1530.0
-offset_bottom = 763.0
-theme_override_font_sizes/font_size = 15
+offset_right = 1563.3333333333335
+offset_bottom = 765.0
+theme_override_font_sizes/font_size = 16
 text = "Bahan dari tas pemain"
 autowrap_mode = 3
 theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
 
 
 [node name="Availability" type="Label" parent="Design"]
+scale = Vector2(1.0625, 1.0625)
 unique_name_in_owner = true
 offset_left = 1030.0
 offset_top = 772.0
-offset_right = 1530.0
-offset_bottom = 804.0
-theme_override_font_sizes/font_size = 17
+offset_right = 1500.5882352941176
+offset_bottom = 802.1176470588235
+theme_override_font_sizes/font_size = 16
 text = ""
 autowrap_mode = 3
 theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
@@ -253,12 +264,13 @@ text = "Esc  Kembali"
 focus_mode = 0
 
 [node name="Hint" type="Label" parent="Design"]
+scale = Vector2(1.0625, 1.0625)
 unique_name_in_owner = true
 offset_left = 485.0
 offset_top = 742.0
-offset_right = 985.0
-offset_bottom = 850.0
-theme_override_font_sizes/font_size = 17
+offset_right = 955.5882352941176
+offset_bottom = 843.6470588235294
+theme_override_font_sizes/font_size = 16
 text = "Biaya dan bahan diambil setelah konfirmasi lokasi.\nBatal memilih lokasi tidak dikenakan biaya."
 autowrap_mode = 3
 theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)

@@ -92,6 +92,10 @@ var _pet_tween: Tween
 var _preview_actions := PackedStringArray()
 var _action_index := 0
 @onready var _pet_name: LineEdit = %PetName
+## Kesulitan Gaib save baru (GDD 4.1); hanya untuk pemilik farm, bisa diganti lagi di Pengaturan.
+## Tanpa dropdown (halaman ini sengaja tanpa scroll/OptionButton): tombol ‹ › mengganti pilihan.
+var _horror_index := -1
+var _horror_value: Label
 @onready var _calendar: Control = %BirthdayCalendar
 @onready var _animation_label: Label = %Animation
 var _closed := false
@@ -106,6 +110,8 @@ func _ready() -> void:
 	%PetTab.visible = ask_name and not guest
 	%FarmName.visible = not guest
 	%Identity.get_node("FarmLabel").visible = not guest
+	if ask_name and not guest:
+		_build_horror_choice()
 	if guest:
 		%Heading.text = "Karakter Co-op Baru"
 	%Cancel.visible = allow_cancel
@@ -446,6 +452,8 @@ func _confirm() -> void:
 		data.player_name = _name_edit.text.strip_edges()
 		if not guest:
 			GameState.farm_name = _farm_edit.text.strip_edges()
+			if _horror_index >= 0:
+				GameState.horror.set_difficulty(GameState.horror.difficulties[_horror_index].id)
 		data.birthday_season = DayCycle.SEASONS[_birthday_season]
 		data.birthday_day = _birthday_day
 		if not guest:
@@ -456,6 +464,37 @@ func _confirm() -> void:
 	_release_menu()
 	finished.emit(data.appearance)
 	queue_free()
+
+## Di bawah Nama Farm: "Horor Malam  ‹ Normal ›" (Kesulitan Gaib, bawaan Normal).
+func _build_horror_choice() -> void:
+	var label := Label.new()
+	label.text = "Horor Malam"
+	label.position = Vector2(0, 294)
+	label.size = Vector2(140, 30)
+	label.add_theme_font_size_override("font_size", 18)
+	%Identity.add_child(label)
+	_horror_index = maxi(0, GameState.horror.difficulties.find(GameState.horror.difficulty()))
+	_horror_value = Label.new()
+	_horror_value.name = "HorrorDifficulty"
+	_horror_value.position = Vector2(184, 294)
+	_horror_value.size = Vector2(132, 30)
+	_horror_value.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_horror_value.add_theme_font_size_override("font_size", 18)
+	%Identity.add_child(_horror_value)
+	for step in [-1, 1]:
+		var button := Button.new()
+		button.text = "‹" if step < 0 else "›"
+		button.position = Vector2(140 if step < 0 else 320, 288)
+		button.size = Vector2(40, 42)
+		button.add_theme_font_size_override("font_size", 18)
+		button.tooltip_text = "Seberapa kejam hantu malam. Bisa diganti lagi di Pengaturan > Horor."
+		button.pressed.connect(_change_horror.bind(step))
+		%Identity.add_child(button)
+	_change_horror(0)
+
+func _change_horror(step: int) -> void:
+	_horror_index = posmod(_horror_index + step, GameState.horror.difficulties.size())
+	_horror_value.text = GameState.horror.difficulties[_horror_index].display_name
 
 func _cancel() -> void:
 	if _closed or not allow_cancel:

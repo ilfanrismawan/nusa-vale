@@ -32,7 +32,7 @@ func _ready() -> void:
 	DayCycle.is_running = false
 	DayCycle.current_day = 1
 	GameState.weather.current = "sunny"
-	check(NPCDatabase.residents.size() == 13 and NPCDatabase.gift_profiles.is_empty(), "one central registry for all thirteen residents")
+	check(NPCDatabase.residents.size() == 14 and NPCDatabase.gift_profiles.is_empty(), "one central registry for all fourteen residents")
 	var player := Player.new()
 	player.tool_controller = ToolController.new()
 	var event_count := 0
@@ -91,7 +91,8 @@ func _ready() -> void:
 		actor.queue_free()
 		roots.queue_free()
 		await get_tree().process_frame
-	check(event_count == 65, "all thirteen residents have five heart milestones")
+	# 13 warga lama x 5 tonggak hati + 9 cerita hantu Mbah Darmi (perkenalan dan hati 1-8).
+	check(event_count == 65 + 9, "thirteen residents have five heart milestones and Mbah Darmi nine ghost-lore events")
 	# Actual map population and physical movement on copied, independent road curves.
 	DayCycle.hour = 8
 	DayCycle.minute = 0

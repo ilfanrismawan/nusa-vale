@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/horror/kuntilanak.tscn" id="1_base"]
+
+[node name="PenungguGunung" instance=ExtResource("1_base")]
+scale = Vector2(1.35, 1.35)
+display_name = "Penunggu Gunung"
+ghost_id = &""
+reward_item_id = ""
+journal_hint = ""
+lifetime = 600.0
+stamina_penalty = 50
+repelled_by_light = false
+ignores_incense = true
+glow = Color(1.6, 1.9, 2.6, 1)
+glide_speed = 42.0
+watch_relocate_time = 2.5
+max_relocations = 6
+notify_spawn = "Angin gunung berhenti. Penunggu Gunung muncul: jangan biarkan ia di luar pandanganmu."
+notify_touch = "Penunggu Gunung menyergapmu! Energi -%d."

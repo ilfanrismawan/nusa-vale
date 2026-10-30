@@ -1,0 +1,502 @@
+{
+  "schema_version": 1,
+  "id": "darmi",
+  "name": "Mbah Darmi",
+  "age": 78,
+  "gender": "female",
+  "role": "Sesepuh Desa dan Penutur Cerita Malam",
+  "birthday": {
+    "season": "fall",
+    "day": 28
+  },
+  "home_map": "town",
+  "residence": "Rumah kecil di belakang alun-alun; dari pagi sampai malam duduk di teras dekat alun-alun.",
+  "romanceable": false,
+  "personality": [
+    "bijak",
+    "jenaka",
+    "waspada"
+  ],
+  "biography": "Mbah Darmi adalah warga tertua Nusa Vale. Ia hafal cerita setiap makhluk malam di desa dan cara orang tua dulu menangkalnya.",
+  "move_speed": 22.0,
+  "friendship": {
+    "start": 0,
+    "max_hearts": 10
+  },
+  "offscreen_activities": [
+    "sleeping"
+  ],
+  "anchored": true,
+  "service": null,
+  "visual": {
+    "sprite_frames": "res://resources/npc_data/npc_animation/darmi_resident_frame.tres",
+    "portrait": "res://assets/farm_rpg/Character/NPC'S/Mbah Darmi/Portrait.png",
+    "portrait_cell_size": 64,
+    "portrait_columns": 3,
+    "expressions": {
+      "neutral": 0,
+      "happy": 1,
+      "sparkle": 1,
+      "worried": 2,
+      "annoyed": 2,
+      "angry": 2
+    }
+  },
+  "gift_tastes": {
+    "loved": [
+      "wedang_kantil",
+      "jasmine_tea",
+      "bunga_kantil",
+      "chamomile_tea"
+    ],
+    "liked": [
+      "honey",
+      "banana",
+      "kemenyan",
+      "daffodil"
+    ],
+    "neutral": [
+      "rice",
+      "salt",
+      "wood",
+      "apple"
+    ],
+    "disliked": [
+      "coffee",
+      "espresso"
+    ],
+    "hated": [
+      "slime_gel",
+      "worm",
+      "old_bone"
+    ]
+  },
+  "schedules": {
+    "default": [
+      {
+        "time": "06:00",
+        "map": "town",
+        "point": "darmi_porch",
+        "activity": "preparing"
+      },
+      {
+        "time": "08:00",
+        "map": "town",
+        "point": "darmi_porch",
+        "activity": "working"
+      },
+      {
+        "time": "12:00",
+        "map": "town",
+        "point": "darmi_porch",
+        "activity": "lunch"
+      },
+      {
+        "time": "14:00",
+        "map": "town",
+        "point": "darmi_porch",
+        "activity": "working"
+      },
+      {
+        "time": "18:00",
+        "map": "town",
+        "point": "darmi_porch",
+        "activity": "resting"
+      },
+      {
+        "time": "21:00",
+        "map": "town",
+        "point": "darmi_porch",
+        "activity": "sleeping"
+      }
+    ],
+    "rainy": [
+      {
+        "time": "06:00",
+        "map": "town",
+        "point": "darmi_porch",
+        "activity": "preparing"
+      },
+      {
+        "time": "08:00",
+        "map": "town",
+        "point": "darmi_porch",
+        "activity": "working"
+      },
+      {
+        "time": "12:00",
+        "map": "town",
+        "point": "darmi_porch",
+        "activity": "lunch"
+      },
+      {
+        "time": "14:00",
+        "map": "town",
+        "point": "darmi_porch",
+        "activity": "working"
+      },
+      {
+        "time": "18:00",
+        "map": "town",
+        "point": "darmi_porch",
+        "activity": "resting"
+      },
+      {
+        "time": "21:00",
+        "map": "town",
+        "point": "darmi_porch",
+        "activity": "sleeping"
+      }
+    ]
+  },
+  "dialogue": {
+    "default": [
+      "Duduk sini sebentar, Nak. Mbah sedang menikmati angin."
+    ],
+    "preparing": [
+      "Pagi-pagi begini Mbah menyapu teras dan menyalakan lagi pelita yang padam semalam."
+    ],
+    "working": [
+      "Mbah tidak kerja apa-apa lagi, Nak. Tugas Mbah sekarang mengingat dan bercerita."
+    ],
+    "lunch": [
+      "Sudah makan? Jangan sampai perut kosong, nanti malam gampang ketakutan."
+    ],
+    "resting": [
+      "Matahari hampir turun. Pulanglah sebelum terlalu larut, atau bawalah cahaya."
+    ],
+    "sleeping": [
+      "Mbah sudah mengantuk. Hati-hati di jalan, jangan lupa bawa lampu."
+    ]
+  },
+  "content_status": {
+    "biography": "baseline_2026_10_29",
+    "birthday": "baseline_2026_10_29",
+    "residence": "offscreen_temporary",
+    "visual": "recolor_lyria_2026_10_29",
+    "schedule": "baseline_local",
+    "story": "horror_lore_2026_10_29",
+    "story_expansion": "horror_lore_2026_10_29"
+  },
+  "gift_dialogue": {
+    "loved": [
+      "Oalah, ini kesukaan Mbah! Kamu ini anak yang perhatian."
+    ],
+    "liked": [
+      "Terima kasih, Nak. Mbah senang."
+    ],
+    "neutral": [
+      "Mbah terima, ya. Terima kasih sudah ingat."
+    ],
+    "disliked": [
+      "Wah, ini terlalu keras untuk lambung tua Mbah. Tapi terima kasih."
+    ],
+    "hated": [
+      "Hih! Bawa jauh-jauh barang begitu, Nak."
+    ]
+  },
+  "heart_events": [
+    {
+      "id": "darmi_intro",
+      "hearts": 0,
+      "requires_flags": [],
+      "sets_flags": [
+        "darmi_intro_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "darmi_porch",
+      "time_range": [
+        "06:00",
+        "21:00"
+      ],
+      "lines": [
+        {
+          "text": "Oalah, wajah baru. Kamu yang mengurus ladang tua di ujung desa itu, ya? Panggil saja aku Mbah Darmi.",
+          "expression": "happy"
+        },
+        {
+          "text": "Mbah sudah lama tinggal di Nusa Vale. Siang di sini ramah, Nak. Tapi lewat tengah malam lain cerita.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Kalau lewat jam dua belas malam kamu merasa diawasi, jangan lari ke gelap. Cari api, cari lampu.",
+          "expression": "worried"
+        },
+        {
+          "text": "Sering-sering mampir. Mbah ceritakan pelan-pelan apa saja yang berkeliaran di malam hari.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "darmi_ghost_kuntilanak",
+      "hearts": 1,
+      "requires_flags": [],
+      "sets_flags": [
+        "darmi_ghost_kuntilanak_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "darmi_porch",
+      "time_range": [
+        "06:00",
+        "21:00"
+      ],
+      "lines": [
+        {
+          "text": "Yang paling sering muncul itu Kuntilanak, yang tawanya melengking, dan Pocong yang melompat-lompat.",
+          "expression": "worried"
+        },
+        {
+          "text": "Mereka berdua sama: diam kalau kau tatap. Jangan berpaling. Pandangi terus sambil mundur ke tempat yang terang.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Cahaya lampu atau api unggun itu tempat aman. Makanya Mbah selalu menyalakan pelita di teras.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "darmi_ghost_genderuwo",
+      "hearts": 2,
+      "requires_flags": [],
+      "sets_flags": [
+        "darmi_ghost_genderuwo_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "darmi_porch",
+      "time_range": [
+        "06:00",
+        "21:00"
+      ],
+      "lines": [
+        {
+          "text": "Kalau tanah sudah lebih tua, datang Genderuwo. Badannya besar, langkahnya berat, dan dia tidak takut cahaya.",
+          "expression": "worried"
+        },
+        {
+          "text": "Tapi matanya buruk. Kalau kau diam tak bergerak, dia tak bisa melihatmu. Tunggu dia berpaling, baru menjauh pelan-pelan.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Lain lagi Banaspati, bola api itu. Dia malah datang ke cahaya. Kalau dia mengincarmu, tinggalkan lampu dan cari gelap.",
+          "expression": "worried"
+        },
+        {
+          "text": "Bakar Kemenyan: satu Resin dan tiga Kayu. Asapnya membuat lingkaran aman sebentar, Banaspati pun mundur.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "darmi_ghost_tuyul",
+      "hearts": 3,
+      "requires_flags": [],
+      "sets_flags": [
+        "darmi_ghost_tuyul_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "darmi_porch",
+      "time_range": [
+        "06:00",
+        "21:00"
+      ],
+      "lines": [
+        {
+          "text": "Ada juga si kecil Tuyul. Tidak menyerang, tapi tangannya panjang. Kalau kau di luar lewat jam satu malam, dia mencuri uang atau isi kotak kirimanmu.",
+          "expression": "annoyed"
+        },
+        {
+          "text": "Paginya ada jejak kaki kecil di dekat kotak kiriman. Itu tandanya.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Pasang Sesajen Penangkal Tuyul di ladang: tiga Kacang Merah, tiga Garam, empat Kayu. Satu saja cukup, dia segan mendekat.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "darmi_ghost_sundel",
+      "hearts": 4,
+      "requires_flags": [],
+      "sets_flags": [
+        "darmi_ghost_sundel_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "darmi_porch",
+      "time_range": [
+        "06:00",
+        "21:00"
+      ],
+      "lines": [
+        {
+          "text": "Nah, ini yang membingungkan. Sundel Bolong justru bergerak saat kau tatap. Kebalikan Kuntilanak.",
+          "expression": "worried"
+        },
+        {
+          "text": "Jadi kalau Sundel Bolong mendekat, palingkan muka dan jalan menjauh. Kalau keduanya datang bersama, pilih baik-baik siapa yang kau pandangi.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Leak, kepala yang terbang itu, tembus cahaya kecil. Lentera dan lilin tidak berguna. Hanya api unggun besar atau asap Kemenyan yang menahannya.",
+          "expression": "worried"
+        }
+      ]
+    },
+    {
+      "id": "darmi_ghost_bekal",
+      "hearts": 5,
+      "requires_flags": [],
+      "sets_flags": [
+        "darmi_ghost_bekal_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "darmi_porch",
+      "time_range": [
+        "06:00",
+        "21:00"
+      ],
+      "lines": [
+        {
+          "text": "Mbah bekali cara orang tua dulu. Wedang Kantil, Bunga Kantil diseduh dengan Madu, bikin hati tenang dan rasa takut naik lebih lambat.",
+          "expression": "happy"
+        },
+        {
+          "text": "Jimat Penolak dari Bulu Genderuwo, Bunga Kantil, Embun Kubur, dan tembaga. Dengan jimat itu, makhluk yang kau tatap tidak langsung bergerak saat kau berpaling.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Kalau sudah kuat, tempalah Keris Pusaka. Pegang dan tatap makhluk itu sebentar, dia akan terusir. Leak dan Sundel Bolong pun pergi.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "darmi_ghost_penunggu",
+      "hearts": 6,
+      "requires_flags": [],
+      "sets_flags": [
+        "darmi_ghost_penunggu_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "darmi_porch",
+      "time_range": [
+        "06:00",
+        "21:00"
+      ],
+      "lines": [
+        {
+          "text": "Hutan Dalam, Gunung, dan Gua punya penunggunya sendiri. Masing-masing ada altarnya.",
+          "expression": "worried"
+        },
+        {
+          "text": "Jangan dilawan dengan senjata. Datanglah lewat tengah malam membawa sesajen: tiga Kemenyan dan persembahan kesukaan penunggu tempat itu.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Nyalakan tiga titik kemenyan di sekeliling altar, lalu bertahan sampai penunggunya tenang tanpa tersentuh. Dia akan meninggalkan benda keramat.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Benda keramat itu bahan Keris Pusaka dan Tugu Pagar Gaib, pelindung ladang yang paling kuat.",
+          "expression": "happy"
+        }
+      ]
+    },
+    {
+      "id": "darmi_ghost_kliwon",
+      "hearts": 7,
+      "requires_flags": [],
+      "sets_flags": [
+        "darmi_ghost_kliwon_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "darmi_porch",
+      "time_range": [
+        "06:00",
+        "21:00"
+      ],
+      "lines": [
+        {
+          "text": "Setiap musim ada satu malam Jumat Kliwon, hari ke dua puluh lima. Semua penunggu keluar malam itu.",
+          "expression": "worried"
+        },
+        {
+          "text": "Kalau kau berani dan siap, hadiahnya dua kali lipat. Kalau tidak, tidurlah lebih awal.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Dan kalau suatu malam ada ketukan di pintu rumahmu lewat tengah malam, memanggil namamu, jangan dibukakan. Itu bukan tamu.",
+          "expression": "worried"
+        }
+      ]
+    },
+    {
+      "id": "darmi_ghost_catatan",
+      "hearts": 8,
+      "requires_flags": [],
+      "sets_flags": [
+        "darmi_ghost_catatan_told"
+      ],
+      "weather": "any",
+      "map": "town",
+      "point": "darmi_porch",
+      "time_range": [
+        "06:00",
+        "21:00"
+      ],
+      "lines": [
+        {
+          "text": "Kamu sudah banyak melewati malam, Nak. Mbah bangga.",
+          "expression": "happy"
+        },
+        {
+          "text": "Catat setiap makhluk yang pernah kau hadapi. Catatan Gaib-mu ada di buku Pengaturan, bagian Horor.",
+          "expression": "neutral"
+        },
+        {
+          "text": "Kalau semuanya sudah kau lewati, termasuk tiga penunggu, keberanianmu akan mengeras jadi Mustika Pemberani. Simpan baik-baik.",
+          "expression": "happy"
+        }
+      ]
+    }
+  ],
+  "dialogue_by_hearts": {
+    "1": [
+      "Ingat, Kuntilanak dan Pocong diam kalau kau tatap. Mundur ke cahaya."
+    ],
+    "2": [
+      "Genderuwo buta pada yang diam. Banaspati datang ke cahaya, usir dengan Kemenyan."
+    ],
+    "3": [
+      "Sudah pasang Sesajen Penangkal Tuyul di ladang? Tiga Kacang Merah, tiga Garam, empat Kayu."
+    ],
+    "4": [
+      "Sundel Bolong bergerak saat ditatap; palingkan mukamu. Leak hanya takut api besar dan Kemenyan."
+    ],
+    "5": [
+      "Wedang Kantil sebelum keluar malam, Jimat Penolak di badan, Keris Pusaka di tangan. Begitu orang tua dulu."
+    ],
+    "6": [
+      "Penunggu tidak dilawan, Nak. Dibujuk dengan sesajen dan kemenyan di altarnya, lewat tengah malam."
+    ],
+    "7": [
+      "Malam Jumat Kliwon jatuh di hari ke dua puluh lima. Jangan bukakan pintu kalau ada yang mengetuk lewat tengah malam."
+    ],
+    "8": [
+      "Catatan Gaib-mu sudah sampai mana? Mbah ingin lihat Mustika Pemberani-mu suatu hari."
+    ],
+    "10": [
+      "Kamu sudah seperti cucu Mbah sendiri. Kalau Mbah tiada nanti, ceritakan semua ini pada yang muda-muda."
+    ]
+  }
+}

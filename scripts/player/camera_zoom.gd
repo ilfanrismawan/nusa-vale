@@ -21,7 +21,7 @@ var _target_zoom: float = 1.0
 var _tween: Tween
 
 ## Co-op: hanya kamera P1 (keyboard + mouse) yang menerima tombol zoom, zoom tidak dibawa
-## lewat _session_zoom, dan batas zoom dikali `_zoom_scale` (layar co-op digambar 2x).
+## lewat _session_zoom, dan batas zoom dikali `_zoom_scale` (layar co-op dengan skala UI pemain).
 var _accept_input := true
 var _share_zoom := true
 var _zoom_scale := 1.0

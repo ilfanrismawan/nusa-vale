@@ -3,7 +3,7 @@ extends PanelContainer
 ## Tab "Keahlian" di buku inventori (GDD 13): level role, EXP, pohon perk, pilihan cabang A/B,
 ## dan Token Talenta. Gaya sama dengan inventory_crafting.gd.
 
-const FONT = preload("res://resources/ui/readable_font.tres")
+const FONT = preload("res://assets/fonts/m5x7.ttf")
 const INK := Color("50321f")
 const MUTED := Color("8e785e")
 const GREEN := Color("356444")
@@ -44,7 +44,7 @@ func _ready() -> void:
 		button.icon = roles[i].icon
 		button.expand_icon = false
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		button.add_theme_font_size_override("font_size", 14)
+		button.add_theme_font_size_override("font_size", 16)
 		button.pressed.connect(_select_role.bind(roles[i]))
 		_place(catalog, button, Rect2(8, 28 + i * 23, 134, 21))
 		_role_buttons.append(button)
@@ -169,7 +169,7 @@ func _perk_row(perk: RolePerk, prefix: String, active: bool, can_pick: bool, at_
 	row.add_child(text)
 	if can_pick:
 		var pick := _button("Pilih")
-		pick.add_theme_font_size_override("font_size", 12)
+		pick.add_theme_font_size_override("font_size", 16)
 		pick.custom_minimum_size = Vector2(44, 20)
 		pick.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		pick.pressed.connect(_choose.bind(at_level, branch))
@@ -235,7 +235,7 @@ func _paper(parent: Control, rect: Rect2, fill: Color) -> Panel:
 func _label(value: String, font_size: int) -> Label:
 	var label := Label.new()
 	label.text = value
-	label.add_theme_font_size_override("font_size", font_size)
+	label.add_theme_font_size_override("font_size", 16)
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	return label
 

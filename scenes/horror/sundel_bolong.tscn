@@ -1,0 +1,83 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/horror/night_stalker.gd" id="1_stalker"]
+[ext_resource type="Texture2D" path="res://assets/horror/sundel_bolong.png" id="2_sheet"]
+[ext_resource type="Texture2D" path="res://assets/horror/jumpscare_sundel_bolong.png" id="3_face"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f0"]
+atlas = ExtResource("2_sheet")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f1"]
+atlas = ExtResource("2_sheet")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f2"]
+atlas = ExtResource("2_sheet")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f3"]
+atlas = ExtResource("2_sheet")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f4"]
+atlas = ExtResource("2_sheet")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_body"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f3")
+}],
+"loop": true,
+"name": &"float",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f1")
+}],
+"loop": true,
+"name": &"lunge",
+"speed": 8.0
+}]
+
+[node name="SundelBolong" type="Node2D"]
+z_index = 2
+script = ExtResource("1_stalker")
+display_name = "Sundel Bolong"
+ghost_id = &"sundel_bolong"
+reward_item_id = "embun_kubur"
+journal_hint = "Hanya bergerak saat ditatap."
+rule = 1
+glide_speed = 26.0
+lifetime = 80.0
+stamina_penalty = 35
+notify_spawn = "Ada perempuan bergaun lusuh di kejauhan... Kata orang, Sundel Bolong mendekat justru saat kau menatapnya."
+notify_touch = "Sundel Bolong merangkulmu dari depan! Energi -%d."
+jumpscare_texture = ExtResource("3_face")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, -16)
+sprite_frames = SubResource("SpriteFrames_body")
+animation = &"float"
+autoplay = "float"
+
+[node name="Presence" type="AudioStreamPlayer2D" parent="."]
+max_distance = 260.0
+attenuation = 1.6
+bus = &"SFX"

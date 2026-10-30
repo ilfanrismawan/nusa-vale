@@ -27,6 +27,11 @@ static func get_stream(key: StringName) -> AudioStreamWAV:
 		_cache[key] = stream
 	return stream
 
+## Lepas semua suara tersimpan (dipanggil HorrorManager saat game keluar agar tidak tersisa
+## sebagai "resources still in use at exit").
+static func clear_cache() -> void:
+	_cache.clear()
+
 
 static func _to_stream(buffer: PackedFloat32Array, rate: int = RATE, loop: bool = false) -> AudioStreamWAV:
 	var bytes := PackedByteArray()

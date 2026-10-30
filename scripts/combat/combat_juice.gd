@@ -250,7 +250,7 @@ static func zoom_punch(player: Player, amount: float = 0.08) -> void:
 
 ## Teks pendek yang melayang di atas kepala pemain (Lelah!, Hindar, nama weapon art).
 static func float_text(player: Player, text: String, color: Color) -> void:
-	var label := _label(text, color, 14, player.global_position + Vector2(0, -34))
+	var label := _label(text, color, 14, player.global_position + Player.SPRITE_OFFSET + Vector2(0, -34))
 	if label == null:
 		return
 	var tw := label.create_tween()
@@ -274,7 +274,7 @@ static func parry_flash(player: Player, world_pos: Vector2) -> void:
 	spark(world_pos, Color(1.0, 0.95, 0.6), 14)
 	Juice.hitstop(110)
 	Juice.shake(3.0, 0.18)
-	var label := _label("PARRY!", Color(1.0, 0.95, 0.55), 22, player.global_position + Vector2(0, -36))
+	var label := _label("PARRY!", Color(1.0, 0.95, 0.55), 22, player.global_position + Player.SPRITE_OFFSET + Vector2(0, -36))
 	if label != null:
 		var lt := label.create_tween()
 		label.scale = Vector2.ONE * 1.6

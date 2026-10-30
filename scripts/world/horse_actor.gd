@@ -38,6 +38,7 @@ func _ready() -> void:
 	# Sama dengan posisi kuda saat ditunggangi (HorseMount.RIDE_LIFT) supaya naik/turun tidak melompat.
 	_sprite.position.y = -10
 	add_child(_sprite)
+	preload("res://scripts/effects/ground_shadow.gd").attach(self, 11.0)
 	_badge = Label.new()
 	_badge.position = Vector2(-20, -48)
 	_badge.add_theme_font_override("font", preload("res://assets/fonts/m5x7.ttf"))

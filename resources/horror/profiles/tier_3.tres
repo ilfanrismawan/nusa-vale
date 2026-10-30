@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="HorrorProfile" format=3 uid="uid://b2ro6ji1ai5sx"]
+
+[ext_resource type="Script" uid="uid://fbatp422sl5" path="res://scripts/data/horror_profile.gd" id="1_profile"]
+[ext_resource type="PackedScene" path="res://scenes/horror/banaspati.tscn" id="st_banaspati"]
+[ext_resource type="PackedScene" path="res://scenes/horror/genderuwo.tscn" id="st_genderuwo"]
+[ext_resource type="PackedScene" path="res://scenes/horror/kuntilanak.tscn" id="st_kuntilanak"]
+[ext_resource type="PackedScene" path="res://scenes/horror/leak.tscn" id="st_leak"]
+[ext_resource type="PackedScene" path="res://scenes/horror/pocong.tscn" id="st_pocong"]
+[ext_resource type="PackedScene" path="res://scenes/horror/sundel_bolong.tscn" id="st_sundel_bolong"]
+
+[resource]
+script = ExtResource("1_profile")
+tier = 3
+display_name = "Teror"
+unlock_cave_floor = 50
+unlock_day = 113
+notify_reached = "Mbah Darmi berpesan: \"Mereka mulai berburu. Jangan jauh-jauh dari api kalau lewat tengah malam.\""
+stalkers = Array[PackedScene]([ExtResource("st_kuntilanak"), ExtResource("st_pocong"), ExtResource("st_genderuwo"), ExtResource("st_banaspati"), ExtResource("st_sundel_bolong"), ExtResource("st_leak")])
+stalker_chance = 0.4
+stalker_check_interval = 14.0
+stalker_cooldown = 120.0
+max_stalkers = 2
+event_interval_min = 15.0
+event_interval_max = 32.0
+fear_rise_scale = 1.15
+fear_effects = true

@@ -228,12 +228,12 @@ func outside() -> void:
 				continue
 			image("Post_%d_%d" % [x,y], fences, "res://assets/farm_rpg/objects/exterior/Fence Wood.png",Vector2(x,y),Rect2(0,16,16,16))
 			solid("PostBody_%d_%d" % [x,y], fences, Rect2(x-3,y-8,6,16))
-	image("Trough", decor, "res://assets/ranch/feeding_trough.svg",Vector2(1016,360))
-	image("WaterBasin", decor, "res://assets/ranch/water_basin.svg",Vector2(848,496))
+	image("Trough", decor, "res://assets/ranch/feeding_trough.png",Vector2(1016,360))
+	image("WaterBasin", decor, "res://assets/ranch/water_basin.png",Vector2(848,496))
 	# Scenic animals are display sprites, not player-owned livestock/save records.
-	image("DisplayCow", decor,"res://assets/farm_rpg/animals/cow.png",Vector2(880,394),Rect2(0,0,32,32),1.5)
-	image("DisplaySheep", decor,"res://assets/farm_rpg/animals/sheep.png",Vector2(1008,432),Rect2(0,0,32,32),1.5)
-	image("DisplayChicken", decor,"res://assets/farm_rpg/animals/chicken/white.png",Vector2(944,470),Rect2(0,0,16,16),1.5)
+	image("DisplayCow", decor,"res://assets/farm_rpg/animals/Farm/Cow/Common Cow/Female Cow Black.png",Vector2(880,394),Rect2(0,0,32,32),1.5)
+	image("DisplaySheep", decor,"res://assets/farm_rpg/animals/Farm/Sheep/Sheep Female.png",Vector2(1008,432),Rect2(0,0,32,32),1.5)
+	image("DisplayChicken", decor,"res://assets/farm_rpg/animals/Farm/Chicken/Chicken White.png",Vector2(944,470),Rect2(0,0,16,16),1.5)
 	# Dense tree borders; keep authored paths, pond bank and home yard clear.
 	for i in 260:
 		var pos := Vector2(rng.randi_range(20,1130),rng.randi_range(32,752))
@@ -286,7 +286,7 @@ func inside() -> void:
 		partition.polygon = PackedVector2Array([rect.position,Vector2(rect.end.x,rect.position.y),rect.end,Vector2(rect.position.x,rect.end.y)])
 		partition.color = Color8(104,65,45)
 		put(partition,world,"RoomPartition"+str(world.get_child_count()))
-	image("FeedSack",furniture,"res://assets/ranch/feeding_trough.svg",Vector2(112,208))
+	image("FeedSack",furniture,"res://assets/ranch/feeding_trough.png",Vector2(112,208))
 	signboard("ShopBoard",furniture,Vector2(272,96),"TOKO TERNAK EEP")
 	signboard("Hours",furniture,Vector2(128,304),"09–12 / 13–17\nRabu libur")
 	signboard("Bedroom",furniture,Vector2(528,64),"RUMAH EEP")

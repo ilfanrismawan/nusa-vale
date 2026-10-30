@@ -1,8 +1,8 @@
 class_name ChickenVisual
 extends RefCounted
 
-const WHITE := preload("res://assets/farm_rpg/animals/chicken/white.png")
-const BROWN := preload("res://assets/farm_rpg/animals/chicken/brown.png")
+const WHITE := preload("res://assets/farm_rpg/animals/Farm/Chicken/Chicken White.png")
+const BROWN := preload("res://assets/farm_rpg/animals/Farm/Chicken/Chicken Brown White.png")
 static var _cache: Dictionary = {}
 
 static func frames(variant: String) -> SpriteFrames:

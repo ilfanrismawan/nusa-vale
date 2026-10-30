@@ -34,6 +34,7 @@ extends CharacterBody2D
 ## - dialog_lines: PackedStringArray (dialog kontekstual saat jam ini)
 @export var schedule: Array[Dictionary] = []
 
+const GroundShadow := preload("res://scripts/effects/ground_shadow.gd")
 @onready var sprite: AnimatedSprite2D = get_node_or_null("AnimatedSprite2D")
 @onready var interaction_area: Area2D = get_node_or_null("InteractionArea")
 
@@ -52,6 +53,8 @@ var _stuck_timer: float = 0.0
 var _last_pos: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
+	# Sprite NPC ber-offset (0, -10): titik badan = kaki, bayangan di sana.
+	GroundShadow.attach(self)
 	# Pastikan layer collision sesuai untuk karakter/NPC
 	collision_layer = 1
 	collision_mask = 1

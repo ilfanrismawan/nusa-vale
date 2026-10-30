@@ -20,7 +20,7 @@ func update(player: Node2D, moved: float, running: bool) -> void:
 
 func surface_at(player: Node2D) -> String:
 	var world: Node = player.world_root()
-	var feet: Vector2 = player.global_position + Vector2(0, 8)
+	var feet: Vector2 = player.global_position + Player.FEET_OFFSET
 	# Explicit overlays beat the ground below. Decorative/collision layers are excluded.
 	for layer_name in ["Road", "Plaza", "Ruins", "Stairs", "WateredLayer", "SoilLayer", "DirtPath", "ForestFloor", "BaseLayerGround", "TileMapLayer2", "TileMapLayer"]:
 		var layer := world.get_node_or_null(NodePath(layer_name)) as TileMapLayer

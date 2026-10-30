@@ -78,7 +78,7 @@ func _ready() -> void:
 	StructureManager._sync_all()
 	player.global_position += Vector2(0, 10)
 	carried_animal._physics_process(0.1)
-	check(carried_animal.global_position == player.global_position + Vector2(0, -22), "held animal follows player after shared-state refresh")
+	check(carried_animal.global_position == player.global_position + Player.SPRITE_OFFSET + Vector2(0, -22), "held animal follows player after shared-state refresh")
 	check(player._try_interact() and not player.has_meta("carried_animal") and carried_animal.collision_mask == 1, "interaction drops carried animal and restores collision")
 	check(player.data.serialize_inventory() == inventory_before and state.chickens[0].affection == affection_before, "lifting/dropping consumes no inventory and does not trigger care")
 	carried_animal.lift_with(player)

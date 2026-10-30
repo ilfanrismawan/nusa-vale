@@ -90,8 +90,8 @@ static func eat(player: Player, slot: int) -> Dictionary:
 	if slot < 0 or slot >= data.bag_size or data.inventory[slot] == null:
 		return {"ok": false, "message": "Tidak ada makanan."}
 	var item: ItemData = data.inventory[slot].item
-	if item.category != ItemData.Category.FOOD:
-		return {"ok": false, "message": "Item ini bukan makanan."}
+	if not item.is_edible():
+		return {"ok": false, "message": "Item ini tidak bisa dimakan."}
 	var effects: Array[FoodEffectData] = []
 	for effect in item.food_effects:
 		if effect == null or not effect.is_valid_effect():

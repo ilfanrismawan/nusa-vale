@@ -97,7 +97,7 @@ func try_pickup(p: Player) -> bool:
 			node.interact()
 			return true
 	# Tidak tepat di depan: ambil yang paling dekat dengan kaki (maks. ~1 petak).
-	var feet := p.global_position + Vector2(0, 8)
+	var feet := p.global_position + Player.FEET_OFFSET
 	var best: Forageable = null
 	var best_dist := 20.0
 	for node in _nodes.values():

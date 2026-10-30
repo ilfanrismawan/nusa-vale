@@ -122,7 +122,12 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			return
 		if current_item != null and current_item.category == ItemData.Category.FOOD:
-			Notify.say(CookingManager.eat(player, player.data.hotbar_page * 8 + current_index).message)
+			FoodEating.eat(player, player.data.hotbar_page * 8 + current_index)
+			get_viewport().set_input_as_handled()
+			return
+		# Kemenyan (GDD 4.1, Progres Horor): dibakar = zona aman portabel.
+		if current_item != null and current_item.horror_ward_seconds > 0.0:
+			HorrorWard.ignite(player, player.data.hotbar_page * 8 + current_index)
 			get_viewport().set_input_as_handled()
 			return
 		# Buku riset Perpustakaan (GDD 13.1): dibaca untuk EXP role.

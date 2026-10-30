@@ -168,6 +168,9 @@ var birthday_season: String = ""
 var birthday_day: int = 0
 var pet_id: String = ""
 var pet_name: String = ""
+## Kasih sayang peliharaan 0..PetActor.MAX_AFFECTION dan hari terakhir dielus (0 = belum pernah).
+var pet_affection: int = 0
+var pet_day: int = 0
 ## Kendaraan yang sedang dinaiki/diparkir (GDD 10). Runtime saja, tidak disimpan:
 ## setelah load pemain mulai berjalan kaki.
 var riding_vehicle_id: String = ""
@@ -225,10 +228,13 @@ func set_appearance(new_appearance: CharacterAppearance) -> void:
 
 # ── Stamina ─────────────────────────────────────────────────────────
 
+## Diatur NightHorror: biaya stamina naik saat sangat takut (GDD 4.1, Progres Horor). Tidak disimpan.
+var fear_stamina_multiplier := 1.0
+
 func spend_stamina(amount: int) -> bool:
 	if amount < 0:
 		return false
-	var exact_cost := amount * food_stamina_cost_multiplier() * SkillSystem.stamina_mult(self) + _food_cost_remainder
+	var exact_cost := amount * food_stamina_cost_multiplier() * SkillSystem.stamina_mult(self) * fear_stamina_multiplier + _food_cost_remainder
 	var cost := floori(exact_cost)
 	if stamina < cost:
 		stamina_exhausted.emit()
@@ -271,6 +277,14 @@ func food_stamina_cost_multiplier() -> float:
 	for active in active_food_effects:
 		var effect: FoodEffectData = active.effect
 		multiplier *= pow(effect.stamina_cost_multiplier, int(active.stacks))
+	return multiplier
+
+## Pengali kenaikan rasa takut dari makanan penenang (GDD 4.1, Progres Horor).
+func food_fear_multiplier() -> float:
+	var multiplier := 1.0
+	for active in active_food_effects:
+		var effect: FoodEffectData = active.effect
+		multiplier *= pow(effect.fear_rise_multiplier, int(active.stacks))
 	return multiplier
 
 func advance_food_effects(delta: float) -> void:
@@ -717,6 +731,8 @@ func to_dict() -> Dictionary:
 		"npc_progress": social_progress(),
 		"pet_id": pet_id,
 		"pet_name": pet_name,
+		"pet_affection": pet_affection,
+		"pet_day": pet_day,
 		"stamina": clampi(stamina, 0, max_stamina),
 		"hp": clampi(hp, 1, max_hp),
 		"consumed_daya": consumed_daya.duplicate(),
@@ -761,6 +777,9 @@ func load_pet(data: Dictionary) -> void:
 	var saved_name: Variant = data.get("pet_name", "")
 	pet_id = saved_id.strip_edges() if saved_id is String else ""
 	pet_name = saved_name.strip_edges() if saved_name is String and not pet_id.is_empty() else ""
+	# Kunci baru tanpa naik versi save: save lama = peliharaan baru, belum pernah dielus.
+	pet_affection = clampi(int(data.get("pet_affection", 0)), 0, 100) if not pet_id.is_empty() else 0
+	pet_day = maxi(0, int(data.get("pet_day", 0))) if not pet_id.is_empty() else 0
 
 func load_birthday(data: Dictionary) -> void:
 	birthday_season = ""

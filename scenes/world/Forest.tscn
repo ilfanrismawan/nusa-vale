@@ -41,10 +41,12 @@
 [ext_resource type="Script" uid="uid://c74xqxwwjr6m7" path="res://scripts/world/weed_spawner.gd" id="39_8r3uc"]
 [ext_resource type="Script" uid="uid://da62xubh24afr" path="res://scripts/world/forage_spawner.gd" id="40_8uto1"]
 [ext_resource type="Script" uid="uid://d2ntcii31kuw" path="res://scripts/world/tree_spawner.gd" id="43_6nx3n"]
-[ext_resource type="Script" path="res://scripts/world/forest_ore_spawner.gd" id="forest_ore"]
-[ext_resource type="Material" path="res://resources/grass_detail_material.tres" id="grass_detail"]
+[ext_resource type="PackedScene" uid="uid://bw0550f44esb0" path="res://scenes/world/exterior/object/daya_shrine.tscn" id="daya_shrine"]
+[ext_resource type="Script" uid="uid://bap0bp252upeq" path="res://scripts/world/forest_ore_spawner.gd" id="forest_ore"]
+[ext_resource type="Material" uid="uid://bob2uie4q2xql" path="res://resources/grass_detail_material.tres" id="grass_detail"]
 [ext_resource type="Material" path="res://resources/soil_detail_material.tres" id="soil_detail"]
 [ext_resource type="Material" uid="uid://ci3yasder0uu3" path="res://resources/water_detail_material.tres" id="water_detail"]
+[ext_resource type="PackedScene" path="res://scenes/world/wildlife_spawner.tscn" id="WildlifeSpawnerScene"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_001"]
 texture = ExtResource("1_fv2")
@@ -7423,6 +7425,9 @@ offset = Vector2(0, -22)
 position = Vector2(0, -3)
 shape = SubResource("RectangleShape2D_085")
 
+[node name="DayaShrine" parent="YSortEntities" unique_id=1620198046 instance=ExtResource("daya_shrine")]
+position = Vector2(688, 500)
+
 [node name="ChopPine01" parent="YSortEntities" unique_id=703641383 instance=ExtResource("16_fv2")]
 position = Vector2(568, 92)
 
@@ -7537,10 +7542,11 @@ metadata/_custom_type_script = "uid://da62xubh24afr"
 [node name="TreeSpawner" type="Node2D" parent="." unique_id=63305106]
 script = ExtResource("43_6nx3n")
 
-[node name="OreSpawner" type="Node2D" parent="."]
+[node name="OreSpawner" type="Node2D" parent="." unique_id=1783641278]
 script = ExtResource("forest_ore")
-location_id = "forest"
 daily_spawn = 2
 max_active = 10
+
+[node name="WildlifeSpawner" parent="." unique_id=411872901 instance=ExtResource("WildlifeSpawnerScene")]
 
 [editable path="Player"]

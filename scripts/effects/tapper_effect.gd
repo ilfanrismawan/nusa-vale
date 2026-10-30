@@ -16,7 +16,7 @@ func apply(player: Player, cell: Vector2i) -> void:
 
 static func find_tree(player: Player, cell: Vector2i) -> Node2D:
 	var target := Juice.cell_center(player, cell)
-	var front := player.global_position + Vector2(0, 8) + player.facing_direction.normalized() * 14.0
+	var front := player.global_position + Player.FEET_OFFSET + player.facing_direction.normalized() * 14.0
 	var best: Node2D = null
 	var best_dist := TREE_REACH
 	for node in player.get_tree().get_nodes_in_group(&"choppable"):

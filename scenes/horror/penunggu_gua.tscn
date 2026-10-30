@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/horror/leak.tscn" id="1_base"]
+
+[node name="PenungguGua" instance=ExtResource("1_base")]
+scale = Vector2(1.4, 1.4)
+display_name = "Penunggu Gua"
+ghost_id = &""
+reward_item_id = ""
+journal_hint = ""
+lifetime = 600.0
+stamina_penalty = 50
+ignores_incense = true
+glow = Color(2.0, 1.3, 2.4, 1)
+glide_speed = 46.0
+notify_spawn = "Dinding gua berbisik. Penunggu Gua melayang turun: membeku saat ditatap, hanya api besar yang ditakutinya."
+notify_touch = "Penunggu Gua menyambarmu! Energi -%d."

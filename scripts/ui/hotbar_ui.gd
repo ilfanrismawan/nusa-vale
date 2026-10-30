@@ -9,7 +9,7 @@ signal slot_selected(index: int)
 const HOTBAR_SLOTS := 8
 const SLOT_SCENE = preload("res://scenes/ui/inventory_slot.tscn")
 const SKIN_SELECTED: Texture2D = preload("res://resources/ui/hotbar_slot_selected.tres")
-const FONT: Font = preload("res://resources/ui/readable_font.tres")
+const FONT: Font = preload("res://assets/fonts/m5x7.ttf")
 const NUMBER_COLOR := Color8(249, 230, 207)
 const OUTLINE_COLOR := Color8(28, 10, 24)
 const NAME_HOLD := 1.4 # detik nama item tampil di atas hotbar
@@ -76,6 +76,7 @@ func _make_number_label(number: int) -> Label:
 	label.add_theme_constant_override("outline_size", 1)
 	label.position = Vector2(3, -4)
 	label.modulate.a = 0.85
+	label.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	return label
 
 func _build_name_label() -> void:

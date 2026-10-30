@@ -316,7 +316,7 @@ func _heal_circle(attack: int) -> void:
 			continue
 		if (other.global_position + Player.FEET_OFFSET).distance_to(center) <= art.radius:
 			other.data.restore_hp(art.heal_amount)
-			CombatJuice.damage_number("+%d" % art.heal_amount, other.global_position + Vector2(0, -18), art.color)
+			CombatJuice.damage_number("+%d" % art.heal_amount, other.global_position + Player.SPRITE_OFFSET + Vector2(0, -18), art.color)
 	_melee(attack, art.radius, 0.0, art.color)
 
 #endregion

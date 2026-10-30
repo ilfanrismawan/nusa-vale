@@ -64,3 +64,47 @@ upgrade di belakang tier alat yang justru memerlukan bahan tersebut.
 ## Gua, spawn dan prefab enemy/boss
 
 Lihat [CAVE_EDITOR_GUIDE.md](CAVE_EDITOR_GUIDE.md) untuk marker layout, pengaturan spawn/pilar, scene enemy/boss, serta prefab tangga dan lift.
+
+## Lobi co-op
+
+Buka `scenes/ui/coop_lobby.tscn` di editor 2D. Layout, kartu pemain, judul,
+petunjuk tetap, dan tombol tersedia sebagai node; atur ukuran/jarak melalui
+Container dan `Theme Overrides` di Inspector. Panel utama memakai StyleBox
+pada `UI/Center/Panel`. Warna/font bersama dan variasi status tersedia di
+resource `Theme` milik node `UI`: `JoinedCard`, `EmptyCard`, `ReadyLabel`,
+`WaitingLabel`, dan `PrimaryButton`. Script memilih variasi sesuai status,
+tanpa membuat StyleBox baru atau menimpa warna dari Inspector.
+
+Blur latar diatur pada `UI/Dim` → `Material` → `Shader Parameters`:
+`blur_amount` mengatur kekaburan, alpha `top_tint`/`bottom_tint` mengatur
+gelapnya latar. Transparansi panel dan kartu diatur lewat alpha `Bg Color`
+pada StyleBox masing-masing.
+
+Pilih root `CoopLobby` untuk mengubah teks dinamis pada grup **Teks Lobi**.
+`Joined Text` memakai dua placeholder `%d` untuk jumlah pemain dan kapasitas.
+Teks perangkat, jumlah pemain dan informasi save diperbarui saat permainan.
+Pertahankan unique name node, jalur `Content/Device` dan `Content/Status`
+di setiap kartu, serta koneksi sinyal kedua tombol ketika merapikan scene.
+
+### Co-op saat bermain
+
+- `scenes/ui/coop_join_menu.tscn`: pilihan karakter dan konfirmasi keluar.
+  Root menyediakan teks judul, label karakter baru, serta template baris.
+  Node `UI` menyediakan `Preferred Width`, margin, ambang layout ringkas,
+  dan tinggi daftar di Inspector. Dua baris contoh di `Entries` hanya untuk
+  preview editor; runtime menggantinya dengan daftar karakter save.
+- `scenes/ui/coop_join_row.tscn`: ukuran, perataan, dan tampilan tiap baris
+  karakter. Nama panjang dipotong; pilihan gamepad menggulir daftar otomatis.
+- `scenes/ui/coop_wait_panel.tscn`: judul, alasan menunggu, penjelasan dan
+  tombol batal. Alasan aktual diperbarui otomatis oleh sistem bergabung.
+- `resources/ui/coop_ingame_theme.tres`: font, panel transparan, warna teks,
+  pilihan hijau, serta konfirmasi hapus merah untuk kedua dialog.
+- `scenes/ui/coop_backdrop.tscn`: material blur dan tint bersama.
+  `scenes/ui/coop_join_pane.tscn` menempatkan backdrop di viewport dunia,
+  terbatas pada petak pemain yang bergabung. Jangan memindahkan blur ini ke
+  `JoinPane/Screen`: viewport tersebut hanya berisi UI transparan, bukan dunia.
+
+`coop_dialog_layout.gd` menyesuaikan panel untuk setengah/seperempat layar
+dan skala UI pemain. Pada ruang pendek, judul/petunjuk dibuat ringkas dan
+daftar tetap dapat digulir. Perubahan visual tidak menjeda pemain lain;
+input pilihan karakter tetap hanya berasal dari perangkat pemain terkait.

@@ -24,6 +24,7 @@ func _ready() -> void:
 	DigSpotSpawner.attach_dig_spots(self, "farm", ^"YSort", 1, 3, true)
 	# Gathering (GDD 7): serangga liar dan pohon dari biji pohon.
 	BugSpawner.attach(self, "farm", ^"YSort", 5)
+	# Hanya gagak yang mampir ke ladang (GDD 4.10.13); suasana, tidak memakan tanaman.
 	PlantedTreeSpawner.attach_planted(self, "farm", ^"YSort")
 	
 func _exit_tree() -> void:

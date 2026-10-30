@@ -5,13 +5,13 @@
 [ext_resource type="StyleBox" uid="uid://bcsqilgingklv" path="res://resources/ui/style_resident_card_hover.tres" id="3_hover"]
 [ext_resource type="StyleBox" uid="uid://bsrx56th8vhnf" path="res://resources/ui/style_resident_card_selected.tres" id="4_selected"]
 [ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="6_gbqgw"]
-[ext_resource type="SystemFont" uid="uid://cc5l8ign8cs06" path="res://resources/ui/menu_vector_font.tres" id="font"]
+[ext_resource type="FontFile" path="res://assets/fonts/m5x7.ttf" id="font"]
 [ext_resource type="Texture2D" uid="uid://de5sv84qsxww7" path="res://assets/ui/relationship_gift.svg" id="gift_icon"]
 [ext_resource type="Texture2D" uid="uid://co1idpiu14lph" path="res://assets/ui/relationship_talk.svg" id="talk_icon"]
 
 [sub_resource type="Theme" id="CardTheme"]
 default_font = ExtResource("font")
-default_font_size = 7
+default_font_size = 16
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_x5ddy"]
 
@@ -60,15 +60,16 @@ autowrap_trim_flags = 0
 justification_flags = 131
 
 [node name="StatusLabel" type="Label" parent="." unique_id=262381979]
+scale = Vector2(0.5, 0.5)
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 0
 offset_left = 41.0
 offset_top = 1.0
-offset_right = 84.0
-offset_bottom = 11.833333
+offset_right = 127.0
+offset_bottom = 22.666666
 theme_override_colors/font_color = Color(0.48, 0.34, 0.23, 1)
-theme_override_font_sizes/font_size = 8
+theme_override_font_sizes/font_size = 16
 horizontal_alignment = 2
 clip_text = true
 
@@ -85,61 +86,66 @@ theme_override_constants/v_separation = 0
 columns = 5
 
 [node name="GiftCheck1" type="Label" parent="." unique_id=899408361]
+scale = Vector2(0.4375, 0.4375)
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 0
 offset_left = 48.0
 offset_top = 56.0
-offset_right = 61.0
-offset_bottom = 66.0
-theme_override_font_sizes/font_size = 7
+offset_right = 77.71428571428572
+offset_bottom = 78.85714285714286
+theme_override_font_sizes/font_size = 16
 
 [node name="GiftCheck2" type="Label" parent="." unique_id=1156198774]
+scale = Vector2(0.4375, 0.4375)
 unique_name_in_owner = true
 visible = false
 texture_filter = 2
 layout_mode = 0
 offset_left = 75.0
 offset_top = 43.0
-offset_right = 96.0
-offset_bottom = 52.0
-theme_override_font_sizes/font_size = 7
+offset_right = 123.0
+offset_bottom = 63.57142857142857
+theme_override_font_sizes/font_size = 16
 
 [node name="TalkCheck" type="Label" parent="." unique_id=1612855084]
+scale = Vector2(0.4375, 0.4375)
 unique_name_in_owner = true
 texture_filter = 2
 layout_mode = 0
 offset_left = 71.0
 offset_top = 56.0
-offset_right = 82.0
-offset_bottom = 66.0
-theme_override_font_sizes/font_size = 7
+offset_right = 96.14285714285714
+offset_bottom = 78.85714285714286
+theme_override_font_sizes/font_size = 16
 
 [node name="EventBadge" type="Label" parent="." unique_id=1426489618]
+scale = Vector2(0.375, 0.375)
 unique_name_in_owner = true
 visible = false
 texture_filter = 2
 layout_mode = 0
 offset_left = 2.0
 offset_top = 57.0
-offset_right = 39.0
-offset_bottom = 69.0
+offset_right = 100.66666666666667
+offset_bottom = 89.0
 theme_override_colors/font_color = Color(0.22, 0.34, 0.2, 1)
 theme_override_colors/font_shadow_color = Color(1, 1, 0.82, 1)
 theme_override_constants/shadow_outline_size = 2
-theme_override_font_sizes/font_size = 6
+theme_override_font_sizes/font_size = 16
 text = "♥ Cerita baru!"
 
 [node name="PortraitInitial" type="Label" parent="." unique_id=553990307]
+scale = Vector2(1.1875, 1.1875)
 unique_name_in_owner = true
 visible = false
 texture_filter = 2
 layout_mode = 0
 offset_left = 1.0
-offset_right = 42.0
-offset_bottom = 72.0
+offset_right = 35.526315789473685
+offset_bottom = 60.63157894736842
 theme_override_colors/font_color = Color(0.57, 0.39, 0.25, 1)
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 vertical_alignment = 1
 

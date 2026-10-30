@@ -4,6 +4,8 @@
 [ext_resource type="Texture2D" path="res://resources/icons/icon_common_mushroom.tres" id="2"]
 [resource]
 script = ExtResource("1")
+edible = true
+stamina_restore = 13
 category = 6
 item_id = "mooncap"
 display_name = "Jamur Rembulan"

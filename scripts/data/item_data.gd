@@ -3,6 +3,9 @@ extends Resource
 
 enum Category { ALL, SEED, CROP, TOOL, MATERIAL, FISH, FORAGE, EQUIPMENT, BUILDING, FOOD }
 @export_category("Food")
+## Bisa dimakan walau bukan kategori FOOD (hasil panen, forage, artisan). Nilainya sengaja
+## di bawah barang jadi yang dibuat darinya (tools/rebalance_edible.py, docs/EDIBLE_BALANCE.md).
+@export var edible: bool = false
 @export_range(0, 200) var stamina_restore: int = 0
 @export_range(0, 120) var speed_buff_seconds: float = 0.0
 @export_range(1.0, 3.0, 0.01) var speed_buff_multiplier: float = 1.15
@@ -86,6 +89,18 @@ enum Quality {
 ## Kendaraan (GDD 10). Diisi = barang ini dinaiki dengan tombol Alat, dibeli sekali per pemain.
 @export var vehicle: VehicleData
 
+@export_category("Horor")
+## Kemenyan (GDD 4.1, Progres Horor): dipakai = zona aman portabel selama ini (detik). 0 = bukan.
+@export_range(0.0, 600.0, 1.0) var horror_ward_seconds: float = 0.0
+@export_range(16.0, 240.0, 1.0) var horror_ward_radius: float = 80.0
+## Jimat (dipakai sebagai equipment): makhluk yang membeku saat ditatap baru bergerak
+## selama ini (detik) setelah pemain berpaling.
+@export_range(0.0, 5.0, 0.1) var horror_charm_seconds: float = 0.0
+## Keris Pusaka (dipegang di hotbar): makhluk yang ditatap selama ini (detik) terusir. 0 = bukan.
+@export_range(0.0, 5.0, 0.1) var horror_gaze_seconds: float = 0.0
+## Dipakai sebagai equipment: bagian kenaikan rasa takut dan kaku jumpscare yang ditahan (0..0,9).
+@export_range(0.0, 0.9, 0.05) var horror_fear_resist: float = 0.0
+
 @export_category("Skill")
 ## Buku riset (GDD 13.1): role_id yang mendapat EXP saat buku dibaca (kosong = bukan buku).
 @export var skill_book_role: String = ""
@@ -93,6 +108,9 @@ enum Quality {
 
 func is_tool() -> bool:
 	return action_data != null
+
+func is_edible() -> bool:
+	return category == Category.FOOD or (edible and stamina_restore > 0)
 
 func hp_restore_amount() -> int:
 	@warning_ignore("integer_division")

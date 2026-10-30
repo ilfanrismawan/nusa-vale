@@ -2,6 +2,7 @@
 [ext_resource type="Theme" path="res://resources/ui/inventory_book_theme.tres" id="theme"]
 
 [node name="SkillRole" type="Button"]
+scale = Vector2(0.75, 0.75)
 custom_minimum_size = Vector2(87, 20)
 toggle_mode = true
 expand_icon = true
@@ -9,4 +10,4 @@ icon_alignment = 0
 alignment = 0
 clip_text = true
 theme_override_constants/icon_max_width = 14
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 16
