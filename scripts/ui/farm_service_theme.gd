@@ -7,21 +7,13 @@ const DIALOG := preload("res://assets/farm_rpg/ui/dialogue box.png")
 const FONT := preload("res://resources/ui/readable_font.tres")
 const INK := Color("50321f")
 const LAYER := 70
-const BLACKSMITH_LAYERS := [
-	preload("res://assets/farm_rpg/Character/NPC'S/Blacksmith/Portrait - PNG and Aseprite/Skins/2.png"),
-	preload("res://assets/farm_rpg/Character/NPC'S/Blacksmith/Portrait - PNG and Aseprite/Eyes/Brown.png"),
-	preload("res://assets/farm_rpg/Character/NPC'S/Blacksmith/Portrait - PNG and Aseprite/Clothers/T-shirt Gray.png"),
-	preload("res://assets/farm_rpg/Character/NPC'S/Blacksmith/Portrait - PNG and Aseprite/Clothers/Blacksmith apron.png"),
-	preload("res://assets/farm_rpg/Character/NPC'S/Blacksmith/Portrait - PNG and Aseprite/Hair/Black.png"),
-	preload("res://assets/farm_rpg/Character/NPC'S/Blacksmith/Portrait - PNG and Aseprite/Acc/Beard/Black.png"),
-	preload("res://assets/farm_rpg/Character/NPC'S/Blacksmith/Portrait - PNG and Aseprite/Arm/2.png")
-]
+const BLACKSMITH_PORTRAIT := preload("res://assets/farm_rpg/Character/NPC'S/Blacksmith/Portrait/Blacksmith.png")
 
 static func blacksmith_portrait() -> Control:
 	var root := Control.new()
 	root.custom_minimum_size = Vector2(80, 80)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	for texture in BLACKSMITH_LAYERS:
+	for texture in [BLACKSMITH_PORTRAIT]:
 		var layer := TextureRect.new()
 		layer.texture = portrait(texture)
 		layer.expand_mode = TextureRect.EXPAND_IGNORE_SIZE

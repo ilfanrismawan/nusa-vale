@@ -10,6 +10,10 @@ const LAYER_BIT := 1 << 10
 const SORT_SHIFT := Vector2(0, -4)
 const GROUP := &"forageable"
 const RADIUS := 8.0
+const GroundShadow := preload("res://scripts/effects/ground_shadow.gd")
+## Bayangan di bawah ikon barang (ikon 16 px berpusat di tengah sel).
+const SHADOW_RADIUS := 5.0
+const SHADOW_OFFSET := Vector2(0, 6)
 
 var item: ItemData
 var location_id: String = ""
@@ -29,6 +33,8 @@ func setup(p_item: ItemData, p_location_id: String, p_cell: Vector2i) -> void:
 	monitoring = false
 	monitorable = true
 	add_to_group(GROUP)
+
+	GroundShadow.attach(self, SHADOW_RADIUS, -SORT_SHIFT + SHADOW_OFFSET)
 
 	_sprite = Sprite2D.new()
 	_sprite.texture = OutlineIcon.get_for(item.icon)

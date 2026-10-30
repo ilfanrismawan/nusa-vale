@@ -923,6 +923,10 @@ func aim_vector() -> Vector2:
 	return facing_direction
 
 func _update_aim() -> void:
+	if _update_guard_pose():
+		if is_instance_valid(_aim_line):
+			_aim_line.visible = false
+		return
 	if not is_aiming():
 		if is_instance_valid(_aim_line):
 			_aim_line.visible = false
@@ -964,6 +968,17 @@ func _update_aim() -> void:
 	var origin := FEET_OFFSET * 0.5
 	_aim_line.points = PackedVector2Array([origin + dir * 6.0, origin + dir * length])
 	_aim_line.visible = true
+
+## Block/parry: karakter menahan pose senjata terangkat (WeaponStyle.guard_pose_frame).
+## true bila pose guard sedang dipakai.
+func _update_guard_pose() -> bool:
+	if combat == null or not combat.guarding:
+		return false
+	var style := Combat.style_for(tool_controller.current_item)
+	if style == null or style.guard_pose_frame < 0:
+		return false
+	animation_controller.hold_pose(style.animation_name, style.guard_pose_frame)
+	return true
 
 ## Busur: selama membidik karakter menahan pose tali ditarik (WeaponStyle.aim_pose_frame).
 func _update_aim_pose() -> void:

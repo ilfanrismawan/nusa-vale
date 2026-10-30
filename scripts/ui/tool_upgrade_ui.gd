@@ -4,6 +4,8 @@ extends CanvasLayer
 const Presentation = preload("res://scripts/resources/blacksmith_presentation.gd")
 signal finished
 
+const SCROLL_WIDTH := 14.0
+
 @export var presentation: Presentation = preload("res://resources/ui/blacksmith_presentation.tres")
 @export var card_scene: PackedScene = preload("res://scenes/ui/blacksmith_tool_card.tscn")
 @export var material_scene: PackedScene = preload("res://scenes/ui/blacksmith_material_row.tscn")
@@ -55,10 +57,28 @@ func _ready() -> void:
 	for kind in ToolUpgradeManager.TOOL_TYPES:
 		if not _kinds.has(kind):
 			_kinds.append(kind)
+	_style_scroll(%Tools.get_parent() as ScrollContainer, ScrollContainer.SCROLL_MODE_SHOW_ALWAYS)
+	_style_scroll(%Materials.get_parent() as ScrollContainer, ScrollContainer.SCROLL_MODE_AUTO)
 	_build_entries()
 	_refresh_tools()
 	_resize()
 	Coop.set_menu_open(player, true)
+
+## Scroll bar tebal yang kontras dengan latar gelap, supaya terlihat ada isi di bawah.
+func _style_scroll(scroll: ScrollContainer, mode: ScrollContainer.ScrollMode) -> void:
+	scroll.vertical_scroll_mode = mode
+	var bar := scroll.get_v_scroll_bar()
+	bar.custom_minimum_size.x = SCROLL_WIDTH
+	var track := StyleBoxFlat.new()
+	track.bg_color = Color(0, 0, 0, 0.35)
+	track.set_corner_radius_all(6)
+	bar.add_theme_stylebox_override("scroll", track)
+	bar.add_theme_stylebox_override("scroll_focus", track)
+	for state in ["grabber", "grabber_highlight", "grabber_pressed"]:
+		var grabber := StyleBoxFlat.new()
+		grabber.bg_color = Color("f5f0e1") if state == "grabber" else Color.WHITE
+		grabber.set_corner_radius_all(6)
+		bar.add_theme_stylebox_override(state, grabber)
 
 func _open_social_dialog() -> void:
 	_close()

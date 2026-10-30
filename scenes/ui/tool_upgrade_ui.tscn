@@ -1,14 +1,8 @@
 [gd_scene format=3 uid="uid://bbdhj2888itkk"]
 
-[ext_resource type="Texture2D" uid="uid://bbqec3g1g70i4" path="res://assets/farm_rpg/Character/NPC'S/Blacksmith/Portrait - PNG and Aseprite/Clothers/Blacksmith apron.png" id="Apron"]
-[ext_resource type="Texture2D" uid="uid://bfp5lf0845noy" path="res://assets/farm_rpg/Character/NPC'S/Blacksmith/Portrait - PNG and Aseprite/Arm/2.png" id="Arm"]
-[ext_resource type="Texture2D" uid="uid://6fu6uxxoug12" path="res://assets/farm_rpg/Character/NPC'S/Blacksmith/Portrait - PNG and Aseprite/Acc/Beard/Black.png" id="Beard"]
-[ext_resource type="Texture2D" uid="uid://beib7yxwxrdgf" path="res://assets/farm_rpg/Character/NPC'S/Blacksmith/Portrait - PNG and Aseprite/Eyes/Brown.png" id="Eyes"]
-[ext_resource type="Texture2D" uid="uid://dvxt8cpr1kbup" path="res://assets/farm_rpg/Character/NPC'S/Blacksmith/Portrait - PNG and Aseprite/Hair/Black.png" id="Hair"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/Character/NPC'S/Blacksmith/Portrait/Blacksmith.png" id="PortraitSheet"]
 [ext_resource type="Script" uid="uid://cvqyjblhh1jm3" path="res://scripts/ui/tool_upgrade_ui.gd" id="script"]
 [ext_resource type="Shader" uid="uid://u3opbt5e1rcp" path="res://resources/ui/cooking_backdrop.gdshader" id="shader"]
-[ext_resource type="Texture2D" uid="uid://cf3hgtdheoqmj" path="res://assets/farm_rpg/Character/NPC'S/Blacksmith/Portrait - PNG and Aseprite/Clothers/T-shirt Gray.png" id="Shirt"]
-[ext_resource type="Texture2D" uid="uid://5skld2o7qlce" path="res://assets/farm_rpg/Character/NPC'S/Blacksmith/Portrait - PNG and Aseprite/Skins/2.png" id="Skin"]
 [ext_resource type="Theme" uid="uid://c1wj1ihbrjfm" path="res://resources/ui/cooking_theme.tres" id="theme"]
 
 [sub_resource type="ShaderMaterial" id="Backdrop"]
@@ -17,38 +11,8 @@ shader_parameter/blur_amount = 3.5
 shader_parameter/top_tint = Color(0.045, 0.035, 0.02, 0.62)
 shader_parameter/bottom_tint = Color(0.42745098, 0.31764707, 0.105882354, 0.69411767)
 
-[sub_resource type="AtlasTexture" id="PortraitSkin"]
-atlas = ExtResource("Skin")
-region = Rect2(0, 0, 64, 64)
-filter_clip = true
-
-[sub_resource type="AtlasTexture" id="PortraitEyes"]
-atlas = ExtResource("Eyes")
-region = Rect2(0, 0, 64, 64)
-filter_clip = true
-
-[sub_resource type="AtlasTexture" id="PortraitShirt"]
-atlas = ExtResource("Shirt")
-region = Rect2(0, 0, 64, 64)
-filter_clip = true
-
-[sub_resource type="AtlasTexture" id="PortraitApron"]
-atlas = ExtResource("Apron")
-region = Rect2(0, 0, 64, 64)
-filter_clip = true
-
-[sub_resource type="AtlasTexture" id="PortraitHair"]
-atlas = ExtResource("Hair")
-region = Rect2(0, 0, 64, 64)
-filter_clip = true
-
-[sub_resource type="AtlasTexture" id="PortraitBeard"]
-atlas = ExtResource("Beard")
-region = Rect2(0, 0, 64, 64)
-filter_clip = true
-
-[sub_resource type="AtlasTexture" id="PortraitArm"]
-atlas = ExtResource("Arm")
+[sub_resource type="AtlasTexture" id="PortraitNeutral"]
+atlas = ExtResource("PortraitSheet")
 region = Rect2(0, 0, 64, 64)
 filter_clip = true
 
@@ -93,73 +57,13 @@ offset_right = 480.0
 offset_bottom = 750.0
 mouse_filter = 2
 
-[node name="Skin" type="TextureRect" parent="Design/PortraitLayers" unique_id=1079242941]
+[node name="Portrait" type="TextureRect" parent="Design/PortraitLayers" unique_id=1079242941]
 texture_filter = 1
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
-texture = SubResource("PortraitSkin")
-expand_mode = 1
-stretch_mode = 6
-
-[node name="Eyes" type="TextureRect" parent="Design/PortraitLayers" unique_id=486303566]
-texture_filter = 1
-layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-texture = SubResource("PortraitEyes")
-expand_mode = 1
-stretch_mode = 6
-
-[node name="Shirt" type="TextureRect" parent="Design/PortraitLayers" unique_id=105544073]
-texture_filter = 1
-layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-texture = SubResource("PortraitShirt")
-expand_mode = 1
-stretch_mode = 6
-
-[node name="Apron" type="TextureRect" parent="Design/PortraitLayers" unique_id=1610734018]
-texture_filter = 1
-layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-texture = SubResource("PortraitApron")
-expand_mode = 1
-stretch_mode = 6
-
-[node name="Hair" type="TextureRect" parent="Design/PortraitLayers" unique_id=217480856]
-texture_filter = 1
-layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-texture = SubResource("PortraitHair")
-expand_mode = 1
-stretch_mode = 6
-
-[node name="Beard" type="TextureRect" parent="Design/PortraitLayers" unique_id=1700187975]
-texture_filter = 1
-layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-texture = SubResource("PortraitBeard")
-expand_mode = 1
-stretch_mode = 6
-
-[node name="Arm" type="TextureRect" parent="Design/PortraitLayers" unique_id=1219868384]
-texture_filter = 1
-layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
-mouse_filter = 2
-texture = SubResource("PortraitArm")
+texture = SubResource("PortraitNeutral")
 expand_mode = 1
 stretch_mode = 6
 

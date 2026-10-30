@@ -10,6 +10,7 @@
 [resource]
 script = ExtResource("1")
 hit_frame_ratio = 0.45
+guard_pose_frame = 1
 speed_scale = 1.4
 melee_radius = 14.0
 knockback = 12.0

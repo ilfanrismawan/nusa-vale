@@ -41,13 +41,13 @@
     "sprite_frames": "res://resources/npc_data/npc_animation/bima_resident_frame.tres",
     "portrait": "res://assets/farm_rpg/Character/NPC'S/Blacksmith/Portrait/Blacksmith.png",
     "portrait_cell_size": 64,
-    "portrait_columns": 5,
+    "portrait_columns": 4,
     "expressions": {
       "neutral": 0,
-      "sparkle": 5,
+      "sparkle": 4,
       "angry": 7,
-      "happy": 10,
-      "annoyed": 12
+      "happy": 2,
+      "annoyed": 5
     }
   },
   "gift_tastes": {
