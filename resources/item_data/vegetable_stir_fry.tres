@@ -19,4 +19,5 @@ item_id = "vegetable_stir_fry"
 display_name = "Capcay"
 icon = SubResource("Icon")
 description = "Masakan dari dapur. Pilih di hotbar untuk dimakan."
+buy_price = 638
 sell_price = 319

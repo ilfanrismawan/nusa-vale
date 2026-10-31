@@ -226,7 +226,7 @@ size_flags_horizontal = 3
 toggle_mode = true
 text = "Nasi & Lauk"
 theme_override_font_sizes/font_size = 17
-metadata/item_ids = PackedStringArray("rice_bowl", "fried_egg", "grilled_catfish")
+metadata/item_ids = PackedStringArray("rice_bowl", "fried_egg", "boiled_egg", "grilled_catfish", "anguilla_fritta", "fish_stew")
 
 [node name="Soup" type="Button" parent="Book/Filters"]
 layout_mode = 2
@@ -234,7 +234,7 @@ size_flags_horizontal = 3
 toggle_mode = true
 text = "Sayur & Kuah"
 theme_override_font_sizes/font_size = 17
-metadata/item_ids = PackedStringArray("vegetable_soup")
+metadata/item_ids = PackedStringArray("vegetable_soup", "mushroom_saute", "stir_fry", "vegetable_stir_fry")
 
 [node name="Drinks" type="Button" parent="Book/Filters"]
 layout_mode = 2
@@ -242,7 +242,7 @@ size_flags_horizontal = 3
 toggle_mode = true
 text = "Minuman"
 theme_override_font_sizes/font_size = 17
-metadata/item_ids = PackedStringArray("jasmine_tea", "coffee")
+metadata/item_ids = PackedStringArray("green_tea", "jasmine_tea", "wedang_kantil", "coffee")
 
 [node name="Stock" type="GridContainer" parent="Book"]
 offset_left = 280.0

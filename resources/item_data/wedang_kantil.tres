@@ -14,4 +14,5 @@ item_id = "wedang_kantil"
 display_name = "Wedang Kantil"
 icon = ExtResource("2_icon")
 description = "Minuman hangat beraroma kantil. Rasa takut di malam hari naik jauh lebih lambat."
+buy_price = 190
 sell_price = 95

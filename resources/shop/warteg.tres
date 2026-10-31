@@ -4,9 +4,17 @@
 [ext_resource type="Script" path="res://scripts/data/item_data.gd" id="2_item"]
 [ext_resource type="Resource" uid="uid://uq24eljr5q60" path="res://resources/item_data/rice_bowl.tres" id="rice_bowl"]
 [ext_resource type="Resource" uid="uid://ti6hhlk0afwt" path="res://resources/item_data/fried_egg.tres" id="fried_egg"]
+[ext_resource type="Resource" uid="uid://kn0nyatt1iwm" path="res://resources/item_data/boiled_egg.tres" id="boiled_egg"]
 [ext_resource type="Resource" uid="uid://b4tatx4smsjl1" path="res://resources/item_data/grilled_catfish.tres" id="grilled_catfish"]
+[ext_resource type="Resource" uid="uid://dsd3mdw6o3gnm" path="res://resources/item_data/anguilla_fritta.tres" id="anguilla_fritta"]
+[ext_resource type="Resource" uid="uid://coif4scanfyyt" path="res://resources/item_data/fish_stew.tres" id="fish_stew"]
 [ext_resource type="Resource" uid="uid://do0a1t7wty1yn" path="res://resources/item_data/vegetable_soup.tres" id="vegetable_soup"]
+[ext_resource type="Resource" uid="uid://dunvpb1a4eiv1" path="res://resources/item_data/mushroom_saute.tres" id="mushroom_saute"]
+[ext_resource type="Resource" uid="uid://cipg8jeursv2f" path="res://resources/item_data/stir_fry.tres" id="stir_fry"]
+[ext_resource type="Resource" uid="uid://4rgalnehr6xn" path="res://resources/item_data/vegetable_stir_fry.tres" id="vegetable_stir_fry"]
+[ext_resource type="Resource" uid="uid://b5n2tav3do1j6" path="res://resources/item_data/green_tea.tres" id="green_tea"]
 [ext_resource type="Resource" uid="uid://clgvhw0mxyd4f" path="res://resources/item_data/jasmine_tea.tres" id="jasmine_tea"]
+[ext_resource type="Resource" path="res://resources/item_data/wedang_kantil.tres" id="wedang_kantil"]
 [ext_resource type="Resource" uid="uid://bwxdxpwcve1xf" path="res://resources/item_data/coffee.tres" id="coffee"]
 
 [resource]
@@ -15,5 +23,5 @@ shop_id = "warteg"
 shop_name = "Warteg Bahari"
 keeper_name = "Mbak Warteg"
 greeting = "Monggo, mau makan apa? Nasi, lauk, sayur, semua masih hangat."
-stock = Array[ExtResource("2_item")]([ExtResource("rice_bowl"), ExtResource("fried_egg"), ExtResource("grilled_catfish"), ExtResource("vegetable_soup"), ExtResource("jasmine_tea"), ExtResource("coffee")])
+stock = Array[ExtResource("2_item")]([ExtResource("rice_bowl"), ExtResource("fried_egg"), ExtResource("boiled_egg"), ExtResource("grilled_catfish"), ExtResource("anguilla_fritta"), ExtResource("fish_stew"), ExtResource("vegetable_soup"), ExtResource("mushroom_saute"), ExtResource("stir_fry"), ExtResource("vegetable_stir_fry"), ExtResource("green_tea"), ExtResource("jasmine_tea"), ExtResource("wedang_kantil"), ExtResource("coffee")])
 buys_items = false

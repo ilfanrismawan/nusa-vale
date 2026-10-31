@@ -39,11 +39,16 @@ func _ready() -> void:
 	check(is_instance_valid(shop) and shop.scene_file_path == "res://scenes/ui/warteg_ui.tscn", "interaksi membuka UI warteg")
 	check(shop != null and shop.shop_data.shop_id == "warteg" and not shop.shop_data.buys_items, "UI memakai menu warteg")
 	check(shop != null and shop.shop_data.stock.all(func(item: ItemData): return item.buy_price > 0), "semua menu warteg punya harga")
-	var visible := func(): return shop._rows.filter(func(row): return row["panel"].visible).size()
+	var listed := func(): return shop._rows.filter(func(row): return shop._matches_filter(row["item"])).size()
 	check(not shop._filter_buttons.has("spring") and shop.current_season_filter == "All", "tab warteg bukan tab musim dan dibuka di Semua")
-	check(visible.call() == shop.shop_data.stock.size(), "semua menu tampil saat dibuka")
+	check(listed.call() == shop.shop_data.stock.size(), "semua menu tampil saat dibuka")
+	var tabbed := {}
+	for id in ["RiceSides", "Soup", "Drinks"]:
+		for item_id in shop._filter_buttons[id].get_meta("item_ids"):
+			tabbed[item_id] = true
+	check(shop.shop_data.stock.all(func(item: ItemData): return tabbed.has(item.item_id)), "setiap menu masuk salah satu tab")
 	shop._filter_buttons["Drinks"].pressed.emit()
-	check(visible.call() == 2, "tab Minuman hanya menampilkan minuman")
+	check(listed.call() == 4, "tab Minuman hanya menampilkan minuman")
 	shop._filter_buttons["All"].pressed.emit()
 	var nasi := GameState._resolve_item("rice_bowl")
 	shop._on_row_input(_click(), nasi)

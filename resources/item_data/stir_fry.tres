@@ -19,4 +19,5 @@ item_id = "stir_fry"
 display_name = "Tumis Sayur Telur"
 icon = SubResource("Icon")
 description = "Masakan dari dapur. Pilih di hotbar untuk dimakan."
+buy_price = 430
 sell_price = 215
