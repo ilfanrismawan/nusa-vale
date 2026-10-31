@@ -1,5 +1,31 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3]
+
 [ext_resource type="PackedScene" path="res://scenes/world/interior/town_room.tscn" id="1"]
+[ext_resource type="Script" path="res://scripts/world/school_notice.gd" id="notice"]
+[ext_resource type="Texture2D" path="res://assets/ranch/care_board.png" id="board"]
+[ext_resource type="PackedScene" path="res://scenes/world/exterior/object/ShopCounter.tscn" id="counter"]
+[ext_resource type="Resource" path="res://resources/shop/library_books.tres" id="books"]
+
+[sub_resource type="RectangleShape2D" id="NoticeShape"]
+size = Vector2(48, 24)
+
 [node name="LibraryInterior" instance=ExtResource("1")]
-room_title = "Perpustakaan"
+
+[node name="Title" parent="."]
+text = "Perpustakaan"
+
+[node name="LibrarianDesk" parent="." instance=ExtResource("counter")]
+position = Vector2(240, 112)
+shop_data = ExtResource("books")
+
+[node name="HoursNotice" type="StaticBody2D" parent="."]
+position = Vector2(360, 104)
+script = ExtResource("notice")
+message = "Perpustakaan buka {hours}."
 service = "library"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HoursNotice"]
+shape = SubResource("NoticeShape")
+
+[node name="Board" type="Sprite2D" parent="HoursNotice"]
+texture = ExtResource("board")

@@ -146,6 +146,10 @@ def build(house):
     s.subs.append('[sub_resource type="ShaderMaterial" id="VignetteMaterial"]\nshader = ' + s.res("Shader", "res://shaders/room_vignette.gdshader")
                   + '\nshader_parameter/vignette_color = Color(0.09, 0.04, 0.05, 1)\nshader_parameter/strength = 0.42\n'
                   'shader_parameter/inner_radius = 0.55\nshader_parameter/outer_radius = 1.2\n')
+    s.subs.append('[sub_resource type="ShaderMaterial" id="SunShaftMaterial"]\nshader = ' + s.res("Shader", "res://shaders/light_shaft.gdshader")
+                  + '\nshader_parameter/shaft_color = Color(1, 0.93, 0.72, 1)\nshader_parameter/intensity = 0.22\n'
+                  'shader_parameter/top_width = 0.6\nshader_parameter/slant = 0.15\nshader_parameter/edge_softness = 0.22\n'
+                  'shader_parameter/shimmer_speed = 0.6\nshader_parameter/shimmer_amount = 0.12\n')
     s.node(f'[node name="{house["node"]}" type="Node2D"]', y_sort_enabled="true",
            script=s.res("Script", "res://scripts/world/node_interior.gd"), room_title=f'"{house["title"]}"', default_zoom="2.0")
 
@@ -227,6 +231,11 @@ def build(house):
     s.node('[node name="Vignette" type="ColorRect" parent="Pencahayaan"]', z_index=20, material='SubResource("VignetteMaterial")',
            offset_left=f"{left_px - 16:g}", offset_top=f"{16 * fy:g}", offset_right=f"{right_px + 16:g}", offset_bottom=f"{bottom_y + 32:g}",
            mouse_filter=2)
+    # Berkas sinar matahari dari jendela & pengatur siang/malam (InteriorDaylight).
+    s.node('[node name="SinarMatahari" type="ColorRect" parent="Pencahayaan"]', z_index=5, material='SubResource("SunShaftMaterial")',
+           offset_left=f"{16 * window_x + 4:g}", offset_top=f"{top_px - 8:g}", offset_right=f"{16 * window_x + 44:g}",
+           offset_bottom=f"{top_px + 76:g}", mouse_filter=2)
+    s.node('[node name="SiangHari" type="Node" parent="Pencahayaan"]', script=s.res("Script", "res://scripts/world/interior_daylight.gd"))
 
     # Pemain, pintu keluar, penghuni
     s.node('[node name="Player" parent="." instance=' + s.res("PackedScene", "res://scenes/player/Player.tscn") + ']', position=v(240, 256))

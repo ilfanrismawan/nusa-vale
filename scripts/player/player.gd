@@ -49,6 +49,9 @@ const PICKUP_GESTURE_SPEED := 2.0
 var _carried_item_id := ""
 var _preview_item_id := ""
 var _pickup_visual: Sprite2D
+## Peti panen yang diangkat saat memegang banyak hasil panen (scripts/data/harvest_crate_set.gd).
+const HarvestCrateSet := preload("res://scripts/data/harvest_crate_set.gd")
+var _harvest_crates := preload("res://resources/carry/harvest_crates.tres") as HarvestCrateSet
 var _pickup_visual_tween: Tween
 var _footsteps := FootstepAudio.new()
 var food_speed_remaining := 0.0
@@ -436,7 +439,7 @@ func show_tool_preview(item: ItemData) -> void:
 		return
 	if _holds_overhead(item):
 		_carried_item_id = item.item_id
-		_show_static_item_visual(item.icon)
+		_show_held_item(item)
 		animation_controller.set_carrying_item(true)
 		return
 	_preview_item_id = item.item_id
@@ -472,7 +475,11 @@ func _flush_item_gesture() -> void:
 					hotbar_ui.refresh()
 					break
 			_carried_item_id = _pending_pickup_id
-			_show_pickup_visual(_pending_pickup_icon)
+			var picked := GameState._resolve_item(_pending_pickup_id) as ItemData
+			if _wants_crate(picked):
+				_show_held_item(picked)
+			else:
+				_show_pickup_visual(_pending_pickup_icon)
 			animation_controller.set_carrying_item(true)
 	_pending_item_gesture = &""
 	_pending_pickup_icon = null
@@ -504,8 +511,18 @@ func _restore_held_item() -> void:
 	if not (state is IdleState or state is MoveState):
 		return
 	_carried_item_id = held.item_id
-	_show_static_item_visual(held.icon)
+	_show_held_item(held)
 	animation_controller.set_carrying_item(true)
+
+## Hasil panen yang jumlahnya di tas mencapai batas peti diangkat dalam peti.
+func _wants_crate(item: ItemData) -> bool:
+	return item != null and _harvest_crates.crate_for(item) != null and data.has_item(item.item_id, _harvest_crates.min_amount)
+
+func _show_held_item(item: ItemData) -> void:
+	if _wants_crate(item):
+		_show_static_item_visual(_harvest_crates.crate_for(item), true)
+	else:
+		_show_static_item_visual(item.icon)
 
 func _sync_carried_item() -> void:
 	var visible_id := _carried_item_id if not _carried_item_id.is_empty() else _preview_item_id
@@ -514,12 +531,17 @@ func _sync_carried_item() -> void:
 	var held := tool_controller.current_item
 	if held == null or held.item_id != visible_id or not data.has_item(visible_id):
 		_clear_pickup_visual()
+		return
+	# Jumlah melewati batas peti (panen/jual/makan): ganti buah <-> peti tanpa memutus angkatan.
+	if visible_id == _carried_item_id and is_instance_valid(_pickup_visual) \
+			and bool(_pickup_visual.get_meta("crate", false)) != _wants_crate(held):
+		_show_held_item(held)
 
 ## Local to the collecting character, so it follows movement and its own co-op viewport.
 func _show_pickup_visual(icon: Texture2D) -> void:
 	_show_static_item_visual(icon)
 
-func _show_static_item_visual(icon: Texture2D) -> void:
+func _show_static_item_visual(icon: Texture2D, crate: bool = false) -> void:
 	# All callers share one visual; replacement removes the old node immediately.
 	_dispose_item_visual()
 	if icon == null:
@@ -532,7 +554,9 @@ func _show_static_item_visual(icon: Texture2D) -> void:
 	var image := icon.get_image()
 	if image != null and image.get_used_rect().has_area():
 		bounds = Rect2(image.get_used_rect())
-	_pickup_visual.scale = Vector2.ONE * minf(1.0, 16.0 / maxf(1.0, maxf(bounds.size.x, bounds.size.y)))
+	if not crate:
+		_pickup_visual.scale = Vector2.ONE * minf(1.0, 16.0 / maxf(1.0, maxf(bounds.size.x, bounds.size.y)))
+	_pickup_visual.set_meta("crate", crate)
 	_pickup_visual.offset = icon.get_size() * 0.5 - bounds.get_center()
 	_pickup_visual.set_meta("visible_height", bounds.size.y * _pickup_visual.scale.y)
 	_pickup_visual.z_index = 10
@@ -552,6 +576,16 @@ func _update_held_item_position() -> void:
 	elif animation.begins_with("carry_walk_") or animation.begins_with("carry_run_"):
 		hand_y += float(sprite.frame % 2)
 	var hand_x := signf(facing_direction.x)
+	if _pickup_visual.get_meta("crate", false):
+		# Peti mengikuti posisi peti di layer Box per frame (badan 32x32 di tengah frame 64x64).
+		var split := animation.rfind("_")
+		var base := animation.substr(0, split)
+		var direction := animation.substr(split + 1)
+		var bottom: int = _harvest_crates.bottom_row(base, direction, sprite.frame)
+		if bottom >= 0:
+			hand_y = SPRITE_OFFSET.y + float(bottom - 32)
+			var side := float(_harvest_crates.side_offset(base, direction, sprite.frame))
+			hand_x = -side if (sprite.flip_h or direction == "left") else side
 	_pickup_visual.position = Vector2(hand_x, hand_y - float(_pickup_visual.get_meta("visible_height", 16.0)) * 0.5)
 
 func _clear_pickup_visual() -> void:

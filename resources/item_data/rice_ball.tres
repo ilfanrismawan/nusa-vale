@@ -19,5 +19,5 @@ item_id = "rice_ball"
 display_name = "Onigiri"
 icon = SubResource("Icon")
 description = "Masakan dari dapur. Pilih di hotbar untuk dimakan."
-sell_price = 26
 buy_price = 52
+sell_price = 26

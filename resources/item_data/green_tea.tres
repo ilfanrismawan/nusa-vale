@@ -19,5 +19,5 @@ item_id = "green_tea"
 display_name = "Teh Hijau"
 icon = SubResource("Icon")
 description = "Masakan dari dapur. Pilih di hotbar untuk dimakan."
-sell_price = 11
 buy_price = 22
+sell_price = 11

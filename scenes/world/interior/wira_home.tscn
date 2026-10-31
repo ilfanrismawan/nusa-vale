@@ -1,18 +1,154 @@
 [gd_scene format=3]
-[ext_resource type="PackedScene" path="res://scenes/world/interior/town_room.tscn" id="Room"]
-[ext_resource type="Script" path="res://scripts/world/resident_interior.gd" id="Interior"]
-[ext_resource type="Script" path="res://scripts/npc/npc_map_presenter.gd" id="ResidentPresenter"]
 
+[ext_resource type="PackedScene" path="res://scenes/world/interior/town_room.tscn" id="Room"]
+[ext_resource type="Script" path="res://scripts/npc/npc_map_presenter.gd" id="ResidentPresenter"]
 [ext_resource type="PackedScene" path="res://scenes/npc/routes/wira_home_paths.tscn" id="ResidentPaths"]
+[ext_resource type="FontFile" path="res://assets/fonts/m5x7.ttf" id="font"]
+[ext_resource type="Texture2D" path="res://scenes/world/interior/objects/Beds.png" id="bed"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/interior/Closet.png" id="closet"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/interior/Chairs.png" id="chairs"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/interior/Tables and desks.png" id="tables"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/exterior/Fence and Bridge/Fence Wood.png" id="fence"]
+
+[sub_resource type="RectangleShape2D" id="BedShape"]
+size = Vector2(24, 32)
+
+[sub_resource type="RectangleShape2D" id="WardrobeShape"]
+size = Vector2(26, 30)
+
+[sub_resource type="RectangleShape2D" id="ChairShape"]
+size = Vector2(10, 8)
+
+[sub_resource type="RectangleShape2D" id="TableShape"]
+size = Vector2(60, 24)
+
+[sub_resource type="RectangleShape2D" id="WorkCounterShape"]
+size = Vector2(44, 24)
+
+[sub_resource type="RectangleShape2D" id="Timber0Shape"]
+size = Vector2(16, 12)
+
+[sub_resource type="RectangleShape2D" id="Timber1Shape"]
+size = Vector2(16, 12)
+
+[sub_resource type="RectangleShape2D" id="Timber2Shape"]
+size = Vector2(16, 12)
 
 [node name="WiraHome" instance=ExtResource("Room")]
-script = ExtResource("Interior")
-room_title = "Rumah dan Bengkel Wira"
-resident_id = "wira"
 
-[node name="ExitDoor" parent="." index="1"]
+[node name="ExitDoor" parent="."]
 target_scene = "res://scenes/world/hill.tscn"
 spawn_position = Vector2(285, 285)
+
+[node name="Title" parent="."]
+text = "Rumah dan Bengkel Wira"
+
+[node name="DiningRug" type="Polygon2D" parent="."]
+z_index = -2
+color = Color(0.694118, 0.423529, 0.278431, 1)
+polygon = PackedVector2Array(264, 106, 348, 106, 348, 178, 264, 178)
+
+[node name="WorkshopLabel" type="Label" parent="."]
+offset_left = 72.0
+offset_top = 62.0
+theme_override_fonts/font = ExtResource("font")
+text = "Bengkel · Bangunan / Upgrade"
+
+[node name="Bed" type="StaticBody2D" parent="."]
+position = Vector2(390, 90)
+
+[node name="Sprite2D" type="Sprite2D" parent="Bed"]
+texture_filter = 1
+texture = ExtResource("bed")
+region_enabled = true
+region_rect = Rect2(0, 0, 32, 48)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bed"]
+shape = SubResource("BedShape")
+
+[node name="Wardrobe" type="StaticBody2D" parent="."]
+position = Vector2(438, 90)
+
+[node name="Sprite2D" type="Sprite2D" parent="Wardrobe"]
+texture_filter = 1
+texture = ExtResource("closet")
+region_enabled = true
+region_rect = Rect2(0, 0, 32, 48)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wardrobe"]
+shape = SubResource("WardrobeShape")
+
+[node name="Chair" type="StaticBody2D" parent="."]
+position = Vector2(306, 158)
+
+[node name="Sprite2D" type="Sprite2D" parent="Chair"]
+texture_filter = 1
+texture = ExtResource("chairs")
+region_enabled = true
+region_rect = Rect2(146, 15, 11, 16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Chair"]
+shape = SubResource("ChairShape")
+
+[node name="Table" type="StaticBody2D" parent="."]
+position = Vector2(306, 130)
+
+[node name="Sprite2D" type="Sprite2D" parent="Table"]
+texture_filter = 1
+texture = ExtResource("tables")
+region_enabled = true
+region_rect = Rect2(224, 224, 64, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Table"]
+shape = SubResource("TableShape")
+
+[node name="WorkCounter" type="StaticBody2D" parent="."]
+position = Vector2(128, 112)
+
+[node name="Sprite2D" type="Sprite2D" parent="WorkCounter"]
+texture_filter = 1
+texture = ExtResource("tables")
+region_enabled = true
+region_rect = Rect2(136, 192, 48, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorkCounter"]
+shape = SubResource("WorkCounterShape")
+
+[node name="Timber0" type="StaticBody2D" parent="."]
+position = Vector2(72, 198)
+
+[node name="Sprite2D" type="Sprite2D" parent="Timber0"]
+texture_filter = 1
+texture = ExtResource("fence")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Timber0"]
+shape = SubResource("Timber0Shape")
+
+[node name="Timber1" type="StaticBody2D" parent="."]
+position = Vector2(88, 198)
+
+[node name="Sprite2D" type="Sprite2D" parent="Timber1"]
+texture_filter = 1
+texture = ExtResource("fence")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Timber1"]
+shape = SubResource("Timber1Shape")
+
+[node name="Timber2" type="StaticBody2D" parent="."]
+position = Vector2(104, 198)
+
+[node name="Sprite2D" type="Sprite2D" parent="Timber2"]
+texture_filter = 1
+texture = ExtResource("fence")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Timber2"]
+shape = SubResource("Timber2Shape")
 
 [node name="NPCPoints" type="Node2D" parent="."]
 

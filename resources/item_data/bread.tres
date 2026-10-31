@@ -19,5 +19,5 @@ item_id = "bread"
 display_name = "Roti"
 icon = SubResource("Icon")
 description = "Masakan dari dapur. Pilih di hotbar untuk dimakan."
-sell_price = 150
 buy_price = 300
+sell_price = 150

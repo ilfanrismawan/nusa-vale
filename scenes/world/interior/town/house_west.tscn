@@ -21,6 +21,9 @@
 [ext_resource type="Script" path="res://scripts/world/exit_door_school.gd" id="r19"]
 [ext_resource type="Script" path="res://scripts/npc/resident_room.gd" id="r20"]
 
+[ext_resource type="Script" path="res://scripts/world/interior_daylight.gd" id="daylight_script"]
+[ext_resource type="Shader" path="res://shaders/light_shaft.gdshader" id="daylight_shaft"]
+
 [sub_resource type="ShaderMaterial" id="FloorWear"]
 shader = ExtResource("r3")
 shader_parameter/grime_color = Color(0.25, 0.13, 0.1, 1)
@@ -77,6 +80,16 @@ size = Vector2(7, 4)
 
 [sub_resource type="RectangleShape2D" id="Rect_14"]
 size = Vector2(32, 16)
+
+[sub_resource type="ShaderMaterial" id="SunShaftMaterial"]
+shader = ExtResource("daylight_shaft")
+shader_parameter/shaft_color = Color(1, 0.93, 0.72, 1)
+shader_parameter/intensity = 0.22
+shader_parameter/top_width = 0.6
+shader_parameter/slant = 0.15
+shader_parameter/edge_softness = 0.22
+shader_parameter/shimmer_speed = 0.6
+shader_parameter/shimmer_amount = 0.12
 
 [node name="HouseWestInterior" type="Node2D"]
 y_sort_enabled = true
@@ -393,6 +406,18 @@ offset_top = 64
 offset_right = 368
 offset_bottom = 288
 mouse_filter = 2
+
+[node name="SinarMatahari" type="ColorRect" parent="Pencahayaan"]
+z_index = 5
+material = SubResource("SunShaftMaterial")
+offset_left = 196.0
+offset_top = 104.0
+offset_right = 236.0
+offset_bottom = 188.0
+mouse_filter = 2
+
+[node name="SiangHari" type="Node" parent="Pencahayaan"]
+script = ExtResource("daylight_script")
 
 [node name="Player" parent="." instance=ExtResource("r18")]
 position = Vector2(240, 256)

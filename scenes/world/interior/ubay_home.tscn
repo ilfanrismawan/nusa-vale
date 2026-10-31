@@ -31,6 +31,8 @@
 
 [ext_resource type="PackedScene" path="res://scenes/npc/routes/ubay_home_paths.tscn" id="ResidentPaths"]
 
+[ext_resource type="Script" path="res://scripts/world/interior_daylight.gd" id="daylight_script"]
+
 [sub_resource type="ShaderMaterial" id="FloorWear"]
 shader = ExtResource("9_floor_wear")
 shader_parameter/grime_color = Color(0.3, 0.17, 0.12, 1)
@@ -785,6 +787,9 @@ offset_top = 64.0
 offset_right = 352.0
 offset_bottom = 288.0
 mouse_filter = 2
+
+[node name="SiangHari" type="Node" parent="Pencahayaan"]
+script = ExtResource("daylight_script")
 
 [node name="Player" parent="." instance=ExtResource("3_Player")]
 position = Vector2(240, 256)

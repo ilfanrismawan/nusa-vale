@@ -1,5 +1,30 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3]
+
 [ext_resource type="PackedScene" path="res://scenes/world/interior/town_room.tscn" id="1"]
+[ext_resource type="Script" path="res://scripts/world/school_notice.gd" id="notice"]
+[ext_resource type="Texture2D" path="res://assets/ranch/care_board.png" id="board"]
+[ext_resource type="Script" path="res://scripts/world/kitchen_station.gd" id="kitchen"]
+
+[sub_resource type="RectangleShape2D" id="NoticeShape"]
+size = Vector2(48, 24)
+
 [node name="WarungInterior" instance=ExtResource("1")]
-room_title = "Warung Makan"
+
+[node name="Title" parent="."]
+text = "Warung Makan"
+
+[node name="Kitchen" type="Area2D" parent="."]
+position = Vector2(240, 120)
+script = ExtResource("kitchen")
+
+[node name="HoursNotice" type="StaticBody2D" parent="."]
+position = Vector2(360, 104)
+script = ExtResource("notice")
+message = "Warung Rasa Nusa buka {hours}. Joko melayani di depan."
 service = "warung"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HoursNotice"]
+shape = SubResource("NoticeShape")
+
+[node name="Board" type="Sprite2D" parent="HoursNotice"]
+texture = ExtResource("board")

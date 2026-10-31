@@ -1,19 +1,24 @@
-[gd_scene load_steps=3 format=3]
-[ext_resource type="Script" path="res://scripts/world/ranch_interior.gd" id="1"]
-[ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="2"]
-[node name="CoopInterior" type="Node2D"]
+[gd_scene format=3 uid="uid://bf48s6cub77ct"]
+
+[ext_resource type="Script" uid="uid://dlmdxwhiarhju" path="res://scripts/world/ranch_interior.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://bye3dnnqckqj5" path="res://scenes/player/Player.tscn" id="2"]
+
+[node name="CoopInterior" type="Node2D" unique_id=1572660909]
 texture_filter = 1
 script = ExtResource("1")
 housing = "chicken_coop"
-[node name="Player" parent="." instance=ExtResource("2")]
+
+[node name="Player" parent="." unique_id=190640493 instance=ExtResource("2")]
 position = Vector2(427, 320)
-[node name="spawn" type="Marker2D" parent="."]
-position = Vector2(427, 320)
-[node name="Camera2D" parent="Player/CharacterBody2D" index="6"]
+
+[node name="Camera2D" parent="Player/CharacterBody2D" parent_id_path=PackedInt32Array(190640493, 1371179200) index="2" unique_id=110213196]
 limit_left = 214
 limit_top = 120
 limit_right = 640
 limit_bottom = 360
 position_smoothing_enabled = false
+
+[node name="spawn" type="Marker2D" parent="." unique_id=1354069463]
+position = Vector2(427, 320)
 
 [editable path="Player"]

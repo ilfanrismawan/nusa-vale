@@ -1,0 +1,47 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://scripts/data/harvest_crate_set.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/exterior/Box.png" id="2_box"]
+
+[resource]
+script = ExtResource("1_script")
+texture = ExtResource("2_box")
+min_amount = 5
+crates = {
+"apple": Rect2(64, 96, 16, 16),
+"apricot": Rect2(112, 16, 16, 32),
+"banana": Rect2(48, 96, 16, 16),
+"beet": Rect2(80, 64, 16, 32),
+"blackberry": Rect2(112, 112, 16, 16),
+"blueberry": Rect2(64, 0, 16, 16),
+"broccoli": Rect2(96, 96, 16, 16),
+"cabbage": Rect2(64, 48, 16, 16),
+"carrot": Rect2(96, 16, 16, 32),
+"cauliflower": Rect2(112, 0, 16, 16),
+"cherry": Rect2(80, 48, 16, 16),
+"chili": Rect2(96, 48, 16, 16),
+"corn": Rect2(64, 128, 16, 16),
+"cucumber": Rect2(96, 112, 16, 16),
+"eggplant": Rect2(80, 112, 16, 16),
+"garlic": Rect2(80, 0, 16, 16),
+"grape": Rect2(64, 144, 16, 16),
+"leek": Rect2(64, 16, 16, 32),
+"mango": Rect2(80, 128, 16, 16),
+"melon": Rect2(48, 112, 16, 16),
+"orange": Rect2(80, 96, 16, 16),
+"parsnip": Rect2(80, 16, 16, 32),
+"pea": Rect2(96, 0, 16, 16),
+"peach": Rect2(112, 96, 16, 16),
+"pineapple": Rect2(64, 64, 16, 32),
+"potato": Rect2(48, 16, 16, 32),
+"pumpkin": Rect2(96, 128, 16, 16),
+"red_pepper": Rect2(80, 144, 16, 16),
+"rice": Rect2(48, 48, 16, 16),
+"strawberry": Rect2(48, 0, 16, 16),
+"sunflower": Rect2(48, 64, 16, 32),
+"tomato": Rect2(112, 48, 16, 16),
+"watermelon": Rect2(112, 128, 16, 16),
+"wheat": Rect2(48, 128, 16, 16),
+"yellow_pepper": Rect2(48, 144, 16, 16),
+"zucchini": Rect2(64, 112, 16, 16)
+}

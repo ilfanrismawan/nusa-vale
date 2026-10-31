@@ -6,7 +6,8 @@ extends Node
 
 signal lift_unlocked(floor_number: int)
 
-const DATA: CaveData = preload("res://resources/cave/cave_data.tres")
+## load() (bukan preload) agar editor tidak memuat ~220 resource gua saat membuka project.
+static var DATA: CaveData = load("res://resources/cave/cave_data.tres")
 
 ## Lantai tempat pemain berada / akan masuk (0 = lobi gua). Tidak disimpan.
 var current_floor: int = 0

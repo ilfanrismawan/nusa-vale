@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://btwakwafylorp"]
+
+[ext_resource type="Texture2D" uid="uid://s6ol6wavy2pj" path="res://assets/farm_rpg/objects/exterior/Houses/NPCS houses/Houses.png" id="1_f6roc"]
+
+[node name="Bar" type="Node2D" unique_id=402395608]
+
+[node name="Houses" type="Sprite2D" parent="." unique_id=1843109328]
+position = Vector2(222, 100)
+texture = ExtResource("1_f6roc")
+region_enabled = true
+region_rect = Rect2(411, 403, 58, 29)
+
+[node name="Houses4" type="Sprite2D" parent="." unique_id=1536791463]
+position = Vector2(222, 129)
+texture = ExtResource("1_f6roc")
+region_enabled = true
+region_rect = Rect2(507, 631, 58, 25)
+
+[node name="Houses3" type="Sprite2D" parent="." unique_id=1606763485]
+position = Vector2(242, 77)
+texture = ExtResource("1_f6roc")
+region_enabled = true
+region_rect = Rect2(236, 10, 36, 86)
+
+[node name="Houses5" type="Sprite2D" parent="." unique_id=1524314169]
+position = Vector2(205, 75)
+texture = ExtResource("1_f6roc")
+region_enabled = true
+region_rect = Rect2(192, 10, 36, 86)
+
+[node name="Houses2" type="Sprite2D" parent="." unique_id=1868725079]
+position = Vector2(215, 115)
+texture = ExtResource("1_f6roc")
+region_enabled = true
+region_rect = Rect2(481, 330, 46, 6)
+
+[node name="Houses6" type="Sprite2D" parent="." unique_id=840451584]
+position = Vector2(222, 99)
+texture = ExtResource("1_f6roc")
+region_enabled = true
+region_rect = Rect2(488, 298, 15, 18)

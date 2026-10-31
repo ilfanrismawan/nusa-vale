@@ -443,7 +443,6 @@ centered = false
 offset = Vector2(0, -43)
 
 [node name="Obstacles" type="StaticBody2D" parent="Showroom" unique_id=1200786413]
-visible = false
 
 [node name="BackWall" type="CollisionShape2D" parent="Showroom/Obstacles" unique_id=1185737907]
 position = Vector2(769, 220)
