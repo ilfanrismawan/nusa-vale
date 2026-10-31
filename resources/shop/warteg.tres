@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ShopData" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/shop_data.gd" id="1_shop"]
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="2_item"]
+[ext_resource type="Resource" uid="uid://uq24eljr5q60" path="res://resources/item_data/rice_bowl.tres" id="rice_bowl"]
+[ext_resource type="Resource" uid="uid://ti6hhlk0afwt" path="res://resources/item_data/fried_egg.tres" id="fried_egg"]
+[ext_resource type="Resource" uid="uid://b4tatx4smsjl1" path="res://resources/item_data/grilled_catfish.tres" id="grilled_catfish"]
+[ext_resource type="Resource" uid="uid://do0a1t7wty1yn" path="res://resources/item_data/vegetable_soup.tres" id="vegetable_soup"]
+[ext_resource type="Resource" uid="uid://clgvhw0mxyd4f" path="res://resources/item_data/jasmine_tea.tres" id="jasmine_tea"]
+[ext_resource type="Resource" uid="uid://bwxdxpwcve1xf" path="res://resources/item_data/coffee.tres" id="coffee"]
+
+[resource]
+script = ExtResource("1_shop")
+shop_id = "warteg"
+shop_name = "Warteg Bahari"
+keeper_name = "Mbak Warteg"
+greeting = "Monggo, mau makan apa? Nasi, lauk, sayur, semua masih hangat."
+stock = Array[ExtResource("2_item")]([ExtResource("rice_bowl"), ExtResource("fried_egg"), ExtResource("grilled_catfish"), ExtResource("vegetable_soup"), ExtResource("jasmine_tea"), ExtResource("coffee")])
+buys_items = false

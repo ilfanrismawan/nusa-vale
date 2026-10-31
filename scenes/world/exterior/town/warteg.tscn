@@ -1,0 +1,165 @@
+[gd_scene format=3 uid="uid://bw8rfgq1rgw88"]
+
+[ext_resource type="Texture2D" uid="uid://b5cfugqysjv44" path="res://assets/farm_rpg/objects/exterior/warteg/warteg.png" id="1_r5usy"]
+[ext_resource type="Texture2D" uid="uid://bat7s5mcx8ac1" path="res://assets/farm_rpg/objects/exterior/warteg/warteg_back.png" id="2_xpxyc"]
+[ext_resource type="Texture2D" uid="uid://bqj222erokg4m" path="res://assets/farm_rpg/objects/exterior/warteg/warteg_topdown_sheet.png" id="3_r5usy"]
+[ext_resource type="Texture2D" uid="uid://b73rqg4r343r2" path="res://assets/farm_rpg/objects/exterior/warteg/warteg_topdown_front_sheet.png" id="4_xpxyc"]
+[ext_resource type="Texture2D" uid="uid://c7451w08k1x4e" path="res://assets/farm_rpg/objects/exterior/warteg/warteg_topdown_glow_sheet.png" id="5_bjkpn"]
+[ext_resource type="PackedScene" uid="uid://l3wp4bi5elun" path="res://scenes/objects/building_sign.tscn" id="6_xpxyc"]
+[ext_resource type="Script" uid="uid://b14vsibn0fm0q" path="res://scripts/object/shop_counter.gd" id="7_counter"]
+[ext_resource type="Resource" path="res://resources/shop/warteg.tres" id="8_menu"]
+[ext_resource type="PackedScene" path="res://scenes/ui/warteg_ui.tscn" id="9_ui"]
+
+[sub_resource type="RectangleShape2D" id="CounterShape"]
+size = Vector2(60, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ff4wa"]
+atlas = ExtResource("3_r5usy")
+region = Rect2(0, 0, 96, 108)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cj8nb"]
+atlas = ExtResource("3_r5usy")
+region = Rect2(96, 0, 96, 108)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vjfc2"]
+atlas = ExtResource("3_r5usy")
+region = Rect2(192, 0, 96, 108)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ryutw"]
+atlas = ExtResource("3_r5usy")
+region = Rect2(288, 0, 96, 108)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4kxuq"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ff4wa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cj8nb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vjfc2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ryutw")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 6.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hxnvd"]
+atlas = ExtResource("4_xpxyc")
+region = Rect2(0, 0, 96, 108)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4q3cg"]
+atlas = ExtResource("4_xpxyc")
+region = Rect2(96, 0, 96, 108)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3cbsu"]
+atlas = ExtResource("4_xpxyc")
+region = Rect2(192, 0, 96, 108)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_36fd7"]
+atlas = ExtResource("4_xpxyc")
+region = Rect2(288, 0, 96, 108)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_mti6b"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hxnvd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4q3cg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3cbsu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_36fd7")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 6.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u775f"]
+atlas = ExtResource("5_bjkpn")
+region = Rect2(0, 0, 96, 108)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hkhxd"]
+atlas = ExtResource("5_bjkpn")
+region = Rect2(96, 0, 96, 108)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i07en"]
+atlas = ExtResource("5_bjkpn")
+region = Rect2(192, 0, 96, 108)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dnpi4"]
+atlas = ExtResource("5_bjkpn")
+region = Rect2(288, 0, 96, 108)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_mm1bc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u775f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hkhxd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i07en")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dnpi4")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 6.0
+}]
+
+[node name="Warteg" type="Node2D" unique_id=539657404]
+
+[node name="Warteg" type="Sprite2D" parent="." unique_id=1818784977]
+visible = false
+texture = ExtResource("1_r5usy")
+
+[node name="WartegBack" type="Sprite2D" parent="." unique_id=619709264]
+visible = false
+texture = ExtResource("2_xpxyc")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=781174130]
+sprite_frames = SubResource("SpriteFrames_4kxuq")
+autoplay = "default"
+frame_progress = 0.08743899
+
+[node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="." unique_id=1662747795]
+sprite_frames = SubResource("SpriteFrames_mti6b")
+autoplay = "default"
+
+[node name="AnimatedSprite2D3" type="AnimatedSprite2D" parent="." unique_id=2123705950]
+sprite_frames = SubResource("SpriteFrames_mm1bc")
+autoplay = "default"
+frame_progress = 0.5362406
+
+[node name="Body" type="StaticBody2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Body"]
+polygon = PackedVector2Array(-47, -6, 47, -6, 47, 48, 38, 48, 38, 40, 24, 40, 22, 45, -36, 45, -38, 42, -47, 42)
+
+[node name="Counter" type="Area2D" parent="."]
+position = Vector2(-7, 38)
+script = ExtResource("7_counter")
+shop_data = ExtResource("8_menu")
+menu_scene = ExtResource("9_ui")
+service = "warteg"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Counter"]
+shape = SubResource("CounterShape")
+
+[node name="BuildingSign" parent="." unique_id=201779144 instance=ExtResource("6_xpxyc")]
+position = Vector2(0, -6)
+caption = "Warteg"

@@ -20,4 +20,5 @@ item_id = "jasmine_tea"
 display_name = "Teh Melati"
 icon = SubResource("Icon")
 description = "Masakan dari dapur. Pilih di hotbar untuk dimakan."
+buy_price = 48
 sell_price = 24
