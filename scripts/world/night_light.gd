@@ -23,7 +23,8 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	var night := DayCycle.night_intensity()
-	enabled = night > 0.0
+	if enabled != (night > 0.0):
+		enabled = night > 0.0
 	if not enabled:
 		return
 	var t := Time.get_ticks_msec() * 0.001
@@ -33,4 +34,6 @@ func _process(_delta: float) -> void:
 	e += sin(t * pulse_speed * TAU * 0.5 + _phase) * pulse_amount
 	if flicker_amount > 0.0:
 		e += sin(t * 37.0 + _phase) * sin(t * 13.0) * flicker_amount
-	energy = maxf(e, 0.0)
+	e = maxf(e, 0.0)
+	if not is_equal_approx(energy, e):
+		energy = e

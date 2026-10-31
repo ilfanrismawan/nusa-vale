@@ -25,7 +25,37 @@ func gateway(other_map: String, npc_id: String = "") -> Vector2:
 	push_error("No NPC gateway for %s in %s" % [other_map, name])
 	return global_position
 
+## Graf per resident dibangun sekali lalu dipakai ulang; dibuang otomatis
+## saat kurva atau daftar anak berubah.
+var _graphs: Dictionary = {}
+
+func _init() -> void:
+	child_order_changed.connect(invalidate)
+
+func invalidate() -> void:
+	_graphs.clear()
+
 func route(from: Vector2, to: Vector2, npc_id: String = "") -> Array[Vector2]:
+	var graph: AStar2D = _graphs.get(npc_id)
+	if graph == null:
+		graph = _build_graph(npc_id)
+		_graphs[npc_id] = graph
+	var result: Array[Vector2] = []
+	if graph.get_point_count() == 0:
+		push_warning("No Path2D assigned to NPC: " + npc_id)
+		return result
+	var points := graph.get_point_path(graph.get_closest_point(from), graph.get_closest_point(to))
+	if points.is_empty():
+		push_warning("Disconnected Path2D curves for NPC: " + npc_id)
+		return result
+	for point in points:
+		if point.distance_to(from) > 2.0:
+			result.append(point)
+	if result.is_empty() or result.back().distance_to(to) > 2.0:
+		result.append(to)
+	return result
+
+func _build_graph(npc_id: String) -> AStar2D:
 	var graph := AStar2D.new()
 	for child in get_children():
 		var path := child as Path2D
@@ -33,6 +63,8 @@ func route(from: Vector2, to: Vector2, npc_id: String = "") -> Array[Vector2]:
 			continue
 		if not npc_id.is_empty() and (not "npc_id" in path or str(path.npc_id) != npc_id):
 			continue
+		if not path.curve.changed.is_connected(invalidate):
+			path.curve.changed.connect(invalidate)
 		var previous := -1
 		var samples := PackedVector2Array()
 		var straight := true
@@ -51,17 +83,4 @@ func route(from: Vector2, to: Vector2, npc_id: String = "") -> Array[Vector2]:
 			if previous >= 0 and previous != index:
 				graph.connect_points(previous, index)
 			previous = index
-	var result: Array[Vector2] = []
-	if graph.get_point_count() == 0:
-		push_warning("No Path2D assigned to NPC: " + npc_id)
-		return result
-	var points := graph.get_point_path(graph.get_closest_point(from), graph.get_closest_point(to))
-	if points.is_empty():
-		push_warning("Disconnected Path2D curves for NPC: " + npc_id)
-		return result
-	for point in points:
-		if point.distance_to(from) > 2.0:
-			result.append(point)
-	if result.is_empty() or result.back().distance_to(to) > 2.0:
-		result.append(to)
-	return result
+	return graph
