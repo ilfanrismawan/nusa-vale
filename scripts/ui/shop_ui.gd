@@ -10,7 +10,8 @@ const ServiceTheme = preload("res://scripts/ui/farm_service_theme.gd")
 @export var card_normal: StyleBox = preload("res://resources/ui/shop_card_normal.tres")
 @export var card_selected: StyleBox = preload("res://resources/ui/shop_card_selected.tres")
 
-## Presentasi toko diedit di scenes/ui/shop_book.tscn.
+## Presentasi toko diedit di scenes/ui/shop_book.tscn (atau scene presentation_scene lain,
+## mis. scenes/ui/warteg_book.tscn untuk warteg_ui.tscn).
 ## Script hanya mengikat data, navigasi halaman, dan transaksi.
 
 const DEFAULT_SHOP := "res://resources/shop/general_store.tres"
@@ -69,6 +70,13 @@ var _detail_name: Label
 var _empty: Label
 var _catalog_previous: Button
 var _catalog_next: Button
+## Teks bawaan presentasi (diedit di scene), dipakai lagi saat belum ada pilihan.
+var _selection_hint := ""
+var _summary_hint := ""
+var _buy_hint := ""
+## metadata/verb dan metadata/unit pada tombol Buy, mis. "Pesan" dan "porsi" di warteg.
+var _buy_verb := "Beli"
+var _unit_word := "barang"
 
 func _ready() -> void:
 	layer = ServiceTheme.LAYER
@@ -81,6 +89,9 @@ func _ready() -> void:
 
 	_build_ui()
 	_build_rows()
+	# Toko tanpa tab musim (mis. warteg) atau tanpa stok musim ini: buka di tab pertama.
+	if not _filter_buttons.has(current_season_filter) or not _rows.any(func(row): return _matches_filter(row["item"])):
+		current_season_filter = "all" if _filter_buttons.is_empty() else _filter_buttons.keys()[0]
 	_refresh()
 
 	GameState.money_changed.connect(_on_money_changed)
@@ -117,8 +128,14 @@ func _build_ui() -> void:
 	if shop_data.portrait != null:
 		portrait.texture = ServiceTheme.portrait(shop_data.portrait)
 	_inv_hint.text = "Tas · klik jual 1, Shift+klik jual setumpuk" if shop_data.buys_items else "Isi tas · toko ini tidak menerima penjualan"
+	_selection_hint = _detail_name.text
+	_summary_hint = _purchase_summary.text
+	_buy_hint = _purchase_button.text
+	_buy_verb = _purchase_button.get_meta("verb", "Beli")
+	_unit_word = _purchase_button.get_meta("unit", "barang")
+	# Tab filter: metadata/season = tab musim; metadata/item_ids = tab daftar item (kosong = semua).
 	for button in book.get_node("Book/Filters").get_children():
-		var id: String = button.get_meta("season")
+		var id: String = button.get_meta("season", button.name)
 		_filter_buttons[id] = button
 		button.pressed.connect(_on_season_tab_pressed.bind(id))
 	book.get_node("Book/Close").pressed.connect(close_shop)
@@ -140,6 +157,10 @@ func _build_ui() -> void:
 	_show_greeting()
 
 func _matches_filter(item: ItemData) -> bool:
+	var tab: Button = _filter_buttons.get(current_season_filter)
+	if tab != null and tab.has_meta("item_ids"):
+		var ids: PackedStringArray = tab.get_meta("item_ids")
+		return ids.is_empty() or ids.has(item.item_id)
 	if current_season_filter == "all": return true
 	if current_season_filter == "other": return item.season.is_empty() or item.season == "all"
 	return item.season == current_season_filter
@@ -270,10 +291,10 @@ func _on_row_input(event: InputEvent, item: ItemData) -> void:
 func _refresh_purchase() -> void:
 	if _purchase_button == null: return
 	if _selected_item == null:
-		_purchase_summary.text = "Pilih barang, lalu tentukan jumlah."
+		_purchase_summary.text = _summary_hint
 		_purchase_button.disabled = true
 		_quantity.editable = false
-		_purchase_button.text = "Pilih barang dahulu"
+		_purchase_button.text = _buy_hint
 		return
 	var item := _selected_item
 	var bag_upgrade := _single_purchase(item)
@@ -282,11 +303,11 @@ func _refresh_purchase() -> void:
 	var count := int(_quantity.value)
 	var total := _unit_price(item, count) * count
 	var available := _bag_status(item).is_empty() and GameState.money >= total and ((bag_upgrade and item.vehicle == null) or _can_fit(item, count))
-	_purchase_summary.text = "%d barang · Total %s G" % [count, _format_money(total)]
+	_purchase_summary.text = "%d %s · Total %s G" % [count, _unit_word, _format_money(total)]
 	if not available:
 		var status := _bag_status(item)
 		_purchase_summary.text += "\n" + ("Sudah dimiliki" if status == "owned" else "Persyaratan belum terpenuhi" if status == "locked" else "Uang kurang" if GameState.money < total else "Tas penuh")
-	_purchase_button.text = "Beli · %s G" % _format_money(total)
+	_purchase_button.text = "%s · %s G" % [_buy_verb, _format_money(total)]
 	_purchase_button.disabled = not available
 
 func _purchase_selected() -> void:
@@ -352,7 +373,7 @@ func _show_greeting() -> void:
 
 func _show_detail_item(item: ItemData) -> void:
 	_detail_icon.texture = item.icon if item != null else null
-	_detail_name.text = item.display_name if item != null else "Pilih kebutuhanmu"
+	_detail_name.text = item.display_name if item != null else _selection_hint
 
 # ── Transaksi ───────────────────────────────────────────────────────
 

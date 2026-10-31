@@ -1,7 +1,9 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/shop_ui.gd" id="1_shop_ui"]
+[ext_resource type="PackedScene" path="res://scenes/ui/warteg_book.tscn" id="2_book"]
 
 [node name="WartegUi" type="CanvasLayer"]
 process_mode = 3
 script = ExtResource("1_shop_ui")
+presentation_scene = ExtResource("2_book")

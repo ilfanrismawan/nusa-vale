@@ -39,9 +39,16 @@ func _ready() -> void:
 	check(is_instance_valid(shop) and shop.scene_file_path == "res://scenes/ui/warteg_ui.tscn", "interaksi membuka UI warteg")
 	check(shop != null and shop.shop_data.shop_id == "warteg" and not shop.shop_data.buys_items, "UI memakai menu warteg")
 	check(shop != null and shop.shop_data.stock.all(func(item: ItemData): return item.buy_price > 0), "semua menu warteg punya harga")
+	var visible := func(): return shop._rows.filter(func(row): return row["panel"].visible).size()
+	check(not shop._filter_buttons.has("spring") and shop.current_season_filter == "All", "tab warteg bukan tab musim dan dibuka di Semua")
+	check(visible.call() == shop.shop_data.stock.size(), "semua menu tampil saat dibuka")
+	shop._filter_buttons["Drinks"].pressed.emit()
+	check(visible.call() == 2, "tab Minuman hanya menampilkan minuman")
+	shop._filter_buttons["All"].pressed.emit()
 	var nasi := GameState._resolve_item("rice_bowl")
 	shop._on_row_input(_click(), nasi)
 	shop._quantity.value = 2
+	check(shop._purchase_button.text.begins_with("Pesan") and shop._purchase_summary.text.contains("2 porsi"), "tombol memakai kata pesan dan porsi")
 	shop._purchase_button.pressed.emit()
 	check(GameState.money == 1000 - 2 * nasi.buy_price and player.data.get_item_count("rice_bowl") == 2, "memesan nasi memotong uang dan memberi makanan")
 
