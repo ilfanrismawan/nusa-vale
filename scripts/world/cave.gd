@@ -16,7 +16,8 @@ extends Node2D
 signal floor_built(floor_number: int)
 signal stairs_revealed(position: Vector2)
 
-const DATA: CaveData = preload("res://resources/cave/cave_data.tres")
+## load() (bukan preload) agar editor tidak memuat ~220 resource gua saat membuka project.
+static var DATA: CaveData = load("res://resources/cave/cave_data.tres")
 const ORE_SHEET := preload("res://assets/farm_rpg/objects/mine/stone with minerals.png")
 const ROCK_SCENE := preload("res://scenes/objects/rock.tscn")
 const LIFT_MENU := preload("res://scripts/ui/cave_lift_menu.gd")

@@ -1,42 +1,41 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://7dhig82gq71m"]
 
-[ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/exterior/tea_stall.png" id="StallSheet"]
-[ext_resource type="Script" path="res://scripts/world/tea_stall.gd" id="TeaStall"]
-[ext_resource type="PackedScene" path="res://scenes/objects/building_sign.tscn" id="BuildingSign"]
+[ext_resource type="PackedScene" uid="uid://l3wp4bi5elun" path="res://scenes/objects/building_sign.tscn" id="BuildingSign"]
+[ext_resource type="Texture2D" uid="uid://c6tg5bga4layt" path="res://assets/farm_rpg/objects/exterior/tea_stall.png" id="StallSheet"]
+[ext_resource type="Script" uid="uid://dyfpabyov17x6" path="res://scripts/world/tea_stall.gd" id="TeaStall"]
 
 [sub_resource type="RectangleShape2D" id="CounterShape"]
 size = Vector2(60, 10)
 
-[node name="TeaStall" type="StaticBody2D"]
+[node name="TeaStall" type="StaticBody2D" unique_id=2088954687]
 y_sort_enabled = true
 script = ExtResource("TeaStall")
 
-[node name="Back" type="Sprite2D" parent="."]
-position = Vector2(0, -30)
+[node name="Back" type="Sprite2D" parent="." unique_id=189073206]
 texture_filter = 1
+position = Vector2(0, -30)
 texture = ExtResource("StallSheet")
 offset = Vector2(0, -8)
 region_enabled = true
 region_rect = Rect2(0, 0, 64, 76)
 
-[node name="Front" type="Sprite2D" parent="."]
+[node name="Front" type="Sprite2D" parent="." unique_id=1230188894]
 texture_filter = 1
 texture = ExtResource("StallSheet")
 offset = Vector2(0, -38)
 region_enabled = true
 region_rect = Rect2(64, 0, 64, 76)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=49545642]
 position = Vector2(0, -5)
 shape = SubResource("CounterShape")
 
-[node name="KeeperSpot" type="Marker2D" parent="."]
+[node name="KeeperSpot" type="Marker2D" parent="." unique_id=649944687]
 position = Vector2(0, -16)
 
-[node name="Sign" parent="." instance=ExtResource("BuildingSign")]
-position = Vector2(0, -62)
+[node name="Sign" parent="." unique_id=63797598 instance=ExtResource("BuildingSign")]
+position = Vector2(68, -2)
 caption = "Teh & Kue"
-font_size = 8
+mount = 2
 minimum_width = 32
 minimum_height = 16
-mount = 0

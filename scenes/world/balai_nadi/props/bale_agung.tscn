@@ -2,11 +2,11 @@
 
 [ext_resource type="Texture2D" uid="uid://c53ejb8dlrhyp" path="res://assets/balai_nadi/v2/bale_agung.png" id="1_f0c7p"]
 [ext_resource type="Script" uid="uid://djpcv63tepcru" path="res://scripts/world/balai_nadi_interactable.gd" id="2_em5h5"]
-[ext_resource type="Script" path="res://scripts/world/balai_restoration_art.gd" id="3_art"]
-[ext_resource type="Texture2D" path="res://assets/balai_nadi/v4/bale_agung_ruined.png" id="4_ruin"]
+[ext_resource type="Script" uid="uid://mn4l0du8g7y2" path="res://scripts/world/balai_restoration_art.gd" id="3_art"]
+[ext_resource type="Texture2D" uid="uid://dij6j8l5xri51" path="res://assets/balai_nadi/v4/bale_agung_ruined.png" id="4_ruin"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ajcru"]
-size = Vector2(44, 48)
+size = Vector2(20, 28)
 
 [node name="BaleAgung" type="Node2D" unique_id=1873435796]
 texture_filter = 1
@@ -39,5 +39,5 @@ script = ExtResource("2_em5h5")
 target_scene = "res://scenes/ui/balai_nadi_ui.tscn"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BalaiInteractionArea" unique_id=773626079]
-position = Vector2(0, 40)
+position = Vector2(0, 34)
 shape = SubResource("RectangleShape2D_ajcru")

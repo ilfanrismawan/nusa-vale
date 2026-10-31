@@ -55,7 +55,7 @@ func _ready() -> void:
 	_bound_viewport = get_viewport()
 	_bound_viewport.size_changed.connect(_layout_hud)
 	# Horor malam: scene node yang bisa diatur di editor (scenes/effects/night_horror.tscn).
-	var night = preload("res://scenes/effects/night_horror.tscn").instantiate()
+	var night = load("res://scenes/effects/night_horror.tscn").instantiate()
 	night.name = "NightHorror"
 	night.player = player
 	add_child(night)

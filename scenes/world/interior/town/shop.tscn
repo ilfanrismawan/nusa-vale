@@ -23,6 +23,8 @@
 [ext_resource type="Texture2D" uid="uid://b8t6w8k5bo02b" path="res://assets/farm_rpg/objects/exterior/Wooden Buckets.png" id="21_text"]
 [ext_resource type="Texture2D" uid="uid://ra7xfhn34wrv" path="res://assets/farm_rpg/Character/Pre-made/NPC'S/Manu/Idle.png" id="22_text"]
 
+[ext_resource type="Script" path="res://scripts/world/interior_daylight.gd" id="daylight_script"]
+
 [sub_resource type="RectangleShape2D" id="Rect_BackWall"]
 size = Vector2(416, 48)
 
@@ -1318,6 +1320,9 @@ material = SubResource("VignetteMaterial")
 offset_right = 416.0
 offset_bottom = 272.0
 mouse_filter = 2
+
+[node name="SiangHari" type="Node" parent="Lighting"]
+script = ExtResource("daylight_script")
 
 [node name="Player" parent="." unique_id=876274422 instance=ExtResource("2_pack")]
 position = Vector2(208, 236)

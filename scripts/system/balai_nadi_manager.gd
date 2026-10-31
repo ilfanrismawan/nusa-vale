@@ -10,7 +10,7 @@ const RESTORATION = preload("res://resources/restoration/balai_nadi_restoration.
 const GREENHOUSE = preload("res://resources/restoration/greenhouse_restoration.tres")
 ## Bundel serangga Sayap Alam (GDD 7, 4A-3).
 const BUG_BUNDLE = preload("res://resources/restoration/bug_bundle.tres")
-const CATALOG = preload("res://resources/restoration/balai_nadi_catalog.tres")
+static var CATALOG = load("res://resources/restoration/balai_nadi_catalog.tres")
 var definitions: Array[RestorationProject] = CATALOG.projects.duplicate()
 var _projects: Dictionary = {}
 var _busy := false

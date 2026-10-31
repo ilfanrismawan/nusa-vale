@@ -1,0 +1,73 @@
+[gd_scene format=3 uid="uid://c58nr4u4d7kc8"]
+
+[ext_resource type="Texture2D" uid="uid://bgsc3yl2pss6j" path="res://assets/farm_rpg/objects/exterior/Base houses.png" id="9_twn"]
+[ext_resource type="PackedScene" uid="uid://l3wp4bi5elun" path="res://scenes/objects/building_sign.tscn" id="BuildingSign"]
+[ext_resource type="Script" uid="uid://xi8t0k3337vc" path="res://scripts/world/town_building_door.gd" id="TownDoor"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tw063"]
+atlas = ExtResource("9_twn")
+region = Rect2(704, 185, 80, 146)
+
+[sub_resource type="RectangleShape2D" id="DoorShape"]
+size = Vector2(17, 23)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6wjsi"]
+resource_local_to_scene = true
+bg_color = Color(0.490196, 0.270588, 0.168627, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.235294, 0.145098, 0.129412, 1)
+
+[node name="HouseSlate" type="StaticBody2D" unique_id=1103897789]
+y_sort_enabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1109783605]
+texture_filter = 1
+texture = SubResource("AtlasTexture_tw063")
+offset = Vector2(0, -73)
+
+[node name="Door" type="Area2D" parent="." unique_id=1391154516]
+position = Vector2(0, 4)
+script = ExtResource("TownDoor")
+target_scene = "res://scenes/world/interior/ubay_home.tscn"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Door" unique_id=438896992]
+position = Vector2(0.5, -25.5)
+shape = SubResource("DoorShape")
+
+[node name="ReturnSpawn" type="Marker2D" parent="." unique_id=1937463634]
+position = Vector2(0, 36)
+
+[node name="Sign" parent="." unique_id=1295954677 instance=ExtResource("BuildingSign")]
+position = Vector2(0.99999994, -40)
+scale = Vector2(0.5221005, 0.5221005)
+caption = "Ubay · Pos Pengiriman"
+minimum_width = 32
+minimum_height = 16
+
+[node name="Board" parent="Sign" index="3" unique_id=1199681524]
+custom_minimum_size = Vector2(32, 16)
+offset_left = -65.0
+offset_top = -9.5
+offset_right = 65.0
+offset_bottom = 9.5
+
+[node name="LeftPost" parent="Sign/Board/Posts" parent_id_path=PackedInt32Array(1295954677, 644522095) index="0" unique_id=1985933926]
+offset_bottom = -5.5
+
+[node name="RightPost" parent="Sign/Board/Posts" parent_id_path=PackedInt32Array(1295954677, 644522095) index="1" unique_id=8433196]
+offset_bottom = -5.5
+
+[node name="Frame" parent="Sign/Board" index="2" unique_id=2106215583]
+theme_override_styles/panel = SubResource("StyleBoxFlat_6wjsi")
+
+[node name="Caption" parent="Sign/Board/Content/Row" parent_id_path=PackedInt32Array(1295954677, 841684192) index="1" unique_id=149572031]
+texture_filter = 1
+text = "Ubay · Pos Pengiriman"
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=567940612]
+polygon = PackedVector2Array(-8, -33, -7, 0, -36, 0, -35, -58, -3, -90, 3, -90, 35, -56, 35, -1, 8, -1, 8, -34)
+
+[editable path="Sign"]

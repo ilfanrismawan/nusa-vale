@@ -9,6 +9,7 @@ const Network := preload("res://scripts/npc/npc_route_network.gd")
 const Gateway := preload("res://scripts/npc/npc_route_point.gd")
 const WalkPath := preload("res://scripts/npc/npc_walk_path.gd")
 
+## Kosong = nama file scene induk (mis. "warung").
 @export var map_id := ""
 ## Peta di balik pintu (gateway NPC).
 @export var outside_map := "town"
@@ -35,11 +36,15 @@ static func scheduled_points(target_map: String) -> Dictionary:
 
 
 func _ready() -> void:
-	name = "ResidentRoom"
+	var room := get_parent()
+	if map_id.is_empty():
+		map_id = room.scene_file_path.get_file().get_basename()
+	# Scene yang sudah menyusun NPCPoints/NPCMapPresenter sendiri (mis. rumah Wira) tidak dibangun ulang.
+	if room.has_node("NPCMapPresenter"):
+		return
 	var used := scheduled_points(map_id)
 	if used.is_empty():
 		return
-	var room := get_parent()
 	var markers := Node2D.new()
 	markers.name = "NPCPoints"
 	var actors := Node2D.new()

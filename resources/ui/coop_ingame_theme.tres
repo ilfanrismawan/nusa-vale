@@ -1,65 +1,6 @@
-[gd_resource type="Theme" load_steps=9 format=3]
-[ext_resource type="Font" path="res://resources/ui/readable_font.tres" id="font"]
+[gd_resource type="Theme" format=3 uid="uid://cdgntyrrg4oes"]
 
-[sub_resource type="StyleBoxFlat" id="Card"]
-content_margin_left = 24.0
-content_margin_top = 24.0
-content_margin_right = 24.0
-content_margin_bottom = 24.0
-bg_color = Color(0.13, 0.07, 0.11, 0.64)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.91, 0.718, 0.471, 1)
-
-[sub_resource type="StyleBoxFlat" id="Row"]
-content_margin_left = 14.0
-content_margin_top = 10.0
-content_margin_right = 14.0
-content_margin_bottom = 10.0
-bg_color = Color(0.188, 0.133, 0.118, 0.64)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.439, 0.329, 0.239, 1)
-
-[sub_resource type="StyleBoxFlat" id="Selected"]
-content_margin_left = 14.0
-content_margin_top = 10.0
-content_margin_right = 14.0
-content_margin_bottom = 10.0
-bg_color = Color(0.188, 0.133, 0.118, 0.64)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.549, 0.839, 0.471, 1)
-
-[sub_resource type="StyleBoxFlat" id="Danger"]
-content_margin_left = 14.0
-content_margin_top = 10.0
-content_margin_right = 14.0
-content_margin_bottom = 10.0
-bg_color = Color(0.3, 0.12, 0.1, 0.8)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.91, 0.47, 0.41, 1)
-
-[sub_resource type="StyleBoxFlat" id="Primary"]
-content_margin_left = 14.0
-content_margin_top = 10.0
-content_margin_right = 14.0
-content_margin_bottom = 10.0
-bg_color = Color(0.271, 0.357, 0.208, 0.9)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.549, 0.839, 0.471, 1)
+[ext_resource type="FontVariation" uid="uid://bw6sa2q375h63" path="res://resources/ui/readable_font.tres" id="font"]
 
 [sub_resource type="StyleBoxFlat" id="Disabled"]
 content_margin_left = 14.0
@@ -81,27 +22,87 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.976, 0.902, 0.812, 1)
 
+[sub_resource type="StyleBoxFlat" id="Selected"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+bg_color = Color(0.188, 0.133, 0.118, 0.64)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.549, 0.839, 0.471, 1)
+
+[sub_resource type="StyleBoxFlat" id="Row"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+bg_color = Color(0.188, 0.133, 0.118, 0.64)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.439, 0.329, 0.239, 1)
+
+[sub_resource type="StyleBoxFlat" id="Danger"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+bg_color = Color(0.3, 0.12, 0.1, 0.8)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.91, 0.47, 0.41, 1)
+
+[sub_resource type="StyleBoxFlat" id="Card"]
+content_margin_left = 24.0
+content_margin_top = 24.0
+content_margin_right = 24.0
+content_margin_bottom = 24.0
+bg_color = Color(0.13, 0.07, 0.11, 0.64)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.91, 0.718, 0.471, 1)
+
+[sub_resource type="StyleBoxFlat" id="Primary"]
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+bg_color = Color(0.271, 0.357, 0.208, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.549, 0.839, 0.471, 1)
+
 [resource]
 default_font = ExtResource("font")
 default_font_size = 20
-Label/colors/font_color = Color(0.976, 0.902, 0.812, 1)
-MutedLabel/base_type = &"Label"
-MutedLabel/colors/font_color = Color(0.765, 0.675, 0.584, 1)
-ReadyLabel/base_type = &"Label"
-ReadyLabel/colors/font_color = Color(0.549, 0.839, 0.471, 1)
-PanelContainer/styles/panel = SubResource("Card")
 Button/colors/font_color = Color(0.976, 0.902, 0.812, 1)
 Button/colors/font_disabled_color = Color(0.765, 0.675, 0.584, 1)
-Button/styles/normal = SubResource("Row")
-Button/styles/hover = SubResource("Selected")
-Button/styles/pressed = SubResource("Selected")
 Button/styles/disabled = SubResource("Disabled")
 Button/styles/focus = SubResource("Focus")
-SelectedRow/base_type = &"Button"
-SelectedRow/colors/font_color = Color(0.549, 0.839, 0.471, 1)
-SelectedRow/styles/normal = SubResource("Selected")
+Button/styles/hover = SubResource("Selected")
+Button/styles/normal = SubResource("Row")
+Button/styles/pressed = SubResource("Selected")
 DangerRow/base_type = &"Button"
 DangerRow/colors/font_color = Color(0.91, 0.47, 0.41, 1)
 DangerRow/styles/normal = SubResource("Danger")
+Label/colors/font_color = Color(0.976, 0.902, 0.812, 1)
+MutedLabel/base_type = &"Label"
+MutedLabel/colors/font_color = Color(0.765, 0.675, 0.584, 1)
+PanelContainer/styles/panel = SubResource("Card")
 PrimaryButton/base_type = &"Button"
 PrimaryButton/styles/normal = SubResource("Primary")
+ReadyLabel/base_type = &"Label"
+ReadyLabel/colors/font_color = Color(0.549, 0.839, 0.471, 1)
+SelectedRow/base_type = &"Button"
+SelectedRow/colors/font_color = Color(0.549, 0.839, 0.471, 1)
+SelectedRow/styles/normal = SubResource("Selected")

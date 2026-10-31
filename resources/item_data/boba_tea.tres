@@ -19,5 +19,5 @@ item_id = "boba_tea"
 display_name = "Teh Boba"
 icon = SubResource("Icon")
 description = "Masakan dari dapur. Pilih di hotbar untuk dimakan."
-sell_price = 143
 buy_price = 286
+sell_price = 143

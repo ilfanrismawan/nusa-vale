@@ -1,5 +1,24 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3]
+
 [ext_resource type="PackedScene" path="res://scenes/world/interior/town_room.tscn" id="1"]
+[ext_resource type="Script" path="res://scripts/world/school_notice.gd" id="notice"]
+[ext_resource type="Texture2D" path="res://assets/ranch/care_board.png" id="board"]
+
+[sub_resource type="RectangleShape2D" id="NoticeShape"]
+size = Vector2(48, 24)
+
 [node name="HouseOrangeInterior" instance=ExtResource("1")]
-room_title = "Rumah Jingga"
-service = "house"
+
+[node name="Title" parent="."]
+text = "Rumah Jingga"
+
+[node name="WelcomeNotice" type="StaticBody2D" parent="."]
+position = Vector2(240, 104)
+script = ExtResource("notice")
+message = "Selamat datang di Rumah Jingga."
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WelcomeNotice"]
+shape = SubResource("NoticeShape")
+
+[node name="Board" type="Sprite2D" parent="WelcomeNotice"]
+texture = ExtResource("board")
