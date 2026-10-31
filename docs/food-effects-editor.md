@@ -25,6 +25,8 @@ Resep dan detail inventory menampilkan angka efek dari resource yang sama dengan
 | tick_interval | Jarak antar tick dalam detik |
 | stacking | REFRESH, REPLACE, atau STACK |
 | max_stacks | Batas tumpukan untuk mode STACK |
+| hp_per_tick | Positif memulihkan HP, negatif menguras HP (tidak pernah di bawah 1) |
+| fear_rise_multiplier | < 1 menenangkan rasa takut malam, > 1 membuat lebih takut |
 
 REFRESH memperbarui efek dengan ID sama, menjaga sisa durasi terpanjang, dan tidak menambah kekuatan. REPLACE mengganti efek serta memulai ulang durasi dan jam tick. STACK menambah tumpukan sampai max_stacks sambil memperbarui durasi. Setiap pemasangan menyalin konfigurasi resource; perubahan saat game berjalan berlaku pada konsumsi berikutnya.
 
@@ -49,5 +51,7 @@ Efek dengan ID berbeda berjalan bersamaan. Multiplier gerak dan biaya stamina di
 | seafood | Gerak +5%, biaya -15%, 90 detik |
 | bread_energy | Biaya stamina -10%, 90 detik |
 | fermented | Biaya -15%, +1 stamina/10 detik, 100 detik |
+| tipsy (debuff) | Mabuk: gerak -12%, biaya +10%, rasa takut -10%, STACK sampai 3, 90 detik. Dipasang di semua bir, wine, dan mead |
+| food_poisoning (debuff) | Keracunan: gerak -10%, -1 stamina dan -2 HP/5 detik, 30 detik. HP tidak turun di bawah 1. Dipasang di ikan buntal dan ikan zombi asap |
 
 Semua angka di tabel adalah konfigurasi awal pada .tres dan dapat diubah lewat Inspector. Tidak ada pemetaan nama makanan ke efek di kode runtime.

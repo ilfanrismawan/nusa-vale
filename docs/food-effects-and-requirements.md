@@ -4,7 +4,7 @@ Tabel ini mencatat profil awal. Konfigurasi aktif selalu dibaca dari ItemData.fo
 
 | Item | Resource efek |
 | --- | --- |
-| `anguilla_fritta` | `fried_heaviness.tres` |
+| `anguilla_fritta` | `fried_heaviness.tres`, `protein.tres` |
 | `apple_pie` | `balanced.tres` |
 | `apple_slices` | `refreshing.tres` |
 | `artichoke_dip` | `balanced.tres` |

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="FoodEffectData" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/food_effect_data.gd" id="1_effect"]
+
+[resource]
+script = ExtResource("1_effect")
+id = &"food_poisoning"
+display_name = "Keracunan"
+description = "Sisa racun di ikan membuat tubuh lemas: HP dan stamina terkuras perlahan. Tidak sampai membuat pingsan."
+duration_seconds = 30.0
+movement_multiplier = 0.9
+stamina_cost_multiplier = 1.0
+stamina_per_tick = -1
+hp_per_tick = -2
+tick_interval = 5.0
+stacking = 0
+max_stacks = 1

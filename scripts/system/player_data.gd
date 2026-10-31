@@ -302,7 +302,9 @@ func advance_food_effects(delta: float) -> void:
 		if ticks > 0 and effect.stamina_per_tick != 0:
 			stamina += effect.stamina_per_tick * ticks * int(active.stacks)
 		if ticks > 0 and effect.hp_per_tick != 0 and hp > 0:
-			hp += effect.hp_per_tick * ticks * int(active.stacks)
+			var hp_change: int = effect.hp_per_tick * ticks * int(active.stacks)
+			# Debuff makanan (mis. keracunan) menguras HP tapi tidak pernah membuat pingsan.
+			hp = maxi(mini(hp, 1), hp + hp_change) if hp_change < 0 else hp + hp_change
 		active.remaining = maxf(0.0, float(active.remaining) - delta)
 		if active.remaining <= 0.0:
 			active_food_effects.remove_at(index)

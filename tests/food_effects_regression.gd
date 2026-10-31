@@ -54,6 +54,19 @@ func _ready() -> void:
 	check(data.active_food_effects[0].remaining == 4.0 and data.active_food_effects[0].elapsed == 0.0, "replace restarts duration and tick clock")
 	data.load_dict(data.to_dict())
 	check(data.active_food_effects.is_empty(), "temporary effects clear on loading")
+	var poison := load("res://resources/cooking/effects/food_poisoning.tres") as FoodEffectData
+	data.hp = 5
+	data.apply_food_effect(poison)
+	data.advance_food_effects(30.0)
+	check(data.hp == 1 and data.active_food_effects.is_empty(), "food poisoning drains HP but never knocks the player out")
+	var tipsy := load("res://resources/cooking/effects/tipsy.tres") as FoodEffectData
+	for drink in 4: data.apply_food_effect(tipsy)
+	check(data.active_food_effects[0].stacks == 3 and data.food_movement_multiplier() < 0.7, "alcohol stacks up to its cap")
+	data.clear_food_effects()
+	for id in ["beer", "wine", "mead", "apple_wine", "blueberry_wine", "cherry_wine", "orange_wine", "peach_wine", "strawberry_wine"]:
+		check(GameState._resolve_item(id).food_effects.any(func(e): return e.id == &"tipsy"), "alcohol has tipsy debuff: " + id)
+	for id in ["smoked_fish_pufferfish", "smoked_fish_zombie_fish"]:
+		check(GameState._resolve_item(id).food_effects.any(func(e): return e.id == &"food_poisoning"), "toxic fish has poisoning debuff: " + id)
 	var foods := 0
 	var expected_foods := 0
 	for recipe in CookingManager.all_recipes():
