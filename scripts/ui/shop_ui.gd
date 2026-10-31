@@ -13,6 +13,7 @@ const ServiceTheme = preload("res://scripts/ui/farm_service_theme.gd")
 ## Presentasi toko diedit di scenes/ui/shop_book.tscn (atau scene presentation_scene lain,
 ## mis. scenes/ui/warteg_book.tscn untuk warteg_ui.tscn).
 ## Script hanya mengikat data, navigasi halaman, dan transaksi.
+## Opsional: Book/Effects/List (instance scenes/ui/food_effect_list.tscn) menampilkan buff/debuff makanan.
 
 const DEFAULT_SHOP := "res://resources/shop/general_store.tres"
 const FONT := preload("res://resources/ui/readable_font.tres")
@@ -77,6 +78,7 @@ var _buy_hint := ""
 ## metadata/verb dan metadata/unit pada tombol Buy, mis. "Pesan" dan "porsi" di warteg.
 var _buy_verb := "Beli"
 var _unit_word := "barang"
+var _effect_list: FoodEffectList
 
 func _ready() -> void:
 	layer = ServiceTheme.LAYER
@@ -133,6 +135,7 @@ func _build_ui() -> void:
 	_buy_hint = _purchase_button.text
 	_buy_verb = _purchase_button.get_meta("verb", "Beli")
 	_unit_word = _purchase_button.get_meta("unit", "barang")
+	_effect_list = book.get_node_or_null("Book/Effects/List") as FoodEffectList
 	# Tab filter: metadata/season = tab musim; metadata/item_ids = tab daftar item (kosong = semua).
 	for button in book.get_node("Book/Filters").get_children():
 		var id: String = button.get_meta("season", button.name)
@@ -329,7 +332,7 @@ func _on_row_hover(panel: PanelContainer, item: ItemData) -> void:
 		"winter": season_tag = " (Musim Dingin)"
 	var text := "%s\n%s" % [season_tag.strip_edges(), item.description] if not season_tag.is_empty() else item.description
 	if not BAG_UPGRADES.has(item.item_id):
-		text += "\n\nKlik untuk memilih. Atur jumlah, lalu tekan Beli."
+		text += "\n\nKlik untuk memilih. Atur jumlah, lalu tekan %s." % _buy_verb
 	_dialog_label.text = text
 	_show_detail_item(item)
 
@@ -374,6 +377,8 @@ func _show_greeting() -> void:
 func _show_detail_item(item: ItemData) -> void:
 	_detail_icon.texture = item.icon if item != null else null
 	_detail_name.text = item.display_name if item != null else _selection_hint
+	if _effect_list != null:
+		_effect_list.show_item(item)
 
 # ── Transaksi ───────────────────────────────────────────────────────
 

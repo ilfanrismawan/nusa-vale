@@ -2,9 +2,12 @@
 
 [ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://autoload/data/item_data.gd" id="1"]
 [ext_resource type="Texture2D" path="res://resources/icons/icon_buffalo_cheese.tres" id="2"]
+[ext_resource type="Script" uid="uid://vbwn6cjjdlc0" path="res://scripts/resources/food_effect_data.gd" id="fx_type"]
+[ext_resource type="Resource" path="res://resources/cooking/effects/hearty.tres" id="fx_hearty"]
 
 [resource]
 script = ExtResource("1")
+food_effects = Array[ExtResource("fx_type")]([ExtResource("fx_hearty")])
 edible = true
 stamina_restore = 26
 item_id = "buffalo_cheese_large_gold"

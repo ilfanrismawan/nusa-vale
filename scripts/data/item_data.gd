@@ -116,6 +116,28 @@ func hp_restore_amount() -> int:
 	@warning_ignore("integer_division")
 	return hp_restore if hp_restore >= 0 else stamina_restore / 2
 
+## Baris buff (positive = true, hijau) dan debuff (merah) saat dimakan, buff lebih dulu.
+## [{"text": String, "positive": bool, "tooltip": String, "instant": bool?}]; kosong untuk barang yang tidak dimakan.
+func effect_lines() -> Array[Dictionary]:
+	var lines: Array[Dictionary] = []
+	if stamina_restore > 0:
+		lines.append({"text": "%+d stamina" % stamina_restore, "positive": true, "instant": true, "tooltip": "Pulih langsung saat dimakan."})
+	if stamina_restore > 0 and hp_restore_amount() > 0:
+		lines.append({"text": "%+d HP" % hp_restore_amount(), "positive": true, "instant": true, "tooltip": "Pulih langsung saat dimakan."})
+	for effect in food_effects:
+		if effect == null or not effect.is_valid_effect():
+			continue
+		for line in effect.stat_lines():
+			line.text += " · %s %s dtk" % [effect.display_name, FoodEffectData.seconds_text(effect.duration_seconds)]
+			line.tooltip = effect.description
+			lines.append(line)
+	if food_effects.is_empty() and speed_buff_seconds > 0.0:
+		lines.append({"text": "Gerak %+.0f%% · %s dtk" % [(speed_buff_multiplier - 1.0) * 100.0, FoodEffectData.seconds_text(speed_buff_seconds)], "positive": speed_buff_multiplier > 1.0, "tooltip": ""})
+	var buffs := lines.filter(func(line): return line.positive)
+	var debuffs := lines.filter(func(line): return not line.positive)
+	lines.assign(buffs + debuffs)
+	return lines
+
 func food_summary() -> String:
 	var parts: PackedStringArray = ["%+d stamina" % stamina_restore]
 	if hp_restore_amount() > 0:

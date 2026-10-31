@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dufirbfujpiry"]
 
 [ext_resource type="Script" uid="uid://5f2xbdnvcc84" path="res://scripts/ui/ui_inventory.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/ui/food_effect_list.tscn" id="food_effects"]
 [ext_resource type="Texture2D" path="res://resources/ui/book_bg.tres" id="2_book_bg"]
 [ext_resource type="Texture2D" path="res://resources/ui/btn_close_x.tres" id="17_btn_close"]
 [ext_resource type="Texture2D" path="res://resources/ui/btn_close_x_pressed.tres" id="18_btn_close_pressed"]
@@ -944,6 +945,19 @@ offset_top = 102.0
 offset_right = 168.9393
 offset_bottom = 157.94215
 scale = Vector2(0.9652828, 0.9652828)
+
+[node name="DetailEffectList" parent="Dimmer/BookRoot/RightPage" instance=ExtResource("food_effects")]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 17.0
+offset_top = 158.0
+offset_right = 196.0
+offset_bottom = 202.0
+theme_override_constants/separation = 0
+font_size = 16
+icon_size = Vector2(9, 9)
+max_rows = 3
 
 [node name="GoldLabel" type="Label" parent="Dimmer/BookRoot/RightPage" unique_id=2145520553]
 unique_name_in_owner = true

@@ -188,7 +188,7 @@ func _update_selection() -> void:
 	var item := _selected.result_item()
 	%Description.text = item.description if item != null else ""
 	%Stats.text = "ϟ  +%d stamina     ×%d hasil" % [item.stamina_restore if item != null else 0, _selected.output_count]
-	%Buff.text = item.food_summary() if item != null else ""
+	%Buff.show_item(item)
 	for child in %Requirements.get_children():
 		%Requirements.remove_child(child)
 		child.queue_free()

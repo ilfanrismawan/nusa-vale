@@ -33,6 +33,7 @@ extends CanvasLayer
 @onready var detail_title: Label = %DetailTitle
 @onready var detail_sub: Label = %DetailSub
 @onready var detail_desc: Control = %DetailDesc
+@onready var detail_effects: FoodEffectList = get_node_or_null("%DetailEffectList")
 @onready var gold_label: Label = %GoldLabel
 @onready var price_label: Label = %PriceLabel
 
@@ -891,10 +892,12 @@ func _display_item_detail(item: ItemData, count: int, slot_idx: int = -1) -> voi
 			ItemData.Category.FOOD: cat_name = "Makanan"
 		detail_sub.text = "[%s]" % cat_name
 
+	if detail_effects:
+		detail_effects.show_item(item if item.is_edible() else null)
 	if detail_desc:
 		var text := item.description
 		if item.is_edible():
-			text += "\n" + item.food_summary() + "\nKlik kanan: makan"
+			text += "\nKlik kanan: makan"
 		if text.is_empty():
 			if item.category == ItemData.Category.TOOL:
 				text = "Gunakan peralatan ini dengan klik kiri saat berada di dekat objek kerja."
@@ -939,6 +942,8 @@ func _clear_item_detail() -> void:
 		detail_title.text = "Detail Item"
 	if detail_sub:
 		detail_sub.text = "Arahkan kursor ke slot"
+	if detail_effects:
+		detail_effects.show_item(null)
 	if detail_desc:
 		if _sell_mode:
 			detail_desc.text = "Shipping Bin: klik kanan untuk menitipkan barang. Uang diterima setelah tidur."

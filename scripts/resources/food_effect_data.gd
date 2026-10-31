@@ -21,6 +21,26 @@ enum Stacking { REFRESH, REPLACE, STACK }
 func is_valid_effect() -> bool:
 	return not id.is_empty() and is_finite(duration_seconds) and duration_seconds > 0.0 and is_finite(movement_multiplier) and movement_multiplier > 0.0 and is_finite(stamina_cost_multiplier) and stamina_cost_multiplier > 0.0 and is_finite(fear_rise_multiplier) and fear_rise_multiplier > 0.0 and is_finite(tick_interval) and tick_interval > 0.0 and max_stacks > 0
 
+## Detik untuk teks UI: 90.0 -> "90", 2.5 -> "2.5".
+static func seconds_text(value: float) -> String:
+	return str(int(value)) if is_equal_approx(value, roundf(value)) else "%.1f" % value
+
+## Rincian per stat untuk UI: [{"text": String, "positive": bool}]. positive = buff (hijau), false = debuff (merah).
+func stat_lines() -> Array[Dictionary]:
+	var lines: Array[Dictionary] = []
+	var tick := seconds_text(tick_interval)
+	if not is_equal_approx(movement_multiplier, 1.0):
+		lines.append({"text": "Gerak %+.0f%%" % ((movement_multiplier - 1.0) * 100.0), "positive": movement_multiplier > 1.0})
+	if not is_equal_approx(stamina_cost_multiplier, 1.0):
+		lines.append({"text": "Biaya stamina %+.0f%%" % ((stamina_cost_multiplier - 1.0) * 100.0), "positive": stamina_cost_multiplier < 1.0})
+	if stamina_per_tick != 0:
+		lines.append({"text": "%+d stamina / %s dtk" % [stamina_per_tick, tick], "positive": stamina_per_tick > 0})
+	if hp_per_tick != 0:
+		lines.append({"text": "%+d HP / %s dtk" % [hp_per_tick, tick], "positive": hp_per_tick > 0})
+	if not is_equal_approx(fear_rise_multiplier, 1.0):
+		lines.append({"text": "Rasa takut %+.0f%%" % ((fear_rise_multiplier - 1.0) * 100.0), "positive": fear_rise_multiplier < 1.0})
+	return lines
+
 func summary() -> String:
 	var parts: PackedStringArray = []
 	if not is_equal_approx(movement_multiplier, 1.0):

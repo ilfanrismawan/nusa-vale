@@ -4,6 +4,7 @@
 [ext_resource type="Theme" path="res://resources/ui/startup_form_theme.tres" id="form"]
 [ext_resource type="PackedScene" path="res://scenes/ui/book_text.tscn" id="text"]
 [ext_resource type="Shader" path="res://resources/ui/cooking_backdrop.gdshader" id="shader"]
+[ext_resource type="PackedScene" path="res://scenes/ui/food_effect_list.tscn" id="effects"]
 
 [sub_resource type="StyleBoxFlat" id="Paper"]
 bg_color = Color(0.969, 0.953, 0.914, 1)
@@ -124,10 +125,10 @@ theme_override_styles/panel = SubResource("Paper")
 mouse_filter = 2
 
 [node name="SelectedIcon" type="TextureRect" parent="Book"]
-offset_left = 1008.0
-offset_top = 169.0
-offset_right = 1120.0
-offset_bottom = 281.0
+offset_left = 1038.0
+offset_top = 162.0
+offset_right = 1110.0
+offset_bottom = 234.0
 texture_filter = 1
 expand_mode = 1
 stretch_mode = 5
@@ -135,9 +136,9 @@ mouse_filter = 2
 
 [node name="SelectedName" type="Label" parent="Book"]
 offset_left = 928.0
-offset_top = 295.0
+offset_top = 238.0
 offset_right = 1220.0
-offset_bottom = 353.0
+offset_bottom = 292.0
 text = "Mau makan apa?"
 theme_override_font_sizes/font_size = 23
 autowrap_mode = 3
@@ -146,9 +147,9 @@ text_overrun_behavior = 3
 
 [node name="Description" parent="Book" instance=ExtResource("text")]
 offset_left = 928.0
-offset_top = 363.0
+offset_top = 294.0
 offset_right = 1220.0
-offset_bottom = 499.0
+offset_bottom = 382.0
 text_font_size = 18
 
 [node name="Navigation" parent="Book/Description" index="1"]
@@ -167,6 +168,17 @@ theme_override_styles/normal = SubResource("TextNav")
 theme_override_styles/disabled = SubResource("TextNav")
 theme_override_styles/hover = SubResource("TextNavHover")
 theme_override_styles/pressed = SubResource("TextNavHover")
+
+[node name="Effects" type="ScrollContainer" parent="Book"]
+offset_left = 928.0
+offset_top = 386.0
+offset_right = 1220.0
+offset_bottom = 504.0
+horizontal_scroll_mode = 0
+
+[node name="List" parent="Book/Effects" instance=ExtResource("effects")]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="QuantityHeading" type="Label" parent="Book"]
 offset_left = 928.0

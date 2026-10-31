@@ -12,6 +12,12 @@
 
 Resep dan detail inventory menampilkan angka efek dari resource yang sama dengan simulasi gameplay. HUD menampilkan nama efek, jumlah stack, dan sisa waktu. Description merupakan penjelasan bebas; bukan rumus simulasi.
 
+## Tampilan buff & debuff (hijau / merah)
+
+`scenes/ui/food_effect_list.tscn` (`FoodEffectList`) menampilkan satu baris per stat: buff hijau dengan panah naik, debuff merah dengan panah turun, buff lebih dulu. Ikon (`assets/farm_rpg/ui/effects/buff_up.png`, `debuff_down.png`), warna, dan font diedit pada baris template `BuffRow` / `DebuffRow`. Arahkan kursor ke baris untuk membaca description efeknya.
+
+Dipakai di detail toko (`shop_book.tscn`, `warteg_book.tscn`: node `Book/Effects/List`), panel `Buff` UI masak (`cooking_ui.tscn`), dan `DetailEffectList` di inventory. Inventory memakai `max_rows = 3`: stamina + HP digabung satu baris, debuff selalu tampil, sisanya menjadi "+N efek lain" dengan tooltip. Penentuan buff/debuff ada di `FoodEffectData.stat_lines()`: gerak > 1, biaya stamina < 1, tick stamina/HP positif, dan rasa takut < 1 dihitung buff.
+
 ## Parameter FoodEffectData
 
 | Field | Arti |

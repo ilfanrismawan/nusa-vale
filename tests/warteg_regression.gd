@@ -50,6 +50,9 @@ func _ready() -> void:
 	shop._filter_buttons["Drinks"].pressed.emit()
 	check(listed.call() == 4, "tab Minuman hanya menampilkan minuman")
 	shop._filter_buttons["All"].pressed.emit()
+	shop._show_detail_item(GameState._resolve_item("anguilla_fritta"))
+	var effect_rows := shop._effect_list.get_children().filter(func(row): return row.visible)
+	check(effect_rows.size() == GameState._resolve_item("anguilla_fritta").effect_lines().size(), "detail warteg menampilkan buff & debuff menu")
 	var nasi := GameState._resolve_item("rice_bowl")
 	shop._on_row_input(_click(), nasi)
 	shop._quantity.value = 2

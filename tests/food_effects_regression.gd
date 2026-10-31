@@ -67,6 +67,25 @@ func _ready() -> void:
 		check(GameState._resolve_item(id).food_effects.any(func(e): return e.id == &"tipsy"), "alcohol has tipsy debuff: " + id)
 	for id in ["smoked_fish_pufferfish", "smoked_fish_zombie_fish"]:
 		check(GameState._resolve_item(id).food_effects.any(func(e): return e.id == &"food_poisoning"), "toxic fish has poisoning debuff: " + id)
+	for id in ["cheese", "goat_cheese_large_gold", "buffalo_cheese", "mayonnaise_silver", "duck_mayonnaise", "dried_fruit", "raisins", "blueberry_jam", "strawberry_jam", "maple_syrup", "honey", "pickled_cucumber", "pickled_tomato", "yogurt"]:
+		check(not GameState._resolve_item(id).food_effects.is_empty(), "artisan product has food effects: " + id)
+	var belut := GameState._resolve_item("anguilla_fritta").effect_lines()
+	check(belut.any(func(line): return line.positive) and belut.any(func(line): return not line.positive), "effect lines split buffs and debuffs")
+	check(belut[0].positive and not belut[belut.size() - 1].positive, "buffs are listed before debuffs")
+	var list := (load("res://scenes/ui/food_effect_list.tscn") as PackedScene).instantiate() as FoodEffectList
+	add_child(list)
+	list.show_item(GameState._resolve_item("beer"))
+	var rows := list.get_children().filter(func(row): return row.visible)
+	var red := rows.filter(func(row): return row.get_node("Icon").texture == list.get_node("DebuffRow/Icon").texture)
+	check(rows.size() == GameState._resolve_item("beer").effect_lines().size() and not red.is_empty(), "effect list shows red debuff rows for alcohol")
+	list.max_rows = 3
+	list.show_item(GameState._resolve_item("beer"))
+	rows = list.get_children().filter(func(row): return row.visible)
+	red = rows.filter(func(row): return row.get_node("Icon").visible and row.get_node("Icon").texture == list.get_node("DebuffRow/Icon").texture)
+	check(rows.size() == 3 and not red.is_empty() and rows[2].get_node("Text").text.begins_with("+"), "compact list keeps a debuff and summarises the rest")
+	list.show_item(GameState._resolve_item("plank"))
+	check(not list.visible, "effect list hides for non-food")
+	list.queue_free()
 	var foods := 0
 	var expected_foods := 0
 	for recipe in CookingManager.all_recipes():
