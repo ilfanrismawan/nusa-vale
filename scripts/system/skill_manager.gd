@@ -31,6 +31,7 @@ func _on_day_passed(_day: int) -> void:
 			row["data"] = data
 			last_levels.append(row)
 	_check_cave_unlock()
+	_check_beach_unlock()
 	_pay_interest()
 	if last_levels.is_empty() and not _has_pending_choice():
 		return
@@ -42,6 +43,13 @@ func _check_cave_unlock() -> void:
 		return
 	if UnlockManager.try_unlock_cave():
 		Notify.say("Penambang Lv %d! Gua Tambang di Gunung kini terbuka." % UnlockManager.CAVE_MINER_LEVEL)
+
+## Nelayan Lv 2 membuka jalan ke Pantai (UnlockManager.try_unlock_beach).
+func _check_beach_unlock() -> void:
+	if UnlockManager.is_unlocked("beach"):
+		return
+	if UnlockManager.try_unlock_beach():
+		Notify.say("Nelayan Lv %d! Jalan ke Pantai di selatan Kota kini terbuka." % UnlockManager.BEACH_FISHER_LEVEL)
 
 ## Smart Investor (Economist Lv5 B): bunga harian dari uang bersama.
 func _pay_interest() -> void:

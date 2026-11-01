@@ -67,6 +67,35 @@ func miner_level_waiting_for_sleep() -> bool:
 	return false
 
 
+## Level role Nelayan (aktif) yang membuka jalan ke Pantai di selatan Town.
+const BEACH_FISHER_LEVEL := 2
+
+
+## Akses permanen setelah salah satu pemain mencapai Nelayan Lv 2 (EXP dari memancing).
+func try_unlock_beach() -> bool:
+	if is_unlocked("beach"):
+		return true
+	if _best_level(&"fisher") < BEACH_FISHER_LEVEL:
+		return false
+	return unlock("beach")
+
+
+## Nelayan tertinggi sudah punya EXP Lv 2 tetapi belum tidur untuk mengaktifkannya.
+func fisher_level_waiting_for_sleep() -> bool:
+	for data in GameState.players:
+		if data != null and data.skills != null and data.skills.earned_level(&"fisher") >= BEACH_FISHER_LEVEL:
+			return true
+	return false
+
+
+func _best_level(role_id: StringName) -> int:
+	var best := 0
+	for data in GameState.players:
+		if data != null and data.skills != null:
+			best = maxi(best, data.skills.level(role_id))
+	return best
+
+
 func _ready() -> void:
 	reset()
 

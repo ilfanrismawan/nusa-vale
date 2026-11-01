@@ -1,6 +1,6 @@
 # Nusa Vale — Game Design Document (GDD)
 
-Versi dokumen: 3.67 (1 November 2026).
+Versi dokumen: 3.68 (2 November 2026).
 Dokumen ini adalah **sumber kebenaran desain** proyek `E:\nusa-vale` (Game Design Document resmi).
 Pada versi 1.9, ditambahkan 4 pilar fundamental Life-Sim / Farming RPG: **Sistem Peternakan & Satwa** (kandang Barn/Coop, sapi, kambing, domba, ayam, bebek, kuda, pakan & affection), **Mesin Pengolah Pasca-Panen (Artisan Goods)** (mayones, keju, selai, fermentasi keg, tenun, pengasap ikan), **Sistem Cuaca Harian Dinamis** (cerah, hujan penyiram otomatis, badai petir penangkal baterai, salju), serta **Sistem Sosial, Persahabatan, & Jadwal Harian NPC** (hati 0-10, sistem hadiah loved/hated, rutinitas harian, heart events, dan romansa/teman sekamar).
 
@@ -48,12 +48,12 @@ Panduan editor resep, karakter, animasi dan syarat objek: [EDITOR_GUIDE.md](EDIT
 | Loop inti | Farming, inventory, toko, shipping esok hari, crafting, alat, save | Playtest loop inti solo/co-op lulus menurut pemilik; balancing progres/ekonomi menjadi prioritas berikutnya |
 | Peternakan | Ayam, bebek, sapi, kambing, domba, kerbau, kapibara, kuda tunggangan; perawatan, kualitas, merumput, interior, upgrade; pembiakan Barn, Inkubator, bulu bebek | Sprite kuda/kerbau/kapibara masih placeholder hasil recolor sapi; festival, ayam jago dan layanan kesehatan berbayar belum ada |
 | Pengolahan | Furnace, Mayonnaise Maker, Cheese Press, Loom, Preserves Jar, Dehydrator, Beehive, Sawmill, Keg, Oil Maker, Fish Smoker, Penangkal Petir; stasiun Alchemy Table dan Anvil | Mesin olahan artisan lengkap dan teruji di runner; penuaan Cellar masih target |
-| Dunia | Farm, rumah, Forest, Deep Forest, Town, Balai Nadi, Greenhouse, Gunung dan Gua Tambang 1–100 | Pohon buah permanen lintas musim terpasang; Pantai dan Modern City masih target |
+| Dunia | Farm, rumah, Forest, Deep Forest, Town, Balai Nadi, Greenhouse, Gunung dan Gua Tambang 1–100, Pantai | Pohon buah permanen lintas musim terpasang; Modern City masih target |
 | Town/NPC | Bangunan/interior, jadwal/rute, layanan, hadiah, panel hubungan, dialog bersyarat hati/flag; heart event, surat cerita, status dating/married, upacara dasar, pasangan/roommate tinggal di rumah, bantuan harian, surat resep/bingkisan | Upacara dasar berupa dialog di rumah; sinematik khusus dan bouquet/pendant masih target; reward seluruh 13 warga terpasang sebagai baseline 24 Oktober |
 | Cuaca | Cerah, Hujan, Badai Petir (Thunderstorm) dengan kilat prosedural & penangkal petir Battery Pack; menyiram outdoor otomatis | Salju/blizzard masih target; cuaca belum bergantung musim. Prakiraan besok tersedia di TV rumah (`scripts/ui/television_ui.gd`) |
 | Cooking | 137 Resource resep, 22 Resource alat masak, database resep, buku per pemain, dapur rumah, stamina/HP, buff laju dan regenerasi HP | Hitungan data bukan bukti semua resep bisa diakses; kanal memasak TV mengajarkan resep; buff lanjutan perlu implementasi/verifikasi; hadiah resep sosial terpasang untuk 13 resident |
 | Biji Daya | Tiga sumber unik memberi +30 stamina; rumah Lv2 +30 dan Lv3 +40, maksimum individu 200 | Biji tetap per karakter; penghuni tanpa Biji Daya mencapai 170 dengan rumah penuh |
-| Fishing | Minigame, lokasi, jam, musim ikan, air beku musim dingin, kolam air panas Gunung, danau gua lantai 10 | Pantai (`beach_sea`) belum punya scene |
+| Fishing | Minigame, lokasi, jam, musim ikan, air beku musim dingin, kolam air panas Gunung, danau gua lantai 10, laut Pantai (`beach_sea`) | Laut Pantai tidak membeku di Musim Dingin |
 | Co-op | Lokal split-screen 2–4 pemain | Playtest solo/co-op lulus menurut pemilik; perubahan baru diuji sesuai dampaknya |
 | Konten lanjutan | Data equipment, HP per pemain, combat dasar (pedang/busur/tongkat), musuh dengan AI kejar/serang, denda tumbang lewat Klinik, Gunung + Gua Tambang lantai 1-100, lima boss, pemanah/penyihir, lift dan Toko Combat | musik boss orkestra (belum dibuktikan), bazaar, festival, ekonomi dinamis belum terpasang |
 | Role/EXP | Tujuh role Lv1–10 per karakter, EXP aktivitas, level setelah tidur, cabang, buku riset, Token Talenta, UI keahlian | Kurir Logistik, Forest Whisperer, Bintang Perak, Bintang Emas, dan Perpetual Orchard aktif; 4 perk bergantung sistem lanjutan masih “Segera hadir” (Merchant Lv7/Lv10 aktif sejak 26 Oktober) |
@@ -150,7 +150,7 @@ Spesifikasi terperinci dan batas antara fitur terpasang dengan rancangan lanjuta
 | Bukit (Hill) | `scenes/world/hill.tscn` | Rumah warga, akses Gunung dan rute NPC | [terpasang] |
 | Ranch Eep | `scenes/world/eep_ranch.tscn`, `scenes/world/interior/eep_home.tscn` | Kolam, padang berpagar, rumah/toko ternak, pakan dan peralatan; utara Farm, barat Town | [terpasang 24 Oktober 2026] |
 | Deep Forest | `scenes/world/DeepForest.tscn` | Gathering lanjutan; unlock permanen dari Forest | [terpasang] |
-| Pantai (Beach) | scene baru | Spot memancing laut (`beach_sea`), hasil laut, forage pantai (harus di-unlock) | [keputusan] |
+| Pantai (Beach) | `scenes/world/beach.tscn` | Masuk dari jalan selatan Town (lewat jembatan); dermaga kayu berbentuk T, seluruh laut = FishingSpot `beach_sea` (tidak membeku), ForageSpawner `beach`, pohon kelapa, area santai/festival, karang, lapak ikan. Terbuka saat salah satu pemain mencapai Nelayan Lv 2 (`UnlockManager.try_unlock_beach`, usulan Claude, bisa diubah) | [terpasang 2 November 2026 + keputusan] |
 | Modern City | scene baru | Area perkotaan metropolitan late-game, teknologi modern, kendaraan canggih (harus di-unlock setelah Nusa Vale makmur) | [keputusan] |
 
 ### Fungsi Ruangan Sekolah & Universitas [terpasang 31 Oktober 2026]
@@ -964,7 +964,7 @@ Dapur rumah setelah upgrade tingkat 1 di Wira, buku per pemain, pemulihan stamin
 | Gunung | Bawang Daun, Kacang Polong Manis, Mooncap, Tanah Liat | Bunga Matahari, Beri Liar, Jamur, Kuarsa | Blackberry, Hazelnut, Truffle, Mooncap | Holly, Akar Musim Dingin, Tanah Liat, Kuarsa |
 | Pantai | Kelapa Muda, Lidah Buaya, Kerang, Cangkang | Kelapa, Lidah Buaya, Cangkang, Bintang Laut | Kelapa, Kerang, Siput, Teripang | Kerang, Cangkang, Siput, Bintang Laut |
 
-- Data `resources/forage_data/<area>_<item>.tres`. Kota dan Gunung aktif sekarang (ForageSpawner baru di `mountain.tscn`). Pantai belum punya scene; datanya aktif begitu scene pantai diberi ForageSpawner dengan lokasi `beach`.
+- Data `resources/forage_data/<area>_<item>.tres`. Kota dan Gunung aktif sekarang (ForageSpawner baru di `mountain.tscn`). Pantai aktif sejak 2 November 2026 (`beach.tscn`, satu ForageSpawner `beach` untuk seluruh pasir; belum ada zona per jenis barang).
 
 ---
 
@@ -1813,6 +1813,7 @@ Dengan disahkannya keputusan utama di atas, butir keputusan teknis turunan yang 
 
 ## 19. Changelog
 
+- **2026-11-02 (Versi 3.68)**: Scene **Pantai** (permintaan pemilik, dari mockup tata letak; bagian 3): `scenes/world/beach.tscn` dibangun oleh `tools/build_beach.gd` (jalankan `res://tools/build_beach.tscn`; menjalankan ulang menimpa editan editor) dan tetap bisa diedit di editor. Isi: rumput utara dengan jalan dari Town, pasir, muara di barat, dermaga T, laut beranimasi sebagai satu FishingSpot `beach_sea` yang tidak membeku, ForageSpawner `beach`, pohon kelapa dan hammock, area payung/handuk untuk festival, lapak ikan, kano, batu karang, dan gelembung penanda spot. `BeachAccess` di tepi selatan Town kini memakai `beach_entrance.gd`: terkunci sampai Nelayan Lv 2 (usulan Claude, bisa diganti pemilik), dicek juga setelah tidur di `SkillManager`. Kunci `beach` sudah ada di `UnlockManager` dan ikut save, tanpa naik versi. Belum: Pak Bahar tetap memancing di dermaga Town (belum dipindah ke Pantai), bug/wildlife pantai, dekorasi pantai yang bisa dipasang pemain, festival Renang Bahari. Tes baru `tests/beach_scene_regression.tscn`.
 - **2026-11-01 (Versi 3.67)**: Peliharaan bisa diberi makan sekali sehari dengan ikan atau masakan (+3 kasih sayang, bagian 4.10.12) dan punya gelembung makan; gelembung status kini menempel tepat di atas kepala hewan, kuda, dan peliharaan. Tanpa perubahan save.
 - **2026-11-01 (Versi 3.66)**: Buku **Shipping Bin** (permintaan pemilik, mockup disetujui; bagian 4.7): UI sendiri bergaya buku tas sebagai scene node yang bisa diedit (tas + filter kategori + jumlah + Titip di kiri, Kotak Kiriman bersama di kanan). Titipan bisa diambil lagi sampai Ubay mengangkut pukul 17.00 atau sampai tidur; EXP Economist ditarik saat diambil lagi. Kolom save opsional `seller`/`locked`/`ubay_day`, tanpa naik versi. Tes baru `tests/shipping_bin_ui_regression.tscn`.
 - **2026-11-01 (Versi 3.65)**: Bayangan dan pijakan untuk monster dan serangga (permintaan pemilik; bagian 7.2 dan 8.2): perataan kaki otomatis dari piksel sprite (`GroundShadow.align_feet`) dan bayangan oval untuk musuh gua, boss (menggantikan bayangan gambar sendiri, mengecil saat slam), serangga darat, dan serangga terbang (mengikuti tinggi terbang). Pengaturan baru di grup **Bayangan** `EnemyData`. Tes baru `tests/ground_shadow_snapshot.tscn`. Tanpa perubahan save.
