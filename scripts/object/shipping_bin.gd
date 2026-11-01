@@ -2,7 +2,8 @@ class_name ShippingBin
 extends Area2D
 
 ## Kotak jual. Pemain mendekat, menghadap kotak, lalu menekan interact (E / X / klik kanan,
-## A di gamepad) untuk membuka tas dalam mode jual. Bisa juga lewat Player._try_interact.
+## A di gamepad) untuk membuka buku Shipping Bin (scenes/ui/shipping_bin_ui.tscn).
+## Bisa juga lewat Player._try_interact.
 
 const PROMPT_FONT := preload("res://assets/fonts/m5x7.ttf")
 const FEET_OFFSET := Player.FEET_OFFSET
@@ -18,6 +19,9 @@ const REGION_OPEN := Rect2(0, 44, 16, 20)
 const SPRITE_OFFSET := Vector2(0, -2)
 ## Jangan bunyi saat area baru dimuat dengan pemain sudah berdiri di dekat kotak.
 const QUIET_AFTER_READY_MS := 400
+
+## Buku Shipping Bin yang dibuka saat interaksi (bisa diganti di Inspector).
+@export var ui_scene: PackedScene = preload("res://scenes/ui/shipping_bin_ui.tscn")
 
 @onready var sprite: Sprite2D = get_node_or_null("Sprite2D")
 
@@ -102,11 +106,27 @@ func interact(player: Player = null) -> void:
 		return
 	# Co-op: yang dijual isi tas pemain yang menekan; uangnya masuk ke uang bersama.
 	GameState.use_player(player)
-	# Buka tas dalam mode jual: pemain memilih item dan jumlahnya (lihat ui_inventory.gd).
+	if ui_scene != null:
+		var ui := ui_scene.instantiate()
+		ui.player = player
+		ui.bin = self
+		Coop.ui_parent(player).add_child(ui)
+		return
+	# Cadangan lama: tas dalam mode jual (lihat ui_inventory.gd).
 	if bag != null and bag.has_method("open_sell_mode"):
 		bag.open_sell_mode()
 	else:
 		sell_harvested_items()
+
+## Tutup kotak memantul (dipanggil buku Shipping Bin setiap kali barang dititip).
+func bounce() -> void:
+	if sprite == null:
+		return
+	if _lid_tween != null and _lid_tween.is_valid():
+		_lid_tween.kill()
+	sprite.scale = Vector2(1.15, 0.85)
+	_lid_tween = create_tween()
+	_lid_tween.tween_property(sprite, "scale", Vector2.ONE, 0.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 ## true jika pemain berada di area kotak dan menghadap ke arahnya.
 func is_facing(player: Player) -> bool:

@@ -1,0 +1,65 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/shipping_bin_row.gd" id="1_script"]
+
+[node name="ShippingBinRow" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 24)
+offset_right = 267.0
+offset_bottom = 24.0
+theme_type_variation = &"ShipRow"
+script = ExtResource("1_script")
+
+[node name="Box" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Icon" type="TextureRect" parent="Box"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="Box"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Strawberry"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Qty" type="Label" parent="Box"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+theme_type_variation = &"SubLabel"
+text = "x12"
+horizontal_alignment = 2
+
+[node name="Subtotal" type="Label" parent="Box"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(54, 0)
+layout_mode = 2
+text = "792 G"
+horizontal_alignment = 2
+
+[node name="TakeBack" type="Button" parent="Box"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(38, 18)
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"SoftButton"
+tooltip_text = "Ambil lagi ke tas"
+text = "Ambil"
+
+[node name="Locked" type="Label" parent="Box"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(38, 0)
+layout_mode = 2
+theme_type_variation = &"MutedLabel"
+tooltip_text = "Sudah diangkut Ubay, dibayar saat tidur"
+text = "Ubay"
+horizontal_alignment = 1

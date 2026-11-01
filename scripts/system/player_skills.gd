@@ -68,6 +68,19 @@ func add_points(role_id: StringName, amount: float) -> int:
 	changed.emit()
 	return 0
 
+## Kebalikan add_points (barang Shipping Bin diambil lagi sebelum diangkut). Level aktif
+## tidak berubah; hanya EXP yang belum dipakai yang dikurangi.
+func remove_points(role_id: StringName, amount: float) -> void:
+	if SkillSystem.role(role_id) == null or amount <= 0.0 or not is_finite(amount):
+		return
+	var key := String(role_id)
+	var total := float(_remainder.get(key, 0.0)) - amount
+	var whole := floori(total)
+	_remainder[key] = total - whole
+	if whole < 0:
+		points[key] = maxi(0, get_points(role_id) + whole)
+	changed.emit()
+
 ## Naikkan level aktif ke level EXP (dipanggil saat hari berganti).
 ## Mengembalikan [{role_id, from, to}].
 func apply_levels() -> Array[Dictionary]:
