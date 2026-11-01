@@ -1,6 +1,6 @@
 # Nusa Vale — Game Design Document (GDD)
 
-Versi dokumen: 3.64 (1 November 2026).
+Versi dokumen: 3.65 (1 November 2026).
 Dokumen ini adalah **sumber kebenaran desain** proyek `E:\nusa-vale` (Game Design Document resmi).
 Pada versi 1.9, ditambahkan 4 pilar fundamental Life-Sim / Farming RPG: **Sistem Peternakan & Satwa** (kandang Barn/Coop, sapi, kambing, domba, ayam, bebek, kuda, pakan & affection), **Mesin Pengolah Pasca-Panen (Artisan Goods)** (mayones, keju, selai, fermentasi keg, tenun, pengasap ikan), **Sistem Cuaca Harian Dinamis** (cerah, hujan penyiram otomatis, badai petir penangkal baterai, salju), serta **Sistem Sosial, Persahabatan, & Jadwal Harian NPC** (hati 0-10, sistem hadiah loved/hated, rutinitas harian, heart events, dan romansa/teman sekamar).
 
@@ -907,6 +907,8 @@ Dapur rumah setelah upgrade tingkat 1 di Wira, buku per pemain, pemulihan stamin
 
 15 serangga, data di `resources/bugs/*.tres` (item di `resources/item_data/`). Muncul per musim, siang (06-18) atau malam, dan area; serangga terbang melayang, serangga darat merayap, dan semuanya kabur bila pemain terlalu dekat. Tiap area punya batas jumlah: Ladang 5, Hutan 6, Kota 4, Gunung 4, Gua 3 (lantai biasa, bukan arena boss).
 
+**Bayangan & pijakan [terpasang 1 November 2026]:** serangga darat diratakan otomatis supaya kaki ikon tepat di tanah dan punya bayangan oval (`GroundShadow`, `CRAWL_SHADOW`); serangga terbang punya bayangan di tanah yang mengecil saat naik dan membesar saat turun (`FLY_SHADOW`, `scripts/world/bug_critter.gd`).
+
 | Serangga | Area | Musim | Waktu |
 |---|---|---|---|
 | Kupu Kubis | Ladang, Hutan, Kota | Semi, Panas | Siang |
@@ -1008,6 +1010,8 @@ Untuk fase MVP, sistem combat dirancang ringkas, fungsional, dan stabil untuk me
 
 ### 8.2 Visi Pengembangan Lanjutan: Sistem Combat 2D Top-Down Soulslike [keputusan - Roadmap Lanjutan]
 Setelah fase MVP rampung, sistem combat akan dievolusikan menjadi sistem pertarungan **2D Top-Down Soulslike** yang kompleks, menantang, presisi (*deliberate*), dan membutuhkan penguasaan ritme bertarung.
+
+**Bayangan & pijakan musuh [terpasang 1 November 2026]:** semua `Enemy` (termasuk boss) memasang bayangan oval `GroundShadow` di kaki dan menggeser sprite otomatis supaya baris piksel terbawah frame idle tepat di titik pijak (sebelumnya slime/boss tampak melayang 3–5 px). Diatur per musuh di grup Inspector **Bayangan** pada `EnemyData`: `align_feet`, `foot_sink`, `shadow_radius` (0 = `body_radius` + 1; boss `body_radius` × 1,5), `shadow_offset`. Bayangan memudar saat musuh mati; bayangan boss mengecil saat lompatan slam.
 
 #### A. Mekanika Tempur Kompleks Berbasis Stamina & Timing (Soulslike Core) [terpasang 2026-10-17]
 1. **Stamina-Driven Combat**:
@@ -1806,6 +1810,7 @@ Dengan disahkannya keputusan utama di atas, butir keputusan teknis turunan yang 
 
 ## 19. Changelog
 
+- **2026-11-01 (Versi 3.65)**: Bayangan dan pijakan untuk monster dan serangga (permintaan pemilik; bagian 7.2 dan 8.2): perataan kaki otomatis dari piksel sprite (`GroundShadow.align_feet`) dan bayangan oval untuk musuh gua, boss (menggantikan bayangan gambar sendiri, mengecil saat slam), serangga darat, dan serangga terbang (mengikuti tinggi terbang). Pengaturan baru di grup **Bayangan** `EnemyData`. Tes baru `tests/ground_shadow_snapshot.tscn`. Tanpa perubahan save.
 - **2026-11-01 (Versi 3.64)**: Tab **Kalender** di buku inventory (permintaan pemilik; bagian 12): grid musim dengan penanda ulang tahun warga, ulang tahun pemain, dan Malam Jumat Kliwon; detail tanggal, layanan tutup, dan acara mendatang. Ulang tahun warga dibaca lewat `NPCSocialService.birthday_of()` (dipakai bersama bonus hadiah ulang tahun). Tes baru `tests/calendar_ui_regression.tscn`; urutan tab RB/LB di `gamepad_input_regression` disesuaikan. Tanpa perubahan save.
 - **2026-11-01 (Versi 3.63)**: Penanda status hewan di atas kepala (permintaan pemilik; bagian 4.10.7): gelembung makan, elus, sikat, dan hasil siap untuk ternak, kuda, dan peliharaan; yang belum terang dan memantul, yang sudah abu-abu bercentang saat pemain dekat. Interaksi langsung ternak tidak lagi mencoba menyikat burung unta. Tanpa perubahan save.
 - **2026-11-01 (Versi 3.62)**: Penyempurnaan perilaku NPC P1: warga yang masuk peta setelah entri jadwalnya berjalan >= `settle_after_minutes` (default 10 menit) langsung berdiri di titik; rute gagal dicatat sekali per entri lalu NPC ditaruh di titik atau dilepas dari peta tanpa diulang tiap menit; warga macet (< 25% gerak selama 1,5 detik) menembus rintangan tanpa teleport dan collision dipulihkan saat bebas atau tiba di tujuan; field jadwal `facing` (fallback meta `npc_facing` pada Marker2D, lalu arah langkah terakhir); cache graf rute A* dibangun ulang otomatis saat Path2D/kurva berubah; id menu layanan warga jadi konstanta di `resident_service_menu.gd`. Tanpa perubahan save. Tes baru `tests/npc_behavior_regression.tscn` (terdaftar di `tools/verify_mvp.ps1`); `npc_homes_regression` kini mengharapkan NPC sudah di titik kerja pukul 10:00.

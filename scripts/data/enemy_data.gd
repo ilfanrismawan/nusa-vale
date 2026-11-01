@@ -20,7 +20,19 @@ extends Resource
 @export var frame_size: Vector2i = Vector2i(32, 32)
 @export_range(1.0, 24.0) var animation_fps: float = 8.0
 ## Geser gambar supaya kaki musuh berada di titik asal node.
+## Bila "align_feet" aktif, nilai Y ini hanya titik awal: sprite diratakan otomatis.
 @export var sprite_offset: Vector2 = Vector2(0, -8)
+
+@export_group("Bayangan")
+## Geser sprite otomatis supaya baris piksel terbawah (kaki) frame idle tepat di titik pijak,
+## jadi musuh tidak terlihat melayang di atas bayangannya.
+@export var align_feet: bool = true
+## Kaki dibenamkan sedikit ke tanah (px); 1 = baris kaki terakhir tepat di garis bayangan.
+@export_range(-8.0, 8.0, 1.0) var foot_sink: float = 1.0
+## Jari-jari bayangan oval di tanah. 0 = otomatis (body_radius + 1).
+@export_range(0.0, 32.0, 0.5) var shadow_radius: float = 0.0
+## Geser posisi bayangan dari titik pijak.
+@export var shadow_offset: Vector2 = Vector2.ZERO
 
 @export_group("Statistik")
 @export_range(1, 9999) var max_hp: int = 20

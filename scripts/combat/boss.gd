@@ -87,6 +87,10 @@ func _ready() -> void:
 		return
 	add_to_group(&"bosses")
 	_sprite.scale = Vector2.ONE * boss.sprite_scale
+	align_sprite_feet()
+	# Bayangan boss lebih lebar dari musuh biasa (kecuali diatur manual di EnemyData).
+	if data.shadow_radius <= 0.0:
+		_shadow.radius = data.body_radius * 1.5
 	_face(Vector2.DOWN)
 	_play("idle")
 
@@ -674,10 +678,10 @@ func _draw() -> void:
 	if _dead or boss == null:
 		return
 	var lift := -_sprite.position.y
-	# Bayangan di tanah: mengecil saat boss melayang (tanda titik jatuh selain retakan).
-	var shadow := data.body_radius * 1.5 * (1.0 - 0.4 * lift / SLAM_HEIGHT)
+	# Bayangan di tanah (GroundShadow dari Enemy) mengecil saat boss melayang: tanda titik jatuh.
+	if is_instance_valid(_shadow):
+		_shadow.lift = lift
 	draw_set_transform(Vector2(0, 2), 0.0, Vector2(1.0, 0.45))
-	draw_circle(Vector2.ZERO, shadow, Color(0, 0, 0, 0.3))
 	var aura := _aura_color()
 	if aura.a > 0.0:
 		var pulse := 0.5 + 0.5 * sin(_time * (10.0 if enraged else 5.0))

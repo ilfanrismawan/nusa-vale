@@ -5,11 +5,16 @@ extends Node2D
 ## terbang melayang di atasnya.
 
 const AnimalPhysics := preload("res://scripts/world/animal_physics.gd")
+const GroundShadow := preload("res://scripts/effects/ground_shadow.gd")
 
 signal caught
 
 ## Tinggi terbang di atas tanah (px). Bayangan kecil tetap di tanah.
 const FLY_HEIGHT := 12.0
+## Jari-jari bayangan serangga darat / terbang (px). Bayangan terbang mengecil sesuai tinggi
+## (GroundShadow.lift), jadi nilai dasarnya lebih besar.
+const CRAWL_SHADOW := 3.5
+const FLY_SHADOW := 5.0
 const FLY_RANGE := 36.0
 const CRAWL_RANGE := 14.0
 const FLEE_DISTANCE := 44.0
@@ -24,6 +29,7 @@ var _wait := 0.0
 var _flee := 0.0
 var _t := 0.0
 var _gone := false
+var _shadow: Node2D
 
 
 func setup(p_data: Resource) -> void:
@@ -44,22 +50,21 @@ func _ready() -> void:
 	_sprite = Sprite2D.new()
 	_sprite.texture = data.item.icon
 	_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	_sprite.position = Vector2(0, -FLY_HEIGHT if data.flying else -3.0)
 	add_child(_sprite)
+	# Serangga darat: kaki ikon tepat di tanah. Serangga terbang melayang setinggi FLY_HEIGHT.
+	if data.flying:
+		_sprite.position.y = -FLY_HEIGHT
+	elif not GroundShadow.align_feet(_sprite, _sprite.texture, 1.0):
+		_sprite.position.y = -3.0
+	_shadow = GroundShadow.attach(self, FLY_SHADOW if data.flying else CRAWL_SHADOW)
+	_shadow.lift = FLY_HEIGHT if data.flying else 0.0
 	modulate.a = 0.0
 	create_tween().tween_property(self, "modulate:a", 1.0, 0.4)
-	queue_redraw()
-
-
-func _draw() -> void:
-	if data != null and data.flying:
-		draw_set_transform(Vector2.ZERO, 0.0, Vector2(1.0, 0.5))
-		draw_circle(Vector2.ZERO, 3.0, Color(0, 0, 0, 0.22))
 
 
 ## Titik yang harus kena jaring: sprite-nya (serangga terbang melayang di atas tanah).
 func catch_point() -> Vector2:
-	return global_position + (_sprite.position if _sprite != null else Vector2.ZERO)
+	return global_position + (_sprite.position + _sprite.offset if _sprite != null else Vector2.ZERO)
 
 
 func _physics_process(delta: float) -> void:
@@ -98,6 +103,8 @@ func _physics_process(delta: float) -> void:
 			_sprite.flip_h = to.x < 0.0
 	if data.flying:
 		_sprite.position.y = -FLY_HEIGHT + sin(_t * 3.0) * 2.0
+		# Bayangan mengecil saat serangga naik, membesar saat turun.
+		_shadow.lift = -_sprite.position.y
 		# Kepakan sayap: lebar sprite naik-turun cepat.
 		_sprite.scale.x = 0.7 + 0.3 * absf(sin(_t * 14.0))
 	else:

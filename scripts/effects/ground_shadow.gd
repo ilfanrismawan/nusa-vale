@@ -29,6 +29,47 @@ static func attach(parent: Node2D, p_radius: float = DEFAULT_RADIUS, at: Vector2
 	return shadow
 
 
+## Cache baris bawah piksel terlihat per tekstur/region (gambar hanya dibaca sekali).
+static var _bottom_cache: Dictionary = {}
+
+
+## Baris di bawah piksel tak-transparan terbawah tekstur (0..tinggi), atau -1 bila tak terbaca.
+static func visible_bottom(texture: Texture2D) -> int:
+	if texture == null:
+		return -1
+	var key: String = texture.resource_path
+	if texture is AtlasTexture:
+		var atlas := texture as AtlasTexture
+		key = "%s|%s" % [atlas.atlas.resource_path if atlas.atlas != null else "", atlas.region]
+	if not key.is_empty() and _bottom_cache.has(key):
+		return _bottom_cache[key]
+	var image := texture.get_image()
+	var bottom := -1
+	if image != null:
+		if image.is_compressed():
+			image.decompress()
+		var used := image.get_used_rect()
+		bottom = used.end.y if used.size.y > 0 else -1
+	if not key.is_empty():
+		_bottom_cache[key] = bottom
+	return bottom
+
+
+## Geser offset Y sprite (Sprite2D / AnimatedSprite2D) supaya kaki tepat di titik asal induknya,
+## dibenamkan `sink` px. `texture` = frame acuan (idle). false bila tekstur tak terbaca.
+static func align_feet(sprite: Node2D, texture: Texture2D, sink: float = 1.0) -> bool:
+	var bottom := visible_bottom(texture)
+	if bottom < 0:
+		return false
+	var centered: bool = sprite.get("centered")
+	var offset: Vector2 = sprite.get("offset")
+	var top := sprite.position.y + offset.y * sprite.scale.y - (texture.get_height() * 0.5 * sprite.scale.y if centered else 0.0)
+	var feet := top + bottom * sprite.scale.y
+	offset.y += (sink - feet) / sprite.scale.y
+	sprite.set("offset", offset)
+	return true
+
+
 func _draw() -> void:
 	var scale_by := clampf(1.0 - lift / 30.0, 0.55, 1.0)
 	draw_set_transform(Vector2.ZERO, 0.0, Vector2(1.0, SQUASH))

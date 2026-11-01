@@ -17,6 +17,7 @@ enum AiState { IDLE, PATROL, CHASE, WINDUP, ATTACK, RECOVER, HURT, RETURN, STAGG
 ## Status kesadaran (GDD 8.2-B3).
 enum Alert { CALM, SUSPICIOUS, AGGRO, FLANK, RETREAT }
 
+const GroundShadow := preload("res://scripts/effects/ground_shadow.gd")
 const HIT_INVULNERABLE := 0.2
 const CONTACT_COOLDOWN := 0.8
 const KNOCKBACK_DECAY := 10.0
@@ -56,6 +57,8 @@ var target: Player
 var home := Vector2.ZERO
 var _sprite: AnimatedSprite2D
 var _sprite_base_tint := Color.WHITE
+## Bayangan oval di kaki (GroundShadow); diatur dari grup "Bayangan" di EnemyData.
+var _shadow: Node2D
 var _contact: Area2D
 var _invulnerable := 0.0
 var _knockback := Vector2.ZERO
@@ -155,6 +158,7 @@ func _ready() -> void:
 		_sprite.offset = data.sprite_offset
 	_sprite_base_tint = _sprite.modulate
 	_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	_ground_sprite()
 	_sprite.animation_finished.connect(_on_animation_finished)
 	_sprite.frame_changed.connect(_on_frame_changed)
 	brain = EnemyBrain.build(self)
@@ -186,6 +190,24 @@ func _ready() -> void:
 	_contact.body_exited.connect(func(body: Node2D):
 		if body is Player:
 			_touching.erase(body))
+
+## Kaki menapak: ratakan sprite ke titik pijak lalu pasang bayangan di bawahnya.
+func _ground_sprite() -> void:
+	align_sprite_feet()
+	var radius := data.shadow_radius if data.shadow_radius > 0.0 else data.body_radius + 1.0
+	_shadow = GroundShadow.attach(self, radius, data.shadow_offset)
+
+## Ratakan kaki frame idle ke titik pijak (EnemyData.align_feet). Panggil ulang bila skala sprite berubah.
+func align_sprite_feet() -> void:
+	if not data.align_feet or _sprite.sprite_frames == null:
+		return
+	var frames := _sprite.sprite_frames
+	var anim: StringName = &"idle_down" if frames.has_animation(&"idle_down") else _sprite.animation
+	if not frames.has_animation(anim) or frames.get_frame_count(anim) == 0:
+		var names := frames.get_animation_names()
+		anim = StringName(names[0]) if not names.is_empty() else &""
+	if anim != &"" and frames.get_frame_count(anim) > 0:
+		GroundShadow.align_feet(_sprite, frames.get_frame_texture(anim, 0), data.foot_sink)
 
 ## Satu animasi per arah (idle_down, walk_left, ...); sheet 1 baris dipakai untuk semua arah.
 ## Jumlah frame dihitung dari lebar gambar.
@@ -1017,6 +1039,8 @@ func _die() -> void:
 		Juice.play(data.death_feedback, global_position)
 	CombatJuice.death_burst(global_position, _particle_color())
 	CombatJuice.squash(_sprite, 0.5)
+	if is_instance_valid(_shadow):
+		create_tween().tween_property(_shadow, "modulate:a", 0.0, 0.35)
 	_drop_loot()
 	died.emit(self)
 	if has_animation("dead"):
