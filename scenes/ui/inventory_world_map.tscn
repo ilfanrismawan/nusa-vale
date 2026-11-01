@@ -1,0 +1,981 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/inventory_world_map.gd" id="script"]
+[ext_resource type="Script" path="res://scripts/ui/world_map_area.gd" id="area"]
+[ext_resource type="Theme" uid="uid://cl73ou0e04t25" path="res://resources/ui/inventory_book_theme.tres" id="theme"]
+[ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="font"]
+[ext_resource type="Texture2D" path="res://assets/ui/world_map/world_map.png" id="map"]
+[ext_resource type="Texture2D" path="res://assets/ui/world_map/world_map_fog_beach.png" id="fog_beach"]
+[ext_resource type="Texture2D" path="res://assets/ui/world_map/world_map_fog_city.png" id="fog_city"]
+[ext_resource type="Texture2D" path="res://assets/ui/world_map/world_map_area_icons.png" id="icons"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_carrot.tres" id="icon_carrot"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/icons/biji_daya/biji_daya_balai.png" id="icon_balai"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/icons/Farm Animals/Animals farm icons.png" id="animals"]
+
+[sub_resource type="AtlasTexture" id="Icon0"]
+atlas = ExtResource("icons")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Icon1"]
+atlas = ExtResource("icons")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Icon2"]
+atlas = ExtResource("icons")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Icon3"]
+atlas = ExtResource("icons")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Icon4"]
+atlas = ExtResource("icons")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Icon5"]
+atlas = ExtResource("icons")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Icon6"]
+atlas = ExtResource("icons")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Icon7"]
+atlas = ExtResource("icons")
+region = Rect2(112, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="IconCow"]
+atlas = ExtResource("animals")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Lock"]
+atlas = ExtResource("icons")
+region = Rect2(128, 0, 7, 8)
+
+[sub_resource type="StyleBoxEmpty" id="None"]
+
+[sub_resource type="StyleBoxFlat" id="TagNormal"]
+content_margin_left = 3.0
+content_margin_top = 0.0
+content_margin_right = 3.0
+content_margin_bottom = 1.0
+bg_color = Color(0.976, 0.902, 0.812, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.43, 0.24, 0.16, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="TagSelected"]
+content_margin_left = 3.0
+content_margin_top = 0.0
+content_margin_right = 3.0
+content_margin_bottom = 1.0
+bg_color = Color(1, 0.925, 0.667, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.78, 0.32, 0.18, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="TagLocked"]
+content_margin_left = 3.0
+content_margin_top = 0.0
+content_margin_right = 3.0
+content_margin_bottom = 1.0
+bg_color = Color(0.92, 0.91, 0.94, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.47, 0.47, 0.55, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="MapFrame"]
+bg_color = Color(0.59, 0.35, 0.27, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.43, 0.24, 0.16, 1)
+
+[node name="InventoryWorldMap" type="PanelContainer"]
+custom_minimum_size = Vector2(420, 224)
+theme = ExtResource("theme")
+script = ExtResource("script")
+
+[node name="Pages" type="Control" parent="."]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Left" type="Control" parent="Pages"]
+clip_contents = true
+layout_mode = 0
+offset_left = 4.0
+offset_right = 200.0
+offset_bottom = 224.0
+mouse_filter = 2
+
+[node name="Title" type="Label" parent="Pages/Left"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 0.0
+offset_right = 90.0
+offset_bottom = 16.0
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "PETA LEMBAH"
+clip_text = true
+
+[node name="Clock" type="Label" parent="Pages/Left"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 84.0
+offset_top = 0.0
+offset_right = 194.0
+offset_bottom = 16.0
+theme_override_colors/font_color = Color(0.45, 0.31, 0.2, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "Semi 12 · 10.20"
+horizontal_alignment = 2
+clip_text = true
+
+[node name="Filters" type="HBoxContainer" parent="Pages/Left"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 2.0
+offset_top = 16.0
+offset_right = 194.0
+offset_bottom = 33.0
+theme_override_constants/separation = 3
+
+[node name="FilterShop" type="Button" parent="Pages/Left/Filters"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Sorot area yang punya toko / layanan"
+toggle_mode = true
+text = "Toko"
+metadata/filter = "shop"
+
+[node name="FilterFish" type="Button" parent="Pages/Left/Filters"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Sorot area tempat memancing"
+toggle_mode = true
+text = "Mancing"
+metadata/filter = "fish"
+
+[node name="FilterForage" type="Button" parent="Pages/Left/Filters"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Sorot area dengan hasil alam musim ini"
+toggle_mode = true
+text = "Forage"
+metadata/filter = "forage"
+
+[node name="FilterResident" type="Button" parent="Pages/Left/Filters"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Sorot area yang sedang ada warganya"
+toggle_mode = true
+text = "Warga"
+metadata/filter = "resident"
+
+[node name="MapFrame" type="Panel" parent="Pages/Left"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 35.0
+offset_right = 195.0
+offset_bottom = 221.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("MapFrame")
+
+[node name="Map" type="Control" parent="Pages/Left"]
+clip_contents = true
+layout_mode = 0
+offset_left = 2.0
+offset_top = 36.0
+offset_right = 194.0
+offset_bottom = 220.0
+mouse_filter = 2
+
+[node name="MapTexture" type="TextureRect" parent="Pages/Left/Map"]
+texture_filter = 1
+layout_mode = 0
+offset_right = 192.0
+offset_bottom = 184.0
+mouse_filter = 2
+texture = ExtResource("map")
+
+[node name="FogBeach" type="TextureRect" parent="Pages/Left/Map"]
+texture_filter = 1
+layout_mode = 0
+offset_right = 192.0
+offset_bottom = 184.0
+mouse_filter = 2
+texture = ExtResource("fog_beach")
+
+[node name="FogCity" type="TextureRect" parent="Pages/Left/Map"]
+texture_filter = 1
+layout_mode = 0
+offset_right = 192.0
+offset_bottom = 184.0
+mouse_filter = 2
+texture = ExtResource("fog_city")
+
+[node name="Areas" type="Control" parent="Pages/Left/Map"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 192.0
+offset_bottom = 184.0
+mouse_filter = 2
+
+[node name="Farm" type="Button" parent="Pages/Left/Map/Areas"]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 86.0
+offset_right = 125.0
+offset_bottom = 145.0
+mouse_default_cursor_shape = 2
+theme_override_styles/focus = SubResource("None")
+theme_override_styles/disabled = SubResource("None")
+theme_override_styles/hover_pressed = SubResource("None")
+theme_override_styles/hover = SubResource("None")
+theme_override_styles/pressed = SubResource("None")
+theme_override_styles/normal = SubResource("None")
+flat = true
+script = ExtResource("area")
+area_id = "farm"
+display_name = "Ladang"
+subtitle = "Ladang dan rumahmu"
+icon_texture = ExtResource("icon_carrot")
+scene_prefixes = PackedStringArray("res://scenes/world/farm.tscn", "res://scenes/world/interior/house/", "res://scenes/world/interior/interior_house", "res://scenes/world/interior/greenhouse", "res://scenes/world/interior/home_", "res://scenes/world/interior/barn_interior", "res://scenes/world/interior/coop_interior")
+npc_maps = PackedStringArray("farm")
+places = PackedStringArray("Rumah & Greenhouse", "Shipping Bin")
+fish_locations = PackedStringArray("farm_pond", "farm_river")
+forage_locations = PackedStringArray("farm")
+pin_point = Vector2(14, 18)
+tag_normal = SubResource("TagNormal")
+tag_selected = SubResource("TagSelected")
+tag_locked = SubResource("TagLocked")
+
+[node name="Tag" type="PanelContainer" parent="Pages/Left/Map/Areas/Farm"]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 15.0
+offset_right = 58.0
+offset_bottom = 29.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("TagNormal")
+
+[node name="Row" type="HBoxContainer" parent="Pages/Left/Map/Areas/Farm/Tag"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Name" type="Label" parent="Pages/Left/Map/Areas/Farm/Tag/Row"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.14, 0.08, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+theme_override_constants/line_spacing = -4
+text = "Ladang"
+
+[node name="Town" type="Button" parent="Pages/Left/Map/Areas"]
+layout_mode = 0
+offset_left = 133.0
+offset_top = 86.0
+offset_right = 189.0
+offset_bottom = 137.0
+mouse_default_cursor_shape = 2
+theme_override_styles/focus = SubResource("None")
+theme_override_styles/disabled = SubResource("None")
+theme_override_styles/hover_pressed = SubResource("None")
+theme_override_styles/hover = SubResource("None")
+theme_override_styles/pressed = SubResource("None")
+theme_override_styles/normal = SubResource("None")
+flat = true
+script = ExtResource("area")
+area_id = "town"
+display_name = "Kota"
+subtitle = "Timur Ladang"
+icon_texture = SubResource("Icon0")
+scene_prefixes = PackedStringArray("res://scenes/world/town.tscn", "res://scenes/world/interior/town/", "res://scenes/world/interior/school", "res://scenes/world/university", "res://scenes/world/interior/university", "res://scenes/world/interior/ubay_home", "res://scenes/world/interior/cookware_shop", "res://scenes/world/interior/town_room")
+npc_maps = PackedStringArray("town", "warung", "house_pink", "house_west", "house_blue", "house_brick", "house_tall", "herbal_house", "ubay_home", "blacksmith", "university")
+services = PackedStringArray("shop", "cookware_shop", "clinic", "warung", "library", "school", "university")
+places = PackedStringArray("Pandai Besi Bima")
+fish_locations = PackedStringArray("town_river")
+forage_locations = PackedStringArray("town")
+pin_point = Vector2(13, 14)
+tag_normal = SubResource("TagNormal")
+tag_selected = SubResource("TagSelected")
+tag_locked = SubResource("TagLocked")
+
+[node name="Tag" type="PanelContainer" parent="Pages/Left/Map/Areas/Town"]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 44.0
+offset_bottom = 26.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("TagNormal")
+
+[node name="Row" type="HBoxContainer" parent="Pages/Left/Map/Areas/Town/Tag"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Name" type="Label" parent="Pages/Left/Map/Areas/Town/Tag/Row"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.14, 0.08, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+theme_override_constants/line_spacing = -4
+text = "Kota"
+
+[node name="Balai" type="Button" parent="Pages/Left/Map/Areas"]
+layout_mode = 0
+offset_left = 143.0
+offset_top = 52.0
+offset_right = 184.0
+offset_bottom = 79.0
+mouse_default_cursor_shape = 2
+theme_override_styles/focus = SubResource("None")
+theme_override_styles/disabled = SubResource("None")
+theme_override_styles/hover_pressed = SubResource("None")
+theme_override_styles/hover = SubResource("None")
+theme_override_styles/pressed = SubResource("None")
+theme_override_styles/normal = SubResource("None")
+flat = true
+script = ExtResource("area")
+area_id = "balai"
+display_name = "Balai Nadi"
+subtitle = "Utara Kota"
+icon_texture = ExtResource("icon_balai")
+scene_prefixes = PackedStringArray("res://scenes/world/balai_nadi/")
+places = PackedStringArray("Bale Agung (sumbangan paket)")
+pin_point = Vector2(27, 6)
+tag_normal = SubResource("TagNormal")
+tag_selected = SubResource("TagSelected")
+tag_locked = SubResource("TagLocked")
+
+[node name="Tag" type="PanelContainer" parent="Pages/Left/Map/Areas/Balai"]
+layout_mode = 0
+offset_left = -13.0
+offset_top = 5.0
+offset_right = 55.0
+offset_bottom = 19.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("TagNormal")
+
+[node name="Row" type="HBoxContainer" parent="Pages/Left/Map/Areas/Balai/Tag"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Name" type="Label" parent="Pages/Left/Map/Areas/Balai/Tag/Row"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.14, 0.08, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+theme_override_constants/line_spacing = -4
+text = "Balai Nadi"
+
+[node name="Hill" type="Button" parent="Pages/Left/Map/Areas"]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 54.0
+offset_right = 138.0
+offset_bottom = 79.0
+mouse_default_cursor_shape = 2
+theme_override_styles/focus = SubResource("None")
+theme_override_styles/disabled = SubResource("None")
+theme_override_styles/hover_pressed = SubResource("None")
+theme_override_styles/hover = SubResource("None")
+theme_override_styles/pressed = SubResource("None")
+theme_override_styles/normal = SubResource("None")
+flat = true
+script = ExtResource("area")
+area_id = "hill"
+display_name = "Bukit"
+subtitle = "Utara Ladang"
+icon_texture = SubResource("Icon1")
+scene_prefixes = PackedStringArray("res://scenes/world/hill.tscn", "res://scenes/world/interior/wira_home")
+npc_maps = PackedStringArray("hill", "wira_home")
+places = PackedStringArray("Rumah & bengkel Wira")
+pin_point = Vector2(20, 8)
+tag_normal = SubResource("TagNormal")
+tag_selected = SubResource("TagSelected")
+tag_locked = SubResource("TagLocked")
+
+[node name="Tag" type="PanelContainer" parent="Pages/Left/Map/Areas/Hill"]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 8.0
+offset_right = 52.0
+offset_bottom = 22.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("TagNormal")
+
+[node name="Row" type="HBoxContainer" parent="Pages/Left/Map/Areas/Hill/Tag"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Name" type="Label" parent="Pages/Left/Map/Areas/Hill/Tag/Row"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.14, 0.08, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+theme_override_constants/line_spacing = -4
+text = "Bukit"
+
+[node name="Mountain" type="Button" parent="Pages/Left/Map/Areas"]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 5.0
+offset_right = 140.0
+offset_bottom = 50.0
+mouse_default_cursor_shape = 2
+theme_override_styles/focus = SubResource("None")
+theme_override_styles/disabled = SubResource("None")
+theme_override_styles/hover_pressed = SubResource("None")
+theme_override_styles/hover = SubResource("None")
+theme_override_styles/pressed = SubResource("None")
+theme_override_styles/normal = SubResource("None")
+flat = true
+script = ExtResource("area")
+area_id = "mountain"
+display_name = "Gunung"
+subtitle = "Lewat Bukit"
+icon_texture = SubResource("Icon2")
+scene_prefixes = PackedStringArray("res://scenes/world/mountain.tscn")
+places = PackedStringArray("Kolam air panas")
+fish_locations = PackedStringArray("mountain_hot_spring")
+forage_locations = PackedStringArray("mountain")
+pin_point = Vector2(18, 39)
+tag_normal = SubResource("TagNormal")
+tag_selected = SubResource("TagSelected")
+tag_locked = SubResource("TagLocked")
+
+[node name="Tag" type="PanelContainer" parent="Pages/Left/Map/Areas/Mountain"]
+layout_mode = 0
+offset_left = -2.0
+offset_top = 5.0
+offset_right = 42.0
+offset_bottom = 19.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("TagNormal")
+
+[node name="Row" type="HBoxContainer" parent="Pages/Left/Map/Areas/Mountain/Tag"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Name" type="Label" parent="Pages/Left/Map/Areas/Mountain/Tag/Row"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.14, 0.08, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+theme_override_constants/line_spacing = -4
+text = "Gunung"
+
+[node name="Cave" type="Button" parent="Pages/Left/Map/Areas"]
+layout_mode = 0
+offset_left = 74.0
+offset_top = 29.0
+offset_right = 97.0
+offset_bottom = 50.0
+mouse_default_cursor_shape = 2
+theme_override_styles/focus = SubResource("None")
+theme_override_styles/disabled = SubResource("None")
+theme_override_styles/hover_pressed = SubResource("None")
+theme_override_styles/hover = SubResource("None")
+theme_override_styles/pressed = SubResource("None")
+theme_override_styles/normal = SubResource("None")
+flat = true
+script = ExtResource("area")
+area_id = "cave"
+display_name = "Gua"
+subtitle = "Di kaki Gunung"
+icon_texture = SubResource("Icon3")
+unlock_id = "cave"
+locked_hint = "Terbuka saat salah satu pemain mencapai Penambang Lv 2 (aktif setelah tidur)."
+scene_prefixes = PackedStringArray("res://scenes/world/cave/")
+places = PackedStringArray("Toko Combat")
+fish_locations = PackedStringArray("cave_lake")
+pin_point = Vector2(12, 5)
+tag_normal = SubResource("TagNormal")
+tag_selected = SubResource("TagSelected")
+tag_locked = SubResource("TagLocked")
+
+[node name="Tag" type="PanelContainer" parent="Pages/Left/Map/Areas/Cave"]
+layout_mode = 0
+offset_left = -5.0
+offset_top = 4.0
+offset_right = 30.0
+offset_bottom = 18.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("TagNormal")
+
+[node name="Row" type="HBoxContainer" parent="Pages/Left/Map/Areas/Cave/Tag"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Name" type="Label" parent="Pages/Left/Map/Areas/Cave/Tag/Row"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.14, 0.08, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+theme_override_constants/line_spacing = -4
+text = "Gua"
+
+[node name="Lock" type="TextureRect" parent="Pages/Left/Map/Areas/Cave/Tag/Row"]
+visible = false
+texture_filter = 1
+custom_minimum_size = Vector2(7, 8)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = SubResource("Lock")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Forest" type="Button" parent="Pages/Left/Map/Areas"]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 69.0
+offset_right = 41.0
+offset_bottom = 137.0
+mouse_default_cursor_shape = 2
+theme_override_styles/focus = SubResource("None")
+theme_override_styles/disabled = SubResource("None")
+theme_override_styles/hover_pressed = SubResource("None")
+theme_override_styles/hover = SubResource("None")
+theme_override_styles/pressed = SubResource("None")
+theme_override_styles/normal = SubResource("None")
+flat = true
+script = ExtResource("area")
+area_id = "forest"
+display_name = "Hutan"
+subtitle = "Barat, seberang jembatan"
+icon_texture = SubResource("Icon4")
+unlock_id = "forest"
+locked_hint = "Perbaiki jembatan rusak di Ladang untuk membuka Hutan."
+scene_prefixes = PackedStringArray("res://scenes/world/forest.tscn")
+fish_locations = PackedStringArray("forest_river", "forest")
+forage_locations = PackedStringArray("forest")
+pin_point = Vector2(20, 19)
+tag_normal = SubResource("TagNormal")
+tag_selected = SubResource("TagSelected")
+tag_locked = SubResource("TagLocked")
+
+[node name="Tag" type="PanelContainer" parent="Pages/Left/Map/Areas/Forest"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 22.0
+offset_right = 49.0
+offset_bottom = 36.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("TagNormal")
+
+[node name="Row" type="HBoxContainer" parent="Pages/Left/Map/Areas/Forest/Tag"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Name" type="Label" parent="Pages/Left/Map/Areas/Forest/Tag/Row"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.14, 0.08, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+theme_override_constants/line_spacing = -4
+text = "Hutan"
+
+[node name="Lock" type="TextureRect" parent="Pages/Left/Map/Areas/Forest/Tag/Row"]
+visible = false
+texture_filter = 1
+custom_minimum_size = Vector2(7, 8)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = SubResource("Lock")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DeepForest" type="Button" parent="Pages/Left/Map/Areas"]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 137.0
+offset_right = 44.0
+offset_bottom = 184.0
+mouse_default_cursor_shape = 2
+theme_override_styles/focus = SubResource("None")
+theme_override_styles/disabled = SubResource("None")
+theme_override_styles/hover_pressed = SubResource("None")
+theme_override_styles/hover = SubResource("None")
+theme_override_styles/pressed = SubResource("None")
+theme_override_styles/normal = SubResource("None")
+flat = true
+script = ExtResource("area")
+area_id = "deep_forest"
+display_name = "Hutan Dalam"
+subtitle = "Di balik Hutan"
+icon_texture = SubResource("Icon5")
+unlock_id = "deep_forest"
+locked_hint = "Buka dari Hutan: 3.000 G, 150 kayu, dan 75 batu."
+scene_prefixes = PackedStringArray("res://scenes/world/deepforest.tscn")
+forage_locations = PackedStringArray("deep_forest")
+pin_point = Vector2(22, 17)
+tag_normal = SubResource("TagNormal")
+tag_selected = SubResource("TagSelected")
+tag_locked = SubResource("TagLocked")
+
+[node name="Tag" type="PanelContainer" parent="Pages/Left/Map/Areas/DeepForest"]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 12.0
+offset_right = 85.0
+offset_bottom = 26.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("TagNormal")
+
+[node name="Row" type="HBoxContainer" parent="Pages/Left/Map/Areas/DeepForest/Tag"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Name" type="Label" parent="Pages/Left/Map/Areas/DeepForest/Tag/Row"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.14, 0.08, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+theme_override_constants/line_spacing = -4
+text = "Hutan Dalam"
+
+[node name="Lock" type="TextureRect" parent="Pages/Left/Map/Areas/DeepForest/Tag/Row"]
+visible = false
+texture_filter = 1
+custom_minimum_size = Vector2(7, 8)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = SubResource("Lock")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Ranch" type="Button" parent="Pages/Left/Map/Areas"]
+layout_mode = 0
+offset_left = 67.0
+offset_top = 152.0
+offset_right = 125.0
+offset_bottom = 182.0
+mouse_default_cursor_shape = 2
+theme_override_styles/focus = SubResource("None")
+theme_override_styles/disabled = SubResource("None")
+theme_override_styles/hover_pressed = SubResource("None")
+theme_override_styles/hover = SubResource("None")
+theme_override_styles/pressed = SubResource("None")
+theme_override_styles/normal = SubResource("None")
+flat = true
+script = ExtResource("area")
+area_id = "ranch"
+display_name = "Ranch Eep"
+subtitle = "Selatan Ladang"
+icon_texture = SubResource("IconCow")
+scene_prefixes = PackedStringArray("res://scenes/world/eep_ranch.tscn", "res://scenes/world/interior/eep_home")
+npc_maps = PackedStringArray("eep_ranch", "eep_home")
+places = PackedStringArray("Toko ternak Eep")
+pin_point = Vector2(11, 10)
+tag_normal = SubResource("TagNormal")
+tag_selected = SubResource("TagSelected")
+tag_locked = SubResource("TagLocked")
+
+[node name="Tag" type="PanelContainer" parent="Pages/Left/Map/Areas/Ranch"]
+layout_mode = 0
+offset_left = -2.0
+offset_top = 13.0
+offset_right = 60.0
+offset_bottom = 27.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("TagNormal")
+
+[node name="Row" type="HBoxContainer" parent="Pages/Left/Map/Areas/Ranch/Tag"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Name" type="Label" parent="Pages/Left/Map/Areas/Ranch/Tag/Row"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.14, 0.08, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+theme_override_constants/line_spacing = -4
+text = "Ranch Eep"
+
+[node name="Beach" type="Button" parent="Pages/Left/Map/Areas"]
+layout_mode = 0
+offset_left = 133.0
+offset_top = 152.0
+offset_right = 192.0
+offset_bottom = 184.0
+mouse_default_cursor_shape = 2
+theme_override_styles/focus = SubResource("None")
+theme_override_styles/disabled = SubResource("None")
+theme_override_styles/hover_pressed = SubResource("None")
+theme_override_styles/hover = SubResource("None")
+theme_override_styles/pressed = SubResource("None")
+theme_override_styles/normal = SubResource("None")
+flat = true
+script = ExtResource("area")
+area_id = "beach"
+display_name = "Pantai"
+subtitle = "Tenggara Kota"
+icon_texture = SubResource("Icon6")
+unlock_id = "beach"
+locked_hint = "Pantai belum bisa dikunjungi."
+fog = NodePath("../../FogBeach")
+fish_locations = PackedStringArray("beach_sea")
+forage_locations = PackedStringArray("beach")
+pin_point = Vector2(27, 8)
+tag_normal = SubResource("TagNormal")
+tag_selected = SubResource("TagSelected")
+tag_locked = SubResource("TagLocked")
+
+[node name="Tag" type="PanelContainer" parent="Pages/Left/Map/Areas/Beach"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 13.0
+offset_right = 54.0
+offset_bottom = 27.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("TagNormal")
+
+[node name="Row" type="HBoxContainer" parent="Pages/Left/Map/Areas/Beach/Tag"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Name" type="Label" parent="Pages/Left/Map/Areas/Beach/Tag/Row"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.14, 0.08, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+theme_override_constants/line_spacing = -4
+text = "Pantai"
+
+[node name="Lock" type="TextureRect" parent="Pages/Left/Map/Areas/Beach/Tag/Row"]
+visible = false
+texture_filter = 1
+custom_minimum_size = Vector2(7, 8)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = SubResource("Lock")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ModernCity" type="Button" parent="Pages/Left/Map/Areas"]
+layout_mode = 0
+offset_left = 141.0
+offset_top = 0.0
+offset_right = 192.0
+offset_bottom = 37.0
+mouse_default_cursor_shape = 2
+theme_override_styles/focus = SubResource("None")
+theme_override_styles/disabled = SubResource("None")
+theme_override_styles/hover_pressed = SubResource("None")
+theme_override_styles/hover = SubResource("None")
+theme_override_styles/pressed = SubResource("None")
+theme_override_styles/normal = SubResource("None")
+flat = true
+script = ExtResource("area")
+area_id = "modern_city"
+display_name = "Kota Modern"
+subtitle = "Jauh di timur laut"
+icon_texture = SubResource("Icon7")
+unlock_id = "modern_city"
+hide_name_when_locked = true
+locked_hint = "Ada sesuatu di balik kabut. Pulihkan Nusa Vale dulu."
+fog = NodePath("../../FogCity")
+pin_point = Vector2(25, 10)
+tag_normal = SubResource("TagNormal")
+tag_selected = SubResource("TagSelected")
+tag_locked = SubResource("TagLocked")
+
+[node name="Tag" type="PanelContainer" parent="Pages/Left/Map/Areas/ModernCity"]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 10.0
+offset_right = 38.0
+offset_bottom = 24.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("TagNormal")
+
+[node name="Row" type="HBoxContainer" parent="Pages/Left/Map/Areas/ModernCity/Tag"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Name" type="Label" parent="Pages/Left/Map/Areas/ModernCity/Tag/Row"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.25, 0.14, 0.08, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+theme_override_constants/line_spacing = -4
+text = "???"
+
+[node name="Pins" type="Control" parent="Pages/Left/Map"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 192.0
+offset_bottom = 184.0
+mouse_filter = 2
+
+[node name="Right" type="Control" parent="Pages"]
+clip_contents = true
+layout_mode = 0
+offset_left = 221.0
+offset_right = 421.0
+offset_bottom = 224.0
+mouse_filter = 2
+
+[node name="AreaIcon" type="TextureRect" parent="Pages/Right"]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 4.0
+offset_top = 3.0
+offset_right = 20.0
+offset_bottom = 19.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AreaName" type="Label" parent="Pages/Right"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 24.0
+offset_top = 0.0
+offset_right = 120.0
+offset_bottom = 16.0
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "Kota"
+clip_text = true
+
+[node name="AreaStatus" type="Label" parent="Pages/Right"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 120.0
+offset_top = 0.0
+offset_right = 188.0
+offset_bottom = 16.0
+theme_override_colors/font_color = Color(0.27, 0.47, 0.2, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "Terbuka"
+horizontal_alignment = 2
+
+[node name="AreaSubtitle" type="Label" parent="Pages/Right"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 24.0
+offset_top = 14.0
+offset_right = 188.0
+offset_bottom = 30.0
+theme_override_colors/font_color = Color(0.45, 0.31, 0.2, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "Timur Ladang"
+clip_text = true
+
+[node name="TopSeparator" type="HSeparator" parent="Pages/Right"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 31.0
+offset_right = 188.0
+offset_bottom = 35.0
+
+[node name="Scroll" type="ScrollContainer" parent="Pages/Right"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 37.0
+offset_right = 188.0
+offset_bottom = 199.0
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+
+[node name="Body" type="VBoxContainer" parent="Pages/Right/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="HeadingTemplate" type="Label" parent="Pages/Right"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_right = 192.0
+offset_bottom = 16.0
+theme_override_colors/font_color = Color(0.45, 0.31, 0.2, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "TEMPAT"
+
+[node name="NoteTemplate" type="Label" parent="Pages/Right"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(182, 0)
+layout_mode = 0
+offset_right = 182.0
+offset_bottom = 16.0
+theme_override_colors/font_color = Color(0.25, 0.14, 0.08, 1)
+theme_override_constants/line_spacing = -3
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "Catatan"
+autowrap_mode = 3
+
+[node name="ItemsTemplate" type="HFlowContainer" parent="Pages/Right"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_right = 190.0
+offset_bottom = 16.0
+mouse_filter = 2
+theme_override_constants/h_separation = 3
+theme_override_constants/v_separation = 2
+
+[node name="BottomSeparator" type="HSeparator" parent="Pages/Right"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 200.0
+offset_right = 196.0
+offset_bottom = 204.0
+
+[node name="Players" type="Label" parent="Pages/Right"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 4.0
+offset_top = 205.0
+offset_right = 196.0
+offset_bottom = 222.0
+theme_override_colors/font_color = Color(0.27, 0.47, 0.2, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "Kamu: Ladang"
+clip_text = true

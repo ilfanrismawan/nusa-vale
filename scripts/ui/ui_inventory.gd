@@ -96,6 +96,8 @@ var _skill_tree: Control
 var _relationship_ui: Control
 ## Tab Kalender (ulang tahun, Malam Jumat Kliwon, layanan tutup).
 var _calendar_page: Control
+## Tab Peta (Peta Lembah, hanya dilihat; GDD 3).
+var _map_page: Control
 
 ## Pemain pemilik UI ini (diisi Player). Kosong = P1.
 var player: Player
@@ -141,8 +143,8 @@ func _ready() -> void:
 ## Menu tambahan menggunakan font dan warna buku inventory.
 func _setup_rpg_menus() -> void:
 	_rpg_menu = %TopTabsContainer
-	_menu_buttons = {"Tas": tab_book, "Status": %TabStatus, "Equipment": %TabEquipment, "Crafting": %TabCrafting, "Keahlian": %TabSkills, "NPC": %TabNPC, "Kalender": %TabCalendar, "Koleksi": tab_collection}
-	_top_tabs.assign([tab_book, %TabStatus, %TabEquipment, %TabCrafting, %TabSkills, %TabNPC, %TabCalendar, tab_collection, tab_gear, %TabControls])
+	_menu_buttons = {"Tas": tab_book, "Status": %TabStatus, "Equipment": %TabEquipment, "Crafting": %TabCrafting, "Keahlian": %TabSkills, "NPC": %TabNPC, "Kalender": %TabCalendar, "Peta": %TabMap, "Koleksi": tab_collection}
+	_top_tabs.assign([tab_book, %TabStatus, %TabEquipment, %TabCrafting, %TabSkills, %TabNPC, %TabCalendar, %TabMap, tab_collection, tab_gear, %TabControls])
 	for index in _top_tabs.size():
 		_top_tabs[index].position.x = index * 38
 	for tab in _top_tabs:
@@ -153,6 +155,7 @@ func _setup_rpg_menus() -> void:
 	%TabSkills.pressed.connect(_show_skills)
 	%TabNPC.pressed.connect(_show_relationships)
 	%TabCalendar.pressed.connect(_show_calendar)
+	%TabMap.pressed.connect(_show_map)
 	_controls_panel = %ControlsPage
 	%TabControls.pressed.connect(_show_controls)
 	_settings_panel = %SettingsPage
@@ -164,7 +167,8 @@ func _setup_rpg_menus() -> void:
 	_skill_tree = %SkillTreePage
 	_relationship_ui = %RelationshipPage
 	_calendar_page = %CalendarPage
-	for page in [_equipment_panel, _crafting_panel, _skill_tree, _relationship_ui, _calendar_page, _settings_panel, _controls_panel]:
+	_map_page = %MapPage
+	for page in [_equipment_panel, _crafting_panel, _skill_tree, _relationship_ui, _calendar_page, _map_page, _settings_panel, _controls_panel]:
 		page.inventory_ui = self
 	_btn_sort = %SortButton
 	_btn_sort.pressed.connect(_sort_bag)
@@ -184,6 +188,7 @@ func _show_bag_page() -> void:
 	_skill_tree.hide()
 	_relationship_ui.hide()
 	_calendar_page.hide()
+	_map_page.hide()
 	_settings_panel.hide()
 	_controls_panel.hide()
 	book_root.get_node("LeftPage").show()
@@ -203,6 +208,7 @@ func _show_status() -> void:
 	_skill_tree.hide()
 	_relationship_ui.hide()
 	_calendar_page.hide()
+	_map_page.hide()
 	_settings_panel.hide()
 	_controls_panel.hide()
 	book_root.get_node("LeftPage").hide()
@@ -249,6 +255,8 @@ func _update_menu_highlight() -> void:
 		active = _menu_buttons["NPC"]
 	if is_instance_valid(_calendar_page) and _calendar_page.visible:
 		active = _menu_buttons["Kalender"]
+	if is_instance_valid(_map_page) and _map_page.visible:
+		active = _menu_buttons["Peta"]
 	if is_instance_valid(_settings_panel) and _settings_panel.visible:
 		active = tab_gear
 	if is_instance_valid(_controls_panel) and _controls_panel.visible:
@@ -267,6 +275,7 @@ func _show_collection() -> void:
 	_skill_tree.hide()
 	_relationship_ui.hide()
 	_calendar_page.hide()
+	_map_page.hide()
 	_settings_panel.hide()
 	_controls_panel.hide()
 	book_root.get_node("LeftPage").hide()
@@ -288,6 +297,7 @@ func _show_equipment() -> void:
 	_skill_tree.hide()
 	_relationship_ui.hide()
 	_calendar_page.hide()
+	_map_page.hide()
 	_settings_panel.hide()
 	_controls_panel.hide()
 	for path in ["LeftPage", "RightPage", "RightRibbonsContainer"]:
@@ -302,7 +312,7 @@ func _show_crafting() -> void:
 		return
 	_hide_tooltip()
 	_clear_item_detail()
-	for panel in [_status_panel, _equipment_panel, _collection_panel, _skill_tree, _relationship_ui, _calendar_page, _settings_panel, _controls_panel]:
+	for panel in [_status_panel, _equipment_panel, _collection_panel, _skill_tree, _relationship_ui, _calendar_page, _map_page, _settings_panel, _controls_panel]:
 		panel.hide()
 	for path in ["LeftPage", "RightPage", "RightRibbonsContainer"]:
 		book_root.get_node(path).hide()
@@ -317,6 +327,10 @@ func _show_relationships() -> void:
 
 func _show_calendar() -> void:
 	_show_embedded_page(_calendar_page)
+
+
+func _show_map() -> void:
+	_show_embedded_page(_map_page)
 
 
 func _show_controls() -> void:
@@ -335,7 +349,7 @@ func _show_embedded_page(page: Control) -> void:
 		return
 	_hide_tooltip()
 	_clear_item_detail()
-	for panel in [_status_panel, _equipment_panel, _collection_panel, _crafting_panel, _skill_tree, _relationship_ui, _calendar_page, _settings_panel, _controls_panel]:
+	for panel in [_status_panel, _equipment_panel, _collection_panel, _crafting_panel, _skill_tree, _relationship_ui, _calendar_page, _map_page, _settings_panel, _controls_panel]:
 		panel.hide()
 	for path in ["LeftPage", "RightPage", "RightRibbonsContainer"]:
 		book_root.get_node(path).hide()
@@ -577,6 +591,18 @@ func _input(event: InputEvent) -> void:
 		else:
 			return
 		get_viewport().set_input_as_handled()
+	elif input.is_event(event, &"world_map") and not get_viewport().gui_get_focus_owner() is LineEdit:
+		# M: buka tas langsung di tab Peta; tekan lagi menutup.
+		if visible and _map_page.visible:
+			_close()
+		elif visible:
+			_show_map()
+		elif _can_open_now():
+			_open()
+			_show_map()
+		else:
+			return
+		get_viewport().set_input_as_handled()
 	elif visible and event is InputEventJoypadButton and not _drop_dialog_open() \
 			and (input.is_event(event, &"tool_prev") or input.is_event(event, &"tool_next")):
 		# LB/RB di dalam tas berpindah tab, seperti menu Stardew Valley.
@@ -624,6 +650,8 @@ func _cycle_tab(step: int) -> void:
 		current = _menu_buttons["NPC"]
 	if _calendar_page.visible:
 		current = _menu_buttons["Kalender"]
+	if _map_page.visible:
+		current = _menu_buttons["Peta"]
 	if _settings_panel.visible:
 		current = tab_gear
 	if _controls_panel.visible:
@@ -660,6 +688,7 @@ func _close() -> void:
 	_skill_tree.hide()
 	_relationship_ui.hide()
 	_calendar_page.hide()
+	_map_page.hide()
 	_settings_panel.hide()
 	_controls_panel.hide()
 	if is_instance_valid(_consume_dialog):

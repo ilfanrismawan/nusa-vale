@@ -72,6 +72,7 @@ static func default_rows() -> Array[Dictionary]:
 	rows.append(_row("tool_prev", "Slot sebelumnya", "Lapangan", [[mouse(MOUSE_BUTTON_WHEEL_UP), WORLD], [key(KEY_LEFT), WORLD]], [[joy(JOY_BUTTON_LEFT_SHOULDER), EXPLORE | MENU], [joy(JOY_BUTTON_DPAD_LEFT), COMBAT]]))
 	rows.append(_row("tool_next", "Slot berikutnya", "Lapangan", [[mouse(MOUSE_BUTTON_WHEEL_DOWN), WORLD], [key(KEY_RIGHT), WORLD]], [[joy(JOY_BUTTON_RIGHT_SHOULDER), EXPLORE | MENU], [joy(JOY_BUTTON_DPAD_RIGHT), COMBAT]]))
 	rows.append(_row("cycle_hotbar", "Halaman hotbar", "Lapangan", [[key(KEY_TAB), WORLD]], [[joy(JOY_BUTTON_BACK), WORLD]]))
+	rows.append(_row("world_map", "Peta lembah", "Lapangan", [[key(KEY_M), WORLD | MENU]], []))
 	rows.append(_row("sort_inventory", "Rapikan tas", "Lapangan", [[key(KEY_R), WORLD | MENU]], [[joy(JOY_BUTTON_RIGHT_STICK), EXPLORE | MENU]]))
 	for i in 8:
 		rows.append(_row("slot_%d" % (i + 1), "Slot %d" % (i + 1), "Lapangan", [[key(KEY_1 + i), WORLD]], [], false))
