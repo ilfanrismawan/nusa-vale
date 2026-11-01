@@ -7,6 +7,8 @@ extends Resource
 @export var map_id: StringName
 @export var point_id: StringName
 @export var activity: StringName = &"idle"
+## Arah hadap di titik. Kosong = arah langkah terakhir.
+@export var facing: String = ""
 
 func total_minutes() -> int:
 	return hour * 60 + minute

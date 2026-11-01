@@ -1,6 +1,14 @@
 extends CanvasLayer
 
 signal selected(index: int)
+## Id aksi yang dikirim `selected`. Nilainya dipakai tes dan ScheduledNPC; jangan diubah urutannya.
+const TALK := 0
+const SERVICE := 1
+const CLOSE := 2
+const ROMANCE := 3
+const LETTER := 4
+const HOUSEHOLD := 5
+const SUPPLIES := 6
 var player: Player
 var npc_name := "Warga Desa"
 var role_title := ""
@@ -20,36 +28,36 @@ func _ready() -> void:
 	%Portrait.texture = FarmServiceTheme.portrait(portrait)
 	%Service.text = {"carpenter": "Bangun / Upgrade", "shipping": "Info Pengiriman", "livestock": "Beli Hewan Ternak", "blacksmith": "Tempa / Pecah Geoda", "shop": "Beli Makanan / Minuman"}.get(service, "Layanan")
 	%Service.visible = service in ["carpenter", "shipping", "livestock", "blacksmith", "shop"]
-	%Talk.pressed.connect(func(): selected.emit(0))
-	%Service.pressed.connect(func(): selected.emit(1))
-	%Close.pressed.connect(func(): selected.emit(2))
+	%Talk.pressed.connect(func(): selected.emit(TALK))
+	%Service.pressed.connect(func(): selected.emit(SERVICE))
+	%Close.pressed.connect(func(): selected.emit(CLOSE))
 	var box := %Talk.get_parent()
 	if supplies_available:
 		var button := Button.new()
 		button.text = "Beli Pakan / Peralatan"
 		button.custom_minimum_size.y = 52
-		button.pressed.connect(func(): selected.emit(6))
+		button.pressed.connect(func(): selected.emit(SUPPLIES))
 		box.add_child(button)
 		box.move_child(button, %Close.get_index())
 	if not romance_action.is_empty():
 		var button := Button.new()
 		button.text = "Nyatakan Perasaan" if romance_action == "dating" else "Melamar"
 		button.custom_minimum_size.y = 52
-		button.pressed.connect(func(): selected.emit(3))
+		button.pressed.connect(func(): selected.emit(ROMANCE))
 		box.add_child(button)
 		box.move_child(button, %Close.get_index())
 	if not household_action.is_empty():
 		var button := Button.new()
 		button.text = household_action
 		button.custom_minimum_size.y = 52
-		button.pressed.connect(func(): selected.emit(5))
+		button.pressed.connect(func(): selected.emit(HOUSEHOLD))
 		box.add_child(button)
 		box.move_child(button, %Close.get_index())
 	if letter_available:
 		var button := Button.new()
 		button.text = "Baca Surat"
 		button.custom_minimum_size.y = 52
-		button.pressed.connect(func(): selected.emit(4))
+		button.pressed.connect(func(): selected.emit(LETTER))
 		box.add_child(button)
 		box.move_child(button, %Close.get_index())
 	get_viewport().size_changed.connect(_resize)
@@ -71,7 +79,7 @@ func _input(event: InputEvent) -> void:
 	var input := player.input if is_instance_valid(player) else PlayerInput.solo()
 	if input.is_event(event, &"ui_cancel"):
 		get_viewport().set_input_as_handled()
-		selected.emit(2)
+		selected.emit(CLOSE)
 
 func _exit_tree() -> void:
 	Coop.set_menu_open(player, false)

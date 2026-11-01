@@ -107,11 +107,11 @@ func _ready() -> void:
 		check(actor != null, npc + " is in Town at 10.00")
 		if actor != null:
 			var door: Vector2 = town.get_node("NPCPaths").gateway(home, npc)
-			# Mbah Darmi (anchored) langsung duduk di terasnya; yang lain berjalan dari pintu rumah.
-			if npc == "darmi":
-				check(actor.global_position.distance_to(town.get_node("NPCPoints/darmi_porch").global_position) < 2.0, "darmi is seated at her porch")
-			else:
-				check(actor._active_path.size() > 0 or actor.global_position.distance_to(door) < 4.0, npc + " arrives from the home door")
+			# Jadwal kerja sudah berjalan sejak pagi: saat pemain masuk Town jam 10.00 warga langsung
+			# berada di titiknya (Mbah Darmi di teras), tidak berbondong keluar dari pintu rumah.
+			var work_point := str(NPCDatabase.schedule_entry(npc, 10, 0, false).point)
+			check(not actor._is_walking and actor.global_position.distance_to(town.get_node("NPCPoints/" + work_point).global_position) < 2.0, npc + " is already at " + work_point + " when Town loads mid-schedule")
+			check(door != Vector2.ZERO, npc + " still has a home door gateway")
 			check(walk(actor), npc + " reaches the work point without collisions")
 			set_time(23, 0)
 			presenter.refresh()

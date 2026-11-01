@@ -161,6 +161,7 @@ function Invoke-GodotCheck([string]$Label, [string[]]$Arguments, [bool]$Expected
         'tests/fishing_season_regression.tscn' = 'FISHING SEASON COMPLETE: failures=0'
         'tests/portrait_expression_regression.tscn' = 'PORTRAIT REGRESSION COMPLETE'
         'tests/npc_social_regression.tscn' = 'NPC SOCIAL COMPLETE: failures=0'
+        'tests/npc_behavior_regression.tscn' = 'NPC BEHAVIOR COMPLETE: failures=0'
         'tests/balai_bundles_regression.tscn' = 'BALAI BUNDLES COMPLETE: failures=0'
         'tests/ranch_expansion_regression.tscn' = 'ranch_expansion_regression failures=0'
         'tests/vehicle_regression.tscn' = 'VEHICLE_TEST failures=0'
@@ -304,6 +305,7 @@ try {
     Invoke-GodotCheck 'Centralized resident data, routes, events and rewards' @('tests/npc_centralization_regression.tscn')
     Invoke-GodotCheck 'Resident schedules and services' @('tests/residents_regression.tscn')
     Invoke-GodotCheck 'NPC road arrival and departure' @('tests/npc_paths_regression.tscn')
+    Invoke-GodotCheck 'NPC mid-schedule spawn, blocked roads, facing and menu ids' @('tests/npc_behavior_regression.tscn')
     Invoke-GodotCheck 'NPC editable profiles and isolated curves' @('tests/npc_inspector_regression.tscn')
     Invoke-GodotCheck 'NPC gift categories and transactions' @('tests/npc_gifts_regression.tscn')
     Invoke-GodotCheck 'Household and social recipe mail' @('tests/household_regression.tscn')

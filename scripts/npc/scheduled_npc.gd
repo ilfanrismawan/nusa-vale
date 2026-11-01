@@ -1,10 +1,19 @@
 extends VillageNPC
 
+const ServiceMenu := preload("res://scripts/ui/resident_service_menu.gd")
+## Setelah terhalang selama ini (detik), warga menembus penghalang sampai waypoint berikutnya.
+const STUCK_PASS_SECONDS := 1.5
+
 var definition: Dictionary = {}
 var _service_menu: CanvasLayer
 var waypoint_radius := 2.0
 var _offscreen := false
 var _geode_ui: AcceptDialog
+## Pemain yang membuka menu warga (co-op: batal harus untuk pemain ini).
+var _menu_player: Player
+var _passing_through := false
+var _blocked_time := 0.0
+var _last_facing := "down"
 
 func _exit_tree() -> void:
 	if is_instance_valid(_geode_ui):
@@ -118,6 +127,7 @@ func _update_presence() -> void:
 		return
 	_offscreen = hidden
 	visible = not hidden
+	_end_pass_through(true)
 	collision_mask = 0 if hidden else 1
 	interaction_area.set_deferred("monitoring", not hidden)
 	if hidden:
@@ -135,6 +145,9 @@ func _physics_process(delta: float) -> void:
 	if _active_path.is_empty():
 		_is_walking = false
 		velocity = Vector2.ZERO
+		if _passing_through:
+			# Sudah di tujuan dan tidak bergerak lagi: aman memulihkan collision.
+			_end_pass_through(true)
 		_play_facing_idle(_desired_facing)
 		return
 	var offset := _active_path[0] - global_position
@@ -142,10 +155,45 @@ func _physics_process(delta: float) -> void:
 		_active_path.pop_front()
 		_is_walking = not _active_path.is_empty()
 		velocity = Vector2.ZERO
+		_end_pass_through(_active_path.is_empty())
 		return
+	var before := global_position
 	velocity = offset.normalized() * minf(walk_speed, offset.length() / maxf(delta, 0.001))
+	var expected := velocity.length() * delta
 	move_and_slide()
 	_update_walk_animation(offset.normalized())
+	# Terhalang (pemain, hewan, objek baru): setelah sebentar, tembus sampai waypoint ini, tanpa teleport.
+	if expected > 0.0 and before.distance_to(global_position) < expected * 0.25:
+		_blocked_time += delta
+		if _blocked_time >= STUCK_PASS_SECONDS and not _passing_through:
+			_passing_through = true
+			collision_mask = 0
+	else:
+		_blocked_time = 0.0
+
+## Tembus berakhir di waypoint berikutnya, tetapi baru setelah badan tidak lagi tumpang tindih penghalang.
+func _end_pass_through(force: bool = false) -> void:
+	_blocked_time = 0.0
+	if not _passing_through:
+		return
+	if not force and not _offscreen:
+		collision_mask = 1
+		if test_move(global_transform, Vector2.ZERO):
+			collision_mask = 0
+			return
+	_passing_through = false
+	collision_mask = 0 if _offscreen else 1
+
+func _update_walk_animation(dir: Vector2) -> void:
+	super._update_walk_animation(dir)
+	if absf(dir.x) > absf(dir.y):
+		_last_facing = "side_left" if dir.x < 0 else "side_right"
+	elif dir != Vector2.ZERO:
+		_last_facing = "down" if dir.y > 0 else "up"
+
+## Arah kosong di jadwal = tetap menghadap arah langkah terakhir.
+func _play_facing_idle(facing: String) -> void:
+	super._play_facing_idle(facing if not facing.is_empty() else _last_facing)
 
 func interact(player: Player = null) -> void:
 	if not visible:
@@ -157,6 +205,7 @@ func interact(player: Player = null) -> void:
 	if player == null:
 		return
 	_face_player(player)
+	_menu_player = player
 	_service_menu = preload("res://scenes/ui/resident_service_menu.tscn").instantiate()
 	_service_menu.player = player
 	_service_menu.npc_name = npc_name
@@ -175,9 +224,10 @@ func interact(player: Player = null) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if is_instance_valid(_service_menu):
-		if event.is_action_pressed("ui_cancel"):
+		# Hanya menu warga sendiri; toko/upgrade/konstruksi menutup dirinya sendiri.
+		if _service_menu.get_script() == ServiceMenu and event.is_action_pressed("ui_cancel"):
 			get_viewport().set_input_as_handled()
-			_choose_service(2, RoomDoor.player())
+			_choose_service(ServiceMenu.CLOSE, _menu_player if is_instance_valid(_menu_player) else RoomDoor.player())
 		return
 	super._unhandled_input(event)
 
@@ -187,9 +237,9 @@ func _choose_service(index: int, player: Player) -> void:
 	_service_menu = null
 	if player == null:
 		return
-	if index == 0:
+	if index == ServiceMenu.TALK:
 		_open_resident_dialog(player)
-	elif index == 3:
+	elif index == ServiceMenu.ROMANCE:
 		var status := NPCSocialService.relationship_action(player.data, npc_id)
 		var allowed := NPCSocialService.can_relationship(player.data, npc_id, status)
 		var key := ("confession_accept" if status == "dating" else "marriage_accept") if allowed else "confession_too_early"
@@ -197,18 +247,18 @@ func _choose_service(index: int, player: Player) -> void:
 		var fallback := ["Aku juga merasakan hal yang sama."] if allowed else ["Aku belum siap. Mari saling mengenal lebih dahulu."]
 		var packet := NPCDialogueResolver.packet(dialogue.get(key, fallback), player.data)
 		_show_packet(packet, player, {"relationship_status": status} if allowed else {"kind": "notice"})
-	elif index == 5:
+	elif index == ServiceMenu.HOUSEHOLD:
 		if _current_activity == "at_home" and NPCHousehold.ceremony_ready(player.data, npc_id):
 			var spouse: bool = player.data.household.mode == "spouse"
 			var lines := ["Hari ini kita berkumpul untuk merayakan ikatan yang tumbuh di Nusa Vale.", "Di rumah ini kita akan saling menjaga, berbagi pekerjaan, dan menyambut hari baru bersama.", "Dengan disaksikan keluarga dan sahabat, kita memulai kehidupan bersama."] if spouse else ["Terima kasih sudah mengundangku. Kita tetap sahabat, dan sekarang berbagi rumah.", "Mari saling membantu dan menjaga rumah ini bersama."]
 			_show_packet(NPCDialogueResolver.packet(lines, player.data), player, {"ceremony": true})
 		elif NPCHousehold.roommate_available(player.data, npc_id):
 			_show_packet(NPCDialogueResolver.packet(["Aku senang menjadi teman sekamarmu. Aku akan mampir besok untuk merayakannya."], player.data), player, {"roommate": true})
-	elif index == 4:
+	elif index == ServiceMenu.LETTER:
 		var letter := NPCEventService.pending_letter(player.data, npc_id)
 		if not letter.is_empty():
 			_show_packet(NPCDialogueResolver.packet([str(letter.subject), str(letter.body)], player.data), player, {"letter_id": letter.id})
-	elif index == 6 and _service_available():
+	elif index == ServiceMenu.SUPPLIES and _service_available():
 		var path := str(definition.get("service_rules", {}).get("supplies_shop", ""))
 		if path.is_empty():
 			return
@@ -220,7 +270,7 @@ func _choose_service(index: int, player: Player) -> void:
 		_service_menu = shop
 		shop.tree_exited.connect(func(): _service_menu = null)
 		Coop.ui_parent(player).add_child(shop)
-	elif index == 1 and _service_available():
+	elif index == ServiceMenu.SERVICE and _service_available():
 		var service := str(definition.get("service", ""))
 		if service == "carpenter":
 			_service_menu = load("res://scenes/ui/carpenter_menu.tscn").instantiate()

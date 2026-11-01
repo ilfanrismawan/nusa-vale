@@ -45,7 +45,10 @@ func _entries(schedule: Array[NPCScheduleEntry]) -> Array:
 	var result: Array = []
 	for entry in sorted:
 		if entry != null:
-			result.append({"time": "%02d:%02d" % [entry.hour, entry.minute], "map": str(entry.map_id), "point": str(entry.point_id), "activity": str(entry.activity)})
+			var value := {"time": "%02d:%02d" % [entry.hour, entry.minute], "map": str(entry.map_id), "point": str(entry.point_id), "activity": str(entry.activity)}
+			if not entry.facing.is_empty():
+				value["facing"] = entry.facing
+			result.append(value)
 	return result
 
 func _normalize_data(data: Dictionary) -> void:
