@@ -126,6 +126,7 @@ polygon = PackedVector2Array(-35, 38, -35, 14, -37, 10, -28, 7, 19, 7, 33, 7, 36
 [node name="Area2D" type="Area2D" parent="." unique_id=1328381898]
 script = ExtResource("ResidentDoor")
 target_scene = "res://scenes/world/interior/wira_home.tscn"
+spawn_position = Vector2(240, 330)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=2082419873]
 position = Vector2(0.5, 29)

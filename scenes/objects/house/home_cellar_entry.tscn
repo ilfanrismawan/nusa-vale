@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/house_kitchen_door.gd" id="script"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/exterior/Mine and Dungeon/Mine/Stairs.png" id="stairs"]
+
+[sub_resource type="RectangleShape2D" id="Trigger"]
+size = Vector2(26, 34)
+
+[node name="CellarDoor" type="Area2D"]
+script = ExtResource("script")
+required_flag = "house_cellar_upgraded"
+target_scene = "res://scenes/world/interior/home_cellar.tscn"
+spawn_position = Vector2(358, 164)
+locked_message = "Gudang bawah tanah belum dibangun. Pesan Grand House ke Wira, tukang kayu di Bukit."
+
+[node name="Stairs" type="Sprite2D" parent="."]
+texture = ExtResource("stairs")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 32)
+
+[node name="Trigger" type="CollisionShape2D" parent="."]
+shape = SubResource("Trigger")

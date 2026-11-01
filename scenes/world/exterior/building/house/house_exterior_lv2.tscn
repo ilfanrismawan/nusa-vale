@@ -1,0 +1,49 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/exterior/Houses/3.png" id="1_tex"]
+[ext_resource type="Script" uid="uid://bfg43kx57o018" path="res://scripts/world/enter_door_house.gd" id="2_door"]
+[ext_resource type="Script" path="res://scripts/world/house_exterior.gd" id="3_ext"]
+[ext_resource type="Script" path="res://scripts/world/house_anchor.gd" id="4_anchor"]
+
+[sub_resource type="RectangleShape2D" id="DoorShape"]
+size = Vector2(11, 18)
+
+[node name="HouseExteriorLv2" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("3_ext")
+clear_area = Rect2(-54, -52, 136, 112)
+
+[node name="Roof" type="Sprite2D" parent="."]
+position = Vector2(0, 8)
+texture = ExtResource("1_tex")
+offset = Vector2(14, -2)
+
+[node name="Wall" type="StaticBody2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Wall"]
+polygon = PackedVector2Array(-45, 8, 76, 8, 76, 38, -45, 38)
+
+[node name="Door" type="Area2D" parent="."]
+script = ExtResource("2_door")
+target_spawn_pos = Vector2(310, 190)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Door"]
+position = Vector2(-0.5, 30)
+shape = SubResource("DoorShape")
+
+[node name="Anchors" type="Node2D" parent="."]
+
+[node name="ShippingBin" type="Marker2D" parent="Anchors"]
+position = Vector2(90, 35)
+script = ExtResource("4_anchor")
+target_path = NodePath("ShippingBin")
+
+[node name="ShippingPickup" type="Marker2D" parent="Anchors"]
+position = Vector2(90, 63)
+script = ExtResource("4_anchor")
+target_path = NodePath("NPCPoints/shipping_pickup")
+
+[node name="Mailbox" type="Marker2D" parent="Anchors"]
+position = Vector2(-34, 48)
+script = ExtResource("4_anchor")
+target_path = NodePath("SocialMailbox")

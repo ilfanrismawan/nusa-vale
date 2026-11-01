@@ -85,7 +85,7 @@ func _ready() -> void:
 	DayCycle.minute = 0
 	var solo_day := DayCycle.current_day
 	var house := get_tree().current_scene
-	var bed := house.get_node("Kasur") as Bed
+	var bed: Bed = house.bed()
 	dismiss_shipping_report()
 	check(not get_tree().paused, "closing shipping report releases the pause before solo sleep")
 	bed._sleep()

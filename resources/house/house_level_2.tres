@@ -1,6 +1,8 @@
 [gd_resource type="Resource" script_class="HouseLevelData" format=3]
 [ext_resource type="Script" path="res://scripts/resources/house_level_data.gd" id="script"]
 [ext_resource type="Texture2D" path="res://assets/farm_rpg/Houses/9.png" id="icon"]
+[ext_resource type="PackedScene" path="res://scenes/world/exterior/building/house/house_exterior_lv2.tscn" id="exterior"]
+[ext_resource type="PackedScene" path="res://scenes/world/interior/house/house_interior_lv2.tscn" id="interior"]
 [resource]
 script = ExtResource("script")
 display_name = "Spacious Bedroom"
@@ -12,3 +14,5 @@ build_days = 3
 grants_flags = PackedStringArray("house_bedroom_upgraded")
 stamina_bonus = 30
 completed_message = "Kamar tidur baru selesai! Stamina maksimum semua penghuni +30."
+exterior_scene = ExtResource("exterior")
+interior_scene = ExtResource("interior")

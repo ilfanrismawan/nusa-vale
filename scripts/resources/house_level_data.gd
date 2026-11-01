@@ -16,3 +16,7 @@ extends Resource
 ## Tambahan stamina maksimum untuk semua pemain selama rumah di tingkat ini atau lebih.
 @export_range(0, 200) var stamina_bonus: int = 0
 @export_multiline var completed_message: String
+## Tampilan rumah di farm untuk tingkat ini (root memakai house_exterior.gd). Kosong = pakai tingkat di bawahnya.
+@export var exterior_scene: PackedScene
+## Isi interior_house.tscn untuk tingkat ini (root memakai house_interior_layout.gd). Kosong = pakai tingkat di bawahnya.
+@export var interior_scene: PackedScene

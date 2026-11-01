@@ -1,7 +1,8 @@
 extends Node
 
 ## Upgrade rumah di Wira (GDD 4.12, save v17): data tingkat, pesanan, hari pengerjaan,
-## bonus stamina, flag dapur, save/load + migrasi save lama, menu tukang kayu, pintu dapur.
+## bonus stamina, flag dapur, save/load + migrasi save lama, menu tukang kayu, pintu dapur,
+## layout interior dan tampilan rumah di farm per tingkat.
 ## Tidak menulis save ke disk.
 
 var failures := 0
@@ -30,6 +31,8 @@ func _ready() -> void:
 	_test_save()
 	await _test_menu()
 	await _test_kitchen_door()
+	await _test_interior_tiers()
+	await _test_exterior_tiers()
 	GameState.new_game()
 	check(GameState.house.level == 0 and not GameState.house.is_building() and GameState.p1().max_stamina == PlayerData.MAX_STAMINA, "new game resets the house")
 	print("HOUSE REGRESSION COMPLETE: failures=%d" % failures)
@@ -154,7 +157,85 @@ func _test_kitchen_door() -> void:
 	room.get_node("Player").queue_free()
 	add_child(room)
 	await settle()
-	var door: Node = room.get_node_or_null("KitchenDoor")
+	var door: Node = room.find_child("KitchenDoor", true, false)
 	check(door != null and door.get("required_flag") == HouseManager.LEGACY_KITCHEN_FLAG, "house interior has the kitchen door")
 	room.queue_free()
+	await settle()
+
+func _walkable(world: Node2D, point: Vector2) -> bool:
+	var query := PhysicsPointQueryParameters2D.new()
+	query.position = point
+	query.collision_mask = 1
+	return world.get_world_2d().direct_space_state.intersect_point(query, 1).is_empty()
+
+func _test_interior_tiers() -> void:
+	var house := GameState.house
+	var floor_cells := -1
+	for level in range(0, house.max_level() + 1):
+		house._set_level(level)
+		var room: Node2D = load("res://scenes/world/interior/interior_house.tscn").instantiate()
+		room.get_node("Player").queue_free()
+		add_child(room)
+		await settle()
+		await get_tree().physics_frame
+		await get_tree().physics_frame
+		var layout: Node2D = room.layout
+		var expected := HouseManager.scene_for(level, room.base_layout, true)
+		check(layout != null and layout.scene_file_path == expected.resource_path, "level %d uses its interior layout" % level)
+		check(room.bed() != null and layout.find_child("KitchenDoor", true, false) != null and layout.get_node_or_null("BedSpawn") != null, "level %d layout has bed, kitchen door and wake spot" % level)
+		var cells := 0
+		for layer in layout.find_children("*", "TileMapLayer", false, false):
+			if layer.z_index < 0 and (layer.name == "Floor" or layer.name == "TileMapLayer2"):
+				cells = layer.get_used_cells().size()
+		check(cells > floor_cells, "level %d interior is larger than the level below" % level)
+		floor_cells = cells
+		# Titik yang dipakai dari luar scene harus tetap lantai bebas di semua tingkat.
+		for point in [Vector2(310, 190), Vector2(317, 151), HouseInteriorLayout.point("KitchenReturn", Vector2.ZERO), layout.get_node("BedSpawn").position]:
+			check(_walkable(room, point), "level %d point %s is walkable" % [level, point])
+		if level >= 3:
+			var cellar_door := layout.find_child("CellarDoor", true, false)
+			check(cellar_door != null and ResourceLoader.exists(cellar_door.target_scene), "level %d has the cellar stairs" % level)
+			check(_walkable(room, HouseInteriorLayout.point("CellarReturn", Vector2.ZERO)), "cellar return point is walkable")
+		if level == 1:
+			# Upgrade selesai saat pemain di dalam rumah: layout ikut berganti.
+			house._set_level(2)
+			await settle()
+			check(room.layout.scene_file_path == HouseManager.scene_for(2, room.base_layout, true).resource_path, "finished upgrade swaps the layout while inside")
+		room.queue_free()
+		await settle()
+	var cellar: Node = load("res://scenes/world/interior/home_cellar.tscn").instantiate()
+	check(cellar.get_node_or_null("ExitDoor") != null and cellar.get_node("ExitDoor").return_marker == "CellarReturn", "cellar exits back to the house cellar stairs")
+	cellar.free()
+	house._set_level(0)
+
+func _test_exterior_tiers() -> void:
+	var house := GameState.house
+	var farm := Node2D.new()
+	farm.name = "FakeFarm"
+	var bin := Node2D.new()
+	bin.name = "ShippingBin"
+	farm.add_child(bin)
+	var tree: Choppable = load("res://scenes/objects/pine_tree.tscn").instantiate()
+	tree.persistence_id = "farm:cleanup:HouseRegressionTree"
+	tree.position = Vector2(0, -60)
+	farm.add_child(tree)
+	var home: Node2D = load("res://scenes/world/exterior/building/house/House.tscn").instantiate()
+	farm.add_child(home)
+	add_child(farm)
+	await settle()
+	var lv0_bin := bin.position
+	var lv0_exterior: Node = home.exterior
+	check(lv0_exterior != null and lv0_exterior.get_node_or_null("Door") != null, "level 0 house has its door")
+	check(is_instance_valid(tree), "level 0 keeps cleanup trees around the house")
+	for level in range(1, house.max_level() + 1):
+		house._set_level(level)
+		await settle()
+		var exterior: Node = home.exterior
+		check(exterior != null and exterior.scene_file_path == house.data_for(level).exterior_scene.resource_path, "level %d farm house uses its exterior" % level)
+		check(exterior.get_node_or_null("Door") != null and exterior.get_node("Door").target_spawn_pos == Vector2(310, 190), "level %d door leads to the shared entrance" % level)
+	check(bin.position != lv0_bin, "bigger house moves the shipping bin to its anchor")
+	check(not is_instance_valid(tree) and GameState.chopped_trees.has("farm:cleanup:HouseRegressionTree"), "bigger house clears cleanup trees under it for good")
+	GameState.chopped_trees.erase("farm:cleanup:HouseRegressionTree")
+	farm.queue_free()
+	house._set_level(0)
 	await settle()

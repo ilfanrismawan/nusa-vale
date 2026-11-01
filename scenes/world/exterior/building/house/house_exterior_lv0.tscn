@@ -1,0 +1,55 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" uid="uid://q32pffktpdju" path="res://assets/farm_rpg/Houses/9.png" id="1_dd62a"]
+[ext_resource type="Script" uid="uid://bfg43kx57o018" path="res://scripts/world/enter_door_house.gd" id="2_coavl"]
+[ext_resource type="Script" path="res://scripts/world/house_exterior.gd" id="3_ext"]
+[ext_resource type="Script" path="res://scripts/world/house_anchor.gd" id="4_anchor"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_okwql"]
+size = Vector2(11, 18)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ovsut"]
+size = Vector2(17, 23)
+
+[node name="HouseExteriorLv0" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("3_ext")
+
+[node name="Roof" type="Sprite2D" parent="."]
+texture = ExtResource("1_dd62a")
+
+[node name="Wall" type="StaticBody2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Wall"]
+polygon = PackedVector2Array(-34, 14, -26, 8, -7, -13, 3, -17, 26, 7, 35, 15, 28, 17, 28, 38, 7, 37, 7, 17, -7, 17, -8, 37, -27, 37, -28, 15)
+
+[node name="Door" type="Area2D" parent="."]
+script = ExtResource("2_coavl")
+target_spawn_pos = Vector2(310, 190)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Door"]
+position = Vector2(-0.5, 30)
+shape = SubResource("RectangleShape2D_okwql")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(-0.5, 27.5)
+shape = SubResource("RectangleShape2D_ovsut")
+
+[node name="Anchors" type="Node2D" parent="."]
+
+[node name="ShippingBin" type="Marker2D" parent="Anchors"]
+position = Vector2(40, 35)
+script = ExtResource("4_anchor")
+target_path = NodePath("ShippingBin")
+
+[node name="ShippingPickup" type="Marker2D" parent="Anchors"]
+position = Vector2(40, 63)
+script = ExtResource("4_anchor")
+target_path = NodePath("NPCPoints/shipping_pickup")
+
+[node name="Mailbox" type="Marker2D" parent="Anchors"]
+position = Vector2(-25, 47)
+script = ExtResource("4_anchor")
+target_path = NodePath("SocialMailbox")

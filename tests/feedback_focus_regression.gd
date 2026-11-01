@@ -50,7 +50,7 @@ func _ready() -> void:
 	var house := (load("res://scenes/world/interior/interior_house.tscn") as PackedScene).instantiate()
 	add_child(house)
 	await get_tree().process_frame
-	var bed := house.get_node("Kasur") as Bed
+	var bed: Bed = house.bed()
 	var player := house.get_node("Player/CharacterBody2D") as Player
 	player.set_physics_process(false)
 	var sprite := player.animation_controller.sprite

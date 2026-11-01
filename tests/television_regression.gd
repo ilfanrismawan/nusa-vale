@@ -33,7 +33,7 @@ func _ready() -> void:
 	add_child(room)
 	for f in 3:
 		await get_tree().process_frame
-	check(room.get_node_or_null("Television") != null, "Interior house scene/script has Television instance")
+	check(room.find_child("Television", true, false) != null, "Interior house layout has Television instance")
 	room.queue_free()
 
 	print("=== Test 2: Television UI & Weather Forecast ===")

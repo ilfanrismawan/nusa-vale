@@ -38,6 +38,7 @@
 [ext_resource type="Resource" path="res://resources/seasons/tree_pine.tres" id="34_14nwo"]
 [ext_resource type="Resource" path="res://resources/seasons/waterfall.tres" id="35_dyt2u"]
 [ext_resource type="Resource" path="res://resources/seasons/water_anim.tres" id="36_ge40s"]
+[ext_resource type="PackedScene" uid="uid://bw8rfgq1rgw88" path="res://scenes/world/exterior/town/warteg.tscn" id="37_j7ir7"]
 [ext_resource type="Resource" path="res://resources/seasons/water_tile.tres" id="37_vylga"]
 [ext_resource type="Script" uid="uid://da62xubh24afr" path="res://scripts/world/forage_spawner.gd" id="38_gymkd"]
 [ext_resource type="PackedScene" path="res://scenes/world/exterior/object/fountain_light.tscn" id="41_j7ir7"]
@@ -48,9 +49,8 @@
 [ext_resource type="Texture2D" uid="uid://bhtflnawvcu7n" path="res://assets/farm_rpg/objects/Props/Spring/props water.png" id="113_m3us6"]
 [ext_resource type="Texture2D" uid="uid://i56aqpuh0syp" path="res://assets/farm_rpg/objects/Props/Water props.png" id="114_pirog"]
 [ext_resource type="Script" uid="uid://kol2oyvhbgqs" path="res://scripts/world/fishing_spot.gd" id="115_a168f"]
-[ext_resource type="PackedScene" path="res://scenes/world/kitchen_station.tscn" id="cooking_warung"]
 [ext_resource type="Material" uid="uid://bob2uie4q2xql" path="res://resources/grass_detail_material.tres" id="grass_detail"]
-[ext_resource type="PackedScene" uid="uid://dh1mdfipeceww" path="res://scenes/world/exterior/town/courier_depot.tscn" id="ResidentDepot"]
+[ext_resource type="PackedScene" path="res://scenes/world/exterior/town/courier_depot.tscn" id="ResidentDepot"]
 [ext_resource type="PackedScene" path="res://scenes/npc/routes/town_paths.tscn" id="ResidentPaths"]
 [ext_resource type="Script" uid="uid://5cyo43xb7vqo" path="res://scripts/npc/npc_map_presenter.gd" id="ResidentPresenter"]
 [ext_resource type="Material" path="res://resources/soil_detail_material.tres" id="soil_detail"]
@@ -67,10 +67,10 @@
 [ext_resource type="PackedScene" uid="uid://dt0pni71h81hn" path="res://scenes/world/exterior/town/house_west.tscn" id="town_house_west"]
 [ext_resource type="PackedScene" path="res://scenes/world/exterior/town/school.tscn" id="town_school"]
 [ext_resource type="PackedScene" uid="uid://dkqwvuaii8bpi" path="res://scenes/world/exterior/town/shop.tscn" id="town_shop"]
-[ext_resource type="PackedScene" uid="uid://7dhig82gq71m" path="res://scenes/world/exterior/town/tea_stall.tscn" id="town_tea_stall"]
+[ext_resource type="PackedScene" path="res://scenes/world/exterior/town/tea_stall.tscn" id="town_tea_stall"]
 [ext_resource type="PackedScene" path="res://scenes/world/exterior/town/university.tscn" id="town_university"]
-[ext_resource type="PackedScene" path="res://scenes/world/exterior/town/warung.tscn" id="town_warung"]
 [ext_resource type="Material" uid="uid://ci3yasder0uu3" path="res://resources/water_detail_material.tres" id="water_detail"]
+[ext_resource type="Script" path="res://scripts/effects/sky_fx.gd" id="sky_fx"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tw001"]
 texture = ExtResource("1_twn")
@@ -1314,415 +1314,415 @@ size = Vector2(29, 17)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w5a0g"]
 size = Vector2(27, 16)
 
-[sub_resource type="Curve2D" id="Curve2D_3lc8v"]
+[sub_resource type="Curve2D" id="Curve2D_0ledj"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
 "points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 960, 300, 0, 0, 0, 0, 780, 300, 0, 0, 0, 0, 780, 430)
 }
 point_count = 4
+
+[sub_resource type="Curve2D" id="Curve2D_3lc8v"]
+resource_local_to_scene = true
+bake_interval = 4.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 970, 430, 0, 0, 0, 0, 920, 430, 0, 0, 0, 0, 920, 470, 0, 0, 0, 0, 900, 498, 0, 0, 0, 0, 840, 497)
+}
+point_count = 6
 
 [sub_resource type="Curve2D" id="Curve2D_j7ir7"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 970, 430, 0, 0, 0, 0, 920, 430, 0, 0, 0, 0, 920, 470, 0, 0, 0, 0, 900, 498, 0, 0, 0, 0, 840, 497)
+"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 1232, 344, 0, 0, 0, 0, 1232, 200, 0, 0, 0, 0, 1232, 24)
 }
-point_count = 6
+point_count = 4
 
 [sub_resource type="Curve2D" id="Curve2D_iw7m6"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 1232, 344, 0, 0, 0, 0, 1232, 200, 0, 0, 0, 0, 1232, 24)
+"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 780, 500, 0, 0, 0, 0, 840, 497)
 }
-point_count = 4
+point_count = 3
 
 [sub_resource type="Curve2D" id="Curve2D_ogk73"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 780, 500, 0, 0, 0, 0, 840, 497)
+"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 700, 440, 0, 0, 0, 0, 550, 440, 0, 0, 0, 0, 340, 408, 0, 0, 0, 0, 300, 408, 0, 0, 0, 0, 32, 408)
 }
-point_count = 3
+point_count = 6
 
 [sub_resource type="Curve2D" id="Curve2D_njmhf"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 700, 440, 0, 0, 0, 0, 550, 440, 0, 0, 0, 0, 340, 408, 0, 0, 0, 0, 300, 408, 0, 0, 0, 0, 32, 408)
+"points": PackedVector2Array(0, 0, 0, 0, 840, 470, 0, 0, 0, 0, 840, 497)
 }
-point_count = 6
+point_count = 2
 
 [sub_resource type="Curve2D" id="Curve2D_j11rb"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 840, 470, 0, 0, 0, 0, 840, 497)
+"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 960, 300, 0, 0, 0, 0, 780, 300, 0, 0, 0, 0, 780, 430)
 }
-point_count = 2
+point_count = 4
 
 [sub_resource type="Curve2D" id="Curve2D_duxtq"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 960, 300, 0, 0, 0, 0, 780, 300, 0, 0, 0, 0, 780, 430)
+"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 970, 430, 0, 0, 0, 0, 920, 430, 0, 0, 0, 0, 920, 470, 0, 0, 0, 0, 900, 498, 0, 0, 0, 0, 840, 497)
 }
-point_count = 4
+point_count = 6
 
 [sub_resource type="Curve2D" id="Curve2D_ab4yg"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 970, 430, 0, 0, 0, 0, 920, 430, 0, 0, 0, 0, 920, 470, 0, 0, 0, 0, 900, 498, 0, 0, 0, 0, 840, 497)
+"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 1232, 344, 0, 0, 0, 0, 1232, 200, 0, 0, 0, 0, 1232, 24)
 }
-point_count = 6
+point_count = 4
 
 [sub_resource type="Curve2D" id="Curve2D_xlx07"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 1232, 344, 0, 0, 0, 0, 1232, 200, 0, 0, 0, 0, 1232, 24)
+"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 780, 500, 0, 0, 0, 0, 840, 497)
 }
-point_count = 4
+point_count = 3
 
 [sub_resource type="Curve2D" id="Curve2D_7s1qy"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 780, 500, 0, 0, 0, 0, 840, 497)
+"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 700, 440, 0, 0, 0, 0, 550, 440, 0, 0, 0, 0, 340, 408, 0, 0, 0, 0, 300, 408, 0, 0, 0, 0, 32, 408)
 }
-point_count = 3
+point_count = 6
 
 [sub_resource type="Curve2D" id="Curve2D_olspa"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 700, 440, 0, 0, 0, 0, 550, 440, 0, 0, 0, 0, 340, 408, 0, 0, 0, 0, 300, 408, 0, 0, 0, 0, 32, 408)
+"points": PackedVector2Array(0, 0, 0, 0, 840, 470, 0, 0, 0, 0, 840, 497)
 }
-point_count = 6
+point_count = 2
 
 [sub_resource type="Curve2D" id="Curve2D_yvgiu"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 840, 470, 0, 0, 0, 0, 840, 497)
+"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 960, 300, 0, 0, 0, 0, 780, 300, 0, 0, 0, 0, 780, 430)
 }
-point_count = 2
+point_count = 4
 
 [sub_resource type="Curve2D" id="Curve2D_7mqnn"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 960, 300, 0, 0, 0, 0, 780, 300, 0, 0, 0, 0, 780, 430)
+"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 970, 430, 0, 0, 0, 0, 920, 430, 0, 0, 0, 0, 920, 470, 0, 0, 0, 0, 900, 498, 0, 0, 0, 0, 840, 497)
 }
-point_count = 4
+point_count = 6
 
 [sub_resource type="Curve2D" id="Curve2D_iul5l"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 970, 430, 0, 0, 0, 0, 920, 430, 0, 0, 0, 0, 920, 470, 0, 0, 0, 0, 900, 498, 0, 0, 0, 0, 840, 497)
+"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 1232, 344, 0, 0, 0, 0, 1232, 200, 0, 0, 0, 0, 1232, 24)
 }
-point_count = 6
+point_count = 4
 
 [sub_resource type="Curve2D" id="Curve2D_lbip1"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 1232, 344, 0, 0, 0, 0, 1232, 200, 0, 0, 0, 0, 1232, 24)
+"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 780, 500, 0, 0, 0, 0, 840, 497)
 }
-point_count = 4
+point_count = 3
 
 [sub_resource type="Curve2D" id="Curve2D_j0slu"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 780, 500, 0, 0, 0, 0, 840, 497)
+"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 700, 440, 0, 0, 0, 0, 550, 440, 0, 0, 0, 0, 340, 408, 0, 0, 0, 0, 300, 408, 0, 0, 0, 0, 32, 408)
 }
-point_count = 3
+point_count = 6
 
 [sub_resource type="Curve2D" id="Curve2D_oqy72"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 700, 440, 0, 0, 0, 0, 550, 440, 0, 0, 0, 0, 340, 408, 0, 0, 0, 0, 300, 408, 0, 0, 0, 0, 32, 408)
+"points": PackedVector2Array(0, 0, 0, 0, 840, 470, 0, 0, 0, 0, 840, 497)
 }
-point_count = 6
+point_count = 2
 
 [sub_resource type="Curve2D" id="Curve2D_dc804"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 840, 470, 0, 0, 0, 0, 840, 497)
+"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 960, 300, 0, 0, 0, 0, 780, 300, 0, 0, 0, 0, 780, 430)
 }
-point_count = 2
+point_count = 4
 
 [sub_resource type="Curve2D" id="Curve2D_bb1wu"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 960, 300, 0, 0, 0, 0, 780, 300, 0, 0, 0, 0, 780, 430)
+"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 970, 430, 0, 0, 0, 0, 920, 430, 0, 0, 0, 0, 920, 470, 0, 0, 0, 0, 900, 498, 0, 0, 0, 0, 840, 497)
 }
-point_count = 4
+point_count = 6
 
 [sub_resource type="Curve2D" id="Curve2D_m3h2c"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 970, 430, 0, 0, 0, 0, 920, 430, 0, 0, 0, 0, 920, 470, 0, 0, 0, 0, 900, 498, 0, 0, 0, 0, 840, 497)
+"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 1232, 344, 0, 0, 0, 0, 1232, 200, 0, 0, 0, 0, 1232, 24)
 }
-point_count = 6
+point_count = 4
 
 [sub_resource type="Curve2D" id="Curve2D_pgh64"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 1232, 344, 0, 0, 0, 0, 1232, 200, 0, 0, 0, 0, 1232, 24)
+"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 780, 500, 0, 0, 0, 0, 840, 497)
 }
-point_count = 4
+point_count = 3
 
 [sub_resource type="Curve2D" id="Curve2D_vrkl3"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 780, 500, 0, 0, 0, 0, 840, 497)
+"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 700, 440, 0, 0, 0, 0, 550, 440, 0, 0, 0, 0, 340, 408, 0, 0, 0, 0, 300, 408, 0, 0, 0, 0, 32, 408)
 }
-point_count = 3
+point_count = 6
 
 [sub_resource type="Curve2D" id="Curve2D_qasu2"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 700, 440, 0, 0, 0, 0, 550, 440, 0, 0, 0, 0, 340, 408, 0, 0, 0, 0, 300, 408, 0, 0, 0, 0, 32, 408)
+"points": PackedVector2Array(0, 0, 0, 0, 840, 470, 0, 0, 0, 0, 840, 497)
 }
-point_count = 6
+point_count = 2
 
 [sub_resource type="Curve2D" id="Curve2D_8q6gc"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 840, 470, 0, 0, 0, 0, 840, 497)
+"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 960, 300, 0, 0, 0, 0, 780, 300, 0, 0, 0, 0, 780, 430)
 }
-point_count = 2
+point_count = 4
 
 [sub_resource type="Curve2D" id="Curve2D_qy0pi"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 960, 300, 0, 0, 0, 0, 780, 300, 0, 0, 0, 0, 780, 430)
+"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 970, 430, 0, 0, 0, 0, 920, 430, 0, 0, 0, 0, 920, 470, 0, 0, 0, 0, 900, 498, 0, 0, 0, 0, 840, 497)
 }
-point_count = 4
+point_count = 6
 
 [sub_resource type="Curve2D" id="Curve2D_3w4lo"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 970, 430, 0, 0, 0, 0, 920, 430, 0, 0, 0, 0, 920, 470, 0, 0, 0, 0, 900, 498, 0, 0, 0, 0, 840, 497)
+"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 1232, 344, 0, 0, 0, 0, 1232, 200, 0, 0, 0, 0, 1232, 24)
 }
-point_count = 6
+point_count = 4
 
 [sub_resource type="Curve2D" id="Curve2D_l7t6v"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 1232, 344, 0, 0, 0, 0, 1232, 200, 0, 0, 0, 0, 1232, 24)
+"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 780, 500, 0, 0, 0, 0, 840, 497)
 }
-point_count = 4
+point_count = 3
 
 [sub_resource type="Curve2D" id="Curve2D_gyebm"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 780, 500, 0, 0, 0, 0, 840, 497)
+"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 700, 440, 0, 0, 0, 0, 550, 440, 0, 0, 0, 0, 340, 408, 0, 0, 0, 0, 300, 408, 0, 0, 0, 0, 32, 408)
 }
-point_count = 3
+point_count = 6
 
 [sub_resource type="Curve2D" id="Curve2D_7jfrx"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 700, 440, 0, 0, 0, 0, 550, 440, 0, 0, 0, 0, 340, 408, 0, 0, 0, 0, 300, 408, 0, 0, 0, 0, 32, 408)
+"points": PackedVector2Array(0, 0, 0, 0, 840, 470, 0, 0, 0, 0, 840, 497)
 }
-point_count = 6
+point_count = 2
 
 [sub_resource type="Curve2D" id="Curve2D_ag2p6"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 840, 470, 0, 0, 0, 0, 840, 497)
+"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 960, 300, 0, 0, 0, 0, 780, 300, 0, 0, 0, 0, 780, 430)
 }
-point_count = 2
+point_count = 4
 
 [sub_resource type="Curve2D" id="Curve2D_lbxxc"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 960, 300, 0, 0, 0, 0, 780, 300, 0, 0, 0, 0, 780, 430)
+"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 970, 430, 0, 0, 0, 0, 920, 430, 0, 0, 0, 0, 920, 470, 0, 0, 0, 0, 900, 498, 0, 0, 0, 0, 840, 497)
 }
-point_count = 4
+point_count = 6
 
 [sub_resource type="Curve2D" id="Curve2D_0bfxu"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 970, 430, 0, 0, 0, 0, 920, 430, 0, 0, 0, 0, 920, 470, 0, 0, 0, 0, 900, 498, 0, 0, 0, 0, 840, 497)
+"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 1232, 344, 0, 0, 0, 0, 1232, 200, 0, 0, 0, 0, 1232, 24)
 }
-point_count = 6
+point_count = 4
 
 [sub_resource type="Curve2D" id="Curve2D_8jqla"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 1232, 344, 0, 0, 0, 0, 1232, 200, 0, 0, 0, 0, 1232, 24)
+"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 780, 500, 0, 0, 0, 0, 840, 497)
 }
-point_count = 4
+point_count = 3
 
 [sub_resource type="Curve2D" id="Curve2D_ufgby"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 780, 500, 0, 0, 0, 0, 840, 497)
+"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 700, 440, 0, 0, 0, 0, 550, 440, 0, 0, 0, 0, 340, 408, 0, 0, 0, 0, 300, 408, 0, 0, 0, 0, 32, 408)
 }
-point_count = 3
+point_count = 6
 
 [sub_resource type="Curve2D" id="Curve2D_s04hg"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 700, 440, 0, 0, 0, 0, 550, 440, 0, 0, 0, 0, 340, 408, 0, 0, 0, 0, 300, 408, 0, 0, 0, 0, 32, 408)
+"points": PackedVector2Array(0, 0, 0, 0, 840, 470, 0, 0, 0, 0, 840, 497)
 }
-point_count = 6
+point_count = 2
 
 [sub_resource type="Curve2D" id="Curve2D_fhfvl"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 840, 470, 0, 0, 0, 0, 840, 497)
+"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 960, 300, 0, 0, 0, 0, 780, 300, 0, 0, 0, 0, 780, 430)
 }
-point_count = 2
+point_count = 4
 
 [sub_resource type="Curve2D" id="Curve2D_m80ia"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 960, 300, 0, 0, 0, 0, 780, 300, 0, 0, 0, 0, 780, 430)
+"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 970, 430, 0, 0, 0, 0, 920, 430, 0, 0, 0, 0, 920, 470, 0, 0, 0, 0, 900, 498, 0, 0, 0, 0, 840, 497)
 }
-point_count = 4
+point_count = 6
 
 [sub_resource type="Curve2D" id="Curve2D_s0bkl"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 970, 430, 0, 0, 0, 0, 920, 430, 0, 0, 0, 0, 920, 470, 0, 0, 0, 0, 900, 498, 0, 0, 0, 0, 840, 497)
+"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 1232, 344, 0, 0, 0, 0, 1232, 200, 0, 0, 0, 0, 1232, 24)
 }
-point_count = 6
+point_count = 4
 
 [sub_resource type="Curve2D" id="Curve2D_0fvtn"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 1232, 344, 0, 0, 0, 0, 1232, 200, 0, 0, 0, 0, 1232, 24)
+"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 780, 500, 0, 0, 0, 0, 840, 497)
 }
-point_count = 4
+point_count = 3
 
 [sub_resource type="Curve2D" id="Curve2D_b8a70"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 780, 500, 0, 0, 0, 0, 840, 497)
+"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 700, 440, 0, 0, 0, 0, 550, 440, 0, 0, 0, 0, 340, 408, 0, 0, 0, 0, 300, 408, 0, 0, 0, 0, 32, 408)
 }
-point_count = 3
+point_count = 6
 
 [sub_resource type="Curve2D" id="Curve2D_pkl8t"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 700, 440, 0, 0, 0, 0, 550, 440, 0, 0, 0, 0, 340, 408, 0, 0, 0, 0, 300, 408, 0, 0, 0, 0, 32, 408)
+"points": PackedVector2Array(0, 0, 0, 0, 840, 470, 0, 0, 0, 0, 840, 497)
 }
-point_count = 6
+point_count = 2
 
 [sub_resource type="Curve2D" id="Curve2D_3qi1s"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 840, 470, 0, 0, 0, 0, 840, 497)
+"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 960, 300, 0, 0, 0, 0, 780, 300, 0, 0, 0, 0, 780, 430)
 }
-point_count = 2
+point_count = 4
 
 [sub_resource type="Curve2D" id="Curve2D_e43l1"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 960, 300, 0, 0, 0, 0, 780, 300, 0, 0, 0, 0, 780, 430)
+"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 970, 430, 0, 0, 0, 0, 920, 430, 0, 0, 0, 0, 920, 470, 0, 0, 0, 0, 900, 498, 0, 0, 0, 0, 840, 497)
 }
-point_count = 4
+point_count = 6
 
 [sub_resource type="Curve2D" id="Curve2D_r4oh6"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 970, 430, 0, 0, 0, 0, 920, 430, 0, 0, 0, 0, 920, 470, 0, 0, 0, 0, 900, 498, 0, 0, 0, 0, 840, 497)
+"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 1232, 344, 0, 0, 0, 0, 1232, 200, 0, 0, 0, 0, 1232, 24)
 }
-point_count = 6
+point_count = 4
 
 [sub_resource type="Curve2D" id="Curve2D_gjw4x"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 1232, 344, 0, 0, 0, 0, 1232, 200, 0, 0, 0, 0, 1232, 24)
+"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 780, 500, 0, 0, 0, 0, 840, 497)
 }
-point_count = 4
+point_count = 3
 
 [sub_resource type="Curve2D" id="Curve2D_yqox8"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 780, 500, 0, 0, 0, 0, 840, 497)
+"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 700, 440, 0, 0, 0, 0, 550, 440, 0, 0, 0, 0, 340, 408, 0, 0, 0, 0, 300, 408, 0, 0, 0, 0, 32, 408)
 }
-point_count = 3
+point_count = 6
 
 [sub_resource type="Curve2D" id="Curve2D_vgvp2"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 780, 430, 0, 0, 0, 0, 700, 440, 0, 0, 0, 0, 550, 440, 0, 0, 0, 0, 340, 408, 0, 0, 0, 0, 300, 408, 0, 0, 0, 0, 32, 408)
+"points": PackedVector2Array(0, 0, 0, 0, 840, 470, 0, 0, 0, 0, 840, 497)
 }
-point_count = 6
+point_count = 2
 
 [sub_resource type="Curve2D" id="Curve2D_i8bx4"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 840, 470, 0, 0, 0, 0, 840, 497)
+"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 960, 300, 0, 0, 0, 0, 780, 300, 0, 0, 0, 0, 780, 430)
 }
-point_count = 2
+point_count = 4
 
 [sub_resource type="Curve2D" id="Curve2D_55yh2"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 960, 300, 0, 0, 0, 0, 780, 300, 0, 0, 0, 0, 780, 430)
+"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 970, 430, 0, 0, 0, 0, 920, 430, 0, 0, 0, 0, 920, 470, 0, 0, 0, 0, 900, 498, 0, 0, 0, 0, 840, 497)
 }
-point_count = 4
+point_count = 6
 
 [sub_resource type="Curve2D" id="Curve2D_c4l5h"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 970, 430, 0, 0, 0, 0, 920, 430, 0, 0, 0, 0, 920, 470, 0, 0, 0, 0, 900, 498, 0, 0, 0, 0, 840, 497)
-}
-point_count = 6
-
-[sub_resource type="Curve2D" id="Curve2D_3nion"]
-resource_local_to_scene = true
-bake_interval = 4.0
-_data = {
 "points": PackedVector2Array(0, 0, 0, 0, 970, 344, 0, 0, 0, 0, 1232, 344, 0, 0, 0, 0, 1232, 200, 0, 0, 0, 0, 1232, 24)
 }
 point_count = 4
 
-[sub_resource type="Curve2D" id="Curve2D_dnnur"]
+[sub_resource type="Curve2D" id="Curve2D_3nion"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
@@ -1730,7 +1730,7 @@ _data = {
 }
 point_count = 3
 
-[sub_resource type="Curve2D" id="Curve2D_2vnfs"]
+[sub_resource type="Curve2D" id="Curve2D_dnnur"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
@@ -1738,7 +1738,7 @@ _data = {
 }
 point_count = 6
 
-[sub_resource type="Curve2D" id="Curve2D_yndkc"]
+[sub_resource type="Curve2D" id="Curve2D_2vnfs"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
@@ -1746,7 +1746,7 @@ _data = {
 }
 point_count = 2
 
-[sub_resource type="Curve2D" id="Curve2D_8krsa"]
+[sub_resource type="Curve2D" id="Curve2D_yndkc"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
@@ -1754,7 +1754,7 @@ _data = {
 }
 point_count = 4
 
-[sub_resource type="Curve2D" id="Curve2D_al4kj"]
+[sub_resource type="Curve2D" id="Curve2D_8krsa"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
@@ -1762,7 +1762,7 @@ _data = {
 }
 point_count = 6
 
-[sub_resource type="Curve2D" id="Curve2D_0g7ar"]
+[sub_resource type="Curve2D" id="Curve2D_al4kj"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
@@ -1770,7 +1770,7 @@ _data = {
 }
 point_count = 4
 
-[sub_resource type="Curve2D" id="Curve2D_gv06x"]
+[sub_resource type="Curve2D" id="Curve2D_0g7ar"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
@@ -1778,7 +1778,7 @@ _data = {
 }
 point_count = 3
 
-[sub_resource type="Curve2D" id="Curve2D_t5tvc"]
+[sub_resource type="Curve2D" id="Curve2D_gv06x"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
@@ -1786,7 +1786,7 @@ _data = {
 }
 point_count = 6
 
-[sub_resource type="Curve2D" id="Curve2D_fj4ap"]
+[sub_resource type="Curve2D" id="Curve2D_t5tvc"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
@@ -1794,7 +1794,7 @@ _data = {
 }
 point_count = 2
 
-[sub_resource type="Curve2D" id="Curve2D_ula6w"]
+[sub_resource type="Curve2D" id="Curve2D_fj4ap"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
@@ -1802,7 +1802,7 @@ _data = {
 }
 point_count = 5
 
-[sub_resource type="Curve2D" id="Curve2D_m4j2v"]
+[sub_resource type="Curve2D" id="Curve2D_ula6w"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
@@ -1810,7 +1810,7 @@ _data = {
 }
 point_count = 4
 
-[sub_resource type="Curve2D" id="Curve2D_pc833"]
+[sub_resource type="Curve2D" id="Curve2D_m4j2v"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
@@ -1818,7 +1818,7 @@ _data = {
 }
 point_count = 4
 
-[sub_resource type="Curve2D" id="Curve2D_cje4s"]
+[sub_resource type="Curve2D" id="Curve2D_pc833"]
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
@@ -8774,9 +8774,6 @@ position = Vector2(1208, 761)
 [node name="University" parent="YSortEntities/Buildings" unique_id=24540617 instance=ExtResource("town_university")]
 position = Vector2(719, 132)
 
-[node name="Warung" parent="YSortEntities/Buildings" unique_id=1791422117 instance=ExtResource("town_warung")]
-position = Vector2(660, 241)
-
 [node name="Blacksmith" parent="YSortEntities/Buildings" unique_id=1672144821 instance=ExtResource("town_blacksmith")]
 position = Vector2(1307, 926)
 
@@ -8813,6 +8810,9 @@ position = Vector2(754, 186)
 [node name="TeaStall" parent="YSortEntities/Buildings" unique_id=1839339523 instance=ExtResource("town_tea_stall")]
 position = Vector2(960, 504)
 scale = Vector2(0.8195385, 0.8195385)
+
+[node name="Warteg" parent="YSortEntities/Buildings" unique_id=539657404 instance=ExtResource("37_j7ir7")]
+position = Vector2(654, 195)
 
 [node name="Anvil" type="StaticBody2D" parent="YSortEntities" unique_id=1811101128]
 position = Vector2(1367, 915)
@@ -9161,9 +9161,6 @@ metadata/_custom_type_script = "uid://c74xqxwwjr6m7"
 [node name="TileMapLayer2" type="TileMapLayer" parent="." unique_id=1371806708]
 tile_map_data = PackedByteArray("AAA8ADAAAAAAAAAAAAA8ADEAAAAAAAEAAAA8ADIAAAAAAAIAAAA9ADAAAAABAAAAAAA9ADEAAAABAAEAAAA9ADIAAAABAAIAAAA+ADAAAAACAAAAAAA+ADEAAAACAAEAAAA+ADIAAAACAAIAAAA/ADAAAAADAAAAAAA/ADEAAAADAAEAAAA/ADIAAAADAAIAAABAADAAAAACAAAAAABAADEAAAACAAEAAABAADIAAAACAAIAAABBADAAAAADAAAAAABBADEAAAADAAEAAABBADIAAAADAAIAAABCADAAAAACAAAAAABCADEAAAACAAEAAABCADIAAAACAAIAAABDADAAAAADAAAAAABDADEAAAADAAEAAABDADIAAAADAAIAAABEADAAAAADAAAAAABEADEAAAADAAEAAABEADIAAAADAAIAAABFADAAAAAEAAAAAABFADEAAAAEAAEAAABFADIAAAAEAAIAAABGADAAAAAFAAAAAABGADEAAAAFAAEAAABGADIAAAAFAAIAAAA=")
 tile_set = SubResource("TileSet_kx4jw")
-
-[node name="BalaiNadiAccess" parent="." unique_id=694731992 instance=ExtResource("town_balai_access")]
-position = Vector2(333, 6)
 
 [node name="WaterDecoration" type="TileMapLayer" parent="." unique_id=46374457]
 texture_filter = 1
@@ -9541,9 +9538,6 @@ script = ExtResource("90_m3h2c")
 position = Vector2(689, 1141)
 shape = SubResource("RectangleShape2D_r2eyg")
 
-[node name="WarungKitchen" parent="." unique_id=1275117203 instance=ExtResource("cooking_warung")]
-position = Vector2(936, 388)
-
 [node name="Marker2D" type="Marker2D" parent="." unique_id=748504952]
 position = Vector2(1233, 14)
 
@@ -9645,196 +9639,196 @@ script = ExtResource("ResidentPresenter")
 [node name="NPCPaths" parent="." unique_id=361139853 instance=ExtResource("ResidentPaths")]
 
 [node name="Wira_bridge_to_center" parent="NPCPaths" index="3"]
-curve = SubResource("Curve2D_3lc8v")
+curve = SubResource("Curve2D_0ledj")
 
 [node name="Wira_bridge_to_home" parent="NPCPaths" index="4"]
-curve = SubResource("Curve2D_j7ir7")
+curve = SubResource("Curve2D_3lc8v")
 
 [node name="Wira_bridge_to_hill" parent="NPCPaths" index="5"]
-curve = SubResource("Curve2D_iw7m6")
+curve = SubResource("Curve2D_j7ir7")
 
 [node name="Wira_center_to_home" parent="NPCPaths" index="6"]
-curve = SubResource("Curve2D_ogk73")
+curve = SubResource("Curve2D_iw7m6")
 
 [node name="Wira_center_to_farm" parent="NPCPaths" index="7"]
-curve = SubResource("Curve2D_njmhf")
+curve = SubResource("Curve2D_ogk73")
 
 [node name="Wira_door_to_home" parent="NPCPaths" index="8"]
-curve = SubResource("Curve2D_j11rb")
+curve = SubResource("Curve2D_njmhf")
 
 [node name="Ubay_bridge_to_center" parent="NPCPaths" index="9"]
-curve = SubResource("Curve2D_duxtq")
+curve = SubResource("Curve2D_j11rb")
 
 [node name="Ubay_bridge_to_home" parent="NPCPaths" index="10"]
-curve = SubResource("Curve2D_ab4yg")
+curve = SubResource("Curve2D_duxtq")
 
 [node name="Ubay_bridge_to_hill" parent="NPCPaths" index="11"]
-curve = SubResource("Curve2D_xlx07")
+curve = SubResource("Curve2D_ab4yg")
 
 [node name="Ubay_center_to_home" parent="NPCPaths" index="12"]
-curve = SubResource("Curve2D_7s1qy")
+curve = SubResource("Curve2D_xlx07")
 
 [node name="Ubay_center_to_farm" parent="NPCPaths" index="13"]
-curve = SubResource("Curve2D_olspa")
+curve = SubResource("Curve2D_7s1qy")
 
 [node name="Ubay_door_to_home" parent="NPCPaths" index="14"]
-curve = SubResource("Curve2D_yvgiu")
+curve = SubResource("Curve2D_olspa")
 
 [node name="Zarathia_Ubay_bridge_to_center" parent="NPCPaths" index="15"]
-curve = SubResource("Curve2D_7mqnn")
+curve = SubResource("Curve2D_yvgiu")
 
 [node name="Zarathia_Ubay_bridge_to_home" parent="NPCPaths" index="16"]
-curve = SubResource("Curve2D_iul5l")
+curve = SubResource("Curve2D_7mqnn")
 
 [node name="Zarathia_Ubay_bridge_to_hill" parent="NPCPaths" index="17"]
-curve = SubResource("Curve2D_lbip1")
+curve = SubResource("Curve2D_iul5l")
 
 [node name="Zarathia_Ubay_center_to_home" parent="NPCPaths" index="18"]
-curve = SubResource("Curve2D_j0slu")
+curve = SubResource("Curve2D_lbip1")
 
 [node name="Zarathia_Ubay_center_to_farm" parent="NPCPaths" index="19"]
-curve = SubResource("Curve2D_oqy72")
+curve = SubResource("Curve2D_j0slu")
 
 [node name="Zarathia_Ubay_door_to_home" parent="NPCPaths" index="20"]
-curve = SubResource("Curve2D_dc804")
+curve = SubResource("Curve2D_oqy72")
 
 [node name="Zarathustra_Ubay_bridge_to_center" parent="NPCPaths" index="21"]
-curve = SubResource("Curve2D_bb1wu")
+curve = SubResource("Curve2D_dc804")
 
 [node name="Zarathustra_Ubay_bridge_to_home" parent="NPCPaths" index="22"]
-curve = SubResource("Curve2D_m3h2c")
+curve = SubResource("Curve2D_bb1wu")
 
 [node name="Zarathustra_Ubay_bridge_to_hill" parent="NPCPaths" index="23"]
-curve = SubResource("Curve2D_pgh64")
+curve = SubResource("Curve2D_m3h2c")
 
 [node name="Zarathustra_Ubay_center_to_home" parent="NPCPaths" index="24"]
-curve = SubResource("Curve2D_vrkl3")
+curve = SubResource("Curve2D_pgh64")
 
 [node name="Zarathustra_Ubay_center_to_farm" parent="NPCPaths" index="25"]
-curve = SubResource("Curve2D_qasu2")
+curve = SubResource("Curve2D_vrkl3")
 
 [node name="Zarathustra_Ubay_door_to_home" parent="NPCPaths" index="26"]
-curve = SubResource("Curve2D_8q6gc")
+curve = SubResource("Curve2D_qasu2")
 
 [node name="kirana_route_0" parent="NPCPaths" index="27"]
-curve = SubResource("Curve2D_qy0pi")
+curve = SubResource("Curve2D_8q6gc")
 
 [node name="kirana_route_1" parent="NPCPaths" index="28"]
-curve = SubResource("Curve2D_3w4lo")
+curve = SubResource("Curve2D_qy0pi")
 
 [node name="kirana_route_2" parent="NPCPaths" index="29"]
-curve = SubResource("Curve2D_l7t6v")
+curve = SubResource("Curve2D_3w4lo")
 
 [node name="kirana_route_3" parent="NPCPaths" index="30"]
-curve = SubResource("Curve2D_gyebm")
+curve = SubResource("Curve2D_l7t6v")
 
 [node name="kirana_route_4" parent="NPCPaths" index="31"]
-curve = SubResource("Curve2D_7jfrx")
+curve = SubResource("Curve2D_gyebm")
 
 [node name="kirana_route_5" parent="NPCPaths" index="32"]
-curve = SubResource("Curve2D_ag2p6")
+curve = SubResource("Curve2D_7jfrx")
 
 [node name="bahar_route_0" parent="NPCPaths" index="33"]
-curve = SubResource("Curve2D_lbxxc")
+curve = SubResource("Curve2D_ag2p6")
 
 [node name="bahar_route_1" parent="NPCPaths" index="34"]
-curve = SubResource("Curve2D_0bfxu")
+curve = SubResource("Curve2D_lbxxc")
 
 [node name="bahar_route_2" parent="NPCPaths" index="35"]
-curve = SubResource("Curve2D_8jqla")
+curve = SubResource("Curve2D_0bfxu")
 
 [node name="bahar_route_3" parent="NPCPaths" index="36"]
-curve = SubResource("Curve2D_ufgby")
+curve = SubResource("Curve2D_8jqla")
 
 [node name="bahar_route_4" parent="NPCPaths" index="37"]
-curve = SubResource("Curve2D_s04hg")
+curve = SubResource("Curve2D_ufgby")
 
 [node name="bahar_route_5" parent="NPCPaths" index="38"]
-curve = SubResource("Curve2D_fhfvl")
+curve = SubResource("Curve2D_s04hg")
 
 [node name="joko_route_0" parent="NPCPaths" index="39"]
-curve = SubResource("Curve2D_m80ia")
+curve = SubResource("Curve2D_fhfvl")
 
 [node name="joko_route_1" parent="NPCPaths" index="40"]
-curve = SubResource("Curve2D_s0bkl")
+curve = SubResource("Curve2D_m80ia")
 
 [node name="joko_route_2" parent="NPCPaths" index="41"]
-curve = SubResource("Curve2D_0fvtn")
+curve = SubResource("Curve2D_s0bkl")
 
 [node name="joko_route_3" parent="NPCPaths" index="42"]
-curve = SubResource("Curve2D_b8a70")
+curve = SubResource("Curve2D_0fvtn")
 
 [node name="joko_route_4" parent="NPCPaths" index="43"]
-curve = SubResource("Curve2D_pkl8t")
+curve = SubResource("Curve2D_b8a70")
 
 [node name="joko_route_5" parent="NPCPaths" index="44"]
-curve = SubResource("Curve2D_3qi1s")
+curve = SubResource("Curve2D_pkl8t")
 
 [node name="ratih_route_0" parent="NPCPaths" index="45"]
-curve = SubResource("Curve2D_e43l1")
+curve = SubResource("Curve2D_3qi1s")
 
 [node name="ratih_route_1" parent="NPCPaths" index="46"]
-curve = SubResource("Curve2D_r4oh6")
+curve = SubResource("Curve2D_e43l1")
 
 [node name="ratih_route_2" parent="NPCPaths" index="47"]
-curve = SubResource("Curve2D_gjw4x")
+curve = SubResource("Curve2D_r4oh6")
 
 [node name="ratih_route_3" parent="NPCPaths" index="48"]
-curve = SubResource("Curve2D_yqox8")
+curve = SubResource("Curve2D_gjw4x")
 
 [node name="ratih_route_4" parent="NPCPaths" index="49"]
-curve = SubResource("Curve2D_vgvp2")
+curve = SubResource("Curve2D_yqox8")
 
 [node name="ratih_route_5" parent="NPCPaths" index="50"]
-curve = SubResource("Curve2D_i8bx4")
+curve = SubResource("Curve2D_vgvp2")
 
 [node name="rian_route_0" parent="NPCPaths" index="51"]
-curve = SubResource("Curve2D_55yh2")
+curve = SubResource("Curve2D_i8bx4")
 
 [node name="rian_route_1" parent="NPCPaths" index="52"]
-curve = SubResource("Curve2D_c4l5h")
+curve = SubResource("Curve2D_55yh2")
 
 [node name="rian_route_2" parent="NPCPaths" index="53"]
-curve = SubResource("Curve2D_3nion")
+curve = SubResource("Curve2D_c4l5h")
 
 [node name="rian_route_3" parent="NPCPaths" index="54"]
-curve = SubResource("Curve2D_dnnur")
+curve = SubResource("Curve2D_3nion")
 
 [node name="rian_route_4" parent="NPCPaths" index="55"]
-curve = SubResource("Curve2D_2vnfs")
+curve = SubResource("Curve2D_dnnur")
 
 [node name="rian_route_5" parent="NPCPaths" index="56"]
-curve = SubResource("Curve2D_yndkc")
+curve = SubResource("Curve2D_2vnfs")
 
 [node name="damar_route_0" parent="NPCPaths" index="57"]
-curve = SubResource("Curve2D_8krsa")
+curve = SubResource("Curve2D_yndkc")
 
 [node name="damar_route_1" parent="NPCPaths" index="58"]
-curve = SubResource("Curve2D_al4kj")
+curve = SubResource("Curve2D_8krsa")
 
 [node name="damar_route_2" parent="NPCPaths" index="59"]
-curve = SubResource("Curve2D_0g7ar")
+curve = SubResource("Curve2D_al4kj")
 
 [node name="damar_route_3" parent="NPCPaths" index="60"]
-curve = SubResource("Curve2D_gv06x")
+curve = SubResource("Curve2D_0g7ar")
 
 [node name="damar_route_4" parent="NPCPaths" index="61"]
-curve = SubResource("Curve2D_t5tvc")
+curve = SubResource("Curve2D_gv06x")
 
 [node name="damar_route_5" parent="NPCPaths" index="62"]
-curve = SubResource("Curve2D_fj4ap")
+curve = SubResource("Curve2D_t5tvc")
 
 [node name="bahar_work_branch" parent="NPCPaths" index="63"]
-curve = SubResource("Curve2D_ula6w")
+curve = SubResource("Curve2D_fj4ap")
 
 [node name="joko_work_branch" parent="NPCPaths" index="64"]
-curve = SubResource("Curve2D_m4j2v")
+curve = SubResource("Curve2D_ula6w")
 
 [node name="ratih_work_branch" parent="NPCPaths" index="65"]
-curve = SubResource("Curve2D_pc833")
+curve = SubResource("Curve2D_m4j2v")
 
 [node name="rian_work_branch" parent="NPCPaths" index="66"]
-curve = SubResource("Curve2D_cje4s")
+curve = SubResource("Curve2D_pc833")
 
 [node name="RanchEntrance" type="Area2D" parent="." unique_id=1387344532]
 position = Vector2(62, 791)
@@ -9846,4 +9840,12 @@ spawn_position = Vector2(48, 320)
 position = Vector2(-46, 0.5)
 shape = SubResource("EepRanchExitShape")
 
+[node name="BalaiNadiAccess2" parent="." unique_id=963677985 instance=ExtResource("town_balai_access")]
+position = Vector2(334, 17)
+
 [editable path="NPCPaths"]
+
+[node name="SkyFX" type="Node2D" parent="."]
+script = ExtResource("sky_fx")
+ray_strength = 0.8
+cloud_coverage = 0.4

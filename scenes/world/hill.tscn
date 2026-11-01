@@ -25,6 +25,7 @@
 [ext_resource type="Texture2D" uid="uid://nq7uq2ysfp3m" path="res://assets/farm_rpg/objects/exterior/Mine and Dungeon/Mine/Door Mine.png" id="23_rjvrt"]
 [ext_resource type="PackedScene" path="res://scenes/npc/routes/hill_paths.tscn" id="ResidentPaths"]
 [ext_resource type="Script" uid="uid://5cyo43xb7vqo" path="res://scripts/npc/npc_map_presenter.gd" id="ResidentPresenter"]
+[ext_resource type="Script" path="res://scripts/effects/sky_fx.gd" id="sky_fx"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a4c73"]
 shader = ExtResource("2_8baq5")
@@ -1388,3 +1389,12 @@ position = Vector2(192, 174)
 
 [node name="zarathustra_wood_storage" type="Marker2D" parent="NPCPoints"]
 position = Vector2(354, 274)
+
+[node name="SkyFX" type="Node2D" parent="."]
+script = ExtResource("sky_fx")
+ray_strength = 1.8
+cloud_coverage = 0.5
+cloud_darkness = 0.3
+wind = Vector2(26, 6)
+cloud_scale = 0.0012
+fade_y = Vector2(64, 176)

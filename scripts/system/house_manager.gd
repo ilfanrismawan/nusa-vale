@@ -46,6 +46,19 @@ func data_for(target: int) -> HouseLevelData:
 func next_level() -> HouseLevelData:
 	return data_for(level + 1)
 
+## Scene rumah untuk tingkat `target` (exterior_scene atau interior_scene): tingkat itu atau tingkat
+## terdekat di bawahnya, lalu `base` (tingkat 0). Static supaya preview @tool di editor bisa memakainya.
+static func scene_for(target: int, base: PackedScene, interior: bool) -> PackedScene:
+	for number in range(mini(target, MAX_LEVELS), 0, -1):
+		var path := LEVEL_PATH % number
+		if not ResourceLoader.exists(path):
+			continue
+		var data := load(path) as HouseLevelData
+		var scene: PackedScene = null if data == null else (data.interior_scene if interior else data.exterior_scene)
+		if scene != null:
+			return scene
+	return base
+
 func is_building() -> bool:
 	return not order.is_empty()
 
