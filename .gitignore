@@ -17,3 +17,6 @@ tests/*_result*.txt
 # Local reference art and mockups (not shipped)
 /Ref/
 /docs/mockups/
+
+assets/farm_rpg/icons/biji_daya/mockup/
+development/tiktok/
