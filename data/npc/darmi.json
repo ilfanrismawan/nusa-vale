@@ -143,15 +143,9 @@
       },
       {
         "time": "18:00",
-        "map": "town",
-        "point": "darmi_porch",
-        "activity": "resting"
-      },
-      {
-        "time": "19:30",
         "map": "house_west",
         "point": "darmi_home",
-        "activity": "resting"
+        "activity": "resting_home"
       },
       {
         "time": "21:00",
@@ -179,6 +173,9 @@
     ],
     "sleeping": [
       "Mbah sudah mengantuk. Hati-hati di jalan, jangan lupa bawa lampu."
+    ],
+    "resting_home": [
+      "Malam hujan itu dingin, Nak. Mbah masuk lebih awal, jangan lupa bawa obor kalau pulang."
     ]
   },
   "content_status": {

@@ -151,7 +151,7 @@
       {
         "time": "12:00",
         "map": "town",
-        "point": "damar_rest",
+        "point": "damar_work",
         "activity": "lunch"
       },
       {
@@ -162,15 +162,9 @@
       },
       {
         "time": "17:00",
-        "map": "town",
-        "point": "damar_rest",
-        "activity": "resting"
-      },
-      {
-        "time": "20:00",
         "map": "house_brick",
         "point": "damar_home",
-        "activity": "resting"
+        "activity": "resting_home"
       },
       {
         "time": "22:00",
@@ -198,6 +192,9 @@
     ],
     "sleeping": [
       "Sudah waktunya beristirahat. Sampai besok."
+    ],
+    "resting_home": [
+      "Kayu basah tidak boleh dipaksa. Aku menggambar rancangan saja di rumah."
     ]
   },
   "content_status": {

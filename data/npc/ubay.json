@@ -42,6 +42,9 @@
 	"breakfast": [
       "Aku sedang menyiapkan bekal. Rutenya cukup panjang hari ini."
 	],
+	"resting_home": [
+	  "Semua paket sampai kering. Sekarang aku cuma mau jemur jas hujan dan minum yang hangat."
+	],
 	"sorting": [
 	  "Alamat jelas, paket aman, penerima senang.",
       "Sekarang tinggal mencari siapa yang mengirim labu sebesar ini."
@@ -174,9 +177,9 @@
 	  },
 	  {
 		"time": "19:00",
-		"map": "town",
-		"point": "ubay_rest",
-		"activity": "resting"
+		"map": "ubay_home",
+		"point": "ubay_home",
+		"activity": "resting_home"
 	  },
 	  {
 		"time": "22:00",

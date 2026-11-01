@@ -140,31 +140,19 @@
         "time": "08:00",
         "map": "town",
         "point": "bahar_work",
-        "activity": "working"
+        "activity": "mending_nets"
       },
       {
         "time": "12:00",
-        "map": "town",
-        "point": "bahar_rest",
+        "map": "house_blue",
+        "point": "bahar_home",
         "activity": "lunch"
       },
       {
-        "time": "14:00",
-        "map": "town",
-        "point": "bahar_work",
-        "activity": "working"
-      },
-      {
-        "time": "18:00",
-        "map": "town",
-        "point": "bahar_rest",
-        "activity": "resting"
-      },
-      {
-        "time": "20:00",
+        "time": "13:00",
         "map": "house_blue",
         "point": "bahar_home",
-        "activity": "resting"
+        "activity": "mending_nets_home"
       },
       {
         "time": "22:00",
@@ -192,6 +180,12 @@
     ],
     "sleeping": [
       "Sudah waktunya beristirahat. Sampai besok."
+    ],
+    "mending_nets": [
+      "Laut sedang keruh. Hari ini cukup ikat perahu dan perbaiki jaring."
+    ],
+    "mending_nets_home": [
+      "Hujan begini aku menambal jaring di rumah. Tanganku tetap butuh kerjaan."
     ]
   },
   "content_status": {

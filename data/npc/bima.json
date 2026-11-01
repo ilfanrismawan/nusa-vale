@@ -161,15 +161,9 @@
       },
       {
         "time": "17:00",
-        "map": "town",
-        "point": "bima_work",
-        "activity": "resting"
-      },
-      {
-        "time": "19:00",
         "map": "blacksmith",
         "point": "bima_home",
-        "activity": "resting"
+        "activity": "resting_home"
       },
       {
         "time": "22:00",
@@ -197,6 +191,9 @@
     ],
     "sleeping": [
       "Sudah waktunya beristirahat. Sampai besok."
+    ],
+    "resting_home": [
+      "Bara tungku sudah kututup. Hujan begini lebih enak duduk dekat api di rumah."
     ]
   },
   "content_status": {

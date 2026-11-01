@@ -132,7 +132,7 @@
       {
         "time": "12:00",
         "map": "town",
-        "point": "ratih_rest",
+        "point": "ratih_work",
         "activity": "lunch"
       },
       {
@@ -143,15 +143,9 @@
       },
       {
         "time": "16:00",
-        "map": "town",
-        "point": "ratih_rest",
-        "activity": "resting"
-      },
-      {
-        "time": "19:00",
         "map": "herbal_house",
         "point": "ratih_home",
-        "activity": "resting"
+        "activity": "brewing_herbs"
       },
       {
         "time": "22:00",
@@ -179,6 +173,9 @@
     ],
     "sleeping": [
       "Sudah waktunya beristirahat. Sampai besok."
+    ],
+    "brewing_herbs": [
+      "Musim hujan banyak yang masuk angin. Aku merebus jahe dan sereh untuk stok klinik."
     ]
   },
   "content_status": {

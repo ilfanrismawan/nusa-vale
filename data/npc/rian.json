@@ -127,12 +127,18 @@
         "time": "07:00",
         "map": "town",
         "point": "rian_work",
+        "activity": "sheltering_animals"
+      },
+      {
+        "time": "08:00",
+        "map": "town",
+        "point": "rian_work",
         "activity": "working"
       },
       {
         "time": "12:00",
-        "map": "town",
-        "point": "rian_rest",
+        "map": "house_tall",
+        "point": "rian_home",
         "activity": "lunch"
       },
       {
@@ -142,16 +148,10 @@
         "activity": "working"
       },
       {
-        "time": "18:00",
-        "map": "town",
-        "point": "rian_rest",
-        "activity": "resting"
-      },
-      {
-        "time": "20:00",
+        "time": "16:00",
         "map": "house_tall",
         "point": "rian_home",
-        "activity": "resting"
+        "activity": "resting_home"
       },
       {
         "time": "22:00",
@@ -179,6 +179,12 @@
     ],
     "sleeping": [
       "Sudah waktunya beristirahat. Sampai besok."
+    ],
+    "sheltering_animals": [
+      "Hewan-hewan harus masuk kandang sebelum hujan makin deras."
+    ],
+    "resting_home": [
+      "Kandang sudah kering dan hewan tenang. Sekarang giliranku berteduh."
     ]
   },
   "content_status": {
