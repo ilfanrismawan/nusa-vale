@@ -20,3 +20,4 @@ tests/*_result*.txt
 
 assets/farm_rpg/icons/biji_daya/mockup/
 development/tiktok/
+tests/_snapshots/
