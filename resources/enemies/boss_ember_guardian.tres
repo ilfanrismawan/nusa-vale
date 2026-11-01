@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/data/boss_data.gd" id="1"]
 [ext_resource type="Resource" path="res://resources/enemies/cave_mage.tres" id="2_minion"]
-[ext_resource type="AudioStream" path="res://assets/audio/music/boss_exclusive_orchestra.wav" id="3_music"]
+[ext_resource type="AudioStream" uid="uid://cgv01xvhnya33" path="res://assets/audio/music/boss_exclusive_orchestra.ogg" id="3_music"]
 
 [resource]
 script = ExtResource("1")

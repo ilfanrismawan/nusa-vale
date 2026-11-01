@@ -148,7 +148,8 @@ func _close_bars() -> void:
 
 ## Genderang makin cepat tiap fase dan saat boss murka.
 func _update_drum() -> void:
-	if not _drum.playing:
+	# Musik asli (orkestra) tidak di-pitch agar tidak terdengar cempreng; hanya genderang sintetis.
+	if not _drum.playing or data.music != null:
 		return
 	var wanted := 1.0 + 0.12 * (boss.phase - 1) + (0.1 if boss.enraged else 0.0)
 	_drum.pitch_scale = move_toward(_drum.pitch_scale, wanted, 0.01)
