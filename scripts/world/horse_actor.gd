@@ -14,11 +14,15 @@ const DIRECTIONS := ["down", "up", "right", "left"]
 ## Pelana semua kuda [usulan]; pilihan lain di aset: Black, Blue, Green, Pink.
 const SADDLE := "Brown"
 static var _frames: Dictionary = {}
+const StatusMarker := preload("res://scripts/ui/animal_status_marker.gd")
 var uid := 0
 var animal_id := 0
 var flip := false
 var _sprite: AnimatedSprite2D
 var _badge: Label
+## Gelembung makan/elus/sikat di atas kepala kuda. Naik kuda otomatis memberi 1 jerami dan elusan;
+## sikat lewat menu Barn.
+var _status: Node2D
 var _idle_timer := 0.0
 
 func _ready() -> void:
@@ -47,7 +51,17 @@ func _ready() -> void:
 	_badge.add_theme_color_override("font_outline_color", Color("302333"))
 	_badge.add_theme_constant_override("outline_size", 2)
 	_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# Nama di bawah kaki, hanya saat pemain dekat.
+	_badge.position = Vector2(-20, 2)
+	_badge.visible = false
 	add_child(_badge)
+	_status = StatusMarker.new()
+	_status.position = Vector2(0, -42)
+	_status.provider = func() -> Array:
+		var horse := animal()
+		return [] if horse.is_empty() else RanchHusbandry.status_needs(horse, DayCycle.current_day)
+	_status.near_changed.connect(func(near: bool) -> void: _badge.visible = near)
+	add_child(_status)
 	refresh()
 	# Muncul dengan sedikit pantulan supaya terlihat "tiba".
 	_sprite.scale = Vector2(1.15, 0.85)
@@ -64,7 +78,8 @@ func refresh() -> void:
 		return
 	_sprite.sprite_frames = horse_frames(RanchHusbandry.horse_coat(horse))
 	_sprite.play(anim_name("idle", Vector2.LEFT if flip else Vector2.RIGHT))
-	_badge.text = str(horse.name) + (" ♥" if int(horse.pet_day) != DayCycle.current_day else "")
+	_badge.text = str(horse.name)
+	_status.update_now()
 
 func _process(delta: float) -> void:
 	# Sesekali mengibas: squash kecil supaya kuda terasa hidup saat menunggu.

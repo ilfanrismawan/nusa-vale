@@ -173,6 +173,8 @@ var pet_name: String = ""
 ## Kasih sayang peliharaan 0..PetActor.MAX_AFFECTION dan hari terakhir dielus (0 = belum pernah).
 var pet_affection: int = 0
 var pet_day: int = 0
+## Hari terakhir peliharaan diberi makan (0 = belum pernah). Kunci opsional, tanpa naik versi save.
+var pet_fed_day: int = 0
 ## Kendaraan yang sedang dinaiki/diparkir (GDD 10). Runtime saja, tidak disimpan:
 ## setelah load pemain mulai berjalan kaki.
 var riding_vehicle_id: String = ""
@@ -738,6 +740,7 @@ func to_dict() -> Dictionary:
 		"pet_name": pet_name,
 		"pet_affection": pet_affection,
 		"pet_day": pet_day,
+		"pet_fed_day": pet_fed_day,
 		"stamina": clampi(stamina, 0, max_stamina),
 		"hp": clampi(hp, 1, max_hp),
 		"consumed_daya": consumed_daya.duplicate(),
@@ -787,6 +790,7 @@ func load_pet(data: Dictionary) -> void:
 	# Kunci baru tanpa naik versi save: save lama = peliharaan baru, belum pernah dielus.
 	pet_affection = clampi(int(data.get("pet_affection", 0)), 0, 100) if not pet_id.is_empty() else 0
 	pet_day = maxi(0, int(data.get("pet_day", 0))) if not pet_id.is_empty() else 0
+	pet_fed_day = maxi(0, int(data.get("pet_fed_day", 0))) if not pet_id.is_empty() else 0
 
 func load_birthday(data: Dictionary) -> void:
 	birthday_season = ""

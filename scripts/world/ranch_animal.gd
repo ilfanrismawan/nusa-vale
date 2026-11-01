@@ -3,6 +3,7 @@ extends CharacterBody2D
 const AnimalPhysics := preload("res://scripts/world/animal_physics.gd")
 const FEET_RADIUS := 4.0
 const GroundShadow := preload("res://scripts/effects/ground_shadow.gd")
+const StatusMarker := preload("res://scripts/ui/animal_status_marker.gd")
 var uid := 0
 var animal_id := 0
 var home := Vector2.ZERO
@@ -10,7 +11,9 @@ var indoors := false
 var roam_rect := Rect2()
 var _sprite: AnimatedSprite2D
 var _badge: Label
-var _product_icon: Sprite2D
+## Gelembung makan/elus/sikat/hasil di atas kepala; menggantikan teks "Lapar"/"Siap" dan ikon hasil lama.
+var _status: Node2D
+var _sprite_height := 16.0
 var _target := Vector2.ZERO
 var _pasture_uid := 0
 var _timer := 0.0
@@ -35,10 +38,12 @@ func _ready() -> void:
 	add_child(_sprite)
 	_shadow = GroundShadow.attach(self)
 	_badge = Label.new()
-	_badge.position = Vector2(-23, 10) if indoors else Vector2(-18, -28)
-	if indoors:
-		_badge.size = Vector2(46, 12)
-		_badge.clip_text = true
+	# Nama di bawah kaki; di ladang hanya tampil saat pemain dekat (penanda status ada di atas kepala).
+	_badge.position = Vector2(-23, 2 if not indoors else 10)
+	_badge.size = Vector2(46, 12)
+	_badge.clip_text = true
+	_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_badge.visible = indoors
 	_badge.add_theme_font_override("font", preload("res://assets/fonts/m5x7.ttf"))
 	_badge.add_theme_font_size_override("font_size", 12)
 	_badge.add_theme_color_override("font_color", Color("fff1c9"))
@@ -46,10 +51,12 @@ func _ready() -> void:
 	_badge.add_theme_constant_override("outline_size", 2)
 	_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_badge)
-	_product_icon = Sprite2D.new()
-	_product_icon.position = Vector2(10, -20)
-	_product_icon.scale = Vector2(0.75, 0.75)
-	add_child(_product_icon)
+	_status = StatusMarker.new()
+	_status.provider = func() -> Array:
+		var bird := animal()
+		return [] if bird.is_empty() else RanchHusbandry.status_needs(bird, DayCycle.current_day)
+	_status.near_changed.connect(func(near: bool) -> void: _badge.visible = (indoors or near) and not is_instance_valid(_carried_by))
+	add_child(_status)
 	# Titik rumah (depan kandang) bisa tertutup objek yang ditaruh pemain: geser ke titik kosong.
 	home = AnimalPhysics.nearest_free(self, home, FEET_RADIUS, 24.0 if indoors else 48.0, [get_rid()])
 	_target = home
@@ -74,16 +81,19 @@ func refresh() -> void:
 		visible = false
 	# Anak tanpa sheet anak memakai sprite dewasa yang diperkecil.
 	_sprite.scale = Vector2.ONE * (1.0 if RanchHusbandry.is_adult(bird) or RanchVisual.has_baby_sheet(RanchHusbandry.species(bird)) else 0.65)
-	_badge.text = "Siap" if not str(bird.ready).is_empty() else ("Lapar" if int(bird.fed_day) != DayCycle.current_day else str(bird.name))
-	if indoors:
-		_badge.text = str(bird.name) + (" !" if bird.sick or int(bird.fed_day) != DayCycle.current_day else "")
-	_product_icon.visible = not str(bird.ready).is_empty()
-	if _product_icon.visible:
-		_product_icon.texture = GameState._resolve_item(str(bird.ready)).icon
+	# "!" = Kurang sehat; lapar/elus/sikat/hasil ditunjukkan gelembung status.
+	_badge.text = str(bird.name) + (" !" if bird.sick else "")
 	if not visible:
 		global_position = home
 		_timer = 0
 	_set_frames(bird, false)
+	_place_status()
+	_status.update_now()
+
+## Gelembung tepat di atas kepala, termasuk anak yang sprite-nya diperkecil.
+func _place_status() -> void:
+	var top := _sprite.position.y + _sprite.scale.y * (_sprite.offset.y - _sprite_height * 0.5)
+	_status.position = Vector2(0, top - 7)
 
 func _set_frames(bird: Dictionary, walking: bool) -> void:
 	if walking:
@@ -101,6 +111,7 @@ func _fit_feet() -> void:
 	if names.is_empty() or _sprite.sprite_frames.get_frame_count(names[0]) == 0:
 		return
 	var height := float(_sprite.sprite_frames.get_frame_texture(names[0], 0).get_height())
+	_sprite_height = height
 	# Posisi sprite (-8) ditambah offset ini = -height/2: dasar sel tepat di titik badan.
 	_sprite.offset.y = 8.0 - height * 0.5
 	if is_instance_valid(_shadow):
@@ -116,7 +127,8 @@ func _physics_process(delta: float) -> void:
 			_sprite.z_as_relative = true
 			_sprite.z_index = 0
 			collision_mask = 1
-			_badge.show()
+			_badge.visible = indoors or _status.near
+			_status.show()
 			_shadow.show()
 			refresh()
 			return
@@ -202,7 +214,7 @@ func lift_with(player: Player) -> void:
 	collision_layer = 0
 	collision_mask = 0
 	_badge.hide()
-	_product_icon.hide()
+	_status.hide()
 	_shadow.hide()
 	# Diangkat: pusat gambar di atas kepala seperti sebelum offset kaki (_fit_feet).
 	_sprite.position = Vector2(0, -_sprite.offset.y)
@@ -229,7 +241,8 @@ func place_from_player(player: Player) -> void:
 	_sprite.position = Vector2(0, -8)
 	_sprite.z_index = 0
 	_sprite.z_as_relative = true
-	_badge.show()
+	_badge.visible = indoors or _status.near
+	_status.show()
 	_shadow.show()
 	collision_layer = 0
 	collision_mask = 1
@@ -251,10 +264,11 @@ func care_with(player: Player) -> void:
 		result = StructureManager.pet_chicken(uid, animal_id)
 	elif int(bird.fed_day) != DayCycle.current_day:
 		result = StructureManager.feed_chickens(player.data, uid, animal_id)
-	elif not RanchHusbandry.species(bird) in ["chicken", "duck"] and int(bird.brush_day) != DayCycle.current_day:
+	elif RanchHusbandry.brushable(bird) and int(bird.brush_day) != DayCycle.current_day:
 		result = StructureManager.brush_animal(player.data, uid, animal_id)
 	else:
 		result = {"message": "%s sudah dirawat hari ini." % bird.name}
 	Notify.say(result.message)
 	if result.get("ok", false):
 		Juice.play(&"sparkle", global_position)
+	_status.update_now()

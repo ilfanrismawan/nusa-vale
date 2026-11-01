@@ -8,9 +8,13 @@ extends CharacterBody2D
 ## tidak menghalangi pemain. Area anak di layer interaksi untuk dielus.
 const AnimalPhysics := preload("res://scripts/world/animal_physics.gd")
 const GroundShadow := preload("res://scripts/effects/ground_shadow.gd")
+const StatusMarker := preload("res://scripts/ui/animal_status_marker.gd")
 const GROUP := &"pet_actor"
 const MAX_AFFECTION := 100
 const PET_GAIN := 5
+## Makan sekali sehari: pegang ikan atau masakan lalu interaksi dengan peliharaan (GDD 4.10.12).
+const FEED_GAIN := 3
+const FOOD_CATEGORIES := [ItemData.Category.FISH, ItemData.Category.FOOD]
 const DAY_START := 6
 const DAY_END := 20
 const HOUSE_SCENE := "interior_house.tscn"
@@ -25,6 +29,8 @@ static var _frames: Dictionary = {}
 var home := Vector2.ZERO
 var _sprite: AnimatedSprite2D
 var _badge: Label
+## Gelembung makan dan elus di atas kepala.
+var _status: Node2D
 var _target := Vector2.ZERO
 var _wait := 0.0
 var _facing := "down"
@@ -68,7 +74,19 @@ func _ready() -> void:
 	_badge.add_theme_color_override("font_outline_color", Color("302333"))
 	_badge.add_theme_constant_override("outline_size", 2)
 	_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# Nama di bawah kaki, hanya saat pemain dekat.
+	_badge.position = Vector2(-20, 2)
+	_badge.visible = false
 	add_child(_badge)
+	_status = StatusMarker.new()
+	_status.position = Vector2(0, -35)
+	_status.provider = func() -> Array:
+		var data := owner_data()
+		if data.pet_id.is_empty():
+			return []
+		return [{"kind": "feed", "done": data.pet_fed_day == DayCycle.current_day}, {"kind": "pet", "done": data.pet_day == DayCycle.current_day}]
+	_status.near_changed.connect(func(near: bool) -> void: _badge.visible = near)
+	add_child(_status)
 	_target = home
 	_wait = randf_range(1.0, 3.0)
 	refresh()
@@ -84,7 +102,8 @@ func refresh() -> void:
 		return
 	_sprite.sprite_frames = frames
 	_play(false)
-	_badge.text = data.pet_name + (" ♥" if data.pet_day != DayCycle.current_day else "")
+	_badge.text = data.pet_name
+	_status.update_now()
 
 func _physics_process(delta: float) -> void:
 	if _sprite == null or _sprite.sprite_frames == null:
@@ -150,9 +169,22 @@ func _play(walking: bool) -> void:
 func interact(player: Node) -> void:
 	if not player is Player:
 		return
-	var result := pet()
+	var data := owner_data()
+	var result: Dictionary
+	var fed_now := false
+	if data.pet_fed_day != DayCycle.current_day and is_pet_food(player.tool_controller.current_item):
+		result = feed(player)
+		fed_now = result.ok
+	elif data.pet_day != DayCycle.current_day:
+		result = pet()
+	elif data.pet_fed_day != DayCycle.current_day:
+		result = {"ok": false, "message": "%s lapar. Pegang ikan atau masakan, lalu interaksi untuk memberi makan." % data.pet_name}
+	else:
+		result = {"ok": false, "message": "%s sudah makan dan dielus hari ini." % data.pet_name}
 	Notify.say(result.message)
-	if result.ok:
+	if fed_now:
+		Juice.play(&"sparkle", global_position)
+	elif result.ok:
 		_wait = maxf(_wait, 2.0)
 		_play(false)
 		var heart := Label.new()
@@ -169,6 +201,27 @@ func interact(player: Node) -> void:
 	var squash := create_tween()
 	squash.tween_property(_sprite, "scale", Vector2(1.12, 0.88), 0.08)
 	squash.tween_property(_sprite, "scale", Vector2.ONE, 0.14)
+
+## Ikan atau masakan jadi bisa dimakan peliharaan.
+static func is_pet_food(item: ItemData) -> bool:
+	return item != null and item.category in FOOD_CATEGORIES
+
+## Beri makan peliharaan pemain 1 dari item yang dipegang `player` (tas pemain pelaku): {"ok", "message"}.
+static func feed(player: Player) -> Dictionary:
+	var data := GameState.p1()
+	var item: ItemData = player.tool_controller.current_item if player != null else null
+	if data.pet_id.is_empty():
+		return {"ok": false, "message": "Belum ada peliharaan."}
+	if data.pet_fed_day == DayCycle.current_day:
+		return {"ok": false, "message": "%s sudah makan hari ini." % data.pet_name}
+	if not is_pet_food(item) or not player.data.remove_item(item.item_id, 1):
+		return {"ok": false, "message": "%s mau ikan atau masakan." % data.pet_name}
+	data.pet_fed_day = DayCycle.current_day
+	data.pet_affection = mini(MAX_AFFECTION, data.pet_affection + FEED_GAIN)
+	Juice.play_sound(&"plant")
+	for actor in (Engine.get_main_loop() as SceneTree).get_nodes_in_group(GROUP):
+		actor.refresh()
+	return {"ok": true, "message": "%s makan %s dengan lahap! (Kasih sayang %d/%d)" % [data.pet_name, item.display_name, data.pet_affection, MAX_AFFECTION]}
 
 ## Elus peliharaan pemain 1: {"ok", "message"}.
 static func pet() -> Dictionary:

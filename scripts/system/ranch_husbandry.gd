@@ -64,6 +64,19 @@ static func horse_coat(animal: Dictionary) -> String:
 static func species(animal: Dictionary) -> String:
 	return str(animal.get("species", "chicken"))
 
+## Unggas cukup dielus; ternak berbulu dan kuda juga disikat (GDD 4.10.4).
+static func brushable(animal: Dictionary) -> bool:
+	return not species(animal) in ["chicken", "duck", "ostrich"]
+
+## Isi penanda status di atas kepala (animal_status_marker.gd): makan, elus, sikat, hasil siap.
+static func status_needs(animal: Dictionary, day: int) -> Array:
+	var needs := [{"kind": "feed", "done": int(animal.fed_day) == day}, {"kind": "pet", "done": int(animal.pet_day) == day}]
+	if brushable(animal):
+		needs.append({"kind": "brush", "done": int(animal.get("brush_day", 0)) == day})
+	if not str(animal.get("ready", "")).is_empty():
+		needs.append({"kind": "product", "done": false, "icon": GameState._resolve_item(str(animal.ready)).icon})
+	return needs
+
 static func product(animal: Dictionary, comfortable: bool) -> String:
 	var info: Dictionary = SPECIES[species(animal)]
 	var base: String = info.product
