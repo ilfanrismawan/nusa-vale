@@ -14,6 +14,9 @@ var _badge: Label
 ## Gelembung makan/elus/sikat/hasil di atas kepala; menggantikan teks "Lapar"/"Siap" dan ikon hasil lama.
 var _status: Node2D
 var _sprite_height := 16.0
+## Baris piksel teratas yang tidak transparan di sel sprite (sel 32 px punya ruang kosong di atas kepala).
+var _art_top := 0.0
+static var _art_top_cache: Dictionary = {}
 var _target := Vector2.ZERO
 var _pasture_uid := 0
 var _timer := 0.0
@@ -92,8 +95,19 @@ func refresh() -> void:
 
 ## Gelembung tepat di atas kepala, termasuk anak yang sprite-nya diperkecil.
 func _place_status() -> void:
-	var top := _sprite.position.y + _sprite.scale.y * (_sprite.offset.y - _sprite_height * 0.5)
-	_status.position = Vector2(0, top - 7)
+	var top := _sprite.position.y + _sprite.scale.y * (_sprite.offset.y - _sprite_height * 0.5 + _art_top)
+	_status.position = Vector2(0, roundf(top - 8))
+
+static func _opaque_top(texture: Texture2D) -> float:
+	if texture == null:
+		return 0.0
+	var key := texture.get_instance_id()
+	if not _art_top_cache.has(key):
+		var image := texture.get_image()
+		if image != null and image.is_compressed():
+			image.decompress()
+		_art_top_cache[key] = float(image.get_used_rect().position.y) if image != null and not image.is_empty() else 0.0
+	return _art_top_cache[key]
 
 func _set_frames(bird: Dictionary, walking: bool) -> void:
 	if walking:
@@ -112,6 +126,7 @@ func _fit_feet() -> void:
 		return
 	var height := float(_sprite.sprite_frames.get_frame_texture(names[0], 0).get_height())
 	_sprite_height = height
+	_art_top = _opaque_top(_sprite.sprite_frames.get_frame_texture(names[0], 0))
 	# Posisi sprite (-8) ditambah offset ini = -height/2: dasar sel tepat di titik badan.
 	_sprite.offset.y = 8.0 - height * 0.5
 	if is_instance_valid(_shadow):

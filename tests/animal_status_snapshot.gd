@@ -6,6 +6,7 @@ const StatusMarker := preload("res://scripts/ui/animal_status_marker.gd")
 const OUT_DIR := "res://tests/_snapshots"
 const ZOOM := 3.0
 
+var _view: SubViewport
 var _saved_records: Array
 var _saved_pet := {}
 
@@ -20,15 +21,23 @@ func _ready() -> void:
 	_saved_records = StructureManager.records.duplicate(true)
 	var p1 := GameState.p1()
 	_saved_pet = {"pet_id": p1.pet_id, "pet_name": p1.pet_name, "pet_day": p1.pet_day, "pet_fed_day": p1.pet_fed_day}
+	# SubViewport sendiri: tidak tertutup lapisan UI autoload (transisi/HUD).
+	var view := SubViewport.new()
+	view.size = Vector2i(320, 120)
+	view.world_2d = World2D.new()
+	view.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	view.canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST
+	add_child(view)
+	_view = view
 	var bg := ColorRect.new()
 	bg.color = Color("5d9b45")
 	bg.position = Vector2(-200, -200)
 	bg.size = Vector2(800, 500)
-	add_child(bg)
+	view.add_child(bg)
 	var ysort := Node2D.new()
 	ysort.name = "YSort"
 	ysort.y_sort_enabled = true
-	add_child(ysort)
+	view.add_child(ysort)
 	# Barn: sapi (semua belum + susu siap), domba (makan+elus sudah, sikat belum), kambing anak, kuda.
 	var barn := _record(9001, "barn", day, [
 		{"name": "Moli", "species": "cow", "fed_day": 0, "pet_day": 0, "brush_day": 0, "ready": "cow_milk"},
@@ -66,8 +75,8 @@ func _ready() -> void:
 	ysort.add_child(pet)
 	var camera := Camera2D.new()
 	camera.position = Vector2(x * 0.5, -14)
-	camera.zoom = Vector2.ONE * ZOOM
-	add_child(camera)
+	camera.zoom = Vector2.ONE
+	view.add_child(camera)
 	camera.make_current()
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(OUT_DIR))
 	await _capture("animal_status_jauh.png")
@@ -97,6 +106,7 @@ func _record(uid: int, item: String, day: int, animals: Array) -> Dictionary:
 func _capture(file: String) -> void:
 	# Tunggu gelembung muncul (tween pantul 0,18 detik).
 	await get_tree().create_timer(0.6, true).timeout
-	var image := get_viewport().get_texture().get_image()
+	var image := _view.get_texture().get_image()
+	image.resize(image.get_width() * int(ZOOM), image.get_height() * int(ZOOM), Image.INTERPOLATE_NEAREST)
 	var err := image.save_png(ProjectSettings.globalize_path(OUT_DIR.path_join(file)))
 	print("animal_status_snapshot: %s -> %s" % [file, error_string(err)])

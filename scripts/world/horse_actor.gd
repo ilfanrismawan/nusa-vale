@@ -51,12 +51,13 @@ func _ready() -> void:
 	_badge.add_theme_color_override("font_outline_color", Color("302333"))
 	_badge.add_theme_constant_override("outline_size", 2)
 	_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	# Nama di bawah kaki, hanya saat pemain dekat.
-	_badge.position = Vector2(-20, 2)
+	# Nama di bawah kaki kuda (gambar kuda turun sampai y +6), hanya saat pemain dekat.
+	_badge.position = Vector2(-20, 8)
 	_badge.visible = false
 	add_child(_badge)
 	_status = StatusMarker.new()
-	_status.position = Vector2(0, -42)
+	# Puncak gambar kuda (sel 48 px, kepala di baris ~20) ada di sekitar y -14.
+	_status.position = Vector2(0, -22)
 	_status.provider = func() -> Array:
 		var horse := animal()
 		return [] if horse.is_empty() else RanchHusbandry.status_needs(horse, DayCycle.current_day)

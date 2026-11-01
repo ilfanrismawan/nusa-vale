@@ -79,7 +79,8 @@ func _ready() -> void:
 	_badge.visible = false
 	add_child(_badge)
 	_status = StatusMarker.new()
-	_status.position = Vector2(0, -35)
+	# Puncak gambar peliharaan (sel 32 px, kepala di baris ~16) ada di sekitar y -12.
+	_status.position = Vector2(0, -20)
 	_status.provider = func() -> Array:
 		var data := owner_data()
 		if data.pet_id.is_empty():
