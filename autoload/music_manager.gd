@@ -8,14 +8,14 @@ signal track_changed(track_name: String)
 const BUS_NAME := &"Music"
 const DEFAULT_FADE := 1.2
 
-const TRACK_DAY_FARM := "res://assets/audio/music/spring_cozy_farm.wav"
-const TRACK_NIGHT_FARM := "res://assets/audio/music/night_cozy_serenade.wav"
-const TRACK_TOWN := "res://assets/audio/music/town_friendly_breeze.wav"
-const TRACK_DEEP_FOREST := "res://assets/audio/music/deep_forest_enchanted.wav"
-const TRACK_SHOP := "res://assets/audio/music/cozy_shop_warung.wav"
-const TRACK_RAIN := "res://assets/audio/music/rainy_day_solitude.wav"
-const TRACK_MIDNIGHT_HORROR := "res://assets/audio/music/midnight_horror_nightmare.wav"
-const TRACK_BOSS_ORCHESTRA := "res://assets/audio/music/boss_exclusive_orchestra.wav"
+const TRACK_DAY_FARM := "res://assets/audio/music/spring_cozy_farm.ogg"
+const TRACK_NIGHT_FARM := "res://assets/audio/music/night_cozy_serenade.ogg"
+const TRACK_TOWN := "res://assets/audio/music/town_friendly_breeze.ogg"
+const TRACK_DEEP_FOREST := "res://assets/audio/music/deep_forest_enchanted.ogg"
+const TRACK_SHOP := "res://assets/audio/music/cozy_shop_warung.ogg"
+const TRACK_RAIN := "res://assets/audio/music/rainy_day_solitude.ogg"
+const TRACK_MIDNIGHT_HORROR := "res://assets/audio/music/midnight_horror_nightmare.ogg"
+const TRACK_BOSS_ORCHESTRA := "res://assets/audio/music/boss_exclusive_orchestra.ogg"
 
 var _player_a: AudioStreamPlayer
 var _player_b: AudioStreamPlayer
@@ -200,7 +200,7 @@ func play_track(track_path: String, fade_time: float = DEFAULT_FADE, target_volu
 	if not stream:
 		if not _warned_paths.has(track_path):
 			_warned_paths[track_path] = true
-			push_error("[MusicManager] Musik belum bisa dimuat: %s. Jika file .wav baru ditambahkan, buka editor Godot sekali agar ter-import (muncul file .import), lalu jalankan ulang." % track_path)
+			push_error("[MusicManager] Musik belum bisa dimuat: %s. Jika file musik baru ditambahkan, buka editor Godot sekali agar ter-import (muncul file .import), lalu jalankan ulang." % track_path)
 		return
 
 	_current_path = track_path
