@@ -1,0 +1,361 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/inventory_calendar.gd" id="script"]
+[ext_resource type="Theme" uid="uid://cl73ou0e04t25" path="res://resources/ui/inventory_book_theme.tres" id="theme"]
+[ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="font"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/ui/weather icons.png" id="weather"]
+[ext_resource type="Texture2D" path="res://resources/ui/birthday_cake_icon.tres" id="cake"]
+[ext_resource type="Texture2D" path="res://resources/ui/icon_tab_heart.tres" id="heart"]
+
+[sub_resource type="AtlasTexture" id="Spring"]
+atlas = ExtResource("weather")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Summer"]
+atlas = ExtResource("weather")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Fall"]
+atlas = ExtResource("weather")
+region = Rect2(32, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Winter"]
+atlas = ExtResource("weather")
+region = Rect2(48, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="Moon"]
+atlas = ExtResource("weather")
+region = Rect2(16, 32, 16, 16)
+
+[sub_resource type="StyleBoxFlat" id="TodaySwatch"]
+bg_color = Color(1, 0.93, 0.66, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.78, 0.32, 0.18, 1)
+
+[node name="InventoryCalendar" type="PanelContainer"]
+custom_minimum_size = Vector2(420, 224)
+theme = ExtResource("theme")
+script = ExtResource("script")
+season_icons = Array[Texture2D]([SubResource("Spring"), SubResource("Summer"), SubResource("Fall"), SubResource("Winter")])
+event_icons = {
+"birthday": ExtResource("cake"),
+"kliwon": SubResource("Moon"),
+"player_birthday": ExtResource("heart")
+}
+
+[node name="Pages" type="Control" parent="."]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Left" type="Control" parent="Pages"]
+clip_contents = true
+layout_mode = 0
+offset_left = 4.0
+offset_right = 200.0
+offset_bottom = 224.0
+mouse_filter = 2
+
+[node name="PrevSeason" type="Button" parent="Pages/Left"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 4.0
+offset_top = 3.0
+offset_right = 20.0
+offset_bottom = 19.0
+tooltip_text = "Musim sebelumnya"
+text = "<"
+
+[node name="SeasonIcon" type="TextureRect" parent="Pages/Left"]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 25.0
+offset_top = 4.0
+offset_right = 39.0
+offset_bottom = 18.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SeasonTitle" type="Label" parent="Pages/Left"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 42.0
+offset_top = 1.0
+offset_right = 172.0
+offset_bottom = 21.0
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "Musim Semi · Tahun 1"
+clip_text = true
+
+[node name="NextSeason" type="Button" parent="Pages/Left"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 176.0
+offset_top = 3.0
+offset_right = 192.0
+offset_bottom = 19.0
+tooltip_text = "Musim berikutnya"
+text = ">"
+
+[node name="Weekdays" type="HBoxContainer" parent="Pages/Left"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 4.0
+offset_top = 20.0
+offset_right = 192.0
+offset_bottom = 34.0
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="WeekdayTemplate" type="Label" parent="Pages/Left"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(26, 0)
+layout_mode = 0
+offset_right = 26.0
+offset_bottom = 14.0
+theme_override_colors/font_color = Color(0.45, 0.31, 0.2, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "Sen"
+horizontal_alignment = 1
+
+[node name="Days" type="GridContainer" parent="Pages/Left"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 4.0
+offset_top = 35.0
+offset_right = 192.0
+offset_bottom = 165.0
+theme_override_constants/h_separation = 1
+theme_override_constants/v_separation = 2
+columns = 7
+
+[node name="Legend" type="HFlowContainer" parent="Pages/Left"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 170.0
+offset_right = 192.0
+offset_bottom = 222.0
+mouse_filter = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 0
+
+[node name="LegendBirthday" type="HBoxContainer" parent="Pages/Left/Legend"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Icon" type="TextureRect" parent="Pages/Left/Legend/LegendBirthday"]
+texture_filter = 1
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("cake")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Pages/Left/Legend/LegendBirthday"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.31, 0.2, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "Ultah warga"
+
+[node name="LegendPlayer" type="HBoxContainer" parent="Pages/Left/Legend"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Icon" type="TextureRect" parent="Pages/Left/Legend/LegendPlayer"]
+texture_filter = 1
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("heart")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Pages/Left/Legend/LegendPlayer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.31, 0.2, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "Ultahmu"
+
+[node name="LegendKliwon" type="HBoxContainer" parent="Pages/Left/Legend"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Icon" type="TextureRect" parent="Pages/Left/Legend/LegendKliwon"]
+texture_filter = 1
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = SubResource("Moon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Pages/Left/Legend/LegendKliwon"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.31, 0.2, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "Malam Kliwon"
+
+[node name="LegendToday" type="HBoxContainer" parent="Pages/Left/Legend"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Swatch" type="Panel" parent="Pages/Left/Legend/LegendToday"]
+custom_minimum_size = Vector2(9, 9)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("TodaySwatch")
+
+[node name="Label" type="Label" parent="Pages/Left/Legend/LegendToday"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.31, 0.2, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "Hari ini"
+
+[node name="Right" type="Control" parent="Pages"]
+clip_contents = true
+layout_mode = 0
+offset_left = 221.0
+offset_right = 421.0
+offset_bottom = 224.0
+mouse_filter = 2
+
+[node name="DateTitle" type="Label" parent="Pages/Right"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 4.0
+offset_top = 1.0
+offset_right = 196.0
+offset_bottom = 19.0
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "SENIN, 1 MUSIM SEMI"
+clip_text = true
+
+[node name="DateSub" type="Label" parent="Pages/Right"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 4.0
+offset_top = 17.0
+offset_right = 140.0
+offset_bottom = 33.0
+theme_override_colors/font_color = Color(0.45, 0.31, 0.2, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "Tahun 1 · Hari ini"
+clip_text = true
+
+[node name="TodayButton" type="Button" parent="Pages/Right"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 140.0
+offset_top = 17.0
+offset_right = 196.0
+offset_bottom = 33.0
+tooltip_text = "Kembali ke tanggal hari ini"
+text = "Hari ini"
+
+[node name="TopSeparator" type="HSeparator" parent="Pages/Right"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 35.0
+offset_right = 196.0
+offset_bottom = 39.0
+
+[node name="Events" type="VBoxContainer" parent="Pages/Right"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 4.0
+offset_top = 42.0
+offset_right = 188.0
+offset_bottom = 130.0
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Closed" type="Label" parent="Pages/Right"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 4.0
+offset_top = 128.0
+offset_right = 188.0
+offset_bottom = 152.0
+theme_override_colors/font_color = Color(0.45, 0.31, 0.2, 1)
+theme_override_constants/line_spacing = -3
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "Semua layanan buka sesuai jam."
+autowrap_mode = 3
+clip_text = true
+
+[node name="BottomSeparator" type="HSeparator" parent="Pages/Right"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 152.0
+offset_right = 196.0
+offset_bottom = 156.0
+
+[node name="UpcomingHeading" type="Label" parent="Pages/Right"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 155.0
+offset_right = 196.0
+offset_bottom = 171.0
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "AKAN DATANG"
+
+[node name="Upcoming" type="VBoxContainer" parent="Pages/Right"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 4.0
+offset_top = 170.0
+offset_right = 196.0
+offset_bottom = 222.0
+theme_override_constants/separation = -2
+
+[node name="UpcomingTemplate" type="Label" parent="Pages/Right"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_right = 192.0
+offset_bottom = 14.0
+mouse_filter = 1
+theme_override_colors/font_color = Color(0.25, 0.14, 0.08, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "Sel 2 Semi · Ulang tahun"
+clip_text = true
+
+[node name="UpcomingEmpty" type="Label" parent="Pages/Right"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 4.0
+offset_top = 170.0
+offset_right = 196.0
+offset_bottom = 186.0
+theme_override_colors/font_color = Color(0.45, 0.31, 0.2, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "Belum ada acara 28 hari ke depan."
+clip_text = true

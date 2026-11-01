@@ -1,0 +1,167 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/calendar_cell.gd" id="script"]
+[ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="font"]
+[ext_resource type="Texture2D" path="res://resources/ui/birthday_cake_icon.tres" id="cake"]
+[ext_resource type="Texture2D" path="res://resources/ui/icon_tab_heart.tres" id="heart"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/ui/weather icons.png" id="weather"]
+
+[sub_resource type="AtlasTexture" id="Moon"]
+atlas = ExtResource("weather")
+region = Rect2(16, 32, 16, 16)
+
+[sub_resource type="StyleBoxFlat" id="Normal"]
+content_margin_left = 2.0
+content_margin_top = 1.0
+content_margin_right = 2.0
+content_margin_bottom = 1.0
+bg_color = Color(0.96, 0.9, 0.76, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.68, 0.5, 0.35, 0.9)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="Weekend"]
+content_margin_left = 2.0
+content_margin_top = 1.0
+content_margin_right = 2.0
+content_margin_bottom = 1.0
+bg_color = Color(0.9, 0.81, 0.66, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.68, 0.5, 0.35, 0.9)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="Today"]
+content_margin_left = 2.0
+content_margin_top = 1.0
+content_margin_right = 2.0
+content_margin_bottom = 1.0
+bg_color = Color(1, 0.93, 0.66, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.78, 0.32, 0.18, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="Selected"]
+content_margin_left = 2.0
+content_margin_top = 1.0
+content_margin_right = 2.0
+content_margin_bottom = 1.0
+bg_color = Color(0.99, 0.97, 0.86, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.25, 0.14, 0.08, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="Hover"]
+content_margin_left = 2.0
+content_margin_top = 1.0
+content_margin_right = 2.0
+content_margin_bottom = 1.0
+bg_color = Color(1, 0.96, 0.82, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5, 0.33, 0.2, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="Focus"]
+draw_center = false
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.25, 0.14, 0.08, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+
+[node name="CalendarCell" type="Button"]
+custom_minimum_size = Vector2(26, 31)
+toggle_mode = true
+script = ExtResource("script")
+style_normal = SubResource("Normal")
+style_weekend = SubResource("Weekend")
+style_today = SubResource("Today")
+style_selected = SubResource("Selected")
+style_hover = SubResource("Hover")
+style_focus = SubResource("Focus")
+marker_icons = {
+"birthday": ExtResource("cake"),
+"kliwon": SubResource("Moon"),
+"player_birthday": ExtResource("heart")
+}
+
+[node name="Number" type="Label" parent="."]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 3.0
+offset_top = -2.0
+offset_right = 24.0
+offset_bottom = 14.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.25, 0.14, 0.08, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "1"
+
+[node name="TodayTag" type="ColorRect" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 19.0
+offset_top = 3.0
+offset_right = 23.0
+offset_bottom = 7.0
+mouse_filter = 2
+color = Color(0.78, 0.32, 0.18, 1)
+
+[node name="Markers" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -24.0
+offset_top = -12.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = 0
+alignment = 2

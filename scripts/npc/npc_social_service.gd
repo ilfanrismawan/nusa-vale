@@ -118,7 +118,8 @@ static func commit_relationship(data: PlayerData, id: String, status: String) ->
 	data.story_flags[("dating_" if status == "dating" else "married_") + id] = true
 	return true
 
-static func _birthday(id: String) -> bool:
+## Ulang tahun warga: {"season": "spring".., "day": 1..28}; kosong bila belum tercatat.
+static func birthday_of(id: String) -> Dictionary:
 	var definition: Dictionary = NPCDatabase.social_definition(id)
 	var birthday: Dictionary = definition.get("birthday", {})
 	var season := str(definition.get("birthday_season", birthday.get("season", "")))
@@ -129,7 +130,13 @@ static func _birthday(id: String) -> bool:
 		day = legacy.birthday_day
 	if season == "autumn":
 		season = "fall"
-	return season == DayCycle.SEASONS[DayCycle.get_season()] and day == (DayCycle.current_day - 1) % DayCycle.DAYS_PER_SEASON + 1
+	if not DayCycle.SEASONS.has(season) or day < 1 or day > DayCycle.DAYS_PER_SEASON:
+		return {}
+	return {"season": season, "day": day}
+
+static func _birthday(id: String) -> bool:
+	var birthday := birthday_of(id)
+	return not birthday.is_empty() and birthday.season == DayCycle.SEASONS[DayCycle.get_season()] and birthday.day == DayCycle.get_day_of_season()
 
 static func give(data: PlayerData, id: String, slot: int) -> Dictionary:
 	if data == null or not known(id):

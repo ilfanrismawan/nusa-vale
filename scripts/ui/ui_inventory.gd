@@ -94,6 +94,8 @@ var _crafting_panel: PanelContainer
 ## Tab Keahlian (Role & EXP, GDD 13).
 var _skill_tree: Control
 var _relationship_ui: Control
+## Tab Kalender (ulang tahun, Malam Jumat Kliwon, layanan tutup).
+var _calendar_page: Control
 
 ## Pemain pemilik UI ini (diisi Player). Kosong = P1.
 var player: Player
@@ -139,8 +141,8 @@ func _ready() -> void:
 ## Menu tambahan menggunakan font dan warna buku inventory.
 func _setup_rpg_menus() -> void:
 	_rpg_menu = %TopTabsContainer
-	_menu_buttons = {"Tas": tab_book, "Status": %TabStatus, "Equipment": %TabEquipment, "Crafting": %TabCrafting, "Keahlian": %TabSkills, "NPC": %TabNPC, "Koleksi": tab_collection}
-	_top_tabs.assign([tab_book, %TabStatus, %TabEquipment, %TabCrafting, %TabSkills, %TabNPC, tab_collection, tab_gear, %TabControls])
+	_menu_buttons = {"Tas": tab_book, "Status": %TabStatus, "Equipment": %TabEquipment, "Crafting": %TabCrafting, "Keahlian": %TabSkills, "NPC": %TabNPC, "Kalender": %TabCalendar, "Koleksi": tab_collection}
+	_top_tabs.assign([tab_book, %TabStatus, %TabEquipment, %TabCrafting, %TabSkills, %TabNPC, %TabCalendar, tab_collection, tab_gear, %TabControls])
 	for index in _top_tabs.size():
 		_top_tabs[index].position.x = index * 38
 	for tab in _top_tabs:
@@ -150,6 +152,7 @@ func _setup_rpg_menus() -> void:
 	%TabCrafting.pressed.connect(_show_crafting)
 	%TabSkills.pressed.connect(_show_skills)
 	%TabNPC.pressed.connect(_show_relationships)
+	%TabCalendar.pressed.connect(_show_calendar)
 	_controls_panel = %ControlsPage
 	%TabControls.pressed.connect(_show_controls)
 	_settings_panel = %SettingsPage
@@ -160,7 +163,8 @@ func _setup_rpg_menus() -> void:
 	_collection_panel = %CollectionPage
 	_skill_tree = %SkillTreePage
 	_relationship_ui = %RelationshipPage
-	for page in [_equipment_panel, _crafting_panel, _skill_tree, _relationship_ui, _settings_panel, _controls_panel]:
+	_calendar_page = %CalendarPage
+	for page in [_equipment_panel, _crafting_panel, _skill_tree, _relationship_ui, _calendar_page, _settings_panel, _controls_panel]:
 		page.inventory_ui = self
 	_btn_sort = %SortButton
 	_btn_sort.pressed.connect(_sort_bag)
@@ -179,6 +183,7 @@ func _show_bag_page() -> void:
 	_crafting_panel.hide()
 	_skill_tree.hide()
 	_relationship_ui.hide()
+	_calendar_page.hide()
 	_settings_panel.hide()
 	_controls_panel.hide()
 	book_root.get_node("LeftPage").show()
@@ -197,6 +202,7 @@ func _show_status() -> void:
 	_crafting_panel.hide()
 	_skill_tree.hide()
 	_relationship_ui.hide()
+	_calendar_page.hide()
 	_settings_panel.hide()
 	_controls_panel.hide()
 	book_root.get_node("LeftPage").hide()
@@ -241,6 +247,8 @@ func _update_menu_highlight() -> void:
 		active = _menu_buttons["Keahlian"]
 	if is_instance_valid(_relationship_ui) and _relationship_ui.visible:
 		active = _menu_buttons["NPC"]
+	if is_instance_valid(_calendar_page) and _calendar_page.visible:
+		active = _menu_buttons["Kalender"]
 	if is_instance_valid(_settings_panel) and _settings_panel.visible:
 		active = tab_gear
 	if is_instance_valid(_controls_panel) and _controls_panel.visible:
@@ -258,6 +266,7 @@ func _show_collection() -> void:
 	_crafting_panel.hide()
 	_skill_tree.hide()
 	_relationship_ui.hide()
+	_calendar_page.hide()
 	_settings_panel.hide()
 	_controls_panel.hide()
 	book_root.get_node("LeftPage").hide()
@@ -278,6 +287,7 @@ func _show_equipment() -> void:
 	_crafting_panel.hide()
 	_skill_tree.hide()
 	_relationship_ui.hide()
+	_calendar_page.hide()
 	_settings_panel.hide()
 	_controls_panel.hide()
 	for path in ["LeftPage", "RightPage", "RightRibbonsContainer"]:
@@ -292,7 +302,7 @@ func _show_crafting() -> void:
 		return
 	_hide_tooltip()
 	_clear_item_detail()
-	for panel in [_status_panel, _equipment_panel, _collection_panel, _skill_tree, _relationship_ui, _settings_panel, _controls_panel]:
+	for panel in [_status_panel, _equipment_panel, _collection_panel, _skill_tree, _relationship_ui, _calendar_page, _settings_panel, _controls_panel]:
 		panel.hide()
 	for path in ["LeftPage", "RightPage", "RightRibbonsContainer"]:
 		book_root.get_node(path).hide()
@@ -303,6 +313,10 @@ func _show_crafting() -> void:
 
 func _show_relationships() -> void:
 	_show_embedded_page(_relationship_ui)
+
+
+func _show_calendar() -> void:
+	_show_embedded_page(_calendar_page)
 
 
 func _show_controls() -> void:
@@ -321,7 +335,7 @@ func _show_embedded_page(page: Control) -> void:
 		return
 	_hide_tooltip()
 	_clear_item_detail()
-	for panel in [_status_panel, _equipment_panel, _collection_panel, _crafting_panel, _skill_tree, _relationship_ui, _settings_panel, _controls_panel]:
+	for panel in [_status_panel, _equipment_panel, _collection_panel, _crafting_panel, _skill_tree, _relationship_ui, _calendar_page, _settings_panel, _controls_panel]:
 		panel.hide()
 	for path in ["LeftPage", "RightPage", "RightRibbonsContainer"]:
 		book_root.get_node(path).hide()
@@ -608,6 +622,8 @@ func _cycle_tab(step: int) -> void:
 		current = _menu_buttons["Keahlian"]
 	if _relationship_ui.visible:
 		current = _menu_buttons["NPC"]
+	if _calendar_page.visible:
+		current = _menu_buttons["Kalender"]
 	if _settings_panel.visible:
 		current = tab_gear
 	if _controls_panel.visible:
@@ -643,6 +659,7 @@ func open_sell_mode() -> void:
 func _close() -> void:
 	_skill_tree.hide()
 	_relationship_ui.hide()
+	_calendar_page.hide()
 	_settings_panel.hide()
 	_controls_panel.hide()
 	if is_instance_valid(_consume_dialog):

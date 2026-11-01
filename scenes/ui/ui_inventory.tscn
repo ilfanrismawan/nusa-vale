@@ -10,6 +10,8 @@
 [ext_resource type="Texture2D" uid="uid://duh7k2bv6sk0i" path="res://assets/farm_rpg/ui/Banner.png" id="26_v05ns"]
 [ext_resource type="PackedScene" uid="uid://ci12rtnquqvtc" path="res://scenes/ui/skill_tree_ui.tscn" id="30_skills"]
 [ext_resource type="PackedScene" uid="uid://dtfmpcp3erfgl" path="res://scenes/ui/npc_relationship_ui.tscn" id="31_relationship"]
+[ext_resource type="PackedScene" path="res://scenes/ui/inventory_calendar.tscn" id="32_calendar"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory_tab_calendar.svg" id="calendar_icon"]
 [ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="actions_1_wuc6u"]
 [ext_resource type="Theme" uid="uid://cl73ou0e04t25" path="res://resources/ui/inventory_book_theme.tres" id="book_theme"]
 [ext_resource type="Texture2D" uid="uid://d0xlnxsut3hss" path="res://assets/ui/inventory_tab_book.svg" id="compact_book"]
@@ -156,6 +158,15 @@ offset_top = 20.0
 offset_right = 448.0
 offset_bottom = 244.0
 embedded = true
+
+[node name="CalendarPage" parent="Dimmer/BookRoot" instance=ExtResource("32_calendar")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 28.0
+offset_top = 20.0
+offset_right = 448.0
+offset_bottom = 244.0
 
 [node name="RightRibbonsContainer" type="Control" parent="Dimmer/BookRoot" unique_id=1743247451]
 unique_name_in_owner = true
@@ -1185,6 +1196,32 @@ offset_right = 31.0
 offset_bottom = 33.33335
 mouse_filter = 2
 texture = ExtResource("TopTabsContainer_8_1d1eo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TabCalendar" type="TextureButton" parent="Dimmer/BookRoot/TopTabsContainer"]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(38, 36)
+layout_mode = 0
+offset_left = 228.0
+offset_top = 6.0
+offset_right = 266.0
+offset_bottom = 42.0
+tooltip_text = "Kalender: ulang tahun warga, malam Kliwon, dan hari tutup toko"
+texture_normal = ExtResource("TopTabsContainer_4_enmef")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="Dimmer/BookRoot/TopTabsContainer/TabCalendar"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 7.0
+offset_top = 9.333351
+offset_right = 31.0
+offset_bottom = 33.33335
+mouse_filter = 2
+texture = ExtResource("calendar_icon")
 expand_mode = 1
 stretch_mode = 5
 
