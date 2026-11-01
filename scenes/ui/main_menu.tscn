@@ -123,9 +123,9 @@ theme_override_font_sizes/font_size = 16
 scale = Vector2(1.25, 1.25)
 unique_name_in_owner = true
 offset_left = 30.0
-offset_top = 199.0
+offset_top = 194.0
 offset_right = 278.0
-offset_bottom = 239.8
+offset_bottom = 234.8
 text = "Muat Game"
 theme_override_font_sizes/font_size = 16
 
@@ -133,9 +133,9 @@ theme_override_font_sizes/font_size = 16
 scale = Vector2(1.25, 1.25)
 unique_name_in_owner = true
 offset_left = 30.0
-offset_top = 264.0
+offset_top = 254.0
 offset_right = 278.0
-offset_bottom = 304.8
+offset_bottom = 294.8
 text = "Co-op Lokal"
 theme_override_font_sizes/font_size = 16
 
@@ -143,19 +143,29 @@ theme_override_font_sizes/font_size = 16
 scale = Vector2(1.25, 1.25)
 unique_name_in_owner = true
 offset_left = 30.0
-offset_top = 329.0
+offset_top = 314.0
 offset_right = 278.0
-offset_bottom = 369.8
+offset_bottom = 354.8
 text = "Pengaturan"
+theme_override_font_sizes/font_size = 16
+
+[node name="BtnCredits" type="Button" parent="Design/MenuPanel"]
+scale = Vector2(1.25, 1.25)
+unique_name_in_owner = true
+offset_left = 30.0
+offset_top = 374.0
+offset_right = 278.0
+offset_bottom = 414.8
+text = "Kredit"
 theme_override_font_sizes/font_size = 16
 
 [node name="BtnQuit" type="Button" parent="Design/MenuPanel"]
 scale = Vector2(1.25, 1.25)
 unique_name_in_owner = true
 offset_left = 30.0
-offset_top = 394.0
+offset_top = 434.0
 offset_right = 278.0
-offset_bottom = 434.8
+offset_bottom = 474.8
 text = "Keluar"
 theme_override_font_sizes/font_size = 16
 

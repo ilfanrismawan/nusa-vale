@@ -21,6 +21,7 @@ static var DATA: CaveData = load("res://resources/cave/cave_data.tres")
 const ORE_SHEET := preload("res://assets/farm_rpg/objects/mine/stone with minerals.png")
 const ROCK_SCENE := preload("res://scenes/objects/rock.tscn")
 const LIFT_MENU := preload("res://scripts/ui/cave_lift_menu.gd")
+const DemoLimits := preload("res://scripts/system/demo_limits.gd")
 const WINTER_POND := preload("res://scripts/world/winter_pond.gd")
 const FLOOR_BADGE := preload("res://scripts/ui/cave_floor_badge.gd")
 const LOBBY_ICON := preload("res://resources/icons/icon_pickaxe_wood.tres")
@@ -664,6 +665,9 @@ func go_to_floor(number: int) -> void:
 	if _changing or not is_inside_tree():
 		return
 	number = clampi(number, 0, DATA.max_floor)
+	if DemoLimits.is_floor_locked(number):
+		Notify.say("Versi demo hanya sampai lantai %d. Lantai berikutnya ada di versi lengkap!" % DemoLimits.MAX_CAVE_FLOOR)
+		return
 	_changing = true
 	await Transition.fade_action(func() -> void:
 		build_floor(number)

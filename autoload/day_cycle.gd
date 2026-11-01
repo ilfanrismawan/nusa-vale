@@ -14,6 +14,7 @@ var hour: int = 6
 var minute: int = 0
 
 const DAYS_PER_SEASON := 28
+const DemoLimits := preload("res://scripts/system/demo_limits.gd")
 const SEASONS: Array[String] = ["spring", "summer", "fall", "winter"]
 
 
@@ -283,6 +284,15 @@ func advance_day() -> void:
 	GameState.weather.advance_day(current_day)
 	NPCHousehold.advance_all(current_day)
 	time_tick.emit(hour, minute)
+	if DemoLimits.is_day_over_limit(current_day):
+		_show_demo_end()
+
+## Build demo: hari setelah batas dimulai -> layar akhir demo (save hari ini tetap tersimpan).
+func _show_demo_end() -> void:
+	var timer := get_tree().create_timer(2.5, true)
+	timer.timeout.connect(func() -> void:
+		var screen := (load(DemoLimits.END_SCREEN) as PackedScene).instantiate()
+		get_tree().root.add_child(screen))
 	
 func _lighting_color(current_hour: int) -> Color:
 	if current_hour >= 6 and current_hour < 16:

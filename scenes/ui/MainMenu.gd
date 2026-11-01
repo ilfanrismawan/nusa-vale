@@ -5,6 +5,7 @@ extends Control
 @onready var btn_new: Button = %BtnNew
 @onready var btn_continue: Button = %BtnContinue
 @onready var btn_settings: Button = %BtnSettings
+@onready var btn_credits: Button = %BtnCredits
 @onready var btn_quit: Button = %BtnQuit
 @onready var confirm_dialog: ConfirmationDialog = %ConfirmDialog
 @onready var settings_menu: CanvasLayer = %SettingsMenu
@@ -13,6 +14,9 @@ extends Control
 
 const GAME_SCENE := "res://scenes/world/farm.tscn"
 const CoopLobby := preload("res://scenes/ui/coop_lobby.tscn")
+const CREDITS_SCENE := "res://scenes/ui/credits_screen.tscn"
+const DemoLimits := preload("res://scripts/system/demo_limits.gd")
+const DEMO_SAVE_OVER := "Save ini sudah melewati batas demo (akhir musim Semi). Lanjutkan di versi lengkap!"
 
 var _tween: Tween
 var btn_coop: Button
@@ -27,12 +31,15 @@ func _ready() -> void:
 	btn_new.pressed.connect(_on_new_game_pressed)
 	btn_continue.pressed.connect(_on_continue_pressed)
 	btn_settings.pressed.connect(_on_settings_pressed)
+	btn_credits.pressed.connect(_on_credits_pressed)
 	btn_quit.pressed.connect(_on_quit_pressed)
 	# Konfirmasi timpa save sekarang ada di SaveSlotMenu; ConfirmDialog tidak dipakai lagi.
 
 	# Tombol Lanjutkan membuka daftar slot; aktif jika ada minimal satu slot terisi.
 	btn_continue.text = "Muat Game"
 	btn_continue.disabled = not SaveManager.has_any_save()
+	if DemoLimits.is_demo():
+		version_label.text += " · Demo"
 	if settings_menu and settings_menu.has_method("set_save_buttons_visible"):
 		settings_menu.set_save_buttons_visible(false)
 
@@ -46,6 +53,7 @@ func _play_intro_animation() -> void:
 	btn_new.modulate.a = 0.0
 	btn_continue.modulate.a = 0.0
 	btn_settings.modulate.a = 0.0
+	btn_credits.modulate.a = 0.0
 	btn_quit.modulate.a = 0.0
 	btn_coop.modulate.a = 0.0
 	version_label.modulate.a = 0.0
@@ -63,6 +71,7 @@ func _play_intro_animation() -> void:
 	_tween.tween_property(btn_continue, "modulate:a", 1.0, 0.3)
 	_tween.tween_property(btn_coop, "modulate:a", 1.0, 0.3)
 	_tween.tween_property(btn_settings, "modulate:a", 1.0, 0.3)
+	_tween.tween_property(btn_credits, "modulate:a", 1.0, 0.3)
 	_tween.tween_property(btn_quit, "modulate:a", 1.0, 0.3)
 	_tween.tween_property(version_label, "modulate:a", 0.6, 0.3)
 
@@ -94,6 +103,9 @@ func _start_coop(devices: Array[int]) -> void:
 	if SaveManager.has_save():
 		if not SaveManager.load_game():
 			Notify.say("Gagal memuat save.")
+			return
+		if DemoLimits.is_day_over_limit(DayCycle.current_day):
+			Notify.say(DEMO_SAVE_OVER)
 			return
 	else:
 		_reset_world()
@@ -156,6 +168,9 @@ func _continue_game() -> void:
 	if not SaveManager.load_game():
 		Notify.say("Gagal memuat save.")
 		return
+	if DemoLimits.is_day_over_limit(DayCycle.current_day):
+		Notify.say(DEMO_SAVE_OVER)
+		return
 	_enter_house()
 
 func _enter_house() -> void:
@@ -175,6 +190,12 @@ func _enter_house() -> void:
 func _on_settings_pressed() -> void:
 	if settings_menu:
 		settings_menu.toggle()
+
+
+func _on_credits_pressed() -> void:
+	var credits: CanvasLayer = (load(CREDITS_SCENE) as PackedScene).instantiate()
+	credits.connect("closed", func(): btn_credits.grab_focus())
+	add_child(credits)
 
 
 func _on_quit_pressed() -> void:
