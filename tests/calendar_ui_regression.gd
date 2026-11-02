@@ -86,7 +86,7 @@ func _ready() -> void:
 	check((cells[2] as CalendarCell).is_today and cells[2].button_pressed, "sel hari ini terpilih saat tab dibuka")
 	check((cells[0] as CalendarCell).is_past and not (cells[5] as CalendarCell).is_past, "hari lewat ditandai")
 	check(_cell_kinds(cells[2]) == 1, "3 Panas (Ubay) punya penanda ulang tahun")
-	check(page.get_node("%DateTitle").text == "RABU, 3 MUSIM PANAS", "detail menampilkan tanggal terpilih")
+	check(page.get_node("%DateTitle").text == "Rabu, 3 Musim Panas", "detail menampilkan tanggal terpilih")
 	check(page.get_node("%Closed").text.contains("Toko Umum"), "detail menampilkan layanan tutup")
 	check(page.get_node("%Upcoming").get_child_count() > 0, "daftar akan datang terisi")
 	await capture(page, "calendar_summer")

@@ -87,20 +87,24 @@ static func is_kliwon(abs_day: int) -> bool:
 
 
 ## Acara pada satu hari absolut, urut tampil: ulang tahun pemain, ulang tahun warga, Kliwon.
+## Kunci: kind, title, short (judul ringkas untuk daftar), detail (lengkap, untuk tooltip), summary (satu baris).
 ## `birthdays` boleh diisi hasil resident_birthdays() agar tidak dihitung ulang per sel.
 static func events_for(data: PlayerData, abs_day: int, birthdays: Array[Dictionary] = [], show_kliwon := true) -> Array[Dictionary]:
 	var events: Array[Dictionary] = []
 	var season := DayCycle.SEASONS[season_of(abs_day)]
 	var day := day_of_season(abs_day)
 	if data != null and data.birthday_season == season and data.birthday_day == day:
-		events.append({"kind": KIND_PLAYER_BIRTHDAY, "title": "Ulang tahunmu", "detail": "Selamat ulang tahun, %s!" % (data.player_name if not data.player_name.is_empty() else "Petani")})
+		var greeting := "Selamat ulang tahun, %s!" % (data.player_name if not data.player_name.is_empty() else "Petani")
+		events.append({"kind": KIND_PLAYER_BIRTHDAY, "title": "Ulang tahunmu", "short": "Ulang tahunmu", "detail": greeting, "summary": greeting})
 	if birthdays.is_empty():
 		birthdays = resident_birthdays()
 	for entry in birthdays:
 		if entry.season == season and int(entry.day) == day:
-			events.append({"kind": KIND_BIRTHDAY, "id": entry.id, "title": "Ulang tahun %s" % entry.name, "detail": "Hadiah hari ini bernilai 8× poin dan tidak memakai jatah pekanan."})
+			events.append({"kind": KIND_BIRTHDAY, "id": entry.id, "title": "Ulang tahun %s" % entry.name, "short": str(entry.name),
+				"detail": "Hadiah hari ini bernilai 8× poin dan tidak memakai jatah pekanan.", "summary": "Hadiah bernilai 8× poin."})
 	if show_kliwon and is_kliwon(abs_day):
-		events.append({"kind": KIND_KLIWON, "title": "Malam Jumat Kliwon", "detail": "Semua penunggu keluar malam ini; hadiah material malam ×2."})
+		events.append({"kind": KIND_KLIWON, "title": "Malam Jumat Kliwon", "short": "Malam Kliwon",
+			"detail": "Semua penunggu keluar malam ini; hadiah material malam ×2.", "summary": "Penunggu keluar; material ×2."})
 	return events
 
 
