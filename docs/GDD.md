@@ -1,6 +1,6 @@
 # Nusa Vale — Game Design Document (GDD)
 
-Versi dokumen: 3.84 (2 November 2026).
+Versi dokumen: 3.85 (3 November 2026).
 Dokumen ini adalah **sumber kebenaran desain** proyek `E:\nusa-vale` (Game Design Document resmi).
 Pada versi 1.9, ditambahkan 4 pilar fundamental Life-Sim / Farming RPG: **Sistem Peternakan & Satwa** (kandang Barn/Coop, sapi, kambing, domba, ayam, bebek, kuda, pakan & affection), **Mesin Pengolah Pasca-Panen (Artisan Goods)** (mayones, keju, selai, fermentasi keg, tenun, pengasap ikan), **Sistem Cuaca Harian Dinamis** (cerah, hujan penyiram otomatis, badai petir penangkal baterai, salju), serta **Sistem Sosial, Persahabatan, & Jadwal Harian NPC** (hati 0-10, sistem hadiah loved/hated, rutinitas harian, heart events, dan romansa/teman sekamar).
 
@@ -1841,6 +1841,7 @@ Dengan disahkannya keputusan utama di atas, butir keputusan teknis turunan yang 
 
 ## 19. Changelog
 
+- **2026-11-03 (Versi 3.85)**: Persiapan halaman itch.io (permintaan pemilik): draf halaman `docs/ITCH_PAGE.md` (deskripsi ID/EN, kontrol dari `input_layout.gd`, kredit, checklist upload) dan gambar di `docs/itch/` (cover 630×500, 6 screenshot 1280×720, GIF; folder diberi `.gdignore` agar tidak ikut export). 524 file `.tres` kini menulis path script `res://scripts/data/*.gd` sesuai UID-nya (sebelumnya path lama `autoload/data/`); perilaku dan save tidak berubah.
 - **2026-11-02 (Versi 3.84)**: Persiapan rilis itch.io: `project.godot` tidak lagi menyetel mode jendela Minimized (`window/size/mode=1`, terbawa sejak 18 Oktober), sehingga build export terbuka sebagai jendela biasa. Tanpa perubahan save.
 - **2026-11-02 (Versi 3.83)**: Polesan tab **Kalender** (permintaan pemilik, mockup disetujui; bagian 12): tata letak gaya buku seperti Peta/Shipping Bin, progres dan ringkasan musim, sel tanggal baru (hari lewat bercentang, Kliwon ungu, bingkai pilihan), detail tanggal dengan ikon sobekan kalender, kartu acara, kotak layanan, dan baris "Akan datang" baru (`calendar_upcoming_row.tscn`). Judul detail kini huruf biasa ("Rabu, 3 Musim Panas"); `tests/calendar_ui_regression` disesuaikan dan lulus. Tanpa perubahan save.
 - **2026-11-02 (Versi 3.82)**: **Grid tas bisa dipakai dengan gamepad** (permintaan pemilik, hasil audit gamepad; bagian 4.3): sebelumnya slot tas hanya menerima klik mouse. Kini D-pad/stik kiri memindah kursor slot (tepi grid = ganti halaman), A pilih/tukar, X makan/buang/titip (aksi baru `item_action`, bisa diatur ulang), dan dialog buang/titip diatur dengan D-pad (±1/±10), A konfirmasi, B batal. Petunjuk "Klik kanan: makan" berganti "[X]: makan" untuk pemain gamepad. Lanjutan: D-pad ditahan berulang, Back = tampilkan item di hotbar (aksi `hotbar_item`), tab Crafting bisa dipakai dengan gamepad (D-pad pilih resep, A buat, X ganti grup), dan menu bangunan/kandang memberi fokus awal ke tombol pertama (sebelumnya tidak ada fokus sehingga D-pad/A tidak berbuat apa-apa). Tes baru `tests/inventory_gamepad_regression.tscn` (masuk `tools/verify_mvp.ps1`) dan cek fokus gamepad di `tests/chicken_regression.tscn`. Tanpa perubahan save.
