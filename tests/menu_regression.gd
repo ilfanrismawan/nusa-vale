@@ -49,7 +49,7 @@ func _ready() -> void:
 	get_viewport().push_input(esc, true)
 	await get_tree().process_frame
 	check(ui.visible and not settings.visible and get_tree().paused, "Esc opens inventory, not settings, and pauses solo")
-	check(ui._top_tabs.size() == 9 and not ui.has_method("_on_save_pressed"), "Top tabs include skills, NPC and controls pages without a direct save action")
+	check(ui._top_tabs.size() == 12 and not ui.has_method("_on_save_pressed"), "Top tabs include skills, NPC and controls pages without a direct save action")
 	await click_icon(ui._menu_buttons["NPC"])
 	check(is_instance_valid(ui._relationship_ui), "NPC tab opens from an actual mouse click")
 	ui._relationship_ui.close_menu()

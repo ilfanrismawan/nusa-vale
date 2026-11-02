@@ -3,6 +3,12 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/book_pager.tscn" id="pager"]
 [ext_resource type="PackedScene" path="res://scenes/ui/book_text.tscn" id="text"]
 [ext_resource type="Script" path="res://scripts/ui/inventory_collection.gd" id="script"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory_side_tab_normal.svg" id="side_normal"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory_side_tab_active.svg" id="side_active"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_fish_carp.tres" id="filter_icon_0"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_common_mushroom.tres" id="filter_icon_1"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_parsnip.tres" id="filter_icon_2"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_copper_ore.tres" id="filter_icon_3"]
 
 [node name="InventoryCollection" type="PanelContainer"]
 custom_minimum_size = Vector2(420, 224)
@@ -35,6 +41,110 @@ offset_bottom = 224.0
 clip_contents = true
 mouse_filter = 2
 
+[node name="FilterTabsContainer" type="Control" parent="Pages"]
+unique_name_in_owner = true
+offset_left = -30.0
+offset_top = 14.0
+offset_right = 2.0
+offset_bottom = 126.0
+mouse_filter = 2
+
+[node name="Filter1" type="TextureButton" parent="Pages/FilterTabsContainer"]
+texture_filter = 1
+offset_top = 0.0
+offset_right = 32.0
+offset_bottom = 28.0
+tooltip_text = "Ikan"
+toggle_mode = true
+texture_normal = ExtResource("side_normal")
+texture_pressed = ExtResource("side_active")
+texture_hover = ExtResource("side_active")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="Pages/FilterTabsContainer/Filter1"]
+texture_filter = 1
+offset_left = 7.0
+offset_top = 4.0
+offset_right = 27.0
+offset_bottom = 24.0
+mouse_filter = 2
+texture = ExtResource("filter_icon_0")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Filter2" type="TextureButton" parent="Pages/FilterTabsContainer"]
+texture_filter = 1
+offset_top = 28.0
+offset_right = 32.0
+offset_bottom = 56.0
+tooltip_text = "Hutan"
+toggle_mode = true
+texture_normal = ExtResource("side_normal")
+texture_pressed = ExtResource("side_active")
+texture_hover = ExtResource("side_active")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="Pages/FilterTabsContainer/Filter2"]
+texture_filter = 1
+offset_left = 7.0
+offset_top = 4.0
+offset_right = 27.0
+offset_bottom = 24.0
+mouse_filter = 2
+texture = ExtResource("filter_icon_1")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Filter3" type="TextureButton" parent="Pages/FilterTabsContainer"]
+texture_filter = 1
+offset_top = 56.0
+offset_right = 32.0
+offset_bottom = 84.0
+tooltip_text = "Tanaman"
+toggle_mode = true
+texture_normal = ExtResource("side_normal")
+texture_pressed = ExtResource("side_active")
+texture_hover = ExtResource("side_active")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="Pages/FilterTabsContainer/Filter3"]
+texture_filter = 1
+offset_left = 7.0
+offset_top = 4.0
+offset_right = 27.0
+offset_bottom = 24.0
+mouse_filter = 2
+texture = ExtResource("filter_icon_2")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Filter4" type="TextureButton" parent="Pages/FilterTabsContainer"]
+texture_filter = 1
+offset_top = 84.0
+offset_right = 32.0
+offset_bottom = 112.0
+tooltip_text = "Mineral"
+toggle_mode = true
+texture_normal = ExtResource("side_normal")
+texture_pressed = ExtResource("side_active")
+texture_hover = ExtResource("side_active")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="Pages/FilterTabsContainer/Filter4"]
+texture_filter = 1
+offset_left = 7.0
+offset_top = 4.0
+offset_right = 27.0
+offset_bottom = 24.0
+mouse_filter = 2
+texture = ExtResource("filter_icon_3")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="Heading" type="Label" parent="Pages/Left"]
 scale = Vector2(1.0625, 1.0625)
 unique_name_in_owner = true
@@ -47,71 +157,27 @@ theme_override_font_sizes/font_size = 16
 text = "KOLEKSI"
 clip_text = true
 
-
-[node name="Filters" type="GridContainer" parent="Pages/Left"]
-unique_name_in_owner = true
-offset_left = 4.0
-offset_top = 25.0
-offset_right = 196.0
-offset_bottom = 69.0
-columns = 2
-theme_override_constants/h_separation = 4
-theme_override_constants/v_separation = 4
-
-[node name="Filter1" type="Button" parent="Pages/Left/Filters"]
-scale = Vector2(0.75, 0.75)
-unique_name_in_owner = true
-custom_minimum_size = Vector2(94, 20)
-toggle_mode = true
-theme_override_font_sizes/font_size = 16
-text = "Ikan"
-
-[node name="Filter2" type="Button" parent="Pages/Left/Filters"]
-scale = Vector2(0.75, 0.75)
-unique_name_in_owner = true
-custom_minimum_size = Vector2(94, 20)
-toggle_mode = true
-theme_override_font_sizes/font_size = 16
-text = "Hutan"
-
-[node name="Filter3" type="Button" parent="Pages/Left/Filters"]
-scale = Vector2(0.75, 0.75)
-unique_name_in_owner = true
-custom_minimum_size = Vector2(94, 20)
-toggle_mode = true
-theme_override_font_sizes/font_size = 16
-text = "Tanaman"
-
-[node name="Filter4" type="Button" parent="Pages/Left/Filters"]
-scale = Vector2(0.75, 0.75)
-unique_name_in_owner = true
-custom_minimum_size = Vector2(94, 20)
-toggle_mode = true
-theme_override_font_sizes/font_size = 16
-text = "Mineral"
-
 [node name="Summary" type="Label" parent="Pages/Left"]
 scale = Vector2(0.6875, 0.6875)
 unique_name_in_owner = true
 offset_left = 4.0
-offset_top = 74.0
+offset_top = 23.0
 offset_right = 283.27272727272725
-offset_bottom = 114.72727272727272
+offset_bottom = 43.0
 mouse_filter = 2
 theme_override_font_sizes/font_size = 16
 text = ""
 clip_text = true
-autowrap_mode = 3
-max_lines_visible = 2
 
 [node name="List" type="GridContainer" parent="Pages/Left"]
 unique_name_in_owner = true
-offset_left = 4.0
-offset_top = 108.0
-offset_right = 196.0
+offset_left = 5.0
+offset_top = 40.0
+offset_right = 191.0
 offset_bottom = 194.0
-columns = 1
-theme_override_constants/v_separation = 4
+columns = 7
+theme_override_constants/h_separation = 3
+theme_override_constants/v_separation = 2
 
 [node name="CollectionPager" parent="Pages/Left" instance=ExtResource("pager")]
 scale = Vector2(0.75, 0.75)
@@ -121,7 +187,7 @@ offset_top = 201.0
 offset_right = 260.0
 offset_bottom = 229.0
 content_path = NodePath("../List")
-page_size = 3
+page_size = 42
 
 [node name="NotesHeading" type="Label" parent="Pages/Right"]
 unique_name_in_owner = true
@@ -134,11 +200,20 @@ theme_override_font_sizes/font_size = 16
 text = "CATATAN PENEMUAN"
 clip_text = true
 
+[node name="DetailIcon" type="TextureRect" parent="Pages/Right"]
+unique_name_in_owner = true
+texture_filter = 1
+offset_left = 4.0
+offset_top = 26.0
+offset_right = 36.0
+offset_bottom = 58.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Detail" parent="Pages/Right" instance=ExtResource("text")]
 unique_name_in_owner = true
 offset_left = 4.0
-offset_top = 28.0
+offset_top = 62.0
 offset_right = 196.0
 offset_bottom = 222.0
-

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/ranch/horse_flute.png" id="2"]
+
+[resource]
+script = ExtResource("1")
+item_id = "horse_flute"
+display_name = "Seruling Kuda"
+icon = ExtResource("2")
+buy_price = 1000
+sell_price = 0
+description = "Pegang lalu pakai (klik kiri) di luar ruangan: kudamu berlari datang ke sisimu dari mana pun ia ditinggal. Tidak habis dipakai."
+stackable = false
+max_stack = 1

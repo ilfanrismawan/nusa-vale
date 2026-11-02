@@ -84,7 +84,7 @@ border_color = Color(0.549, 0.839, 0.471, 1)
 
 [resource]
 default_font = ExtResource("font")
-default_font_size = 20
+default_font_size = 16
 Button/colors/font_color = Color(0.976, 0.902, 0.812, 1)
 Button/colors/font_disabled_color = Color(0.765, 0.675, 0.584, 1)
 Button/styles/disabled = SubResource("Disabled")

@@ -35,7 +35,7 @@ offset_left = -55.0
 offset_top = -44.0
 offset_right = 55.0
 theme_override_fonts/font = ExtResource("4_font")
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 16
 text = "Kompor"
 horizontal_alignment = 1
 

@@ -4,13 +4,13 @@
   "name": "Pak Joko",
   "age": 46,
   "gender": "male",
-  "role": "Koki Warung Nusa",
+  "role": "Penjaga Warteg Bahari",
   "birthday": {
     "season": "summer",
     "day": 21
   },
   "home_map": "warung",
-  "residence": "Tinggal di belakang Warung Rasa Nusa; melayani 08.00–20.00.",
+  "residence": "Tinggal di belakang Warteg Bahari; berjaga 08.00–20.00.",
   "romanceable": false,
   "personality": [
     "hangat",
@@ -34,22 +34,10 @@
       "lunch"
     ],
     "closed_days": [],
-    "name": "Warung Rasa Nusa",
-    "greeting": "Selamat datang! Semua disiapkan dengan perhatian.",
-    "stock": [
-      {
-        "item": "vegetable_soup",
-        "price": 290
-      },
-      {
-        "item": "boiled_egg",
-        "price": 110
-      },
-      {
-        "item": "rice_ball",
-        "price": 60
-      }
-    ]
+    "name": "Warteg Bahari",
+    "greeting": "Monggo, mau makan apa? Nasi, lauk, sayur, semua baru saya masak, masih hangat.",
+    "shop_data": "res://resources/shop/warteg.tres",
+    "menu_scene": "res://scenes/ui/warteg_ui.tscn"
   },
   "visual": {
     "sprite_frames": "res://resources/npc_data/npc_animation/joko_resident_frame.tres",
@@ -112,7 +100,7 @@
       {
         "time": "12:00",
         "map": "town",
-        "point": "joko_rest",
+        "point": "joko_work",
         "activity": "lunch"
       },
       {
@@ -156,7 +144,7 @@
       {
         "time": "12:00",
         "map": "town",
-        "point": "joko_rest",
+        "point": "joko_work",
         "activity": "lunch"
       },
       {
@@ -184,13 +172,13 @@
       "Joko menjaga rasa masakan rumahan sambil belajar menerima bantuan tetangga."
     ],
     "preparing": [
-      "Aku sedang menyiapkan pekerjaan hari ini."
+      "Bumbu dan nasi untuk warteg sedang kusiapkan."
     ],
     "working": [
-      "Aku sedang menyiapkan masakan. Dapur warung bisa kamu gunakan sesuai akses yang sudah terbuka."
+      "Warteg buka! Nasi, lauk, sayur, minuman, pilih saja di meja."
     ],
     "lunch": [
-      "Aku beristirahat sebentar sebelum melanjutkan pekerjaan."
+      "Aku makan siang sambil jaga warteg. Mau pesan juga?"
     ],
     "resting": [
       "Senang bisa mengobrol setelah bekerja. Bagaimana harimu?"

@@ -152,7 +152,7 @@ func setup(
 
 		label.add_theme_font_size_override(
 			"font_size",
-			8
+			16
 		)
 
 		label.add_theme_color_override(

@@ -11,6 +11,13 @@ kontribusi dibuka lewat `BaleAgung/BalaiInteractionArea` di prop `bale_agung.tsc
 `ReturnTown` di tepi selatan kembali ke Kota. Bagian "Play and integrate" di bawah
 menggambarkan dua scene lama dan hanya tersisa sebagai riwayat.
 
+Update 2026-11-02: medan dan dekorasi `balai.tscn` dibangun `tools/build_balai.gd`
+(`res://tools/build_balai.tscn`, headless). Generator mengganti layer `base`/`water`/`grass`
+dan node hasilnya saja; bangunan, dek, titian, tangga, jembatan, pintu, dan batas tetap
+diedit di editor. Menjalankan ulang membuang editan editor pada layer/node hasil generator.
+Layer `water` menutupi seluruh peta (alt 1 = tanpa kolisi untuk darat dan sel yang bisa
+dilewati); daftar sel yang bisa dilewati disimpan di metadata `walkable_cells`.
+
 Balai Nadi is an optional, persistent community restoration. Its first project accepts
 100 `wood` (Kayu) and 50 `stone` (Stone), using existing ItemData resources.
 

@@ -22,6 +22,31 @@ func capture(file_name: String) -> void:
 	RenderingServer.force_draw()
 	get_viewport().get_texture().get_image().save_png("res://scratch/" + file_name + ".png")
 
+## Isi tas dengan cukup bahan untuk slot yang dibutuhkan paket (N dari M).
+func grant_project(player: Player, project: RestorationProject) -> void:
+	var manager := GameState.balai_nadi
+	var granted := 0
+	for id in project.requirements:
+		if granted >= manager.slots_needed(project):
+			break
+		if id == "money":
+			GameState.money += manager.required(project, id)
+		else:
+			player.data.add_item_silent(id, manager.required(project, id))
+		granted += 1
+
+## Satu bahan per giliran supaya tas tidak penuh oleh semua paket sekaligus.
+func fill_project(player: Player, project: RestorationProject) -> void:
+	var manager := GameState.balai_nadi
+	for id in project.requirements:
+		if manager.completed(project.project_id):
+			break
+		if id == "money":
+			GameState.money += manager.remaining(project.project_id, id)
+		else:
+			player.data.add_item_silent(id, manager.remaining(project.project_id, id))
+		manager.contribute(player.data, project.project_id, id)
+
 func petal_keys(menu: BalaiNadiUI) -> Array:
 	return menu._petals.map(func(petal): return petal.get_meta("entry").key)
 
@@ -106,6 +131,29 @@ func _ready() -> void:
 	check(manager.completed("wild_forage_bundle") and menu.get_node("%CompletedStamp").visible and menu.get_node("%Donate").disabled and menu.get_node("%DonateAll").disabled, "Semua fills an N-of-M bundle and stamps it complete")
 	check(not manager.completed("greenhouse_restoration"), "completing one bundle does not complete independent nature packages")
 	await capture("balai-radial-completed")
+	# Perayaan sayap lengkap: tiga paket Karya lewat manager (tanpa perayaan), paket terakhir lewat menu.
+	var karya := manager.wing_projects("karya")
+	for project in karya.slice(0, karya.size() - 1):
+		fill_project(player, project)
+	check(not menu._is_celebrating() and not menu.get_node("%Celebration").visible, "contributions from outside this board never trigger its celebration")
+	var last: RestorationProject = karya[karya.size() - 1]
+	menu._select_project_id(last.project_id)
+	grant_project(player, last)
+	menu._refresh()
+	var tokens_before := player.data.skills.tokens
+	menu.get_node("%DonateAll").pressed.emit()
+	check(manager.wing_completed("karya") and player.data.skills.tokens > tokens_before, "last craft bundle completes the wing")
+	check(menu._is_celebrating() and menu.get_node("%Celebration").visible and not menu.get_node("%Card").visible, "completing a wing from the board plays the celebration")
+	check(menu.get_node("%Celebration")._title.text.contains(manager.wing("karya").display_name) and menu.get_node("%Celebration")._subtitle.text.contains(manager.wing("karya").bonus_text), "celebration names the wing and its permanent bonus")
+	menu._donate()
+	check(menu._is_celebrating(), "board input is blocked while celebrating")
+	await capture("balai-wing-celebration")
+	var skip := InputEventAction.new()
+	skip.action = &"ui_accept"
+	skip.pressed = true
+	menu._input(skip)
+	check(not menu._is_celebrating() and menu._level == BalaiNadiUI.Level.WINGS and menu._petals[menu._sel].get_meta("entry").key == "karya", "skipping returns to the wing ring focused on the finished wing")
+	check(menu.get_node("%Hints").visible and menu._petals[menu._sel].get_node("%Check").visible, "finished wing petal shows its check after the celebration")
 	menu.close_menu()
 	await settle()
 	check(not player.is_input_locked() and not get_tree().paused, "closing bundle board restores solo controls")

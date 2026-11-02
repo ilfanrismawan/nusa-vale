@@ -42,5 +42,5 @@ position = Vector2(-14, -7)
 position = Vector2(31, -54)
 caption = "Rumah Barat"
 minimum_width = 32
-font_size = 8
+font_size = 16
 minimum_height = 16

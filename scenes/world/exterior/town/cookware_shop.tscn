@@ -43,5 +43,5 @@ position = Vector2(0, 36)
 position = Vector2(0, -24)
 caption = "Alat Masak"
 minimum_width = 32
-font_size = 8
+font_size = 16
 minimum_height = 16

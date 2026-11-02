@@ -83,8 +83,13 @@ func area_id() -> String:
 func _visible_plot(data: Dictionary) -> bool:
 	return str(data.get("area", "farm")) == area_id()
 
+## Sama dengan syarat pintu greenhouse: proyek Balai Nadi menulis unlock ini saat selesai dan saat
+## load, dan cheat debug "Buka Semua Area" juga membukanya.
+func greenhouse_open() -> bool:
+	return UnlockManager.is_unlocked("greenhouse")
+
 func _can_access_plot(data: Dictionary) -> bool:
-	return _visible_plot(data) and (area_id() != "greenhouse" or GameState.balai_nadi.completed("greenhouse_restoration"))
+	return _visible_plot(data) and (area_id() != "greenhouse" or greenhouse_open())
 
 func _set_ground_tile(layer: TileMapLayer, cell: Vector2i) -> void:
 	if area_id() == "greenhouse":
@@ -139,7 +144,7 @@ func hoe(cell: Vector2i) -> bool:
 ## plot_area kosong = area dunia aktif; isi dengan area petak saat memproses semua petak.
 func is_crop_in_season(crop: CropData, plot_area: String = "") -> bool:
 	var area := plot_area if not plot_area.is_empty() else area_id()
-	if area == "greenhouse" and GameState.balai_nadi.completed("greenhouse_restoration"):
+	if area == "greenhouse" and greenhouse_open():
 		return true
 	return crop.season.is_empty() or crop.season == DayCycle.get_current_season()
 
@@ -438,7 +443,7 @@ func _update_crop_tile(cell: Vector2i, crop: CropData, stage: int) -> void:
 	crop_layer.set_cell(cell, sources[crop.crop_id], crop.get_growth_coords(stage))
 	
 func is_tile_farmable(cell: Vector2i) -> bool:
-	if area_id() == "greenhouse" and not GameState.balai_nadi.completed("greenhouse_restoration"):
+	if area_id() == "greenhouse" and not greenhouse_open():
 		return false
 	if is_instance_valid(_bound_world) and _bound_world.get_meta("structure_area", "") == "farm" and StructureManager.occupies(cell):
 		return false

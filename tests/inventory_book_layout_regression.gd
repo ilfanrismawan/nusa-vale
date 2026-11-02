@@ -60,10 +60,10 @@ func _ready() -> void:
 		return
 	var top_tabs: Control = inv.get_node("%TopTabsContainer")
 	check(top_tabs.position == Vector2(44, -40), "compact tabs match reference book inset and top margin")
-	check(inv._top_tabs.size() == 9 and top_tabs.find_children("*", "Label", true, false).is_empty(), "all nine top tabs are icon-only")
+	check(inv._top_tabs.size() == 12 and top_tabs.find_children("*", "Label", true, false).is_empty(), "all twelve top tabs are icon-only")
 	for index in inv._top_tabs.size():
 		var tab: TextureButton = inv._top_tabs[index]
-		check(tab.position.x == index * 38 and tab.size.x == 38, "tab %d touches its neighbours without spacing" % index)
+		check(is_equal_approx(tab.position.x, index * inv.TAB_WIDTH) and is_equal_approx(tab.size.x, inv.TAB_WIDTH) and tab.get_global_rect().end.x <= inv.book_root.get_global_rect().end.x + 0.5, "tab %d touches its neighbours without spacing" % index)
 		check(is_equal_approx(tab.position.y + tab.size.y, 42.0), "tab %d stays attached to book edge" % index)
 		var icon_rect: Rect2 = tab.get_node("Icon").get_rect()
 		check(not tab.tooltip_text.is_empty() and icon_rect.size == Vector2(24, 24) and is_equal_approx(icon_rect.get_center().x, tab.size.x / 2.0) and Rect2(Vector2.ZERO, tab.size).encloses(icon_rect), "tab %d has centred icon padding and accessible name" % index)
@@ -78,7 +78,7 @@ func _ready() -> void:
 		get_viewport().get_texture().get_image().save_png("res://scratch/inventory_top_tabs_preview.png")
 	# Native dropdown internals have no scene owner; page content must have no scrollers.
 	check(inv.book_root.find_children("*", "ScrollContainer", true, true).is_empty(), "inventory contains no scroll containers")
-	for method: String in ["_show_bag_page", "_show_status", "_show_equipment", "_show_crafting", "_show_skills", "_show_relationships", "_show_collection", "_on_gear_pressed", "_show_controls"]:
+	for method: String in ["_show_bag_page", "_show_status", "_show_equipment", "_show_crafting", "_show_skills", "_show_relationships", "_show_collection", "_on_gear_pressed", "_show_controls", "_show_animals"]:
 		inv.call(method)
 		await get_tree().process_frame
 		await get_tree().process_frame
@@ -86,7 +86,7 @@ func _ready() -> void:
 		if method == "_show_bag_page":
 			areas.assign([inv.book_root.get_node("LeftPage"), inv.book_root.get_node("RightPage")])
 		else:
-			var pages: Dictionary = {"_show_status": inv._status_panel, "_show_equipment": inv._equipment_panel, "_show_crafting": inv._crafting_panel, "_show_skills": inv._skill_tree, "_show_relationships": inv._relationship_ui, "_show_collection": inv._collection_panel, "_on_gear_pressed": inv._settings_panel, "_show_controls": inv._controls_panel}
+			var pages: Dictionary = {"_show_status": inv._status_panel, "_show_equipment": inv._equipment_panel, "_show_crafting": inv._crafting_panel, "_show_skills": inv._skill_tree, "_show_relationships": inv._relationship_ui, "_show_collection": inv._collection_panel, "_on_gear_pressed": inv._settings_panel, "_show_controls": inv._controls_panel, "_show_animals": inv._animals_page}
 			var page: Control = pages[method]
 			var design: Node = page.get_node("Design" if page.has_node("Design") else "Pages")
 			areas.assign([design.get_child(0), design.get_child(1)])

@@ -22,8 +22,24 @@ func _ready() -> void:
 	player.set_process(false)
 	player.set_physics_process(false)
 
+	var world := Node2D.new()
+	add_child(world)
+	var actors := Node2D.new()
+	actors.name = "NPCActors"
+	world.add_child(actors)
 	var warteg: Node2D = load("res://scenes/world/exterior/town/warteg.tscn").instantiate()
-	add_child(warteg)
+	world.add_child(warteg)
+	var joko := CharacterBody2D.new()
+	joko.set_script(load("res://scripts/npc/scheduled_npc.gd"))
+	joko.npc_id = "joko"
+	joko.npc_name = "Pak Joko"
+	joko.definition = {"service": "shop", "service_rules": {"available_activities": ["working", "lunch"]}}
+	var body_sprite := AnimatedSprite2D.new()
+	body_sprite.name = "AnimatedSprite2D"
+	joko.add_child(body_sprite)
+	actors.add_child(joko)
+	joko.set_physics_process(false)
+	joko.set_process(false)
 	var polygon := warteg.get_node_or_null("Body/CollisionPolygon2D") as CollisionPolygon2D
 	check(polygon != null and polygon.polygon.size() >= 3, "warteg punya polygon collision")
 	var counter := warteg.get_node_or_null("Counter") as ShopCounter
@@ -34,10 +50,21 @@ func _ready() -> void:
 	check(not is_instance_valid(counter._shop), "warteg tutup di luar jam buka")
 
 	DayCycle.hour = 12
+	check(counter.keeper == "joko", "warteg dijaga Pak Joko")
+	joko._current_activity = "working"
+	joko.global_position = counter.global_position + Vector2(0, 400)
+	counter.interact(player)
+	check(not is_instance_valid(counter._shop), "warteg tutup saat Pak Joko tidak di meja")
+	joko.global_position = counter.global_position + Vector2(-15, 16)
+	joko._current_activity = "sleeping"
+	counter.interact(player)
+	check(not is_instance_valid(counter._shop), "warteg tutup saat Pak Joko tidak bertugas")
+	joko._current_activity = "working"
 	counter.interact(player)
 	var shop := counter._shop
 	check(is_instance_valid(shop) and shop.scene_file_path == "res://scenes/ui/warteg_ui.tscn", "interaksi membuka UI warteg")
 	check(shop != null and shop.shop_data.shop_id == "warteg" and not shop.shop_data.buys_items, "UI memakai menu warteg")
+	check(shop != null and shop.shop_data.keeper_name == "Pak Joko" and shop.shop_data.portrait != null, "penjaga warteg adalah Pak Joko")
 	check(shop != null and shop.shop_data.stock.all(func(item: ItemData): return item.buy_price > 0), "semua menu warteg punya harga")
 	var listed := func(): return shop._rows.filter(func(row): return shop._matches_filter(row["item"])).size()
 	check(not shop._filter_buttons.has("spring") and shop.current_season_filter == "All", "tab warteg bukan tab musim dan dibuka di Semua")

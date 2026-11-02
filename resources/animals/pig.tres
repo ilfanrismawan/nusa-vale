@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AnimalSpeciesData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/animal_species_data.gd" id="1_species"]
+
+[resource]
+script = ExtResource("1_species")
+species_id = "pig"
+display_name = "Babi"
+sort_order = 6
+price = 6000
+home = "barn"
+interval = 3
+product = "truffle"
+tool = ""
+large_product = false
+breed_days = 5
+hatch_egg = ""
+hatch_days = 0
+description = "Mengendus Truffle setiap 3 hari terawat; diambil dengan tangan."

@@ -117,6 +117,20 @@ func _ready() -> void:
 	await get_tree().process_frame
 	check(menu._title.text.contains("4/4") and menu._content.find_child("BuyChicken", true, false) == null, "care UI shows occupied slots and no longer sells animals")
 	check(menu._content.find_child("FeedingProgress", true, false).value == 2, "feeding meter reflects only chickens fed today")
+	var pad_event := InputEventJoypadButton.new()
+	pad_event.button_index = JOY_BUTTON_A
+	pad_event.pressed = true
+	player.input.note_event(pad_event)
+	await get_tree().process_frame
+	var focused: Control = menu.get_viewport().gui_get_focus_owner()
+	check(focused is BaseButton and menu._content.is_ancestor_of(focused), "gamepad: menu kandang memfokus tombol pertama isi menu")
+	var buttons: Array[BaseButton] = menu._pad_buttons()
+	if buttons.size() > 1:
+		buttons[1].grab_focus()
+		menu._refresh()
+		await get_tree().process_frame
+		await get_tree().process_frame
+		check(menu.get_viewport().gui_get_focus_owner() == menu._pad_buttons()[1], "gamepad: fokus kembali ke posisi yang sama setelah menu dibangun ulang")
 	menu._close()
 	PauseManager.set_requested(false)
 	get_tree().current_scene = self

@@ -33,12 +33,12 @@ theme_override_styles/panel = SubResource("Key")
 [node name="KeyText" type="Label" parent="Layout/Key"]
 layout_mode = 2
 mouse_filter = 2
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 16
 text = "E"
 horizontal_alignment = 1
 [node name="Action" type="Label" parent="Layout"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 16
 text = "Interaksi"

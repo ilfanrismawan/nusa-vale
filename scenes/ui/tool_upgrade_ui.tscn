@@ -94,7 +94,7 @@ offset_left = 22.0
 offset_top = 18.0
 offset_right = 300.0
 offset_bottom = 72.0
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 16
 text = "Butuh upgrade? Bawa alat dan bahanmu kemari."
 autowrap_mode = 3
 
@@ -105,7 +105,7 @@ offset_left = 135.0
 offset_top = 677.0
 offset_right = 290.0
 offset_bottom = 717.0
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("NameTag")
 text = "Empu Bima"
 horizontal_alignment = 1
@@ -118,7 +118,7 @@ offset_top = 15.0
 offset_right = 1570.0
 offset_bottom = 50.0
 theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16
 text = "● 0 G"
 
 [node name="ToolScroll" type="ScrollContainer" parent="Design" unique_id=1085071573]
@@ -153,7 +153,7 @@ offset_left = 38.0
 offset_top = 28.0
 offset_right = 323.0
 offset_bottom = 82.0
-theme_override_font_sizes/font_size = 21
+theme_override_font_sizes/font_size = 16
 text = "Pilih hasil upgrade"
 autowrap_mode = 3
 
@@ -175,7 +175,7 @@ offset_top = 84.0
 offset_right = 318.0
 offset_bottom = 106.0
 theme_override_colors/font_color = Color(0.8, 0.53, 0.17, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 16
 text = "Alat"
 
 [node name="Line" type="HSeparator" parent="Design/Detail" unique_id=1931966832]
@@ -203,7 +203,7 @@ offset_left = 38.0
 offset_top = 188.0
 offset_right = 368.0
 offset_bottom = 256.0
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 [node name="MaterialScroll" type="ScrollContainer" parent="Design/Detail" unique_id=1909729489]
@@ -239,7 +239,7 @@ offset_top = 605.0
 offset_right = 1433.0
 offset_bottom = 679.0
 theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 [node name="Availability" type="Label" parent="Design" unique_id=780197275]
@@ -260,7 +260,7 @@ offset_left = 1026.0
 offset_top = 738.0
 offset_right = 1433.0
 offset_bottom = 784.0
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 text = "Pesan upgrade"
 
 [node name="PreviousPage" type="Button" parent="Design" unique_id=1165326433]

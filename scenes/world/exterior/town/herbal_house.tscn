@@ -34,7 +34,7 @@ position = Vector2(0, 36)
 position = Vector2(-30, -41)
 caption = "Rumah Herbal"
 minimum_width = 32
-font_size = 8
+font_size = 16
 minimum_height = 16
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=761860934]

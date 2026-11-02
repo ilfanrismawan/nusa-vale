@@ -64,7 +64,7 @@ func _refresh() -> void:
 	for animal in state.chickens:
 		_build_animal(state, animal, str(record.item))
 	if state.chickens.is_empty():
-		_label(_content, "Kandang kosong. Beli hewan dari Rian di Toko Ternak, Kota.")
+		_label(_content, "Kandang kosong. Beli hewan dari Eep di Toko Ranch Eep.")
 	_status.text = "Pagi: panen → pakan → elus/sikat → bersihkan. Alat & jerami tersedia di toko.\nHewan kurang sehat pulih setelah 1 hari makan dengan kandang bersih."
 
 func _build_animal(state: Dictionary, animal: Dictionary, home: String) -> void:

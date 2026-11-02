@@ -65,7 +65,7 @@ stretch_mode = 5
 [node name="Title" type="Label" parent="Panel/Layout/Heading" unique_id=1462450372]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.88, 0.79, 1)
-theme_override_font_sizes/font_size = 25
+theme_override_font_sizes/font_size = 32
 text = "Recipe Cooking"
 
 [node name="PreviousTab" type="Button" parent="Panel/Layout" unique_id=1940752528]
@@ -177,7 +177,7 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 25
+theme_override_font_sizes/font_size = 32
 text = "Recipe"
 text_overrun_behavior = 3
 
@@ -191,7 +191,7 @@ text = "New"
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85, 0.58, 0.2, 1)
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 16
 text = "Peralatan"
 autowrap_mode = 3
 
@@ -202,13 +202,13 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.53, 0.48, 0.39, 1)
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 [node name="Stats" type="Label" parent="Panel/Layout/Detail/DetailLayout/DetailScroll/DetailContent" unique_id=726703669]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 16
 
 [node name="BuffPanel" type="PanelContainer" parent="Panel/Layout/Detail/DetailLayout/DetailScroll/DetailContent" unique_id=2090059752]
 layout_mode = 2
@@ -217,7 +217,7 @@ theme_type_variation = &"BuffPanel"
 [node name="Buff" parent="Panel/Layout/Detail/DetailLayout/DetailScroll/DetailContent/BuffPanel" unique_id=212024822 instance=ExtResource("food_effects")]
 unique_name_in_owner = true
 layout_mode = 2
-font_size = 17
+font_size = 16
 
 [node name="Requirements" type="VBoxContainer" parent="Panel/Layout/Detail/DetailLayout/DetailScroll/DetailContent" unique_id=171415918]
 unique_name_in_owner = true
@@ -244,7 +244,7 @@ offset_top = 968.0
 offset_right = 1212.0
 offset_bottom = 1016.0
 theme_override_colors/font_color = Color(1, 0.9, 0.81, 1)
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 [node name="DebugToggle" type="Button" parent="Panel/Layout" unique_id=1911707052]

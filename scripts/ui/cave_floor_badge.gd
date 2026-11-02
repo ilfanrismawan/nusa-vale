@@ -39,7 +39,7 @@ func _ready() -> void:
 	var text := VBoxContainer.new()
 	text.add_theme_constant_override("separation", -4)
 	row.add_child(text)
-	_floor_label = _make_label(24)
+	_floor_label = _make_label(16)
 	text.add_child(_floor_label)
 	_band_label = _make_label(16)
 	text.add_child(_band_label)

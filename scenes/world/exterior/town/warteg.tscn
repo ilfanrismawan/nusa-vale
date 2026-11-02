@@ -156,6 +156,7 @@ script = ExtResource("7_counter")
 shop_data = ExtResource("8_menu")
 menu_scene = ExtResource("9_ui")
 service = "warteg"
+keeper = "joko"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Counter"]
 shape = SubResource("CounterShape")

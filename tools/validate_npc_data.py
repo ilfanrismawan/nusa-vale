@@ -110,7 +110,7 @@ def main():
             require(strings(data.get('personality', [])) and bool(data.get('personality')), loc, 'personality required')
             service = data.get('service')
             service_type = service.get('type') if isinstance(service, dict) else service
-            require(service_type in (None, '', 'shipping', 'carpenter', 'livestock', 'blacksmith', 'shop'), loc, 'unsupported service.type')
+            require(service_type in (None, '', 'shipping', 'carpenter', 'livestock', 'blacksmith', 'shop', 'vet'), loc, 'unsupported service.type')
             if isinstance(service, dict):
                 require(strings(service.get('available_activities', [])), loc, 'available_activities must be an array of strings')
                 require(strings(service.get('closed_days', [])), loc, 'closed_days must be an array of strings')

@@ -78,7 +78,7 @@ func _bake() -> void:
 	label.name = "Label"
 	label.position = Vector2(-115, -50)
 	label.text = "↑ Kembali ke Forest [E]"
-	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_font_size_override("font_size", 16)
 	gate.add_child(label)
 	root.add_child(gate)
 	var spawners := [ForageSpawner.new(), WeedSpawner.new(), preload("res://scripts/world/deep_forest_tree_spawner.gd").new(), DigSpotSpawner.new(), preload("res://scripts/world/deep_forest_ore_spawner.gd").new()]

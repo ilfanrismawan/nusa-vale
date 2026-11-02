@@ -35,7 +35,7 @@ static func squash(node: Node2D, amount: float = 0.3) -> void:
 
 ## Angka damage yang meloncat, melayang miring, lalu memudar. Finisher lebih besar.
 static func damage_number(text: String, world_pos: Vector2, color: Color, big: bool = false) -> void:
-	var label := _label(text, color, 24 if big else 16, world_pos)
+	var label := _label(text, color, 32 if big else 16, world_pos)
 	if label == null:
 		return
 	var drift := Vector2(randf_range(-10.0, 10.0), -18.0 if big else -14.0)
@@ -50,7 +50,7 @@ static func damage_number(text: String, world_pos: Vector2, color: Color, big: b
 ## "x2", "x3!" di atas kepala pemain saat combo menyambung.
 static func combo_text(player: Player, hit: int, finisher: bool) -> void:
 	var color := HEAVY_COLOR if finisher else Color(1.0, 1.0, 1.0).lerp(HIT_COLOR, 0.5)
-	var label := _label("x%d%s" % [hit, "!" if finisher else ""], color, 20 if finisher else 16, player.global_position + Vector2(10, -28))
+	var label := _label("x%d%s" % [hit, "!" if finisher else ""], color, 16, player.global_position + Vector2(10, -28))
 	if label == null:
 		return
 	label.scale = Vector2(1.8, 1.8)
@@ -250,7 +250,7 @@ static func zoom_punch(player: Player, amount: float = 0.08) -> void:
 
 ## Teks pendek yang melayang di atas kepala pemain (Lelah!, Hindar, nama weapon art).
 static func float_text(player: Player, text: String, color: Color) -> void:
-	var label := _label(text, color, 14, player.global_position + Player.SPRITE_OFFSET + Vector2(0, -34))
+	var label := _label(text, color, 16, player.global_position + Player.SPRITE_OFFSET + Vector2(0, -34))
 	if label == null:
 		return
 	var tw := label.create_tween()
@@ -274,7 +274,7 @@ static func parry_flash(player: Player, world_pos: Vector2) -> void:
 	spark(world_pos, Color(1.0, 0.95, 0.6), 14)
 	Juice.hitstop(110)
 	Juice.shake(3.0, 0.18)
-	var label := _label("PARRY!", Color(1.0, 0.95, 0.55), 22, player.global_position + Player.SPRITE_OFFSET + Vector2(0, -36))
+	var label := _label("PARRY!", Color(1.0, 0.95, 0.55), 16, player.global_position + Player.SPRITE_OFFSET + Vector2(0, -36))
 	if label != null:
 		var lt := label.create_tween()
 		label.scale = Vector2.ONE * 1.6
@@ -285,7 +285,7 @@ static func parry_flash(player: Player, world_pos: Vector2) -> void:
 
 ## Teks di atas musuh (Goyah!, KRITIS!).
 static func enemy_text(world_pos: Vector2, text: String, color: Color, big: bool = false) -> void:
-	var label := _label(text, color, 20 if big else 14, world_pos)
+	var label := _label(text, color, 16, world_pos)
 	if label == null:
 		return
 	var tw := label.create_tween()

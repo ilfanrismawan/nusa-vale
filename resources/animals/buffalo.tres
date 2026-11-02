@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AnimalSpeciesData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/animal_species_data.gd" id="1_species"]
+
+[resource]
+script = ExtResource("1_species")
+species_id = "buffalo"
+display_name = "Kerbau"
+sort_order = 5
+price = 4000
+home = "barn"
+interval = 2
+product = "buffalo_milk"
+tool = "milk_pail"
+large_product = true
+breed_days = 7
+hatch_egg = ""
+hatch_days = 0
+description = "Susu kerbau setiap 2 hari dengan Ember Susu."

@@ -24,6 +24,11 @@ var _badge: Label
 ## sikat lewat menu Barn.
 var _status: Node2D
 var _idle_timer := 0.0
+## Seruling Kuda: selama berlari datang kuda belum bisa dinaiki dan tidak mengibas.
+var _galloping := false
+var _gallop: Tween
+var _hoof_timer := 0.0
+var _trail: CPUParticles2D
 
 func _ready() -> void:
 	add_to_group(GROUP)
@@ -46,7 +51,7 @@ func _ready() -> void:
 	_badge = Label.new()
 	_badge.position = Vector2(-20, -48)
 	_badge.add_theme_font_override("font", preload("res://assets/fonts/m5x7.ttf"))
-	_badge.add_theme_font_size_override("font_size", 12)
+	_badge.add_theme_font_size_override("font_size", 16)
 	_badge.add_theme_color_override("font_color", Color("fff1c9"))
 	_badge.add_theme_color_override("font_outline_color", Color("302333"))
 	_badge.add_theme_constant_override("outline_size", 2)
@@ -83,6 +88,14 @@ func refresh() -> void:
 	_status.update_now()
 
 func _process(delta: float) -> void:
+	if _galloping:
+		# Derap: badan naik-turun dan kuku berbunyi bergantian.
+		_sprite.position.y = -10.0 - absf(sin(Time.get_ticks_msec() * 0.018)) * 2.0
+		_hoof_timer -= delta
+		if _hoof_timer <= 0.0:
+			_hoof_timer = 0.16
+			Juice.play_footstep("dirt", true, randi() % 4)
+		return
 	# Sesekali mengibas: squash kecil supaya kuda terasa hidup saat menunggu.
 	_idle_timer -= delta
 	if _idle_timer <= 0.0:
@@ -92,7 +105,7 @@ func _process(delta: float) -> void:
 		tween.tween_property(_sprite, "scale", Vector2.ONE, 0.18)
 
 func interact(player: Node) -> void:
-	if player is Player:
+	if player is Player and not _galloping:
 		var result := StructureManager.mount_horse(player, uid, animal_id)
 		if not result.ok:
 			Notify.say(result.message)
@@ -100,6 +113,81 @@ func interact(player: Node) -> void:
 			tween.tween_property(_sprite, "position:x", 2.0, 0.05)
 			tween.tween_property(_sprite, "position:x", -2.0, 0.05)
 			tween.tween_property(_sprite, "position:x", 0.0, 0.05)
+
+## Dipanggil Seruling Kuda: berlari dari `from` ke `to` (titik kaki), mengerem, lalu menoleh ke pemain.
+func gallop_in(from: Vector2, to: Vector2) -> void:
+	if _gallop != null:
+		_gallop.kill()
+	_galloping = true
+	global_position = from
+	var heading := to - from
+	_sprite.play(anim_name("run", heading if heading.length() > 1.0 else (Vector2.LEFT if flip else Vector2.RIGHT)))
+	_sprite.scale = Vector2(1.08, 0.94)
+	if _trail == null:
+		_trail = _dust(10, false)
+	_trail.emitting = true
+	_gallop = create_tween()
+	_gallop.tween_property(self, "global_position", to, clampf(heading.length() / 150.0, 0.35, 1.4)) 		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	_gallop.tween_callback(_arrive)
+
+func _arrive() -> void:
+	_galloping = false
+	_trail.emitting = false
+	_sprite.position.y = -10.0
+	_sprite.play(anim_name("idle", Vector2.LEFT if flip else Vector2.RIGHT))
+	# Rem mendadak: semburan debu, badan tertekan lalu memantul, dan hati di atas kepala.
+	var skid := _dust(14, true)
+	skid.emitting = true
+	get_tree().create_timer(1.0, false).timeout.connect(skid.queue_free)
+	_sprite.scale = Vector2(1.2, 0.8)
+	var tween := create_tween()
+	tween.tween_property(_sprite, "scale", Vector2.ONE, 0.45).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+	Juice.play_sound(&"swish", -3.0)
+	Juice.play_sound(&"pickup", 7.0)
+	Juice.float_text("♥", global_position + Vector2(0, -38), Color("ff7073"))
+	Juice.shake(1.0, 0.1)
+	_idle_timer = randf_range(2.5, 5.0)
+
+## Seruling saat kuda sudah dekat: lompat kecil senang.
+func nuzzle() -> void:
+	if _galloping:
+		return
+	var tween := create_tween()
+	tween.tween_property(_sprite, "position:y", -16.0, 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(_sprite, "position:y", -10.0, 0.14).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.tween_property(_sprite, "scale", Vector2(1.12, 0.88), 0.06)
+	tween.tween_property(_sprite, "scale", Vector2.ONE, 0.2).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	Juice.float_text("♥", global_position + Vector2(0, -38), Color("ff7073"))
+
+## Debu tanah di kaki kuda; partikel di koordinat dunia supaya tertinggal di belakang derap.
+func _dust(amount: int, one_shot: bool) -> CPUParticles2D:
+	var dust := CPUParticles2D.new()
+	dust.amount = amount
+	dust.one_shot = one_shot
+	dust.emitting = false
+	dust.lifetime = 0.45
+	dust.explosiveness = 0.9 if one_shot else 0.0
+	dust.local_coords = false
+	dust.direction = Vector2.UP
+	dust.spread = 80.0
+	dust.initial_velocity_min = 8.0
+	dust.initial_velocity_max = 26.0 if one_shot else 16.0
+	dust.gravity = Vector2(0, 30)
+	dust.scale_amount_min = 1.0
+	dust.scale_amount_max = 3.0
+	dust.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
+	dust.emission_rect_extents = Vector2(8, 1)
+	var colors := Gradient.new()
+	colors.set_color(0, Color("c8a77a"))
+	colors.set_color(1, Color("8f6f4f"))
+	dust.color_initial_ramp = colors
+	var fade := Gradient.new()
+	fade.set_color(0, Color.WHITE)
+	fade.set_color(1, Color(1, 1, 1, 0))
+	dust.color_ramp = fade
+	dust.z_index = -1
+	add_child(dust)
+	return dust
 
 ## Animasi kuda (bayangan + badan warna `coat` + pelana): idle_/walk_/run_<arah>.
 ## Jumlah frame per arah sama dengan animasi penunggang horse_idle/horse_walk/horse_run,

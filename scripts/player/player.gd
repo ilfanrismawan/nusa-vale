@@ -221,10 +221,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	# gua, tempat pemain hampir selalu memegang pedang).
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and holds_weapon() and input.uses_mouse():
 		if event.pressed and not is_input_locked():
-			var mouse: Variant = _mouse_world_position()
-			if not Coop.has_root():
-				# Posisi event adalah titik klik, termasuk saat kursor belum diperbarui OS.
-				mouse = get_viewport().get_canvas_transform().affine_inverse() * event.position
+			var mouse: Variant = _click_world_position(event)
 			if mouse != null and _interact_at(mouse):
 				mark_interacted()
 				get_viewport().set_input_as_handled()
@@ -239,9 +236,16 @@ func _unhandled_input(event: InputEvent) -> void:
 			tool_controller.jump_state.double_jump()
 		get_viewport().set_input_as_handled()
 		return
+	if input.is_event(event, &"whistle"):
+		bind_context()
+		PetActor.whistle(self)
+		get_viewport().set_input_as_handled()
+		return
 	if input.is_event(event, &"interact"):
 		bind_context()
-		if _try_interact():
+		# Klik kanan: objek di bawah kursor lebih dulu (peliharaan kecil yang berjalan sering tidak
+		# tepat di depan pemain, lalu makanan yang dipegang malah termakan sendiri).
+		if _interact_at_cursor(event) or _try_interact():
 			mark_interacted()
 			get_viewport().set_input_as_handled()
 			return
@@ -493,7 +497,7 @@ func _holding_tool_or_weapon() -> bool:
 ## (sudah punya bayangan penempatan) tidak diangkat.
 func _holds_overhead(item: ItemData) -> bool:
 	return item != null and item.icon != null and not item.is_tool() and not Combat.is_weapon(item) \
-		and item.vehicle == null and not (item.placeable and item.seat_definition != null)
+		and item.vehicle == null and not (item.placeable and item.seat_definition != null) 		and item.item_id != HorseFlute.ITEM_ID
 
 ## Angkat lagi barang yang dipegang setelah aksi/gesture/pindah area membersihkannya.
 func _restore_held_item() -> void:
@@ -616,6 +620,11 @@ func _try_interact() -> bool:
 				if not bed._sleeping:
 					bed._sleep()
 				return true
+	# Peliharaan di kaki pemain menang dari pintu rumah ladang di dekatnya, tanpa harus dihadap.
+	var pet := PetActor.near(self)
+	if pet != null:
+		pet.interact(self)
+		return true
 	# Entrances remain interactable; interior exit triggers also travel on contact.
 	var nearest_door := _nearest_scene_door()
 	if nearest_door != null:
@@ -654,6 +663,23 @@ func _nearest_scene_door(require_facing: bool = true) -> Area2D:
 func _door_center(door: Area2D) -> Vector2:
 	var shape := door.get_node_or_null("CollisionShape2D") as Node2D
 	return shape.global_position if shape != null else door.global_position
+
+## Titik dunia yang diklik `event`, atau null.
+func _click_world_position(event: InputEventMouseButton) -> Variant:
+	if not Coop.has_root():
+		# Posisi event adalah titik klik, termasuk saat kursor belum diperbarui OS.
+		return get_viewport().get_canvas_transform().affine_inverse() * event.position
+	return _mouse_world_position()
+
+## Tombol interaksi dari klik mouse: objek di bawah kursor bila dekat. Hewan yang diangkat dan
+## kuda yang ditunggangi tetap ditangani _try_interact().
+func _interact_at_cursor(event: InputEvent) -> bool:
+	if not event is InputEventMouseButton or not input.uses_mouse():
+		return false
+	if has_meta("riding_horse") or (has_meta("carried_animal") and is_instance_valid(get_meta("carried_animal"))):
+		return false
+	var mouse: Variant = _click_world_position(event)
+	return mouse != null and _interact_at(mouse)
 
 ## Klik kanan sambil memegang senjata: buka pintu atau interaksi dengan objek di bawah kursor
 ## bila dekat pemain. true bila ada yang ditangani.
@@ -702,22 +728,22 @@ func _interactable_at_point(target_position: Vector2) -> Node:
 	query.collision_mask = 0xFFFFFFFF
 	
 	var results := space_state.intersect_point(query, 16)
-	
+
+	# Makhluk (peliharaan, NPC) menang dari area objek diam yang tumpang tindih, mis. area
+	# Kotak Pengiriman yang menutupi tempat main peliharaan di depan rumah ladang.
+	var found: Node = null
 	for result in results:
 		var collider = result.get("collider")
 		if collider == null:
 			continue
-		
-		if collider.has_method("interact"):
-			return collider
-		
-		var parent: Node = collider.get_parent()
-		
-		if parent != null:
-			if parent.has_method("interact"):
-				return parent	
-			
-	return null
+		var target: Node = collider if collider.has_method("interact") else collider.get_parent()
+		if target == null or not target.has_method("interact"):
+			continue
+		if target is CharacterBody2D:
+			return target
+		if found == null:
+			found = target
+	return found
 	
 func _update_tile_cursor() -> void:
 	if not is_instance_valid(tile_cursor):

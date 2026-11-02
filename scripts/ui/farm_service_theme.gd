@@ -51,7 +51,7 @@ static func ribbon(dark: bool = false) -> StyleBoxTexture:
 static func make_theme() -> Theme:
 	var theme := Theme.new()
 	theme.default_font = FONT
-	theme.default_font_size = 18
+	theme.default_font_size = 16
 	for type in ["Label", "Button", "OptionButton", "LineEdit", "SpinBox"]:
 		theme.set_color("font_color", type, INK)
 	theme.set_stylebox("panel", "PanelContainer", frame())

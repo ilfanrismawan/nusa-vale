@@ -142,8 +142,11 @@ func _ready() -> void:
 			var shop: ShopUI = actor._service_menu
 			check(not shop._rows.is_empty() and not shop.shop_data.buys_items, id + " stock loads without an unrestricted resale counter")
 			var item: ItemData = shop.shop_data.stock[0]
-			var original := GameState._resolve_item(item.item_id)
-			check(item != original and original.buy_price != item.buy_price, id + " shop price does not mutate shared item")
+			if id == "joko":
+				check(shop.scene_file_path == "res://scenes/ui/warteg_ui.tscn" and shop.shop_data.shop_id == "warteg", "joko opens the Warteg Bahari menu")
+			else:
+				var original := GameState._resolve_item(item.item_id)
+				check(item != original and original.buy_price != item.buy_price, id + " shop price does not mutate shared item")
 			GameState.money = 10000
 			var price := shop._unit_price(item, 1)
 			var count := player.data.get_item_count(item.item_id)

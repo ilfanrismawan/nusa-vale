@@ -25,6 +25,7 @@ func prepare() -> void:
 	GameState.new_game()
 	DayCycle.current_day = 1
 	DayCycle.hour = 6
+	GameState.weather.current = "sunny"
 	GameState.money = 100000
 	StructureManager.records.assign([record(7, "barn", Vector2i(44, 18)), record(19, "chicken_coop", Vector2i(56, 18)), record(31, "barn", Vector2i(44, 25))])
 	StructureManager._next_uid = 32
@@ -64,7 +65,7 @@ func _ready() -> void:
 	player.set_physics_process(false)
 	check(room.get_node("Animals").get_child_count() == 3, "interior shows this barn's three saved animals")
 	check(player.base_layer_ground == room.get_node("BaseLayerGround"), "player binds non-farmable interior ground")
-	player.global_position = Vector2(427, 203) - Player.FEET_OFFSET
+	player.global_position = room.spot_position("feed") - Player.FEET_OFFSET
 	check(player._try_interact(), "normal player interact reaches physical feeding trough")
 	var state := StructureManager.coop_state(StructureManager.record_for(7))
 	check(state.hay == 17 and state.chickens[0].fed_day == DayCycle.current_day, "trough uses actual shared feed stock")
@@ -90,7 +91,7 @@ func _ready() -> void:
 	carried_animal.roam_rect = Rect2(carried_animal.home - Vector2(10, 6), Vector2(20, 12))
 	state.dirt = 2
 	StructureManager._sync_all()
-	player.global_position = Vector2(393, 225) - Player.FEET_OFFSET
+	player.global_position = room.get_node("DirtSpots/Dirt0").global_position - Player.FEET_OFFSET
 	check(player._try_interact() and state.dirt == 1, "physical dirt spot cleans shared barn state")
 	check(not StructureManager.pack(player.data, 7).ok, "occupied interior cannot be packed")
 	state.chickens[0].ready = "cow_milk"
@@ -98,16 +99,23 @@ func _ready() -> void:
 	player.global_position = room.pen_center(0) - Player.FEET_OFFSET
 	check(player._try_interact() and player.data.get_item_count("cow_milk") == 1, "milk can be harvested inside with the existing tool")
 	check(SaveManager.save_game() and SaveManager.load_game() and StructureManager.record_for(7).item == "barn" and room.ranch_uid == 7, "save/load retains non-contiguous building identity while inside")
-	player.global_position = Vector2(427, 320)
+	player.global_position = room.spot_position("door") - Player.FEET_OFFSET
+	check(player._try_interact() and StructureManager.coop_state(StructureManager.record_for(7)).door and not carried_animal.visible, "interior animal door lets the herd out")
+	check(player._try_interact() and not StructureManager.coop_state(StructureManager.record_for(7)).door and carried_animal.visible, "closing the animal door brings the herd back inside")
+	player.global_position = room.get_node("spawn").global_position
 	await capture("barn-interior.png")
 	player.set_physics_process(true)
-	player.global_position = Vector2(427, 342)
+	player.global_position = room.get_node("Exit").global_position - Player.FEET_OFFSET
 	await get_tree().physics_frame
 	await get_tree().physics_frame
 	await settle()
 	check(get_tree().current_scene.scene_file_path.ends_with("world/farm.tscn"), "walking onto interior exit automatically returns to farm")
 	player = get_tree().current_scene.get_node("Player/CharacterBody2D")
 	check(player.global_position.distance_to(StructureManager._ranch_returns[0]) < 4, "exit appears outside the same constructed barn")
+	var barn_node := StructureManager.structure_node(get_tree().current_scene, 7)
+	player.global_position = barn_node.animal_door_position() + Vector2(0, 14) - Player.FEET_OFFSET
+	check(StructureManager.near_animal_door(player, 7) and StructureManager.interact_near(player) and StructureManager.coop_state(StructureManager.record_for(7)).door and barn_node.get_node("AnimalDoor").region_rect.position.y == 18, "small exterior animal door opens from outside")
+	check(StructureManager.interact_near(player) and not StructureManager.coop_state(StructureManager.record_for(7)).door, "closing the exterior animal door calls the herd back in")
 	StructureManager.enter_ranch(player, 19)
 	await settle()
 	room = get_tree().current_scene
@@ -117,9 +125,9 @@ func _ready() -> void:
 	var birds := StructureManager.coop_state(StructureManager.record_for(19))
 	birds.eggs = 2
 	StructureManager._sync_all()
-	player.global_position = Vector2(499, 185) - Player.FEET_OFFSET
+	player.global_position = room.spot_position("eggs") - Player.FEET_OFFSET
 	check(player._try_interact() and player.data.get_item_count("chicken_egg") == 2, "nest station collects saved eggs inside")
-	player.global_position = Vector2(427, 320)
+	player.global_position = room.get_node("spawn").global_position
 	await capture("coop-interior.png")
 	get_tree().current_scene = self
 	room.queue_free()

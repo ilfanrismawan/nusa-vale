@@ -156,7 +156,7 @@ func _build_panel() -> void:
 	var font := preload("res://assets/fonts/m5x7.ttf")
 	var theme := Theme.new()
 	theme.default_font = font
-	theme.default_font_size = 14
+	theme.default_font_size = 16
 	_panel.theme = theme
 
 	var root_box := VBoxContainer.new()
@@ -289,7 +289,7 @@ func _build_panel() -> void:
 	var hint := Label.new()
 	hint.text = "Tekan F1 kapan saja untuk buka/tutup menu ini."
 	hint.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6))
-	hint.add_theme_font_size_override("font_size", 12)
+	hint.add_theme_font_size_override("font_size", 16)
 	root_box.add_child(hint)
 
 func _add_category_header(parent: Control, title_text: String) -> void:
@@ -299,7 +299,7 @@ func _add_category_header(parent: Control, title_text: String) -> void:
 	var lbl := Label.new()
 	lbl.text = title_text
 	lbl.add_theme_color_override("font_color", Color(1.0, 0.75, 0.3))
-	lbl.add_theme_font_size_override("font_size", 13)
+	lbl.add_theme_font_size_override("font_size", 16)
 	parent.add_child(lbl)
 
 func _add_cheat_row(parent: Control, shortcut_key: String, description: String, callback: Callable) -> void:

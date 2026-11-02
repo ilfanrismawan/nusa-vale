@@ -4,7 +4,7 @@ extends Node2D
 ## (warna sesuai varian kuda) di bawah pemain dengan frame yang sama.
 ## State tunggangan ada di StructureManager.
 ## Juice: lompat naik ke pelana, debu tiap langkah derap, dan lompat turun.
-## Turun otomatis saat pemain masuk interior, gua, atau ranch indoor; kuda ditinggal di area luar terakhir.
+## Turun otomatis saat pemain masuk interior, gua, gunung, atau ranch indoor; kuda ditinggal di area luar terakhir.
 ## Sprite pemain diangkat RIDE_LIFT supaya kaki kuda berpijak di titik kaki pemain.
 const RIDE_LIFT := 10.0
 ## Bayangan pemain selebar kuda selama menunggang.
@@ -100,7 +100,9 @@ func _physics_process(delta: float) -> void:
 		return
 	if _indoors():
 		StructureManager.dismount(_player)
-		Notify.say("Kuda menunggu di luar.")
+		var world := _player.world_root()
+		var at_mountain := world != null and str(world.scene_file_path) == StructureManager.MOUNTAIN_SCENE
+		Notify.say("Kuda menunggu di kaki gunung." if at_mountain else "Kuda menunggu di luar.")
 		return
 	_remember_spot()
 	# Derap: debu kecil di kaki kuda dan langkah berbunyi lebih rapat dari jalan kaki.
@@ -139,11 +141,7 @@ func _remember_spot() -> void:
 		last_position = _player.global_position + Player.FEET_OFFSET
 
 func _indoors() -> bool:
-	var world := _player.world_root()
-	if world == null:
-		return false
-	var path := str(world.scene_file_path)
-	return world.has_meta("ranch_uid") or path.contains("/interior/") or path.contains("/cave/")
+	return not StructureManager.horse_allowed_in(_player.world_root())
 
 func _exit_tree() -> void:
 	if not is_instance_valid(_player):

@@ -68,3 +68,26 @@ Untuk menjalankan pemeriksaan peternakan secara khusus:
 ```powershell
 ./tools/verify_mvp.ps1 -Scenes @('tests/chicken_regression.tscn', 'tests/ranch_regression.tscn', 'tests/ranch_world_regression.tscn', 'tests/save_regression.tscn')
 ```
+
+## Interior dan pintu hewan
+
+* `scenes/world/interior/barn_interior.tscn` dan `coop_interior.tscn` disusun awal oleh
+  `tools/build_ranch_interiors.gd`, lalu diedit di editor. Titik interaksi = `Spots/<aksi>`
+  (`feed`, `stock`, `menu`, `eggs`, `door`, `exit`), rumah hewan = `Pens/Pen0..11`, kotoran =
+  `DirtSpots/Dirt0..2`. Geser node di editor; `ranch_interior.gd` membacanya saat runtime.
+* Pintu hewan (`state.door`): interaksi di depan pintu kecil kiri eksterior, `Spots/door` di dalam,
+  atau tombol menu Kelola. Terbuka = hewan keluar merumput; tertutup = hewan masuk lagi. Pintu
+  menutup otomatis pukul 18.00 atau saat cuaca tidak cerah.
+* Posisi pintu kecil per tier diatur di inspector `placed_structure.gd` (`barn_door_points`,
+  `coop_door_points`), begitu juga potongan sprite tier (`barn_regions`, `coop_regions`).
+
+## Sakit, kabur, dan mati (keputusan pemilik 2 November 2026)
+
+* `bad_days` (hari berturut-turut tanpa makan atau kandang penuh kotoran): 2 = sakit, 4 = kritis,
+  6 = hilang. Kasih sayang ≥ 20 → kabur ke Rian (`state.away`, tebus 7 hari, 30% harga hewan);
+  selain itu mati. Kuda dikecualikan. Konstanta di awal `ranch_husbandry.gd`.
+* Obat Ternak (`animal_medicine`) dari Klinik Ternak Rian (layanan `vet`): interaksi dengan hewan
+  sakit sambil membawa obat → pulih besok pagi. Menu Rian menampilkan tombol "Tebus <nama>".
+* Rian adalah adik Eep: Eep menjual hewan, Rian merawat yang sakit.
+* Tes: `tests/ranch_neglect_regression.tscn`.
+

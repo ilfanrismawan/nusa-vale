@@ -17,7 +17,7 @@
     "penyayang_hewan",
     "rendah_hati"
   ],
-  "biography": "Rian membangun kepercayaan pada kemampuannya merawat ternak; penjualan hewan ditangani Eep.",
+  "biography": "Rian, adik Eep, membangun kepercayaan pada kemampuannya merawat ternak; penjualan hewan ditangani kakaknya, Eep.",
   "move_speed": 36.0,
   "friendship": {
     "start": 0,
@@ -27,7 +27,23 @@
     "sleeping"
   ],
   "anchored": false,
-  "service": null,
+  "service": {
+    "type": "vet",
+    "available_activities": [
+      "working"
+    ],
+    "closed_days": [
+      "sunday"
+    ],
+    "name": "Klinik Ternak Rian",
+    "greeting": "Hewanmu kurang sehat? Obat ini diminum sekali, besok pagi biasanya sudah segar lagi.",
+    "stock": [
+      {
+        "item": "animal_medicine",
+        "price": 150
+      }
+    ]
+  },
   "visual": {
     "sprite_frames": "res://resources/npc_data/npc_animation/rian_resident_frame.tres",
     "portrait": "res://assets/farm_rpg/Character/NPC'S/Alex/Portrait Alex.png",
@@ -163,13 +179,16 @@
   },
   "dialogue": {
     "default": [
-      "Rian membangun kepercayaan pada kemampuannya merawat ternak; penjualan hewan ditangani Eep."
+      "Rian membangun kepercayaan pada kemampuannya merawat ternak; penjualan hewan ditangani kakaknya, Eep.",
+      "Kak Eep yang jago menawar. Aku lebih betah memeriksa telinga sapi daripada menghitung uang."
     ],
     "preparing": [
       "Aku sedang menyiapkan pekerjaan hari ini."
     ],
     "working": [
-      "Aku membantu perawatan ternak. Untuk membeli hewan, temui Eep di lapaknya."
+      "Aku merawat ternak yang sakit. Untuk membeli hewan, temui kakakku, Eep, di lapaknya.",
+      "Kalau hewanmu terlalu lama ditelantarkan, kadang mereka kabur. Yang sampai ke sini kurawat, dan bisa kamu tebus dalam seminggu.",
+      "Obat Ternak bukan pengganti pakan dan kandang bersih. Hewan yang lemah terlalu lama bisa mati."
     ],
     "lunch": [
       "Aku beristirahat sebentar sebelum melanjutkan pekerjaan."
@@ -355,6 +374,14 @@
     ],
     "10": [
       "Terima kasih sudah mendengarkan. Ketelatenanmu di kebun juga memberiku semangat."
+    ]
+  },
+  "family": {
+    "siblings": [
+      {
+        "id": "eep",
+        "relation": "kakak"
+      }
     ]
   }
 }

@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AnimalSpeciesData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/animal_species_data.gd" id="1_species"]
+
+[resource]
+script = ExtResource("1_species")
+species_id = "cow"
+display_name = "Sapi"
+sort_order = 2
+price = 2500
+home = "barn"
+interval = 1
+product = "cow_milk"
+tool = "milk_pail"
+large_product = true
+breed_days = 6
+hatch_egg = ""
+hatch_days = 0
+description = "Diperah setiap hari dengan Ember Susu."

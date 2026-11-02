@@ -22,10 +22,10 @@ func _ready() -> void:
 	var sign = source.instantiate()
 	sign.position = Vector2(220, 120)
 	sign.get_node("%Caption").text = "Nama dari node"
-	sign.get_node("%Caption").add_theme_font_size_override("font_size", 20)
+	sign.get_node("%Caption").add_theme_font_size_override("font_size", 32)
 	add_child(sign)
 	await settle()
-	check(sign.get_node("%Caption").text == "Nama dari node" and sign.get_node("%Caption").get_theme_font_size("font_size") == 20, "scene-authored caption and font survive ready")
+	check(sign.get_node("%Caption").text == "Nama dari node" and sign.get_node("%Caption").get_theme_font_size("font_size") == 32, "scene-authored caption and font survive ready")
 	check(sign.get_node("%Frame") is Panel and sign.get_node("%Caption") is Label, "board artwork is composed of editable scene nodes")
 	check(sign.board_rect().size.x >= sign.get_node("%Content").get_combined_minimum_size().x, "automatic board fits node text and padding")
 	sign.caption = "Nama bangunan yang lebih panjang"

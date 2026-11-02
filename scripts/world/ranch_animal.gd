@@ -4,6 +4,8 @@ const AnimalPhysics := preload("res://scripts/world/animal_physics.gd")
 const FEET_RADIUS := 4.0
 const GroundShadow := preload("res://scripts/effects/ground_shadow.gd")
 const StatusMarker := preload("res://scripts/ui/animal_status_marker.gd")
+## Warna sprite: sehat, sakit, kritis.
+const SICK_TINTS: Array[Color] = [Color.WHITE, Color(0.86, 0.94, 0.8), Color(0.74, 0.82, 0.7)]
 var uid := 0
 var animal_id := 0
 var home := Vector2.ZERO
@@ -48,7 +50,7 @@ func _ready() -> void:
 	_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_badge.visible = indoors
 	_badge.add_theme_font_override("font", preload("res://assets/fonts/m5x7.ttf"))
-	_badge.add_theme_font_size_override("font_size", 12)
+	_badge.add_theme_font_size_override("font_size", 16)
 	_badge.add_theme_color_override("font_color", Color("fff1c9"))
 	_badge.add_theme_color_override("font_outline_color", Color("302333"))
 	_badge.add_theme_constant_override("outline_size", 2)
@@ -85,7 +87,9 @@ func refresh() -> void:
 	# Anak tanpa sheet anak memakai sprite dewasa yang diperkecil.
 	_sprite.scale = Vector2.ONE * (1.0 if RanchHusbandry.is_adult(bird) or RanchVisual.has_baby_sheet(RanchHusbandry.species(bird)) else 0.65)
 	# "!" = Kurang sehat; lapar/elus/sikat/hasil ditunjukkan gelembung status.
-	_badge.text = str(bird.name) + (" !" if bird.sick else "")
+	_badge.text = str(bird.name) + (" !!" if RanchHusbandry.is_critical(bird) else " !" if bird.sick else "")
+	# Sakit = pucat kehijauan; kritis lebih pucat. Lihat juga gelembung salib merah di atas kepala.
+	_sprite.modulate = SICK_TINTS[2 if RanchHusbandry.is_critical(bird) else 1 if bird.sick else 0]
 	if not visible:
 		global_position = home
 		_timer = 0
@@ -245,14 +249,15 @@ func place_from_player(player: Player) -> void:
 	_carried_by = null
 	player.set_meta("carried_animal", null)
 	global_position = player.global_position + Player.FEET_OFFSET + player.facing_direction.normalized() * 12.0
+	var room_rect := _room_rect()
 	if indoors:
-		global_position = global_position.clamp(Vector2(267, 160), Vector2(587, 326))
+		global_position = global_position.clamp(room_rect.position, room_rect.end)
 	var ray := PhysicsRayQueryParameters2D.create(player.global_position + Player.FEET_OFFSET, global_position, 1, [get_rid(), player.get_rid()])
 	if not get_world_2d().direct_space_state.intersect_ray(ray).is_empty():
 		global_position = player.global_position + Player.FEET_OFFSET
 	if indoors:
 		home = global_position
-		roam_rect = Rect2(home - Vector2(10, 6), Vector2(20, 12)).intersection(Rect2(267, 160, 320, 166))
+		roam_rect = Rect2(home - Vector2(10, 6), Vector2(20, 12)).intersection(room_rect)
 	_sprite.position = Vector2(0, -8)
 	_sprite.z_index = 0
 	_sprite.z_as_relative = true
@@ -266,6 +271,13 @@ func place_from_player(player: Player) -> void:
 	player.play_item_gesture(false)
 	Notify.say("%s diletakkan kembali." % str(animal().name))
 
+## Area lantai interior (camera_rect ruangan dikurangi dinding), untuk meletakkan hewan.
+func _room_rect() -> Rect2:
+	var room = get_parent().get_meta("world").get_ref() if get_parent() != null and get_parent().has_meta("world") else null
+	if room != null and "camera_rect" in room:
+		return (room.camera_rect as Rect2).grow_individual(-24, -56, -24, -24)
+	return Rect2(267, 160, 320, 166)
+
 func care_with(player: Player) -> void:
 	if is_instance_valid(_carried_by):
 		return
@@ -275,6 +287,8 @@ func care_with(player: Player) -> void:
 	var result: Dictionary
 	if not str(bird.ready).is_empty():
 		result = StructureManager.harvest_animal(player.data, uid, animal_id)
+	elif bird.sick and int(bird.treated_day) != DayCycle.current_day and player.data.has_item(StructureManager.MEDICINE):
+		result = StructureManager.treat_animal(player.data, uid, animal_id)
 	elif int(bird.pet_day) != DayCycle.current_day:
 		result = StructureManager.pet_chicken(uid, animal_id)
 	elif int(bird.fed_day) != DayCycle.current_day:

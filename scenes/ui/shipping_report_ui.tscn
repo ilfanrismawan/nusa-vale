@@ -40,7 +40,7 @@ offset_top = 35.0
 offset_right = 1105.0
 offset_bottom = 90.0
 text = "Hasil Kerja Hari Ini"
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 32
 autowrap_mode = 3
 theme_override_colors/font_color = Color(1, 0.95, 0.86, 1)
 
@@ -52,7 +52,7 @@ offset_top = 99.0
 offset_right = 1058.0
 offset_bottom = 134.0
 text = "Musim Semi · Hari 1 · Tahun 1"
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 theme_override_colors/font_color = Color(1, 0.95, 0.86, 1)
 
@@ -71,7 +71,7 @@ offset_top = 24.0
 offset_right = 380.0
 offset_bottom = 59.0
 text = "Barang Terjual"
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 
@@ -136,7 +136,7 @@ offset_top = 180.0
 offset_right = 745.0
 offset_bottom = 300.0
 text = "Belum ada barang yang dikirim.\nBesok masih ada kesempatan baru!"
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 
@@ -154,7 +154,7 @@ offset_top = 25.0
 offset_right = 322.0
 offset_bottom = 60.0
 text = "Total Pendapatan"
-theme_override_font_sizes/font_size = 23
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 
@@ -165,7 +165,7 @@ offset_top = 80.0
 offset_right = 322.0
 offset_bottom = 148.0
 text = "0 G"
-theme_override_font_sizes/font_size = 38
+theme_override_font_sizes/font_size = 32
 autowrap_mode = 3
 
 
@@ -176,7 +176,7 @@ offset_top = 167.0
 offset_right = 322.0
 offset_bottom = 242.0
 text = "0 jenis barang"
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 
@@ -187,7 +187,7 @@ offset_top = 257.0
 offset_right = 322.0
 offset_bottom = 327.0
 text = "Sudah masuk ke saldo bersama."
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 
@@ -209,7 +209,7 @@ offset_top = 381.0
 offset_right = 322.0
 offset_bottom = 424.0
 text = "100 G"
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 32
 autowrap_mode = 3
 
 

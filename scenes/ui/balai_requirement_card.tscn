@@ -41,7 +41,7 @@ offset_top = 56.0
 offset_right = 115.0
 offset_bottom = 88.0
 text = "Nama bahan"
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 mouse_filter = 2
@@ -55,7 +55,7 @@ offset_top = 94.0
 offset_right = 115.0
 offset_bottom = 114.0
 text = "0 / 100"
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 mouse_filter = 2
@@ -79,7 +79,7 @@ offset_top = 2.0
 offset_right = 115.0
 offset_bottom = 27.0
 text = "✓"
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 mouse_filter = 2

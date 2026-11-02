@@ -9,7 +9,10 @@ var catalog: Array[ItemData] = []
 var _summary: Label
 var _list: GridContainer
 var _detail: Control
-var _filters: Array[Button] = []
+var _detail_icon: TextureRect
+var _filters: Array[TextureButton] = []
+## Ikon item yang belum ditemukan tampil sebagai siluet.
+const UNKNOWN_TINT := Color(0.32, 0.2, 0.1, 0.3)
 var _metadata: Dictionary = {}
 var _catalog_loaded := false
 
@@ -17,7 +20,8 @@ func _ready() -> void:
 	_summary = %Summary
 	_list = %List
 	_detail = %Detail
-	_filters.assign(find_children("Filter*", "Button", true, false))
+	_detail_icon = %DetailIcon
+	_filters.assign(%FilterTabsContainer.get_children())
 	for i in _filters.size():
 		_filters[i].pressed.connect(_set_category.bind(CATEGORIES[i]))
 	DiscoveryManager.discovered.connect(_on_discovered)
@@ -76,26 +80,32 @@ func refresh() -> void:
 		if known:
 			found += 1
 		var button := entry_scene.instantiate() as Button
-		button.text = item.display_name if known else "??? Belum ditemukan"
-		button.icon = item.icon if known else null
+		button.icon = item.icon
+		button.tooltip_text = item.display_name if known else "???"
+		if not known:
+			for state in ["icon_normal_color", "icon_hover_color", "icon_pressed_color", "icon_hover_pressed_color", "icon_focus_color"]:
+				button.add_theme_color_override(state, UNKNOWN_TINT)
 		button.pressed.connect(_show_detail.bind(item))
 		_list.add_child(button)
 	%CollectionPager.refresh()
-	_summary.text = "%d / %d ditemukan - penemuan bersama semua pemain" % [found, total]
-	_detail.text = "Pilih penemuan untuk melihat info. ??? akan terbuka saat ditemukan."
+	_summary.text = "%d / %d ditemukan" % [found, total]
+	_detail_icon.texture = null
+	_detail.text = "Pilih ikon untuk melihat info. Siluet terbuka saat ditemukan; penemuan dibagi bersama semua pemain."
 	for i in range(_filters.size()):
 		_filters[i].set_pressed_no_signal(category == CATEGORIES[i])
 
 func _show_detail(item: ItemData) -> void:
 	if not is_known(item):
-		_detail.text = "Belum ditemukan. Jelajahi dunia untuk membuka catatan ini."
+		_detail_icon.texture = null
+		_detail.text = "??? Belum ditemukan. Jelajahi dunia untuk membuka catatan ini."
 		return
+	_detail_icon.texture = item.icon
 	var info: Resource = _metadata.get(item.item_id)
 	var text := item.description
 	if info is FishData:
-		text = "Lokasi: %s | %02d:00-%02d:00" % [", ".join(info.locations), info.min_hour, info.max_hour]
+		text = "Lokasi: %s | %02d:00-%02d:00" % [_pretty(info.locations), info.min_hour, info.max_hour]
 	elif info is ForageData:
-		text = "Lokasi: %s | %s" % [", ".join(info.locations), "Semua musim" if info.seasons.is_empty() else ", ".join(info.seasons)]
+		text = "Lokasi: %s | %s" % [_pretty(info.locations), "Semua musim" if info.seasons.is_empty() else _pretty(info.seasons)]
 	_detail.text = "%s - %d G\n%s" % [item.display_name, item.sell_price, text]
 
 func _on_discovered(_id: String) -> void:
@@ -109,3 +119,10 @@ var _refresh_pending := false
 func _refresh_discoveries() -> void:
 	_refresh_pending = false
 	refresh()
+
+## ID data (mis. town_river) jadi teks tampilan (Town River).
+func _pretty(ids: PackedStringArray) -> String:
+	var names := PackedStringArray()
+	for id in ids:
+		names.append(id.capitalize())
+	return ", ".join(names)

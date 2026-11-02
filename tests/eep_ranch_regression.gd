@@ -68,10 +68,10 @@ func _ready() -> void:
 	var eep: VillageNPC = presenter.actors.eep
 	eep.set_physics_process(false)
 	await get_tree().physics_frame
-	check(exterior.get_node("NorthToFarm").scene_target.ends_with("farm.tscn") and exterior.get_node("WestToTown").scene_target.ends_with("town.tscn"), "north leads to Farm and west leads to Town")
+	check(exterior.get_node("NorthToFarm").scene_target.ends_with("farm.tscn") and exterior.get_node("EastToTown").scene_target.ends_with("town.tscn") and exterior.get_node("EastToTown").position.x > 1400, "north leads to Farm and east leads to Town")
 	check(exterior.get_node("Scenery/EepRanchHouse/Door").target_scene == HOME, "ranch building opens Eep home and shop")
-	check(exterior.get_node("PondWater").get_used_cells().size() > 200 and exterior.get_node("Scenery/PastureFence").get_child_count() > 40, "authored pond and fenced pasture present")
-	check(clear_spawn(exterior, Vector2(608,64)) and clear_spawn(exterior, Vector2(48,320)) and clear_spawn(exterior, Vector2(816,288)), "ranch entrance and home return spawns are clear")
+	check(exterior.get_node("PondWater").polygon.size() > 60 and exterior.get_node("TerrainCollisions/PondWaterBody").get_child_count() > 0 and exterior.get_node("Scenery/PastureFence").get_child_count() > 40, "authored pond and fenced pasture present")
+	check(clear_spawn(exterior, Vector2(608,64)) and clear_spawn(exterior, Vector2(1392,416)) and clear_spawn(exterior, Vector2(1160,294)), "ranch entrance and home return spawns are clear")
 	check(walk(eep), "Eep walks from home doorway to morning feeding point")
 	DayCycle.hour = 9
 	presenter.refresh()
@@ -130,18 +130,18 @@ func _ready() -> void:
 	world = get_tree().current_scene
 	check(world.scene_file_path == RANCH, "house exit returns to ranch doorway")
 	actor = world.get_node("Player/CharacterBody2D")
-	await cross(actor,world.get_node("WestToTown"))
+	await cross(actor,world.get_node("EastToTown"))
 	world = get_tree().current_scene
-	check(world.scene_file_path.ends_with("town.tscn"), "west ranch exit reaches Town")
-	check(clear_spawn(world,Vector2(1184,648)), "Town return spawn clear")
+	check(world.scene_file_path.ends_with("town.tscn"), "east ranch exit reaches Town")
+	check(clear_spawn(world,Vector2(72,791)), "Town arrival spawn clear")
 	var town_corridor_clear := true
-	for x in range(1184,1297,8):
-		town_corridor_clear = clear_spawn(world,Vector2(x,648)) and town_corridor_clear
-	check(town_corridor_clear, "Town east corridor reaches ranch trigger")
+	for x in range(40,81,8):
+		town_corridor_clear = clear_spawn(world,Vector2(x,791)) and town_corridor_clear
+	check(town_corridor_clear, "Town west corridor reaches ranch trigger")
 	actor = world.get_node("Player/CharacterBody2D")
 	await cross(actor,world.get_node("RanchEntrance"))
 	world = get_tree().current_scene
-	check(world.scene_file_path == RANCH, "Town east gate returns to ranch west")
+	check(world.scene_file_path == RANCH, "Town west gate returns to ranch east")
 	actor = world.get_node("Player/CharacterBody2D")
 	await cross(actor,world.get_node("NorthToFarm"))
 	world = get_tree().current_scene
@@ -154,7 +154,7 @@ func _ready() -> void:
 	actor = Coop.root.body_of(1)
 	await cross(actor,actor.world_root().get_node("EnterEepRanch"))
 	check(actor.world_root().scene_file_path == RANCH and Coop.root.body_of(0).world_root().scene_file_path.ends_with("farm.tscn"), "co-op ranch boundary moves only crossing player")
-	await cross(actor,actor.world_root().get_node("WestToTown"))
+	await cross(actor,actor.world_root().get_node("EastToTown"))
 	check(actor.world_root().scene_file_path.ends_with("town.tscn") and not actor.is_input_locked(), "co-op ranch to Town releases crossing player control")
 	print("EEP RANCH COMPLETE: failures=%d" % failures)
 	get_tree().quit(1 if failures else 0)

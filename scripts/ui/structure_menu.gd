@@ -13,6 +13,8 @@ var _status: Label
 var _title: Label
 var _opened := false
 var _progress_label: Label
+## Urutan tombol yang terakhir difokus gamepad; dipakai lagi setelah isi menu dibangun ulang.
+var _pad_focus_index := 0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -44,6 +46,7 @@ func _ready() -> void:
 	heading.add_child(close)
 	var scroll := ScrollContainer.new()
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.follow_focus = true
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	rows.add_child(scroll)
 	_content = VBoxContainer.new()
@@ -62,6 +65,7 @@ func _ready() -> void:
 	GameState.inventory_changed.connect(_refresh)
 	_opened = true
 	Coop.set_menu_open(player, true)
+	get_viewport().gui_focus_changed.connect(_on_focus_changed)
 	_refresh()
 
 func _button(text: String, callback: Callable) -> Button:
@@ -74,10 +78,37 @@ func _button(text: String, callback: Callable) -> Button:
 func _process(_delta: float) -> void:
 	if _progress_label == null:
 		return
+	_pad_focus()
 	var record := StructureManager.record_for(uid)
 	_progress_label.visible = not record.is_empty() and record.job.has("seconds")
 	if _progress_label.visible:
 		_progress_label.text = "Sisa %.1f detik aktif%s" % [maxf(0, float(record.job.seconds)), " · Dijeda" if get_tree().paused or not DayCycle.is_running else ""]
+
+## Gamepad: isi menu dibangun ulang tiap aksi sehingga fokus hilang; kembalikan fokus ke
+## tombol di posisi yang sama (awal: tombol pertama isi menu) agar D-pad + A langsung jalan.
+func _pad_focus() -> void:
+	if not _opened or not is_instance_valid(player) or not player.input.prefers_pad():
+		return
+	var focused := get_viewport().gui_get_focus_owner()
+	if focused != null and _panel.is_ancestor_of(focused) and focused.is_visible_in_tree():
+		return
+	var buttons := _pad_buttons()
+	if not buttons.is_empty():
+		buttons[clampi(_pad_focus_index, 0, buttons.size() - 1)].grab_focus()
+
+## Tombol yang bisa difokus: isi menu dulu, lalu Kemas dan Tutup.
+func _pad_buttons() -> Array[BaseButton]:
+	var buttons: Array[BaseButton] = []
+	for root: Node in [_content, _panel]:
+		for node in root.find_children("*", "BaseButton", true, false):
+			var button := node as BaseButton
+			if not buttons.has(button) and button.is_visible_in_tree() and not button.disabled and button.focus_mode != Control.FOCUS_NONE:
+				buttons.append(button)
+	return buttons
+
+func _on_focus_changed(control: Control) -> void:
+	if _opened and _panel.is_ancestor_of(control) and control is BaseButton:
+		_pad_focus_index = maxi(0, _pad_buttons().find(control))
 
 func _label(parent: Node, text: String) -> Label:
 	var label := Label.new()

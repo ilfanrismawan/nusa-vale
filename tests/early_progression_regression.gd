@@ -42,6 +42,11 @@ func _ready() -> void:
 		node.free()
 	check(wood >= BrokenBridge.REQUIRED_WOOD + 10, "starter wood can fund bridge and first copper order")
 	check(stone >= BrokenBridge.REQUIRED_STONE + 25, "starter stone can fund bridge and furnace before upgrading")
+	var hit_times: Array = BrokenBridge.CONSTRUCTION_HITS.map(func(hit): return hit[0])
+	var sorted_times := hit_times.duplicate()
+	sorted_times.sort()
+	check(BrokenBridge.CONSTRUCTION_HITS.all(func(hit): return Juice.impact_stream(hit[1]) != null), "bridge repair hammer sounds exist")
+	check(hit_times == sorted_times and hit_times.back() < Transition.DURATION * 2.0 + 0.3, "bridge hammer hits are ordered and land inside the black fade")
 	print("EARLY STOCK: wood=%d (%d stamina), stone=%d (%d stamina)" % [wood, wood_energy, stone, stone_energy])
 	var gross := 5 * 2 * GameState._resolve_item("strawberry").sell_price + 3 * GameState._resolve_item("carrot").sell_price
 	var reseed := 5 * GameState._resolve_item("seed_strawberry").buy_price + 3 * GameState._resolve_item("seed_carrot").buy_price

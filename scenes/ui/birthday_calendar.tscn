@@ -57,7 +57,7 @@ offset_top = 25.0
 offset_right = 515.0
 offset_bottom = 65.0
 text = "Pilih Ulang Tahun"
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 32
 autowrap_mode = 3
 
 
@@ -68,7 +68,7 @@ offset_top = 90.0
 offset_right = 83.0
 offset_bottom = 132.0
 text = "‹"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 
 [node name="SeasonTitle" type="Label" parent="Paper"]
 unique_name_in_owner = true
@@ -77,7 +77,7 @@ offset_top = 90.0
 offset_right = 447.0
 offset_bottom = 132.0
 text = "Musim Semi"
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 
@@ -88,7 +88,7 @@ offset_top = 90.0
 offset_right = 515.0
 offset_bottom = 132.0
 text = "›"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 
 [node name="CalendarHint" type="Label" parent="Paper"]
 unique_name_in_owner = true
@@ -118,7 +118,7 @@ offset_top = 503.0
 offset_right = 515.0
 offset_bottom = 543.0
 text = "Esc  Batal"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 
 [node name="BirthdayIcon" type="TextureRect" parent="Paper"]
 unique_name_in_owner = true
@@ -159,6 +159,6 @@ offset_left = 74.0
 offset_top = 504.0
 offset_right = 310.0
 offset_bottom = 546.0
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 16
 text = "Ikon kue menandai ulang tahunmu."
 autowrap_mode = 3

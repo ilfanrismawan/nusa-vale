@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AnimalSpeciesData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/animal_species_data.gd" id="1_species"]
+
+[resource]
+script = ExtResource("1_species")
+species_id = "chicken"
+display_name = "Ayam"
+sort_order = 0
+price = 800
+home = "chicken_coop"
+interval = 1
+product = "chicken_egg"
+tool = ""
+large_product = true
+breed_days = 0
+hatch_egg = "chicken_egg"
+hatch_days = 3
+description = "Bertelur setiap hari bila diberi makan dan dirawat. Telur bisa ditetaskan di Inkubator."

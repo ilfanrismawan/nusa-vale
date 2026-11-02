@@ -68,7 +68,7 @@ offset_left = 325.0
 offset_top = 408.0
 offset_right = 595.0
 offset_bottom = 452.0
-theme_override_font_sizes/font_size = 23
+theme_override_font_sizes/font_size = 16
 text = "Warga Desa"
 autowrap_mode = 3
 
@@ -99,7 +99,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(820, 80)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 16
 text = "Selamat datang di Nusa Vale!"
 autowrap_mode = 3
 

@@ -8,6 +8,16 @@ const REQUIRED_STONE: int = 50
 
 const WARNING_COOLDOWN: float = 2.0
 const UNLOCK_FEEDBACK: ActionFeedback = preload("res://resources/feedback/bridge_unlock.tres")
+## Bunyi tukang di balik layar hitam: [detik sejak mulai fade, nama Kenney impact, semitone].
+## Ketukan papan berirama, lalu satu hantaman kayu berat tepat sebelum layar terang lagi.
+const CONSTRUCTION_HITS := [
+	[0.05, "impactPlank_medium_000", 0.0],
+	[0.22, "impactPlank_medium_001", 1.0],
+	[0.39, "impactPlank_medium_002", 0.0],
+	[0.62, "impactWood_medium_003", -2.0],
+	[0.74, "impactWood_medium_001", -1.0],
+	[1.0, "impactWood_heavy_002", -3.0],
+]
 
 @export var water_layer: PassableTileLayer
 @export var walkaway: Rect2 = Rect2(-62, -16, 124, 23)
@@ -120,12 +130,22 @@ func repair_bridge() -> bool:
 	return true
 	
 func _play_repair_transition() -> void:
+	_play_construction_sfx()
 	await Transition.fade_action(_finish_repair)
 	# Celebrate after the fade: particles and sound should not disappear behind black.
 	_play_unlock_celebration()
 	_repair_in_progress = false
 	Notify.say("Jembatan berhasil diperbaiki!")
 	
+## Fade memakai PauseManager, jadi tween bunyi harus tetap jalan saat game dijeda.
+func _play_construction_sfx() -> void:
+	var hits := create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	var elapsed := 0.0
+	for hit in CONSTRUCTION_HITS:
+		hits.tween_interval(maxf(0.001, hit[0] - elapsed))
+		hits.tween_callback(Juice.sfx.bind(Juice.impact_stream(hit[1]), -4.0, 0.04, hit[2]))
+		elapsed = hit[0]
+
 func _finish_repair() -> void:
 	WorldState.set_flag(BRIDGE_FLAG, true)
 	UnlockManager.unlock("forest")

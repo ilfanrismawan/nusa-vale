@@ -186,7 +186,7 @@ position = Vector2(272, 96)
 script = ExtResource("12_a1wgq")
 caption = "TOKO TERNAK EEP"
 minimum_width = 88
-font_size = 10
+font_size = 16
 
 [node name="Hours" type="Node2D" parent="Furniture" unique_id=256415970 instance=ExtResource("11_yh2xg")]
 z_index = 2
@@ -196,7 +196,7 @@ script = ExtResource("12_a1wgq")
 caption = "09–12 / 13–17
 Rabu libur"
 minimum_width = 88
-font_size = 10
+font_size = 16
 
 [node name="Bedroom" type="Node2D" parent="Furniture" unique_id=1965689013 instance=ExtResource("11_yh2xg")]
 z_index = 2
@@ -205,7 +205,7 @@ position = Vector2(528, 64)
 script = ExtResource("12_a1wgq")
 caption = "RUMAH EEP"
 minimum_width = 88
-font_size = 10
+font_size = 16
 
 [node name="BedroomRug" type="Sprite2D" parent="." unique_id=1061721815]
 z_index = -5
@@ -226,7 +226,7 @@ polygon = PackedVector2Array(416, 240, 424, 240, 424, 432, 416, 432)
 position = Vector2(320, 436)
 script = ExtResource("14_r6v12")
 scene_target = "res://scenes/world/eep_ranch.tscn"
-spawn_position = Vector2(816, 288)
+spawn_position = Vector2(1160, 294)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ExitDoor" unique_id=773918249]
 shape = SubResource("RectangleShape2D_viqcr")

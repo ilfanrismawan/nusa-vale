@@ -34,7 +34,7 @@ func _ready() -> void:
 	add_child(canvas)
 	var catalog := _paper(canvas, Rect2(0, 0, 150, 248), Color("ecd1a0"))
 	var detail := _paper(canvas, Rect2(160, 0, 260, 248), Color("f3dfb8"))
-	var heading := _label("KEAHLIAN", 20)
+	var heading := _label("KEAHLIAN", 16)
 	heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_place(catalog, heading, Rect2(6, 4, 138, 22))
 	var roles := SkillSystem.roles()
@@ -48,9 +48,9 @@ func _ready() -> void:
 		button.pressed.connect(_select_role.bind(roles[i]))
 		_place(catalog, button, Rect2(8, 28 + i * 23, 134, 21))
 		_role_buttons.append(button)
-	_tokens = _label("", 13)
+	_tokens = _label("", 16)
 	_place(catalog, _tokens, Rect2(10, 192, 132, 16))
-	_team = _label("", 11)
+	_team = _label("", 16)
 	_team.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_team.max_lines_visible = 2
 	_place(catalog, _team, Rect2(10, 210, 132, 34))
@@ -60,16 +60,16 @@ func _ready() -> void:
 	_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_place(hero, _icon, Rect2(6, 6, 32, 32))
-	_title = _label("", 18)
+	_title = _label("", 16)
 	_place(hero, _title, Rect2(44, 2, 196, 20))
 	_progress = ProgressBar.new()
 	_progress.show_percentage = false
 	_progress.add_theme_stylebox_override("background", _style(Color("fff0ce"), Color("b5874f")))
 	_progress.add_theme_stylebox_override("fill", _style(Color("51774a"), Color("426b43")))
 	_place(hero, _progress, Rect2(44, 24, 194, 10))
-	_exp_label = _label("", 12)
+	_exp_label = _label("", 16)
 	_place(hero, _exp_label, Rect2(44, 36, 196, 16))
-	_hint = _label("", 12)
+	_hint = _label("", 16)
 	_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_hint.max_lines_visible = 2
 	_place(detail, _hint, Rect2(10, 68, 240, 28))
@@ -146,7 +146,7 @@ func _fill_perks(skills: PlayerSkills) -> void:
 	for at_level in range(1, SkillSystem.MAX_LEVEL + 1):
 		if _role.has_choice(at_level):
 			var picked := skills.choice(_role.role_id, at_level)
-			var head := _label("Lv %d · Pilih satu cabang" % at_level, 13)
+			var head := _label("Lv %d · Pilih satu cabang" % at_level, 16)
 			head.add_theme_color_override("font_color", GOLD if current >= at_level and picked.is_empty() else INK)
 			_perks.add_child(head)
 			for branch in ["a", "b"]:
@@ -158,7 +158,7 @@ func _fill_perks(skills: PlayerSkills) -> void:
 func _perk_row(perk: RolePerk, prefix: String, active: bool, can_pick: bool, at_level: int, branch: String) -> Control:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 4)
-	var text := _label("%s%s%s\n%s" % [prefix, perk.title, " (Segera hadir)" if perk.coming_soon else "", perk.description], 12)
+	var text := _label("%s%s%s\n%s" % [prefix, perk.title, " (Segera hadir)" if perk.coming_soon else "", perk.description], 16)
 	text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	text.custom_minimum_size.x = 160
@@ -175,7 +175,7 @@ func _perk_row(perk: RolePerk, prefix: String, active: bool, can_pick: bool, at_
 		pick.pressed.connect(_choose.bind(at_level, branch))
 		row.add_child(pick)
 	elif active and not perk.coming_soon:
-		var mark := _label("✓", 14)
+		var mark := _label("✓", 16)
 		mark.add_theme_color_override("font_color", GREEN)
 		row.add_child(mark)
 	return row

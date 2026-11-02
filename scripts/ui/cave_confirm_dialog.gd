@@ -90,7 +90,7 @@ static func _style(bg: Color) -> StyleBoxFlat:
 static func _make_theme() -> Theme:
 	var t := Theme.new()
 	t.default_font = DropItemDialogScript.FONT
-	t.default_font_size = 18
+	t.default_font_size = 16
 	t.set_color("font_color", "Label", DropItemDialogScript.COLOR_TEXT)
 	t.set_color("title_color", "Window", Color("3b2825"))
 	var panel := _style(Color("3b2825"))

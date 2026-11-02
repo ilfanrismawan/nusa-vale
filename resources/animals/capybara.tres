@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AnimalSpeciesData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/animal_species_data.gd" id="1_species"]
+
+[resource]
+script = ExtResource("1_species")
+species_id = "capybara"
+display_name = "Kapibara"
+sort_order = 8
+price = 2000
+home = "barn"
+interval = 0
+product = ""
+tool = ""
+large_product = true
+breed_days = 4
+hatch_egg = ""
+hatch_days = 0
+description = "Teman santai di Barn. Tidak menghasilkan komoditas, tetapi bisa dibiakkan."

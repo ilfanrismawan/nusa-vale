@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://scripts/world/product_ready_sound.gd" id="ready_sound_script"]
 [ext_resource type="AudioStream" path="res://assets/audio/sfx/machines/machine_ready.wav" id="ready_sound_stream"]
@@ -7,6 +7,7 @@
 [ext_resource type="FontFile" path="res://assets/fonts/m5x7.ttf" id="font"]
 [ext_resource type="Texture2D" path="res://assets/farm_rpg/icons/Food Icons/Chicken Egg.png" id="egg"]
 [ext_resource type="Texture2D" path="res://resources/icons/icon_furnace.tres" id="preview"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/objects/exterior/Houses/Farm Buildings/Chicken Coop/Chicken Door.png" id="animal_door"]
 
 [sub_resource type="RectangleShape2D" id="Footprint"]
 size = Vector2(14, 14)
@@ -29,6 +30,13 @@ script = ExtResource("script")
 [node name="Sprite" type="Sprite2D" parent="."]
 texture = ExtResource("preview")
 
+[node name="AnimalDoor" type="Sprite2D" parent="."]
+visible = false
+texture = ExtResource("animal_door")
+offset = Vector2(0, -7)
+region_enabled = true
+region_rect = Rect2(5, 2, 17, 14)
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("Footprint")
 
@@ -37,7 +45,7 @@ visible = false
 offset_left = -24.0
 offset_top = 25.0
 theme_override_fonts/font = ExtResource("font")
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 16
 theme_override_colors/font_color = Color(1, 0.945, 0.788, 1)
 theme_override_colors/font_outline_color = Color(0.188, 0.137, 0.2, 1)
 theme_override_constants/outline_size = 2

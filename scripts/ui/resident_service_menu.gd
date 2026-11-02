@@ -9,6 +9,8 @@ const ROMANCE := 3
 const LETTER := 4
 const HOUSEHOLD := 5
 const SUPPLIES := 6
+## Tombol tebus hewan (layanan "vet"): REDEEM_BASE + indeks di `redeem_options`.
+const REDEEM_BASE := 100
 var player: Player
 var npc_name := "Warga Desa"
 var role_title := ""
@@ -18,6 +20,8 @@ var romance_action := ""
 var letter_available := false
 var household_action := ""
 var supplies_available := false
+## [{"label": String}] satu tombol per hewan yang kabur dan dirawat di sini.
+var redeem_options: Array = []
 @onready var panel: PanelContainer = $Panel
 
 func _ready() -> void:
@@ -26,8 +30,8 @@ func _ready() -> void:
 	%Speaker.text = npc_name
 	%Role.text = role_title
 	%Portrait.texture = FarmServiceTheme.portrait(portrait)
-	%Service.text = {"carpenter": "Bangun / Upgrade", "shipping": "Info Pengiriman", "livestock": "Beli Hewan Ternak", "blacksmith": "Tempa / Pecah Geoda", "shop": "Beli Makanan / Minuman"}.get(service, "Layanan")
-	%Service.visible = service in ["carpenter", "shipping", "livestock", "blacksmith", "shop"]
+	%Service.text = {"carpenter": "Bangun / Upgrade", "shipping": "Info Pengiriman", "livestock": "Beli Hewan Ternak", "blacksmith": "Tempa / Pecah Geoda", "shop": "Beli Makanan / Minuman", "vet": "Beli Obat Ternak"}.get(service, "Layanan")
+	%Service.visible = service in ["carpenter", "shipping", "livestock", "blacksmith", "shop", "vet"]
 	%Talk.pressed.connect(func(): selected.emit(TALK))
 	%Service.pressed.connect(func(): selected.emit(SERVICE))
 	%Close.pressed.connect(func(): selected.emit(CLOSE))
@@ -37,6 +41,13 @@ func _ready() -> void:
 		button.text = "Beli Pakan / Peralatan"
 		button.custom_minimum_size.y = 52
 		button.pressed.connect(func(): selected.emit(SUPPLIES))
+		box.add_child(button)
+		box.move_child(button, %Close.get_index())
+	for index in redeem_options.size():
+		var button := Button.new()
+		button.text = str(redeem_options[index].label)
+		button.custom_minimum_size.y = 52
+		button.pressed.connect(func(): selected.emit(REDEEM_BASE + index))
 		box.add_child(button)
 		box.move_child(button, %Close.get_index())
 	if not romance_action.is_empty():

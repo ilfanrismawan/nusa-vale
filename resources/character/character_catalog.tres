@@ -593,6 +593,8 @@ script = ExtResource("3_sheet")
 part_folder = "res://assets/farm_rpg/Character/PNG/22. Flute"
 directions = 3
 animation_name = &"flute"
+animation_fps = 6.0
+animation_loop = false
 
 [sub_resource type="Resource" id="sheet_extra_mage"]
 script = ExtResource("3_sheet")
