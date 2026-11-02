@@ -1807,9 +1807,9 @@ point_count = 5
 resource_local_to_scene = true
 bake_interval = 4.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 920, 430, 0, 0, 0, 0, 895, 430, 0, 0, 0, 0, 895, 400, 0, 0, 0, 0, 895, 388)
+"points": PackedVector2Array(0, 0, 0, 0, 920, 430, 0, 0, 0, 0, 895, 430, 0, 0, 0, 0, 895, 388, 0, 0, 0, 0, 892, 316, 0, 0, 0, 0, 660, 276, 0, 0, 0, 0, 640, 262, 0, 0, 0, 0, 632, 254)
 }
-point_count = 4
+point_count = 7
 
 [sub_resource type="Curve2D" id="Curve2D_m4j2v"]
 resource_local_to_scene = true
@@ -9606,7 +9606,8 @@ position = Vector2(680, 770)
 position = Vector2(700, 440)
 
 [node name="joko_work" type="Marker2D" parent="NPCPoints" unique_id=1547997201]
-position = Vector2(895, 388)
+position = Vector2(632, 254)
+metadata/npc_facing = "down"
 
 [node name="joko_rest" type="Marker2D" parent="NPCPoints" unique_id=703465252]
 position = Vector2(970, 430)

@@ -73,6 +73,8 @@ static func default_rows() -> Array[Dictionary]:
 	rows.append(_row("tool_next", "Slot berikutnya", "Lapangan", [[mouse(MOUSE_BUTTON_WHEEL_DOWN), WORLD], [key(KEY_RIGHT), WORLD]], [[joy(JOY_BUTTON_RIGHT_SHOULDER), EXPLORE | MENU], [joy(JOY_BUTTON_DPAD_RIGHT), COMBAT]]))
 	rows.append(_row("cycle_hotbar", "Halaman hotbar", "Lapangan", [[key(KEY_TAB), WORLD]], [[joy(JOY_BUTTON_BACK), WORLD]]))
 	rows.append(_row("world_map", "Peta lembah", "Lapangan", [[key(KEY_M), WORLD | MENU]], []))
+	# Q di combat = lock-on; di lapangan = siul memanggil peliharaan.
+	rows.append(_row("whistle", "Siul (panggil peliharaan)", "Lapangan", [[key(KEY_Q), EXPLORE]], [[joy(JOY_BUTTON_LEFT_STICK), EXPLORE]]))
 	rows.append(_row("sort_inventory", "Rapikan tas", "Lapangan", [[key(KEY_R), WORLD | MENU]], [[joy(JOY_BUTTON_RIGHT_STICK), EXPLORE | MENU]]))
 	for i in 8:
 		rows.append(_row("slot_%d" % (i + 1), "Slot %d" % (i + 1), "Lapangan", [[key(KEY_1 + i), WORLD]], [], false))
@@ -88,6 +90,9 @@ static func default_rows() -> Array[Dictionary]:
 	rows.append(_row("aim", "Bidik busur / tongkat (tahan)", "Combat", [[mouse(MOUSE_BUTTON_RIGHT), RANGED]], [[axis(JOY_AXIS_TRIGGER_LEFT, 1.0), RANGED]]))
 	rows.append(_row("weapon_art", "Weapon Art", "Combat", [[key(KEY_F), COMBAT]], [[axis(JOY_AXIS_TRIGGER_LEFT, 1.0), MELEE], [joy(JOY_BUTTON_LEFT_STICK), COMBAT]]))
 	rows.append(_row("lock_on", "Kunci target (lock-on)", "Combat", [[key(KEY_Q), COMBAT], [mouse(MOUSE_BUTTON_MIDDLE), COMBAT]], [[joy(JOY_BUTTON_RIGHT_STICK), COMBAT]]))
+	# Menu tas (gamepad): D-pad/stik memilih slot, A pilih/tukar, X = klik kanan mouse.
+	rows.append(_row("item_action", "Makan / buang / titip item; Crafting: ganti grup", "Menu", [], [[joy(JOY_BUTTON_X), MENU]]))
+	rows.append(_row("hotbar_item", "Tampilkan item di hotbar", "Menu", [], [[joy(JOY_BUTTON_BACK), MENU]]))
 	for i in rows.size():
 		rows[i]["id"] = "%s#%d" % [rows[i]["action"], _nth_row_of(rows, i)]
 	return rows

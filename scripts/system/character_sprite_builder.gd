@@ -14,9 +14,10 @@ const FALLBACK_EXTRA_LAYERS := {
 	&"mage": ["Healer Staff.png", "Fx.png"],
 }
 ## Layer tambahan bawaan untuk animasi yang tidak punya extra_layers di katalog (tanpa peringatan).
-## catch_insect = ayunan jaring serangga (GDD 7).
+## catch_insect = ayunan jaring serangga (GDD 7); flute = seruling dan not musik (Seruling Kuda).
 const DEFAULT_EXTRA_LAYERS := {
 	&"catch_insect": ["Weapons/Bug net.png"],
+	&"flute": ["Flute.png", "Fx.png"],
 }
 ## Layer kendaraan bawaan (digambar di belakang badan) untuk animasi tanpa background_layers
 ## di katalog. Kendaraan GDD 10: sepeda merah, sapu terbang berkilau.

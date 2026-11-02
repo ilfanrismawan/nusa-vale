@@ -67,6 +67,14 @@ var current_category: ItemData.Category = ItemData.Category.ALL
 var current_page: int = 0
 var _selected_slot_index: int = -1
 var _hovered_slot_index: int = -1
+## Kursor gamepad (indeks global tas, -1 = tidak aktif) dan slot yang sedang menampilkannya.
+var _pad_slot: int = -1
+var _pad_slot_ui: InventorySlotUI
+## Arah D-pad/stik yang sedang ditahan dan lamanya (untuk auto-repeat).
+const PAD_REPEAT_DELAY := 0.35
+const PAD_REPEAT_RATE := 0.09
+var _pad_hold := Vector2i.ZERO
+var _pad_hold_time := 0.0
 
 ## Buang item: node scene untuk pilihan jumlah dan tombol aksi.
 var _drop_dialog: DropItemDialogScript
@@ -80,6 +88,8 @@ var _tip_label: Label
 ## Mode jual (dibuka dari Shipping Bin): kotak jumlah menjual, bukan membuang.
 var _sell_mode: bool = false
 var _rpg_menu: Control
+## Lebar tab atas; 12 tab x 35 px muat di tepi buku 476 px (mulai x 44).
+const TAB_WIDTH := 35.0
 var _top_tabs: Array[TextureButton] = []
 var _menu_buttons: Dictionary = {}
 var _status_panel: PanelContainer
@@ -98,6 +108,8 @@ var _relationship_ui: Control
 var _calendar_page: Control
 ## Tab Peta (Peta Lembah, hanya dilihat; GDD 3).
 var _map_page: Control
+## Tab Hewan (peliharaan dan ternak, hanya dilihat; GDD 4.10).
+var _animals_page: Control
 
 ## Pemain pemilik UI ini (diisi Player). Kosong = P1.
 var player: Player
@@ -143,10 +155,16 @@ func _ready() -> void:
 ## Menu tambahan menggunakan font dan warna buku inventory.
 func _setup_rpg_menus() -> void:
 	_rpg_menu = %TopTabsContainer
-	_menu_buttons = {"Tas": tab_book, "Status": %TabStatus, "Equipment": %TabEquipment, "Crafting": %TabCrafting, "Keahlian": %TabSkills, "NPC": %TabNPC, "Kalender": %TabCalendar, "Peta": %TabMap, "Koleksi": tab_collection}
-	_top_tabs.assign([tab_book, %TabStatus, %TabEquipment, %TabCrafting, %TabSkills, %TabNPC, %TabCalendar, %TabMap, tab_collection, tab_gear, %TabControls])
+	_menu_buttons = {"Tas": tab_book, "Status": %TabStatus, "Equipment": %TabEquipment, "Crafting": %TabCrafting, "Keahlian": %TabSkills, "NPC": %TabNPC, "Hewan": %TabAnimals, "Kalender": %TabCalendar, "Peta": %TabMap, "Koleksi": tab_collection}
+	_top_tabs.assign([tab_book, %TabStatus, %TabEquipment, %TabCrafting, %TabSkills, %TabNPC, %TabAnimals, %TabCalendar, %TabMap, tab_collection, tab_gear, %TabControls])
 	for index in _top_tabs.size():
-		_top_tabs[index].position.x = index * 38
+		var tab := _top_tabs[index]
+		tab.custom_minimum_size.x = TAB_WIDTH
+		tab.size.x = TAB_WIDTH
+		tab.position.x = index * TAB_WIDTH
+		var icon := tab.get_node_or_null("Icon") as Control
+		if icon != null:
+			icon.position.x = (TAB_WIDTH - icon.size.x) / 2.0
 	for tab in _top_tabs:
 		_setup_tab_hover(tab, tab.tooltip_text)
 	%TabStatus.pressed.connect(_show_status)
@@ -156,6 +174,7 @@ func _setup_rpg_menus() -> void:
 	%TabNPC.pressed.connect(_show_relationships)
 	%TabCalendar.pressed.connect(_show_calendar)
 	%TabMap.pressed.connect(_show_map)
+	%TabAnimals.pressed.connect(_show_animals)
 	_controls_panel = %ControlsPage
 	%TabControls.pressed.connect(_show_controls)
 	_settings_panel = %SettingsPage
@@ -168,7 +187,8 @@ func _setup_rpg_menus() -> void:
 	_relationship_ui = %RelationshipPage
 	_calendar_page = %CalendarPage
 	_map_page = %MapPage
-	for page in [_equipment_panel, _crafting_panel, _skill_tree, _relationship_ui, _calendar_page, _map_page, _settings_panel, _controls_panel]:
+	_animals_page = %AnimalsPage
+	for page in [_equipment_panel, _crafting_panel, _skill_tree, _relationship_ui, _calendar_page, _map_page, _animals_page, _settings_panel, _controls_panel]:
 		page.inventory_ui = self
 	_btn_sort = %SortButton
 	_btn_sort.pressed.connect(_sort_bag)
@@ -189,6 +209,7 @@ func _show_bag_page() -> void:
 	_relationship_ui.hide()
 	_calendar_page.hide()
 	_map_page.hide()
+	_animals_page.hide()
 	_settings_panel.hide()
 	_controls_panel.hide()
 	book_root.get_node("LeftPage").show()
@@ -209,6 +230,7 @@ func _show_status() -> void:
 	_relationship_ui.hide()
 	_calendar_page.hide()
 	_map_page.hide()
+	_animals_page.hide()
 	_settings_panel.hide()
 	_controls_panel.hide()
 	book_root.get_node("LeftPage").hide()
@@ -257,6 +279,8 @@ func _update_menu_highlight() -> void:
 		active = _menu_buttons["Kalender"]
 	if is_instance_valid(_map_page) and _map_page.visible:
 		active = _menu_buttons["Peta"]
+	if is_instance_valid(_animals_page) and _animals_page.visible:
+		active = _menu_buttons["Hewan"]
 	if is_instance_valid(_settings_panel) and _settings_panel.visible:
 		active = tab_gear
 	if is_instance_valid(_controls_panel) and _controls_panel.visible:
@@ -276,6 +300,7 @@ func _show_collection() -> void:
 	_relationship_ui.hide()
 	_calendar_page.hide()
 	_map_page.hide()
+	_animals_page.hide()
 	_settings_panel.hide()
 	_controls_panel.hide()
 	book_root.get_node("LeftPage").hide()
@@ -298,6 +323,7 @@ func _show_equipment() -> void:
 	_relationship_ui.hide()
 	_calendar_page.hide()
 	_map_page.hide()
+	_animals_page.hide()
 	_settings_panel.hide()
 	_controls_panel.hide()
 	for path in ["LeftPage", "RightPage", "RightRibbonsContainer"]:
@@ -312,7 +338,7 @@ func _show_crafting() -> void:
 		return
 	_hide_tooltip()
 	_clear_item_detail()
-	for panel in [_status_panel, _equipment_panel, _collection_panel, _skill_tree, _relationship_ui, _calendar_page, _map_page, _settings_panel, _controls_panel]:
+	for panel in [_status_panel, _equipment_panel, _collection_panel, _skill_tree, _relationship_ui, _calendar_page, _map_page, _animals_page, _settings_panel, _controls_panel]:
 		panel.hide()
 	for path in ["LeftPage", "RightPage", "RightRibbonsContainer"]:
 		book_root.get_node(path).hide()
@@ -333,6 +359,10 @@ func _show_map() -> void:
 	_show_embedded_page(_map_page)
 
 
+func _show_animals() -> void:
+	_show_embedded_page(_animals_page)
+
+
 func _show_controls() -> void:
 	if Coop.active and data.index != 0:
 		Notify.say("Pengaturan kontrol bersama hanya dapat dibuka P1.")
@@ -349,7 +379,7 @@ func _show_embedded_page(page: Control) -> void:
 		return
 	_hide_tooltip()
 	_clear_item_detail()
-	for panel in [_status_panel, _equipment_panel, _collection_panel, _crafting_panel, _skill_tree, _relationship_ui, _calendar_page, _map_page, _settings_panel, _controls_panel]:
+	for panel in [_status_panel, _equipment_panel, _collection_panel, _crafting_panel, _skill_tree, _relationship_ui, _calendar_page, _map_page, _animals_page, _settings_panel, _controls_panel]:
 		panel.hide()
 	for path in ["LeftPage", "RightPage", "RightRibbonsContainer"]:
 		book_root.get_node(path).hide()
@@ -418,7 +448,7 @@ func _setup_tab_hover(tab: TextureButton, hover_hint: String) -> void:
 func _layout_top_tab(tab: TextureButton, active: bool, hovered := false) -> void:
 	var top := 0.0 if active else (3.0 if hovered else 6.0)
 	tab.position.y = top
-	tab.size = Vector2(38, 42 - top)
+	tab.size = Vector2(TAB_WIDTH, 42 - top)
 	tab.z_index = 1 if active else 0
 
 
@@ -579,6 +609,8 @@ func _input(event: InputEvent) -> void:
 	if visible and _drop_dialog_open() and input.is_event(event, &"ui_cancel"):
 		_close_drop_dialog()
 		get_viewport().set_input_as_handled()
+	elif visible and event is InputEventJoypadButton and _pad_bag_event(event, input):
+		get_viewport().set_input_as_handled()
 	elif input.is_event(event, &"crafting_menu"):
 		# Y gamepad (seperti Stardew Valley): buka tas langsung di tab Crafting.
 		if visible and _crafting_panel.visible:
@@ -619,6 +651,150 @@ func _input(event: InputEvent) -> void:
 
 
 
+## ── Gamepad: kursor slot ────────────────────────────────────────────────────
+## Seperti Stardew Valley: D-pad/stik kiri memindah kursor slot (kiri/kanan di tepi grid
+## pindah halaman), A = klik kiri (pilih/tukar), X = klik kanan (makan/buang/titip).
+## Di dialog buang/titip: kiri/kanan jumlah ±1, atas/bawah ±10, A konfirmasi, B batal.
+## Back = tampilkan item di hotbar. Tab Crafting: D-pad pilih resep, A buat, X ganti grup.
+## Arah yang ditahan berulang setelah PAD_REPEAT_DELAY.
+func _process(delta: float) -> void:
+	if not visible:
+		return
+	var input := _owner_input()
+	if not input.prefers_pad():
+		if _pad_slot >= 0:
+			_set_pad_slot(-1)
+		return
+	var step := _pad_step(input, delta)
+	if step == Vector2i.ZERO:
+		return
+	if _drop_dialog_open():
+		_drop_dialog.nudge(step.x if step.x != 0 else -step.y * DropItemDialogScript.BIG_STEP)
+	elif _bag_page_visible() and not (is_instance_valid(_consume_dialog) and _consume_dialog.visible):
+		_move_pad_slot(step)
+	elif _crafting_panel.visible:
+		_crafting_panel.pad_move(step)
+
+
+func _held_direction(input: PlayerInput) -> Vector2i:
+	if input.pressed(&"move_left"):
+		return Vector2i.LEFT
+	if input.pressed(&"move_right"):
+		return Vector2i.RIGHT
+	if input.pressed(&"move_up"):
+		return Vector2i.UP
+	if input.pressed(&"move_down"):
+		return Vector2i.DOWN
+	return Vector2i.ZERO
+
+
+## Satu langkah saat arah baru ditekan, lalu berulang selama ditahan.
+func _pad_step(input: PlayerInput, delta: float) -> Vector2i:
+	var held := _held_direction(input)
+	if held != _pad_hold:
+		_pad_hold = held
+		_pad_hold_time = 0.0
+		return held
+	if held == Vector2i.ZERO:
+		return held
+	_pad_hold_time += delta
+	if _pad_hold_time < PAD_REPEAT_DELAY:
+		return Vector2i.ZERO
+	_pad_hold_time -= PAD_REPEAT_RATE
+	return held
+
+
+func _bag_page_visible() -> bool:
+	return book_root.get_node("LeftPage").visible
+
+
+## A/X gamepad di halaman tas. true = event dipakai.
+func _pad_bag_event(event: InputEvent, input: PlayerInput) -> bool:
+	if _drop_dialog_open():
+		if input.is_event(event, &"ui_accept"):
+			_drop_dialog.confirmed.emit(_drop_dialog.amount)
+			return true
+		return false
+	if _crafting_panel.visible:
+		if input.is_event(event, &"ui_accept"):
+			_crafting_panel.pad_craft()
+		elif input.is_event(event, &"item_action"):
+			_crafting_panel.pad_next_group()
+		else:
+			return false
+		return true
+	if _pad_slot < 0 or not _bag_page_visible():
+		return false
+	if input.is_event(event, &"ui_accept"):
+		_on_slot_clicked(_pad_slot, MOUSE_BUTTON_LEFT)
+	elif input.is_event(event, &"item_action"):
+		_on_slot_clicked(_pad_slot, MOUSE_BUTTON_RIGHT)
+	elif input.is_event(event, &"hotbar_item"):
+		if _slot_item(_pad_slot) != null and not _sell_mode:
+			_select_slot(_pad_slot)
+			_activate_hotbar_item()
+	else:
+		return false
+	return true
+
+
+func _move_pad_slot(step: Vector2i) -> void:
+	var page_start := current_page * SLOTS_PER_PAGE
+	if _pad_slot < page_start or _pad_slot >= page_start + SLOTS_PER_PAGE:
+		_set_pad_slot(page_start)
+		return
+	var cols := maxi(slot_grid.columns, 1)
+	var local := _pad_slot - page_start
+	var col := local % cols + step.x
+	var row := clampi(local / cols + step.y, 0, ceili(float(SLOTS_PER_PAGE) / cols) - 1)
+	var page := current_page
+	if col < 0:
+		page -= 1
+		col = cols - 1
+	elif col >= cols:
+		page += 1
+		col = 0
+	var target := page * SLOTS_PER_PAGE + row * cols + col
+	if page < 0 or page >= total_pages or target >= data.bag_size:
+		return
+	if page != current_page:
+		current_page = page
+		refresh_inventory()
+	_set_pad_slot(target)
+
+
+## Pindahkan kursor gamepad (-1 = matikan) dan tampilkan detail item seperti hover mouse.
+func _set_pad_slot(global_idx: int) -> void:
+	_pad_slot = global_idx
+	_refresh_pad_cursor()
+	_on_slot_unhovered(_hovered_slot_index, null)
+	if global_idx < 0 or not is_instance_valid(_pad_slot_ui):
+		return
+	get_viewport().gui_release_focus()
+	_on_slot_hovered(global_idx, _pad_slot_ui)
+
+
+func _refresh_pad_cursor() -> void:
+	var target: InventorySlotUI = null
+	var local := _pad_slot - current_page * SLOTS_PER_PAGE
+	if _pad_slot >= 0 and local >= 0 and local < _slots.size():
+		target = _slots[local]
+	if target == _pad_slot_ui:
+		return
+	if is_instance_valid(_pad_slot_ui):
+		_pad_slot_ui.set_pad_hover(false)
+	_pad_slot_ui = target
+	if target != null:
+		target.set_pad_hover(true)
+
+
+## "[X]" untuk pemain gamepad, "Klik kanan" untuk mouse.
+func _secondary_hint() -> String:
+	if _owner_input().prefers_pad():
+		return "[%s]" % InputPrompt.key_text(&"item_action", player, InputLayout.MENU, 1)
+	return "Klik kanan"
+
+
 ## ── Open / Close ────────────────────────────────────────────────────────────
 ## Tas boleh dibuka: game tidak dijeda, dan (co-op) pemain ini tidak sedang di toko/pindah area/tidur.
 func _can_open_now() -> bool:
@@ -652,6 +828,8 @@ func _cycle_tab(step: int) -> void:
 		current = _menu_buttons["Kalender"]
 	if _map_page.visible:
 		current = _menu_buttons["Peta"]
+	if _animals_page.visible:
+		current = _menu_buttons["Hewan"]
 	if _settings_panel.visible:
 		current = tab_gear
 	if _controls_panel.visible:
@@ -674,6 +852,11 @@ func _open() -> void:
 	_hide_tooltip()
 	show()
 	Coop.set_menu_open(player, true)
+	if _owner_input().prefers_pad():
+		_set_pad_slot(current_page * SLOTS_PER_PAGE)
+	# Arah yang masih ditahan saat membuka tas (mis. sedang berjalan) tidak menggeser kursor.
+	_pad_hold = _held_direction(_owner_input())
+	_pad_hold_time = -INF
 
 
 ## Dibuka Shipping Bin: tas dalam mode jual (pilih item + jumlah yang dijual).
@@ -689,11 +872,13 @@ func _close() -> void:
 	_relationship_ui.hide()
 	_calendar_page.hide()
 	_map_page.hide()
+	_animals_page.hide()
 	_settings_panel.hide()
 	_controls_panel.hide()
 	if is_instance_valid(_consume_dialog):
 		_consume_dialog.hide()
 	_close_drop_dialog()
+	_set_pad_slot(-1)
 	_sell_mode = false
 	_hide_tooltip()
 	hide()
@@ -943,7 +1128,7 @@ func _display_item_detail(item: ItemData, count: int, slot_idx: int = -1) -> voi
 	if detail_desc:
 		var text := item.description
 		if item.is_edible():
-			text += "\nKlik kanan: makan"
+			text += "\n%s: makan" % _secondary_hint()
 		if text.is_empty():
 			if item.category == ItemData.Category.TOOL:
 				text = "Gunakan peralatan ini dengan klik kiri saat berada di dekat objek kerja."
@@ -992,7 +1177,7 @@ func _clear_item_detail() -> void:
 		detail_effects.show_item(null)
 	if detail_desc:
 		if _sell_mode:
-			detail_desc.text = "Shipping Bin: klik kanan untuk menitipkan barang. Uang diterima setelah tidur."
+			detail_desc.text = "Shipping Bin: %s untuk menitipkan barang. Uang diterima setelah tidur." % _secondary_hint()
 		else:
 			detail_desc.text = "Nama, fungsi, dan harga jual item tampil di sini."
 	if price_label:
@@ -1034,6 +1219,7 @@ func refresh_inventory() -> void:
 			_slots[i].modulate = Color.WHITE
 
 		_slots[i].set_selected(global_idx == _selected_slot_index)
+	_refresh_pad_cursor()
 
 	# Update nomor halaman
 	if is_instance_valid(page_label):

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://autoload/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/ranch/animal_medicine.png" id="2"]
+[resource]
+script = ExtResource("1")
+category = 4
+item_id = "animal_medicine"
+display_name = "Obat Ternak"
+icon = ExtResource("2")
+description = "Racikan Rian untuk hewan Kurang sehat. Berikan langsung ke hewan (interaksi); hewan pulih besok pagi. Tetap beri pakan dan bersihkan kandang agar tidak kambuh."
+buy_price = 150
+sell_price = 40

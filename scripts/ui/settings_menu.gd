@@ -360,6 +360,7 @@ const GROUP_TITLES := {
 	"Lapangan": "Lapangan (seperti Stardew Valley)",
 	"Lompat": "Lompat (seperti Grand Bazaar)",
 	"Combat": "Combat, pegang senjata (seperti soulslike)",
+	"Menu": "Menu tas (gamepad)",
 }
 ## Lebar kolom halaman Kontrol (panel Pengaturan 560 px).
 const CONTROLS_LABEL_WIDTH := 190.0

@@ -6,6 +6,8 @@ const STUCK_PASS_SECONDS := 1.5
 
 var definition: Dictionary = {}
 var _service_menu: CanvasLayer
+## Hewan kabur yang ditawarkan di menu layanan "vet" (urutan = tombol tebus).
+var _redeem_list: Array = []
 var waypoint_radius := 2.0
 var _offscreen := false
 var _geode_ui: AcceptDialog
@@ -25,7 +27,7 @@ func _exit_tree() -> void:
 
 func _service_available() -> bool:
 	var service := str(definition.get("service", ""))
-	if service not in ["carpenter", "shipping", "livestock", "blacksmith", "shop"]:
+	if service not in ["carpenter", "shipping", "livestock", "blacksmith", "shop", "vet"]:
 		return false
 	var rules: Dictionary = definition.get("service_rules", {})
 	var activities: Array = rules.get("available_activities", [])
@@ -219,6 +221,10 @@ func interact(player: Player = null) -> void:
 	elif NPCHousehold.roommate_available(player.data, npc_id):
 		_service_menu.household_action = "Undang sebagai Teman Sekamar"
 	_service_menu.letter_available = not NPCEventService.pending_letter(player.data, npc_id).is_empty()
+	if str(definition.get("service", "")) == "vet":
+		_redeem_list = StructureManager.away_animals()
+		for entry in _redeem_list:
+			_service_menu.redeem_options.append({"label": "Tebus %s · %d G (%d hari)" % [entry.animal.name, entry.cost, entry.days_left]})
 	_service_menu.selected.connect(_choose_service.bind(player))
 	Coop.ui_parent(player).add_child(_service_menu)
 
@@ -237,7 +243,11 @@ func _choose_service(index: int, player: Player) -> void:
 	_service_menu = null
 	if player == null:
 		return
-	if index == ServiceMenu.TALK:
+	if index >= ServiceMenu.REDEEM_BASE:
+		var entry: Dictionary = _redeem_list[index - ServiceMenu.REDEEM_BASE] if index - ServiceMenu.REDEEM_BASE < _redeem_list.size() else {}
+		if not entry.is_empty():
+			Notify.say(StructureManager.redeem_animal(int(entry.uid), int(entry.animal.id)).message)
+	elif index == ServiceMenu.TALK:
 		_open_resident_dialog(player)
 	elif index == ServiceMenu.ROMANCE:
 		var status := NPCSocialService.relationship_action(player.data, npc_id)
@@ -304,7 +314,15 @@ func _choose_service(index: int, player: Player) -> void:
 				_geode_ui.upgrade_requested.connect(_open_upgrade.bind(player))
 			else:
 				_open_upgrade(player)
-		elif service == "shop":
+		elif service == "shop" and definition.service_rules.has("shop_data"):
+			# Toko bangunan (mis. Warteg Bahari): menu & UI sama dengan counter-nya.
+			var menu_path := str(definition.service_rules.get("menu_scene", ""))
+			_service_menu = load(menu_path).instantiate() if not menu_path.is_empty() else ShopUI.new()
+			_service_menu.player = player
+			_service_menu.shop_data = load(str(definition.service_rules.shop_data))
+			_service_menu.tree_exited.connect(func(): _service_menu = null)
+			Coop.ui_parent(player).add_child(_service_menu)
+		elif service == "shop" or service == "vet":
 			var stock := ShopData.new()
 			stock.shop_id = npc_id
 			stock.shop_name = str(definition.service_rules.get("name", "Warung"))

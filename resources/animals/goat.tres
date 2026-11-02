@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AnimalSpeciesData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/animal_species_data.gd" id="1_species"]
+
+[resource]
+script = ExtResource("1_species")
+species_id = "goat"
+display_name = "Kambing"
+sort_order = 3
+price = 3200
+home = "barn"
+interval = 2
+product = "goat_milk"
+tool = "milk_pail"
+large_product = true
+breed_days = 5
+hatch_egg = ""
+hatch_days = 0
+description = "Diperah setiap 2 hari dengan Ember Susu."

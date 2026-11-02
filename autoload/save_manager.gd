@@ -263,7 +263,7 @@ func _valid_player(player: Variant) -> bool:
 		return false
 	if not player.get("birthday_season", "") is String or not _valid_numbers(player, ["birthday_day"]):
 		return false
-	if not player.get("pet_id", "") is String or not player.get("pet_name", "") is String or not _valid_numbers(player, ["pet_affection", "pet_day"]):
+	if not player.get("pet_id", "") is String or not player.get("pet_name", "") is String or not _valid_numbers(player, ["pet_affection", "pet_day", "pet_fed_day"]):
 		return false
 	var order: Variant = player.get("tool_order", {})
 	if not order is Dictionary:
@@ -371,6 +371,7 @@ func _build_save_data() -> Dictionary:
 			"pet_name": GameState.p1().pet_name,
 			"pet_affection": GameState.p1().pet_affection,
 			"pet_day": GameState.p1().pet_day,
+			"pet_fed_day": GameState.p1().pet_fed_day,
 			"money": max(0, GameState.money),
 			"stamina": clampi(GameState.p1().stamina, 0, GameState.p1().max_stamina),
 			"hp": clampi(GameState.p1().hp, 1, GameState.p1().max_hp),

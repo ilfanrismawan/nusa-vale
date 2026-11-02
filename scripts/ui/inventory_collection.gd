@@ -103,9 +103,9 @@ func _show_detail(item: ItemData) -> void:
 	var info: Resource = _metadata.get(item.item_id)
 	var text := item.description
 	if info is FishData:
-		text = "Lokasi: %s | %02d:00-%02d:00" % [", ".join(info.locations), info.min_hour, info.max_hour]
+		text = "Lokasi: %s | %02d:00-%02d:00" % [_pretty(info.locations), info.min_hour, info.max_hour]
 	elif info is ForageData:
-		text = "Lokasi: %s | %s" % [", ".join(info.locations), "Semua musim" if info.seasons.is_empty() else ", ".join(info.seasons)]
+		text = "Lokasi: %s | %s" % [_pretty(info.locations), "Semua musim" if info.seasons.is_empty() else _pretty(info.seasons)]
 	_detail.text = "%s - %d G\n%s" % [item.display_name, item.sell_price, text]
 
 func _on_discovered(_id: String) -> void:
@@ -119,3 +119,10 @@ var _refresh_pending := false
 func _refresh_discoveries() -> void:
 	_refresh_pending = false
 	refresh()
+
+## ID data (mis. town_river) jadi teks tampilan (Town River).
+func _pretty(ids: PackedStringArray) -> String:
+	var names := PackedStringArray()
+	for id in ids:
+		names.append(id.capitalize())
+	return ", ".join(names)

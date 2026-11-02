@@ -130,6 +130,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			HorrorWard.ignite(player, player.data.hotbar_page * 8 + current_index)
 			get_viewport().set_input_as_handled()
 			return
+		# Seruling Kuda (GDD 4.10.10): kuda berlari datang ke sisi pemain.
+		if current_item != null and current_item.item_id == HorseFlute.ITEM_ID:
+			HorseFlute.play(player)
+			get_viewport().set_input_as_handled()
+			return
 		# Buku riset Perpustakaan (GDD 13.1): dibaca untuk EXP role.
 		if current_item != null and not current_item.skill_book_role.is_empty():
 			SkillSystem.read_book(player.data, player.data.hotbar_page * 8 + current_index)

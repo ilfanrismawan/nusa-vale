@@ -69,6 +69,12 @@ func _gui_input(event: InputEvent) -> void:
 			accept_event()
 
 
+## Gamepad: ubah jumlah langsung (kiri/kanan 1, atas/bawah BIG_STEP).
+func nudge(delta: int) -> void:
+	amount = clampi(amount + delta, 1, max_amount)
+	_refresh()
+
+
 func _step(direction: int) -> void:
 	var step := BIG_STEP if Input.is_key_pressed(KEY_SHIFT) else 1
 	amount = clampi(amount + direction * step, 1, max_amount)

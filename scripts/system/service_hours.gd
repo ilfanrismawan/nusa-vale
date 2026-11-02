@@ -15,7 +15,7 @@ const SERVICES := {
 	"library": {"name": "Perpustakaan", "open": 9, "close": 18, "closed_days": ["monday"]},
 	"clinic": {"name": "Klinik Ratih", "open": 8, "close": 16, "closed_days": ["wednesday"]},
 	"warung": {"name": "Warung Rasa Nusa", "open": 7, "close": 21, "closed_days": []},
-	"warteg": {"name": "Warteg Bahari", "open": 6, "close": 22, "closed_days": []},
+	"warteg": {"name": "Warteg Bahari", "open": 8, "close": 20, "closed_days": []},
 	"school": {"name": "Sekolah", "open": 7, "close": 17, "closed_days": ["sunday"]},
 	"university": {"name": "Universitas", "open": 7, "close": 21, "closed_days": []},
 	## Rumah warga (termasuk rumah & bengkel Bima): bisa bertamu 07.00–21.00.

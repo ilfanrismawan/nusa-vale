@@ -1,5 +1,5 @@
 extends Node2D
-## Penanda status hewan di atas kepala (GDD 4.10.4 "Cek pagi"): gelembung makan, elus, sikat, dan hasil siap.
+## Penanda status hewan di atas kepala (GDD 4.10.4 "Cek pagi"): gelembung sakit, makan, elus, sikat, dan hasil siap.
 ## Dipakai ternak (ranch_animal.gd), kuda di dunia (horse_actor.gd), dan peliharaan (pet_actor.gd).
 ## - Belum dirawat: gelembung terang dan memantul, selalu terlihat.
 ## - Sudah dirawat: gelembung abu-abu bercentang, hanya terlihat saat pemain berdiri dekat,
@@ -13,7 +13,7 @@ const SHEET_PATH := "res://assets/ranch/animal_status.png"
 static var _sheet: Texture2D
 const CELL := 12
 ## Kolom di sheet animal_status.png; baris 0 = belum, baris 1 = sudah.
-const COLUMNS := {"feed": 0, "pet": 1, "brush": 2, "product": 3}
+const COLUMNS := {"feed": 0, "pet": 1, "brush": 2, "product": 3, "sick": 4}
 const SPACING := 13.0
 const NEAR_DISTANCE := 40.0
 const POLL_INTERVAL := 0.25

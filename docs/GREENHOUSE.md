@@ -75,6 +75,9 @@ Kebutuhan bahan dapat diubah langsung di resource proyek.
 * `Floor`, `Grass`, `Walls`, `Vines` (sulur di rangka kaca, z di atas `Walls`) memakai
   `greenhouse_interior_tileset.tres`; dekorasi di node `Decor` (y-sort), collision dinding di
   `Bounds`, pintu keluar di `Exit`.
+* Akses tanam memakai `FarmManager.greenhouse_open()` = `UnlockManager.is_unlocked("greenhouse")`,
+  syarat yang sama dengan pintu. Cheat debug "Buka Semua Area" ikut membuka petak; untuk menguji
+  dengan menjalankan scene interior langsung (F6), buka unlock itu dulu lewat cheat (F1).
 * Urutan gambar tanah dikunci lewat z: `BaseLayerGround` -4 < `SoilLayer` -3 < `WateredLayer` -2
   < `Crop` 0 (root y-sort tidak menjamin urutan layer ber-z sama). Tanah dicangkul kosong kembali
   ke tanah dasar keesokan harinya (aturan FarmManager yang sama dengan farm).

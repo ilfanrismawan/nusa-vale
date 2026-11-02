@@ -1,7 +1,7 @@
 extends Resource
 
 @export var title := "Ranch"
-@export var vendor_name := "Rian"
+@export var vendor_name := "Eep"
 @export_multiline var greeting := "Halo! Pilih teman baru untuk peternakanmu."
 @export var vendor_art: Texture2D
 @export var species_order: PackedStringArray = []

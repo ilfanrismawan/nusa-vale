@@ -9,6 +9,7 @@ var _chest_open := false
 var _quiet_until_ms := 0
 var _lid_tween: Tween
 @onready var _coop_status: Label = $CoopStatus
+@onready var _animal_door: Sprite2D = $AnimalDoor
 @onready var _egg_icon: Sprite2D = $EggIcon
 @onready var _particles: CPUParticles2D = $ProcessingParticles
 @onready var _light: PointLight2D = $ProcessingLight
@@ -59,6 +60,16 @@ var _bubble_departure_age := 0.0
 var _bubble_exit_position := Vector2.ZERO
 var _bubble_origin := Vector2.ZERO
 var _icon_base_scale := Vector2.ONE
+
+@export_group("Kandang Ternak/Ayam")
+## Potongan sprite tiap tier [Barn, Big, Deluxe] (varian normal saja, tanpa salju/rangka).
+@export var barn_regions: Array[Rect2] = [Rect2(0, 0, 96, 96), Rect2(0, 0, 104, 96), Rect2(0, 0, 136, 128)]
+@export var coop_regions: Array[Rect2] = [Rect2(0, 0, 80, 80), Rect2(0, 0, 98, 96), Rect2(0, 0, 132, 144)]
+## Titik tengah-bawah pintu hewan kecil per tier, dalam piksel potongan sprite di atas.
+@export var barn_door_points: Array[Vector2] = [Vector2(19, 79), Vector2(23, 95), Vector2(34, 127)]
+@export var coop_door_points: Array[Vector2] = [Vector2(30, 80), Vector2(51, 95), Vector2(116, 140)]
+const DOOR_CLOSED := Rect2(5, 2, 17, 14)
+const DOOR_OPEN := Rect2(5, 18, 17, 14)
 
 func _ready() -> void:
 	set_meta("player_interaction", true)
@@ -139,6 +150,7 @@ func refresh() -> void:
 	_sprite.scale = Vector2.ONE
 	_sprite.modulate = Color(1, 1, 1, 0.45) if record.item == "wooden_gate" and record.open else Color.WHITE
 	_coop_status.visible = record.item in StructureManager.RANCHES or record.item == "silo"
+	_animal_door.visible = record.item in StructureManager.RANCHES
 	_egg_icon.visible = false
 	if record.item in StructureManager.RANCHES:
 		_sprite.position.y = -16
@@ -148,15 +160,27 @@ func refresh() -> void:
 		for animal in animals.chickens:
 			fed += 1 if int(animal.fed_day) == DayCycle.current_day else 0
 			ready += 1 if not str(animal.ready).is_empty() else 0
-		_coop_status.text = "Makan %d/%d · Siap %d%s" % [fed, animals.chickens.size(), ready, " · Kotor!" if int(animals.dirt) >= 3 else ""]
+		var sick := 0
+		for animal in animals.chickens:
+			sick += 1 if animal.sick else 0
+		_coop_status.text = "Makan %d/%d · Siap %d%s%s" % [fed, animals.chickens.size(), ready, " · Sakit %d" % sick if sick > 0 else "", " · Kotor!" if int(animals.dirt) >= 3 else ""]
 		_egg_icon.visible = record.item == "chicken_coop" and ready > 0
-		if int(animals.tier) > 0:
-			var folder := "Chicken Coop" if record.item == "chicken_coop" else "Barn"
-			var prefix := "Big" if int(animals.tier) == 1 else "Deluxe"
+		var tier := clampi(int(animals.tier), 0, 2)
+		var coop: bool = record.item == "chicken_coop"
+		var region: Rect2 = (coop_regions if coop else barn_regions)[tier]
+		if tier > 0:
+			var folder := "Chicken Coop" if coop else "Barn"
+			var prefix := "Big" if tier == 1 else "Deluxe"
 			_sprite.texture = load("res://assets/farm_rpg/objects/exterior/Houses/Farm Buildings/%s/%s %s.png" % [folder, prefix, folder])
 			_sprite.region_enabled = true
-			_sprite.region_rect = Rect2(0, 0, _sprite.texture.get_height(), _sprite.texture.get_height())
-			_sprite.scale = Vector2.ONE * (80.0 if record.item == "chicken_coop" else 96.0) / _sprite.region_rect.size.x
+			_sprite.region_rect = region
+			_sprite.scale = Vector2.ONE * (80.0 if coop else 96.0) / region.size.x
+			# Dasar sprite tetap di tepi bawah tapak, berapa pun tinggi potongannya.
+			_sprite.position.y = item.placement_size.y * 8 - region.size.y * _sprite.scale.y * 0.5
+		var point: Vector2 = (coop_door_points if coop else barn_door_points)[tier]
+		_animal_door.position = _sprite.position + (point - region.size * 0.5) * _sprite.scale
+		_animal_door.scale = _sprite.scale
+		_animal_door.region_rect = DOOR_OPEN if animals.door else DOOR_CLOSED
 	if record.item == "silo":
 		_sprite.position.y = -32
 		_coop_status.text = "Jerami %d/240" % int(record.get("hay", 0))
@@ -192,6 +216,10 @@ func refresh() -> void:
 		_sprite.position.y = (item.placement_size.y * 16 - item.icon.get_height()) / 2.0
 	# Lampu malam langsung menyala saat scene dimuat (tidak menunggu _process setelah transisi).
 	_animate_art(str(record.item))
+
+## Posisi dunia pintu hewan kecil (kaki pemain berdiri di depannya untuk membuka/menutup).
+func animal_door_position() -> Vector2:
+	return _animal_door.global_position
 
 func _art(item_id: String) -> Dictionary:
 	return StructureManager.DECOR.get(item_id, StructureManager.WORKSHOPS.get(item_id, {}))

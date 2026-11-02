@@ -109,6 +109,18 @@ func _on_mouse_exited() -> void:
 	slot_unhovered.emit(slot_index, self)
 
 
+## Kursor gamepad di slot ini: tampilannya sama dengan hover mouse, tanpa sinyal hover.
+func set_pad_hover(on: bool) -> void:
+	if _is_hovered == on:
+		return
+	_is_hovered = on
+	_update_visuals()
+	var tw := create_tween()
+	tw.set_ease(Tween.EASE_OUT)
+	tw.set_trans(Tween.TRANS_BACK if on else Tween.TRANS_CUBIC)
+	tw.tween_property(self, "scale", Vector2(1.08, 1.08) if on else Vector2.ONE, 0.08)
+
+
 ## Denyut singkat saat item bertambah.
 func pulse() -> void:
 	var rest := Vector2(1.08, 1.08) if _is_hovered else Vector2.ONE

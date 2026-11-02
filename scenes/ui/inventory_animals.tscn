@@ -1,0 +1,490 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/inventory_animals.gd" id="script"]
+[ext_resource type="Theme" uid="uid://cl73ou0e04t25" path="res://resources/ui/inventory_book_theme.tres" id="theme"]
+[ext_resource type="FontFile" uid="uid://saysw4lcglb8" path="res://assets/fonts/m5x7.ttf" id="font"]
+[ext_resource type="Texture2D" path="res://resources/ui/icon_tab_heart.tres" id="heart"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory_side_tab_normal.svg" id="side_normal"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory_side_tab_active.svg" id="side_active"]
+[ext_resource type="Texture2D" path="res://resources/ui/icon_tab_book.tres" id="filter_all"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_feed_trough.tres" id="filter_todo"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_cow_milk.tres" id="filter_ready"]
+[ext_resource type="Texture2D" path="res://assets/ui/inventory_tab_animals.svg" id="filter_pet"]
+[ext_resource type="Texture2D" path="res://assets/farm_rpg/icons/Food Icons/Chicken Egg.png" id="filter_coop"]
+[ext_resource type="Texture2D" path="res://resources/icons/icon_barn.tres" id="filter_barn"]
+
+[sub_resource type="StyleBoxFlat" id="PortraitFrame"]
+bg_color = Color(0.96, 0.9, 0.76, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.68, 0.5, 0.35, 0.9)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[node name="InventoryAnimals" type="PanelContainer"]
+custom_minimum_size = Vector2(420, 224)
+theme = ExtResource("theme")
+script = ExtResource("script")
+heart_icon = ExtResource("heart")
+
+[node name="Pages" type="Control" parent="."]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Left" type="Control" parent="Pages"]
+clip_contents = true
+layout_mode = 0
+offset_left = 4.0
+offset_right = 200.0
+offset_bottom = 224.0
+mouse_filter = 2
+
+[node name="Title" type="Label" parent="Pages/Left"]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 4.0
+offset_top = 1.0
+offset_right = 192.0
+offset_bottom = 17.0
+theme_override_colors/font_color = Color(0.25, 0.14, 0.08, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "Hewan 0 · belum dirawat 0"
+clip_text = true
+
+[node name="List" type="VBoxContainer" parent="Pages/Left"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 4.0
+offset_top = 20.0
+offset_right = 192.0
+offset_bottom = 202.0
+mouse_filter = 2
+theme_override_constants/separation = 1
+
+[node name="Empty" type="Label" parent="Pages/Left"]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 8.0
+offset_top = 24.0
+offset_right = 188.0
+offset_bottom = 120.0
+theme_override_colors/font_color = Color(0.45, 0.31, 0.2, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "Belum ada hewan."
+visible = false
+autowrap_mode = 3
+
+[node name="Pager" type="HBoxContainer" parent="Pages/Left"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 52.0
+offset_top = 205.0
+offset_right = 144.0
+offset_bottom = 221.0
+visible = false
+mouse_filter = 2
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="PrevPage" type="Button" parent="Pages/Left/Pager"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+tooltip_text = "Halaman sebelumnya"
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "<"
+
+[node name="PageLabel" type="Label" parent="Pages/Left/Pager"]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.31, 0.2, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "1/1"
+
+[node name="NextPage" type="Button" parent="Pages/Left/Pager"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+tooltip_text = "Halaman berikutnya"
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = ">"
+
+[node name="Right" type="Control" parent="Pages"]
+clip_contents = true
+layout_mode = 0
+offset_left = 221.0
+offset_right = 421.0
+offset_bottom = 224.0
+mouse_filter = 2
+
+[node name="Detail" type="Control" parent="Pages/Right"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 200.0
+offset_bottom = 224.0
+mouse_filter = 2
+
+[node name="PortraitFrame" type="Panel" parent="Pages/Right/Detail"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = 40.0
+offset_bottom = 38.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("PortraitFrame")
+
+[node name="Portrait" type="TextureRect" parent="Pages/Right/Detail/PortraitFrame"]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 34.0
+offset_bottom = 34.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AnimalName" type="Label" parent="Pages/Right/Detail"]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 44.0
+offset_top = 1.0
+offset_right = 196.0
+offset_bottom = 17.0
+theme_override_colors/font_color = Color(0.25, 0.14, 0.08, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "Nama"
+clip_text = true
+
+[node name="Species" type="Label" parent="Pages/Right/Detail"]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 44.0
+offset_top = 17.0
+offset_right = 196.0
+offset_bottom = 33.0
+theme_override_colors/font_color = Color(0.45, 0.31, 0.2, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "Jenis · Kandang"
+clip_text = true
+
+[node name="Stage" type="Label" parent="Pages/Right/Detail"]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 4.0
+offset_top = 40.0
+offset_right = 196.0
+offset_bottom = 56.0
+theme_override_colors/font_color = Color(0.45, 0.31, 0.2, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "Nyaman"
+clip_text = true
+
+[node name="Hearts" type="HBoxContainer" parent="Pages/Right/Detail"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 4.0
+offset_top = 59.0
+offset_right = 74.0
+offset_bottom = 71.0
+mouse_filter = 2
+theme_override_constants/separation = 2
+[node name="Heart1" type="TextureRect" parent="Pages/Right/Detail/Hearts"]
+texture_filter = 1
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("heart")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Heart2" type="TextureRect" parent="Pages/Right/Detail/Hearts"]
+texture_filter = 1
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("heart")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Heart3" type="TextureRect" parent="Pages/Right/Detail/Hearts"]
+texture_filter = 1
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("heart")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Heart4" type="TextureRect" parent="Pages/Right/Detail/Hearts"]
+texture_filter = 1
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("heart")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Heart5" type="TextureRect" parent="Pages/Right/Detail/Hearts"]
+texture_filter = 1
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("heart")
+expand_mode = 1
+stretch_mode = 5
+
+
+[node name="Affection" type="Label" parent="Pages/Right/Detail"]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 78.0
+offset_top = 57.0
+offset_right = 196.0
+offset_bottom = 73.0
+theme_override_colors/font_color = Color(0.45, 0.31, 0.2, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "0/100"
+
+
+[node name="Needs" type="HBoxContainer" parent="Pages/Right/Detail"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 4.0
+offset_top = 76.0
+offset_right = 196.0
+offset_bottom = 92.0
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Info" type="VBoxContainer" parent="Pages/Right/Detail"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 4.0
+offset_top = 96.0
+offset_right = 196.0
+offset_bottom = 160.0
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Description" type="Label" parent="Pages/Right/Detail"]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 4.0
+offset_top = 162.0
+offset_right = 196.0
+offset_bottom = 206.0
+theme_override_colors/font_color = Color(0.25, 0.14, 0.08, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "Deskripsi jenis."
+theme_override_constants/line_spacing = -3
+autowrap_mode = 3
+clip_text = true
+
+[node name="Hint" type="Label" parent="Pages/Right/Detail"]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 4.0
+offset_top = 207.0
+offset_right = 196.0
+offset_bottom = 223.0
+theme_override_colors/font_color = Color(0.45, 0.31, 0.2, 1)
+theme_override_fonts/font = ExtResource("font")
+theme_override_font_sizes/font_size = 16
+text = "Rawat langsung di hewan/kandang"
+clip_text = true
+
+[node name="FilterTabsContainer" type="Control" parent="Pages"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -30.0
+offset_top = 14.0
+offset_right = 2.0
+offset_bottom = 210.0
+mouse_filter = 2
+
+[node name="FilterAll" type="TextureButton" parent="Pages/FilterTabsContainer"]
+texture_filter = 1
+layout_mode = 0
+offset_top = 0.0
+offset_right = 32.0
+offset_bottom = 28.0
+tooltip_text = "Semua hewan"
+toggle_mode = true
+button_pressed = true
+texture_normal = ExtResource("side_normal")
+texture_pressed = ExtResource("side_active")
+texture_hover = ExtResource("side_active")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="Pages/FilterTabsContainer/FilterAll"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 7.0
+offset_top = 4.0
+offset_right = 27.0
+offset_bottom = 24.0
+mouse_filter = 2
+texture = ExtResource("filter_all")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="FilterTodo" type="TextureButton" parent="Pages/FilterTabsContainer"]
+texture_filter = 1
+layout_mode = 0
+offset_top = 28.0
+offset_right = 32.0
+offset_bottom = 56.0
+tooltip_text = "Belum dirawat hari ini (makan, elus, sikat, obat)"
+toggle_mode = true
+button_pressed = false
+texture_normal = ExtResource("side_normal")
+texture_pressed = ExtResource("side_active")
+texture_hover = ExtResource("side_active")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="Pages/FilterTabsContainer/FilterTodo"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 7.0
+offset_top = 4.0
+offset_right = 27.0
+offset_bottom = 24.0
+mouse_filter = 2
+texture = ExtResource("filter_todo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="FilterReady" type="TextureButton" parent="Pages/FilterTabsContainer"]
+texture_filter = 1
+layout_mode = 0
+offset_top = 56.0
+offset_right = 32.0
+offset_bottom = 84.0
+tooltip_text = "Hasil siap diambil"
+toggle_mode = true
+button_pressed = false
+texture_normal = ExtResource("side_normal")
+texture_pressed = ExtResource("side_active")
+texture_hover = ExtResource("side_active")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="Pages/FilterTabsContainer/FilterReady"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 7.0
+offset_top = 4.0
+offset_right = 27.0
+offset_bottom = 24.0
+mouse_filter = 2
+texture = ExtResource("filter_ready")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="FilterPet" type="TextureButton" parent="Pages/FilterTabsContainer"]
+texture_filter = 1
+layout_mode = 0
+offset_top = 84.0
+offset_right = 32.0
+offset_bottom = 112.0
+tooltip_text = "Peliharaan"
+toggle_mode = true
+button_pressed = false
+texture_normal = ExtResource("side_normal")
+texture_pressed = ExtResource("side_active")
+texture_hover = ExtResource("side_active")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="Pages/FilterTabsContainer/FilterPet"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 7.0
+offset_top = 4.0
+offset_right = 27.0
+offset_bottom = 24.0
+mouse_filter = 2
+texture = ExtResource("filter_pet")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="FilterCoop" type="TextureButton" parent="Pages/FilterTabsContainer"]
+texture_filter = 1
+layout_mode = 0
+offset_top = 112.0
+offset_right = 32.0
+offset_bottom = 140.0
+tooltip_text = "Kandang Unggas"
+toggle_mode = true
+button_pressed = false
+texture_normal = ExtResource("side_normal")
+texture_pressed = ExtResource("side_active")
+texture_hover = ExtResource("side_active")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="Pages/FilterTabsContainer/FilterCoop"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 7.0
+offset_top = 4.0
+offset_right = 27.0
+offset_bottom = 24.0
+mouse_filter = 2
+texture = ExtResource("filter_coop")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="FilterBarn" type="TextureButton" parent="Pages/FilterTabsContainer"]
+texture_filter = 1
+layout_mode = 0
+offset_top = 140.0
+offset_right = 32.0
+offset_bottom = 168.0
+tooltip_text = "Barn"
+toggle_mode = true
+button_pressed = false
+texture_normal = ExtResource("side_normal")
+texture_pressed = ExtResource("side_active")
+texture_hover = ExtResource("side_active")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Icon" type="TextureRect" parent="Pages/FilterTabsContainer/FilterBarn"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 7.0
+offset_top = 4.0
+offset_right = 27.0
+offset_bottom = 24.0
+mouse_filter = 2
+texture = ExtResource("filter_barn")
+expand_mode = 1
+stretch_mode = 5

@@ -2,11 +2,11 @@
 
 [ext_resource type="Script" uid="uid://cby1yv2pjlt36" path="res://scripts/world/greenhouse_interior.gd" id="1_su7yl"]
 [ext_resource type="Shader" uid="uid://fyle87ckn5yj" path="res://shaders/floor_wear.gdshader" id="2_8ibw7"]
-[ext_resource type="TileSet" path="res://resources/greenhouse/greenhouse_interior_tileset.tres" id="3_me3hc"]
+[ext_resource type="TileSet" uid="uid://cy2odorco10pl" path="res://resources/greenhouse/greenhouse_interior_tileset.tres" id="3_me3hc"]
 [ext_resource type="Material" uid="uid://bob2uie4q2xql" path="res://resources/grass_detail_material.tres" id="4_lm46e"]
 [ext_resource type="Shader" uid="uid://blhq3t4c1sfx3" path="res://shaders/glass_sheen.gdshader" id="5_73ejt"]
 [ext_resource type="Material" path="res://resources/soil_detail_material.tres" id="6_wlpvs"]
-[ext_resource type="TileSet" path="res://resources/greenhouse/greenhouse_plot_tileset.tres" id="7_cv23h"]
+[ext_resource type="TileSet" uid="uid://bq53d01xcbh8x" path="res://resources/greenhouse/greenhouse_plot_tileset.tres" id="7_cv23h"]
 [ext_resource type="Texture2D" uid="uid://cddykmwt4lbf3" path="res://assets/farm_rpg/tileset/ext/Tilled Soil and wet soil.png" id="8_fymo3"]
 [ext_resource type="Texture2D" uid="uid://bktm3rtf75epg" path="res://assets/farm_rpg/objects/exterior/Water fountain.png" id="9_pmbwr"]
 [ext_resource type="Material" path="res://resources/greenhouse/plant_sway_material.tres" id="10_f6mfe"]
@@ -230,7 +230,7 @@ tile_set = ExtResource("3_me3hc")
 z_index = -4
 material = ExtResource("6_wlpvs")
 position = Vector2(-159648, -159776)
-tile_map_data = PackedByteArray("AAAQJxAnAAAAAAMAAAAQJxEnAAAAAAMAAAAQJxInAAAAAAMAAAAQJxMnAAAAAAMAAAARJxAnAAAAAAMAAAARJxEnAAAAAAMAAAARJxInAAAAAAMAAAARJxMnAAAAAAMAAAASJxAnAAAAAAMAAAASJxEnAAAAAAMAAAASJxInAAAAAAMAAAASJxMnAAAAAAMAAAATJxAnAAAAAAMAAAATJxEnAAAAAAMAAAATJxInAAAAAAMAAAATJxMnAAAAAAMAAAAUJxAnAAAAAAMAAAAUJxEnAAAAAAMAAAAUJxInAAAAAAMAAAAUJxMnAAAAAAMAAAAVJxAnAAAAAAMAAAAVJxEnAAAAAAMAAAAVJxInAAAAAAMAAAAVJxMnAAAAAAMAAAAWJxAnAAAAAAMAAAAWJxEnAAAAAAMAAAAWJxInAAAAAAMAAAAWJxMnAAAAAAMAAAAXJxAnAAAAAAMAAAAXJxEnAAAAAAMAAAAXJxInAAAAAAMAAAAXJxMnAAAAAAMAAAANJw4nAAABAAMAAAANJxEnAAABAAMAAAANJxQnAAABAAMAAAANJxcnAAABAAMAAAAaJw4nAAABAAMAAAAaJxEnAAABAAMAAAAaJxQnAAABAAMAAAAaJxcnAAABAAMAAAA=")
+tile_map_data = PackedByteArray("AAAQJxAnAAAAAAMAAAAQJxEnAAAAAAMAAAAQJxInAAAAAAMAAAAQJxMnAAAAAAMAAAARJxAnAAAAAAMAAAARJxInAAAAAAMAAAARJxMnAAAAAAMAAAASJxAnAAAAAAMAAAASJxEnAAAAAAMAAAASJxInAAAAAAMAAAASJxMnAAAAAAMAAAATJxAnAAAAAAMAAAATJxEnAAAAAAMAAAATJxInAAAAAAMAAAATJxMnAAAAAAMAAAAUJxAnAAAAAAMAAAAUJxEnAAAAAAMAAAAUJxInAAAAAAMAAAAUJxMnAAAAAAMAAAAVJxAnAAAAAAMAAAAVJxEnAAAAAAMAAAAVJxInAAAAAAMAAAAVJxMnAAAAAAMAAAAWJxAnAAAAAAMAAAAWJxEnAAAAAAMAAAAWJxInAAAAAAMAAAAWJxMnAAAAAAMAAAAXJxAnAAAAAAMAAAAXJxEnAAAAAAMAAAAXJxInAAAAAAMAAAAXJxMnAAAAAAMAAAANJw4nAAABAAMAAAANJxEnAAABAAMAAAANJxQnAAABAAMAAAANJxcnAAABAAMAAAAaJw4nAAABAAMAAAAaJxEnAAABAAMAAAAaJxQnAAABAAMAAAAaJxcnAAABAAMAAAARJxEnAAAAAAMAAAA=")
 tile_set = ExtResource("7_cv23h")
 
 [node name="SoilLayer" type="TileMapLayer" parent="." unique_id=1940581389]

@@ -202,10 +202,12 @@ function Invoke-GodotCheck([string]$Label, [string[]]$Arguments, [bool]$Expected
     if ($Arguments -contains 'tests/wildlife_regression.tscn' -and -not ($output -match 'WILDLIFE REGRESSION COMPLETE: failures=0')) { throw 'Wildlife regression tidak selesai' }
     if ($Arguments -contains 'tests/npc_homes_regression.tscn' -and -not ($output -match 'NPC HOMES COMPLETE: failures=0')) { throw 'NPC homes regression tidak selesai' }
     if ($Arguments -contains 'tests/campus_regression.tscn' -and -not ($output -match 'CAMPUS REGRESSION COMPLETE: failures=0')) { throw 'Campus regression tidak selesai' }
+    if ($Arguments -contains 'tests/animal_book_regression.tscn' -and -not ($output -match 'ANIMAL BOOK REGRESSION COMPLETE: failures=0')) { throw 'Animal book regression tidak selesai' }
     if ($Arguments -contains 'tests/pet_regression.tscn' -and -not ($output -match 'PET REGRESSION COMPLETE: failures=0')) { throw 'Pet regression tidak selesai' }
     if ($Arguments -contains 'tests/ranch_interior_regression.tscn' -and -not ($output -match 'RANCH INTERIOR REGRESSION COMPLETE: failures=0')) {
         throw 'Ranch interior regression tidak menyelesaikan semua pemeriksaan'
     }
+    if ($Arguments -contains 'tests/ranch_neglect_regression.tscn' -and -not ($output -match 'RANCH NEGLECT REGRESSION COMPLETE: failures=0')) { throw 'Ranch neglect regression tidak selesai' }
     if ($Arguments -contains 'tests/production_audit.tscn' -and -not ($output -match 'PRODUCTION AUDIT COMPLETE: failures=0')) { throw 'Production audit tidak selesai' }
     if ($Arguments -contains 'tests/doors_livestock_shop_regression.tscn' -and -not ($output -match 'DOORS LIVESTOCK SHOP REGRESSION COMPLETE: failures=0')) { throw 'Doors/livestock shop regression tidak selesai' }
 }
@@ -250,6 +252,7 @@ try {
     Invoke-GodotCheck 'Book paper bounds and pagination without scrolling' @('tests/inventory_book_layout_regression.tscn')
     Invoke-GodotCheck 'Inventory controls tab' @('tests/inventory_controls_regression.tscn')
     Invoke-GodotCheck 'Gamepad inventory navigation and input bindings' @('tests/gamepad_input_regression.tscn')
+    Invoke-GodotCheck 'Gamepad bag slot cursor and drop dialog' @('tests/inventory_gamepad_regression.tscn')
     Invoke-GodotCheck 'Crafting recipes and transactions' @('tests/crafting_regression.tscn')
     Invoke-GodotCheck 'Combat HP, weapons, enemies and defeat' @('tests/combat_regression.tscn')
     Invoke-GodotCheck 'Dungeon shapes, editor zones and reachable routes' @('tests/dungeon_layout_regression.tscn')
@@ -265,7 +268,9 @@ try {
     Invoke-GodotCheck 'Ranch care, production, grazing, upgrades and persistence' @('tests/ranch_regression.tscn')
     Invoke-GodotCheck 'Ranch walking animals, physical grazing and care UI' @('tests/ranch_world_regression.tscn')
     Invoke-GodotCheck 'Ranch interiors, solo transitions and building-specific co-op worlds' @('tests/ranch_interior_regression.tscn')
+    Invoke-GodotCheck 'Ranch sickness, medicine, runaways to Rian and death' @('tests/ranch_neglect_regression.tscn')
     Invoke-GodotCheck 'Pet on the farm by day, indoors at night, daily petting and persistence' @('tests/pet_regression.tscn')
+    Invoke-GodotCheck 'Animal species resources and Animals book tab' @('tests/animal_book_regression.tscn')
     Invoke-GodotCheck 'Forest wildlife spawning, fleeing, hiding and day/night turnover' @('tests/wildlife_regression.tscn')
     Invoke-GodotCheck 'Residents live at home, walk to work and back, building hours' @('tests/npc_homes_regression.tscn')
     Invoke-GodotCheck 'School and university room functions, limits, card, exams, lab and save' @('tests/campus_regression.tscn')

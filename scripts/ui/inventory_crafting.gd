@@ -131,6 +131,26 @@ func _refresh_detail() -> void:
 	_message.tooltip_text = plan["message"]
 	_message.add_theme_color_override("font_color", GREEN if plan["ok"] else RED)
 
+## ── Gamepad (dipanggil tas) ─────────────────────────────────────────────────
+## D-pad memilih resep (lembar ikut berganti), A membuat, X ganti grup resep.
+func pad_move(step: Vector2i) -> void:
+	if _recipe_buttons.is_empty():
+		return
+	var index := 0
+	for i in _recipe_buttons.size():
+		if _recipe_buttons[i].get_meta("recipe") == _selected:
+			index = i
+	index = clampi(index + step.x + step.y * maxi(_list.columns, 1), 0, _recipe_buttons.size() - 1)
+	_select_recipe(_recipe_buttons[index].get_meta("recipe"))
+	%RecipePager.reveal(index)
+
+func pad_craft() -> void:
+	if _selected != null and not _craft_button.disabled:
+		_craft()
+
+func pad_next_group() -> void:
+	_select_group(GROUPS[(GROUPS.find(_group) + 1) % GROUPS.size()])
+
 func _craft() -> void:
 	var result := CraftingSystem.craft(inventory_ui.data, _selected, int(_quantity.value))
 	refresh()

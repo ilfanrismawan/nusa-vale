@@ -6,6 +6,7 @@
 [ext_resource type="Resource" path="res://resources/item_data/animal_brush.tres" id="animal_brush"]
 [ext_resource type="Resource" path="res://resources/item_data/milk_pail.tres" id="milk_pail"]
 [ext_resource type="Resource" path="res://resources/item_data/shears.tres" id="shears"]
+[ext_resource type="Resource" path="res://resources/item_data/horse_flute.tres" id="horse_flute"]
 
 [resource]
 script = ExtResource("shop")
@@ -14,4 +15,4 @@ shop_name = "Perlengkapan Ranch Eep"
 keeper_name = "Eep"
 greeting = "Pakan, jerami, dan alat perawatan untuk hewan di kebunmu."
 buys_items = false
-stock = Array[ExtResource("item")]([ExtResource("animal_feed"), ExtResource("hay"), ExtResource("animal_brush"), ExtResource("milk_pail"), ExtResource("shears")])
+stock = Array[ExtResource("item")]([ExtResource("animal_feed"), ExtResource("hay"), ExtResource("animal_brush"), ExtResource("milk_pail"), ExtResource("shears"), ExtResource("horse_flute")])

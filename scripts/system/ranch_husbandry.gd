@@ -1,26 +1,18 @@
 class_name RanchHusbandry
 extends RefCounted
 ## JSON-only extension of the original chicken save format.
-const SPECIES := {
-	"chicken": {"name": "Ayam", "price": 800, "interval": 1, "product": "chicken_egg", "tool": "", "home": "chicken_coop"},
-	"duck": {"name": "Bebek", "price": 1400, "interval": 2, "product": "duck_egg", "tool": "", "home": "chicken_coop"},
-	"cow": {"name": "Sapi", "price": 2500, "interval": 1, "product": "cow_milk", "tool": "milk_pail", "home": "barn"},
-	"goat": {"name": "Kambing", "price": 3200, "interval": 2, "product": "goat_milk", "tool": "milk_pail", "home": "barn"},
-	"sheep": {"name": "Domba", "price": 3000, "interval": 3, "product": "wool", "tool": "shears", "home": "barn"},
-	"buffalo": {"name": "Kerbau", "price": 4000, "interval": 2, "product": "buffalo_milk", "tool": "milk_pail", "home": "barn"},
-	## Tanpa alat di Barn = hasil siap diambil tangan dari hewannya. "large": false = tanpa ukuran besar
-	## (kualitas perak/emas tetap dari kasih sayang).
-	"pig": {"name": "Babi", "price": 6000, "interval": 3, "product": "truffle", "tool": "", "home": "barn", "large": false},
-	"ostrich": {"name": "Burung Unta", "price": 4500, "interval": 3, "product": "ostrich_egg", "tool": "", "home": "chicken_coop", "large": false},
-	## interval 0 = tidak menghasilkan komoditas harian (GDD 4.10.5).
-	"capybara": {"name": "Kapibara", "price": 2000, "interval": 0, "product": "", "tool": "", "home": "barn"},
-	"horse": {"name": "Kuda", "price": 5000, "interval": 0, "product": "", "tool": "", "home": "barn"},
-}
+## Definisi jenis ternak ada di resources/animals/<id>.tres (AnimalSpeciesData, bisa diatur di
+## Inspector). Tiga kamus di bawah dibangun dari sana dan tetap dipakai kode kandang, toko, dan save.
+const SPECIES_DIR := "res://resources/animals"
+## Data lengkap per jenis, urut sort_order: {species_id: AnimalSpeciesData}.
+static var species_data: Dictionary = _load_species()
+## {species_id: {"name", "price", "interval", "product", "tool", "home", "large"}}, urut sort_order.
+static var SPECIES: Dictionary = _species_info()
 const MAX_PRODUCTS := 999
 ## Lama hamil dalam hari terawat (GDD 4.10.9). Spesies tanpa entri tidak bisa dibiakkan.
-const BREED_DAYS := {"cow": 6, "goat": 5, "sheep": 5, "buffalo": 7, "capybara": 4, "pig": 5}
+static var BREED_DAYS: Dictionary = _breed_days()
 ## Lama inkubasi telur (hari) dan spesies yang menetas.
-const HATCH := {"chicken_egg": {"species": "chicken", "days": 3}, "duck_egg": {"species": "duck", "days": 5}, "ostrich_egg": {"species": "ostrich", "days": 7}}
+static var HATCH: Dictionary = _hatch()
 ## Hari sampai anak hewan dewasa; anak tidak berproduksi dan tidak bisa ditunggangi/dibiakkan.
 const GROW_DAYS := {"chicken_coop": 3, "barn": 5}
 const BREED_AFFECTION := 80
@@ -30,7 +22,50 @@ const HORSE_LIMIT := 1
 ## Warna kuda yang dijual Eep -> file Horse/<n>.png di PNG/14.x Horse. Kuda save lama ("white") = bay.
 const HORSE_COATS := {"bay": "1", "flaxen": "2", "cream": "3", "chestnut": "4", "pearl": "5"}
 const BASIC_VARIANTS := ["white", "brown"]
-const ANIMAL_DEFAULTS := {"species": "chicken", "brush_day": 0, "bad_days": 0, "sick": false, "progress": 0, "ready": "", "baby_days": 0, "pregnant": 0, "feather": 0}
+const ANIMAL_DEFAULTS := {"species": "chicken", "brush_day": 0, "bad_days": 0, "sick": false, "progress": 0, "ready": "", "baby_days": 0, "pregnant": 0, "feather": 0, "treated_day": 0}
+## Penelantaran (GDD 4.10.4, keputusan pemilik 2 November 2026): `bad_days` = hari berturut-turut
+## tanpa makan atau kandang penuh kotoran. 2 hari = sakit, CRITICAL_DAYS = kritis, LOSS_DAYS = hewan
+## hilang: kasih sayang ≥ RUNAWAY_AFFECTION kabur ke Rian (bisa ditebus RANSOM_DAYS hari), selain itu mati.
+const SICK_DAYS := 2
+const CRITICAL_DAYS := 4
+const LOSS_DAYS := 6
+const RUNAWAY_AFFECTION := 20
+const RANSOM_DAYS := 7
+## Biaya tebus di Rian = harga hewan × RANSOM_RATE (dibulatkan ke 10 G).
+const RANSOM_RATE := 0.3
+
+static func _load_species() -> Dictionary:
+	var found: Array[AnimalSpeciesData] = []
+	for file in ResourceLoader.list_directory(SPECIES_DIR):
+		var data := load(SPECIES_DIR.path_join(file)) as AnimalSpeciesData if file.ends_with(".tres") else null
+		if data != null and not data.species_id.is_empty():
+			found.append(data)
+	found.sort_custom(func(a: AnimalSpeciesData, b: AnimalSpeciesData) -> bool: return a.sort_order < b.sort_order)
+	var result := {}
+	for data in found:
+		result[data.species_id] = data
+	return result
+
+static func _species_info() -> Dictionary:
+	var result := {}
+	for kind in species_data:
+		result[kind] = species_data[kind].to_info()
+	return result
+
+static func _breed_days() -> Dictionary:
+	var result := {}
+	for kind in species_data:
+		if species_data[kind].breed_days > 0:
+			result[kind] = species_data[kind].breed_days
+	return result
+
+static func _hatch() -> Dictionary:
+	var result := {}
+	for kind in species_data:
+		var data: AnimalSpeciesData = species_data[kind]
+		if not data.hatch_egg.is_empty() and data.hatch_days > 0:
+			result[data.hatch_egg] = {"species": kind, "days": data.hatch_days}
+	return result
 
 static func migrate(state: Dictionary) -> Dictionary:
 	for key in {"tier": 0, "dirt": 0, "hay": 0, "door": false, "products": {}}:
@@ -38,6 +73,8 @@ static func migrate(state: Dictionary) -> Dictionary:
 			state[key] = {"tier": 0, "dirt": 0, "hay": 0, "door": false, "products": {}}[key]
 	if not state.get("incubator") is Dictionary:
 		state.incubator = {"installed": false, "egg": "", "days": 0}
+	if not state.get("away") is Array:
+		state.away = []
 	for animal in state.chickens:
 		for key in ANIMAL_DEFAULTS:
 			if not animal.has(key):
@@ -71,6 +108,8 @@ static func brushable(animal: Dictionary) -> bool:
 ## Isi penanda status di atas kepala (animal_status_marker.gd): makan, elus, sikat, hasil siap.
 static func status_needs(animal: Dictionary, day: int) -> Array:
 	var needs := [{"kind": "feed", "done": int(animal.fed_day) == day}, {"kind": "pet", "done": int(animal.pet_day) == day}]
+	if animal.get("sick", false):
+		needs.push_front({"kind": "sick", "done": int(animal.get("treated_day", 0)) == day})
 	if brushable(animal):
 		needs.append({"kind": "brush", "done": int(animal.get("brush_day", 0)) == day})
 	if not str(animal.get("ready", "")).is_empty():
@@ -94,10 +133,12 @@ static func product_count(state: Dictionary) -> int:
 		count += int(amount)
 	return count
 
-static func advance(state: Dictionary, day: int) -> void:
+## Mengembalikan kejadian penelantaran [{"kind": "ran"/"died"/"rehomed", "name", "species"}].
+static func advance(state: Dictionary, day: int) -> Array:
 	migrate(state)
+	var events: Array = []
 	if day <= int(state.last_day):
-		return
+		return events
 	for previous in range(int(state.last_day), day):
 		var friendly := _capybara_comfort(state, previous)
 		var births: Array[Dictionary] = []
@@ -106,10 +147,14 @@ static func advance(state: Dictionary, day: int) -> void:
 			var dirty := int(state.dirt) >= 3
 			var was_sick: bool = animal.sick
 			animal.bad_days = int(animal.bad_days) + 1 if not fed or dirty else 0
-			if int(animal.bad_days) >= 2:
+			if int(animal.bad_days) >= SICK_DAYS:
 				animal.sick = true
 			elif fed and int(state.dirt) == 0:
 				animal.sick = false
+			# Obat Ternak dari Rian: diberikan hari itu, pulih pada pergantian hari.
+			if int(animal.get("treated_day", 0)) == previous:
+				animal.sick = false
+				animal.bad_days = 0
 			var bonus := 1 if friendly and fed and species(animal) != "capybara" else 0
 			animal.affection = clampi(int(animal.affection) + (2 + bonus if fed else -3), 0, 100)
 			if int(animal.baby_days) > 0:
@@ -149,6 +194,7 @@ static func advance(state: Dictionary, day: int) -> void:
 			# Kandang penuh menunda kelahiran sampai ada tempat, tanpa kehilangan anak.
 			if not add_baby(state, species(parent), "Anak " + str(parent.name), str(parent.variant)):
 				parent.pregnant = 1
+		events.append_array(_resolve_neglect(state, previous + 1))
 		_advance_incubator(state)
 		if not state.chickens.is_empty():
 			state.dirt = mini(3, int(state.dirt) + 1)
@@ -157,6 +203,36 @@ static func advance(state: Dictionary, day: int) -> void:
 		# Deluxe refills only from actual stored portions, once for each new day.
 		if int(state.tier) == 2:
 			feed_from_hay(state, previous + 1)
+	return events
+
+## Hewan yang ditelantarkan LOSS_DAYS hari hilang dari kandang; yang masih sayang pemiliknya kabur ke
+## Rian dan menunggu ditebus, sisanya mati. Kuda tidak ikut (dirawat sebagai tunggangan di dunia).
+static func _resolve_neglect(state: Dictionary, day: int) -> Array:
+	var events: Array = []
+	var kept: Array = []
+	for animal in state.chickens:
+		if int(animal.bad_days) < LOSS_DAYS or species(animal) == "horse":
+			kept.append(animal)
+			continue
+		var ran := int(animal.affection) >= RUNAWAY_AFFECTION
+		if ran:
+			state.away.append({"animal": animal, "since": day})
+		events.append({"kind": "ran" if ran else "died", "name": str(animal.name), "species": species(animal)})
+	state.chickens = kept
+	var waiting: Array = []
+	for entry in state.away:
+		if day - int(entry.since) > RANSOM_DAYS:
+			events.append({"kind": "rehomed", "name": str(entry.animal.name), "species": species(entry.animal)})
+		else:
+			waiting.append(entry)
+	state.away = waiting
+	return events
+
+static func ransom_cost(animal: Dictionary) -> int:
+	return int(round(int(SPECIES[species(animal)].price) * RANSOM_RATE / 10.0)) * 10
+
+static func is_critical(animal: Dictionary) -> bool:
+	return animal.get("sick", false) and int(animal.get("bad_days", 0)) >= CRITICAL_DAYS
 
 ## Kapibara Nyaman (makan, sehat) membuat hewan lain sekandang +1 kasih sayang saat makan; tidak menumpuk.
 static func _capybara_comfort(state: Dictionary, previous: int) -> bool:
@@ -225,6 +301,10 @@ static func feed_from_hay(state: Dictionary, day: int) -> int:
 	return fed
 
 static func condition(state: Dictionary, animal: Dictionary, day: int) -> String:
+	if int(animal.get("treated_day", 0)) == day and animal.get("sick", false):
+		return "Sudah diobati: pulih besok pagi bila tetap dirawat"
+	if is_critical(animal):
+		return "Kritis: beri pakan, bersihkan kandang, atau obati. Bisa kabur/mati dalam %d hari" % maxi(1, LOSS_DAYS - int(animal.bad_days))
 	if animal.get("sick", false):
 		return "Kurang sehat: beri pakan dan bersihkan kandang"
 	if int(state.dirt) >= 3:
@@ -245,7 +325,7 @@ static func valid(state: Variant, home: String = "chicken_coop") -> bool:
 		var n: Variant = state.get(key, 0)
 		if not integer(n) or n < 0:
 			return false
-	if state.last_day < 1 or state.last_day > 1000000 or state.next_id != state.chickens.size() + 1 or state.get("tier", 0) > 2 or state.get("dirt", 0) > 3 or state.get("hay", 0) > 240 or state.eggs > MAX_PRODUCTS or state.chickens.size() > capacity(state):
+	if state.last_day < 1 or state.last_day > 1000000 or state.next_id < state.chickens.size() + state.get("away", []).size() + 1 or state.next_id > 1000000 or state.get("tier", 0) > 2 or state.get("dirt", 0) > 3 or state.get("hay", 0) > 240 or state.eggs > MAX_PRODUCTS or state.chickens.size() > capacity(state):
 		return false
 	if not state.get("door", false) is bool:
 		return false
@@ -258,8 +338,16 @@ static func valid(state: Variant, home: String = "chicken_coop") -> bool:
 		return false
 	if incubator.get("egg", "") != "" and (not incubator.get("installed", false) or base_egg(incubator.egg).is_empty() or incubator.days < 0 or incubator.days > HATCH[base_egg(incubator.egg)].days):
 		return false
+	var away: Variant = state.get("away", [])
+	if not away is Array:
+		return false
+	var animals: Array = state.chickens.duplicate()
+	for entry in away:
+		if not entry is Dictionary or not entry.get("animal") is Dictionary or not integer(entry.get("since")) or int(entry.since) < 1 or int(entry.since) > state.last_day:
+			return false
+		animals.append(entry.animal)
 	var seen := {}
-	for animal in state.chickens:
+	for animal in animals:
 		if not animal is Dictionary or not animal.get("name") is String or animal.name.strip_edges().is_empty() or animal.name.length() > 16 or not (animal.get("variant") in BASIC_VARIANTS or (species(animal) == "horse" and HORSE_COATS.has(animal.get("variant")))):
 			return false
 		var kind := species(animal)
@@ -268,11 +356,11 @@ static func valid(state: Variant, home: String = "chicken_coop") -> bool:
 		for required in ["id", "fed_day", "pet_day", "affection"]:
 			if not animal.has(required):
 				return false
-		for key in ["id", "fed_day", "pet_day", "brush_day", "affection", "bad_days", "progress", "baby_days", "pregnant", "feather"]:
+		for key in ["id", "fed_day", "pet_day", "brush_day", "affection", "bad_days", "progress", "baby_days", "pregnant", "feather", "treated_day"]:
 			var n: Variant = animal.get(key, 0)
 			if not integer(n) or n < 0 or n > 1000000:
 				return false
-		if animal.id < 1 or animal.id >= state.next_id or seen.has(int(animal.id)) or animal.affection > 100 or animal.fed_day > state.last_day or animal.pet_day > state.last_day or animal.get("brush_day", 0) > state.last_day or animal.get("progress", 0) > SPECIES[kind].interval or not animal.get("sick", false) is bool:
+		if animal.id < 1 or animal.id >= state.next_id or seen.has(int(animal.id)) or animal.affection > 100 or animal.fed_day > state.last_day or animal.pet_day > state.last_day or animal.get("brush_day", 0) > state.last_day or animal.get("treated_day", 0) > state.last_day or animal.get("progress", 0) > SPECIES[kind].interval or not animal.get("sick", false) is bool:
 			return false
 		if not animal.get("ready", "") is String:
 			return false

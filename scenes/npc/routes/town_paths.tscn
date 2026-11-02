@@ -437,7 +437,7 @@ _data = {"points": PackedVector2Array(0, 0, 0, 0, 550, 440, 0, 0, 0, 0, 520, 430
 [sub_resource type="Curve2D" id="joko_work_branch"]
 resource_local_to_scene = true
 bake_interval = 4.0
-_data = {"points": PackedVector2Array(0, 0, 0, 0, 920, 430, 0, 0, 0, 0, 895, 430, 0, 0, 0, 0, 895, 400, 0, 0, 0, 0, 895, 388)}
+_data = {"points": PackedVector2Array(0, 0, 0, 0, 920, 430, 0, 0, 0, 0, 895, 430, 0, 0, 0, 0, 895, 388, 0, 0, 0, 0, 892, 316, 0, 0, 0, 0, 660, 276, 0, 0, 0, 0, 640, 262, 0, 0, 0, 0, 632, 254)}
 
 [sub_resource type="Curve2D" id="ratih_work_branch"]
 resource_local_to_scene = true

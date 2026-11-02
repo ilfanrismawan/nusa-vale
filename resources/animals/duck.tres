@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AnimalSpeciesData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/animal_species_data.gd" id="1_species"]
+
+[resource]
+script = ExtResource("1_species")
+species_id = "duck"
+display_name = "Bebek"
+sort_order = 1
+price = 1400
+home = "chicken_coop"
+interval = 2
+product = "duck_egg"
+tool = ""
+large_product = true
+breed_days = 0
+hatch_egg = "duck_egg"
+hatch_days = 5
+description = "Bertelur setiap 2 hari. Sesekali menjatuhkan bulu bila sangat sayang."

@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AnimalSpeciesData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/animal_species_data.gd" id="1_species"]
+
+[resource]
+script = ExtResource("1_species")
+species_id = "ostrich"
+display_name = "Burung Unta"
+sort_order = 7
+price = 4500
+home = "chicken_coop"
+interval = 3
+product = "ostrich_egg"
+tool = ""
+large_product = false
+breed_days = 0
+hatch_egg = "ostrich_egg"
+hatch_days = 7
+description = "Telur raksasa setiap 3 hari terawat. Telurnya bisa ditetaskan."

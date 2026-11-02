@@ -81,6 +81,10 @@
       {
         "text": "Setiap Rabu lapak libur. Aku perlu waktu untuk memeriksa kesehatan hewan di ranch.",
         "expression": "neutral"
+      },
+      {
+        "text": "Kalau hewanmu sakit, bawa obat dari adikku, Rian. Ia lebih telaten dariku soal itu.",
+        "expression": "happy"
       }
     ],
     "lunch": [
@@ -433,5 +437,13 @@
     "story_expansion": "baseline_2026_10_24",
     "residence": "implemented_eep_ranch_2026_10_24"
   },
-  "biography": "Penjual ternak yang mengutamakan kenyamanan hewan."
+  "biography": "Penjual ternak yang mengutamakan kenyamanan hewan. Kakak Rian; Eep yang berdagang, Rian yang merawat.",
+  "family": {
+    "siblings": [
+      {
+        "id": "rian",
+        "relation": "adik"
+      }
+    ]
+  }
 }

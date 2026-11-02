@@ -1,5 +1,7 @@
 extends Node
 
+const AnimalPhysics := preload("res://scripts/world/animal_physics.gd")
+
 var failures := 0
 
 func check(ok: bool, message: String) -> void:
@@ -66,25 +68,60 @@ func _ready() -> void:
 			if node.get_script().resource_path.ends_with("enter_door_house.gd") and farm.is_ancestor_of(node):
 				door = node
 		check(door != null and pet.global_position.distance_to(door.global_position) < 80.0, "pet plays near the farmhouse door")
-		check(pet._badge.text.begins_with("Belang") and pet._badge.text.ends_with("♥"), "badge shows the pet's name and an unpetted heart")
+		check(pet._badge.text == "Belang", "badge shows the pet's name")
 		player.global_position = pet.global_position + Vector2(0, 14)
 		await capture("pet-farm.png")
-		pet.interact(player)
-		check(data.pet_affection == PetActor.PET_GAIN and data.pet_day == 3, "petting raises affection once")
-		check(not PetActor.pet().ok and data.pet_affection == PetActor.PET_GAIN, "a second pet the same day is refused")
-		check(not pet._badge.text.ends_with("♥"), "badge heart clears after petting")
+		# Peliharaan di kaki pemain: interaksi tanpa harus tepat menghadapnya (rumah ladang dekat).
+		pet._wait = 999.0
+		player.global_position = pet.global_position - Player.FEET_OFFSET + Vector2(4, 4)
+		player.facing_direction = Vector2.DOWN
+		await get_tree().physics_frame
+		check(player._try_interact() and data.pet_affection == PetActor.CARE.pet_gain and data.pet_day == 3, "petting a pet at the player's feet raises affection once")
+		check(not PetActor.pet().ok and data.pet_affection == PetActor.CARE.pet_gain, "a second pet the same day is refused")
+		# Klik kanan pada peliharaan sambil memegang ikan: diberi makan, bukan dimakan sendiri.
+		var hand := 7
+		data.inventory[hand] = {"item": GameState._resolve_item("fish_anchovy"), "count": 2}
+		data.hotbar_page = 0
+		player.tool_controller.select_tool(hand, false)
+		player.global_position = pet.global_position - Player.FEET_OFFSET + Vector2(-22, 0)
+		player.facing_direction = Vector2.LEFT
+		await get_tree().physics_frame
+		var interacted := player._interact_at(pet.global_position + Vector2(0, -5))
+		check(interacted and data.pet_fed_day == 3, "clicking the pet while holding a fish feeds it (handled=%s fed_day=%d)" % [interacted, data.pet_fed_day])
+		check(data.inventory[hand] != null and int(data.inventory[hand].count) == 1, "feeding uses one fish")
+		check(data.pet_affection == PetActor.CARE.pet_gain + PetActor.CARE.feed_gain, "feeding raises affection")
+		# Siul: peliharaan di area yang sama berlari ke sisi pemain.
+		pet._wait = 0.0
+		# Titik panggil yang bisa dicapai lurus dari peliharaan, cukup jauh supaya ia harus berlari.
+		var call_from := pet.global_position + Vector2(0, 70)
+		for angle in 16:
+			var spot := pet.global_position + Vector2.from_angle(TAU * angle / 16.0) * 64.0
+			if AnimalPhysics.is_free(pet, spot, 8.0, [pet.get_rid()]) and not AnimalPhysics.is_blocked(pet, pet.global_position, spot, [pet.get_rid()]):
+				call_from = spot
+				break
+		player.global_position = call_from - Player.FEET_OFFSET
+		var whistled := PetActor.whistle(player)
+		check(whistled.ok, "whistling calls the pet on the same map")
+		check(not PetActor.whistle(player).ok, "whistle has a short cooldown")
+		await get_tree().create_timer(2.5, true).timeout
+		var gap := pet.global_position.distance_to(player.global_position + Player.FEET_OFFSET)
+		check(gap <= PetActor.CARE.call_gap + PetActor.CARE.wander_radius, "called pet runs to the player (gap %.1f)" % gap)
 	check(SaveManager.save_game(), "game with a petted pet saves")
 	data.pet_affection = 0
 	data.pet_day = 0
-	check(SaveManager.load_game() and GameState.p1().pet_affection == PetActor.PET_GAIN and GameState.p1().pet_day == 3, "pet affection survives save/load")
+	check(SaveManager.load_game() and GameState.p1().pet_affection == PetActor.CARE.pet_gain + PetActor.CARE.feed_gain and GameState.p1().pet_day == 3 and GameState.p1().pet_fed_day == 3, "pet affection and feeding survive save/load (%d %d %d)" % [GameState.p1().pet_affection, GameState.p1().pet_day, GameState.p1().pet_fed_day])
 	DayCycle.hour = 21
 	await get_tree().create_timer(0.5, true).timeout
 	check(pet_in(farm) == null, "pet goes indoors at night")
+	var farmer := farm.find_child("CharacterBody2D", true, false) as Player
+	if farmer != null:
+		farmer.remove_meta(&"pet_whistle_ms")
+		check(not PetActor.whistle(farmer).ok, "whistling where the pet is not present is not answered")
 	DayCycle.current_day = 4
 	DayCycle.hour = 10
 	await get_tree().create_timer(0.5, true).timeout
 	pet = pet_in(farm)
-	check(pet != null and pet._badge.text.ends_with("♥"), "pet returns next morning ready to be petted again")
+	check(pet != null and GameState.p1().pet_day != DayCycle.current_day, "pet returns next morning ready to be petted again")
 	GameState.p1().pet_id = ""
 	await get_tree().create_timer(0.5, true).timeout
 	check(pet_in(farm) == null, "no pet is shown when none was chosen")

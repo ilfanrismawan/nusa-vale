@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AnimalSpeciesData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/animal_species_data.gd" id="1_species"]
+
+[resource]
+script = ExtResource("1_species")
+species_id = "horse"
+display_name = "Kuda"
+sort_order = 9
+price = 5000
+home = "barn"
+interval = 0
+product = ""
+tool = ""
+large_product = true
+breed_days = 0
+hatch_egg = ""
+hatch_days = 0
+description = "Tunggangan cepat. Hanya satu kuda per ladang."
