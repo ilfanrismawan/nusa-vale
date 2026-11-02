@@ -48,7 +48,6 @@ shapes/collision/contact_color=Color(1, 0.84313726, 0.101960786, 0.8)
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
-window/size/mode=1
 window/size/window_width_override=1280
 window/size/window_height_override=720
 window/stretch/mode="canvas_items"
