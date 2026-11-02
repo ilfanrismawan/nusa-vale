@@ -15,4 +15,4 @@ scale = Vector2(0.27, 0.27)
 offset_left = 36.0
 offset_top = 448.0
 theme_override_fonts/font = ExtResource("2")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16

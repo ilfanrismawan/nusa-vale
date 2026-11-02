@@ -25,7 +25,7 @@ var _layout_pending := false
 	set(value):
 		minimum_width = value
 		_change("width", value)
-@export_range(8, 24, 1) var font_size: int = 16:
+@export_range(16, 64, 16) var font_size: int = 16:
 	set(value):
 		font_size = value
 		_change("font_size", value)

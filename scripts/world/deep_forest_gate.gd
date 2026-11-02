@@ -17,7 +17,7 @@ func _ready() -> void:
 		var label := Label.new()
 		label.name = "Label"
 		label.position = Vector2(-115, -50)
-		label.add_theme_font_size_override("font_size", 10)
+		label.add_theme_font_size_override("font_size", 16)
 		add_child(label)
 	body_entered.connect(_on_body_entered)
 

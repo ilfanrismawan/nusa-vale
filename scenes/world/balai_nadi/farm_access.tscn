@@ -15,5 +15,5 @@ color = Color(0.48, 0.3, 0.15, 1)
 [node name="Label" type="Label" parent="."]
 offset_left = -30.0
 offset_top = -26.0
-theme_override_font_sizes/font_size = 9
+theme_override_font_sizes/font_size = 16
 text = "Balai Nadi (E)"

@@ -1,0 +1,15 @@
+[gd_resource type="TileSet" format=3 uid="uid://bq53d01xcbh8x"]
+
+[ext_resource type="Texture2D" uid="uid://bqfie0rqa3mfp" path="res://assets/greenhouse/greenhouse_frame.png" id="1_j5gm3"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_pxhdb"]
+texture = ExtResource("1_j5gm3")
+0:3/0 = 0
+0:3/0/custom_data_0 = true
+1:3/0 = 0
+1:3/0/custom_data_0 = true
+
+[resource]
+custom_data_layer_0/name = "farmable"
+custom_data_layer_0/type = 1
+sources/0 = SubResource("TileSetAtlasSource_pxhdb")

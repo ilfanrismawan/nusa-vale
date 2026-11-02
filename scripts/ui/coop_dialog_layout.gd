@@ -38,7 +38,7 @@ func reflow() -> void:
 			if not _font_sizes.has(id):
 				_font_sizes[id] = item.get_theme_font_size("font_size")
 			var base: int = _font_sizes[id]
-			item.add_theme_font_size_override("font_size", mini(base, 22 if item.name == "Title" else 16) if compact else base)
+			item.add_theme_font_size_override("font_size", mini(base, 16) if compact else base)
 	var scroll := get_node_or_null("Frame/Center/Card/Content/Scroll") as ScrollContainer
 	if scroll != null:
 		scroll.custom_minimum_size.y = clampf(area.y - 170.0, 44.0, 108.0) if compact else list_height

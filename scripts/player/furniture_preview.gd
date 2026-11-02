@@ -26,7 +26,7 @@ func _ready() -> void:
 	add_child(_sprite)
 	_hint = Label.new()
 	_hint.add_theme_font_override("font", preload("res://assets/fonts/m5x7.ttf"))
-	_hint.add_theme_font_size_override("font_size", 12)
+	_hint.add_theme_font_size_override("font_size", 16)
 	_hint.add_theme_color_override("font_outline_color", Color.BLACK)
 	_hint.add_theme_constant_override("outline_size", 3)
 	_hint.position = Vector2(-48, 12)

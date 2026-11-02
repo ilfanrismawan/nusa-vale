@@ -29,7 +29,7 @@ offset_top = 40.0
 offset_right = 59.0
 offset_bottom = 62.0
 text = ""
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 mouse_filter = 2

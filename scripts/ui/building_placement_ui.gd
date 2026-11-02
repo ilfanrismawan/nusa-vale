@@ -98,7 +98,7 @@ func _clamp_camera() -> void:
 func _build_ui(item: ItemData) -> void:
 	var theme := Theme.new()
 	theme.default_font = preload("res://resources/ui/readable_font.tres")
-	theme.default_font_size = 18
+	theme.default_font_size = 16
 	var banner := PanelContainer.new()
 	_banner = banner
 	banner.theme = theme
@@ -117,11 +117,11 @@ func _build_ui(item: ItemData) -> void:
 	rows.add_child(title)
 	var guide := Label.new()
 	guide.text = "Tepi layar/WASD: geser · Tahan kiri/tengah + geser: kamera · Wheel: zoom · Klik kiri/Enter: pasang · Kanan/Esc: batal"
-	guide.add_theme_font_size_override("font_size", 14)
+	guide.add_theme_font_size_override("font_size", 16)
 	rows.add_child(guide)
 	var costs := Label.new()
 	costs.text = "Bangunan dari tas — dikonsumsi setelah lokasi dikonfirmasi." if from_inventory else "Biaya %d G + %d kayu + %d batu — dibayar saat konfirmasi." % [int(StructureManager.CONSTRUCTION[item_id].money), int(StructureManager.CONSTRUCTION[item_id].materials.wood), int(StructureManager.CONSTRUCTION[item_id].materials.stone)]
-	costs.add_theme_font_size_override("font_size", 14)
+	costs.add_theme_font_size_override("font_size", 16)
 	rows.add_child(costs)
 	_status = Label.new()
 	rows.add_child(_status)

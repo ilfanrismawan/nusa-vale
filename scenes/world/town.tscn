@@ -9837,13 +9837,13 @@ curve = SubResource("Curve2D_pc833")
 position = Vector2(62, 791)
 script = ExtResource("90_m3h2c")
 scene_target = "res://scenes/world/eep_ranch.tscn"
-spawn_position = Vector2(48, 320)
+spawn_position = Vector2(1392, 416)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RanchEntrance" unique_id=709924920]
 position = Vector2(-46, 0.5)
 shape = SubResource("EepRanchExitShape")
 
-[node name="BalaiNadiAccess2" parent="." unique_id=963677985 instance=ExtResource("town_balai_access")]
+[node name="BalaiNadiAccess" parent="." unique_id=963677985 instance=ExtResource("town_balai_access")]
 position = Vector2(334, 17)
 
 [editable path="NPCPaths"]

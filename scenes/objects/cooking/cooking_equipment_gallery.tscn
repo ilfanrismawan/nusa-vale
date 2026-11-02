@@ -45,14 +45,14 @@ zoom = Vector2(1, 1)
 offset_left = 48.0
 offset_top = 20.0
 theme_override_fonts/font = ExtResource("font")
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 16
 text = "KATALOG PERALATAN DAPUR"
 
 [node name="Hint" type="Label" parent="."]
 offset_left = 48.0
 offset_top = 48.0
 theme_override_fonts/font = ExtResource("font")
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 16
 text = "20 gambar cookware baru + fasilitas lama. Edit AtlasTexture / Equipment Data di Inspector.\nRak piring, bak cuci, lemari es, piring dan sendok madu merupakan dekorasi."
 
 [node name="chef_knife" parent="." instance=ExtResource("chef_knife")]

@@ -107,7 +107,7 @@ func _build_ui() -> void:
 
 	_title_label = Label.new()
 	_title_label.text = "📺 Televisi Tabung Nusa Vale"
-	_title_label.add_theme_font_size_override("font_size", 22)
+	_title_label.add_theme_font_size_override("font_size", 16)
 	_title_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(_title_label)
 
@@ -178,7 +178,7 @@ func _build_ui() -> void:
 
 	_content_title = Label.new()
 	_content_title.text = "Siaran Televisi"
-	_content_title.add_theme_font_size_override("font_size", 18)
+	_content_title.add_theme_font_size_override("font_size", 16)
 	_content_title.modulate = Color(1.0, 0.95, 0.6)
 	screen_vbox.add_child(_content_title)
 

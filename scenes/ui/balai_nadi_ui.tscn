@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/balai_nadi_ui.gd" id="script"]
 [ext_resource type="Theme" path="res://resources/ui/cooking_theme.tres" id="theme"]
@@ -6,6 +6,7 @@
 [ext_resource type="Shader" path="res://resources/ui/glass_panel.gdshader" id="glass_shader"]
 [ext_resource type="Script" path="res://scripts/ui/glass_panel.gd" id="glass_script"]
 [ext_resource type="PackedScene" path="res://scenes/ui/balai_radial_petal.tscn" id="petal"]
+[ext_resource type="Script" path="res://scripts/ui/balai_wing_celebration.gd" id="celebration"]
 
 [sub_resource type="ShaderMaterial" id="Backdrop"]
 shader = ExtResource("backdrop_shader")
@@ -117,7 +118,7 @@ offset_bottom = 98.0
 theme_override_colors/font_color = Color(1, 0.89, 0.6, 1)
 theme_override_colors/font_outline_color = Color(0.1, 0.08, 0.16, 0.85)
 theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 16
 text = "Balai Nadi"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -166,7 +167,7 @@ anchor_bottom = 1.0
 theme_override_colors/font_color = Color(1, 0.89, 0.6, 1)
 theme_override_colors/font_outline_color = Color(0.1, 0.08, 0.16, 0.85)
 theme_override_constants/outline_size = 5
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -212,7 +213,7 @@ offset_bottom = 112.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0.1, 0.08, 0.16, 0.85)
 theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 16
 text = "Paket"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -317,7 +318,7 @@ offset_bottom = 46.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0.1, 0.08, 0.16, 0.85)
 theme_override_constants/outline_size = 5
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 vertical_alignment = 1
 
 [node name="RewardTokens" type="Label" parent="Design/Card/RewardPill"]
@@ -343,7 +344,7 @@ offset_bottom = 494.0
 focus_mode = 0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.35)
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("ButtonGlass")
 theme_override_styles/hover = SubResource("ButtonGlass")
 theme_override_styles/pressed = SubResource("ButtonGlass")
@@ -362,7 +363,7 @@ theme_override_colors/font_color = Color(0.12, 0.1, 0.18, 1)
 theme_override_colors/font_hover_color = Color(0.12, 0.1, 0.18, 1)
 theme_override_colors/font_pressed_color = Color(0.12, 0.1, 0.18, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.35)
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("ButtonGold")
 theme_override_styles/hover = SubResource("ButtonGold")
 theme_override_styles/pressed = SubResource("ButtonGold")
@@ -379,7 +380,7 @@ offset_bottom = 520.0
 theme_override_colors/font_color = Color(1, 1, 1, 0.85)
 theme_override_colors/font_outline_color = Color(0.1, 0.08, 0.16, 0.85)
 theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 vertical_alignment = 1
 text_overrun_behavior = 3
@@ -398,7 +399,7 @@ theme_override_colors/font_hover_color = Color(1, 0.89, 0.6, 1)
 theme_override_colors/font_pressed_color = Color(1, 0.89, 0.6, 1)
 theme_override_colors/font_outline_color = Color(0.1, 0.08, 0.16, 0.85)
 theme_override_constants/outline_size = 5
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("ButtonGlass")
 theme_override_styles/hover = SubResource("ButtonGlass")
 theme_override_styles/pressed = SubResource("ButtonGlass")
@@ -434,6 +435,16 @@ anchor_bottom = 1.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0.1, 0.08, 0.16, 0.85)
 theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Celebration" type="Control" parent="Design"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+script = ExtResource("celebration")

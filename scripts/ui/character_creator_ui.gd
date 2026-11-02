@@ -471,7 +471,7 @@ func _build_horror_choice() -> void:
 	label.text = "Horor Malam"
 	label.position = Vector2(0, 294)
 	label.size = Vector2(140, 30)
-	label.add_theme_font_size_override("font_size", 18)
+	label.add_theme_font_size_override("font_size", 16)
 	%Identity.add_child(label)
 	_horror_index = maxi(0, GameState.horror.difficulties.find(GameState.horror.difficulty()))
 	_horror_value = Label.new()
@@ -479,14 +479,14 @@ func _build_horror_choice() -> void:
 	_horror_value.position = Vector2(184, 294)
 	_horror_value.size = Vector2(132, 30)
 	_horror_value.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_horror_value.add_theme_font_size_override("font_size", 18)
+	_horror_value.add_theme_font_size_override("font_size", 16)
 	%Identity.add_child(_horror_value)
 	for step in [-1, 1]:
 		var button := Button.new()
 		button.text = "‹" if step < 0 else "›"
 		button.position = Vector2(140 if step < 0 else 320, 288)
 		button.size = Vector2(40, 42)
-		button.add_theme_font_size_override("font_size", 18)
+		button.add_theme_font_size_override("font_size", 16)
 		button.tooltip_text = "Seberapa kejam hantu malam. Bisa diganti lagi di Pengaturan > Horor."
 		button.pressed.connect(_change_horror.bind(step))
 		%Identity.add_child(button)

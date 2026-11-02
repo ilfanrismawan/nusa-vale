@@ -2080,7 +2080,7 @@ position = Vector2(544, 64)
 script = ExtResource("22_0rc6i")
 caption = "UTARA: KOTA"
 minimum_width = 88
-font_size = 10
+font_size = 16
 
 [node name="Pebble1" type="Sprite2D" parent="Scenery" unique_id=1459028923]
 texture_filter = 1

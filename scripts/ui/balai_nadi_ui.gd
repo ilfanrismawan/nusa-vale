@@ -45,6 +45,9 @@ var _tilt := Vector2.ZERO
 var _nav_held := Vector2i.ZERO
 var _nav_timer := 0.0
 var _card_base := Vector2.ZERO
+## Sayap yang baru lengkap oleh sumbangan menu ini; dirayakan setelah _after_donation.
+var _pending_wing := ""
+var _celebrating_wing := ""
 @onready var _status: Label = %Status
 
 func _ready() -> void:
@@ -59,6 +62,8 @@ func _ready() -> void:
 	GameState.inventory_changed.connect(_refresh)
 	GameState.money_changed.connect(_money_changed)
 	GameState.balai_nadi.state_changed.connect(_refresh)
+	GameState.balai_nadi.wing_finished.connect(_on_wing_finished)
+	%Celebration.finished.connect(_end_celebration)
 	_opened = true
 	Coop.set_menu_open(player, true)
 	_wings_open = GameState.balai_nadi.wings_unlocked()
@@ -251,6 +256,8 @@ func _process(delta: float) -> void:
 		return
 	_time += delta
 	_bloom = move_toward(_bloom, 1.0, delta / maxf(0.01, bloom_time))
+	if _is_celebrating():
+		return
 	var aim := player.input.get_vector() if is_instance_valid(player) else Vector2.ZERO
 	if _level == Level.CARD:
 		_card_nav(aim, delta)
@@ -503,6 +510,9 @@ func _after_donation(success: bool, ids: Array) -> void:
 		_status.text = "Belum bisa menyumbang. Periksa bahan di tas."
 		return
 	Juice.play_sound(&"sparkle" if manager.completed(project_id) else &"pickup")
+	if not _pending_wing.is_empty():
+		_celebrate(_pending_wing)
+		return
 	for id in ids:
 		if _rows.has(id):
 			_rows[id].button.pulse()
@@ -512,6 +522,43 @@ func _after_donation(success: bool, ids: Array) -> void:
 			if manager.remaining(project_id, id) > 0 and manager.available_amount(player.data, id) > 0:
 				_select_requirement(id)
 				break
+
+# ── Perayaan sayap lengkap ─────────────────────────────────────────
+
+## Co-op: hanya menu yang sedang menyumbang yang merayakan, bukan menu pemain lain.
+func _on_wing_finished(wing_id: String) -> void:
+	if _opened and _submitting:
+		_pending_wing = wing_id
+
+func _is_celebrating() -> bool:
+	return not _celebrating_wing.is_empty()
+
+func _celebrate(wing_id: String) -> void:
+	_pending_wing = ""
+	_celebrating_wing = wing_id
+	var wing := GameState.balai_nadi.wing(wing_id)
+	var title := "%s Pulih!" % (wing.display_name if wing != null and not wing.display_name.is_empty() else presentation.wing_labels.get(wing_id, wing_id.capitalize()))
+	var bonus := "Bonus permanen: %s · +%d Talenta" % [wing.bonus_text, wing.reward_tokens] if wing != null else ""
+	%Card.visible = false
+	%Hints.visible = false
+	%Celebration.play(_wing_icon(wing_id), title, bonus)
+	Juice.play_upgrade_reward(3)
+	if is_instance_valid(player):
+		Juice.play(&"balai_wing_complete", player.global_position)
+
+## Setelah perayaan: kembali ke lingkaran sayap, kelopak sayap tadi meletup dan tercentang.
+func _end_celebration() -> void:
+	var wing_id := _celebrating_wing
+	_celebrating_wing = ""
+	if not _opened:
+		return
+	%Hints.visible = true
+	_show_wings(wing_id)
+	var index := _petals.find_custom(func(p): return p.get_meta("entry").key == wing_id)
+	if index >= 0:
+		_set_selection(index)
+		_petals[index].pulse()
+	Juice.play_sound(&"pickup", 7.0)
 
 func _contribute(item_id: String) -> void:
 	_select_requirement(item_id)
@@ -536,6 +583,12 @@ func _back() -> void:
 
 func _input(event: InputEvent) -> void:
 	if not _opened or not Coop.accepts_event(player, event):
+		return
+	if _is_celebrating():
+		var pressed: bool = event is InputEventMouseButton and event.pressed
+		if pressed or player.input.is_event(event, &"ui_accept") or player.input.is_event(event, &"interact") or player.input.is_event(event, &"ui_cancel"):
+			get_viewport().set_input_as_handled()
+			%Celebration.skip()
 		return
 	if event is InputEventMouseButton and not player.input.uses_mouse():
 		get_viewport().set_input_as_handled()

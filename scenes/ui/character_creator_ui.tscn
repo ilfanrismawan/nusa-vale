@@ -34,7 +34,7 @@ offset_left = 55.0
 offset_top = 25.0
 offset_right = 815.0
 offset_bottom = 80.0
-theme_override_font_sizes/font_size = 34
+theme_override_font_sizes/font_size = 32
 text = "Ciptakan Ceritamu"
 autowrap_mode = 3
 theme_override_colors/font_color = Color(1, 0.95, 0.86, 1)
@@ -46,7 +46,7 @@ offset_left = 57.0
 offset_top = 82.0
 offset_right = 957.0
 offset_bottom = 117.0
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 16
 text = "Kenali dirimu, pilih gayamu, lalu mulailah kehidupan di Nusa Vale."
 autowrap_mode = 3
 theme_override_colors/font_color = Color(1, 0.95, 0.86, 1)
@@ -65,7 +65,7 @@ offset_left = 25.0
 offset_top = 22.0
 offset_right = 295.0
 offset_bottom = 58.0
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 16
 text = "Penampilanmu"
 autowrap_mode = 3
 
@@ -89,7 +89,7 @@ offset_top = 325.0
 offset_right = 87.0
 offset_bottom = 367.0
 text = "‹"
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16
 
 [node name="TurnLabel" type="Label" parent="Design/PreviewPanel"]
 unique_name_in_owner = true
@@ -97,7 +97,7 @@ offset_left = 98.0
 offset_top = 326.0
 offset_right = 222.0
 offset_bottom = 366.0
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 text = "Putar"
 autowrap_mode = 3
 
@@ -109,7 +109,7 @@ offset_top = 325.0
 offset_right = 288.0
 offset_bottom = 367.0
 text = "›"
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16
 
 
 [node name="Animation" type="Label" parent="Design/PreviewPanel"]
@@ -119,7 +119,7 @@ offset_top = 385.0
 offset_right = 228.0
 offset_bottom = 427.0
 text = "Walk"
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 horizontal_alignment = 1
 text_overrun_behavior = 3
@@ -131,7 +131,7 @@ offset_top = 385.0
 offset_right = 80.0
 offset_bottom = 427.0
 text = "‹"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 
 [node name="NextAnimation" type="Button" parent="Design/PreviewPanel"]
 unique_name_in_owner = true
@@ -140,7 +140,7 @@ offset_top = 385.0
 offset_right = 288.0
 offset_bottom = 427.0
 text = "›"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 
 [node name="SetupPanel" type="Panel" parent="Design"]
 offset_left = 400.0
@@ -156,7 +156,7 @@ offset_top = 20.0
 offset_right = 272.0
 offset_bottom = 64.0
 text = "1 · Profil"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 toggle_mode = true
 
 [node name="AppearanceTab" type="Button" parent="Design/SetupPanel"]
@@ -166,7 +166,7 @@ offset_top = 20.0
 offset_right = 532.0
 offset_bottom = 64.0
 text = "2 · Penampilan"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 toggle_mode = true
 
 [node name="PetTab" type="Button" parent="Design/SetupPanel"]
@@ -176,7 +176,7 @@ offset_top = 20.0
 offset_right = 792.0
 offset_bottom = 64.0
 text = "3 · Teman Pet"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 toggle_mode = true
 
 [node name="Identity" type="Control" parent="Design/SetupPanel"]
@@ -194,7 +194,7 @@ offset_top = 0.0
 offset_right = 780.0
 offset_bottom = 32.0
 text = "Profil Petani · Semua kolom bertanda * wajib diisi"
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 [node name="NameLabel" type="Label" parent="Design/SetupPanel/Identity"]
@@ -204,7 +204,7 @@ offset_top = 61.0
 offset_right = 360.0
 offset_bottom = 91.0
 text = "Nama *"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 [node name="PlayerName" type="LineEdit" parent="Design/SetupPanel/Identity"]
@@ -222,7 +222,7 @@ offset_top = 184.0
 offset_right = 360.0
 offset_bottom = 214.0
 text = "Nama Farm *"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 [node name="FarmName" type="LineEdit" parent="Design/SetupPanel/Identity"]
@@ -240,7 +240,7 @@ offset_top = 61.0
 offset_right = 770.0
 offset_bottom = 91.0
 text = "Tanggal Ulang Tahun *"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 [node name="BirthdayButton" type="Button" parent="Design/SetupPanel/Identity"]
@@ -250,7 +250,7 @@ offset_top = 100.0
 offset_right = 770.0
 offset_bottom = 146.0
 text = "Pilih dari kalender…"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 
 [node name="CalendarHint" type="Label" parent="Design/SetupPanel/Identity"]
 unique_name_in_owner = true
@@ -259,7 +259,7 @@ offset_top = 163.0
 offset_right = 770.0
 offset_bottom = 263.0
 text = "Pilih musim dan tanggal melalui kalender.\n\nSetelah profil lengkap, pilih gaya dan teman pet lewat tab di atas."
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 [node name="AppearancePage" type="Control" parent="Design/SetupPanel"]
@@ -287,7 +287,7 @@ offset_top = 288.0
 offset_right = 95.0
 offset_bottom = 330.0
 text = "‹"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 
 [node name="OptionPage" type="Label" parent="Design/SetupPanel/AppearancePage"]
 unique_name_in_owner = true
@@ -296,7 +296,7 @@ offset_top = 290.0
 offset_right = 660.0
 offset_bottom = 328.0
 text = "Pilihan 1 / 2"
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 horizontal_alignment = 1
 
@@ -307,7 +307,7 @@ offset_top = 288.0
 offset_right = 780.0
 offset_bottom = 330.0
 text = "›"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 
 [node name="PetPage" type="Control" parent="Design/SetupPanel"]
 unique_name_in_owner = true
@@ -334,7 +334,7 @@ offset_top = 288.0
 offset_right = 85.0
 offset_bottom = 330.0
 text = "‹"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 
 [node name="PetPageNumber" type="Label" parent="Design/SetupPanel/PetPage"]
 unique_name_in_owner = true
@@ -343,7 +343,7 @@ offset_top = 290.0
 offset_right = 455.0
 offset_bottom = 328.0
 text = "1 / 2"
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 horizontal_alignment = 1
 
@@ -354,7 +354,7 @@ offset_top = 288.0
 offset_right = 565.0
 offset_bottom = 330.0
 text = "›"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 
 [node name="PetIcon" type="TextureRect" parent="Design/SetupPanel/PetPage"]
 unique_name_in_owner = true
@@ -375,7 +375,7 @@ offset_top = 119.0
 offset_right = 780.0
 offset_bottom = 163.0
 text = "Teman Pet"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 horizontal_alignment = 1
 
@@ -386,7 +386,7 @@ offset_top = 170.0
 offset_right = 780.0
 offset_bottom = 241.0
 text = "Teman kecil untuk farm."
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 [node name="PetNameLabel" type="Label" parent="Design/SetupPanel/PetPage"]
@@ -426,7 +426,7 @@ offset_top = 624.0
 offset_right = 325.0
 offset_bottom = 672.0
 text = "Acak Penampilan"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 
 [node name="Cancel" type="Button" parent="Design"]
 unique_name_in_owner = true
@@ -435,7 +435,7 @@ offset_top = 665.0
 offset_right = 995.0
 offset_bottom = 709.0
 text = "Batal"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 
 [node name="Confirm" type="Button" parent="Design"]
 unique_name_in_owner = true
@@ -444,7 +444,7 @@ offset_top = 665.0
 offset_right = 1225.0
 offset_bottom = 709.0
 text = "Selesai"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 
 [node name="BirthdayCalendar" parent="Design" instance=ExtResource("calendar")]
 unique_name_in_owner = true

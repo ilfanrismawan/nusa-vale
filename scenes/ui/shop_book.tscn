@@ -75,7 +75,7 @@ offset_top = 30.0
 offset_right = 1240.0
 offset_bottom = 75.0
 theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 16
 horizontal_alignment = 2
 text = "0 G"
 
@@ -95,7 +95,7 @@ offset_top = 104.0
 offset_right = 250.0
 offset_bottom = 146.0
 theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 16
 text = "Penjaga toko"
 text_overrun_behavior = 3
 
@@ -114,7 +114,7 @@ offset_right = 238.0
 offset_bottom = 670.0
 text = "Selamat datang!"
 autowrap_mode = 3
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 
 [node name="DetailPanel" type="Panel" parent="Book"]
 offset_left = 904.0
@@ -140,7 +140,7 @@ offset_top = 238.0
 offset_right = 1220.0
 offset_bottom = 292.0
 text = "Pilih kebutuhanmu"
-theme_override_font_sizes/font_size = 23
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 max_lines_visible = 2
 text_overrun_behavior = 3
@@ -150,7 +150,7 @@ offset_left = 928.0
 offset_top = 294.0
 offset_right = 1220.0
 offset_bottom = 382.0
-text_font_size = 18
+text_font_size = 16
 
 [node name="Navigation" parent="Book/Description" index="1"]
 offset_left = 0.0
@@ -186,7 +186,7 @@ offset_top = 510.0
 offset_right = 1218.0
 offset_bottom = 536.0
 text = "Jumlah pembelian"
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 16
 
 [node name="Quantity" type="SpinBox" parent="Book"]
 offset_left = 928.0
@@ -213,7 +213,7 @@ offset_top = 640.0
 offset_right = 1220.0
 offset_bottom = 682.0
 text = "Pilih barang dahulu"
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16
 
 [node name="Filters" type="HBoxContainer" parent="Book"]
 offset_left = 280.0
@@ -227,7 +227,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 toggle_mode = true
 text = "Semua"
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 16
 metadata/season = "all"
 
 [node name="Spring" type="Button" parent="Book/Filters"]
@@ -235,7 +235,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 toggle_mode = true
 text = "Semi"
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 16
 metadata/season = "spring"
 
 [node name="Summer" type="Button" parent="Book/Filters"]
@@ -243,7 +243,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 toggle_mode = true
 text = "Panas"
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 16
 metadata/season = "summer"
 
 [node name="Fall" type="Button" parent="Book/Filters"]
@@ -251,7 +251,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 toggle_mode = true
 text = "Gugur"
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 16
 metadata/season = "fall"
 
 [node name="Winter" type="Button" parent="Book/Filters"]
@@ -259,7 +259,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 toggle_mode = true
 text = "Dingin"
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 16
 metadata/season = "winter"
 
 [node name="Other" type="Button" parent="Book/Filters"]
@@ -267,7 +267,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 toggle_mode = true
 text = "Lain"
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 16
 metadata/season = "other"
 
 [node name="Stock" type="GridContainer" parent="Book"]
@@ -305,7 +305,7 @@ offset_bottom = 527.0
 theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
 text = "1 / 1"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 
 [node name="CatalogNext" type="Button" parent="Book"]
 offset_left = 800.0
@@ -347,7 +347,7 @@ offset_bottom = 697.0
 theme_override_colors/font_color = Color(1, 0.94, 0.84, 1)
 text = "1 / 1"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 16
 
 [node name="InventoryNext" type="Button" parent="Book"]
 offset_left = 538.0
@@ -362,4 +362,4 @@ offset_top = 663.0
 offset_right = 880.0
 offset_bottom = 700.0
 text = "Esc  Kembali"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16

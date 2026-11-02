@@ -62,7 +62,7 @@ offset_top = 40.0
 offset_right = 1230.0
 offset_bottom = 85.0
 text = "Esc  Tutup"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 
 [node name="Bag" type="Panel" parent="Design"]
 offset_left = 45.0
@@ -78,7 +78,7 @@ offset_top = 20.0
 offset_right = 554.0
 offset_bottom = 60.0
 text = "Penyimpanan"
-theme_override_font_sizes/font_size = 23
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 
@@ -111,7 +111,7 @@ offset_top = 20.0
 offset_right = 554.0
 offset_bottom = 60.0
 text = "Penyimpanan"
-theme_override_font_sizes/font_size = 23
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 
@@ -137,7 +137,7 @@ offset_top = 520.0
 offset_right = 1225.0
 offset_bottom = 570.0
 text = "Pilih item untuk memindahkan satu tumpukan."
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 theme_override_colors/font_color = Color(1, 0.95, 0.86, 1)
 
@@ -149,7 +149,7 @@ offset_top = 574.0
 offset_right = 1225.0
 offset_bottom = 609.0
 text = "Peti digunakan bersama · Bahan upgrade diambil dari tasmu."
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 theme_override_colors/font_color = Color(1, 0.95, 0.86, 1)
 
@@ -173,7 +173,7 @@ offset_top = 665.0
 offset_right = 310.0
 offset_bottom = 707.0
 text = "Kemas ke tas"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 
 [node name="Upgrade" type="Button" parent="Design"]
 unique_name_in_owner = true
@@ -182,4 +182,4 @@ offset_top = 665.0
 offset_right = 1230.0
 offset_bottom = 707.0
 text = "Upgrade peti"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16

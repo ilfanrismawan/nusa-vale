@@ -40,7 +40,7 @@ func _ready() -> void:
 	_herd.z_index = -1
 	_herd.set_meta("world", weakref(self))
 	add_child(_herd)
-	_status = _label(self, "", Vector2(270, 130), 12)
+	_status = _label(self, "", Vector2(270, 130), 16)
 	_status.z_index = 10
 	StructureManager.changed.connect(_refresh)
 	SaveManager.game_loaded.connect(_refresh)
@@ -119,7 +119,7 @@ func _build_bounds() -> void:
 			StructureManager.leave_ranch(body))
 	add_child(exit)
 
-func _label(parent: Node, text: String, pos: Vector2, size: int = 12) -> Label:
+func _label(parent: Node, text: String, pos: Vector2, size: int = 16) -> Label:
 	var label := Label.new()
 	label.text = text
 	label.position = pos

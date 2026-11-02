@@ -578,7 +578,11 @@ func _build() -> void:
 	put(seasons, world, "SeasonalTileSwapper")
 	var scene := PackedScene.new()
 	assert(scene.pack(world) == OK)
+	var uid := ResourceLoader.get_resource_uid(SCENE)
 	var error := ResourceSaver.save(scene, SCENE)
+	# PackedScene baru tidak membawa UID lama; rujukan uid:// (pintu Balai di kota) harus tetap valid.
+	if error == OK and uid != ResourceUID.INVALID_ID:
+		error = ResourceSaver.set_uid(SCENE, uid)
 	print("BALAI BUILD: ", error_string(error), "; land=", land.size(), " water=", water.size(), " path=", path.size(), " walkable=", walkable.size())
 	world.free()
 	get_tree().quit(0 if error == OK else 1)

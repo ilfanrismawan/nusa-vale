@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://shaders/plant_sway.gdshader" id="1_qmsuv"]
+
+[resource]
+shader = ExtResource("1_qmsuv")
+shader_parameter/amount = null
+shader_parameter/speed = null
+shader_parameter/sway_height = null

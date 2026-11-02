@@ -81,7 +81,6 @@ offset_top = 4.0
 offset_right = 258.0
 offset_bottom = 36.0
 theme_override_colors/font_color = Color(1, 0.94, 0.85, 1)
-theme_override_font_sizes/font_size = 21
 text = "Ranch"
 
 [node name="Money" type="Label" parent="Design" unique_id=1974551808]
@@ -92,7 +91,6 @@ offset_top = 5.0
 offset_right = 1265.0
 offset_bottom = 39.0
 theme_override_colors/font_color = Color(1, 0.94, 0.85, 1)
-theme_override_font_sizes/font_size = 18
 text = "● 0 G"
 
 [node name="DialogPanel" type="Panel" parent="Design" unique_id=1402120518]
@@ -110,7 +108,6 @@ offset_left = 20.0
 offset_top = 15.0
 offset_right = 235.0
 offset_bottom = 59.0
-theme_override_font_sizes/font_size = 13
 text = "Halo! Kami menjual hewan terbaik untuk peternakanmu."
 autowrap_mode = 3
 
@@ -121,7 +118,6 @@ offset_left = 72.0
 offset_top = 803.0
 offset_right = 160.0
 offset_bottom = 838.0
-theme_override_font_sizes/font_size = 17
 theme_override_styles/normal = SubResource("NameTag")
 text = "Rian"
 horizontal_alignment = 1
@@ -179,7 +175,6 @@ offset_left = 40.0
 offset_top = 158.0
 offset_right = 290.0
 offset_bottom = 184.0
-theme_override_font_sizes/font_size = 19
 text = "Ayam"
 
 [node name="HomeType" type="Label" parent="Design/Detail" unique_id=1016082990]
@@ -190,7 +185,6 @@ offset_top = 187.0
 offset_right = 290.0
 offset_bottom = 209.0
 theme_override_colors/font_color = Color(0.8, 0.52, 0.17, 1)
-theme_override_font_sizes/font_size = 14
 text = "Hewan kandang unggas"
 
 [node name="Line" type="HSeparator" parent="Design/Detail" unique_id=662249709]
@@ -207,7 +201,6 @@ offset_left = 40.0
 offset_top = 232.0
 offset_right = 290.0
 offset_bottom = 288.0
-theme_override_font_sizes/font_size = 13
 autowrap_mode = 3
 max_lines_visible = 3
 
@@ -218,7 +211,6 @@ offset_left = 40.0
 offset_top = 292.0
 offset_right = 290.0
 offset_bottom = 316.0
-theme_override_font_sizes/font_size = 14
 text = "Panen setiap 1 hari"
 
 [node name="Products" type="Panel" parent="Design/Detail" unique_id=237976182]
@@ -247,7 +239,6 @@ offset_left = 48.0
 offset_top = 11.0
 offset_right = 258.0
 offset_bottom = 43.0
-theme_override_font_sizes/font_size = 13
 text = "Menghasilkan telur"
 
 [node name="ToolHint" type="Label" parent="Design/Detail" unique_id=887239460]
@@ -257,7 +248,6 @@ offset_left = 40.0
 offset_top = 377.0
 offset_right = 300.0
 offset_bottom = 393.0
-theme_override_font_sizes/font_size = 10
 
 [node name="ColorStrip" type="HBoxContainer" parent="Design" unique_id=909942086]
 layout_mode = 0
@@ -272,7 +262,6 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 0.94, 0.85, 1)
-theme_override_font_sizes/font_size = 15
 text = "Warna"
 
 [node name="Swatches" type="HBoxContainer" parent="Design/ColorStrip" unique_id=814062854]
@@ -287,7 +276,6 @@ offset_left = 935.0
 offset_top = 650.0
 offset_right = 1265.0
 offset_bottom = 690.0
-theme_override_font_sizes/font_size = 13
 
 [node name="AnimalName" type="LineEdit" parent="Design" unique_id=2068070190]
 unique_name_in_owner = true
@@ -296,7 +284,6 @@ offset_left = 935.0
 offset_top = 702.0
 offset_right = 1265.0
 offset_bottom = 742.0
-theme_override_font_sizes/font_size = 15
 placeholder_text = "Nama hewan (opsional)"
 max_length = 16
 
@@ -308,7 +295,6 @@ offset_top = 756.0
 offset_right = 1265.0
 offset_bottom = 816.0
 theme_override_colors/font_color = Color(1, 0.9, 0.79, 1)
-theme_override_font_sizes/font_size = 14
 autowrap_mode = 3
 
 [node name="Status" type="Label" parent="Design" unique_id=123678877]
@@ -319,7 +305,6 @@ offset_top = 730.0
 offset_right = 880.0
 offset_bottom = 836.0
 theme_override_colors/font_color = Color(1, 0.94, 0.85, 1)
-theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
 [node name="GamepadHint" type="Label" parent="Design" unique_id=1306511498]
@@ -331,7 +316,6 @@ offset_top = 852.0
 offset_right = 880.0
 offset_bottom = 910.0
 theme_override_colors/font_color = Color(1, 0.94, 0.85, 1)
-theme_override_font_sizes/font_size = 15
 text = "LB/RB: kandang · Y: warna · A: beli"
 autowrap_mode = 3
 
@@ -352,5 +336,5 @@ offset_left = 1125.0
 offset_top = 922.0
 offset_right = 1265.0
 offset_bottom = 954.0
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 16
 text = "Esc  Kembali"

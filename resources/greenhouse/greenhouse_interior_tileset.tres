@@ -1,0 +1,42 @@
+[gd_resource type="TileSet" format=3 uid="uid://cy2odorco10pl"]
+
+[ext_resource type="Texture2D" uid="uid://omf8whfi0m45" path="res://assets/farm_rpg/tileset/int/Tileset House.png" id="1_g6x7o"]
+[ext_resource type="Texture2D" uid="uid://bqfie0rqa3mfp" path="res://assets/greenhouse/greenhouse_frame.png" id="2_nwe0p"]
+[ext_resource type="Texture2D" uid="uid://ncqoc1p3duym" path="res://assets/farm_rpg/tileset/ext/Tileset Grass Spring.png" id="3_3qbg2"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bvwlb"]
+texture = ExtResource("1_g6x7o")
+26:3/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7lwg4"]
+texture = ExtResource("2_nwe0p")
+0:0/0 = 0
+0:1/0 = 0
+0:2/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+2:1/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3spwb"]
+texture = ExtResource("3_3qbg2")
+9:2/0 = 0
+8:0/0 = 0
+11:0/0 = 0
+8:3/0 = 0
+11:3/0 = 0
+10:0/0 = 0
+9:3/0 = 0
+8:1/0 = 0
+11:2/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+
+[resource]
+sources/0 = SubResource("TileSetAtlasSource_bvwlb")
+sources/1 = SubResource("TileSetAtlasSource_7lwg4")
+sources/2 = SubResource("TileSetAtlasSource_3spwb")

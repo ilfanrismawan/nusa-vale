@@ -22,7 +22,7 @@ offset_left = 12.0
 offset_top = 163.0
 offset_right = 228.0
 offset_bottom = 201.0
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 text = "Bangunan"
 autowrap_mode = 3
 
@@ -35,7 +35,7 @@ offset_left = 12.0
 offset_top = 202.0
 offset_right = 228.0
 offset_bottom = 230.0
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 16
 text = "0 G"
 autowrap_mode = 3
 

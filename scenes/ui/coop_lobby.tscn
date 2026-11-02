@@ -193,7 +193,7 @@ horizontal_alignment = 1
 layout_mode = 2
 text = "1 / 4 pemain bergabung"
 unique_name_in_owner = true
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 
 [node name="PlayerGrid" type="GridContainer" parent="UI/Center/Panel/Content"]
 unique_name_in_owner = true
@@ -215,7 +215,7 @@ theme_override_constants/separation = 8
 [node name="Seat" type="Label" parent="UI/Center/Panel/Content/PlayerGrid/Player1/Content"]
 layout_mode = 2
 text = "PEMAIN 1  /  TUAN RUMAH"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 
 [node name="Device" type="Label" parent="UI/Center/Panel/Content/PlayerGrid/Player1/Content"]
 layout_mode = 2
@@ -241,7 +241,7 @@ theme_override_constants/separation = 8
 [node name="Seat" type="Label" parent="UI/Center/Panel/Content/PlayerGrid/Player2/Content"]
 layout_mode = 2
 text = "PEMAIN 2"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 
 [node name="Device" type="Label" parent="UI/Center/Panel/Content/PlayerGrid/Player2/Content"]
 layout_mode = 2
@@ -267,7 +267,7 @@ theme_override_constants/separation = 8
 [node name="Seat" type="Label" parent="UI/Center/Panel/Content/PlayerGrid/Player3/Content"]
 layout_mode = 2
 text = "PEMAIN 3"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 
 [node name="Device" type="Label" parent="UI/Center/Panel/Content/PlayerGrid/Player3/Content"]
 layout_mode = 2
@@ -293,7 +293,7 @@ theme_override_constants/separation = 8
 [node name="Seat" type="Label" parent="UI/Center/Panel/Content/PlayerGrid/Player4/Content"]
 layout_mode = 2
 text = "PEMAIN 4"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 
 [node name="Device" type="Label" parent="UI/Center/Panel/Content/PlayerGrid/Player4/Content"]
 layout_mode = 2

@@ -38,6 +38,11 @@ func set_selected(on: bool) -> void:
 	selected = on
 	%Name.visible = on and not %Name.text.is_empty()
 
+## Letupan sesaat (mis. sayap baru lengkap); kembali halus lewat _process.
+func pulse() -> void:
+	_scale = selected_scale * 1.45
+	_glow = 1.0
+
 func _process(delta: float) -> void:
 	var k := 1.0 - exp(-delta * smoothing)
 	_glow = lerpf(_glow, 1.0 if selected else 0.0, k)

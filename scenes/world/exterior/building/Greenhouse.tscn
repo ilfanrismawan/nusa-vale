@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://bm5jr5q8r7lsd" path="res://assets/farm_rpg/objects/exterior/Houses/Farm Buildings/Greenhouse/Greenhouse.png" id="1_o3ltr"]
 [ext_resource type="Texture2D" uid="uid://288u3qxytt4t" path="res://assets/farm_rpg/objects/exterior/Greenhouse/Door.png" id="2_wyvxl"]
 [ext_resource type="Script" uid="uid://cuh86yns22q3y" path="res://scripts/world/greenhouse.gd" id="3"]
+[ext_resource type="Texture2D" path="res://assets/greenhouse/greenhouse_damage.png" id="4_damage"]
 
 [sub_resource type="RectangleShape2D" id="door"]
 size = Vector2(28, 16)
@@ -24,6 +25,32 @@ position = Vector2(1, 25)
 texture = ExtResource("2_wyvxl")
 region_enabled = true
 region_rect = Rect2(7, 9, 18, 31)
+
+[node name="Damage" type="Node2D" parent="."]
+
+[node name="BoardTop" type="Sprite2D" parent="Damage"]
+position = Vector2(0, 19)
+texture = ExtResource("4_damage")
+region_enabled = true
+region_rect = Rect2(0, 0, 30, 7)
+
+[node name="BoardCross" type="Sprite2D" parent="Damage"]
+position = Vector2(0, 30)
+texture = ExtResource("4_damage")
+region_enabled = true
+region_rect = Rect2(0, 7, 30, 10)
+
+[node name="CrackHole" type="Sprite2D" parent="Damage"]
+position = Vector2(-13, -10)
+texture = ExtResource("4_damage")
+region_enabled = true
+region_rect = Rect2(32, 0, 16, 16)
+
+[node name="Crack" type="Sprite2D" parent="Damage"]
+position = Vector2(14, -2)
+texture = ExtResource("4_damage")
+region_enabled = true
+region_rect = Rect2(32, 16, 16, 12)
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1007752025]
 

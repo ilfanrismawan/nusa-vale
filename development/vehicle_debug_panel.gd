@@ -9,7 +9,7 @@ func _ready() -> void:
 	var heading := Label.new()
 	heading.text = "KENDARAAN"
 	heading.add_theme_color_override("font_color", Color(1.0, 0.75, 0.3))
-	heading.add_theme_font_size_override("font_size", 13)
+	heading.add_theme_font_size_override("font_size", 16)
 	add_child(heading)
 	for id in VEHICLE_IDS:
 		var item := GameState._resolve_item(id)

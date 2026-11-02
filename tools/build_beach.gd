@@ -99,7 +99,7 @@ func signboard(label: String, parent: Node, at: Vector2, caption: String) -> voi
 	var board: Node2D = load("res://scenes/objects/building_sign.tscn").instantiate()
 	board.position = at
 	board.caption = caption
-	board.font_size = 10
+	board.font_size = 16
 	board.minimum_width = 88
 	put(board, parent, label)
 

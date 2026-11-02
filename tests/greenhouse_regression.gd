@@ -42,7 +42,7 @@ func _ready() -> void:
 	check(player._find_interactable() == greenhouse, "Farm greenhouse door uses existing interaction query")
 	player._try_interact()
 	await get_tree().process_frame
-	check(get_tree().current_scene == farm and not manager.completed(ID) and greenhouse.get_node("Sprite2D").region_rect.position.y == 7, "New Game keeps greenhouse damaged and refuses entry")
+	check(get_tree().current_scene == farm and not manager.completed(ID) and greenhouse.get_node("Sprite2D").region_rect == greenhouse.locked_region and greenhouse.get_node("Damage").visible, "New Game keeps greenhouse damaged and refuses entry")
 	await capture("greenhouse-locked.png")
 	# Outdoor travel is automatic; the Balai Nadi is now located in town.
 	player.global_position = farm.get_node("EnterTown/CollisionShape2D").global_position - Player.FEET_OFFSET
@@ -94,7 +94,7 @@ func _ready() -> void:
 	farm = get_tree().current_scene
 	player = farm.get_node("Player/CharacterBody2D")
 	greenhouse = farm.get_node("Greenhouse")
-	check(greenhouse.get_node("Sprite2D").region_rect.position.y == 103 and greenhouse.get_node("Sprite2D2").visible, "Farm greenhouse swaps to clean restored sprite and repaired door")
+	check(greenhouse.get_node("Sprite2D").region_rect == greenhouse.restored_region and greenhouse.get_node("Sprite2D2").visible and not greenhouse.get_node("Damage").visible, "Farm greenhouse swaps to clean restored sprite and repaired door")
 	var sprite := greenhouse.get_node("Sprite2D") as Sprite2D
 	check(sprite.texture.get_image().get_region(Rect2i(sprite.region_rect)).get_used_rect().has_area(), "Restored atlas region contains visible greenhouse artwork")
 	await capture("greenhouse-restored.png")
@@ -104,7 +104,7 @@ func _ready() -> void:
 	check(get_tree().current_scene.scene_file_path.ends_with("interior/greenhouse.tscn"), "Restored greenhouse door opens playable growing room")
 	var room := get_tree().current_scene
 	player = room.get_node("Player/CharacterBody2D")
-	check(player.base_layer_ground != null and room.get_node("BaseLayerGround").get_used_cells().size() == 32, "Interior exposes 32 farmable tiles to existing player tools")
+	check(player.base_layer_ground != null and room.get_node("BaseLayerGround").get_used_cells().size() == 40, "Interior exposes 32 field tiles plus 8 fruit tree beds to existing player tools")
 	var crop: CropData = load("res://resources/crop_data/tomato.tres")
 	DayCycle.current_day = 1
 	check(FarmManager.hoe(CELL) and FarmManager.is_crop_in_season(crop) and FarmManager.plant(CELL, crop), "Greenhouse supports existing hoe and out-of-season planting")

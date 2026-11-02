@@ -46,7 +46,7 @@ func _ready() -> void:
 	_badge = Label.new()
 	_badge.position = Vector2(-20, -48)
 	_badge.add_theme_font_override("font", preload("res://assets/fonts/m5x7.ttf"))
-	_badge.add_theme_font_size_override("font_size", 12)
+	_badge.add_theme_font_size_override("font_size", 16)
 	_badge.add_theme_color_override("font_color", Color("fff1c9"))
 	_badge.add_theme_color_override("font_outline_color", Color("302333"))
 	_badge.add_theme_constant_override("outline_size", 2)

@@ -1,19 +1,19 @@
 # Rumah dan toko Ranch Eep
 
-Implementasi: 24 Oktober 2026. Area dibuat sebagai scene Godot yang dapat diedit, memakai aset proyek. Komposisi mengikuti referensi pemilik: kolam di barat daya, pepohonan di pinggir area, jalan tanah bercabang, rumah ranch di timur laut, padang berpagar dan kandang kecil di timur, serta air di tenggara.
+Implementasi: 24 Oktober 2026; tata ulang 2 November 2026. Area dibuat sebagai scene Godot yang dapat diedit, memakai aset proyek. Komposisi mengikuti referensi pemilik: hutan rapat di tepi, tempat piknik di barat laut, kolam besar dengan dermaga di barat daya, alun-alun tanah di tengah tempat jalan Farm/Town bertemu, rumah ranch + silo + halaman berpagar di timur laut, padang berpagar di tengah-timur, kandang ayam di tenggara, dan sungai yang keluar peta di sudut tenggara.
 
 ## Scene dan koneksi
 
-- Area luar: `scenes/world/eep_ranch.tscn`, ukuran 1.152 × 768.
+- Area luar: `scenes/world/eep_ranch.tscn`, ukuran 1.440 × 768.
 - Rumah/toko: `scenes/world/interior/eep_home.tscn`, ukuran 640 × 448. Area depan untuk pelayanan; kamar dan meja makan di sisi timur.
 - Ranch **utara → Farm**; Farm mempunyai `EnterEepRanch` pada jalur selatan. Posisi kembali ke Farm `(992, 928)`, sebelum collider tebing; trigger menuju ranch `(992, 976)`.
-- Ranch **barat → Town**; Town mempunyai `RanchEntrance` di timur. Posisi kembali ke Town `(1184, 640)`.
+- Ranch **timur → Town** (`EastToTown`, jalan keluar di tepi kanan `y = 416`). Ranch berada di barat daya Town pada Peta Lembah, sehingga pemain masuk Town dari kiri melalui `RanchEntrance` di tepi barat Town; spawn tiba di Town `(72, 791)`, spawn kembali ke ranch `(1392, 416)`.
 - Pintu rumah ranch menuju interior, dan pintu interior kembali ke depan rumah. Akses bangunan memakai interaksi; batas luar berpindah otomatis.
 - Jalur Farm–Town lama tetap tersedia. Koneksi ranch adalah tambahan.
 
 Pohon cleanup Farm `MahoganyTree18` digeser dari `(990, 967)` ke `(944, 967)` agar tidak menutup koridor pintu ranch. ID persistensinya tetap sama, sehingga pohon yang sudah ditebang tidak muncul kembali.
 
-Layer tanah, jalan dan air; collider kolam; pagar; bangunan; dekorasi; marker; Path2D; dan pintu tersimpan dalam scene. `scripts/world/eep_ranch.gd` hanya menangani batas kamera dan pengikatan state area, bukan menggambar peta saat runtime. `tools/build_eep_ranch.gd` adalah alat authoring awal; menjalankannya ulang menimpa dua scene ranch tersebut.
+Layer tanah dan jalan (autotile tepi/sudut dalam dari `Tileset Grass Spring`), permukaan air poligon halus (tekstur + `water_detail_material`, garis pasir basah dan busa), collider poligon kolam/sungai dengan dermaga yang dapat dipijak, pagar, bangunan, dekorasi, marker, Path2D, dan pintu tersimpan dalam scene. `scripts/world/eep_ranch.gd` hanya menangani batas kamera dan pengikatan state area. `tools/build_eep_ranch.gd` adalah alat authoring: `Godot.exe --headless --path . --script res://tools/build_eep_ranch.gd` menimpa area luar; tambahkan `-- --inside` untuk ikut menimpa interior rumah.
 
 ## Jadwal dan perdagangan Eep
 

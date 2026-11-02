@@ -41,5 +41,5 @@ position = Vector2(16, 69)
 position = Vector2(0, 34)
 caption = "Toko"
 minimum_width = 32
-font_size = 8
+font_size = 16
 minimum_height = 16

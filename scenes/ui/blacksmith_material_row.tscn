@@ -21,5 +21,5 @@ text = "Material"
 text_overrun_behavior = 3
 [node name="Count" type="Label" parent="Layout"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 16
 text = "0 / 5"

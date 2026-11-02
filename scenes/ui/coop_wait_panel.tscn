@@ -42,13 +42,13 @@ theme_override_constants/separation = 14
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"MutedLabel"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 text = "PEMAIN 2 / BERGABUNG"
 
 [node name="Title" type="Label" parent="Frame/Center/Card/Content"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 32
 text = "Siap Bergabung"
 autowrap_mode = 3
 max_lines_visible = 2
@@ -70,7 +70,7 @@ autowrap_mode = 3
 [node name="SharedInfo" type="Label" parent="Frame/Center/Card/Content" groups=["coop_compact_hide"]]
 layout_mode = 2
 theme_type_variation = &"MutedLabel"
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 16
 text = "Anda akan masuk otomatis setelah area siap.\nPemain lain tetap bermain."
 autowrap_mode = 3
 

@@ -1,4 +1,4 @@
-[gd_scene format=4]
+[gd_scene format=4 uid="uid://c2yfngw5phigp"]
 
 [ext_resource type="Texture2D" path="res://assets/farm_rpg/tileset/ext/Tileset Grass Spring.png" id="1_l64d7"]
 [ext_resource type="Texture2D" path="res://assets/farm_rpg/tileset/ext/Water tile.png" id="2_bhkj0"]
