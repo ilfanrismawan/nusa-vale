@@ -147,6 +147,7 @@ func _test_brew() -> void:
 	var game := BrewGame.new()
 	game.player = player
 	game.recipe = recipe
+	game.title = "Racik di Kuali: %s" % GameState._resolve_item(recipe.output_item_id).display_name
 	var result := [null]
 	game.finished.connect(func(ok: bool) -> void: result[0] = ok)
 	add_child(game)
@@ -190,6 +191,7 @@ func _test_rune() -> void:
 	var game := RuneGame.new()
 	game.player = player
 	game.rune = "bolt"
+	game.title = "Gambar Rune: Kantil Charm"
 	var result := [null]
 	game.finished.connect(func(ok: bool) -> void: result[0] = ok)
 	add_child(game)
@@ -205,6 +207,8 @@ func _test_rune() -> void:
 			await _frames(3)
 			await shot("minigame_rune_jimat")
 	check(result[0] == true, "Gambar Rune berhasil bila garis diikuti")
+	await get_tree().create_timer(0.4).timeout
+	await shot("minigame_hasil_berhasil")
 	var bad := RuneGame.new()
 	bad.player = player
 	bad.rune = "shield"
@@ -225,6 +229,7 @@ func _test_sequence() -> void:
 	var game := SequenceGame.new()
 	game.player = player
 	game.length = 5
+	game.title = "Urutan Mantra: Pesona Ember"
 	var result := [null]
 	game.finished.connect(func(ok: bool) -> void: result[0] = ok)
 	add_child(game)

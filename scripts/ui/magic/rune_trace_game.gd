@@ -81,12 +81,15 @@ func _move_cursor(pos: Vector2, jump: bool = false) -> void:
 		if _cursor.distance_to(_points[0]) <= HIT_RADIUS * 1.4:
 			_started = true
 			_trail = [_points[0]]
+			burst(_points[0], GOLD, 10, 55.0)
 			play(&"magic_cast")
 			set_status("Ikuti garisnya...")
 		return
 	if jump:
 		return
 	_trail.append(_cursor)
+	if randf() < 0.35:
+		sparkle(_cursor, Vector2(randf_range(-12, 12), randf_range(-18, 4)), Color(1.0, 0.9, 0.6), 0.5, 1.2)
 	if _trail.size() > 600:
 		_trail.remove_at(1)
 	var target := _points[_next]
@@ -94,6 +97,7 @@ func _move_cursor(pos: Vector2, jump: bool = false) -> void:
 		_next += 1
 		play(&"magic_cast")
 		flash(GOOD)
+		burst(target, Color(0.6, 0.95, 1.0), 10, 60.0)
 		if _next >= _points.size():
 			finish(true, "Rune bersinar sempurna!")
 		return
@@ -102,6 +106,7 @@ func _move_cursor(pos: Vector2, jump: bool = false) -> void:
 		_mistakes += 1
 		_stray_cooldown = 0.6
 		flash(BAD)
+		burst(_cursor, BAD, 8, 50.0)
 		if _mistakes >= MAX_MISTAKES:
 			finish(false, "Goresan terlalu liar, rune pecah.")
 		else:
@@ -112,26 +117,79 @@ static func _segment_distance(p: Vector2, a: Vector2, b: Vector2) -> float:
 	return p.distance_to(Geometry2D.get_closest_point_to_segment(p, a, b))
 
 
+func _mistake_state() -> Vector2i:
+	return Vector2i(_mistakes, MAX_MISTAKES)
+
+
+func _time_ratio() -> float:
+	return clampf(_time_left / time_limit, 0.0, 1.0)
+
+
 func _draw_board(canvas: Control) -> void:
-	var t := Time.get_ticks_msec() * 0.001
-	# Lingkaran rune samar di latar.
-	canvas.draw_arc(BOARD_SIZE * 0.5, BOARD_SIZE.y * 0.46, 0, TAU, 48, Color(0.6, 0.45, 0.9, 0.18), 2.0)
+	var t := age()
+	var center := BOARD_SIZE * 0.5
+	var radius := BOARD_SIZE.y * 0.46
+	# Lingkaran pemanggil: dua cincin, glyph kecil berputar, sinar tipis.
+	var ring_color := Color(0.62, 0.48, 0.95, 0.32 if not _started else 0.5)
+	canvas.draw_arc(center, radius, 0, TAU, 64, ring_color, 1.5)
+	canvas.draw_arc(center, radius - 9, 0, TAU, 64, Color(ring_color, ring_color.a * 0.6), 1.0)
+	for i in 24:
+		var a := t * 0.25 + TAU * i / 24.0
+		var p := center + Vector2(cos(a), sin(a)) * (radius - 4.5)
+		if i % 3 == 0:
+			diamond(canvas, p, 2.2, Color(GOLD, 0.45))
+		else:
+			canvas.draw_line(p - Vector2(cos(a), sin(a)) * 2.0, p + Vector2(cos(a), sin(a)) * 2.0, Color(ring_color, 0.8), 1.0)
+	for i in 6:
+		var a := -t * 0.15 + TAU * i / 6.0
+		canvas.draw_line(center + Vector2(cos(a), sin(a)) * 18.0, center + Vector2(cos(a), sin(a)) * (radius - 12.0), Color(0.6, 0.45, 0.95, 0.05), 1.0)
+	# Pola rune: garis tuntunan putus-putus, ruas selesai berpendar.
 	for i in _points.size() - 1:
-		var done := i < _next - 1 and _started
-		canvas.draw_line(_points[i], _points[i + 1], Color(0.55, 0.9, 1.0, 0.9) if done else Color(0.75, 0.65, 1.0, 0.28), 6.0 if done else 4.0)
-	if _trail.size() > 1:
-		canvas.draw_polyline(PackedVector2Array(_trail), Color(1.0, 0.95, 0.7, 0.85), 2.0)
+		var a := _points[i]
+		var b := _points[i + 1]
+		if _started and i < _next - 1:
+			draw_glow_line(canvas, a, b, Color(0.55, 0.92, 1.0, 0.95), 4.0)
+		else:
+			var active := (_started and i == _next - 1) or (not _started and i == 0)
+			var steps := maxi(2, int(a.distance_to(b) / 9.0))
+			for s in steps:
+				if s % 2 == 1:
+					continue
+				var k0 := float(s) / steps
+				var k1 := float(s + 1) / steps
+				var alpha := 0.55 if active else 0.26
+				if active:
+					alpha *= 0.75 + 0.25 * sin(t * 6.0 - s * 0.6)
+				canvas.draw_line(a.lerp(b, k0), a.lerp(b, k1), Color(0.82, 0.72, 1.0, alpha), 3.0 if active else 2.0)
+	# Jejak tongkat memudar dari ekor ke ujung.
+	var count := _trail.size()
+	var start := maxi(1, count - 140)
+	for i in range(start, count):
+		var k := float(i - start) / maxf(1.0, count - start)
+		canvas.draw_line(_trail[i - 1], _trail[i], Color(1.0, 0.93, 0.66, 0.12 + 0.75 * k), 1.0 + 2.0 * k)
+	# Titik rune.
 	for i in _points.size():
 		var reached := _started and i < _next
 		var is_next := (not _started and i == 0) or (_started and i == _next)
-		var r := 5.0
+		var p := _points[i]
 		if is_next:
-			r = 7.0 + sin(t * 8.0) * 1.5
-			draw_glow_circle(canvas, _points[i], r, Color(1.0, 0.9, 0.5, 0.95))
+			var pulse := sin(t * 7.0)
+			canvas.draw_arc(p, HIT_RADIUS + 3.0 + pulse * 2.0, 0, TAU, 24, Color(GOLD, 0.45), 1.0)
+			draw_glow_circle(canvas, p, 6.5 + pulse * 1.2, Color(1.0, 0.88, 0.5, 0.95))
+			diamond(canvas, p, 2.5, Color(1, 1, 1, 0.9))
+		elif reached:
+			draw_glow_circle(canvas, p, 5.0, Color(0.6, 0.95, 1.0, 0.95))
 		else:
-			canvas.draw_circle(_points[i], r, Color(0.55, 0.95, 1.0) if reached else Color(0.6, 0.5, 0.85, 0.6))
+			canvas.draw_circle(p, 5.0, Color(0.16, 0.1, 0.26))
+			canvas.draw_arc(p, 5.0, 0, TAU, 16, Color(0.7, 0.6, 0.95, 0.7), 1.5)
+	if not _started and not is_done():
+		var font := ServiceTheme.FONT
+		canvas.draw_string_outline(font, _points[0] + Vector2(-16, -14), "MULAI", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, 3, Color(0.08, 0.03, 0.12))
+		canvas.draw_string(font, _points[0] + Vector2(-16, -14), "MULAI", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, GOLD)
 	# Ujung tongkat.
-	draw_glow_circle(canvas, _cursor, 3.0, Color(1, 1, 1, 0.9) if _drawing else Color(0.8, 0.8, 1, 0.5))
-	# Sisa waktu.
-	var ratio := clampf(_time_left / time_limit, 0.0, 1.0)
-	canvas.draw_rect(Rect2(8, BOARD_SIZE.y - 10, (BOARD_SIZE.x - 16) * ratio, 4), Color(0.7, 0.55, 1.0, 0.85))
+	if _drawing:
+		draw_glow_circle(canvas, _cursor, 3.5, Color(1, 0.97, 0.85, 0.95))
+		canvas.draw_line(_cursor + Vector2(-6, 0), _cursor + Vector2(6, 0), Color(1, 1, 1, 0.5), 1.0)
+		canvas.draw_line(_cursor + Vector2(0, -6), _cursor + Vector2(0, 6), Color(1, 1, 1, 0.5), 1.0)
+	else:
+		canvas.draw_arc(_cursor, 4.0, 0, TAU, 16, Color(0.85, 0.82, 1.0, 0.7), 1.5)

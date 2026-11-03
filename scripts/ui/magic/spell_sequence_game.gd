@@ -113,6 +113,7 @@ func _miss(text: String) -> void:
 
 
 func _light(symbol: int, good: bool, seconds: float) -> void:
+	burst(_pad_position(symbol), (COLORS[symbol] as Color) if good else BAD, 10, 60.0)
 	_lit = symbol
 	_lit_good = good
 	_lit_timer = seconds
@@ -123,40 +124,78 @@ func _pad_position(i: int) -> Vector2:
 	return BOARD_SIZE * 0.5 + Vector2(cos(angle), sin(angle)) * RING_RADIUS
 
 
+func _mistake_state() -> Vector2i:
+	return Vector2i(_mistakes, MAX_MISTAKES)
+
+
 func _draw_board(canvas: Control) -> void:
 	var center := BOARD_SIZE * 0.5
-	var t := Time.get_ticks_msec() * 0.001
-	canvas.draw_arc(center, RING_RADIUS, 0, TAU, 48, Color(0.7, 0.55, 1.0, 0.35), 2.0)
-	canvas.draw_arc(center, RING_RADIUS * 0.45, t, t + TAU * 0.8, 24, Color(0.8, 0.7, 1.0, 0.25), 1.5)
+	var t := age()
+	# Lingkaran rapal: cincin ganda, glyph berputar, garis bintang antar pad.
+	canvas.draw_arc(center, RING_RADIUS + 12.0, 0, TAU, 64, Color(0.65, 0.5, 1.0, 0.22), 1.0)
+	canvas.draw_arc(center, RING_RADIUS, 0, TAU, 64, Color(0.7, 0.55, 1.0, 0.4), 1.5)
+	for i in 16:
+		var a := -t * 0.3 + TAU * i / 16.0
+		diamond(canvas, center + Vector2(cos(a), sin(a)) * (RING_RADIUS + 12.0), 1.6 if i % 2 else 2.4, Color(GOLD, 0.35))
+	for i in SYMBOLS.size():
+		var a := _pad_position(i)
+		var b := _pad_position((i + 1) % SYMBOLS.size())
+		canvas.draw_line(a, b, Color(0.7, 0.55, 1.0, 0.12), 1.0)
+		canvas.draw_line(a, center, Color(COLORS[i] as Color, 0.1 if _lit != i else 0.5), 1.0 if _lit != i else 2.0)
+	# Inti tengah: orb dengan manik progres melingkar dan sisa waktu.
+	var phase_color := Color(0.75, 0.6, 1.0) if _showing else GOLD
+	draw_glow_circle(canvas, center, 15.0 + sin(t * 3.0) * 1.0, Color(phase_color, 0.35))
+	canvas.draw_circle(center, 11.0, Color(0.08, 0.05, 0.14))
+	var font := ServiceTheme.FONT
+	var label := "LIHAT" if _showing else "ULANG"
+	var width := font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, 9).x
+	canvas.draw_string(font, center + Vector2(-width * 0.5, 3.5), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 9, phase_color)
+	var count := _sequence.size()
+	for i in count:
+		var a := -PI * 0.5 + TAU * i / count
+		var p := center + Vector2(cos(a), sin(a)) * 28.0
+		var filled := (not _showing and i < _answer_index) or (_showing and i <= _show_index)
+		if filled:
+			var sym: int = _sequence[i] if not _showing else -1
+			draw_glow_circle(canvas, p, 3.2, Color(COLORS[sym] as Color, 0.95) if sym >= 0 else Color(0.8, 0.7, 1.0, 0.9))
+		else:
+			canvas.draw_arc(p, 3.0, 0, TAU, 12, Color(0.6, 0.5, 0.85, 0.6), 1.0)
+	if not _showing and not is_done():
+		var ratio := clampf(_timer / answer_seconds, 0.0, 1.0)
+		var warn := Color(1.0, 0.75, 0.4).lerp(BAD, clampf(1.0 - ratio * 2.0, 0.0, 1.0))
+		canvas.draw_arc(center, 38.0, -PI * 0.5, -PI * 0.5 + TAU * ratio, 48, warn, 2.5)
+	# Pad elemen.
 	for i in SYMBOLS.size():
 		var pos := _pad_position(i)
 		var lit := _lit == i
 		var color: Color = COLORS[i]
+		var k := clampf(_lit_timer / 0.3, 0.0, 1.0) if lit else 0.0
+		var r := PAD_RADIUS * (1.0 + 0.12 * k)
 		if lit:
-			draw_glow_circle(canvas, pos, PAD_RADIUS, color if _lit_good else BAD)
+			var glow := color if _lit_good else BAD
+			draw_glow_circle(canvas, pos, r, glow)
+			canvas.draw_arc(pos, r + 6.0 + (1.0 - k) * 8.0, 0, TAU, 32, Color(glow, 0.5 * k), 2.0)
 		else:
-			canvas.draw_circle(pos, PAD_RADIUS, Color(color, 0.22))
-			canvas.draw_arc(pos, PAD_RADIUS, 0, TAU, 24, Color(color, 0.7), 2.0)
+			canvas.draw_circle(pos, r + 3.0, Color(color, 0.08 + 0.04 * sin(t * 2.0 + i)))
+			canvas.draw_circle(pos, r, Color(0.08, 0.05, 0.14))
+			canvas.draw_circle(pos, r, Color(color, 0.18))
+			canvas.draw_arc(pos, r, 0, TAU, 32, Color(color, 0.8), 2.0)
+			canvas.draw_arc(pos, r - 4.0, PI * 1.1, PI * 1.6, 8, Color(1, 1, 1, 0.25), 1.5)
 		_draw_symbol(canvas, i, pos, Color(0.1, 0.05, 0.15) if lit else color)
-	# Manik urutan di tengah.
-	var count := _sequence.size()
-	for i in count:
-		var p := center + Vector2((i - (count - 1) * 0.5) * 12.0, 0)
-		var filled := (not _showing and i < _answer_index) or (_showing and i <= _show_index)
-		canvas.draw_circle(p, 4.0, Color(1, 0.9, 0.6) if filled else Color(0.5, 0.4, 0.7, 0.6))
-	if not _showing and not is_done():
-		var ratio := clampf(_timer / answer_seconds, 0.0, 1.0)
-		canvas.draw_arc(center, RING_RADIUS * 0.3, -PI * 0.5, -PI * 0.5 + TAU * ratio, 32, Color(1.0, 0.75, 0.4, 0.9), 3.0)
-	for i in _mistakes:
-		canvas.draw_line(Vector2(14 + i * 14, 14), Vector2(22 + i * 14, 28), BAD, 2.0)
+		var element: String = NAMES[i]
+		var nw := font.get_string_size(element, HORIZONTAL_ALIGNMENT_LEFT, -1, 10).x
+		# Atas/bawah: label di kanan pad; kanan/kiri: label di bawah pad.
+		var label_pos := pos + Vector2(PAD_RADIUS + 6.0, 4.0) if i % 2 == 0 else pos + Vector2(-nw * 0.5, PAD_RADIUS + 13.0)
+		canvas.draw_string(font, label_pos, element, HORIZONTAL_ALIGNMENT_LEFT, -1, 10, Color(color, 0.85))
 
 
 ## Simbol elemen sederhana (garis), bukan huruf: angin, api, bumi, air.
 func _draw_symbol(canvas: Control, i: int, pos: Vector2, color: Color) -> void:
 	match i:
 		0:
-			canvas.draw_arc(pos + Vector2(-2, -3), 7, PI, TAU * 0.95, 12, color, 2.0)
-			canvas.draw_line(pos + Vector2(-9, 3), pos + Vector2(9, 3), color, 2.0)
+			canvas.draw_arc(pos + Vector2(-2, -3), 7, PI, TAU * 0.95, 12, color, 2.5)
+			canvas.draw_line(pos + Vector2(-9, 3), pos + Vector2(9, 3), color, 2.5)
+			canvas.draw_line(pos + Vector2(-6, 8), pos + Vector2(5, 8), color, 2.0)
 		1:
 			canvas.draw_colored_polygon(PackedVector2Array([pos + Vector2(0, -10), pos + Vector2(7, 6), pos + Vector2(-7, 6)]), color)
 		2:

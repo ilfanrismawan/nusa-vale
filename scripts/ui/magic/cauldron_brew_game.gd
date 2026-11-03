@@ -12,9 +12,11 @@ const MAX_MISTAKES := 3
 const STIR_SECONDS := 16.0
 const KEY_STIR_SPEED := 4.2
 const MURKY := Color(0.28, 0.3, 0.22)
-const POT_CENTER := Vector2(190, 118)
+const POT_CENTER := Vector2(190, 100)
 const POT_RADIUS := Vector2(70, 34)
 const TRAY_Y := 214.0
+const FIRE_Y := 196.0
+const STIR_RING := Vector2(92, 56)
 ## Bahan pengecoh di nampan (bukan bagian resep; tidak dikonsumsi).
 const DECOYS := ["moon_dew", "stardust", "bunga_kantil", "honey", "lavender", "slime_gel"]
 
@@ -36,6 +38,8 @@ var _lift_speed := 0.9
 var _zone := Vector2(0.42, 0.58)
 var _bubbles: Array[Vector3] = []
 var _splash := 0.0
+## Bahan yang sedang terbang ke kuali: item, from, t (0..1).
+var _flying: Array[Dictionary] = []
 
 
 func _start() -> void:
@@ -100,6 +104,16 @@ func _enter_lift() -> void:
 
 func _tick(delta: float) -> void:
 	_splash = maxf(0.0, _splash - delta * 2.0)
+	for i in range(_flying.size() - 1, -1, -1):
+		_flying[i]["t"] = float(_flying[i]["t"]) + delta * 3.2
+		if float(_flying[i]["t"]) >= 1.0:
+			_flying.remove_at(i)
+			_splash = 1.0
+			burst(POT_CENTER + Vector2(0, -4), _liquid_color().lightened(0.4), 12, 70.0)
+	if randf() < delta * (6.0 + _stir * 10.0):
+		sparkle(POT_CENTER + Vector2(randf_range(-50, 50), -8), Vector2(randf_range(-6, 6), randf_range(-38, -22)), Color(_liquid_color().lightened(0.5), 0.7), randf_range(0.8, 1.4), randf_range(1.6, 2.8))
+	if randf() < delta * 5.0:
+		sparkle(Vector2(POT_CENTER.x + randf_range(-36, 36), FIRE_Y - 8), Vector2(randf_range(-10, 10), randf_range(-40, -20)), Color(1.0, 0.6, 0.25), 0.6, 1.0)
 	for i in _bubbles.size():
 		var b := _bubbles[i]
 		b.z += delta * (0.6 + _stir * 0.8)
@@ -196,8 +210,8 @@ func _drop(index: int) -> void:
 		return
 	var item := _tray[index]
 	if item == _order[_added]:
+		_flying.append({"item": item, "from": _tray_position(index), "t": 0.0})
 		_added += 1
-		_splash = 1.0
 		play(&"splash")
 		_tray.remove_at(index)
 		_tray_index = clampi(_tray_index, 0, maxi(0, _tray.size() - 1))
@@ -214,6 +228,7 @@ func _lift() -> void:
 		return
 	var v := _lift_value()
 	if v >= _zone.x and v <= _zone.y:
+		burst(POT_CENTER, _target().lightened(0.3), 24, 120.0)
 		finish(true, "Ramuan matang sempurna!")
 	else:
 		_mistake("Belum matang!" if v < _zone.x else "Terlalu lama!")
@@ -245,57 +260,160 @@ func _liquid_color() -> Color:
 	return base.darkened(0.12 * _mistakes)
 
 
+func _mistake_state() -> Vector2i:
+	return Vector2i(_mistakes, MAX_MISTAKES)
+
+
+func _time_ratio() -> float:
+	return clampf(_stir_time / STIR_SECONDS, 0.0, 1.0) if _phase == Phase.STIR else -1.0
+
+
 func _draw_board(canvas: Control) -> void:
-	var t := Time.get_ticks_msec() * 0.001
+	var t := age()
 	var liquid := _liquid_color()
-	# Api & kuali.
-	for i in 5:
-		var x := POT_CENTER.x - 40 + i * 20
-		var h := 10.0 + sin(t * 10.0 + i) * 3.0
-		canvas.draw_colored_polygon(PackedVector2Array([Vector2(x - 7, 176), Vector2(x, 176 - h - 6), Vector2(x + 7, 176)]), Color(1.0, 0.55, 0.2, 0.85))
-	canvas.draw_rect(Rect2(POT_CENTER.x - 74, POT_CENTER.y, 148, 52), Color(0.12, 0.1, 0.14))
-	canvas.draw_circle(Vector2(POT_CENTER.x, POT_CENTER.y + 52), 74, Color(0.12, 0.1, 0.14))
-	_draw_ellipse(canvas, POT_CENTER, POT_RADIUS + Vector2(6, 4), Color(0.22, 0.2, 0.26))
-	_draw_ellipse(canvas, POT_CENTER, POT_RADIUS, liquid)
-	for b in _bubbles:
-		var p := POT_CENTER + Vector2(b.x * POT_RADIUS.x, b.y * POT_RADIUS.y)
-		canvas.draw_arc(p, 2.0 + b.z * 3.0, 0, TAU, 10, Color(liquid.lightened(0.4), 1.0 - b.z), 1.0)
-	if _splash > 0.0:
-		canvas.draw_arc(POT_CENTER, 20.0 + (1.0 - _splash) * 40.0, 0, TAU, 24, Color(1, 1, 1, _splash * 0.7), 2.0)
-	# Sendok aduk.
-	var tip := POT_CENTER + Vector2(cos(_stir_angle), sin(_stir_angle)) * Vector2(POT_RADIUS.x * 0.55, POT_RADIUS.y * 0.55)
-	canvas.draw_line(tip, tip + Vector2(18, -56), Color(0.6, 0.4, 0.25), 4.0)
-	# Urutan resep di atas.
-	for i in _order.size():
-		var p := Vector2(BOARD_SIZE.x * 0.5 + (i - (_order.size() - 1) * 0.5) * 34.0, 22)
-		canvas.draw_rect(Rect2(p - Vector2(14, 14), Vector2(28, 28)), Color(0.25, 0.18, 0.35) if i != _added else Color(0.45, 0.32, 0.6))
+	var font := ServiceTheme.FONT
+	_draw_pot(canvas, liquid)
+	_draw_fire(canvas, t)
+	# Bahan yang terbang ke kuali.
+	for f in _flying:
+		var k := float(f["t"])
+		var from: Vector2 = f["from"]
+		var to := POT_CENTER + Vector2(0, -6)
+		var pos := from.lerp(to, k) + Vector2(0, -70.0 * sin(k * PI))
+		draw_icon(canvas, f["item"], pos, 24.0 * (1.0 - 0.4 * k))
+	# Urutan resep di atas: slot berpanah.
+	var n := _order.size()
+	for i in n:
+		var p := Vector2(BOARD_SIZE.x * 0.5 + (i - (n - 1) * 0.5) * 38.0, 24)
+		var rect := Rect2(p - Vector2(15, 15), Vector2(30, 30))
+		var current := i == _added and _phase == Phase.INGREDIENTS
+		var border := Color(GOLD, 0.6 + 0.4 * sin(t * 6.0)) if current else Color(0.55, 0.42, 0.8, 0.6)
+		draw_box(canvas, rect, Color(0.18, 0.12, 0.28, 0.95) if i >= _added else Color(0.14, 0.24, 0.2, 0.95), border, 4, 2 if current else 1)
 		draw_icon(canvas, _order[i], p, 22.0)
 		if i < _added:
-			canvas.draw_line(p + Vector2(-7, 1), p + Vector2(-2, 7), GOOD, 3.0)
-			canvas.draw_line(p + Vector2(-2, 7), p + Vector2(8, -6), GOOD, 3.0)
+			canvas.draw_circle(p + Vector2(10, 10), 6.0, Color(0.1, 0.3, 0.18))
+			canvas.draw_line(p + Vector2(7, 10), p + Vector2(9, 12.5), GOOD, 2.0)
+			canvas.draw_line(p + Vector2(9, 12.5), p + Vector2(13, 7), GOOD, 2.0)
+		if i < n - 1:
+			var ax := p.x + 17.0
+			canvas.draw_colored_polygon(PackedVector2Array([Vector2(ax, p.y - 3), Vector2(ax + 4, p.y), Vector2(ax, p.y + 3)]), Color(GOLD, 0.6))
 	match _phase:
 		Phase.INGREDIENTS:
+			# Rak nampan kayu.
+			var shelf := Rect2(24, TRAY_Y + 14, BOARD_SIZE.x - 48, 6)
+			draw_box(canvas, shelf, Color(0.38, 0.24, 0.16), Color(0.55, 0.36, 0.22), 2)
 			for i in _tray.size():
 				var p := _tray_position(i)
 				var sel := i == _tray_index and not input().uses_mouse()
-				canvas.draw_rect(Rect2(p - Vector2(17, 17), Vector2(34, 34)), Color(0.75, 0.6, 1.0, 0.9) if sel else Color(0.3, 0.24, 0.4), not sel, 2.0)
+				if sel:
+					p.y -= 4.0 + sin(t * 6.0) * 1.5
+				var rect := Rect2(p - Vector2(17, 17), Vector2(34, 34))
+				draw_box(canvas, rect, Color(0.2, 0.14, 0.3, 0.95) if not sel else Color(0.32, 0.22, 0.46), Color(GOLD, 0.95) if sel else Color(0.5, 0.4, 0.7, 0.6), 5, 2 if sel else 1)
 				draw_icon(canvas, _tray[i], p, 26.0)
+				if sel:
+					var name_text := _tray[i].display_name
+					var w := font.get_string_size(name_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 10).x
+					canvas.draw_string_outline(font, Vector2(p.x - w * 0.5, p.y - 22), name_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 10, 3, Color(0.06, 0.03, 0.1))
+					canvas.draw_string(font, Vector2(p.x - w * 0.5, p.y - 22), name_text, HORIZONTAL_ALIGNMENT_LEFT, -1, 10, GOLD)
 		Phase.STIR:
 			var arrow := 1.0 if _clockwise() else -1.0
-			canvas.draw_arc(POT_CENTER, POT_RADIUS.x + 18, -PI * 0.5, -PI * 0.5 + TAU * _stir * arrow, 40, Color(0.7, 1.0, 0.8, 0.9), 4.0)
-			var head_angle := -PI * 0.5 + 0.6 * arrow + t * 2.0 * arrow
-			var head := POT_CENTER + Vector2(cos(head_angle), sin(head_angle)) * (POT_RADIUS.x + 30)
-			draw_glow_circle(canvas, head, 4.0, Color(1, 0.9, 0.6, 0.9))
-			var ratio := clampf(_stir_time / STIR_SECONDS, 0.0, 1.0)
-			canvas.draw_rect(Rect2(8, BOARD_SIZE.y - 10, (BOARD_SIZE.x - 16) * ratio, 4), Color(1.0, 0.7, 0.4, 0.85))
+			_ellipse_arc(canvas, 0.0, TAU, Color(0.6, 0.5, 0.9, 0.18), 3.0)
+			if _stir > 0.0:
+				_ellipse_arc(canvas, -PI * 0.5, -PI * 0.5 + TAU * _stir * arrow, Color(_target(), 0.3), 8.0)
+				_ellipse_arc(canvas, -PI * 0.5, -PI * 0.5 + TAU * _stir * arrow, _target().lightened(0.25), 3.0)
+			for i in 3:
+				var a := -PI * 0.5 + arrow * (t * 1.6 + TAU * i / 3.0)
+				var head := POT_CENTER + Vector2(cos(a), sin(a)) * STIR_RING
+				var tangent := Vector2(-sin(a) * STIR_RING.x, cos(a) * STIR_RING.y).normalized() * arrow
+				var normal := Vector2(tangent.y, -tangent.x)
+				canvas.draw_colored_polygon(PackedVector2Array([head + tangent * 6.0, head - tangent * 3.0 + normal * 4.0, head - tangent * 3.0 - normal * 4.0]), Color(GOLD, 0.85))
+			var pct := "%d%%" % int(_stir * 100.0)
+			var pw := font.get_string_size(pct, HORIZONTAL_ALIGNMENT_LEFT, -1, 12).x
+			canvas.draw_string_outline(font, Vector2(POT_CENTER.x - pw * 0.5, TRAY_Y + 4), pct, HORIZONTAL_ALIGNMENT_LEFT, -1, 12, 3, Color(0.06, 0.03, 0.1))
+			canvas.draw_string(font, Vector2(POT_CENTER.x - pw * 0.5, TRAY_Y + 4), pct, HORIZONTAL_ALIGNMENT_LEFT, -1, 12, PARCHMENT)
 		Phase.LIFT:
-			var bar := Rect2(40, TRAY_Y - 8, BOARD_SIZE.x - 80, 16)
-			for i in 24:
-				var k := i / 23.0
-				canvas.draw_rect(Rect2(bar.position.x + bar.size.x * k, bar.position.y, bar.size.x / 24.0 + 1, bar.size.y), MURKY.lerp(_target(), k))
-			canvas.draw_rect(Rect2(bar.position.x + bar.size.x * _zone.x, bar.position.y - 3, bar.size.x * (_zone.y - _zone.x), bar.size.y + 6), Color(1, 1, 1, 0.9), false, 2.0)
+			var bar := Rect2(40, TRAY_Y - 6, BOARD_SIZE.x - 80, 14)
+			draw_box(canvas, bar.grow(3), Color(0.06, 0.03, 0.1, 0.9), Color(0.55, 0.42, 0.8, 0.8), 6)
+			var segments := 32
+			for i in segments:
+				var k := float(i) / (segments - 1)
+				canvas.draw_rect(Rect2(bar.position.x + bar.size.x * i / segments, bar.position.y, bar.size.x / segments + 1, bar.size.y), MURKY.lerp(_target(), k))
+			var zone := Rect2(bar.position.x + bar.size.x * _zone.x, bar.position.y - 4, bar.size.x * (_zone.y - _zone.x), bar.size.y + 8)
+			var pulse := 0.6 + 0.4 * sin(t * 5.0)
+			canvas.draw_rect(zone.grow(3), Color(GOLD, 0.15 * pulse))
+			canvas.draw_rect(zone, Color(1, 1, 1, 0.12))
+			canvas.draw_rect(zone, Color(GOLD, 0.9), false, 2.0)
 			var mx := bar.position.x + bar.size.x * _lift_value()
-			canvas.draw_line(Vector2(mx, bar.position.y - 6), Vector2(mx, bar.end.y + 6), Color.WHITE, 3.0)
+			var inside := _lift_value() >= _zone.x and _lift_value() <= _zone.y
+			canvas.draw_line(Vector2(mx, bar.position.y - 2), Vector2(mx, bar.end.y + 2), Color.WHITE, 2.0)
+			diamond(canvas, Vector2(mx, bar.position.y - 7), 5.0, GOOD if inside else PARCHMENT)
+			diamond(canvas, Vector2(mx, bar.end.y + 7), 5.0, GOOD if inside else PARCHMENT)
+
+
+func _draw_fire(canvas: Control, t: float) -> void:
+	var base_y := FIRE_Y
+	canvas.draw_circle(Vector2(POT_CENTER.x, base_y - 6), 50.0, Color(1.0, 0.5, 0.2, 0.07))
+	for side: float in [-1.0, 1.0]:
+		var a := Vector2(POT_CENTER.x - 40 * side, base_y + 4)
+		var b := Vector2(POT_CENTER.x + 26 * side, base_y - 2)
+		canvas.draw_line(a, b, Color(0.3, 0.18, 0.1), 7.0)
+		canvas.draw_line(a, b, Color(0.45, 0.28, 0.16), 3.0)
+	for i in 6:
+		var x := POT_CENTER.x - 35 + i * 14
+		var h := 12.0 + sin(t * 9.0 + i * 1.7) * 4.0 + (5.0 if i % 2 == 0 else 0.0)
+		canvas.draw_colored_polygon(PackedVector2Array([Vector2(x - 8, base_y), Vector2(x + sin(t * 7.0 + i) * 2.5, base_y - h), Vector2(x + 8, base_y)]), Color(0.95, 0.35, 0.15, 0.85))
+		canvas.draw_colored_polygon(PackedVector2Array([Vector2(x - 4, base_y), Vector2(x + sin(t * 8.0 + i) * 1.5, base_y - h * 0.6), Vector2(x + 4, base_y)]), Color(1.0, 0.82, 0.35, 0.95))
+
+
+func _draw_pot(canvas: Control, liquid: Color) -> void:
+	var body := Color(0.13, 0.11, 0.16)
+	# Kaki.
+	for side: float in [-1.0, 1.0]:
+		canvas.draw_rect(Rect2(POT_CENTER.x + side * 44 - 4, 172, 8, 18), Color(0.1, 0.08, 0.12))
+	# Badan bulat dengan bayangan dan kilap kiri.
+	var belly := Vector2(POT_CENTER.x, POT_CENTER.y + 24)
+	canvas.draw_rect(Rect2(POT_CENTER.x - 76, POT_CENTER.y, 152, 24), body)
+	_draw_ellipse(canvas, belly, Vector2(76, 60), body)
+	_draw_ellipse(canvas, belly + Vector2(16, 10), Vector2(54, 44), Color(0.08, 0.06, 0.1, 0.6))
+	canvas.draw_arc(belly, 66, PI * 0.72, PI * 1.05, 16, Color(0.4, 0.36, 0.5, 0.5), 3.0)
+	canvas.draw_rect(Rect2(POT_CENTER.x - 76, POT_CENTER.y + 14, 152, 5), Color(0.22, 0.18, 0.26))
+	# Bibir kuali.
+	_draw_ellipse(canvas, POT_CENTER, POT_RADIUS + Vector2(9, 6), Color(0.26, 0.23, 0.3))
+	_draw_ellipse(canvas, POT_CENTER + Vector2(0, -1), POT_RADIUS + Vector2(5, 3), Color(0.08, 0.06, 0.1))
+	# Cairan + pendar + pusaran.
+	canvas.draw_circle(POT_CENTER, POT_RADIUS.x + 14, Color(liquid, 0.08))
+	_draw_ellipse(canvas, POT_CENTER, POT_RADIUS, liquid)
+	_draw_ellipse(canvas, POT_CENTER + Vector2(-10, -6), POT_RADIUS * Vector2(0.55, 0.4), Color(liquid.lightened(0.25), 0.5))
+	for i in 3:
+		var r := 0.3 + i * 0.22
+		var start := _stir_angle * (1.0 - i * 0.2) + i * 2.0
+		var pts := PackedVector2Array()
+		for s in 9:
+			var a := start + s * 0.22
+			pts.append(POT_CENTER + Vector2(cos(a) * POT_RADIUS.x * r, sin(a) * POT_RADIUS.y * r))
+		canvas.draw_polyline(pts, Color(liquid.lightened(0.45), 0.45), 1.5)
+	for b in _bubbles:
+		var p := POT_CENTER + Vector2(b.x * POT_RADIUS.x, b.y * POT_RADIUS.y)
+		canvas.draw_arc(p, 1.5 + b.z * 3.0, 0, TAU, 10, Color(liquid.lightened(0.55), 1.0 - b.z), 1.0)
+	if _splash > 0.0:
+		var ring := (1.0 - _splash)
+		canvas.draw_arc(POT_CENTER, 12.0 + ring * 48.0, 0, TAU, 32, Color(1, 1, 1, _splash * 0.6), 2.0)
+	# Sendok kayu.
+	var tip := POT_CENTER + Vector2(cos(_stir_angle), sin(_stir_angle)) * Vector2(POT_RADIUS.x * 0.55, POT_RADIUS.y * 0.55)
+	var handle := tip + Vector2(20, -60)
+	canvas.draw_line(tip, handle, Color(0.35, 0.22, 0.12), 6.0)
+	canvas.draw_line(tip + Vector2(-1, 0), handle + Vector2(-1, 0), Color(0.62, 0.42, 0.25), 3.0)
+	_draw_ellipse(canvas, tip, Vector2(6, 3), Color(0.5, 0.33, 0.2))
+	canvas.draw_circle(handle, 3.5, Color(0.45, 0.3, 0.18))
+
+
+func _ellipse_arc(canvas: Control, from: float, to: float, color: Color, width: float) -> void:
+	var points := PackedVector2Array()
+	var steps := maxi(2, int(absf(to - from) / TAU * 64.0))
+	for i in steps + 1:
+		var a := lerpf(from, to, float(i) / steps)
+		points.append(POT_CENTER + Vector2(cos(a), sin(a)) * STIR_RING)
+	canvas.draw_polyline(points, color, width)
 
 
 static func _draw_ellipse(canvas: Control, center: Vector2, radius: Vector2, color: Color) -> void:
