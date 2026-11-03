@@ -53,6 +53,8 @@ var _pickup_visual: Sprite2D
 const HarvestCrateSet := preload("res://scripts/data/harvest_crate_set.gd")
 var _harvest_crates := preload("res://resources/carry/harvest_crates.tres") as HarvestCrateSet
 var _pickup_visual_tween: Tween
+## Status gendong hewan pada frame sebelumnya; perubahan memasang/melepas animasi carry_*.
+var _was_carrying_animal := false
 var _footsteps := FootstepAudio.new()
 var food_speed_remaining := 0.0
 var food_speed_multiplier := 1.0
@@ -154,6 +156,7 @@ func _ready() -> void:
 		
 func _process(delta: float) -> void:
 	bind_context()
+	_sync_carried_animal()
 	_sync_carried_item()
 	_flush_item_gesture()
 	_restore_held_item()
@@ -439,7 +442,8 @@ func show_tool_preview(item: ItemData) -> void:
 	if item != null and _carried_item_id == item.item_id and is_instance_valid(_pickup_visual):
 		return
 	_clear_pickup_visual()
-	if item == null or item.icon == null:
+	# Tangan sedang menggendong hewan: barang tidak ikut diangkat di atas kepala.
+	if item == null or item.icon == null or is_carrying_animal():
 		return
 	if _holds_overhead(item):
 		_carried_item_id = item.item_id
@@ -461,7 +465,8 @@ func _flush_item_gesture() -> void:
 		return
 	# Saat memegang alat/senjata, pickup tidak memutar gesture (tidak mengunci input) dan
 	# slot hotbar tidak pindah ke item yang diambil, supaya combat tidak terganggu.
-	if _pending_item_gesture == &"pick_up" and _holding_tool_or_weapon():
+	# Mengangkat hewan tetap memutar gesture walau sedang memegang alat.
+	if _pending_item_gesture == &"pick_up" and _holding_tool_or_weapon() and not is_carrying_animal():
 		_pending_item_gesture = &""
 		_pending_pickup_icon = null
 		_pending_pickup_id = ""
@@ -509,7 +514,7 @@ func _restore_held_item() -> void:
 	if is_input_locked() or is_defeated or is_riding() or has_meta("riding_horse") \
 			or sit_transitioning or is_instance_valid(seated_chair):
 		return
-	if has_meta("carried_animal") and is_instance_valid(get_meta("carried_animal")):
+	if is_carrying_animal():
 		return
 	var state := state_machine.current_state
 	if not (state is IdleState or state is MoveState):
@@ -595,7 +600,7 @@ func _update_held_item_position() -> void:
 func _clear_pickup_visual() -> void:
 	_carried_item_id = ""
 	_preview_item_id = ""
-	animation_controller.set_carrying_item(has_meta("carried_animal"))
+	animation_controller.set_carrying_item(is_carrying_animal())
 	_dispose_item_visual()
 
 func _dispose_item_visual() -> void:
@@ -704,6 +709,24 @@ func mount_speed_multiplier() -> float:
 	if not has_meta("riding_horse"):
 		return 1.0
 	return 1.6 + 0.2 * clampf(float(get_meta("riding_horse").get("affection", 0)) / 100.0, 0.0, 1.0)
+
+## true selama pemain menggendong hewan ternak (meta "carried_animal" dari RanchAnimal.lift_with).
+func is_carrying_animal() -> bool:
+	return has_meta("carried_animal") and is_instance_valid(get_meta("carried_animal"))
+
+## Menggendong hewan memakai pose angkat carry_idle/walk/run, apa pun yang sedang dipegang
+## (alat, senjata, atau tangan kosong). Barang di atas kepala disembunyikan selama menggendong
+## dan diangkat lagi oleh _restore_held_item() setelah hewan diletakkan.
+func _sync_carried_animal() -> void:
+	var carrying := is_carrying_animal()
+	if carrying == _was_carrying_animal:
+		return
+	_was_carrying_animal = carrying
+	if carrying:
+		_carried_item_id = ""
+		_preview_item_id = ""
+		_dispose_item_visual()
+	animation_controller.set_carrying_item(carrying or is_instance_valid(_pickup_visual))
 
 func release_carried_animal() -> void:
 	var carried := get_meta("carried_animal") as Node if has_meta("carried_animal") else null
