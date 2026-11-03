@@ -12,14 +12,30 @@ func _enter_tree() -> void:
 	mask.visible = false
 	resource_spawn_cells.clear()
 	_resource_cells.clear()
+	var blocked := _resource_block_rects()
 	for cell: Vector2i in mask.get_used_cells():
 		var center := mask.to_global(mask.map_to_local(cell))
 		var ground_cell := ground.local_to_map(ground.to_local(center))
 		var path_cell := paths.local_to_map(paths.to_local(center))
 		if ground.get_cell_source_id(ground_cell) < 0 or paths.get_cell_source_id(path_cell) >= 0:
 			continue
+		if blocked.any(func(r: Rect2) -> bool: return r.has_point(center)):
+			continue
 		resource_spawn_cells.append(ground_cell)
 		_resource_cells[ground_cell] = true
+
+## Bangunan di YSortEntities (mis. Menara Penyihir) dengan meta "resource_block" (Rect2 lokal)
+## melarang resource muncul di area itu walau ResourceSpawnMask masih mengecatnya.
+func _resource_block_rects() -> Array[Rect2]:
+	var rects: Array[Rect2] = []
+	var entities := get_node_or_null("YSortEntities")
+	if entities == null:
+		return rects
+	for child: Node in entities.get_children():
+		if child is Node2D and child.has_meta("resource_block"):
+			var rect: Rect2 = child.get_meta("resource_block")
+			rects.append(Rect2((child as Node2D).position + rect.position, rect.size))
+	return rects
 
 func is_resource_cell(cell: Vector2i) -> bool:
 	return _resource_cells.has(cell)

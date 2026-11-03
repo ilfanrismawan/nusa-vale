@@ -16,6 +16,12 @@ const BAR_OFFSET := Vector2(0, -27) + Player.SPRITE_OFFSET
 const STAMINA_COLOR := Color(0.45, 0.9, 0.35)
 const EXHAUSTED_COLOR := Color(0.95, 0.35, 0.3)
 const GUARD_COLOR := Color(0.75, 0.9, 1.0)
+## Perisai Sihir (kursus Fakultas Sihir): guard dengan tongkat menahan dari segala arah.
+const MAGIC_SHIELD_COLOR := Color(0.65, 0.55, 1.0)
+const MAGIC_SHIELD_REDUCTION := 0.85
+## Cahaya (kursus Fakultas Sihir): tongkat menyala saat gelap = cahaya pengusir makhluk malam.
+const STAFF_LIGHT_FROM_NIGHT := 0.25
+const STAFF_LIGHT_TEXTURE := preload("res://resources/world/shop_fx/light_radial.tres")
 
 var player: Player
 var stamina := 100.0
@@ -39,12 +45,23 @@ var _iframes := 0.0
 var _art_ready_ms := {}
 var _bar_alpha := 0.0
 var _flash := 0.0
+var _staff_light: PointLight2D
 
 func _ready() -> void:
 	z_index = 20
 	z_as_relative = false
 	stamina = max_stamina()
 	poise = max_poise()
+	_staff_light = PointLight2D.new()
+	_staff_light.name = "StaffLight"
+	_staff_light.texture = STAFF_LIGHT_TEXTURE
+	_staff_light.texture_scale = 1.6
+	_staff_light.color = Color(0.85, 0.8, 1.0)
+	_staff_light.energy = 0.9
+	_staff_light.position = Player.FEET_OFFSET * 0.5 + Vector2(0, -14)
+	_staff_light.enabled = false
+	_staff_light.visible = false
+	add_child(_staff_light)
 
 func max_stamina() -> float:
 	return float(Combat.RULES.combat_stamina_max)
@@ -178,8 +195,29 @@ func _process(delta: float) -> void:
 
 	_update_guard(free, state)
 	_update_charge(free, delta)
+	_update_staff_light()
 	_update_bar(delta)
 	queue_redraw()
+
+
+func _holds_staff() -> bool:
+	var item := player.tool_controller.current_item if player.tool_controller != null else null
+	return item != null and item.weapon_type == ItemData.WeaponType.STAFF and Combat.style_for(item) != null
+
+
+## Cahaya: menyala bila tongkat dipegang, kursus Cahaya lulus, dan hari mulai gelap.
+func _update_staff_light() -> void:
+	var on := _holds_staff() and Abilities.has(player.data, Abilities.LIGHT_SPELL) and DayCycle.night_intensity() >= STAFF_LIGHT_FROM_NIGHT
+	if on != _staff_light.enabled:
+		_staff_light.enabled = on
+		_staff_light.visible = on
+	if on:
+		_staff_light.energy = 0.8 + 0.1 * sin(Time.get_ticks_msec() * 0.004)
+
+
+## Perisai Sihir aktif: sedang guard sambil memegang tongkat dan kursusnya sudah lulus.
+func magic_shield_active() -> bool:
+	return guarding and _holds_staff() and Abilities.has(player.data, Abilities.MAGIC_SHIELD)
 
 func _update_guard(free: bool, state: State) -> void:
 	# Block dipelajari di Fakultas Bela Diri Universitas.
@@ -277,11 +315,12 @@ func intercept(raw_attack: int, source: Node) -> Array:
 	if is_evading():
 		CombatJuice.float_text(player, "Hindar", Color(0.8, 0.95, 1.0))
 		return [HitOutcome.EVADED, 0]
-	if guarding and _faces(source) and _unblockable(source):
+	var shield := magic_shield_active()
+	if guarding and (_faces(source) or shield) and _unblockable(source):
 		# Serangan bertanda bahaya (GDD 8.2-C): menahan tidak berguna, hanya roll/jaga jarak.
 		CombatJuice.float_text(player, "Tak bisa ditahan!", EXHAUSTED_COLOR)
 		return [HitOutcome.HIT, raw_attack]
-	if guarding and _faces(source):
+	if guarding and (_faces(source) or shield):
 		# Senjata beradu (block/parry) terdengar musuh di sekitar (GDD 8.2-B2).
 		Perception.noise(player, player.global_position, Perception.RULES.clash_noise_radius, player)
 		if is_parry_window() and source != null and source.has_method("can_be_parried") and source.can_be_parried():
@@ -289,10 +328,12 @@ func intercept(raw_attack: int, source: Node) -> Array:
 			return [HitOutcome.PARRIED, 0]
 		var style := Combat.style_for(player.tool_controller.current_item)
 		var reduction := style.block_reduction if style != null else 0.5
+		if shield:
+			reduction = maxf(reduction, MAGIC_SHIELD_REDUCTION)
 		var kept := maxi(0, roundi(raw_attack * (1.0 - reduction)))
 		spend(raw_attack * reduction * Combat.RULES.guard_stamina_per_damage)
 		Juice.play(&"mine", player.global_position, -4.0)
-		CombatJuice.spark(_guard_point(), GUARD_COLOR, 6)
+		CombatJuice.spark(_guard_point(), MAGIC_SHIELD_COLOR if shield else GUARD_COLOR, 6)
 		if is_exhausted():
 			# Stamina habis karena menahan: block jebol.
 			CombatJuice.float_text(player, "Block jebol!", EXHAUSTED_COLOR)
@@ -363,7 +404,12 @@ func _draw() -> void:
 		if _flash > 0.0 and int(_flash * 20.0) % 2 == 0:
 			color = Color.WHITE
 		draw_rect(fill, Color(color, _bar_alpha))
-	if guarding:
+	if magic_shield_active():
+		var pulse := 0.6 + 0.25 * sin(Time.get_ticks_msec() * 0.008)
+		var shield_color := Color.WHITE if is_parry_window() else MAGIC_SHIELD_COLOR
+		draw_circle(Player.FEET_OFFSET * 0.5, 13.0, Color(shield_color, 0.12 * pulse))
+		draw_arc(Player.FEET_OFFSET * 0.5, 13.0, 0.0, TAU, 28, Color(shield_color, pulse), 1.5)
+	elif guarding:
 		var dir := player.aim_vector()
 		var center := Player.FEET_OFFSET * 0.5 + dir * 9.0
 		var color := Color.WHITE if is_parry_window() else GUARD_COLOR

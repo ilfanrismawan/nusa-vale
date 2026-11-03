@@ -136,6 +136,8 @@ var tool_order: Dictionary = {}
 var learned_recipes: Array[String] = []
 ## Kemampuan dari fakultas Universitas (Abilities): id -> true.
 var abilities: Dictionary = {}
+## Pesona senjata Menara Penyihir (Enchanting): item_id senjata -> id pesona. Save v28.
+var enchants: Dictionary = {}
 var friendships: Dictionary = {}
 
 func load_friendships(value: Variant) -> void:
@@ -209,6 +211,7 @@ func reset_to_starter() -> void:
 	tool_order.clear()
 	learned_recipes.clear()
 	abilities.clear()
+	enchants.clear()
 	skills.reset()
 	equipment = empty_equipment()
 	equipment["armor"] = GameState._resolve_item("armor_wood")
@@ -754,6 +757,7 @@ func to_dict() -> Dictionary:
 		"equipment": serialize_equipment(),
 		"skills": skills.to_dict(),
 		"abilities": abilities.duplicate(),
+		"enchants": enchants.duplicate(),
 	}
 
 func load_dict(data: Dictionary) -> void:
@@ -773,6 +777,7 @@ func load_dict(data: Dictionary) -> void:
 	load_daya(data.get("consumed_daya", []))
 	skills.load_dict(data.get("skills", {}))
 	Abilities.load_save(self, data)
+	preload("res://scripts/system/enchanting.gd").load_save(self, data)
 	stamina = clampi(int(data.get("stamina", MAX_STAMINA)), 0, max_stamina)
 	hp = clampi(int(data.get("hp", MAX_HP)), 1, max_hp)
 	bag_level = clampi(int(data.get("bag_level", 0)), 0, BAG_SIZES.size() - 1)

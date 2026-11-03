@@ -23,6 +23,11 @@ extends StaticBody2D
 const SIGN_FONT := preload("res://assets/fonts/m5x7.ttf")
 
 const CONFIRM_MSEC := 4000
+const RUNE_GAME = preload("res://scripts/ui/magic/rune_trace_game.gd")
+const SEQUENCE_GAME = preload("res://scripts/ui/magic/spell_sequence_game.gd")
+## Ujian praktik kursus sihir: stamina untuk mengulang, menit yang terpakai saat gagal.
+const COURSE_RETRY_STAMINA := 15
+const COURSE_FAIL_MINUTES := 30
 
 var _pending_player: Player
 var _pending_until := 0
@@ -226,6 +231,8 @@ func _rest(_player: Player, data: PlayerData) -> void:
 
 
 ## Fakultas: kursus kemampuan gerak/tempur (Abilities), berurutan per fakultas.
+## Kursus bermini game (Fakultas Sihir): biaya dibayar sekali dan tercatat lunas di
+## GameState.campus ("paid|<siapa>|<kursus>"); gagal = coba lagi dengan COURSE_RETRY_STAMINA.
 func _faculty(player: Player, data: PlayerData) -> void:
 	var faculty_name: String = Abilities.FACULTY_NAMES.get(faculty, "Fakultas")
 	var entry := Abilities.next_course(data, faculty)
@@ -239,14 +246,69 @@ func _faculty(player: Player, data: PlayerData) -> void:
 	if not block.is_empty():
 		_say("%s — Kursus %s (%d G). %s" % [faculty_name, entry.title, entry.price, block])
 		return
-	if not _confirmed(player, "%s — Kursus %s: %d G, 2 jam." % [faculty_name, entry.title, entry.price]):
+	var paid := _course_paid(data, entry)
+	if entry.has("minigame") and paid:
+		if not _confirmed(player, "%s — Ulangi ujian praktik %s (biaya sudah lunas, %d stamina)." % [faculty_name, entry.title, COURSE_RETRY_STAMINA]):
+			return
+		if data.stamina < COURSE_RETRY_STAMINA:
+			_say("Kamu terlalu lelah untuk ujian praktik. Istirahat dulu.")
+			return
+		data.stamina -= COURSE_RETRY_STAMINA
+		_start_course_game(player, entry)
+		return
+	var offer := "%s — Kursus %s: %d G, 2 jam." % [faculty_name, entry.title, entry.price]
+	if entry.has("minigame"):
+		offer += " Diakhiri ujian praktik %s." % ("Gambar Rune" if entry.minigame == "rune" else "Urutan Mantra")
+	if not _confirmed(player, offer):
 		return
 	if not GameState.spend_money(int(entry.price)):
 		_say("Uangmu belum cukup untuk kursus %s (%d G)." % [entry.title, entry.price])
 		return
+	if entry.has("minigame"):
+		GameState.campus[_paid_key(data, entry)] = 1
+		_start_course_game(player, entry)
+		return
+	_complete_course(data, entry)
+
+
+func _complete_course(data: PlayerData, entry: Dictionary) -> void:
+	GameState.campus.erase(_paid_key(data, entry))
 	Abilities.learn(data, entry.id)
 	DayCycle.advance_minute(Abilities.COURSE_MINUTES)
 	Notify.say("Kursus selesai! Kamu menguasai %s. %s" % [entry.title, entry.hint])
+
+
+func _paid_key(data: PlayerData, entry: Dictionary) -> String:
+	return "paid|%s|%s" % [Campus.who(data), entry.id]
+
+
+func _course_paid(data: PlayerData, entry: Dictionary) -> bool:
+	return GameState.campus.has(_paid_key(data, entry))
+
+
+## Ujian praktik kursus sihir. Co-op: hanya pemain ini yang terkunci, pemain lain tetap bebas.
+func _start_course_game(player: Player, entry: Dictionary) -> void:
+	var game: Node
+	if entry.minigame == "rune":
+		game = RUNE_GAME.new()
+		game.rune = str(entry.get("rune", "staff"))
+		game.title = "Ujian Praktik: %s" % entry.title
+	else:
+		game = SEQUENCE_GAME.new()
+		game.length = int(entry.get("length", 5))
+		game.title = "Ujian Praktik: %s" % entry.title
+	game.player = player
+	game.finished.connect(func(success: bool) -> void:
+		if not is_instance_valid(player):
+			return
+		if success:
+			_complete_course(player.data, entry)
+		elif not game.get("cancelled"):
+			DayCycle.advance_minute(COURSE_FAIL_MINUTES)
+			Notify.say("Ujian praktik %s belum lulus. Biaya kursus tetap lunas; coba lagi dengan %d stamina." % [entry.title, COURSE_RETRY_STAMINA])
+		else:
+			Notify.say("Ujian praktik ditunda. Biaya kursus %s tetap lunas." % entry.title))
+	Coop.ui_parent(player).add_child(game)
 
 
 # ── Sekolah ─────────────────────────────────────────────────────────

@@ -1,0 +1,94 @@
+[gd_resource type="Resource" script_class="CraftingCatalog" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/crafting_catalog.gd" id="1_catalog"]
+[ext_resource type="Script" path="res://scripts/resources/witch_recipe.gd" id="2_recipe"]
+
+[sub_resource type="Resource" id="Recipe_brew_elixir_vigor"]
+script = ExtResource("2_recipe")
+recipe_id = "brew_elixir_vigor"
+output_item_id = "elixir_vigor"
+ingredients = {
+"potion_stamina": 1,
+"honey": 1,
+"stardust": 1
+}
+group = "Kuali"
+minigame = "brew"
+note = "Aduk searah jarum jam 2 putaran."
+difficulty = 1
+stir_clockwise = true
+stir_turns = 2
+brew_color = Color(1, 0.78, 0.2, 1)
+
+[sub_resource type="Resource" id="Recipe_brew_elixir_moonlight"]
+script = ExtResource("2_recipe")
+recipe_id = "brew_elixir_moonlight"
+output_item_id = "elixir_moonlight"
+ingredients = {
+"moon_dew": 2,
+"bunga_kantil": 1,
+"lavender": 1
+}
+group = "Kuali"
+minigame = "brew"
+note = "Aduk berlawanan arah 2 putaran."
+difficulty = 1
+stir_clockwise = false
+stir_turns = 2
+brew_color = Color(0.78, 0.82, 1, 1)
+
+[sub_resource type="Resource" id="Recipe_brew_elixir_gale"]
+script = ExtResource("2_recipe")
+recipe_id = "brew_elixir_gale"
+output_item_id = "elixir_gale"
+ingredients = {
+"potion_speed": 1,
+"firefly": 1,
+"moon_dew": 1
+}
+group = "Kuali"
+minigame = "brew"
+note = "Aduk searah jarum jam 3 putaran."
+difficulty = 2
+stir_clockwise = true
+stir_turns = 3
+brew_color = Color(0.55, 0.98, 1, 1)
+
+[sub_resource type="Resource" id="Recipe_brew_elixir_starlight"]
+script = ExtResource("2_recipe")
+recipe_id = "brew_elixir_starlight"
+output_item_id = "elixir_starlight"
+ingredients = {
+"stardust": 2,
+"moon_dew": 1,
+"mooncap": 1
+}
+group = "Kuali"
+minigame = "brew"
+note = "Aduk berlawanan arah 3 putaran."
+difficulty = 2
+stir_clockwise = false
+stir_turns = 3
+brew_color = Color(0.85, 0.45, 0.75, 1)
+
+[sub_resource type="Resource" id="Recipe_brew_elixir_phoenix"]
+script = ExtResource("2_recipe")
+recipe_id = "brew_elixir_phoenix"
+output_item_id = "elixir_phoenix"
+ingredients = {
+"potion_greater": 1,
+"fire_quartz": 1,
+"stardust": 2,
+"bara_banaspati": 1
+}
+group = "Kuali"
+minigame = "brew"
+note = "Aduk searah jarum jam 4 putaran. Zona matang sempit."
+difficulty = 3
+stir_clockwise = true
+stir_turns = 4
+brew_color = Color(1, 0.48, 0.1, 1)
+
+[resource]
+script = ExtResource("1_catalog")
+recipes = Array[ExtResource("2_recipe")]([SubResource("Recipe_brew_elixir_vigor"), SubResource("Recipe_brew_elixir_moonlight"), SubResource("Recipe_brew_elixir_gale"), SubResource("Recipe_brew_elixir_starlight"), SubResource("Recipe_brew_elixir_phoenix")])

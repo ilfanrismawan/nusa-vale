@@ -17,7 +17,9 @@ const DEFAULT_PLAYER_NAME := "Petani"
 ## v22: Role & EXP per pemain ("skills" di blok player dan tiap karakter co-op); save lama = Lv0.
 ## v25: permanent friendship locks and per-character household/social reward letters.
 ## v26: peternakan lanjutan (kerbau, kapibara, kuda, anak hewan, kehamilan, inkubator, bulu bebek); save lama = hewan dewasa tanpa inkubator.
-const SAVE_VERSION := 27
+## v28: pesona senjata Menara Penyihir per pemain ("enchants" di blok player dan tiap karakter co-op); save lama = belum ada pesona.
+const SAVE_VERSION := 28
+const Enchanting = preload("res://scripts/system/enchanting.gd")
 
 signal game_saved
 signal game_loaded
@@ -274,6 +276,8 @@ func _valid_player(player: Variant) -> bool:
 		var upgrade := ToolUpgradeManager.get_upgrade_data(str(order.get("old", "")))
 		if upgrade.is_empty() or str(upgrade["next"]) != str(order.get("next", "")) or int(order.get("ready_day", 0)) < 1 or int(order.get("ready_day", 0)) > 1000000:
 			return false
+	if not Enchanting.valid_save(player.get("enchants", {})):
+		return false
 	return player.get("appearance", {}) is Dictionary and _valid_inventory(player.get("inventory", []))
 
 func _is_valid_save(data: Dictionary) -> bool:
@@ -387,6 +391,8 @@ func _build_save_data() -> Dictionary:
 			"skills": GameState.p1().skills.to_dict(),
 			# Kemampuan fakultas Universitas; save lama tanpa kunci ini = semua dikuasai.
 			"abilities": GameState.p1().abilities.duplicate(),
+			# v28: pesona senjata Altar Enchant {item_id: id pesona}.
+			"enchants": GameState.p1().enchants.duplicate(),
 		},
 
 		"inventory": _serialize_inventory(),
@@ -571,6 +577,8 @@ func _load_player(data: Variant) -> void:
 	# Versi 22: Role & EXP. Dimuat sebelum HP karena perk Combat menambah HP maks.
 	GameState.p1().skills.load_dict(player_data.get("skills", {}))
 	Abilities.load_save(GameState.p1(), player_data)
+	# Versi 28: pesona senjata. Save lama tanpa key ini = belum ada pesona.
+	Enchanting.load_save(GameState.p1(), player_data)
 	# Versi 14: HP per pemain. Save lama tanpa key ini = HP penuh.
 	GameState.p1().hp = clampi(int(player_data.get("hp", PlayerData.MAX_HP)), 1, GameState.p1().max_hp)
 

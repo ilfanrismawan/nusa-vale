@@ -1,0 +1,20 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/weapon_enchant.gd" id="1_enchant"]
+
+[resource]
+script = ExtResource("1_enchant")
+id = "shadow"
+display_name = "Shadow"
+description = "Setiap pukulan yang masuk memulihkan HP sebesar 8% ATK."
+color = Color(0.6, 0.35, 0.85, 1)
+ingredients = {
+"embun_kubur": 2,
+"amethyst": 1,
+"stardust": 2
+}
+fee = 1200
+sequence_length = 6
+status = 3
+status_chance = 1.0
+lifesteal_ratio = 0.08

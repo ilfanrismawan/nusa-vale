@@ -1,0 +1,20 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/weapon_enchant.gd" id="1_enchant"]
+
+[resource]
+script = ExtResource("1_enchant")
+id = "ember"
+display_name = "Ember"
+description = "Pukulan 30% berpeluang membakar musuh selama 3 detik."
+color = Color(1, 0.55, 0.2, 1)
+ingredients = {
+"fire_quartz": 1,
+"stardust": 2
+}
+fee = 600
+sequence_length = 5
+status = 1
+status_chance = 0.3
+status_duration = 3.0
+burn_tick_ratio = 0.12

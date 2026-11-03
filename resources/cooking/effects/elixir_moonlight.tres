@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="FoodEffectData" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/food_effect_data.gd" id="1_effect"]
+
+[resource]
+script = ExtResource("1_effect")
+id = &"elixir_moonlight"
+display_name = "Tenang Rembulan"
+description = "Rasa takut di malam hari hampir tidak naik, HP pulih pelan."
+duration_seconds = 360.0
+fear_rise_multiplier = 0.3
+tick_interval = 5.0
+hp_per_tick = 2

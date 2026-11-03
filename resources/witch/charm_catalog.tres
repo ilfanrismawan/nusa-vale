@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="CraftingCatalog" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/crafting_catalog.gd" id="1_catalog"]
+[ext_resource type="Script" path="res://scripts/resources/witch_recipe.gd" id="2_recipe"]
+
+[sub_resource type="Resource" id="Recipe_charm_jimat_kantil"]
+script = ExtResource("2_recipe")
+recipe_id = "charm_jimat_kantil"
+output_item_id = "jimat_kantil"
+ingredients = {
+"bunga_kantil": 3,
+"moon_dew": 1,
+"stardust": 1
+}
+group = "Jimat"
+minigame = "rune"
+note = "Rune Pengikat (spiral)."
+difficulty = 1
+rune = "charm"
+
+[sub_resource type="Resource" id="Recipe_charm_jimat_rembulan"]
+script = ExtResource("2_recipe")
+recipe_id = "charm_jimat_rembulan"
+output_item_id = "jimat_rembulan"
+ingredients = {
+"moon_dew": 3,
+"embun_kubur": 1,
+"quartz": 1
+}
+group = "Jimat"
+minigame = "rune"
+note = "Rune Rembulan (sabit)."
+difficulty = 2
+rune = "moon"
+
+[sub_resource type="Resource" id="Recipe_charm_jimat_bintang"]
+script = ExtResource("2_recipe")
+recipe_id = "charm_jimat_bintang"
+output_item_id = "jimat_bintang"
+ingredients = {
+"stardust": 3,
+"bulu_genderuwo": 1,
+"bara_banaspati": 1,
+"amethyst": 1
+}
+group = "Jimat"
+minigame = "rune"
+note = "Rune Penjaga (silang). Waktu lebih singkat."
+difficulty = 3
+rune = "ward"
+
+[resource]
+script = ExtResource("1_catalog")
+recipes = Array[ExtResource("2_recipe")]([SubResource("Recipe_charm_jimat_kantil"), SubResource("Recipe_charm_jimat_rembulan"), SubResource("Recipe_charm_jimat_bintang")])

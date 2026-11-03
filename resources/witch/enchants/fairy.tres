@@ -1,0 +1,19 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/weapon_enchant.gd" id="1_enchant"]
+
+[resource]
+script = ExtResource("1_enchant")
+id = "fairy"
+display_name = "Fairy"
+description = "Setiap pukulan yang masuk memulihkan 4 stamina tempur."
+color = Color(1, 0.7, 0.9, 1)
+ingredients = {
+"fairy_crystal": 1,
+"moon_dew": 2
+}
+fee = 1200
+sequence_length = 6
+status = 4
+status_chance = 1.0
+stamina_gain = 4

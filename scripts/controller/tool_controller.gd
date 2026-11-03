@@ -224,6 +224,9 @@ func attack(kind: CombatState.Kind = CombatState.Kind.LIGHT) -> bool:
 	# Tongkat sihir baru bisa dipakai setelah kursus Fakultas Sihir.
 	if weapon.weapon_type == ItemData.WeaponType.STAFF and not Abilities.check(player, Abilities.MAGIC):
 		return false
+	# Bola Sihir Terisi (Fakultas Sihir): serangan berat tongkat perlu kursusnya; tanpa itu = ringan.
+	if weapon.weapon_type == ItemData.WeaponType.STAFF and kind == CombatState.Kind.HEAVY and not Abilities.check(player, Abilities.CHARGED_BOLT):
+		kind = CombatState.Kind.LIGHT
 	var combat := player.combat
 	if combat.is_exhausted():
 		combat.spend(1.0)

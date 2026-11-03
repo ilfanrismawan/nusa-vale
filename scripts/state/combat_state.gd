@@ -44,7 +44,8 @@ func start(p_weapon: ItemData, p_style: WeaponStyle, p_aim: Vector2, p_arrow: It
 	combo_queued = false
 	kind = p_kind
 	art = p_art
-	fx = WeaponTierFx.for_item(weapon)
+	# Pesona Altar Enchant (Menara Penyihir) menimpa efek status tier senjata.
+	fx = preload("res://scripts/system/enchanting.gd").fx_for(player.data, weapon)
 	animation_name = style.animation_name
 
 func is_finisher() -> bool:

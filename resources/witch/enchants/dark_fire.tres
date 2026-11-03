@@ -1,0 +1,22 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/weapon_enchant.gd" id="1_enchant"]
+
+[resource]
+script = ExtResource("1_enchant")
+id = "dark_fire"
+display_name = "Dark Fire"
+description = "Pukulan 25% berpeluang menyalakan api gelap 3 detik: terbakar kuat dan DEF musuh turun setengah."
+color = Color(0.5, 0.2, 0.75, 1)
+ingredients = {
+"bara_banaspati": 1,
+"earth_crystal": 1,
+"stardust": 3
+}
+fee = 3000
+sequence_length = 7
+status = 5
+status_chance = 0.25
+status_duration = 3.0
+burn_tick_ratio = 0.15
+defense_scale = 0.5

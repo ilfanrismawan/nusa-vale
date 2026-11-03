@@ -30,6 +30,7 @@
 [ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="27_axkua"]
 [ext_resource type="Script" path="res://scripts/horror/ritual_altar.gd" id="altar_script"]
 [ext_resource type="PackedScene" path="res://scenes/horror/penunggu_hutan.tscn" id="altar_penunggu"]
+[ext_resource type="PackedScene" path="res://scenes/world/exterior/object/witch_tower.tscn" id="witch_tower"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_p2fon"]
 texture = ExtResource("3_nwxwl")
@@ -5169,20 +5170,6 @@ texture = SubResource("AtlasTexture_57v1k")
 offset = Vector2(0, -20)
 metadata/blocker_radius = 8.0
 
-[node name="TreeDeepForest0193" type="Sprite2D" parent="YSortEntities" unique_id=351027781]
-modulate = Color(0.83, 0.98, 0.87, 1)
-position = Vector2(909.5248, 122.63029)
-texture = SubResource("AtlasTexture_57v1k")
-offset = Vector2(0, -20)
-metadata/blocker_radius = 8.0
-
-[node name="TreeDeepForest0194" type="Sprite2D" parent="YSortEntities" unique_id=1670707132]
-modulate = Color(0.83, 0.98, 0.87, 1)
-position = Vector2(938.73395, 114.29175)
-texture = SubResource("AtlasTexture_57v1k")
-offset = Vector2(0, -20)
-metadata/blocker_radius = 8.0
-
 [node name="TreeDeepForest0195" type="Sprite2D" parent="YSortEntities" unique_id=814319205]
 modulate = Color(0.65, 0.86, 0.77, 1)
 position = Vector2(984.05945, 117.12268)
@@ -5447,20 +5434,6 @@ metadata/blocker_radius = 8.0
 modulate = Color(0.83, 0.98, 0.87, 1)
 position = Vector2(688.0698, 147.08875)
 texture = SubResource("AtlasTexture_57v1k")
-offset = Vector2(0, -20)
-metadata/blocker_radius = 8.0
-
-[node name="TreeDeepForest0234" type="Sprite2D" parent="YSortEntities" unique_id=1161783755]
-modulate = Color(0.83, 0.98, 0.87, 1)
-position = Vector2(893.12524, 149.71037)
-texture = SubResource("AtlasTexture_ldebp")
-offset = Vector2(0, -20)
-metadata/blocker_radius = 8.0
-
-[node name="TreeDeepForest0235" type="Sprite2D" parent="YSortEntities" unique_id=605833949]
-modulate = Color(0.83, 0.98, 0.87, 1)
-position = Vector2(930.68915, 140.77219)
-texture = SubResource("AtlasTexture_ldebp")
 offset = Vector2(0, -20)
 metadata/blocker_radius = 8.0
 
@@ -5799,33 +5772,6 @@ texture = SubResource("AtlasTexture_57v1k")
 offset = Vector2(0, -20)
 metadata/blocker_radius = 8.0
 
-[node name="TreeDeepForest0285" type="Sprite2D" parent="YSortEntities" unique_id=568706094]
-modulate = Color(0.83, 0.98, 0.87, 1)
-position = Vector2(901.2588, 165.88297)
-texture = SubResource("AtlasTexture_ldebp")
-offset = Vector2(0, -20)
-metadata/blocker_radius = 8.0
-
-[node name="TreeDeepForest0286" type="Sprite2D" parent="YSortEntities" unique_id=1054984785]
-modulate = Color(0.83, 0.98, 0.87, 1)
-position = Vector2(918.9299, 164.028)
-texture = SubResource("AtlasTexture_ldebp")
-offset = Vector2(0, -20)
-metadata/blocker_radius = 8.0
-
-[node name="bushes0287" type="Sprite2D" parent="YSortEntities" unique_id=1101264972]
-modulate = Color(0.6, 0.82, 0.65, 1)
-position = Vector2(928.9299, 176.028)
-texture = SubResource("AtlasTexture_lmxh2")
-offset = Vector2(0, -12)
-
-[node name="TreeDeepForest0288" type="Sprite2D" parent="YSortEntities" unique_id=1860621918]
-modulate = Color(0.83, 0.98, 0.87, 1)
-position = Vector2(942.4011, 171.12825)
-texture = SubResource("AtlasTexture_ldebp")
-offset = Vector2(0, -20)
-metadata/blocker_radius = 8.0
-
 [node name="TreeDeepForest0289" type="Sprite2D" parent="YSortEntities" unique_id=38492054]
 modulate = Color(0.65, 0.86, 0.77, 1)
 position = Vector2(975.8469, 178.65764)
@@ -6128,27 +6074,6 @@ texture = SubResource("AtlasTexture_57v1k")
 offset = Vector2(0, -20)
 metadata/blocker_radius = 8.0
 
-[node name="TreeDeepForest0333" type="Sprite2D" parent="YSortEntities" unique_id=1974200001]
-modulate = Color(0.83, 0.98, 0.87, 1)
-position = Vector2(897.0693, 198.97934)
-texture = SubResource("AtlasTexture_57v1k")
-offset = Vector2(0, -20)
-metadata/blocker_radius = 8.0
-
-[node name="TreeDeepForest0334" type="Sprite2D" parent="YSortEntities" unique_id=600722039]
-modulate = Color(0.83, 0.98, 0.87, 1)
-position = Vector2(909.6085, 207.40219)
-texture = SubResource("AtlasTexture_57v1k")
-offset = Vector2(0, -20)
-metadata/blocker_radius = 8.0
-
-[node name="TreeDeepForest0335" type="Sprite2D" parent="YSortEntities" unique_id=1886321636]
-modulate = Color(0.83, 0.98, 0.87, 1)
-position = Vector2(943.7074, 190.49075)
-texture = SubResource("AtlasTexture_57v1k")
-offset = Vector2(0, -20)
-metadata/blocker_radius = 8.0
-
 [node name="TreeDeepForest0336" type="Sprite2D" parent="YSortEntities" unique_id=1873522105]
 modulate = Color(0.83, 0.98, 0.87, 1)
 position = Vector2(985.4374, 201.71048)
@@ -6413,20 +6338,6 @@ modulate = Color(0.6, 0.82, 0.65, 1)
 position = Vector2(873.48517, 235.24762)
 texture = SubResource("AtlasTexture_lmxh2")
 offset = Vector2(0, -12)
-
-[node name="TreeDeepForest0375" type="Sprite2D" parent="YSortEntities" unique_id=2121253359]
-modulate = Color(0.83, 0.98, 0.87, 1)
-position = Vector2(898.30646, 225.6281)
-texture = SubResource("AtlasTexture_ldebp")
-offset = Vector2(0, -20)
-metadata/blocker_radius = 8.0
-
-[node name="TreeDeepForest0376" type="Sprite2D" parent="YSortEntities" unique_id=854232576]
-modulate = Color(0.83, 0.98, 0.87, 1)
-position = Vector2(952.0991, 221.36414)
-texture = SubResource("AtlasTexture_57v1k")
-offset = Vector2(0, -20)
-metadata/blocker_radius = 8.0
 
 [node name="TreeDeepForest0377" type="Sprite2D" parent="YSortEntities" unique_id=211676122]
 modulate = Color(0.83, 0.98, 0.87, 1)
@@ -15830,3 +15741,6 @@ reward_item = "kayu_keramat"
 location_id = "deep_forest"
 max_animals = 4
 entities_path = NodePath("YSortEntities")
+
+[node name="WitchTower" parent="YSortEntities" instance=ExtResource("witch_tower")]
+position = Vector2(920, 292)

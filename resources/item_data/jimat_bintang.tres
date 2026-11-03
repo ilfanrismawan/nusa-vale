@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1_item"]
+[ext_resource type="Texture2D" path="res://assets/witch_tower/icons/jimat_bintang.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_item")
+category = 7
+item_id = "jimat_bintang"
+display_name = "Star Ward"
+icon = ExtResource("2_icon")
+description = "Aksesori terkuat meja jimat. Rasa takut naik 35% lebih lambat; makhluk yang ditatap baru bergerak 2 detik setelah kamu berpaling."
+sell_price = 1400
+stackable = false
+max_stack = 1
+equipment_slot = 8
+defense_bonus = 2
+rarity = 3
+horror_charm_seconds = 2.0
+horror_fear_resist = 0.35

@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/witch_tower/icons/elixir_vigor.png" id="2"]
+[ext_resource type="Script" uid="uid://vbwn6cjjdlc0" path="res://scripts/resources/food_effect_data.gd" id="3"]
+[ext_resource type="Resource" path="res://resources/cooking/effects/elixir_vigor.tres" id="4"]
+
+[resource]
+script = ExtResource("1")
+item_id = "elixir_vigor"
+display_name = "Vigor Elixir"
+icon = ExtResource("2")
+description = "Elixir emas dari kuali Menara Penyihir. Memulihkan 60 stamina, lalu semua aktivitas 35% lebih hemat stamina selama 4 menit."
+category = 9
+stamina_restore = 60
+hp_restore = 20
+food_effects = Array[ExtResource("3")]([ExtResource("4")])
+sell_price = 420
+rarity = 2

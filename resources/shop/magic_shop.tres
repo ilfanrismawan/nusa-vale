@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="ShopData" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/shop_data.gd" id="1_shop"]
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="2_item"]
+[ext_resource type="Resource" path="res://resources/item_data/staff_wood.tres" id="staff_wood"]
+[ext_resource type="Resource" path="res://resources/item_data/staff_copper.tres" id="staff_copper"]
+[ext_resource type="Resource" path="res://resources/item_data/staff_iron.tres" id="staff_iron"]
+[ext_resource type="Resource" path="res://resources/item_data/staff_gold.tres" id="staff_gold"]
+[ext_resource type="Resource" path="res://resources/item_data/staff_platinum.tres" id="staff_platinum"]
+[ext_resource type="Resource" path="res://resources/item_data/staff_crimson.tres" id="staff_crimson"]
+[ext_resource type="Resource" path="res://resources/item_data/staff_frost.tres" id="staff_frost"]
+[ext_resource type="Resource" path="res://resources/item_data/staff_shadow.tres" id="staff_shadow"]
+[ext_resource type="Resource" path="res://resources/item_data/staff_fairy.tres" id="staff_fairy"]
+[ext_resource type="Resource" path="res://resources/item_data/staff_obsidian.tres" id="staff_obsidian"]
+[ext_resource type="Resource" path="res://resources/item_data/stardust.tres" id="stardust"]
+[ext_resource type="Resource" path="res://resources/item_data/moon_dew.tres" id="moon_dew"]
+
+[resource]
+script = ExtResource("1_shop")
+shop_id = "magic_shop"
+shop_name = "Toko Sihir"
+keeper_name = "Nyai Kenanga"
+greeting = "Tongkat untuk tiap tingkat, bahan sihir untuk kuali. Pilih dengan hati, murid muda."
+buys_items = true
+stock = Array[ExtResource("2_item")]([ExtResource("staff_wood"), ExtResource("staff_copper"), ExtResource("staff_iron"), ExtResource("staff_gold"), ExtResource("staff_platinum"), ExtResource("staff_crimson"), ExtResource("staff_frost"), ExtResource("staff_shadow"), ExtResource("staff_fairy"), ExtResource("staff_obsidian"), ExtResource("stardust"), ExtResource("moon_dew")])

@@ -11,6 +11,9 @@ const GUARD := &"guard"
 const PARRY := &"parry"
 const WEAPON_ART := &"weapon_art"
 const MAGIC := &"magic"
+const CHARGED_BOLT := &"charged_bolt"
+const MAGIC_SHIELD := &"magic_shield"
+const LIGHT_SPELL := &"light_spell"
 
 const FACULTY_SPORTS := "sports"
 const FACULTY_MARTIAL := "martial"
@@ -23,6 +26,8 @@ const FACULTY_NAMES := {
 }
 
 ## Urutan = urutan kursus di tiap fakultas. requires: kemampuan sebelumnya; role: {role_id: level}.
+## minigame (opsional, Fakultas Sihir): "rune" = Gambar Rune (bentuk `rune`), "sequence" = Urutan Mantra
+## (`length` simbol). Gagal = biaya kursus tetap tercatat lunas, coba lagi memakai stamina.
 const COURSES := [
 	{"id": JUMP, "faculty": FACULTY_SPORTS, "title": "Lompat", "price": 200, "requires": &"", "role": {},
 		"hint": "Tekan tombol lompat untuk melompat."},
@@ -37,7 +42,17 @@ const COURSES := [
 	{"id": WEAPON_ART, "faculty": FACULTY_MARTIAL, "title": "Jurus Senjata", "price": 4000, "requires": PARRY, "role": {&"combat": 4},
 		"hint": "Tekan tombol weapon art untuk jurus khusus senjatamu."},
 	{"id": MAGIC, "faculty": FACULTY_MAGIC, "title": "Dasar Sihir Tongkat", "price": 2500, "requires": &"", "role": {&"combat": 1},
-		"hint": "Tongkat sihir kini bisa dipakai menyerang."},
+		"hint": "Tongkat sihir kini bisa dipakai menyerang, dan pintu Menara Penyihir di Hutan Dalam terbuka untukmu.",
+		"minigame": "rune", "rune": "staff"},
+	{"id": CHARGED_BOLT, "faculty": FACULTY_MAGIC, "title": "Bola Sihir Terisi", "price": 5000, "requires": MAGIC, "role": {&"combat": 3},
+		"hint": "Tahan tombol serang dengan tongkat untuk mengisi bola sihir besar (serangan berat tongkat).",
+		"minigame": "sequence", "length": 5},
+	{"id": MAGIC_SHIELD, "faculty": FACULTY_MAGIC, "title": "Perisai Sihir", "price": 9000, "requires": CHARGED_BOLT, "role": {&"combat": 5},
+		"hint": "Guard sambil memegang tongkat memasang perisai sihir bulat: menahan serangan dari segala arah dan lebih banyak damage. Butuh kursus Bertahan (Block).",
+		"minigame": "rune", "rune": "shield"},
+	{"id": LIGHT_SPELL, "faculty": FACULTY_MAGIC, "title": "Cahaya", "price": 14000, "requires": MAGIC_SHIELD, "role": {&"combat": 7},
+		"hint": "Saat gelap, tongkat yang dipegang menyala dan menjadi cahaya pengusir makhluk malam.",
+		"minigame": "sequence", "length": 7},
 ]
 const COURSE_MINUTES := 120
 

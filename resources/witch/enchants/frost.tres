@@ -1,0 +1,20 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/weapon_enchant.gd" id="1_enchant"]
+
+[resource]
+script = ExtResource("1_enchant")
+id = "frost"
+display_name = "Frost"
+description = "Pukulan 35% berpeluang mendinginkan musuh (gerak 40% lebih lambat) selama 2,5 detik."
+color = Color(0.55, 0.85, 1, 1)
+ingredients = {
+"frozen_tear": 1,
+"moon_dew": 2
+}
+fee = 600
+sequence_length = 5
+status = 2
+status_chance = 0.35
+status_duration = 2.5
+slow_scale = 0.6

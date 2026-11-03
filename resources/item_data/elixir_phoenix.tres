@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" uid="uid://cm1okc20ussp3" path="res://scripts/data/item_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/witch_tower/icons/elixir_phoenix.png" id="2"]
+[ext_resource type="Script" uid="uid://vbwn6cjjdlc0" path="res://scripts/resources/food_effect_data.gd" id="3"]
+[ext_resource type="Resource" path="res://resources/cooking/effects/elixir_phoenix.tres" id="4"]
+
+[resource]
+script = ExtResource("1")
+item_id = "elixir_phoenix"
+display_name = "Phoenix Elixir"
+icon = ExtResource("2")
+description = "Elixir bara dari kuali Menara Penyihir. Memulihkan 180 HP, lalu 7 HP tiap 3 detik selama 90 detik."
+category = 9
+stamina_restore = 40
+hp_restore = 180
+food_effects = Array[ExtResource("3")]([ExtResource("4")])
+sell_price = 650
+rarity = 3
